@@ -1,0 +1,66 @@
+@import "variable.styl"
+
+.mint-msgbox-btns{
+  height: 50px;
+  line-height: 50px;
+}
+.mint-msgbox-confirm {
+  color: #F80F16;
+  font-size: 16px;
+}
+.mint-tab-container-wrap {
+  height 100%
+}
+.mint-msgbox-cancel{
+  font-size: 16px;
+}
+.mint-datetime-action{
+  color:#F80F16
+}
+.mint-msgbox-content{
+  position: relative;
+  border-bottom:none;
+  &:after{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background: #ddd;
+    transform: scaleY(0.5);
+    -webkit-transform: scaleY(0.5);
+    z-index: 10;
+  }
+}
+.mint-tab-container-wrap {
+  height 100%
+}
+
+.mint-datetime-action {
+  display: inline-block;
+  line-height: 40px;
+  font-size: 16px;
+  color: $color-theme-r;
+}
+.mint-datetime-cancel {
+  float: left;
+  text-align: left;
+  margin-left 15px
+  color: #666;
+  width calc(50% - 15px)
+}
+.mint-datetime-confirm {
+  text-align: right;
+  float: right;
+  margin-right 15px
+  width calc(50% - 15px)
+}
+.mint-cell-wrapper {
+  background-image none;
+}
+
+
+.mint-cell:last-child {
+  background-image none;
+}

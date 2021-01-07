@@ -1,0 +1,435 @@
+@import "~@/common/stylus/variable.styl"
+.oil-sale-container {
+  // 公共item组件样式
+
+  .bill-item {
+    display flex
+    justify-content space-between
+    align-items center
+    width 100%
+
+    .img-wrapper {
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    .bill-btn {
+      text-align center
+    }
+
+    .center-text {
+      flex: 1
+      padding-left: 10px;
+
+      .remaining {
+        font-size: 12px
+        color: #1a1a1a
+      }
+
+      .title {
+        font-size: 14px
+      }
+
+      .time, .tips {
+        color: $color-text-l
+        font-size: 12px;
+        padding-top: 10px;
+      }
+
+      .info {
+        color: #009df8
+        font-size: 12px
+
+        .now-price {
+          font-size: 14px
+        }
+
+        .default-num {
+          color: $color-text-l
+          text-decoration line-through
+        }
+      }
+    }
+
+    .bill-btn {
+      .btn-show {
+        border-radius 20px
+        background: #009df8
+        padding: 6px 5px
+        color: #fff
+        font-weight bold
+      }
+
+      .noAppointment {
+        background: $color-background-l
+      }
+    }
+  }
+
+
+  // 公共item组件 外部样式
+
+  .bill-item-info {
+    padding: 11px
+    box-shadow: 0 0 9px 0 rgba(197, 197, 197, 0.3)
+    background: #fff
+    border-radius 4px
+
+    & + .bill-item-info {
+      margin-top: 10px
+    }
+  }
+
+
+  // 公共详情样式
+
+  .buy-bill {
+    box-shadow: 0 0 9px 0 rgba(197, 197, 197, 0.3)
+    background: #fff
+    border-radius 4px
+
+    input:disabled {
+      background #fff
+    }
+
+    .details-list {
+      width: 100%
+
+      .details-item {
+        display flex
+        justify-content space-between
+        align-items center
+
+        & + .details-item {
+          padding-top: 15px;
+        }
+
+        .left {
+          width: 30%
+        }
+
+        .right {
+          flex: 1
+
+          input {
+            line-height 34px
+            width: 100%
+          }
+        }
+
+        .icon-info {
+          width: 8%
+
+          .icon {
+            display flex
+            align-items center
+
+            .small {
+              display inline-block
+              width: 4px
+              height: 4px
+              background: #999
+              border-radius 50%
+            }
+
+            .big {
+              display inline-block
+              width: 6px
+              height: 6px
+              background: #666
+              border-radius 50%
+              margin: 0 3px
+            }
+          }
+        }
+      }
+    }
+
+    .buy-bill-money-list {
+      width: 100%
+
+      .buy-bill-money-item {
+
+        .money {
+          display flex
+          justify-content space-between
+          align-items center
+
+          & + .money {
+            padding-top: 15px;
+          }
+
+          .left {
+            color: $color-text-l
+          }
+
+          .right {
+            .num {
+              font-size: 14px
+            }
+          }
+
+          .special {
+            color: #009df8
+          }
+        }
+      }
+    }
+  }
+
+
+  // 公共--没有更多数据显示
+
+  .no-data {
+    padding: 15px;
+    text-align: center;
+  }
+
+  // 公共按钮置灰效果
+
+  .noClick {
+    background: $color-background-l !important
+  }
+
+  // 公共导航记录样式
+
+  .record-iocn {
+    text-align right
+    padding-right: 10px
+
+    img {
+      width: 20px
+      vertical-align middle
+    }
+  }
+
+  // 全局 弹框样式
+
+  /deep/ .van-popup {
+    width: 70%
+    border-radius 6px
+  }
+
+  // 列表 样式
+
+  .bill-list-container {
+    overflow-y auto
+    -webkit-overflow-scrolling touch
+
+    .bill-list-content {
+      padding: 11px 15px
+    }
+
+    .record-btn-show {
+      .record-img {
+        .tips {
+          color: $color-text-l
+          padding-bottom: 5px
+        }
+      }
+
+      .btn {
+        border-radius 20px
+        background: #009df8
+        padding: 6px 18px;
+        color: #fff
+        font-size: 12px;
+        margin-top: 5px;
+      }
+    }
+  }
+
+
+  // 详情 样式
+
+  .bill-details-container {
+    .bill-content {
+      padding: 11px 15px
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y auto
+      -webkit-overflow-scrolling touch
+      padding-bottom: 100px
+    }
+
+    .record-btn-show {
+      .record-img {
+        .tips {
+          color: $color-text-l
+          padding-bottom: 5px
+        }
+      }
+    }
+
+    .now-buy-bill-btn {
+      padding: 11px 15px
+      position fixed
+      bottom: 0
+      left: 0
+      right: 0
+
+      .btn {
+        border-radius 20px
+        padding: 15px 0
+        width: 100%
+        color: #fff
+        background: #009df8
+        text-align center
+        font-size: 14px
+        font-weight bold
+      }
+    }
+  }
+
+
+  // 记录 样式
+
+  .buy-bill-record-container {
+    overflow-y auto
+    -webkit-overflow-scrolling touch
+
+    .buy-bill-record-content {
+      padding: 11px 15px
+
+      img {
+        display inline-block
+        width: 38px
+        height: 38px
+      }
+
+      .btn {
+        border-radius 20px
+        background: #009df8
+        padding: 6px 18px;
+        color: #fff
+        font-size: 12px;
+        margin-top: 5px;
+      }
+    }
+  }
+
+
+  // 结果 样式
+
+  .buy-bill-results-container {
+    overflow-y auto
+    -webkit-overflow-scrolling touch
+
+    .buy-bill-results-content {
+      padding: 11px 15px
+
+      .bill-results {
+        padding: 15px
+        box-shadow: 0 0 9px 0 rgba(197, 197, 197, 0.3)
+        background: #fff
+        border-radius 4px
+        text-align center
+        margin-bottom: 10px
+
+        .text {
+          color: $color-text-d
+          padding: 10px 0
+        }
+
+        .btn-show {
+          padding: 5px 15px 5px 15px
+
+          .btn {
+            border-radius 20px
+            padding: 10px 0
+            width: 50%
+            margin: 0 auto
+            color: #fff
+            background: #009df8
+            text-align center
+            font-size: 14px
+            font-weight bold
+          }
+        }
+      }
+    }
+
+    .now-buy-bill-btn {
+      padding: 11px 15px
+      position absolute
+      bottom: 0
+      left: 0
+      right: 0
+
+      .btn {
+        border-radius 20px
+        padding: 15px 0
+        width: 100%
+        color: #fff
+        background: #009df8
+        text-align center
+        font-size: 14px
+        font-weight bold
+      }
+    }
+  }
+}
+.details-item {
+  position relative
+}
+  // 配送自提选择
+.switch-bar {
+  background: #e0f5fe;
+  border-radius 15px;
+  display inline-block
+  overflow: hidden
+
+  .switch-bar-item {
+    display inline-block
+    padding 5px 15px;
+    text-align: center
+    font-size: 12px;
+
+    &.active {
+      border-radius inherit;
+    }
+  }
+}
+.tips-content {
+  padding: 15px 20px
+
+  .title {
+    text-align center
+    padding: 10px 0 20px 0
+    font-size: 14px
+    color: #009df8
+    font-weight bold
+  }
+
+  .content {
+    color: $color-text-d
+    line-height 18px
+  }
+
+  .btn-group {
+    display flex
+    justify-content center
+    align-items center
+    padding: 15px 10px 5px 10px
+
+    .btn {
+      border-radius 20px
+      background: #009df8
+      padding: 8px 0
+      width: 70px
+      text-align center
+      color: #fff
+      font-weight bold
+
+      & + .btn {
+        margin-left: 25px
+      }
+    }
+  }
+}
+

@@ -1,0 +1,96 @@
+// 背景图片
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")
+
+// 不换行
+ellipse()
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+ellipse-2()
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal !important;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+// 扩展点击区域
+extend-click()
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    top: -10px
+    left: -10px
+    right: -10px
+    bottom: -10px
+// 0.5px边框
+bdr-r()
+  position: relative
+  &:after
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    content: '';
+    background: #ddd;
+    transform: scaleX(0.5);
+    -webkit-transform: scaleX(0.5);
+    z-index: 10;
+bdr-l()
+  position: relative
+  &:after
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    -webkit-transform: scale(.5);
+    transform: scale(.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    border: 0 solid #e5e5e5
+    border-left-width: 1px
+bdr-t()
+  position: relative
+  &:after
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background: #ddd;
+    transform: scaleY(0.5);
+    -webkit-transform: scaleY(0.5);
+    z-index: 10;
+bdr-b()
+  position: relative
+  &:after
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background: #ddd;
+    transform: scaleY(0.5);
+    -webkit-transform: scaleY(0.5);
+    z-index: 10;
+
+propor-padding(val){
+    position: relative;
+    &:after{
+        content: '';
+        display: block;
+        width: 100%;
+        padding-top: (val)%;
+    }
+}

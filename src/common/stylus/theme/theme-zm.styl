@@ -1,0 +1,51 @@
+
+.theme_sys_base {
+  &.theme_sys_zm {
+    $theme_color = #CF000D
+    $theme_color_l = #ffebf0
+
+    .theme_standard_font {
+      color $theme_color
+    }
+    .theme_standard_font_i {
+      color $theme_color !important
+    }
+    .theme_standard_bg {
+      background-color $theme_color
+    }
+    .theme_standard_bg_i {
+      background-color $theme_color !important
+    }
+    .theme_standard_bdr {
+      border-color $theme_color
+      &.theme_standard_bdr:before {
+        border-color $theme_color
+      }
+    }
+    .theme_standard_bdr_i {
+      border-color $theme_color !important
+      &.theme_standard_bdr_i:before {
+        border-color $theme_color !important
+      }
+    }
+
+    .theme_light_font {
+      color $theme_color_l
+    }
+    .theme_light_font_i {
+      color $theme_color_l !important
+    }
+    .theme_light_bg {
+      background-color $theme_color_l
+    }
+    .theme_light_bg_i {
+      background-color $theme_color_l !important
+    }
+    .theme_light_bdr {
+      border-color $theme_color_l
+    }
+    .theme_light_bdr_i {
+      border-color $theme_color_l !important
+    }
+  }
+}

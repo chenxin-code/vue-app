@@ -1,0 +1,6 @@
+- recharge 易捷卡（充值，充次）
+- micro-shop 微店
+- oil-sale 批量购油（撞单，约定，抢单）
+- real-name-authentication（实名认证）
+- traffic-ticket 罚单
+- share-gift 分享有礼

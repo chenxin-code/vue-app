@@ -1,0 +1,46 @@
+@import "variable.styl"
+
+.nav-top-bg {
+  position fixed;
+  top 0px;
+  left 0px;
+  right 0px;
+  background-color $color-theme-r;
+  z-index 5;
+  .nav-top-title {
+    position absolute;
+    left 60px;
+    right 60px;
+    bottom 0px;
+    color white;
+    font-weight $font-weight-x
+    font-size $font-size-large;
+    text-align center;
+    line-height $nav-height;
+  }
+  .nav-back-btn {
+    position absolute;
+    left 0px;
+    bottom 0px;
+    width 50px;
+    z-index 10;
+    //background url("../static/image/mall/nav-back.png")
+    .nav-back-btn-img {
+      margin-left 14px;
+      margin-top 14px;
+      width 16px;
+      height 16px;
+    }
+  }
+  .nav-right{
+    position absolute;
+    right 0px;
+    top 20px;
+    bottom 0px;
+    width 50px;
+    text-align center;
+    line-height $nav-height;
+    z-index 10;
+    color #fff;
+  }
+}

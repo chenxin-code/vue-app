@@ -1,0 +1,1281 @@
+/**Created by liaoyingchao on 2018/10/24.*/
+
+<template>
+  <div class="list">
+    <nav-top @backEvent="backEvent"></nav-top>
+    <nav-content>
+      <div class="all-content">
+        <div class="row">
+          <div class="local-div single-line" @click="selectAddressClick()">
+            <span class="theme_font_gray single-line">{{location.cityName}}</span>
+            <i class="iconfont mall-arrow-down icon-size theme_font_gray"></i>
+          </div>
+          <div class="search-div theme_bg_white_f5"
+               @click="toSearchEvent">
+            <i class="iconfont mall-sousuo theme_font_tint" style="font-size: 16px;"></i>
+            <span class="theme_font_tint single-line">{{searchKey ? searchKey : '搜你想要的商品'}}</span>
+          </div>
+        </div>
+        <div class="row row-filter top-showdow">
+          <div class="filter-btn theme_font_black" @click="categoryEvent" v-if="categoryIdList == ''">
+            <i class="iconfont mall-datubiao filter-size-1 theme_font_black"></i>
+            <span class="cate single-line">{{cateText}}</span>
+          </div>
+          <div class="filter-btn theme_font_black" @click="filterEvent(0)">
+            <span class="single-line" :class="{theme_standard_font_i: filterType == 0}">综合排序</span>
+          </div>
+          <div class="filter-btn theme_font_black" @click="filterEvent(1)">
+            <span class="single-line" :class="{theme_standard_font_i: filterType == 1 || filterType == 2}">销量</span>
+          </div>
+          <div class="filter-btn theme_font_black" @click="filterEvent(2)">
+            <span class="single-line" :class="{theme_standard_font_i: filterType == 3 || filterType == 4}">价格</span>
+            <div v-show="filterType == 3 || filterType == 4">
+              <i class="iconfont mall-sanjiaoxiabiao arrow-icon theme_font_tint"
+                 :class="{theme_standard_font_i: filterType == 3}"></i>
+              <i class="iconfont mall-xiala arrow-icon theme_font_tint"
+                 :class="{theme_standard_font_i: filterType == 4}"></i>
+            </div>
+          </div>
+          <div class="filter-btn theme_font_black" @click="superFilter">
+            <span class="single-line">筛选</span>
+            <i class="iconfont mall-shaixuan filter-size theme_font_tint"></i>
+          </div>
+        </div>
+        <div class="list-content">
+          <div class="list-pull-to">
+            <pull-to
+              ref="listContent"
+              :bottomConfig="{pullText: '', triggerText: '释放更新', loadingText: '加载中...', doneText: isCanLoadMore?'加载完成':'没有更多数据了', failText: '加载失败', loadedStayTime: 400, stayDistance: 40, triggerDistance: 50}"
+              :bottom-load-method="_loadProList"
+              :isBottomAutoS="true"
+              :isBottomBounce="isCanLoadMore"
+            >
+              <div>
+                <div class="list-tip theme_bg_yl theme_font_red" v-if="pageType != '' && endTime != ''">
+                  <p>限时促销： {{tipText}}</p>
+                  <p>距离结束：
+                    <countdown :endTime="endTime"></countdown>
+                  </p>
+                </div>
+                <CardList @productEvent="productEvent" @addToCart="addToCart" :listData="listData"
+                          v-if="listData.length > 0" :cartProducts="cartProducts"></CardList>
+                <div class="bottom-space"></div>
+              </div>
+            </pull-to>
+          </div>
+          <div class="no-list" v-if="isNoList && pageType == ''">
+            <div class="img-div">
+              <img src="static/image/mall2/no-data-img.png">
+            </div>
+            <div class="tip theme_font_gray">抱歉没有找到相应商品~</div>
+          </div>
+        </div>
+        <div class="category-div" v-show="showCategory" v-if="cateList.length > 0">
+          <Category :cateList="cateList" @closeEvent="showCategory = false" @cateEvent="cateEvent"></Category>
+        </div>
+        <div class="settle-div">
+          <div class="cart-icon" @click.stop="showCartProducts = true">
+            <i class="iconfont mall-gouwuche btn-icon theme_font_red"></i>
+            <div class="num theme_bg_red" v-if="num>0">{{num}}</div>
+          </div>
+          <div class="info">
+            <div class="price">
+              <span>¥</span>
+              <span class="big">{{occurData.payAmount || 0.0}}</span>
+            </div>
+            <div class="yf">
+              另需配送费{{occurData.freightAmount || 0.0}}元
+            </div>
+          </div>
+          <div class="btn theme_standard_bg" @click.stop="toPlaceOrder">去结算</div>
+        </div>
+      </div>
+    </nav-content>
+    <transition name="bounce" @afterEnter="productImgAfterEnter">
+      <img :src="this.addToCartItem.phMainUrl" alt="" class="productImg" v-if="showProductImg && addToCartItem">
+    </transition>
+    <transition @after-enter='afterEnter' @before-enter="beforeEnter">
+      <div class="anProductImg" v-if="showAddCartAn  && addToCartItem">
+        <img :src="this.addToCartItem.phMainUrl" alt="">
+      </div>
+    </transition>
+    <AllCategory ref="All_Category" :barHeight="$store.state.barHeight" v-show="showAllCategory" @closeEvent="showAllCategory = false"
+                 @cateEvent="cateEvent"></AllCategory>
+    <Filtrate @filtrateEvent="filtrateEvent" @closeEvent="filtrateCloseEvent" :category="category" v-if="showCreated"
+              v-show="showFiltrate"></Filtrate>
+    <pop-view class="mall2" v-if="showCartProducts" @closeEvent="showCartProducts = false">
+      <div class="pop-body">
+        <div class="pop-title theme_font_common">已选商品</div>
+        <div class="pop-scroll-div">
+          <div class="pro-row" v-for="(prodata, idx) in cartProducts">
+            <div class="img-div">
+              <img :src="prodata.phPictureUrl"/>
+            </div>
+            <div class="info-div">
+              <div class="title theme_font_black">{{prodata.productName}}</div>
+              <div class="title theme_font_black">
+                <span>{{prodata.specs}}</span>
+              </div>
+              <div class="price pop-mdps">
+                <PriceOrder :productData="prodata"></PriceOrder>
+                <van-stepper
+                  v-model="prodata.number"
+                  class="wish-prod-stepper"
+                  :max="prodata.saleNumMax"
+                  :min="0"
+                  :step="prodata.saleNumStep"
+                  @change="onChange(prodata.skuId, prodata.number)"
+                  integer/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </pop-view>
+  </div>
+</template>
+
+<script>
+  import CardList from '../list/base/card-list'
+  import DetailList from '../list/base/detail-list'
+  import Filtrate from '../list/filtrate/index'
+  import Search from '../common/search'
+  import cartJS from '../cart/js/cart'
+  import GiftList from '../common/giftlist'
+  import PullTo from '@/components/Vendor/vue-pull-to/vue-pull-to'
+  import Category from '../list/category/index'
+  import AllCategory from '../list/category/all-categories'
+  import Countdown from "@/components/Vendor/countdown/countdown";
+  import Recommend from '../list/recommend/index'
+  import InitialLoadPickupAny from '@/utils/initialLoadPickupAny.js'
+  import AdPage from '@/components/product/index/subpage/adpage'
+  import PriceOrder from "@/components/commonui/price/price-order";
+
+  export default {
+    name: "list",
+    components: {
+      PriceOrder,
+      Countdown,
+      CardList,
+      DetailList,
+      Filtrate,
+      GiftList,
+      PullTo,
+      Category,
+      Recommend,
+      AllCategory,
+      AdPage
+    },
+    props: ['componentName', 'orderCategory', 'vipUnitUserCode'],
+    data() {
+      return {
+        deductionSkuId: '',
+        listStyle: 1,
+        pickuYD: false,
+        selectedType: 2,
+        listZitiId: '',
+        filterType: 0,
+        category: '',
+        listData: [],
+        showCreated: false,
+        showFiltrate: false,
+        filterBrands: [],
+        filterFeatureies: [],
+        pageType: '',
+        activityId: '',
+        couponId: '',
+        subtotal: '0.00',
+        searchKey: '',
+        scrollTopValue1: 0,
+        backRefresh: false,
+        activityInfo: {},
+        cartJS: cartJS,
+        cateLevel: '',
+        nowPage: 1,//分页信息
+        isCanLoadMore: false,// 是否可以上拉加载更多
+        clsType: '1',
+        isFirstEnter: true,
+        maxPrice: '',
+        minPrice: '',
+        lastPath: '',
+        // 活动页面，相关数据
+        cateText: '全部分类',
+        showCategory: false,
+        cateList: [],
+        couFaceValue: '0',
+        couThresholdAmount: '0',
+        cartCanUseCouponAmount: '0',
+        endTime: '',
+        tipText: '',
+        isNoList: false,
+        storeOuCode: '',
+        showGuide: false,
+        showAllCategory: false,
+
+        //当前点击加入购货物车的商品
+        addToCartItem: undefined,
+        //加入购物车的时候  显示图片动画
+        showProductImg: false,
+        // 抛物线动画
+        showAddCartAn: false,
+        //显示购物车按钮动画
+        addCartBtnAn: false,
+        easyCardId: '', // 从易捷卡页面过来的才有easyCardId
+        cardType: '', // 551充值卡 552 计次卡 只有计次卡没有购物车悬浮按钮
+        productType: '',
+        categoryIdList: '', //多分类
+        location: {}, //定位
+        carts: [],
+        num: 0,
+        occurData: {},
+        paramsData_toPlaceOrder: {},
+        resData_toPlaceOrder: {},
+        cartProducts: [],
+        showCartProducts: false,
+        loaded: false
+      }
+    },
+    mounted() {
+      this.easyCardId = this.$route.query.easyCardId
+      this.cardType = this.$route.query.cardType
+    },
+    methods: {
+      onChange: function (skuId, number) {
+        let rmIdx = -1
+        for (let i = 0; i < this.carts.length; i++) {
+          if (number == 0) {
+            rmIdx = i
+            break;
+          }
+          if (this.carts[i].skuId == skuId) {
+            this.carts[i].number = number
+          }
+        }
+        if (rmIdx > -1) {
+          this.carts.splice(rmIdx, 1)
+        }
+        if (this.carts.length) {
+          this._settleCart(this.carts[0].storeOuCode)
+        } else {
+          this.num = 0
+          this.cartProducts = []
+          this.occurData = {}
+          this.saveTCPS_Carts();
+        }
+      },
+      getCouponTip: function () {
+        let amount = this.cartCanUseCouponAmount != '' ? this.cartCanUseCouponAmount : '0'
+        if (parseFloat(amount) > parseFloat(this.couThresholdAmount)) {
+          return '您已可以使用优惠券，优惠' + this.couFaceValue + '元'
+        } else {
+          let num = this.$util.toDecimal2(parseFloat(this.couThresholdAmount) - parseFloat(amount))
+          return '还差' + num + '元可以优惠' + this.couFaceValue + '元'
+        }
+      },
+      cateEvent: function (item) {
+        // 更换分类之后 清空筛选属性信息
+        this.showCreated = false
+        this.filterBrands = []
+        this.filterFeatureies = []
+
+        this.showAllCategory = false;
+        this.showCategory = false;
+        this.cateText = item.name
+        this.category = item.id
+        this.cateLevel = item.cateLevel
+        this.clsType = item.clsType
+        this.nowPage = 0;
+        this._loadProList()
+      },
+      categoryEvent: function () {
+        if (this.pageType != '') {
+          this.showCategory = !this.showCategory;
+        } else {
+          this.showAllCategory = !this.showAllCategory;
+        }
+      },
+      // linkType  1去凑单  2再逛逛 3领赠品 4去换购  5赠品未满足  6换购未满足
+      getGiftText: function () {
+        if (this.activityInfo.linkType == 3) {
+          return '选择赠品'
+        } else if (this.activityInfo.linkType == 4) {
+          return '选择换购'
+        } else if (this.activityInfo.linkType == 5) {
+          return '查看赠品'
+        } else if (this.activityInfo.linkType == 6) {
+          return '查看换购'
+        }
+      },
+      goCart: function () {
+        if (this.$route.query.fromCart == 1) {
+          this.$router.go(-1);
+        } else {
+          this.$router.push({
+            path: '/mall2/cart',
+            query: {
+              orderCategory: this.orderCategory,
+              vipUnitUserCode: this.vipUnitUserCode
+            }
+          })
+        }
+      },
+      goGift: function () {
+        let isScan = cartJS.getGiftIsOnlyScan(this.activityInfo);
+        let giftType = cartJS.getGiftType(this.activityInfo);
+
+        GiftList.open({
+          listData: this.activityInfo.gift,
+          activityId: this.activityInfo.mktActivityId,
+          sureFunc: this.sureFunc,
+          isScan: isScan,
+          giftType: giftType
+        })
+      },
+      sureFunc: function (carts) {
+        this.$Loading.open();
+        let url = '/app/json/app_cart/addCart';
+        let paramsData = {
+          token: this.$store.state.login.token,
+          carts: carts,
+          deliveryType: this.selectedType,
+          orderCategory: this.orderCategory,
+          vipUnitUserCode: this.vipUnitUserCode
+        };
+        this.$http.post(url, paramsData).then(
+          res => {
+            this.$Loading.close();
+            let data = res.data;
+            if (data.status == 0) {
+              this.$store.state.mall2.cartNum = data.data;
+              this.$Toast("添加购物车成功！")
+            } else {
+              this.$Toast(data.info);
+            }
+          },
+          error => {
+            this.$Loading.close();
+            this.$Toast('请求数据失败！')
+          }
+        );
+      },
+      backEvent: function () {
+        this.$router.go(-1)
+      },
+      toSearchEvent: function () {
+        Search.open({
+          initData: {
+            barHeight: this.$store.state.barHeight,
+            searchHistory: this.$store.state.mall2.searchHistory
+          },
+          clearSearchHistory: () => {
+            this.$store.state.mall2.searchHistory = []
+          },
+          searchEvent: (searchStr) => {
+            Search.close()
+            this.$mallCommon.pushSearchHistory(searchStr)
+            this.searchKey = searchStr
+            this.nowPage = 0;
+            this._loadProList()
+          }
+        })
+      },
+      listStyleEvent: function () {
+        if (this.listStyle == 1) {
+          this.listStyle = 2
+        } else {
+          this.listStyle = 1
+        }
+      },
+      filtrateCloseEvent: function () {
+        this.showFiltrate = false
+      },
+      selectedTypeEvent: function (tag) {
+        this.$store.state.mall2.staticDeliverType = tag
+        this.$bridgefunc.vuexStorage()
+        this.selectedType = tag;
+        if (tag == 1 && (this.$store.state.mall2.zitiAddress.id == '')) {
+          this.backRefresh = true
+          this.$router.push({
+            path: '/mall2/mypickupaddress'
+          })
+        } else {
+          this.nowPage = 0;
+          this._loadProList()
+          this._getCartCount()
+
+          // this.deductionCart();
+        }
+      },
+      filterEvent: function (type) {
+        this.showCategory = false
+        if (type == 0) {
+          // 综合排序
+          this.filterType = 0
+        } else if (type == 1) {
+          // 销量 点一下降序 点一下取消
+          if (this.filterType == 2) {
+            this.filterType = 0
+          } else {
+            this.filterType = 2
+          }
+        } else if (type == 2) {
+          // 价格
+          if (this.filterType == 3) {
+            this.filterType = 4
+          } else {
+            this.filterType = 3
+          }
+        }
+        this.nowPage = 0;
+        this._loadProList()
+      },
+      filtrateEvent: function (filtrateData) {
+        this.showFiltrate = false
+        this.filterBrands = []
+        this.filterFeatureies = []
+        for (let i = 0; i < filtrateData.brands.length; i++) {
+          this.filterBrands.push(filtrateData.brands[i].id)
+        }
+        for (let i = 0; i < filtrateData.featureies.length; i++) {
+          // this.filterFeatureies.push(filtrateData.featureies[i].id)
+          this.filterFeatureies.push({
+            id: filtrateData.featureies[i].id,
+            featureType: filtrateData.featureies[i].featureType,
+          })
+        }
+        this.maxPrice = filtrateData.maxPrice;
+        this.minPrice = filtrateData.minPrice;
+        this.nowPage = 0;
+        this._loadProList()
+      },
+      superFilter: function () {
+        this.showCategory = false
+        this.showFiltrate = true;
+        this.showCreated = true;
+      },
+      // 获取普通商品列表
+      _loadProList: function (loaded, refreshCate = false) {
+        this.isCanLoadMore = false;
+        this.isNoList = false
+        let page = this.nowPage + 1;
+        if (this.nowPage == 0) {
+          this.listData = [];
+        }
+        this.$Loading.open();
+        let url = '/app/json/product/getAppProSearchList';
+        let paramsData = {
+          token: this.$store.state.login.token,
+          page: page,
+          rows: 20,
+          orderByKey: '',
+          ascOrDesc: '',
+          deliverType: this.selectedType,
+          categoryId: this.category,
+          cateLevel: this.cateLevel,
+          brandIds: this.filterBrands,
+          featureIds: this.filterFeatureies,
+          // 券ID，券相关列表的时候使用
+          couTypeCode: this.couponId,
+          // 活动ID，活动的时候使用
+          activityId: this.activityId,
+          // 搜索key
+          proName: this.searchKey,
+          // 分类类型
+          clsType: this.clsType,
+          // 价格筛选
+          maxPrice: this.maxPrice,
+          minPrice: this.minPrice,
+          easyCardId: this.$route.query.easyCardId,
+          orderCategory: this.orderCategory,
+          vipUnitUserCode: this.vipUnitUserCode
+        };
+        if (this.filterType == 1) {
+          // 销量 升序
+          paramsData.orderByKey = '1'
+          paramsData.ascOrDesc = '0'
+        } else if (this.filterType == 2) {
+          // 销量 降序
+          paramsData.orderByKey = '1'
+          paramsData.ascOrDesc = '1'
+        } else if (this.filterType == 3) {
+          // 价格 降序
+          paramsData.orderByKey = '0'
+          paramsData.ascOrDesc = '0'
+        } else if (this.filterType == 4) {
+          // 价格 升序
+          paramsData.orderByKey = '0'
+          paramsData.ascOrDesc = '1'
+        }
+
+        paramsData.supportCountryDelivery = '0'
+
+        paramsData.area = {
+          provinceId: this.location.provinceId,
+          cityId: this.location.cityId,
+          countryId: this.location.countryId,
+          townId: this.location.townId
+        }
+        // 店铺ID
+        let storeOuCode = this.$route.query.storeOuCode;
+        storeOuCode ? paramsData.storeOuCode = storeOuCode : null;
+        if (this.productType && this.productType != '') {
+          paramsData.productType = this.productType
+        }
+
+        if (this.categoryIdList != '') {
+          paramsData.categoryIdList = this.categoryIdList
+        }
+
+        this.$http.post(url, paramsData).then(res => {
+            this.$Loading.close();
+            let data = res.data;
+            if (data.status == 0) {
+              if (this.activityId) {
+                this.$actionStatistics.listAction('130020', JSON.stringify(paramsData), this.activityId)
+              } else {
+                this.$actionStatistics.listAction('130010', JSON.stringify(paramsData), this.activityId)
+              }
+
+              if (this.nowPage != 0) {
+                this.listData = this.listData.concat(data.data.list);
+              } else {
+                this.listData = data.data.list;
+                if (this.listData.length == 0) {
+                  let isShow = sessionStorage.getItem('Pickup_YD_Is_Show')
+                  if (isShow != '1') {
+                    this.pickuYD = true
+                    sessionStorage.setItem('Pickup_YD_Is_Show', '1')
+                  } else {
+                    this.isNoList = true
+                  }
+                } else {
+                  this.deductionSkuId = this.listData[0].skuId
+                  this.storeOuCode = this.listData[0].storeOuCode
+                  if (refreshCate) {
+                    this.$refs.All_Category.loadProCateList(this.storeOuCode)
+                  }
+                }
+                if (this.pageType != '' && this.cateList.length <= 1) {
+                  let cList = data.data.cateList
+                  this.cateList = [{
+                    'name': '全部分类',
+                    'id': '',
+                    'childList': [{
+                      'name': '全部分类',
+                      'id': ''
+                    }]
+                  }]
+                  for (let i = 0; i < cList.length; i++) {
+                    let subArr = cList[i].childList
+                    this.cateList = this.cateList.concat(subArr);
+                  }
+                }
+              }
+              this.nowPage++;
+              if (data.data.page.count <= this.listData.length) {
+                this.isCanLoadMore = false;
+              } else {
+                this.isCanLoadMore = true;
+              }
+            } else {
+              this.$Toast(data.info);
+            }
+            if (loaded) {
+              loaded('done');
+            }
+          },
+          error => {
+            if (loaded) {
+              loaded('done');
+            }
+            this.$Loading.close();
+            this.$Toast('请求数据失败！')
+          });
+      },
+      productEvent: function (product) {
+        let path = '/mall2/city-delivery/detail'
+        this.$router.push({
+          path: path,
+          query: {
+            id: product.id,
+            skuId: product.skuId,
+            storeOuCode: this.$route.query.storeOuCode,
+          }
+        })
+      },
+      // 获取购物车数量
+      _getCartCount: function () {
+        if (this.$store.state.login.token == '') {
+          return;
+        }
+        let url = '/app/json/app_cart/getCartCount';
+        let paramsData = {
+          token: this.$store.state.login.token,
+          deliveryType: this.selectedType,
+          orderCategory: this.orderCategory,
+          vipUnitUserCode: this.vipUnitUserCode
+        };
+        this.$http.post(url, paramsData).then(
+          res => {
+            let data = res.data;
+            if (data.status == 0) {
+              this.$store.state.mall2.cartNum = data.data
+            } else {
+              this.$Toast(data.info);
+            }
+          },
+          error => {
+            this.$Loading.close();
+            this.$Toast('请求数据失败！')
+          }
+        );
+      },
+      addToCart: function (item) {
+
+        let has = false
+        for (let i = 0; i < this.carts.length; i++) {
+          if (this.carts[i].skuId == item.skuId) {
+            has = true
+            if (item.stockNum < parseInt(this.carts[i].number) + 1) {
+              this.$Toast('当前商品库存不足！')
+              return;
+            }
+            this.carts[i].number = parseInt(this.carts[i].number) + 1
+          }
+        }
+        if (has == false) {
+          if (item.stockNum < 1) {
+            this.$Toast('当前商品库存不足！')
+            return;
+          }
+          this.carts.push({
+            skuId: item.skuId,
+            storeOuCode: item.storeOuCode,
+            activityId: this.activityId,
+            selfActivityId: item.activityId,
+            deliveryType: '2',
+            number: 1,
+          })
+        }
+        this._settleCart(item.storeOuCode)
+      },
+      _settleCart: function (storeOuCode) {
+        this.num = 0
+        for (let i = 0; i < this.carts.length; i++) {
+          this.num += parseInt(this.carts[i].number)
+        }
+        this.$Loading.open();
+        let url = '/app/json/app_cart/SettleCart';
+        let paramsData = {
+          token: this.$store.state.login.token,
+          carts: this.carts,
+          deliveryType: '2',
+          userAddress: this.location,
+          // storeOuCode: storeOuCode,
+          // pickupId: '196',
+          userAddressId: '',
+        };
+        paramsData.couNo = ['-1']
+        this.$http.post(url, paramsData).then(
+          res => {
+            this.$Loading.close();
+            let data = res.data;
+            if (data.status == 0) {
+              this.loaded = true
+              this.paramsData_toPlaceOrder = paramsData
+              this.resData_toPlaceOrder = data.data
+              this.occurData = data.data.occur[0]
+              this.getCartsProducts()
+            } else {
+              this.$Toast(data.info);
+            }
+          },
+          error => {
+            this.$Loading.close();
+            this.$Toast('请求数据失败！')
+          }
+        );
+      },
+      getCartsProducts: function () {
+
+        let arr = []
+        this.num = 0
+        let arrCarts = []
+        let store = this.occurData.store[0]
+        for (let i = 0; i < store.activity.length; i++) {
+          let carts = store.activity[i].cart
+          for (let j = 0; j < carts.length; j++) {
+            arr.push(carts[j])
+            this.num += carts[j].number
+            arrCarts.push({
+              skuId: carts[j].skuId,
+              storeOuCode: carts[j].storeOuCode,
+              activityId: this.activityId,
+              selfActivityId: carts[j].activityId,
+              deliveryType: '2',
+              number: carts[j].number
+            })
+          }
+        }
+        let ncarts = store.noActivityCart
+        for (let j = 0; j < ncarts.length; j++) {
+          arr.push(ncarts[j])
+          this.num += ncarts[j].number
+          arrCarts.push({
+            skuId: ncarts[j].skuId,
+            storeOuCode: ncarts[j].storeOuCode,
+            activityId: this.activityId,
+            selfActivityId: ncarts[j].activityId,
+            deliveryType: '2',
+            number: ncarts[j].number
+          })
+        }
+        this.cartProducts = arr
+        this.carts = arrCarts;
+        this.saveTCPS_Carts();
+      },
+      saveTCPS_Carts(){
+        sessionStorage.setItem('TCPS_Carts', JSON.stringify({
+          carts: this.carts,
+          cityId: this.location.cityId,
+          storeOuCode: this.$route.query.storeOuCode,
+        }))
+      },
+      getTCPS_Carts(){
+        return JSON.parse(sessionStorage.getItem('TCPS_Carts'));
+      },
+      // getProduct
+      selectAddressClick: function () {//选择地址
+
+        this.backRefresh = true;
+        this.$store.state.location.selectType = '4'
+        this.$router.push({
+          path: '/cityselector/0'
+        })
+      },
+      productImgAfterEnter: function (el) {
+        this.showProductImg = false
+        this.showAddCartAn = true
+      },
+      beforeEnter(el) {
+        el.style.transform = `translate3d(0,0,0)`;
+        el.children[0].style.opacity = 0;
+      },
+      afterEnter(el) {
+        let elBottom = el.getBoundingClientRect().bottom;
+        let elLeft = el.children[0].getBoundingClientRect().left
+        let gwcLeft = this.$refs.gouwuche.getBoundingClientRect().left;
+        let gwcBottom = this.$refs.gouwuche.getBoundingClientRect().top;
+        el.style.transform = `translate3d(0,${gwcBottom - elBottom}px,0)`;
+        el.style.transition = 'transform .55s cubic-bezier(0.3, -0.25, 0.7, -0.15)';
+        el.children[0].style.transform = `translate3d(${gwcLeft - elLeft}px,0,0)`;
+        el.children[0].style.transition = 'transform .55s linear';
+        el.children[0].style.opacity = 1;
+        this.showAddCartAn = false
+        el.addEventListener('transitionend', () => {
+          this.addCartBtnAn = true;
+          this.$refs.gouwuche.addEventListener('webkitAnimationEnd', () => {
+            this.addCartBtnAn = false;
+          })
+        })
+      },
+      toPlaceOrder: function () {
+        if (this.num == 0) {
+          return;
+        }
+        if (this.resData_toPlaceOrder.occur.length > 0) {
+          let occurData = this.resData_toPlaceOrder.occur[0]
+          if (occurData.startAmount > 0 && occurData.startAmount > occurData.realAmount) {
+            this.$Toast(occurData.startAmount + '元起送！')
+            return ;
+          }
+        }
+        let params = {
+          res: this.resData_toPlaceOrder,
+          paramsData: this.paramsData_toPlaceOrder,
+          deliveryType: '2'
+        };
+
+        this.$router.push({
+          name: 'citydeliveryplaceorder',
+          params: params
+        })
+      },
+      testCarts(){
+        let carts = this.getTCPS_Carts();
+        if (carts && carts.cityId == this.location.cityId && carts.storeOuCode == this.$route.query.storeOuCode) {
+          this.carts = carts.carts || []
+          if (this.carts.length > 0) {
+            this._settleCart(this.carts[0].storeOuCode)
+          }
+        } else {
+          this.carts = []
+          this.cartProducts = []
+          this.num = 0
+          this.occurData = {}
+          this.saveTCPS_Carts();
+        }
+      },
+    },
+    created() {
+
+      if (this.$store.state.globalConfig.city_delivery_default_filter_type == '2') {
+        this.filterType = '2'
+      } else if (this.$store.state.globalConfig.city_delivery_default_filter_type == '3') {
+        this.filterType = '3'
+      } else if (this.$store.state.globalConfig.city_delivery_default_filter_type == '4') {
+        this.filterType = '4'
+      }
+
+      this.lastPath = this.$route.query.lastPath ? this.$route.query.lastPath : ''
+      this.searchKey = this.$route.query.searchKey ? this.$route.query.searchKey : ''
+
+      this.clsType = this.$route.query.clsType ? this.$route.query.clsType : '1'
+      this.cateText = this.$route.query.categoryName ? this.$route.query.categoryName : '全部分类'
+
+      this.nowPage = 0;
+      this.isCanLoadMore = false;
+      this.isNoList = false
+      let location = sessionStorage.getItem('Address_City_Seleted')
+      if (location) {
+        location = JSON.parse(location)
+        this.location = location
+        this._loadProList(null, true)
+        this.testCarts();
+      } else {
+        this.$bridgefunc.getLocation((location) => {
+
+          let locationinfo = {
+            province: location.province,
+            city: location.city,
+            district: location.area
+          }
+          if (location.city == location.province) {
+            locationinfo.city = location.area
+            locationinfo.district = ''
+          }
+          this.$mallCommon.pureLocationAnalysis((address) => {
+            this.location = address
+            sessionStorage.setItem('Address_City_Seleted', JSON.stringify(address))
+            this._loadProList(null, true)
+            this.testCarts();
+          }, locationinfo)
+        })
+      }
+    },
+    activated() {
+
+      // 判断配送自提变了界面需要刷新
+      if (this.backRefresh) {
+        this.backRefresh = false
+        let location = sessionStorage.getItem('Address_City_Seleted')
+        if (location) {
+          location = JSON.parse(location)
+          this.location = location
+          this.nowPage = 0;
+          this._loadProList(null, true)
+        }
+      } else {
+        this.$refs.listContent.setScrollTopValue(this.scrollTopValue1);
+      }
+
+      if (this.loaded) {
+        this.testCarts();
+      }
+    },
+    beforeRouteLeave(to, from, next) {
+      if (to.path != this.lastPath) {
+        this.scrollTopValue1 = this.$refs.listContent.getScrollTopValue();
+      } else {
+        this.$keepaliveHelper.deleteCache(this)
+      }
+      next()
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="stylus" scoped type="text/stylus">
+  @import "~@/common/stylus/variable.styl"
+  .list {
+    position relative;
+    width 100%
+    height 100%
+    overflow hidden
+
+    .pop-scroll-div {
+      padding-bottom 80px;
+
+      .pop-mdps {
+        display flex;
+        align-items center;
+        justify-content space-between;
+      }
+    }
+
+    .row {
+      width 100%;
+      overflow hidden;
+      padding 5px 15px;
+      display flex;
+      align-items center;
+
+      .space {
+        flex 1;
+      }
+
+      .local-div {
+        flex 1;
+        //max-width 180px;
+        padding-left 5px;
+        padding-right 10px;
+        display flex;
+        align-items center;
+        font-size $font-size-medium-s
+
+        .icon-size {
+          font-size $font-size-medium
+        }
+
+        span {
+          padding 2px;
+          direction: rtl;
+        }
+      }
+
+      .search-div {
+        width 160px;
+        display flex;
+        align-items center;
+        height: 30px;
+        padding: 0 15px;
+        border-radius: 15px;
+      }
+
+      &.row-filter {
+        justify-content: space-around;
+      }
+
+      .filter-btn {
+        padding 7px;
+        display flex;
+        align-items center;
+        justify-content: center;
+
+        .cate {
+          max-width 80px;
+        }
+
+        .arrows {
+          display inline;
+        }
+
+        .arrow-icon {
+          margin-top -4px;
+          margin-bottom -4px;
+          display block;
+          font-size 12px;
+        }
+
+        .filter-size {
+          font-size 17px;
+        }
+
+        .filter-size-1 {
+          font-size 14px;
+          padding 2px 3px 0px;
+        }
+
+        span {
+          font-weight 500;
+        }
+      }
+    }
+
+    .all-content {
+      position relative;
+      display flex;
+      position relative
+      justify-content space-between;
+      flex-direction column;
+      height 100%;
+
+      .settle-div {
+        position absolute;
+        left 10px;
+        right 10px;
+        bottom 15px;
+        display flex;
+        z-index 101;
+        align-items center;
+        background-color rgba(0, 0, 0, 0.5)
+        border-radius 30px;
+        padding 10px 15px;
+        color white;
+
+        .cart-icon {
+          background-color white;
+          border-radius 20px;
+          padding 8px;
+          position relative;
+
+          i {
+            font-size 18px;
+          }
+
+          .num {
+            position absolute;
+            right -5px;
+            top -5px;
+            font-size 10px;
+            border-radius 8px;
+            color white;
+            padding 1px 5px;
+          }
+        }
+
+        .info {
+          flex 1;
+          padding 0 10px
+
+          .price {
+            span {
+              font-weight 600;
+              font-size 12px;
+            }
+
+            .big {
+              font-size 18px;
+            }
+          }
+
+          .yf {
+            margin-top 5px;
+          }
+        }
+
+        .btn {
+          padding 6px 15px;
+          border-radius 20px;
+          font-size 16px;
+          font-weight 600;
+        }
+      }
+
+      .top-showdow {
+        margin-top 3px;
+        border-radius 8px;
+        box-shadow: 0px -2px 2px #efefef;
+        overflow hidden
+      }
+
+      .list-content {
+        flex 1;
+        background: url('../../../../static/image/mall2/list-bg.png') no-repeat center center / 100% 100%;
+        overflow hidden;
+        /*-webkit-overflow-scrolling touch;*/
+        position: relative;
+
+        .list-tip {
+          padding 4px 12px;
+
+          p {
+            display flex;
+            align-items center;
+            padding 3px 0px;
+          }
+        }
+
+        .list-pull-to {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+
+          .bottom-space {
+            height 70px;
+          }
+        }
+
+        .no-list {
+          position absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow-x hidden;
+          overflow-y auto;
+          -webkit-overflow-scrolling touch;
+
+          .img-div {
+            margin-top 20px;
+            text-align center;
+
+            img {
+              width 160px;
+            }
+          }
+
+          .tip {
+            margin-top 10px;
+            padding 10px;
+            font-size 12px;
+            text-align center;
+          }
+        }
+      }
+
+      .activity-btns {
+        height 50px;
+        border-top 1px solid #ddd;
+        display flex;
+        align-items center;
+        font-size 14px;
+
+        .subtotal-div {
+          flex 1;
+          padding 5px 8px;
+
+          p {
+            padding 2px;
+          }
+        }
+
+        .btn {
+          height 50px;
+          line-height 50px;
+          font-size 18px;
+          font-weight 500;
+          padding 0px 15px;
+        }
+
+        .price {
+          font-size 14px;
+          font-weight 500;
+        }
+      }
+
+      .cart-div {
+        position absolute;
+        right 16px;
+        bottom 120px;
+        width 36px;
+        height 36px;
+        border-radius 20px;
+        padding 8px;
+
+        .cart-num {
+          position absolute;
+          right -5px;
+          top -5px;
+          border-radius 12px;
+          padding 2px 4px;
+          font-size 12px;
+        }
+
+        i {
+          font-size 20px;
+        }
+
+        .wish-icon {
+          display block;
+          width 100%;
+          height 100%;
+          position absolute;
+          right 0
+          top 0
+          left 0
+          bottom 0;
+        }
+      }
+
+      .category-div {
+        position absolute;
+        z-index 10;
+        left 0px;
+        right 0px;
+        top 40px;
+        bottom 0px;
+      }
+    }
+
+    .guide-div {
+      position absolute;
+      left 0px;
+      right 0px;
+      top 0px;
+      bottom 0px;
+      z-index 9999;
+      background-color rgba(0, 0, 0, 0.3)
+
+      .guide-img-1 {
+        position absolute;
+        top 50%;
+        left 50%;
+        width 130px;
+        margin-left -55px;
+      }
+
+      .guide-img-2 {
+        position absolute;
+        top 0;
+        right 10px;
+        margin-top -8px;
+        width 165px;
+      }
+
+      .guide-img-3 {
+        position absolute;
+        top 0;
+        left 0;
+        margin-top -10px;
+        width 165px;
+      }
+    }
+
+    .productImg {
+      position: absolute;
+      z-index: 1001;
+      left 147.5px
+      width: 80px;
+      height: 80px;
+      border-radius: 40px;
+      top: 120px;
+    }
+
+    .gouwucheani {
+      animation: addCart-in 0.75s;
+    }
+
+    @keyframes addCart-in {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.8);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .anProductImg {
+      position: absolute;
+      z-index: 1001;
+      left 0px
+      width 100%
+      top: 160px;
+      overflow hidden
+      text-align center
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+      }
+    }
+
+  }
+
+</style>

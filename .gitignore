@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+node_modules
+dist
+app
+app.zip
+api/config.js
+.vscode
+
+myUrl.js

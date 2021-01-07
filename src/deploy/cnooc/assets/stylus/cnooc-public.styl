@@ -1,0 +1,164 @@
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+  overflow: hidden;
+}
+
+
+
+.clearfix {
+  zoom: 1;
+}
+.public-btm-container {
+  position fixed
+  z-index 1000
+  left 0
+  bottom 50px
+  width 100%
+  height 60px
+  line-height 60px
+  border-top 1px solid #DDDDDD
+  box-sizing border-box
+  background-color #fff
+
+  .btn {
+    display inline-block
+    position absolute
+    left 50%
+    top 50%
+    transform translate(-50%, -50%)
+    border-radius 20px
+    width 80%
+    line-height normal !important
+  }
+}
+.btn-group {
+  display flex
+
+  .btn {
+    flex 1
+    padding: 13px 0
+    border-radius: 7px
+    background: -webkit-linear-gradient(-75deg, #0098ff, #0096fc, #0064a7, #005d9c)
+    text-align: center
+    color: #fff
+    font-size: 15px
+
+    & + .btn {
+      margin-left: 10px;
+    }
+  }
+}
+.form-group {
+  .form-cell {
+    display flex
+    align-items center
+    padding 8px 0
+    // border-bottom: 0.5px solid rgb(146, 219, 255)
+    bdr-b()
+
+    .form-label {
+      flex-shrink 0
+      width 90px;
+      color: $color-gray;
+    }
+
+    .form-control {
+      flex 1
+      background: transparent
+      height 30px;
+      line-height: 30px;
+      width 100%
+      color: #222;
+      font-size: 14px;
+    }
+
+    .form-suffix {
+      flex-shrink 0
+
+      .scan-icon {
+        width 30px;
+      }
+    }
+  }
+}
+
+.table-view + .table-view {
+  margin-top: 8px;
+}
+
+.table-view-cell {
+  padding: 11px 15px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  border-radius 5px;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    border: 0 solid #e5e5e5
+    border-bottom-width: 1px
+  }
+
+  &:last-child:after {
+    display: none;
+  }
+
+  .table-view-cell-text{
+    display flex
+    align-items center
+    justify-content space-between
+    .left {
+      flex-shrink 0
+    }
+
+    .center {
+      padding 0 8px;
+      flex 1
+    }
+
+    .right {
+      flex-shrink 0
+    }
+  }
+}
+
+.table-view-cell-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 14px;
+
+  &:after {
+    content: " ";
+    display: inline-block;
+    height: 9px;
+    width: 9px;
+    border-width: 1px 1px 0 0;
+    border-color: #888888;
+    border-style: solid;
+    transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  }
+}
+
+// 无列表数据样式
+.no-result-message {
+  text-align center
+  font-size 14px
+  padding 10px 0
+  color $color-gray
+}
