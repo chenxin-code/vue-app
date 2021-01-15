@@ -348,7 +348,7 @@ var payHelper = {
         document.body.appendChild(textNode)
         document.forms[0].submit()
         // resolve()
-      } else if (payway.payModeSub == '260001') {
+      } else if (payway.payModeSub == '260001' || payway.payModeSub == '260002') {
         // 邻里邦支付平台
         resolve();
       } else {
