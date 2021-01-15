@@ -139,7 +139,16 @@
       },
     },
     created() {
-      this.payResult = this.$route.query.payResult || ''
+      const ret = JSON.parse(decodeURI(this.$route.query.ret));
+      if (ret) {
+        if (res.billRetStatus == '0') {
+          this.payResult = 'icbcFailed'
+        } else {
+          this.payResult = 'success'
+        }
+      } else {
+        this.payResult = this.$route.query.payResult || ''
+      }
 
       let carts = this.$store.state.microSho.carts
       let cartsNew = []

@@ -23,7 +23,7 @@
         <div class="flex-row">
           <div class="title">支付方式</div>
         </div>
-        <div class="flex-row" v-for="item in payWay" @click="payWaySelected(item)">
+        <div class="flex-row" v-for="item in payWay" @click="payWaySelected(item)" v-bind:key="item.text">
           <div class="icon-div">
             <img :src="item.icon"/>
           </div>
@@ -93,7 +93,6 @@
   import {Dialog} from "vant";
   import Cookie from 'js-cookie'
   import ClipboardJS from 'clipboard';
-
   export default {
     name: "index",
     components: {},
@@ -164,14 +163,13 @@
       },
       payEvent: function () {
         console.log(123)
+        console.log(this.$route)
+        console.log(this.payWay)
         if (this.selectedPayWay == null) {
           this.$Toast("请选择支付方式！");
           return;
         }
-        // this.selectedPayWay={
-        //   payModeSub:"210003"
-        // }
-        // this.selectedPayWay.payModeSub="210003"
+
         if (this.selectedPayWay.payModeSub == "210004") {
           // 微信H5支付
           if (this.$util.isWeiXin()) {
@@ -212,14 +210,6 @@
               )
               .then(res1 => {
                 if (this.$route.query.payInfo.style == "travel") {
-                  //  逍遥游门票支付成功后调取接口
-                  // let _this = this;
-                  // let url = "/app/json/app_travel/placingOrder";
-                  // this.$http.post(url, {
-                  //   token: this.$store.state.login.token,
-                  //   orderId: _this.payInfo.orderId,
-                  //   tradeNo: _this.payInfo.tradeNo
-                  // }).then(res => {});
                   this.enterSuccess();
                 } else {
                   this.enterSuccess();
@@ -250,24 +240,14 @@
               )
               .then(res1 => {
                 if (this.$route.query.payInfo.style == "travel") {
-                  //  逍遥游门票支付成功后调取接口
-                  // let _this = this;
-                  // let url = "/app/json/app_travel/placingOrder";
-                  // this.$http.post(url, {
-                  //   token: this.$store.state.login.token,
-                  //   orderId: _this.payInfo.orderId,
-                  //   tradeNo: _this.payInfo.tradeNo
-                  // }).then(res => {});
                   this.enterSuccess();
                 } else {
-                  this.enterSuccess();
+                  this.enterSuccess(res1);
                 }
               })
               .catch(() => {
                 this.hasToPay = false;
               });
-            // }
-
           }
 
         }
@@ -312,7 +292,7 @@
           console.log(error)
         });
       },
-      enterSuccess: function () {
+      enterSuccess: function (res) {
         if (this.isSuccessed) {
           return
         }
@@ -373,6 +353,24 @@
           })
           return;
         } else {
+          // 唤起邻里邦支付平台
+          // const payInfo = JSON.parse(payInfo);
+          // window.open(`x-engine-call://com.zkty.module.yjzdbill/YJBillPayment?args=${
+          //   encodeURI(
+          //     JSON.stringify({
+          //       "businessCstNo": payInfo.businessCstNo,
+          //       "platMerCstNo": payInfo.platMerCstNo,
+          //       "tradeMerCstNo": payInfo.tradeMerCstNo,
+          //       "billNo": payInfo.billNo,
+          //       "appScheme": "x-engine",
+          //       "payType": false,
+          //     })
+          //   )
+          // }&callback={
+          //   ${encodeURI(
+          //     location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+          //   )}
+          // }`, '_self')
           this.$router.replace({
             path: "/mall2/paysuccess",
             query: {

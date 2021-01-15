@@ -55,6 +55,8 @@ var payHelper = {
                 }
               } else if (item.payModeCode == '200') {
                 payItem.icon = 'static/image/mall2/zhifubao.png'
+              } else if (item.payModeCode == '260') {
+                payItem.icon = 'static/image/mall2/timesPay.png'
               } else if (item.payModeCode == '250') {
                 payItem.text = '翼支付'
                 payItem.icon = 'static/image/mall2/zhifubao.png'
@@ -346,6 +348,9 @@ var payHelper = {
         document.body.appendChild(textNode)
         document.forms[0].submit()
         // resolve()
+      } else if (payway.payModeSub == '260001') {
+        // 邻里邦支付平台
+        resolve();
       } else {
         console.log(payway)
         reject()

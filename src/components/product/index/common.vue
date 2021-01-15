@@ -20,7 +20,7 @@
       </div>
       <div class="full-div" :class="{'has-top-div': pageType == 'jiankangma'}" v-if="pageData.type == '1'">
         <div class="page-content">
-          <div class="full-div" v-for="(item, index) in tabbarSubDatas" v-if="item.hasShow && item.data" v-show="index == selectedIndex">
+          <div class="full-div" :key="index" v-for="(item, index) in tabbarSubDatas" v-if="item.hasShow && item.data" v-show="index == selectedIndex">
             <component :ref="getComRef(index)" :hasBack="getHasbackEvent(item.code)" :is="getItemCode(item)"
                        :pageData="item.data"
                        :barHeight="getTopHeight()" :commonShow="selectedIndex == index"
@@ -266,6 +266,7 @@
         }
       },
       getPageData: function (pgcode, tabbarIndex) {
+        console.log('home:::::::::', pgcode, tabbarIndex)
         if (tabbarIndex == -1) {
           // this.fullPageData = fdata;
           // this.pageData = pdata;
@@ -903,6 +904,7 @@
       this.pageType = this.$route.query.pageType ? this.$route.query.pageType : '';
       // sessionStorage.setItem('Other_Common_PageType', this.pageType)
       this.jkmName = this.$route.query.name ? this.$route.query.name : '';
+      console.log('store=======', this.$store.state);
       if (this.pgCode == '') {
         //  创建首页（第一个页面）的时候，走用户信息相关流程
         // this.$userCenter.rootEvents()

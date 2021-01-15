@@ -190,6 +190,7 @@ Axios.interceptors.response.use(
 
     let data = res.data;
     //token  过期重新登录
+    console.log('http res', res)
     if (data.errorCode == 1000 && res.config.url.indexOf('/app/json/login/updateToken?') == -1) {
       res.data.info = '';
       if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {

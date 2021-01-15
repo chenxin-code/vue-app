@@ -10,7 +10,8 @@ import i18n from './locale'
 import store from './vuex/store'
 //路由
 import router from './router'
-console.log('%c**** 12.14 v1.0 ****','color:#f0f');
+console.log('----router---', router)
+console.log('%c**** 12.14 v1.0 ****', 'color:#f0f');
 
 // import Eruda from 'eruda'
 // eruda.init()
@@ -89,9 +90,9 @@ import popview from './components/commonui/pop-view/index'
 Vue.use(popview)
 
 //引入moment
-import moment from 'moment'//导入文件
-Vue.prototype.$moment = moment;//赋值使用
-moment.locale('zh-cn');//需要汉化
+import moment from 'moment' //导入文件
+Vue.prototype.$moment = moment; //赋值使用
+moment.locale('zh-cn'); //需要汉化
 
 //通用css
 import './common/stylus/index.styl'
@@ -118,9 +119,9 @@ import App from './App'
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  i18n,
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    i18n,
+    router,
+    store,
+    render: h => h(App)
 })

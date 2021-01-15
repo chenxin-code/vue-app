@@ -20,7 +20,7 @@
     methods: {
       isShow: function () {
         let path = this.$route.path;
-        console.log(path)
+        console.log('----------', path)
         if (path.indexOf("/mall2") === 0) {
           return true
         }

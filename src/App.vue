@@ -84,19 +84,19 @@
       };
     },
     created() {
-
       // this.viewPortSet();
       this.windowResize();
       this.$store.state.microSho.carts = []
       this.$store.state.microSho.groupbuyingCarts = []
+      console.log('----$router-----', this.$router)
     },
     computed: {
       appBackHomeImg() {
-        if (this.$store.state.globalConfig.appBackHomeImg) {
-          return this.$store.state.globalConfig.appBackHomeImg
-        } else {
-          return require('./assets/app/home.png')
-        }
+        // if (this.$store.state.globalConfig.appBackHomeImg) {
+        //   return this.$store.state.globalConfig.appBackHomeImg
+        // } else {
+        //   return require('./assets/app/home.png')
+        // }
       },
       theme() {
         let theme = 'theme_sys_base'

@@ -9,7 +9,7 @@
     <nav-top @backEvent="backEvent" :noTitle="true" v-show="has_goods">
       <div class="detail-tab">
         <div class="tab-item" :class="{selected: item.id == tabSelected}" v-for="item in tabs"
-             @click="tabEvent(item.id)" :style="getTabStyle()">{{item.name}}
+             @click="tabEvent(item.id)" :style="getTabStyle()" v-bind:key="item.id">{{item.name}}
         </div>
       </div>
     </nav-top>
