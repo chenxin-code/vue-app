@@ -354,32 +354,32 @@
           return;
         } else {
           // 唤起邻里邦支付平台
-          // const payInfo = JSON.parse(payInfo);
-          // window.open(`x-engine-call://com.zkty.module.yjzdbill/YJBillPayment?args=${
-          //   encodeURI(
-          //     JSON.stringify({
-          //       "businessCstNo": payInfo.businessCstNo,
-          //       "platMerCstNo": payInfo.platMerCstNo,
-          //       "tradeMerCstNo": payInfo.tradeMerCstNo,
-          //       "billNo": payInfo.billNo,
-          //       "appScheme": "x-engine",
-          //       "payType": false,
-          //     })
-          //   )
-          // }&callback={
-          //   ${encodeURI(
-          //     location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
-          //   )}
-          // }`, '_self')
-          this.$router.replace({
-            path: "/mall2/paysuccess",
-            query: {
-              selectedIndex: 1,
-              orderCategory: this.$route.query.orderCategory,
-              vipUnitUserCode: this.$route.query.vipUnitUserCode,
-              type: this.$route.query.type
-            }
-          });
+          const payInfo = JSON.parse(payInfo);
+          window.open(`x-engine-call://com.zkty.module.yjzdbill/YJBillPayment?args=${
+            encodeURI(
+              JSON.stringify({
+                "businessCstNo": payInfo.businessCstNo,
+                "platMerCstNo": payInfo.platMerCstNo,
+                "tradeMerCstNo": payInfo.tradeMerCstNo,
+                "billNo": payInfo.billNo,
+                "appScheme": "x-engine",
+                "payType": false,
+              })
+            )
+          }&callback={
+            ${encodeURI(
+              location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+            )}
+          }`, '_self')
+          // this.$router.replace({
+          //   path: "/mall2/paysuccess",
+          //   query: {
+          //     selectedIndex: 1,
+          //     orderCategory: this.$route.query.orderCategory,
+          //     vipUnitUserCode: this.$route.query.vipUnitUserCode,
+          //     type: this.$route.query.type
+          //   }
+          // });
         }
         // if (this.$route.query.type == "five_enter") {
         //   this.$router.replace({
