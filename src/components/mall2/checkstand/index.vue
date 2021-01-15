@@ -354,9 +354,9 @@
           return;
         } else {
           // 唤起邻里邦支付平台
-          const payInfo = JSON.parse(payInfo);
-          window.open(`x-engine-call://com.zkty.module.yjzdbill/YJBillPayment?args=${
-            encodeURI(
+          var payInfo = JSON.parse(JSON.parse(res.payInfo));
+          window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${
+            encodeURIComponent(
               JSON.stringify({
                 "businessCstNo": payInfo.businessCstNo,
                 "platMerCstNo": payInfo.platMerCstNo,
@@ -366,11 +366,7 @@
                 "payType": false,
               })
             )
-          }&callback={
-            ${encodeURI(
-              location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
-            )}
-          }`, '_self')
+          }&callback=${encodeURIComponent(location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`)}`
           // this.$router.replace({
           //   path: "/mall2/paysuccess",
           //   query: {

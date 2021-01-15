@@ -141,7 +141,7 @@
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
       if (ret) {
-        if (res.billRetStatus == '0') {
+        if (ret.billRetStatus == '0') {
           this.payResult = 'icbcFailed'
         } else {
           this.payResult = 'success'
