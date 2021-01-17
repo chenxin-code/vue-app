@@ -35,7 +35,7 @@
                   </div>
                   <div class="title" v-if="hasJYJPro(detailData.orderItemList)">代充值</div>
                   <div class="title" v-else-if="pivotalProductType == 8">待接单</div>
-                  <div class="title" v-else>待发货</div>
+                  <div class="title" v-else>待发货111</div>
                 </div>
               </div>
               <!--待收货-->

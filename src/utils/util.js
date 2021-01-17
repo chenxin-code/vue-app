@@ -1174,7 +1174,7 @@ var utils = {
     let orderScene = 1
     if (store.state.webtype == 0) {
       // 调试模式下，都跟app一致
-      orderScene = 2
+      orderScene = 1
     } else if (store.state.webtype == 1) {
       orderScene = 1
     } else if (store.state.webtype == 2) {
