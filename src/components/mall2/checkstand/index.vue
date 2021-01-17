@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="con" v-if="$route.query.type!='app_purchase_order'">
+      <!-- <div class="con" v-if="$route.query.type!='app_purchase_order'">
         <div class="block-div" v-if="$store.state.globalConfig.replace_pay_enable == 1 && !isSubstitutePay">
           <div class="flex-row">
             <div class="title">找人代付</div>
@@ -64,8 +64,7 @@
             </div>
           </div>
         </div>
-
-      </div>
+      </div> -->
       <div
         class="bottom-btn theme_font_white theme_standard_bg"
         @click="payEvent"
@@ -355,6 +354,7 @@
         } else {
           // 唤起邻里邦支付平台
           var payInfo = JSON.parse(JSON.parse(res.payInfo));
+          console.log('-------', payInfo)
           window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${
             encodeURIComponent(
               JSON.stringify({
