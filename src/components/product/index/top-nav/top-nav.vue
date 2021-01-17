@@ -22,14 +22,15 @@
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'backNav'}, true)}" v-if="myData.isShowBack" @click="hotEvent('backNav');$market.backNav()">
           <img :style="imgStyle" src="static/images/header/back.png"/>
         </div>
-        <div class="location-div space-margin" v-if="myData.isShowArea" :class="hotareaClass({ idCode: myData.idCode + 'selectArea' })" @click="hotEvent('selectArea');$market.selectArea()">
+        <!-- 首页定位选择 -->
+        <!-- <div class="location-div space-margin" v-if="myData.isShowArea" :class="hotareaClass({ idCode: myData.idCode + 'selectArea' })" @click="hotEvent('selectArea');$market.selectArea()">
           <span>{{this.$store.state.indexData.city}}</span>
           <img src="static/images/header/extend-w.png"/>
         </div>
         <div class="location-div space-margin" v-if="myData.isShowStation" :class="hotareaClass({ idCode: myData.idCode + 'selectStation' })" @click="hotEvent('selectStation');$market.selectStation()">
           <span>{{this.$store.state.indexData.station.stationName}}</span>
           <img src="static/images/header/extend-w.png"/>
-        </div>
+        </div> -->
         <div class="search-div other-full space-margin" :class="{'search-div-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'clickSearch'}, true)}" v-if="myData.middelControl == 'search'">
           <div class="search-bg" @click="hotEvent('clickSearch');$market.clickSearch()">
             <div style="height: 20px;line-height: 20px;" class="search-main">
@@ -42,9 +43,9 @@
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
         <!-- 退出登录 -->
-        <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
+        <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
           <img :style="imgStyle" src="static/images/header/login-out-w.png"/>
-        </div>
+        </div> -->
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMsg'}, true)}" v-if="myData.isShowMsg" @click="hotEvent('showMsg');$market.showMsg()">
           <p class="msg-div" v-if="$store.state.indexData.msgNumber > 0">{{$store.state.indexData.msgNumber}}</p>
           <img :style="imgStyle" src="static/images/header/message-w.png"/>

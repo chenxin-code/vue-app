@@ -35,10 +35,10 @@
         </ul>
       </div>
       <!--小程序和公众号不显示退出登录-->
-      <div v-if="$store.state.webtype != 2" class="button" @click="logout">
+      <!-- <div v-if="$store.state.webtype != 2" class="button" @click="logout">
         <span v-if="$store.state.webtype == 3">解除绑定</span>
         <span v-else>退出登录</span>
-      </div>
+      </div> -->
     </nav-content>
   </div>
 </template>
