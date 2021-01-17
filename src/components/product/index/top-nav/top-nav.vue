@@ -62,9 +62,9 @@
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showService'}, true)}" v-if="myData.isShowService" @click="hotEvent('showService');$market.toYHTService()">
           <img :style="imgStyle" src="static/images/header/service-w.png"/>
         </div>
-        <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMore'}, true)}" v-if="myData.isShowMore" @click="hotEvent('showMore');$market.toNavTopMore(myData)">
+        <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMore'}, true)}" v-if="myData.isShowMore" @click="hotEvent('showMore');$market.toNavTopMore(myData)">
           <img :style="imgStyle" src="static/images/header/more-w.png"/>
-        </div>
+        </div> -->
       </div>
       <div class="flex-div white" :style="{'min-height':this.$market.getNavHeight(true)+'px',backgroundImage:`url(${myData.bgImgUrl2})`}" v-if="myData.bgStyle == 'white'">
         <div class="nav-top-title" v-if="myData.middelControl == 'title'" :style="{
@@ -75,14 +75,15 @@
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'backNav'}, true)}" v-if="myData.isShowBack" @click="hotEvent('backNav');$market.backNav()">
           <img :style="imgStyle" src="static/images/header/back.png"/>
         </div>
-        <div class="location-div space-margin" v-if="myData.isShowArea" :class="hotareaClass( { idCode: myData.idCode + 'selectArea' } )" @click="hotEvent('selectArea');$market.selectArea()">
+        <!-- 定位 -->
+        <!-- <div class="location-div space-margin" v-if="myData.isShowArea" :class="hotareaClass( { idCode: myData.idCode + 'selectArea' } )" @click="hotEvent('selectArea');$market.selectArea()">
           <span :class="{'deeper-text': myData.isFloat != true || scrollSite > 60}">{{this.$store.state.indexData.city}}</span>
           <img :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/extend-w.png' : 'static/images/header/extend.png'"/>
         </div>
         <div class="location-div space-margin" v-if="myData.isShowStation" :class="hotareaClass({idCode: myData.idCode + 'selectStation'}, true)" @click="hotEvent('selectStation');$market.selectStation()">
           <span>{{this.$store.state.indexData.station.stationName}}</span>
           <img :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/extend-w.png' : 'static/images/header/extend.png'"/>
-        </div>
+        </div> -->
         <div class="search-div other-full space-margin search-div-bg" v-if="myData.middelControl == 'search'">
           <div class="search-bg" :class="hotareaClass({idCode: myData.idCode + 'clickSearch'}, true)" @click="hotEvent('clickSearch');$market.clickSearch()">
             <div style="height: 20px;line-height: 20px;" class="search-main">
@@ -94,9 +95,10 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
-        <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
+        <!-- 退出登录 -->
+        <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
           <img :style="imgStyle" :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/login-out-w.png' : 'static/images/header/login-out.png'"/>
-        </div>
+        </div> -->
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMsg'}, true)}" v-if="myData.isShowMsg" @click="hotEvent('showMsg');$market.showMsg()">
           <p class="msg-div" v-if="$store.state.indexData.msgNumber > 0">{{$store.state.indexData.msgNumber}}</p>
           <img :style="myData.isFloat == true && scrollSite < 60 ? imgStyle : imgStyle1" :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/message-w.png' : 'static/images/header/message.png'"/>
@@ -113,9 +115,9 @@
         <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showService'}, true)}" v-if="myData.isShowService" @click="hotEvent('showService');$market.toYHTService()">
           <img :style="imgStyle" :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/service-w.png' : 'static/images/header/service.png'"/>
         </div>
-        <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMore'}, true)}" v-if="myData.isShowMore" @click="hotEvent('showMore');$market.toNavTopMore(myData)">
+        <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'showMore'}, true)}" v-if="myData.isShowMore" @click="hotEvent('showMore');$market.toNavTopMore(myData)">
           <img :style="imgStyle" :src="myData.isFloat == true && scrollSite < 60 ? 'static/images/header/more-w.png' : 'static/images/header/more.png'"/>
-        </div>
+        </div> -->
       </div>
       <!--<div class="flex-box" :style="{'min-height':this.$market.getNavHeight()+'px'}">-->
       <!--<div class="nav-top-title" v-if="myData.middelControl == 'title'" :style="{-->
