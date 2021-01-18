@@ -118,14 +118,17 @@
         }
       },
       turnback: function () {//返回
-        if (this.$util.isICBCApp()) {
-          // 工银e生活，需要跳到首页
-          this.$router.replace({
-            path: '/common'
-          })
-        } else {
-          this.$router.go(-1);
-        }
+        this.$router.replace({
+          path: '/common'
+        })
+        // if (this.$util.isICBCApp()) {
+        //   // 工银e生活，需要跳到首页
+        //   this.$router.replace({
+        //     path: '/common'
+        //   })
+        // } else {
+        //   this.$router.go(-1);
+        // }
       },
       activated () {
         this.$userCenter._getMyOrder();
