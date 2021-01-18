@@ -366,7 +366,7 @@
                 "payType": false,
               })
             )
-          }&callback=${encodeURIComponent(location.origin+`#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`)}`
+          }&callback=${encodeURIComponent(location.origin+`/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`)}`
           // this.$router.replace({
           //   path: "/mall2/paysuccess",
           //   query: {
