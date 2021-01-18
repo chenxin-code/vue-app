@@ -362,7 +362,7 @@
                 "platMerCstNo": payInfo.platMerCstNo,
                 "tradeMerCstNo": payInfo.tradeMerCstNo,
                 "billNo": payInfo.billNo,
-                "appScheme": "x-engine",
+                "appScheme": "x-engine-c",
                 "payType": false,
               })
             )
