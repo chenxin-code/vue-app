@@ -9,7 +9,7 @@
     "postdev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "rimraf app && node build/base.env.build.js",
-    "postbuild": "node build/build.js",
+    "postbuild": "node build/build.js && node config/zip.js",
     "devbuild": "node build/base.env.build.js",
     "postdevbuild": "node build/build.js dev"
   },
@@ -50,6 +50,7 @@
     "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
+    "archiver": "^3.1.1",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "autoprefixer": "^7.1.2",
