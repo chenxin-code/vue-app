@@ -144,10 +144,14 @@
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
       if (ret) {
-        if (ret.billRetStatus && ret.billRetStatus == '0') {
-          this.payResult = 'icbcFailed'
+        if (ret.isCancel) {
+          if (ret.billRetStatus == 1) {
+            this.payResult = 'success'
+          } else {
+            this.payResult = 'icbcFailed'
+          }
         } else {
-          this.payResult = 'success'
+          this.payResult = 'icbcFailed'
         }
       } else {
         this.payResult = this.$route.query.payResult || ''
