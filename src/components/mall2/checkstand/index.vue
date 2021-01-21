@@ -354,7 +354,7 @@
         } else {
           // 唤起邻里邦支付平台
           var payInfo = JSON.parse(JSON.parse(res.payInfo));
-          window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${
+          window.location.href = `x-engine-call://com.zkty.module.yjzdbill/YJBillPayment?args=${
             encodeURIComponent(
               JSON.stringify({
                 "businessCstNo": payInfo.businessCstNo,
