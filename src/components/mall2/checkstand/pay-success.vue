@@ -144,7 +144,7 @@
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
       if (ret) {
-        if (ret.isCancel) {
+        if (!ret.isCancel) {
           if (ret.billRetStatus == 1) {
             this.payResult = 'success'
           } else {
