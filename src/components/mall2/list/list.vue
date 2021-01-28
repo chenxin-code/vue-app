@@ -220,15 +220,17 @@
         deductionSkuId: '',
         listStyle: 1,
         pickuYD: false,
-        deliveryTypes: [{
-          text: '配送',
-          fontclass: 'mall-peisong',
-          tag: '2'
-        }, {
-          text: '自提',
-          fontclass: 'mall-ziti',
-          tag: '1'
-        }],
+        deliveryTypes: [
+          {
+            text: '配送',
+            fontclass: 'mall-peisong',
+            tag: '2'
+          }, {
+            text: '自提',
+            fontclass: 'mall-ziti',
+            tag: '1'
+          }
+        ],
         selectedType: 2,
         listZitiId: '',
         filterType: 0,
@@ -931,27 +933,27 @@
         }];
       }
 
-      if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
-        let dt = this.$market.returnCnoocDeliveryType()
-        if (dt == '2' || dt == '') {
-          this.$store.state.mall2.staticDeliverType = 2
-          this.deliveryTypes = [{
-            text: '配送',
-            fontclass: 'mall-peisong',
-            tag: '2'
-          }];
-        } else {
-          this.deliveryTypes = [{
-            text: '配送',
-            fontclass: 'mall-peisong',
-            tag: '2'
-          }, {
-            text: '自提',
-            fontclass: 'mall-ziti',
-            tag: '1'
-          }];
-        }
-      }
+      // if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
+      //   let dt = this.$market.returnCnoocDeliveryType()
+      //   if (dt == '2' || dt == '') {
+      //     this.$store.state.mall2.staticDeliverType = 2
+      //     this.deliveryTypes = [{
+      //       text: '配送',
+      //       fontclass: 'mall-peisong',
+      //       tag: '2'
+      //     }];
+      //   } else {
+      //     this.deliveryTypes = [{
+      //       text: '配送',
+      //       fontclass: 'mall-peisong',
+      //       tag: '2'
+      //     }, {
+      //       text: '自提',
+      //       fontclass: 'mall-ziti',
+      //       tag: '1'
+      //     }];
+      //   }
+      // }
 
       this.dataType = this.$route.query.dataType || ''
       this.channelGroupId = this.$route.query.channelGroupId || ''
