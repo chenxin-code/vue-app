@@ -293,6 +293,7 @@ import Verify from '@/components/commonui/common-verify/index'
             })
           } else {
             let path = '/mall2/list/' + this.$util.getDataString()
+            console.log('---------', this.$util.getDataString())
             if (coupon.canUseListPath) {
               path = coupon.canUseListPath
             }
