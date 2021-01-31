@@ -503,6 +503,7 @@
       },
       // 获取普通商品列表
       _loadProList: function (loaded) {
+        console.log(3333333333333333333333);
         if (this.selectedType == '1') {
           InitialLoadPickupAny.checkIsInitialLoad((address) => {
             if (address) {
