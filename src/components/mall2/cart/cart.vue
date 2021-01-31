@@ -5,7 +5,7 @@
     <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent">
       <div class="cart-top">
         <div class="cart-title" @click="chooseAddress(deliverType)">
-          <span class="title theme_font_black">购物车</span>
+          <span class="title theme_font_black">购物车/span>
           <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i>
         </div>
@@ -13,21 +13,21 @@
       </div>
     </nav-top>
     <nav-content>
-      <div class="row"
-           v-if="$store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.delivertype_default != '2'">
-        <div class="type-btn" v-for="(item,index) in topArr"
-             :class="{theme_light_bg: deliverType == item.type, theme_standard_bdr_i: deliverType == item.type}"
-             @click="deliverTypeEvent(item)">
-          <i class="iconfont  theme_font_common icon-size"
-             :class="[item.class,{theme_standard_font_i: deliverType == item.type}]"></i>
-          <span class="theme_font_common"
-                :class="{theme_standard_font_i: deliverType == item.type}">{{item.name}}</span>
-          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"
-                v-if="peisongNum > 0 && item.type == 2">({{peisongNum}})</span>
-          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"
-                v-if="zitiNum > 0 && item.type == 1">({{zitiNum}})</span>
-        </div>
-      </div>
+<!--      <div class="row"-->
+<!--           v-if="$store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.delivertype_default != '2'">-->
+<!--        <div class="type-btn" v-for="(item,index) in topArr"-->
+<!--             :class="{theme_light_bg: deliverType == item.type, theme_standard_bdr_i: deliverType == item.type}"-->
+<!--             @click="deliverTypeEvent(item)">-->
+<!--          <i class="iconfont  theme_font_common icon-size"-->
+<!--             :class="[item.class,{theme_standard_font_i: deliverType == item.type}]"></i>-->
+<!--          <span class="theme_font_common"-->
+<!--                :class="{theme_standard_font_i: deliverType == item.type}">{{item.name}}</span>-->
+<!--          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"-->
+<!--                v-if="peisongNum > 0 && item.type == 2">({{peisongNum}})</span>-->
+<!--          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"-->
+<!--                v-if="zitiNum > 0 && item.type == 1">({{zitiNum}})</span>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="list-content"
            :class="{notop: $store.state.globalConfig.delivertype_default == '1' || $store.state.globalConfig.delivertype_default == '2'}">
         <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">
