@@ -13,22 +13,22 @@
           </div>
         </div>
         <div class="list-content">
-          <div class="row">
-            <div class="type-btn"
-                 :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"
-                 @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">
-              <i class="iconfont theme_font_common icon-size"
-                 :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>
-              <span class="theme_font_common"
-                    :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>
-            </div>
-            <div class="space"></div>
-            <div class="local-div" @click="selectAddressClick()">
-              <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>
-              <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>
-              <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>
-            </div>
-          </div>
+<!--          <div class="row">-->
+<!--            <div class="type-btn"-->
+<!--                 :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"-->
+<!--                 @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">-->
+<!--              <i class="iconfont theme_font_common icon-size"-->
+<!--                 :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>-->
+<!--              <span class="theme_font_common"-->
+<!--                    :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>-->
+<!--            </div>-->
+<!--            <div class="space"></div>-->
+<!--            <div class="local-div" @click="selectAddressClick()">-->
+<!--              <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>-->
+<!--              <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>-->
+<!--              <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="group-list">
             <div class="group-item" v-for="(item, index) in groupList" :key="index" @click="openGroupDetails(item)">
               {{dealItem(item)}}
@@ -73,11 +73,11 @@
           fontclass: 'mall-peisong',
           tag: '2'
         }
-        // ,{
-        //   text: '自提',
-        //   fontclass: 'mall-ziti',
-        //   tag: '1'
-        // }
+        ,{
+          text: '自提',
+          fontclass: 'mall-ziti',
+          tag: '1'
+        }
         ],
         selectedType: 2,
         groupList:[]
@@ -115,7 +115,7 @@
         this.$bridgefunc.vuexStorage()
         this.selectedType = tag;
         // if (tag == 1 && (this.$store.state.mall2.zitiAddress.id == '')) {
-        //   this.backRefresh = true
+          this.backRefresh = true
         //   this.$router.push({
         //     path: '/mall2/mypickupaddress'
         //   })
@@ -132,7 +132,8 @@
         let params = {
           token: this.$store.state.login.token,
           groupBuyType: 1,
-          deliveryType: this.$store.state.mall2.staticDeliverType,
+          // deliveryType: this.$store.state.mall2.staticDeliverType,
+          deliveryType: 2,//默认配送
           pickupId: this.$store.state.mall2.zitiAddress.id
         };
         this.$http.post(url, params).then(res => {
