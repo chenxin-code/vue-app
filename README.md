@@ -71,7 +71,7 @@
 "downloadImgUrl":"http://tbdwechat.deepermobile.com/download?uploadFile.id=34214",
 "downloadName":"加油江西",
 "shareTitle":"分享标题",
-"technicalSupport":"时代邻里邦",
+"technicalSupport":"广州市时代邻里邦网络科技有限公司",
  // 商户合作email
 "merchantEmail":"business@sunboxsoft.com",
 "shareDesc":"分享描述",

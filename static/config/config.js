@@ -24,7 +24,7 @@ function conf_getAboutusInfo() {
     // 商户合作电话
     merchantEmail: 'business@sunboxsoft.com',
     // 技术支持
-    technicalSupport: '时代邻里邦'
+    technicalSupport: '广州市时代邻里邦网络科技有限公司'
   }
 }
 

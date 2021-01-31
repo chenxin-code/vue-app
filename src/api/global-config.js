@@ -31,7 +31,7 @@ const defaultConfig = {
   "latitude": "39.90",
   // 客服电话
   "customerService": "010-62669197",
-  "technicalSupport": "时代邻里邦",
+  "technicalSupport": "广州市时代邻里邦网络科技有限公司",
   // 商户合作email
   "merchantEmail": "business@sunboxsoft.com",
   // 商户合作电话
