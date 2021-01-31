@@ -5,7 +5,7 @@
     <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent">
       <div class="cart-top">
         <div class="cart-title" @click="chooseAddress(deliverType)">
-          <span class="title theme_font_black">购物车/span>
+          <span class="title theme_font_black">购物车</span>
           <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i>
         </div>
