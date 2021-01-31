@@ -427,22 +427,22 @@
               <div class="theme_font_red">-￥{{$util.toDecimal2(digital.userCanUseDigitalAmount)}}</div>
             </div>
           </div>
-          <div
-            class="block-div"
-            :class="{'is-need-referrer': occurData.needReferrer}"
-            v-if="recommendDisabled && (!cardType || (cardType && cardType == 551))&&$store.state.globalConfig.cut_price_strict!=1">
-            <div class="flex-row">
-              <div class="passwords-input">
-                <div class="label-middle full theme_font_common">推荐人</div>
-                <div class="passwords">
-                  <input placeholder="请输入推荐码" v-model="referrer" :disabled="!canEditReferrer"/>
-                </div>
-                <div class="show-passwords" @click="scanCodeFunc" v-show="canEditReferrer">
-                  <img src="static/image/setting/icon-scan.png" class="scancode"/>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--          <div-->
+<!--            class="block-div"-->
+<!--            :class="{'is-need-referrer': occurData.needReferrer}"-->
+<!--            v-if="recommendDisabled && (!cardType || (cardType && cardType == 551))&&$store.state.globalConfig.cut_price_strict!=1">-->
+<!--            <div class="flex-row">-->
+<!--              <div class="passwords-input">-->
+<!--                <div class="label-middle full theme_font_common">推荐人</div>-->
+<!--                <div class="passwords">-->
+<!--                  <input placeholder="请输入推荐码" v-model="referrer" :disabled="!canEditReferrer"/>-->
+<!--                </div>-->
+<!--                <div class="show-passwords" @click="scanCodeFunc" v-show="canEditReferrer">-->
+<!--                  <img src="static/image/setting/icon-scan.png" class="scancode"/>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
         <div class="bottom-btns">
