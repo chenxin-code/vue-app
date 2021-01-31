@@ -79,10 +79,10 @@
           </div>
           <!--待发货-->
           <div v-if="tabSelectedItem.tag == '16'">
-            <div
-              class="cancel-tip"
-              v-if="$store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="$store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>-->
             <div
               class="block-div"
               v-for="item in listData"
@@ -141,21 +141,21 @@
           </div>
           <!--待收货、提货-->
           <div v-if="tabSelectedItem.tag == '4'">
-            <div
-              class="order-tab"
-              v-if="$store.state.globalConfig.delivertype_default != '2' && $store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.order_list_tabs_type != '2'"
-            >
-              <p
-                class="theme_font_white theme_bg_light_red"
-                :class="{theme_bg_red_i: deliveryType == 2}"
-                @click="deliveryTypeSelected(2)"
-              >待收货</p>
-              <p
-                class="theme_font_white theme_bg_light_red"
-                :class="{theme_bg_red_i: deliveryType == 1}"
-                @click="deliveryTypeSelected(1)"
-              >待提货</p>
-            </div>
+<!--            <div-->
+<!--              class="order-tab"-->
+<!--              v-if="$store.state.globalConfig.delivertype_default != '2' && $store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.order_list_tabs_type != '2'"-->
+<!--            >-->
+<!--              <p-->
+<!--                class="theme_font_white theme_bg_light_red"-->
+<!--                :class="{theme_bg_red_i: deliveryType == 2}"-->
+<!--                @click="deliveryTypeSelected(2)"-->
+<!--              >待收货</p>-->
+<!--              <p-->
+<!--                class="theme_font_white theme_bg_light_red"-->
+<!--                :class="{theme_bg_red_i: deliveryType == 1}"-->
+<!--                @click="deliveryTypeSelected(1)"-->
+<!--              >待提货</p>-->
+<!--            </div>-->
             <div
               class="pickup-coder theme_bg_light_blue"
               v-show="deliveryType == 1 && $store.state.globalConfig.webpos_type != 'cloudpos' && $store.state.globalConfig.showPickupCodeKey != '0'"
@@ -164,14 +164,14 @@
               <div class="text theme_font_white">一键提货码</div>
               <img src="static/image/mall2/pickUpCode.png" />
             </div>
-            <div
-              class="cancel-tip"
-              v-if="deliveryType == 2 && $store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>
-            <div
-              class="cancel-tip"
-              v-if="deliveryType == 1 && $store.state.globalConfig.pickup_cancel_order_tip && $store.state.globalConfig.pickup_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.pickup_cancel_order_tip}}</div>
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="deliveryType == 2 && $store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>-->
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="deliveryType == 1 && $store.state.globalConfig.pickup_cancel_order_tip && $store.state.globalConfig.pickup_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.pickup_cancel_order_tip}}</div>-->
             <div class="block-div" v-for="item in listData" @click="orderDetailEvent(item)">
               <div
                 class="pickup-tip"
@@ -510,7 +510,8 @@ export default {
           isCanLoadMore: true
         },
         {
-          text: '待收(提)货',
+          // text: '待收(提)货',
+          text: '待收货',
           tag: '4',
           type: '200017',
           nowPage: 1,
@@ -758,7 +759,8 @@ export default {
       this.$Toast('暂不支持！')
     },
     deliveryTypeSelected: function(type) {
-      this.deliveryType = type
+      this.deliveryType = 2 //默认待收货
+      // this.deliveryType = type
       this.tabSelectedItem.nowIndex = 1
       this.listData = []
       this.showNoData = false

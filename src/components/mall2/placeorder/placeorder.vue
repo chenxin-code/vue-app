@@ -261,31 +261,31 @@
           </div>
 
           <!--金豆商城不支持开发票-->
-          <div
-            class="block-div"
-            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">
-            <div class="flex-row">
-              <div class="title full theme_font_common">发票</div>
-              <div class="swith" @click="useInvoiceEvent">
-                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>
-                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>
-              </div>
-            </div>
-            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">
-              <div class="label-middle theme_font_common">发票信息</div>
-              <div class="full"></div>
-              <div
-                class="theme_font_black right-margin"
-                :class="{theme_font_tint: invoiceInfo == ''}"
-              >
-                {{invoiceInfo !=
-                '' ? invoiceInfo : '请编辑发票信息'}}
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-          </div>
+<!--          <div-->
+<!--            class="block-div"-->
+<!--            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">-->
+<!--            <div class="flex-row">-->
+<!--              <div class="title full theme_font_common">发票</div>-->
+<!--              <div class="swith" @click="useInvoiceEvent">-->
+<!--                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>-->
+<!--                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">-->
+<!--              <div class="label-middle theme_font_common">发票信息</div>-->
+<!--              <div class="full"></div>-->
+<!--              <div-->
+<!--                class="theme_font_black right-margin"-->
+<!--                :class="{theme_font_tint: invoiceInfo == ''}"-->
+<!--              >-->
+<!--                {{invoiceInfo !=-->
+<!--                '' ? invoiceInfo : '请编辑发票信息'}}-->
+<!--              </div>-->
+<!--              <div>-->
+<!--                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <div class="block-div"
                v-if="(!cardType || (cardType && cardType == 551)) && paramsData.orderCategory != 1 && $route.query.entryType !== 'wish'">
@@ -427,22 +427,22 @@
               <div class="theme_font_red">-￥{{$util.toDecimal2(digital.userCanUseDigitalAmount)}}</div>
             </div>
           </div>
-          <div
-            class="block-div"
-            :class="{'is-need-referrer': occurData.needReferrer}"
-            v-if="recommendDisabled && (!cardType || (cardType && cardType == 551))&&$store.state.globalConfig.cut_price_strict!=1">
-            <div class="flex-row">
-              <div class="passwords-input">
-                <div class="label-middle full theme_font_common">推荐人</div>
-                <div class="passwords">
-                  <input placeholder="请输入推荐码" v-model="referrer" :disabled="!canEditReferrer"/>
-                </div>
-                <div class="show-passwords" @click="scanCodeFunc" v-show="canEditReferrer">
-                  <img src="static/image/setting/icon-scan.png" class="scancode"/>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--          <div-->
+<!--            class="block-div"-->
+<!--            :class="{'is-need-referrer': occurData.needReferrer}"-->
+<!--            v-if="recommendDisabled && (!cardType || (cardType && cardType == 551))&&$store.state.globalConfig.cut_price_strict!=1">-->
+<!--            <div class="flex-row">-->
+<!--              <div class="passwords-input">-->
+<!--                <div class="label-middle full theme_font_common">推荐人</div>-->
+<!--                <div class="passwords">-->
+<!--                  <input placeholder="请输入推荐码" v-model="referrer" :disabled="!canEditReferrer"/>-->
+<!--                </div>-->
+<!--                <div class="show-passwords" @click="scanCodeFunc" v-show="canEditReferrer">-->
+<!--                  <img src="static/image/setting/icon-scan.png" class="scancode"/>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
         <div class="bottom-btns">

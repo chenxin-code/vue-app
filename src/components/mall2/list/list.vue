@@ -26,22 +26,22 @@
           <div class="value">{{axPoints}}</div>
           <i class="iconfont mall-gengduojiantou"></i>
         </div>
-        <div class="row">
-          <div class="type-btn line_circle"
-               :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"
-               @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">
-            <i class="iconfont theme_font_common icon-size"
-               :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>
-            <span class="theme_font_common"
-                  :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>
-          </div>
-          <div class="space"></div>
-          <div class="local-div" @click="selectAddressClick()">
-            <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>
-            <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>
-            <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>
-          </div>
-        </div>
+<!--        <div class="row">-->
+<!--          <div class="type-btn line_circle"-->
+<!--               :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"-->
+<!--               @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">-->
+<!--            <i class="iconfont theme_font_common icon-size"-->
+<!--               :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>-->
+<!--            <span class="theme_font_common"-->
+<!--                  :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>-->
+<!--          </div>-->
+<!--          <div class="space"></div>-->
+<!--          <div class="local-div" @click="selectAddressClick()">-->
+<!--            <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>-->
+<!--            <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>-->
+<!--            <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="row row-channel" v-if="dataType != '' && channels.length > 1">
           <div class="channel-btn theme_font_black" @click="channelEvent(channel)" v-for="channel in channels">
             <div class="text" :class="{'active': selectedChannel.id == channel.id}">{{channel.name}}</div>
@@ -220,15 +220,17 @@
         deductionSkuId: '',
         listStyle: 1,
         pickuYD: false,
-        deliveryTypes: [{
-          text: '配送',
-          fontclass: 'mall-peisong',
-          tag: '2'
-        }, {
-          text: '自提',
-          fontclass: 'mall-ziti',
-          tag: '1'
-        }],
+        deliveryTypes: [
+          {
+            text: '配送',
+            fontclass: 'mall-peisong',
+            tag: '2'
+          }, {
+            text: '自提',
+            fontclass: 'mall-ziti',
+            tag: '1'
+          }
+        ],
         selectedType: 2,
         listZitiId: '',
         filterType: 0,
@@ -501,6 +503,7 @@
       },
       // 获取普通商品列表
       _loadProList: function (loaded) {
+        console.log(3333333333333333333333);
         if (this.selectedType == '1') {
           InitialLoadPickupAny.checkIsInitialLoad((address) => {
             if (address) {
@@ -931,27 +934,27 @@
         }];
       }
 
-      if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
-        let dt = this.$market.returnCnoocDeliveryType()
-        if (dt == '2' || dt == '') {
-          this.$store.state.mall2.staticDeliverType = 2
-          this.deliveryTypes = [{
-            text: '配送',
-            fontclass: 'mall-peisong',
-            tag: '2'
-          }];
-        } else {
-          this.deliveryTypes = [{
-            text: '配送',
-            fontclass: 'mall-peisong',
-            tag: '2'
-          }, {
-            text: '自提',
-            fontclass: 'mall-ziti',
-            tag: '1'
-          }];
-        }
-      }
+      // if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
+      //   let dt = this.$market.returnCnoocDeliveryType()
+      //   if (dt == '2' || dt == '') {
+      //     this.$store.state.mall2.staticDeliverType = 2
+      //     this.deliveryTypes = [{
+      //       text: '配送',
+      //       fontclass: 'mall-peisong',
+      //       tag: '2'
+      //     }];
+      //   } else {
+      //     this.deliveryTypes = [{
+      //       text: '配送',
+      //       fontclass: 'mall-peisong',
+      //       tag: '2'
+      //     }, {
+      //       text: '自提',
+      //       fontclass: 'mall-ziti',
+      //       tag: '1'
+      //     }];
+      //   }
+      // }
 
       this.dataType = this.$route.query.dataType || ''
       this.channelGroupId = this.$route.query.channelGroupId || ''
