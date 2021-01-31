@@ -12,14 +12,15 @@ let cart = {
         hasShow: false,
         class: 'mall-peisong',
         occurArr: []
-      },
-      {
-        name: '自提',
-        type: 1,
-        hasShow: false,
-        class: 'mall-ziti',
-        occurArr: []
-      },
+      }
+      // ,
+      // {
+      //   name: '自提',
+      //   type: 1,
+      //   hasShow: false,
+      //   class: 'mall-ziti',
+      //   occurArr: []
+      // },
     ];
 
     if (store.state.globalConfig.app_home_special_flag == 'cnooc') {

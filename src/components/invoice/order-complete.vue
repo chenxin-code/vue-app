@@ -48,7 +48,7 @@
 //        infoArr1: [{
 //          icon: 'static/image/invoice/wodeuk.png',
 //          label: '增值税普通电子发票',
-//          title: '北京尚博信科技有限公司',
+//          title: '广州市时代邻里邦网络科技有限公司',
 //          path: '',
 //        }]
       }

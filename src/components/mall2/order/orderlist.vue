@@ -510,7 +510,8 @@ export default {
           isCanLoadMore: true
         },
         {
-          text: '待收(提)货',
+          // text: '待收(提)货',
+          text: '待收货',
           tag: '4',
           type: '200017',
           nowPage: 1,

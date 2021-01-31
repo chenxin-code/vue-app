@@ -72,11 +72,13 @@
           text: '配送',
           fontclass: 'mall-peisong',
           tag: '2'
-        }, {
-          text: '自提',
-          fontclass: 'mall-ziti',
-          tag: '1'
-        }],
+        }
+        // ,{
+        //   text: '自提',
+        //   fontclass: 'mall-ziti',
+        //   tag: '1'
+        // }
+        ],
         selectedType: 2,
         groupList:[]
       }
