@@ -231,7 +231,7 @@ const store = new Vuex.Store({
       //   "state": 1,
       //   "computePeriod": 1,
       //   "createTime": 1547091298000,
-      //   "creator": "杜文洁-尚博信",
+      //   "creator": "杜文洁-广州市时代邻里邦网络科技有限公司",
       // }
     ],
     commonArgs: {
