@@ -15,7 +15,7 @@
         <ul class="bill-list">
           <li class="bill-item" v-for="(item, index) in billList" :key="index" @click="openDetails(item)">
             <div class="left">
-              <div class="name">北京尚博信科技有限公司</div>
+              <div class="name">时代邻里邦</div>
               <div class="style" v-if="item.payType == 100">钱包充值</div>
               <div class="style" v-else-if="item.payType == 200">钱包消费</div>
               <div class="style" v-else-if="item.payType == 300">钱包退款</div>

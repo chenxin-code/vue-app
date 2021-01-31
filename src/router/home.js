@@ -26,7 +26,7 @@ module.exports = [
     component: () => import('@/views/funcpage/free-job-protocal.vue'),
     meta: {
       keepAlive: false,
-      title:'北京尚博信科技有限公司'
+      title:'时代邻里邦'
     }
   },
 ]
