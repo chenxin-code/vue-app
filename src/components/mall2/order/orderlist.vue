@@ -79,10 +79,10 @@
           </div>
           <!--待发货-->
           <div v-if="tabSelectedItem.tag == '16'">
-            <div
-              class="cancel-tip"
-              v-if="$store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="$store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>-->
             <div
               class="block-div"
               v-for="item in listData"
@@ -164,14 +164,14 @@
               <div class="text theme_font_white">一键提货码</div>
               <img src="static/image/mall2/pickUpCode.png" />
             </div>
-            <div
-              class="cancel-tip"
-              v-if="deliveryType == 2 && $store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>
-            <div
-              class="cancel-tip"
-              v-if="deliveryType == 1 && $store.state.globalConfig.pickup_cancel_order_tip && $store.state.globalConfig.pickup_cancel_order_tip != ''"
-            >{{$store.state.globalConfig.pickup_cancel_order_tip}}</div>
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="deliveryType == 2 && $store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.delivery_cancel_order_tip}}</div>-->
+<!--            <div-->
+<!--              class="cancel-tip"-->
+<!--              v-if="deliveryType == 1 && $store.state.globalConfig.pickup_cancel_order_tip && $store.state.globalConfig.pickup_cancel_order_tip != ''"-->
+<!--            >{{$store.state.globalConfig.pickup_cancel_order_tip}}</div>-->
             <div class="block-div" v-for="item in listData" @click="orderDetailEvent(item)">
               <div
                 class="pickup-tip"
