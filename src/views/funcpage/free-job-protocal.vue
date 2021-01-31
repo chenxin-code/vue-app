@@ -5,7 +5,7 @@
       <!-- <p class="protocal-title">自由职业者服务协议</p> -->
       <div ref="protocol_content" class="protocol-content">
         <!-- <div class="top-tip">提示条款：</div>
-        <div class="protocal-top">欢迎您与我司【北京尚博信科技有限公司】签署本《自由职业者服务协议》（下称”本协议“）。</div>-->
+        <div class="protocal-top">欢迎您与我司【时代邻里邦】签署本《自由职业者服务协议》（下称”本协议“）。</div>-->
         <div ref="agreementContent" v-html="agreementContent"></div>
         <!-- <div>协议条款：</div>
         <div>根据国家法律有关规定，双方按照平等自愿诚实信用的原则，就</div>-->

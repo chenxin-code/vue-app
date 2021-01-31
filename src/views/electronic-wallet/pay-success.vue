@@ -33,7 +33,7 @@
 <!--          <div class="table-view-cell">-->
 <!--            <div class="table-view-cell-text">-->
 <!--              <div class="left">商家名称</div>-->
-<!--              <div class="right">北京尚博信科技及有限公司</div>-->
+<!--              <div class="right">时代邻里邦</div>-->
 <!--            </div>-->
 <!--          </div>-->
           <div class="table-view-cell">
