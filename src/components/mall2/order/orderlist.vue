@@ -41,14 +41,14 @@
               @click="orderDetailEvent(item,'tobePay')"
               :key="item.id"
             >
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_font_red"></i>
-                  {{item.ouName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
-                <div class="font-small theme_font_red">等待付款</div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_font_red"></i>-->
+<!--                  {{item.ouName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
+<!--                <div class="font-small theme_font_red">等待付款</div>-->
+<!--              </div>-->
               <div class="flex-row">
                 <OrderPros
                   :dataItem="item"
@@ -88,14 +88,14 @@
               v-for="item in listData"
               @click="orderDetailEvent(item,'tobeShip')"
             >
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.storeName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
-                <div class="font-small theme_standard_font">{{getPivotalProductType(item.itemAbstractList) == 8 ? '等待接单' : '待发货'}}</div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.storeName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
+<!--                <div class="font-small theme_standard_font">{{getPivotalProductType(item.itemAbstractList) == 8 ? '等待接单' : '待发货'}}</div>-->
+<!--              </div>-->
               <div class="flex-row">
                 <OrderPros
                   :dataItem="item"
@@ -156,14 +156,14 @@
 <!--                @click="deliveryTypeSelected(1)"-->
 <!--              >待提货</p>-->
 <!--            </div>-->
-            <div
-              class="pickup-coder theme_bg_light_blue"
-              v-show="deliveryType == 1 && $store.state.globalConfig.webpos_type != 'cloudpos' && $store.state.globalConfig.showPickupCodeKey != '0'"
-              @click="showPickUpCode"
-            >
-              <div class="text theme_font_white">一键提货码</div>
-              <img src="static/image/mall2/pickUpCode.png" />
-            </div>
+<!--            <div-->
+<!--              class="pickup-coder theme_bg_light_blue"-->
+<!--              v-show="deliveryType == 1 && $store.state.globalConfig.webpos_type != 'cloudpos' && $store.state.globalConfig.showPickupCodeKey != '0'"-->
+<!--              @click="showPickUpCode"-->
+<!--            >-->
+<!--              <div class="text theme_font_white">一键提货码</div>-->
+<!--              <img src="static/image/mall2/pickUpCode.png" />-->
+<!--            </div>-->
 <!--            <div-->
 <!--              class="cancel-tip"-->
 <!--              v-if="deliveryType == 2 && $store.state.globalConfig.delivery_cancel_order_tip && $store.state.globalConfig.delivery_cancel_order_tip != ''"-->
@@ -180,15 +180,15 @@
                 <span class="theme_font_red">提货时间：</span>
                 {{item.selectReceiveTime}}到{{item.receiveEndTime}}
               </div>
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.storeName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
-                <div class="font-small theme_standard_font" v-if="item.deliverType == 2 || item.deliverType == 3">{{getPivotalProductType(item.itemAbstractList) == 8 ? '待服务' : '待收货'}}</div>
-                <div class="font-small theme_standard_font" v-if="item.deliverType == 1">待提货</div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.storeName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
+<!--                <div class="font-small theme_standard_font" v-if="item.deliverType == 2 || item.deliverType == 3">{{getPivotalProductType(item.itemAbstractList) == 8 ? '待服务' : '待收货'}}</div>-->
+<!--                <div class="font-small theme_standard_font" v-if="item.deliverType == 1">待提货</div>-->
+<!--              </div>-->
               <div class="flex-row">
                 <OrderPros
                   :dataItem="item"
@@ -235,14 +235,14 @@
           <!--待服务-->
           <div v-if="tabSelectedItem.tag == '99'">
             <div class="block-div" v-for="item in listData" @click="orderDetailEvent(item)">
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.storeName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
-                <div class="font-small theme_standard_font">待服务</div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.storeName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
+<!--                <div class="font-small theme_standard_font">待服务</div>-->
+<!--              </div>-->
               <div class="flex-row">
                 <OrderPros
                   :orderItemList="item.itemAbstractList"
@@ -266,11 +266,11 @@
               @click="orderDetailEvent(item,'completed')"
             >
               <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.storeName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.storeName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
                 <div class="right-state">
                   <p class="scan-buy" v-if="item.orderMode == 4">扫码购</p>
                   <div class="font-small theme_standard_font" v-if="item.state != 6">已完成</div>
@@ -330,18 +330,18 @@
               v-for="item in listData"
               @click="orderDetailEvent(item,'completed')"
             >
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.storeName}}
-                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>
-                </div>
-                <div class="right-state">
-                  <p class="scan-buy" v-if="item.orderMode == 4">扫码购</p>
-                  <div class="font-small theme_standard_font" v-if="item.state != 6">已完成</div>
-                  <div class="font-small theme_standard_font" v-if="item.state == 6">已拒收</div>
-                </div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.storeName}}-->
+<!--                  <span class="md-span theme_font_red" v-if="item.deliverType == '3'">（门店配送）</span>-->
+<!--                </div>-->
+<!--                <div class="right-state">-->
+<!--                  <p class="scan-buy" v-if="item.orderMode == 4">扫码购</p>-->
+<!--                  <div class="font-small theme_standard_font" v-if="item.state != 6">已完成</div>-->
+<!--                  <div class="font-small theme_standard_font" v-if="item.state == 6">已拒收</div>-->
+<!--                </div>-->
+<!--              </div>-->
               <div class="flex-row share-btn">
                 <OrderPros
                   :orderItemList="item.itemAbstractList"
@@ -394,13 +394,13 @@
               v-for="item in listData"
               @click="orderDetailEvent(item,'canceled')"
             >
-              <div class="flex-row">
-                <div class="full">
-                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>
-                  {{item.ouName}}
-                </div>
-                <div class="font-small theme_standard_font">已取消</div>
-              </div>
+<!--              <div class="flex-row">-->
+<!--                <div class="full">-->
+<!--                  <i class="dianpu-icon iconfont mall-dianpu theme_standard_font"></i>-->
+<!--                  {{item.ouName}}-->
+<!--                </div>-->
+<!--                <div class="font-small theme_standard_font">已取消</div>-->
+<!--              </div>-->
               <div class="flex-row">
                 <OrderPros
                   :orderItemList="item.itemAbstractList"
