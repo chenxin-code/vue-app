@@ -30,20 +30,20 @@
 <!--      </div>-->
       <div class="list-content"
            :class="{notop: $store.state.globalConfig.delivertype_default == '1' || $store.state.globalConfig.delivertype_default == '2'}">
-        <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">
-          <div class="content" @click="toPresaleCart">
-            <div class="icon">
-              <i class="iconfont mall-gouwuche theme_font_red"></i>
-              <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>
-            </div>
-            <div class="text">
-              预售购物车
-            </div>
-            <div class="jt">
-              <i class="iconfont mall-gengduojiantou theme_font_gray"></i>
-            </div>
-          </div>
-        </div>
+<!--        <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">-->
+<!--          <div class="content" @click="toPresaleCart">-->
+<!--            <div class="icon">-->
+<!--              <i class="iconfont mall-gouwuche theme_font_red"></i>-->
+<!--              <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>-->
+<!--            </div>-->
+<!--            <div class="text">-->
+<!--              预售购物车-->
+<!--            </div>-->
+<!--            <div class="jt">-->
+<!--              <i class="iconfont mall-gengduojiantou theme_font_gray"></i>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <CartList v-for="(item,index) in topArr" :ref="getCartRef(item.type)" v-if="item.hasShow" v-show="deliverType == item.type" :deliverType="item.type" :key="index" :isEditing="isEditing" :orderCategory = "orderCategory" :vipUnitUserCode="vipUnitUserCode"
                   @updateEdit="setEdit">
         </CartList>
