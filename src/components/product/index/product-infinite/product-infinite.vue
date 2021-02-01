@@ -285,30 +285,30 @@
         this.getProducts()
       },
       superFilter: function () {
-        if (this.$store.state.webtype == '-1') {
-          return
-        }
-        this.$market.filtrateEvent({
-          category: this.cateData ? this.cateData.id : ''
-        }, (filtrateData) => {
-
-          this.filterBrands = []
-          this.filterFeatureies = []
-          for (let i = 0; i < filtrateData.brands.length; i++) {
-            this.filterBrands.push(filtrateData.brands[i].id)
-          }
-          for (let i = 0; i < filtrateData.featureies.length; i++) {
-            this.filterFeatureies.push({
-              id: filtrateData.featureies[i].id,
-              featureType: filtrateData.featureies[i].featureType,
-            })
-          }
-          this.maxPrice = filtrateData.maxPrice;
-          this.minPrice = filtrateData.minPrice;
-
-          this.page = 1;
-          this.getProducts()
-        });
+        // if (this.$store.state.webtype == '-1') {
+        //   return
+        // }
+        // this.$market.filtrateEvent({
+        //   category: this.cateData ? this.cateData.id : ''
+        // }, (filtrateData) => {
+        //
+        //   this.filterBrands = []
+        //   this.filterFeatureies = []
+        //   for (let i = 0; i < filtrateData.brands.length; i++) {
+        //     this.filterBrands.push(filtrateData.brands[i].id)
+        //   }
+        //   for (let i = 0; i < filtrateData.featureies.length; i++) {
+        //     this.filterFeatureies.push({
+        //       id: filtrateData.featureies[i].id,
+        //       featureType: filtrateData.featureies[i].featureType,
+        //     })
+        //   }
+        //   this.maxPrice = filtrateData.maxPrice;
+        //   this.minPrice = filtrateData.minPrice;
+        //
+        //   this.page = 1;
+        //   this.getProducts()
+        // });
       },
       categoryEvent: function () {
         if (this.$store.state.webtype == '-1') {
@@ -923,7 +923,7 @@
       display:flex;
       overflow-x:auto;
       white-space:nowrap;
-      
+
       .channel {
         display inline-block;
         padding 10px 5px 5px;
