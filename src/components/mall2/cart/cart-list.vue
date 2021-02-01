@@ -14,11 +14,11 @@
           <div class="store-div" v-for="(storeitem,index) in occuritem.store">
             <div class="store-title">
               <div class="leftcontent">
-                <!--<i class="iconfont font-large-x"-->
-                   <!--:class="cartJS.getXZClass(isEditing,storeitem.checked,storeitem.dchecked)"-->
-                   <!--@click="setStoreSel(storeitem,undefined,occuritem)"></i>-->
-                <!--<span @click="toShop(storeitem)"><i class="iconfont mall-dianpu font-large-x"></i> {{storeitem.storeName}}</span>-->
-                <!--<i class="iconfont mall-gengduojiantou theme_font_gray font-large marL"></i>-->
+<!--                <i class="iconfont font-large-x"-->
+<!--                   :class="cartJS.getXZClass(isEditing,storeitem.checked,storeitem.dchecked)"-->
+<!--                   @click="setStoreSel(storeitem,undefined,occuritem)"></i>-->
+<!--                <span @click="toShop(storeitem)"><i class="iconfont mall-dianpu font-large-x"></i> {{storeitem.storeName}}</span>-->
+<!--                <i class="iconfont mall-gengduojiantou theme_font_gray font-large marL"></i>-->
               </div>
               <div class="rightcontent" v-show="storeitem.userCanGetCoupon && storeitem.userCanGetCoupon.length"
                    @click="coupon(storeitem)">
