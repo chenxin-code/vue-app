@@ -163,9 +163,9 @@
 
           <div class="block-div" v-for="store in occurData.store">
             <!--{{returnStoreProducts(store)}}-->
-            <div class="flex-row">
-              <div class="name">{{store.storeName}}</div>
-            </div>
+<!--            <div class="flex-row">-->
+<!--              <div class="name">{{store.storeName}}</div>-->
+<!--            </div>-->
             <div v-if="store.storeProData.num == 1">
               <div class="pro-row" v-for="prodata in store.storeProData.proArr">
                 <div class="img-div">
