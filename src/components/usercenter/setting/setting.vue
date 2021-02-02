@@ -58,7 +58,7 @@
       return {
         settingList1: [
           {name: '我的收货地址', id: '1'},
-          {name: '我的自提点', id: '2'},
+          // {name: '我的自提点', id: '2'},
         ],
         settingList2: [
           {name: '账户与安全', id: '4'},
