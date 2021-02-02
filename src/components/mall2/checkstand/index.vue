@@ -292,7 +292,6 @@
         });
       },
       enterSuccess: function (res) {
-        debugger
         if (this.isSuccessed) {
           return
         }
