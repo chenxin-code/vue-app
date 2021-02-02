@@ -23,6 +23,7 @@ let cart = {
       // },
     ];
 
+
     if (store.state.globalConfig.app_home_special_flag == 'cnooc') {
       let dt = market.returnCnoocDeliveryType()
       if (dt == '2' || dt == '') {

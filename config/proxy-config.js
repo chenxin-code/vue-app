@@ -17,7 +17,8 @@ module.exports = {
         '/api': {
             // target: 'http://139.129.195.140:18807',
             // target: 'http://192.168.10.11:18807',
-            target: 'http://39.105.84.126:28807',
+            // target: 'http://39.105.84.126:28807',
+            target: 'http://mall-prod-app-linli.timesgroup.cn/',
             // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
             // target:'http://henansydemo.deepermobile.com',
             // target: 'http://jlapp.95504.net:81',
@@ -28,7 +29,8 @@ module.exports = {
         },
         '/app': {
             // target: 'http://tbdapp.deepermobile.com',
-            target: 'http://39.105.84.126:28807',
+            // target: 'http://39.105.84.126:28807',
+            target: 'hhttp://mall-prod-app-linli.timesgroup.cn/',
             changeOrigin: true,
         },
     }
