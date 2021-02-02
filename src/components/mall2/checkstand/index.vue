@@ -299,14 +299,28 @@
         this.pustLiveStreamMsg()
         this.isSuccessed = true
         if (this.$route.query.isGroup == "1") {
-          this.$router.replace({
-            path: "/group_detail",
-            query: {
-              orderId: this.$route.query.orderId,
-              mktGroupBuyId: this.$route.query.mktGroupBuyId,
-              formPaySuccess: "1"
-            }
-          });
+          console.log('res-----------', res)
+          var payInfo = JSON.parse(JSON.parse(res.payInfo));
+          window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${
+            encodeURIComponent(
+              JSON.stringify({
+                "businessCstNo": payInfo.businessCstNo,
+                "platMerCstNo": payInfo.platMerCstNo,
+                "tradeMerCstNo": payInfo.tradeMerCstNo,
+                "billNo": payInfo.billNo,
+                "appScheme": "x-engine-c",
+                "payType": false,
+              })
+            )
+          }&callback=${encodeURIComponent(location.origin+`/app-vue/app/index.html#/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`)}`
+          // this.$router.replace({
+          //   path: "/group_detail",
+          //   query: {
+          //     orderId: this.$route.query.orderId,
+          //     mktGroupBuyId: this.$route.query.mktGroupBuyId,
+          //     formPaySuccess: "1"
+          //   }
+          // });
           return;
         } else if (this.$route.query.buyType == 'songli') {
           this.$router.replace({
