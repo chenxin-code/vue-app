@@ -115,7 +115,7 @@ const store = new Vuex.Store({
       pickUpUser: '',
       recommend: '',
       // 全局选择自提还是配送
-      staticDeliverType: '1',
+      staticDeliverType: '2',
       // 全局自提地址  id为空字符串没有   -1 是定位  其它是选择的地址
       zitiAddress: {
         id: ''
