@@ -114,7 +114,7 @@ function getDictByAlias(resData,resolve,reject) {
     let data = res.data
     if (data.status == 0) {
 
-      let result = accountSubs(resData, data.data)
+      let result = vue_conf_delivertype(resData, data.data)
       Store.commit('setGlobalConfig', assign({}, defaultConfig, result))
       bridgefunc.vuexStorage()
       resolve(resData);
@@ -134,7 +134,7 @@ function getDictByAlias(resData,resolve,reject) {
 /**
  * 账户相关数据初始化
  */
-function accountSubs(resData, list) {
+function vue_conf_delivertype(resData, list) {
   let value = undefined;
   let subAccount = []
 
