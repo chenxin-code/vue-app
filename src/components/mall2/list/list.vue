@@ -523,7 +523,8 @@
           rows: 20,
           orderByKey: '',
           ascOrDesc: '',
-          deliverType: this.selectedType,
+          // deliverType: this.selectedType,
+          deliverType: '2',
           categoryId: this.category,
           cateLevel: this.cateLevel,
           brandIds: this.filterBrands,
@@ -920,6 +921,7 @@
       },
     },
     created() {
+      debugger
       if (this.$store.state.globalConfig.delivertype_default == '1') {
         this.deliveryTypes = [{
           text: '自提',
