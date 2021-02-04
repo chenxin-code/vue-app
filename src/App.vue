@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="theme_sys_base" :class="theme">
+    <!-- APP -->
     <!--@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"-->
     <!--<div id="app" class="theme_sys_base">-->
     <!--app结构请勿随意变动，利用耦合性写了部分代码，慎之-->
