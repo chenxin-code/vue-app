@@ -104,6 +104,10 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
+.router_class {
+  background-color: #F6F6F6;
+}
+
 .confirm_order {
   width: 100%;
   height: 100%;

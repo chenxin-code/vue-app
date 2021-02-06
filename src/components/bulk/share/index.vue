@@ -53,22 +53,12 @@
       </div>
     </div>
     <van-sticky>
-      <div class="select_category">
-        <div class="select_item current_select">全部</div>
-        <div class="select_item">水果</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
-        <div class="select_item">蔬菜</div>
+      <div class="select_box">
+        <div class="select_category">
+          <div class="select_item current_select">全部</div>
+          <div class="select_item">水果</div>
+          <div class="select_item">水果</div>
+        </div>
       </div>
     </van-sticky>
     <div class="category_card">
@@ -312,6 +302,10 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
+.router_class {
+  background-color: #F6F6F6;
+}
+
 .share {
   padding: 10px 10px 73px;
   background-color: #F6F6F6;
@@ -547,36 +541,42 @@ export default {
     }
   }
 
-  .select_category {
+  .select_box {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
     margin: 0px auto 8.5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    overflow-x: auto;
 
-    .select_item {
-      padding: 0 15px 0 10px;
-      height: 20px;
-      font-size: 14px;
-      font-weight: 400;
-      color: #999999;
-      letter-spacing: 2px;
-      text-align: center;
-      line-height: 20px;
-      border-right: 1px solid #F49999;
-    }
+    .select_category {
+      min-width: 100%;
+      height: 44px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      white-space: nowrap;
 
-    .select_item:last-child {
-      border: none;
-    }
+      .select_item {
+        display: inline-flex;
+        padding: 0 15px 0 10px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
+        letter-spacing: 2px;
+        border-right: 1px solid #F49999;
+      }
 
-    .current_select {
-      font-weight: 600;
-      color: #000000;
-      background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      .select_item:last-child {
+        border: none;
+      }
+
+      .current_select {
+        font-weight: 600;
+        color: #000000;
+        background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
   }
 

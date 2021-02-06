@@ -2,10 +2,10 @@
   <!-- // created by hjc 售后申请 -->
   <div class="afterApplication">
     <div class="after_sales">
-      <div class="after_sales_type">
+      <div class="after_sales_type" @click="selectType = true">
         <div class="after_sales_title">
           <div>售后类型</div>
-          <div>退款</div>
+          <div>{{ select == 1 ? "退款" : select == 2 ? "退货" : "换货" }}</div>
         </div>
         <img
           :src="require('./images/right_icon.png')"
@@ -16,7 +16,7 @@
       <div class="goods_info">
         <div class="goods_info_title">商品信息</div>
         <div class="goods_item" v-for="(item, index) in 4" :key="index">
-          <img :src="require('../share/images/share.png')" alt="" />
+          <img :src="require('../../share/images/share.png')" alt="" />
           <div class="goods_item_detail">
             <div class="goods_name">新鲜的大西瓜</div>
             <div class="goods_count">
@@ -41,21 +41,70 @@
       </div>
     </div>
     <div class="problem_description">
-      <van-field
-        v-model="message"
-        rows="2"
-        autosize
-        label="问题描述："
-        type="textarea"
-        maxlength="50"
-        placeholder="请输入问题描述"
-        show-word-limit
-      />
+      <div class="problem_title">问题描述</div>
+      <textarea rows="3" cols="20"></textarea>
+      <van-uploader
+        v-model="fileList"
+        multiple
+        :max-count="3"
+        accept="image/png, image/jpeg,image/jpg"
+      >
+        <template>
+          <div class="photo_btn">
+            <img :src="require('./images/photo_icon.png')" alt="" />
+            <div>上传照片</div>
+          </div>
+        </template>
+      </van-uploader>
     </div>
-    <van-uploader>
-      <van-button icon="plus" type="primary">上传文件</van-button>
-    </van-uploader>
     <div class="submit_btn">发起售后</div>
+    <van-popup
+      v-model="selectType"
+      position="bottom"
+      :style="{ height: '32%' }"
+      round
+    >
+      <div class="select_type">
+        <div class="select_type_title">
+          <div>请选择申请类型</div>
+          <img
+            :src="require('./images/close_icon.png')"
+            alt=""
+            @click="selectType = false"
+          />
+        </div>
+        <van-button block @click="select = 1">
+          <div class="select_btn">
+            <div :class="select == 1 ? 'current' : ''">退款</div>
+            <img
+              :src="require('./images/select_icon.png')"
+              alt=""
+              v-show="select == 1"
+            />
+          </div>
+        </van-button>
+        <van-button block @click="select = 2">
+          <div class="select_btn">
+            <div :class="select == 2 ? 'current' : ''">退货</div>
+            <img
+              :src="require('./images/select_icon.png')"
+              alt=""
+              v-show="select == 2"
+            />
+          </div>
+        </van-button>
+        <van-button block @click="select = 3">
+          <div class="select_btn">
+            <div :class="select == 3 ? 'current' : ''">换货</div>
+            <img
+              :src="require('./images/select_icon.png')"
+              alt=""
+              v-show="select == 3"
+            />
+          </div>
+        </van-button>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -64,15 +113,24 @@ export default {
   name: "afterApplication",
   props: {},
   data() {
-    return {};
+    return {
+      fileList: [],
+      selectType: false,
+      select: 1, // 1退款  2 退货  3换货
+    };
   },
   created() {},
 };
+//
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+.router_class {
+  background-color: #F6F6F6;
+}
 
 .afterApplication {
   width: 100%;
@@ -227,19 +285,52 @@ export default {
 
   .problem_description {
     width: 100%;
-    height: 220px;
+    height: 303px;
     background: #FFFFFF;
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
     margin-top: 10px;
     padding: 6px 10px 10px;
 
-    .van-cell__title {
-      span {
-        font-size: 14px;
-        font-weight: 400;
-        color: #666666;
-        line-height: 20px;
+    .problem_title {
+      font-size: 14px;
+      font-weight: 400;
+      color: #666666;
+      line-height: 20px;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 143px;
+      border: none;
+      resize: none;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #000000;
+      line-height: 20px;
+    }
+
+    .photo_btn {
+      width: 76.5px;
+      height: 76.5px;
+      border-radius: 7px;
+      border: 1px solid #CCCBCB;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 9.5px 0 8.5px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #CCCBCB;
+      line-height: 16.5px;
+
+      img {
+        width: 40.5px;
+        height: 33.5px;
+        margin-bottom: 8.5px;
       }
     }
   }
@@ -256,6 +347,74 @@ export default {
     font-weight: 600;
     color: #FFFFFF;
     margin: 10px auto 0;
+  }
+
+  .select_type {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .select_type_title {
+      padding: 10px 20px 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000000;
+      line-height: 20px;
+      border-bottom: 1px solid #EEEDED;
+
+      div {
+        margin: 0 auto;
+      }
+
+      img {
+        width: 13px;
+        height: 13px;
+      }
+    }
+
+    /deep/.van-button {
+      width: 100%;
+      height: 1.04rem;
+      border: none;
+      border-bottom: 1px solid #EEEDED;
+
+      .van-button__content {
+        width: 100%;
+
+        .van-button__text {
+          width: 100%;
+        }
+
+        .select_btn {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 400;
+          color: #000000;
+          line-height: 20px;
+
+          img {
+            width: 16.5px;
+            height: 11px;
+          }
+
+          .current {
+            font-size: 14px;
+            font-weight: 400;
+            color: #B52232;
+            line-height: 20px;
+          }
+        }
+      }
+    }
   }
 }
 </style>
