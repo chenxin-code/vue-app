@@ -120,6 +120,15 @@ export default [{
     }
   },
   {
+    path: '/bulk_goods_deatil',
+    name: '商品详情',
+    component: () => import('@/components/bulk/goods_detail/index.vue'),
+    meta: {
+      title: '商品详情',
+      keepAlive: false
+    }
+  },
+  {
     path: '/confirmOrder',
     name: '确认订单',
     component: () => import('@/components/bulk/confirmOrder'),
@@ -137,4 +146,5 @@ export default [{
       keepAlive: false
     }
   },
+
 ]
