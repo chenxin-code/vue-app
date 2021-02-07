@@ -28,15 +28,6 @@ export default [{
       keepAlive: false
     }
   }, {
-    path: '/deliveryAddress',
-    name: '收货地址',
-    component: () =>
-      import('@/components/bulk/deliveryAddress/index.vue'),
-    meta: {
-      title: '收货地址',
-      keepAlive: false
-    }
-  }, {
     path: '/bulk',
     name: '活动首页',
     component: () =>
