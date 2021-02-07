@@ -1,17 +1,13 @@
 <template>
   <!-- // created by hjc 售后申请 -->
-  <div class="afterApplication">
+  <div class="afterSalesDetail">
     <div class="after_sales">
-      <div class="after_sales_type" @click="selectType = true">
+      <div class="after_sales_type">
         <div class="after_sales_title">
           <div>售后类型</div>
-          <div>{{ select == 1 ? "退款" : select == 2 ? "退货" : "换货" }}</div>
+          <div>退款</div>
         </div>
-        <img
-          :src="require('./images/right_icon.png')"
-          alt=""
-          class="select_icon"
-        />
+        <div class="order_status">待审核</div>
       </div>
       <div class="goods_info">
         <div class="goods_info_title">商品信息</div>
@@ -25,6 +21,8 @@
                 v-model="value"
                 input-width="0.466667rem"
                 button-size="0.466667rem"
+                disabled
+                integer
               />
             </div>
             <div class="goods_price_btn">
@@ -32,7 +30,6 @@
                 <div>商品价格：</div>
                 <div>¥5.00</div>
               </div>
-              <div class="delet_btn">删除</div>
             </div>
           </div>
         </div>
@@ -42,82 +39,30 @@
     </div>
     <div class="problem_description">
       <div class="problem_title">问题描述</div>
-      <textarea rows="3" cols="20"></textarea>
-      <van-uploader
-        v-model="fileList"
-        multiple
-        :max-count="3"
-        accept="image/png, image/jpeg,image/jpg"
-      >
-        <template>
-          <div class="photo_btn">
-            <img :src="require('./images/photo_icon.png')" alt="" />
-            <div>上传照片</div>
-          </div>
-        </template>
-      </van-uploader>
-    </div>
-    <div class="submit_btn">发起售后</div>
-    <van-popup
-      v-model="selectType"
-      position="bottom"
-      :style="{ height: '32%' }"
-      round
-    >
-      <div class="select_type">
-        <div class="select_type_title">
-          <div>请选择申请类型</div>
-          <img
-            :src="require('./images/close_icon.png')"
-            alt=""
-            @click="selectType = false"
-          />
-        </div>
-        <van-button block @click="select = 1">
-          <div class="select_btn">
-            <div :class="select == 1 ? 'current' : ''">退款</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 1"
-            />
-          </div>
-        </van-button>
-        <van-button block @click="select = 2">
-          <div class="select_btn">
-            <div :class="select == 2 ? 'current' : ''">退货</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 2"
-            />
-          </div>
-        </van-button>
-        <van-button block @click="select = 3">
-          <div class="select_btn">
-            <div :class="select == 3 ? 'current' : ''">换货</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 3"
-            />
-          </div>
-        </van-button>
+      <div class="problem_text">
+        你好数不胜数你打电话点点滴滴年大家都等你多久
+        还得不到你电脑都记得你当年的弟弟看到你懂得的
+        点点滴滴反反复还是不是收拾收拾睡觉时手机少男
+        书生本色江苏苏宁少男少女思考思考世界室内设计
+        实话实说今生今世你说你是莫斯科市开始世界室内
+        和少男少女设计师设计说明书上劳斯莱斯少男少女
+        还是十八世纪四十就是奈史密斯上…..
       </div>
-    </van-popup>
+      <div class="problem_img">
+        <img :src="require('../../share/images/share.png')" alt="" />
+        <img :src="require('../../share/images/share.png')" alt="" />
+        <img :src="require('../../share/images/share.png')" alt="" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "afterApplication",
+  name: "afterSalesDetail",
   props: {},
   data() {
-    return {
-      fileList: [],
-      selectType: false,
-      select: 1, // 1退款  2 退货  3换货
-    };
+    return {};
   },
   created() {},
 };
@@ -132,7 +77,7 @@ export default {
   background-color: #F6F6F6;
 }
 
-.afterApplication {
+.afterSalesDetail {
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -179,9 +124,11 @@ export default {
         }
       }
 
-      .select_icon {
-        width: 7px;
-        height: 12.5px;
+      .order_status {
+        font-size: 14px;
+        font-weight: 600;
+        color: #C82010;
+        line-height: 20px;
       }
     }
 
@@ -255,18 +202,6 @@ export default {
                 font-weight: 600;
               }
             }
-
-            .delet_btn {
-              width: 46px;
-              height: 18.5px;
-              background: #B52232;
-              border-radius: 14px;
-              text-align: center;
-              line-height: 18.5px;
-              font-size: 12px;
-              font-weight: 400;
-              color: #FFFFFF;
-            }
           }
         }
       }
@@ -285,7 +220,6 @@ export default {
 
   .problem_description {
     width: 100%;
-    height: 303px;
     background: #FFFFFF;
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
@@ -300,119 +234,25 @@ export default {
       margin-bottom: 10px;
     }
 
-    textarea {
+    .problem_text {
       width: 100%;
-      height: 143px;
-      border: none;
-      resize: none;
-      margin-bottom: 20px;
       font-size: 14px;
       font-weight: 400;
       color: #000000;
       line-height: 20px;
+      margin-bottom: 20px;
     }
 
-    .photo_btn {
-      width: 76.5px;
-      height: 76.5px;
-      border-radius: 7px;
-      border: 1px solid #CCCBCB;
+    .problem_img {
+      width: 100%;
       display: flex;
-      flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      padding: 9.5px 0 8.5px;
-      font-size: 12px;
-      font-weight: 400;
-      color: #CCCBCB;
-      line-height: 16.5px;
 
       img {
-        width: 40.5px;
-        height: 33.5px;
-        margin-bottom: 8.5px;
-      }
-    }
-  }
-
-  .submit_btn {
-    width: 307.5px;
-    height: 37.5px;
-    background: #B52232;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
-    border-radius: 5px;
-    text-align: center;
-    line-height: 37.5px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #FFFFFF;
-    margin: 10px auto 0;
-  }
-
-  .select_type {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-
-    .select_type_title {
-      padding: 10px 20px 10px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 500;
-      color: #000000;
-      line-height: 20px;
-      border-bottom: 1px solid #EEEDED;
-
-      div {
-        margin: 0 auto;
-      }
-
-      img {
-        width: 13px;
-        height: 13px;
-      }
-    }
-
-    /deep/.van-button {
-      width: 100%;
-      height: 1.04rem;
-      border: none;
-      border-bottom: 1px solid #EEEDED;
-
-      .van-button__content {
-        width: 100%;
-
-        .van-button__text {
-          width: 100%;
-        }
-
-        .select_btn {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-size: 14px;
-          font-weight: 400;
-          color: #000000;
-          line-height: 20px;
-
-          img {
-            width: 16.5px;
-            height: 11px;
-          }
-
-          .current {
-            font-size: 14px;
-            font-weight: 400;
-            color: #B52232;
-            line-height: 20px;
-          }
-        }
+        width: 94px;
+        height: 94px;
+        margin-right: 5px;
       }
     }
   }

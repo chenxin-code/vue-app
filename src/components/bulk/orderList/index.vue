@@ -2,7 +2,7 @@
   <!-- // created by hjc 订单列表 -->
   <div class="orderList">
     <van-sticky>
-      <van-search v-model="value" shape="round" background="#fff" />
+      <van-search v-model="searchValue" shape="round" background="#fff" />
       <div class="tab">
         <div
           class="tab_item"
@@ -23,7 +23,12 @@
           finished-text="没有更多了"
           @load="onLoad"
         >
-          <div class="goods_item" v-for="item in 10" :key="item">
+          <div
+            class="goods_item"
+            v-for="item in 10"
+            :key="item"
+            @click="$router.push('/bulk_order_detail')"
+          >
             <div class="goods_title">
               <div class="goods_ID">#01</div>
               <div class="goods_type">待发货</div>
@@ -57,7 +62,7 @@
                 <span>共计5件商品，合计支付 </span>
                 <span>1000.00</span>
               </div>
-              <div class="confirm" @click="confirm">确认送达</div>
+              <div class="confirm" @click.stop="confirm">确认送达</div>
             </div>
           </div>
         </van-list>
@@ -69,8 +74,8 @@
         <div class="popup_title">确认订单商品</div>
         <div class="popup_detail">抵达</div>
         <div class="popup_btn">
-          <div class="confirm_btn">确认</div>
-          <div class="cancel_btn">取消</div>
+          <div class="confirm_btn" @click="showPopup = false">确认</div>
+          <div class="cancel_btn" @click="showPopup = false">取消</div>
         </div>
       </div>
     </van-popup>
@@ -98,6 +103,7 @@ export default {
       finished: false,
       type: 2,
       showPopup: false,
+      searchValue: "",
     };
   },
   created() {},

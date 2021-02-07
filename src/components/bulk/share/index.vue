@@ -93,7 +93,7 @@
               等购买了此商品
             </div>
           </div>
-          <van-stepper v-model="value" min="0" />
+          <van-stepper v-model="value" min="0" integer />
         </div>
       </div>
     </div>
@@ -222,9 +222,10 @@
                 />
                 <div class="goods_detail">
                   <div class="goods_name">新鲜的大西瓜呐喊声可是你上课</div>
-                  <div class="goods_price_count">
+                  <!-- 空事件是阻止步进器点击事件冒泡到checkbox  勿删 -->
+                  <div class="goods_price_count" @click.stop="">
                     <div class="goods_price">¥5.00</div>
-                    <van-stepper v-model="value" />
+                    <van-stepper v-model="value" integer />
                   </div>
                 </div>
               </div>

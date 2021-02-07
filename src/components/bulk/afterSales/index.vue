@@ -23,7 +23,12 @@
           finished-text="没有更多了"
           @load="onLoad"
         >
-          <div class="goods_item" v-for="item in 10" :key="item">
+          <div
+            class="goods_item"
+            v-for="item in 10"
+            :key="item"
+            @click="$router.push('/bulk_after_sales_detail')"
+          >
             <div class="goods_id">
               <div>#01</div>
               <div>待审核</div>
