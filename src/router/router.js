@@ -15,6 +15,13 @@ let routerArr = [
   },
 ];
 
+// create by hjc 团购模块
+
+import bulk from './modules/bulk'
+
+routerArr = routerArr.concat(bulk);
+
+
 //商城
 // import  mallItems from './mall'
 // routerArr = routerArr.concat(mallItems);
