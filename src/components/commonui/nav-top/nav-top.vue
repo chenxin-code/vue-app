@@ -1,9 +1,9 @@
 <template>
-  <div class="nav-top theme_bg_white" :style="{height: (this.$store.state.barHeight+$market.getNavHeight(isMust))+ 'px', backgroundImage: 'url('+ bgImg +')', ...navTopStyle}">
+  <div class="nav-top theme_bg_white" :style="{height: (this.$store.state.barHeight+$market.getNavHeight(isMust))+ 'px', background:bstyle, backgroundImage: 'url('+ bgImg +')', ...navTopStyle}">
     <div class="navcontent" :style="{top: this.$store.state.barHeight+ 'px','height': $market.getNavHeight(isMust)+'px','line-height': $market.getNavHeight(isMust)+'px'}">
-      <div v-if="!noTitle" class="title-div" :class="[bgImg ? 'theme_font_white' :'theme_font_black' ]" >{{navTitle}}</div>
+      <div v-if="!noTitle" class="title-div" :class="[bgImg || bstyle ? 'theme_font_white' :'theme_font_black' ]" >{{navTitle}}</div>
       <div v-if="!hideBackBtn" class="nav-back-btn"  @click="backEvent">
-        <i class="iconfont mall-fanhui" :class="[bgImg ? 'theme_font_white' :'theme_font_black' ]" style="margin-left: 10px; font-size: 20px;"></i>
+        <i class="iconfont mall-fanhui" :class="[bgImg || bstyle ? 'theme_font_white' :'theme_font_black' ]" style="margin-left: 10px; font-size: 20px;"></i>
       </div>
       <slot></slot>
     </div>
@@ -19,6 +19,7 @@
       noBack: [String, Number, Boolean],
       title: String,
       bgImg: String,
+      bstyle:String,
       isMust: [String, Number, Boolean],
       navTopStyle: {
         type: Object,

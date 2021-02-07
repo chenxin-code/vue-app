@@ -1,12 +1,58 @@
-
 //create by hjc 团购模块
 
 export default [{
+    path: '/purchase',
+    name: '团购首页',
+    component: () =>
+      import('@/components/bulk/purchase/index.vue'),
+    meta: {
+      title: '团购首页',
+      keepAlive: false
+    }
+  }, {
+    path: '/paySuccess',
+    name: '支付成功',
+    component: () =>
+      import('@/components/bulk/paySuccess/index.vue'),
+    meta: {
+      title: '支付成功',
+      keepAlive: false
+    }
+  }, {
+    path: '/myprofit',
+    name: '我的收益',
+    component: () =>
+      import('@/components/bulk/myprofit/index.vue'),
+    meta: {
+      title: '我的收益',
+      keepAlive: false
+    }
+  }, {
+    path: '/deliveryAddress',
+    name: '收货地址',
+    component: () =>
+      import('@/components/bulk/deliveryAddress/index.vue'),
+    meta: {
+      title: '收货地址',
+      keepAlive: false
+    }
+  }, {
     path: '/bulk',
     name: '活动首页',
-    component: () => import('@/components/bulk/activity/index.vue'),
+    component: () =>
+      import('@/components/bulk/activity/index.vue'),
     meta: {
       title: '活动首页',
+      keepAlive: false
+    }
+  },
+  {
+    path: '/bulkDetails',
+    name: '活动首页',
+    component: () =>
+      import('@/components/bulk/activity/details.vue'),
+    meta: {
+      title: '活动详情',
       keepAlive: false
     }
   },
