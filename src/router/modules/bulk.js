@@ -128,4 +128,22 @@ export default [{
       keepAlive: false
     }
   },
+  {
+    path: '/confirmOrder',
+    name: '确认订单',
+    component: () => import('@/components/bulk/confirmOrder'),
+    meta: {
+      title: '确认订单',
+      keepAlive: false
+    }
+  },
+  {
+    path: '/selectAddress',
+    name: '选择收货地址',
+    component: () => import('@/components/bulk/selectAddress'),
+    meta: {
+      title: '选择收货地址',
+      keepAlive: false
+    }
+  },
 ]
