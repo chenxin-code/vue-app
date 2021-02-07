@@ -119,4 +119,13 @@ export default [{
       keepAlive: false
     }
   },
+  {
+    path: '/tips',
+    name: '提示页面',
+    component: () => import('@/components/bulk/tips/index.vue'),
+    meta: {
+      title: '提示页面',
+      keepAlive: false
+    }
+  },
 ]
