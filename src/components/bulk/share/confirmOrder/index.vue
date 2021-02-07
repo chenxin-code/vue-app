@@ -1,11 +1,15 @@
 <template>
   <!-- // created by hjc 分享确认订单 -->
-  <div class="confirm_order">
+  <div class="confirm_order" ref="confirmOrder">
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
         <input type="text" placeholder="姓名" />
-        <input type="text" placeholder="请输入手机号" />
+        <input
+          type="number"
+          placeholder="请输入手机号"
+          v-model.number="userPhone"
+        />
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
@@ -60,16 +64,24 @@
     </div>
     <div class="remark">
       <span>订单备注</span>
-      <input type="text" />
+      <textarea
+        ref="textarea"
+        :style="{ height: textareaHeight }"
+        v-model="textareaValue"
+      ></textarea>
     </div>
+    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
+    <div ref="nullBox"></div>
     <div class="pay_now">
       <div class="pay_price">¥10.00</div>
-      <div class="pay">立即支付</div>
+      <div class="pay" @click="pay">立即支付</div>
     </div>
   </div>
 </template>
 
 <script>
+import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
+import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
   props: {},
@@ -77,7 +89,10 @@ export default {
     return {
       goodsList: [],
       isShowMore: true,
-      arr: [1, 2, 4, 5, 6, 7, 8, 8],
+      arr: [1, 2, 4],
+      textareaHeight: "20px",
+      textareaValue: "",
+      userPhone: "",
     };
   },
   created() {
@@ -95,6 +110,33 @@ export default {
     showMore() {
       this.goodsList = this.arr;
       this.isShowMore = false;
+    },
+    //实现文本域自适应大小
+    getHeight() {
+      this.textareaHeight = calcTextareaHeight(
+        this.$refs.textarea,
+        1,
+        null
+      ).height;
+      //浏览器随着内容大小滚动
+      this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
+    },
+    pay() {
+      if (util.checkMobile(this.userPhone)) {
+        console.log(util.checkMobile(this.userPhone));
+      } else {
+        this.$toast("请输入正确的手机号码");
+      }
+    },
+  },
+  watch: {
+    textareaValue() {
+      //限定150字
+      if (this.textareaValue.length <= 150) {
+        this.getHeight();
+      } else {
+        this.textareaValue = String(this.textareaValue).slice(0, 150);
+      }
     },
   },
 };
@@ -115,6 +157,10 @@ export default {
   padding: 10px 10px 61px;
   background-color: #F6F6F6;
   font-family: PingFangSC-Medium, PingFang SC;
+  background-image: url('./images/background.png');
+  background-position: 0 -60px;
+  background-size: 100% 135.5px;
+  background-repeat: no-repeat;
 
   .line {
     width: 315px;
@@ -350,6 +396,7 @@ export default {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      padding: 10px 0 0;
 
       .sell_price_statistics {
         font-size: 12px;
@@ -373,15 +420,14 @@ export default {
 
   .remark {
     width: 100%;
-    height: 49px;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    // align-items: center;
     margin-top: 10px;
-    padding: 14.5px 0 14.5px 20px;
+    padding: 14.5px 20px 14.5px 20px;
 
     span {
       font-size: 14px;
@@ -392,12 +438,17 @@ export default {
       margin-right: 10px;
     }
 
-    input {
+    textarea {
+      flex: 1;
       font-size: 14px;
       font-weight: 400;
       color: #424242;
       line-height: 20px;
       letter-spacing: 1px;
+      outline: none;
+      resize: none;
+      // height: 143px;
+      border: none;
     }
   }
 

@@ -50,7 +50,7 @@
         <div class="order_value">2020/10/10 20:00:00</div>
       </div>
     </div>
-    <div class="after_sales" @click="$router.push('/bulk_after_sales_detail')">
+    <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
       受理售后问题
     </div>
   </div>

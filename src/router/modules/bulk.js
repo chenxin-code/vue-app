@@ -56,6 +56,15 @@ export default [{
     }
   },
   {
+    path: '/bulk_after_sales_edit',
+    name: '售后申请编辑',
+    component: () => import('@/components/bulk/afterSales/afterSalesEdit/index.vue'),
+    meta: {
+      title: '售后申请编辑',
+      keepAlive: false
+    }
+  },
+  {
     path: '/bulk_after_sales_detail',
     name: '售后申请详情',
     component: () => import('@/components/bulk/afterSales/afterSalesDetail/index.vue'),
