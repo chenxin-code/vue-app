@@ -49,18 +49,27 @@ export default [{
   {
     path: '/bulk_order_detail',
     name: '订单详情',
-    component: () => import('@/components/bulk/orderDetail/index.vue'),
+    component: () => import('@/components/bulk/orderList/orderDetail/index.vue'),
     meta: {
       title: '订单详情',
       keepAlive: false
     }
   },
   {
-    path: '/bulk_after_application',
-    name: '售后申请',
-    component: () => import('@/components/bulk/afterApplication/index.vue'),
+    path: '/bulk_after_sales',
+    name: '售后申请列表',
+    component: () => import('@/components/bulk/afterSales/index.vue'),
     meta: {
-      title: '售后申请',
+      title: '售后申请列表',
+      keepAlive: false
+    }
+  },
+  {
+    path: '/bulk_after_sales_detail',
+    name: '售后申请详情',
+    component: () => import('@/components/bulk/afterSales/afterSalesDetail/index.vue'),
+    meta: {
+      title: '售后申请详情',
       keepAlive: false
     }
   },
