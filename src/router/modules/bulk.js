@@ -11,6 +11,15 @@ export default [{
     }
   },
   {
+    path: '/bulkDetails',
+    name: '活动首页',
+    component: () => import('@/components/bulk/activity/details.vue'),
+    meta: {
+      title: '活动详情',
+      keepAlive: false
+    }
+  },
+  {
     path: '/bulk_share',
     name: '微信团购分享',
     component: () => import('@/components/bulk/share/index.vue'),
