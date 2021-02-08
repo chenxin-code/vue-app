@@ -2,7 +2,14 @@
   <!-- // created by hjc 商品详情 -->
   <div class="goods_detail">
     <div class="goods_swiper">
-      <van-icon name="arrow-left" class="arrow_left" color="#000000" size="0.471467rem" />
+      <van-sticky>
+        <van-icon
+          name="arrow-left"
+          class="arrow_left"
+          color="#000000"
+          size="0.471467rem"
+        />
+      </van-sticky>
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
         <van-swipe-item v-for="item in 4" :key="item">
           <img

@@ -59,8 +59,8 @@ export default {
         box-sizing: border-box;
     }
     .good-ms dd{
-        width: 120px;
-        height: 120px;
+        width: 85px;
+        height: 85px
     }
     .good-ms dd img{
         width:100%;
