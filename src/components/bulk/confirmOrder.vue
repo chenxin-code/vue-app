@@ -9,7 +9,9 @@
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
-        <span>自提</span>
+        <select v-model="takeWay">
+          <option v-for="item in takeWays" :value="item.value">{{item.name}}</option>
+        </select>
       </div>
     </div>
     <div class="pick_up_address" v-show="takeWay === 1">
@@ -78,6 +80,10 @@ export default {
   props: {},
   data() {
     return {
+      takeWays: [
+        {name: '自提',value: 1},
+        {name: '送货上门',value: 2}
+      ],
       takeWay: 2
     }
   },
@@ -96,7 +102,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
-  padding: 10px 3%;
+  padding: 10px;
   overflow: auto;
   bottom: 49px !important;
 
@@ -161,6 +167,18 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      select {
+        margin-left 20px
+        font-size: 14px;
+        color: #424242;
+        width: 180px;
+        border: none;
+        resize: none;
+        outline: none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+      }
 
       span {
         font-size: 14px;
