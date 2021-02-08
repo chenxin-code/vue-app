@@ -3,7 +3,6 @@
   <div id="page-myprofit">
     <div class="myprofit-header">
       <div class="lur-header">
-        <channelSearch></channelSearch>
         <dl class="profit-box-x">
           <dd class="profit-advantor-x">
             <img
@@ -51,19 +50,12 @@
             </div>
         </div>
     </div>
-    <div class="myprofit-footer">
-      <switchMenu></switchMenu>
-    </div>
   </div>
 </template>
 <script>
-import channelSearch from '@/components/bulk/components/channelSearch'
-import switchMenu from '@/components/bulk/components/switchMenu'
 export default {
   name: 'myprofit',
   components: {
-    channelSearch,
-    switchMenu
   },
   data() {
     return {}
@@ -108,12 +100,12 @@ export default {
   padding-bottom:20px;
 }
 .profit-box-x .profit-advantor-x {
-  width: 70px;
-  height: 70px;
+  width: 52.5px;
+  height: 52.5px;
 }
 .profit-box-x .profit-advantor-x img {
-  width: 70px;
-  height: 70px;
+  width: 52.5px;
+  height: 52.5px;
   border-radius: 50%;
   box-sizing: border-box;
   margin-left:10px;

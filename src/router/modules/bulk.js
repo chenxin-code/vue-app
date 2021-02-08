@@ -18,35 +18,8 @@ export default [{
       title: '支付成功',
       keepAlive: false
     }
-  }, {
-    path: '/myprofit',
-    name: '我的收益',
-    component: () =>
-      import('@/components/bulk/myprofit/index.vue'),
-    meta: {
-      title: '我的收益',
-      keepAlive: false
-    }
-  }, {
-    path: '/bulk',
-    name: '活动首页',
-    component: () =>
-      import('@/components/bulk/activity/index.vue'),
-    meta: {
-      title: '活动首页',
-      keepAlive: false
-    }
   },
-  {
-    path: '/bulkDetails',
-    name: '活动首页',
-    component: () =>
-      import('@/components/bulk/activity/details.vue'),
-    meta: {
-      title: '活动详情',
-      keepAlive: false
-    }
-  },
+
   {
     path: '/bulk_share',
     name: '微信团购分享',
@@ -65,15 +38,7 @@ export default [{
       keepAlive: false
     }
   },
-  {
-    path: '/bulk_order_list',
-    name: '订单列表',
-    component: () => import('@/components/bulk/orderList/index.vue'),
-    meta: {
-      title: '订单列表',
-      keepAlive: false
-    }
-  },
+
   {
     path: '/bulk_order_detail',
     name: '订单详情',
@@ -83,15 +48,7 @@ export default [{
       keepAlive: false
     }
   },
-  {
-    path: '/bulk_after_sales',
-    name: '售后申请列表',
-    component: () => import('@/components/bulk/afterSales/index.vue'),
-    meta: {
-      title: '售后申请列表',
-      keepAlive: false
-    }
-  },
+
   {
     path: '/bulk_after_sales_edit',
     name: '售后申请编辑',
@@ -145,6 +102,64 @@ export default [{
       title: '选择收货地址',
       keepAlive: false
     }
+  },
+  {
+    path: '/bulk',
+    name: '首页',
+    component: () => import('@/components/bulk/index.vue'),
+    meta: {
+      title: '首页',
+      keepAlive: false
+    },
+    redirect: "/bulk_index",
+    children: [{
+        path: '/bulk_index',
+        name: '活动首页',
+        component: () =>
+          import('@/components/bulk/activity/index.vue'),
+        meta: {
+          title: '活动首页',
+          keepAlive: false
+        }
+
+      }, {
+        path: '/bulkDetails',
+        name: '活动首页',
+        component: () =>
+          import('@/components/bulk/activity/details.vue'),
+        meta: {
+          title: '活动详情',
+          keepAlive: false
+        }
+      }, {
+        path: '/bulk_order_list',
+        name: '订单列表',
+        component: () => import('@/components/bulk/orderList/index.vue'),
+        meta: {
+          title: '订单列表',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/bulk_after_sales',
+        name: '售后申请列表',
+        component: () => import('@/components/bulk/afterSales/index.vue'),
+        meta: {
+          title: '售后申请列表',
+          keepAlive: false
+        }
+      },
+      {
+        path: '/myprofit',
+        name: '我的收益',
+        component: () =>
+          import('@/components/bulk/myprofit/index.vue'),
+        meta: {
+          title: '我的收益',
+          keepAlive: false
+        }
+      },
+    ]
   },
 
 ]

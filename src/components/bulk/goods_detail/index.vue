@@ -1,40 +1,43 @@
 <template>
   <!-- // created by hjc 商品详情 -->
   <div class="goods_detail">
-    <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
-      <van-swipe-item v-for="item in 4" :key="item">
-        <img
-          class="goods_img"
-          src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
-          alt=""
-        />
-      </van-swipe-item>
-    </van-swipe>
-    <div class="goods_info_box">
-      <div class="goods_info">
-        <div class="goods_price">
-          <div class="goods_price_detail">
-            <div class="goods_price_title">团购价格：</div>
-            <div class="unit">￥</div>
-            <div class="price">7865</div>
-            <div class="line_price">¥10.00</div>
+    <div class="goods_swiper">
+      <van-icon name="arrow-left" class="arrow_left" color="#000000" size="0.471467rem" />
+      <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
+        <van-swipe-item v-for="item in 4" :key="item">
+          <img
+            class="goods_img"
+            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
+            alt=""
+          />
+        </van-swipe-item>
+      </van-swipe>
+      <div class="goods_info_box">
+        <div class="goods_info">
+          <div class="goods_price">
+            <div class="goods_price_detail">
+              <div class="goods_price_title">团购价格：</div>
+              <div class="unit">￥</div>
+              <div class="price">7865</div>
+              <div class="line_price">¥10.00</div>
+            </div>
+            <div class="goods_count">
+              <div>已抢100件</div>
+              <div>剩余999件</div>
+            </div>
           </div>
-          <div class="goods_count">
-            <div>已抢100件</div>
-            <div>剩余999件</div>
+          <div class="goods_time">
+            <div class="goods_time_title">拼团剩余时间</div>
+            <van-count-down :time="time">
+              <template #default="timeData">
+                <span class="block">{{ timeData.hours }}</span>
+                <span class="colon">:</span>
+                <span class="block">{{ timeData.minutes }}</span>
+                <span class="colon">:</span>
+                <span class="block">{{ timeData.seconds }}</span>
+              </template>
+            </van-count-down>
           </div>
-        </div>
-        <div class="goods_time">
-          <div class="goods_time_title">拼团剩余时间</div>
-          <van-count-down :time="time">
-            <template #default="timeData">
-              <span class="block">{{ timeData.hours }}</span>
-              <span class="colon">:</span>
-              <span class="block">{{ timeData.minutes }}</span>
-              <span class="colon">:</span>
-              <span class="block">{{ timeData.seconds }}</span>
-            </template>
-          </van-count-down>
         </div>
       </div>
     </div>
@@ -107,28 +110,44 @@ export default {
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
 
+  .goods_swiper {
+    position: relative;
+    width: 100%;
+    height: 380px;
+
+    .arrow_left {
+      position: absolute;
+      top: 14px;
+      left: 11.5px;
+      z-index: 2;
+    }
+  }
+
   .van-swipe-item {
-    height: 271.5px;
+    height: 380px;
 
     .goods_img {
       width: 100%;
-      height: 271.5px;
+      height: 380px;
     }
   }
 
   .goods_info_box {
+    width: 100%;
     background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 
     .goods_info {
-      width: 353.5px;
+      width: 100%;
       height: 70px;
-      margin: 0 auto;
       background-image: url('./images/goods_background.png');
       background-repeat: no-repeat;
-      background-size: 353.5px 70px;
+      background-size: 100% 70px;
       display: flex;
       justify-content: space-between;
-      padding: 8px 23.5px 8px 9px;
+      padding: 8px 23.5px 8px 20.5px;
       background-color: #fff;
 
       .goods_price {
