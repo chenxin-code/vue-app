@@ -1,30 +1,35 @@
 <template>
   <!-- 支付成功列表页 -->
-  <div id="page-paySuccess">
-    <div>
-      <div class="pay-status-v">
-        <img src="./paysuccess-icon.png" alt="" />
-        <span>恭喜您，支付成功！</span>
+  <div class="pay_success">
+    <navbar :title="'确认订单'"></navbar>
+    <div id="page-paySuccess">
+      <div>
+        <div class="pay-status-v">
+          <img src="./paysuccess-icon.png" alt="" />
+          <span>恭喜您，支付成功！</span>
+        </div>
+        <div class="recommond-txt-v">
+          <div class="v-v">商品推荐</div>
+        </div>
       </div>
-      <div class="recommond-txt-v">
-        <div class="v-v">商品推荐</div>
+      <div class="recommond-list-v">
+        <recommondPanel
+          v-for="(item, index) in 8"
+          :key="index"
+          class="lux"
+        ></recommondPanel>
       </div>
-    </div>
-    <div class="recommond-list-v">
-      <recommondPanel
-        v-for="(item, index) in 8"
-        :key="index"
-        class="lux"
-      ></recommondPanel>
     </div>
   </div>
 </template>
 <script>
 import recommondPanel from "@/components/bulk/components/recommondPanel";
+import navbar from "@/components/bulk/components/navbar";
 export default {
   name: "paySuccess",
   components: {
     recommondPanel,
+    navbar,
   },
 };
 </script>

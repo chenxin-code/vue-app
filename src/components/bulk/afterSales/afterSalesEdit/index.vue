@@ -1,117 +1,123 @@
 <template>
   <!-- // created by hjc 售后申请 -->
-  <div class="afterSalesEdit">
-    <div class="after_sales">
-      <div class="after_sales_type" @click="selectType = true">
-        <div class="after_sales_title">
-          <div>售后类型</div>
-          <div>{{ select == 1 ? "退款" : select == 2 ? "退货" : "换货" }}</div>
-        </div>
-        <img
-          :src="require('./images/right_icon.png')"
-          alt=""
-          class="select_icon"
-        />
-      </div>
-      <div class="goods_info">
-        <div class="goods_info_title">商品信息</div>
-        <div class="goods_item" v-for="(item, index) in 4" :key="index">
-          <img :src="require('../../share/images/share.png')" alt="" />
-          <div class="goods_item_detail">
-            <div class="goods_name">新鲜的大西瓜</div>
-            <div class="goods_count">
-              商品数量：
-              <van-stepper
-                v-model="value"
-                input-width="0.466667rem"
-                button-size="0.466667rem"
-                integer
-              />
-            </div>
-            <div class="goods_price_btn">
-              <div class="price">
-                <div>商品价格：</div>
-                <div>¥5.00</div>
-              </div>
-              <div class="delet_btn">删除</div>
+  <div class="after">
+    <navbar :title="'售后申请'"></navbar>
+    <div class="afterSalesEdit">
+      <div class="after_sales">
+        <div class="after_sales_type" @click="selectType = true">
+          <div class="after_sales_title">
+            <div>售后类型</div>
+            <div>
+              {{ select == 1 ? "退款" : select == 2 ? "退货" : "换货" }}
             </div>
           </div>
-        </div>
-        <div class="line"></div>
-        <div class="refund_price">合计退款金额：¥20.00</div>
-      </div>
-    </div>
-    <div class="problem_description">
-      <div class="problem_title">问题描述</div>
-      <textarea rows="3" cols="20"></textarea>
-      <van-uploader
-        v-model="fileList"
-        multiple
-        :max-count="3"
-        accept="image/png, image/jpeg,image/jpg"
-      >
-        <template>
-          <div class="photo_btn">
-            <img :src="require('./images/photo_icon.png')" alt="" />
-            <div>上传照片</div>
-          </div>
-        </template>
-      </van-uploader>
-    </div>
-    <div class="submit_btn" @click="$router.push('/bulk_after_sales_detail')">
-      发起售后
-    </div>
-    <van-popup
-      v-model="selectType"
-      position="bottom"
-      :style="{ height: '32%' }"
-      round
-    >
-      <div class="select_type">
-        <div class="select_type_title">
-          <div>请选择申请类型</div>
           <img
-            :src="require('./images/close_icon.png')"
+            :src="require('./images/right_icon.png')"
             alt=""
-            @click="selectType = false"
+            class="select_icon"
           />
         </div>
-        <van-button block @click="(select = 1), (selectType = false)">
-          <div class="select_btn">
-            <div :class="select == 1 ? 'current' : ''">退款</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 1"
-            />
+        <div class="goods_info">
+          <div class="goods_info_title">商品信息</div>
+          <div class="goods_item" v-for="(item, index) in 4" :key="index">
+            <img :src="require('../../share/images/share.png')" alt="" />
+            <div class="goods_item_detail">
+              <div class="goods_name">新鲜的大西瓜</div>
+              <div class="goods_count">
+                商品数量：
+                <van-stepper
+                  v-model="value"
+                  input-width="0.466667rem"
+                  button-size="0.466667rem"
+                  integer
+                />
+              </div>
+              <div class="goods_price_btn">
+                <div class="price">
+                  <div>商品价格：</div>
+                  <div>¥5.00</div>
+                </div>
+                <div class="delet_btn">删除</div>
+              </div>
+            </div>
           </div>
-        </van-button>
-        <van-button block @click="(select = 2), (selectType = false)">
-          <div class="select_btn">
-            <div :class="select == 2 ? 'current' : ''">退货</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 2"
-            />
-          </div>
-        </van-button>
-        <van-button block @click="(select = 3), (selectType = false)">
-          <div class="select_btn">
-            <div :class="select == 3 ? 'current' : ''">换货</div>
-            <img
-              :src="require('./images/select_icon.png')"
-              alt=""
-              v-show="select == 3"
-            />
-          </div>
-        </van-button>
+          <div class="line"></div>
+          <div class="refund_price">合计退款金额：¥20.00</div>
+        </div>
       </div>
-    </van-popup>
+      <div class="problem_description">
+        <div class="problem_title">问题描述</div>
+        <textarea rows="3" cols="20"></textarea>
+        <van-uploader
+          v-model="fileList"
+          multiple
+          :max-count="3"
+          accept="image/png, image/jpeg,image/jpg"
+        >
+          <template>
+            <div class="photo_btn">
+              <img :src="require('./images/photo_icon.png')" alt="" />
+              <div>上传照片</div>
+            </div>
+          </template>
+        </van-uploader>
+      </div>
+      <div class="submit_btn" @click="$router.push('/bulk_after_sales_detail')">
+        发起售后
+      </div>
+      <van-popup
+        v-model="selectType"
+        position="bottom"
+        :style="{ height: '32%' }"
+        round
+      >
+        <div class="select_type">
+          <div class="select_type_title">
+            <div>请选择申请类型</div>
+            <img
+              :src="require('./images/close_icon.png')"
+              alt=""
+              @click="selectType = false"
+            />
+          </div>
+          <van-button block @click="(select = 1), (selectType = false)">
+            <div class="select_btn">
+              <div :class="select == 1 ? 'current' : ''">退款</div>
+              <img
+                :src="require('./images/select_icon.png')"
+                alt=""
+                v-show="select == 1"
+              />
+            </div>
+          </van-button>
+          <van-button block @click="(select = 2), (selectType = false)">
+            <div class="select_btn">
+              <div :class="select == 2 ? 'current' : ''">退货</div>
+              <img
+                :src="require('./images/select_icon.png')"
+                alt=""
+                v-show="select == 2"
+              />
+            </div>
+          </van-button>
+          <van-button block @click="(select = 3), (selectType = false)">
+            <div class="select_btn">
+              <div :class="select == 3 ? 'current' : ''">换货</div>
+              <img
+                :src="require('./images/select_icon.png')"
+                alt=""
+                v-show="select == 3"
+              />
+            </div>
+          </van-button>
+        </div>
+      </van-popup>
+    </div>
   </div>
 </template>
 
 <script>
+import navbar from "@/components/bulk/components/navbar/index.vue";
 export default {
   name: "afterSalesEdit",
   props: {},
@@ -121,6 +127,9 @@ export default {
       selectType: false,
       select: 1, // 1退款  2 退货  3换货
     };
+  },
+  components: {
+    navbar,
   },
   created() {},
 };
@@ -135,10 +144,13 @@ export default {
   background-color: #F6F6F6;
 }
 
-.afterSalesEdit {
+.after {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+}
+
+.afterSalesEdit {
   padding: 10px 10px 20px;
   background-color: #F6F6F6;
   font-family: PingFangSC-Regular, PingFang SC;
