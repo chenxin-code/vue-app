@@ -4,15 +4,15 @@
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
-        <input type="text" placeholder="姓名" />
-        <input type="text" placeholder="请输入手机号" />
+        <input placeholder="姓名" />
+        <input placeholder="请输入手机号" />
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
         <span>自提</span>
       </div>
     </div>
-    <div class="pick_up_address">
+    <div class="pick_up_address" v-show="takeWay === 1">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
         <div class="change">切换提货地址</div>
@@ -26,6 +26,15 @@
             提货地址：北京市西城区 五福 玲珑居物业管理中心
           </div>
         </div>
+      </div>
+    </div>
+    <div class="pick_up_address" v-show="takeWay === 2">
+      <div class="addres_title">
+        <div class="addres_title_text">团购提货地点</div>
+      </div>
+      <div class="line"></div>
+      <div class="addres_info">
+        <textarea placeholder="" />
       </div>
     </div>
     <div class="goods_info">
@@ -54,7 +63,7 @@
     </div>
     <div class="remark">
       <span>订单备注：</span>
-      <input type="text" />
+      <input />
     </div>
     <div class="pay_now">
       <div class="pay_price">¥10.00</div>
@@ -68,7 +77,9 @@ export default {
   name: "confirmOrder",
   props: {},
   data() {
-    return {}
+    return {
+      takeWay: 2
+    }
   },
   created() {},
   methods: {}
@@ -200,6 +211,15 @@ export default {
       justify-content: flex-start;
       align-items: center;
       padding-top: 9.5px;
+      textarea {
+        font-size: 14px;
+        color: #424242;
+        width: 100%;
+        height 100px
+        border: none;
+        resize: none;
+        outline: none;
+      }
 
       img {
         width: 65px;
@@ -220,7 +240,7 @@ export default {
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          margin-bottom: 19.5px;
+          margin-bottom: 10px;
         }
 
         .addres {
