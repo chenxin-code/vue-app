@@ -5,6 +5,7 @@ let _requestingArray = {}
 
 class DataRequestJsonp {
   constructor(url, funcName) {
+    debugger
     this.url = url || ''
     this.funcName = funcName
     let scriptNode = document.createElement('script')
@@ -71,13 +72,14 @@ const staticDataRequest = {
    * @returns {DataRequestJsonp} 返回请求对象
    */
   request(url, funcName, args = []) {
+    console.log('config', config)
     if (!url) {
       throw new Error('url 不能为空')
     }
     if (url.indexOf('http') != 0) {
       url = config.baseURL + url
     }
-
+    console.log('uuuuuuuu', url)
     args.forEach(item => {
       if (typeof item === 'object') {
         for (const key in item) {

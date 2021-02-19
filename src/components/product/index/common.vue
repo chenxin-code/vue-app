@@ -320,9 +320,13 @@
 
         this.$STLoading.open()
         staticDataRequest.request(url, funcName, args).then(data => {
+          debugger
           this.$STLoading.close()
+          console.log('111111', funcName)
           console.log('=======', args)
           console.log('-------', data)
+          alert(JSON.stringify(args))
+          alert(JSON.stringify(data))
           if (data.status == 0) {
             this.pageLoaded = true;
             let fdata = data.data.pageData;
