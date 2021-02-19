@@ -327,7 +327,7 @@
             this.pageLoaded = true;
             let fdata = data.data.pageData;
             if (!fdata.pageDataJson) {
-              this.$toast('首页布局获取失败')
+              this.$toast('首页布局获取失败11')
               return
             }
             let pdata = JSON.parse(fdata.pageDataJson);
@@ -900,6 +900,7 @@
       next()
     },
     created() {
+      console.log('pppppppp', this.$store.state)
       this.$store.state.clientWidth = document.documentElement.clientWidth;
       this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : '';
       this.businessType = this.$route.query.businessType ? this.$route.query.businessType : '';
