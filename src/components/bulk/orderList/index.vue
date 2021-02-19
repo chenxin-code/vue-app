@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import Qs from "qs";
 export default {
   name: "orderList",
   props: {},
@@ -106,7 +107,16 @@ export default {
       searchValue: "",
     };
   },
-  created() {},
+  created() {
+    this.$http
+      .post(
+        "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+        Qs.stringify({ gbAcId: 11 })
+      )
+      .then((res) => {
+        console.log("res", res);
+      });
+  },
   methods: {
     confirm() {
       this.showPopup = true;

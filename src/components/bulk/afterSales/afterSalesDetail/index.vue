@@ -1,65 +1,72 @@
 <template>
   <!-- // created by hjc 售后申请 -->
   <div class="afterSalesDetail">
-    <div class="after_sales">
-      <div class="after_sales_type">
-        <div class="after_sales_title">
-          <div>售后类型</div>
-          <div>退款</div>
+    <navbar :title="'售后申请'"></navbar>
+    <div class="afterSalesDetail_box">
+      <div class="after_sales">
+        <div class="after_sales_type">
+          <div class="after_sales_title">
+            <div>售后类型</div>
+            <div>退款</div>
+          </div>
+          <div class="order_status">待审核</div>
         </div>
-        <div class="order_status">待审核</div>
-      </div>
-      <div class="goods_info">
-        <div class="goods_info_title">商品信息</div>
-        <div class="goods_item" v-for="(item, index) in 4" :key="index">
-          <img :src="require('../../share/images/share.png')" alt="" />
-          <div class="goods_item_detail">
-            <div class="goods_name">新鲜的大西瓜</div>
-            <div class="goods_count">
-              商品数量：
-              <van-stepper
-                v-model="value"
-                input-width="0.466667rem"
-                button-size="0.466667rem"
-                disabled
-                integer
-              />
-            </div>
-            <div class="goods_price_btn">
-              <div class="price">
-                <div>商品价格：</div>
-                <div>¥5.00</div>
+        <div class="goods_info">
+          <div class="goods_info_title">商品信息</div>
+          <div class="goods_item" v-for="(item, index) in 4" :key="index">
+            <img :src="require('../../share/images/share.png')" alt="" />
+            <div class="goods_item_detail">
+              <div class="goods_name">新鲜的大西瓜</div>
+              <div class="goods_count">
+                商品数量：
+                <van-stepper
+                  v-model="value"
+                  input-width="0.466667rem"
+                  button-size="0.466667rem"
+                  disabled
+                  integer
+                />
+              </div>
+              <div class="goods_price_btn">
+                <div class="price">
+                  <div>商品价格：</div>
+                  <div>¥5.00</div>
+                </div>
               </div>
             </div>
           </div>
+          <div class="line"></div>
+          <div class="refund_price">合计退款金额：¥20.00</div>
         </div>
-        <div class="line"></div>
-        <div class="refund_price">合计退款金额：¥20.00</div>
       </div>
-    </div>
-    <div class="problem_description">
-      <div class="problem_title">问题描述</div>
-      <div class="problem_text">
-        你好数不胜数你打电话点点滴滴年大家都等你多久
-        还得不到你电脑都记得你当年的弟弟看到你懂得的
-        点点滴滴反反复还是不是收拾收拾睡觉时手机少男
-        书生本色江苏苏宁少男少女思考思考世界室内设计
-        实话实说今生今世你说你是莫斯科市开始世界室内
-        和少男少女设计师设计说明书上劳斯莱斯少男少女
-        还是十八世纪四十就是奈史密斯上…..
-      </div>
-      <div class="problem_img">
-        <img :src="require('../../share/images/share.png')" alt="" />
-        <img :src="require('../../share/images/share.png')" alt="" />
-        <img :src="require('../../share/images/share.png')" alt="" />
+      <div class="problem_description">
+        <div class="problem_title">问题描述</div>
+        <div class="problem_text">
+          你好数不胜数你打电话点点滴滴年大家都等你多久
+          还得不到你电脑都记得你当年的弟弟看到你懂得的
+          点点滴滴反反复还是不是收拾收拾睡觉时手机少男
+          书生本色江苏苏宁少男少女思考思考世界室内设计
+          实话实说今生今世你说你是莫斯科市开始世界室内
+          和少男少女设计师设计说明书上劳斯莱斯少男少女
+          还是十八世纪四十就是奈史密斯上…..
+        </div>
+        <div class="problem_img">
+          <img :src="require('../../share/images/share.png')" alt="" />
+          <img :src="require('../../share/images/share.png')" alt="" />
+          <img :src="require('../../share/images/share.png')" alt="" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import navbar from "@/components/bulk/components/navbar/index.vue";
 export default {
   name: "afterSalesDetail",
+  components: {
+    navbar,
+  },
   props: {},
   data() {
     return {};
@@ -81,10 +88,19 @@ export default {
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  padding: 10px 10px 20px;
+  // padding: 10px 10px 20px;
+  // padding-bottom: 20px;
   background-color: #F6F6F6;
   font-family: PingFangSC-Regular, PingFang SC;
   letter-spacing: 1px;
+
+  .afterSalesDetail_box {
+    // width: 100%;
+    // height: 100%;
+    // overflow-y: auto;
+    padding: 10px 10px 20px;
+    background-color: #F6F6F6;
+  }
 
   .line {
     width: 100%;

@@ -1,64 +1,71 @@
 <template>
   <!-- // created by hjc 订单详情 -->
-  <div class="orderDetail">
-    <div class="user_info">
-      <img :src="require('../../share/images/share.png')" alt="" />
-      <div class="info">
-        <div class="user">
-          <div>张三</div>
-          <div>188****8979</div>
-        </div>
-        <div class="address">
-          浙江省杭州市西湖街道西湖区西斗门2155号2幢海绵 阁123街道办事处
-        </div>
-      </div>
-      <div :class="type == 1 ? 'pick_up' : 'delivery'" class="pick_up_type">
-        {{ type == 1 ? "自提" : "配送上门" }}
-      </div>
-    </div>
-    <div class="note">
-      <div class="note_title">订单备注：</div>
-      <div class="note_text">
-        订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注
-      </div>
-    </div>
-    <div class="goods_info">
-      <div class="goods_info_title">商品信息</div>
-      <div class="goods_item" v-for="(item, index) in 4" :key="index">
+  <div class="order">
+    <navbar :title="'订单详情'"></navbar>
+    <div class="orderDetail">
+      <div class="user_info">
         <img :src="require('../../share/images/share.png')" alt="" />
-        <div class="goods_detail">
-          <div class="goods_name">新鲜的大西瓜500kg/份</div>
-          <div class="goods_price_count">
-            <div>团购价格：¥5.00</div>
-            <div>X3</div>
+        <div class="info">
+          <div class="user">
+            <div>张三</div>
+            <div>188****8979</div>
+          </div>
+          <div class="address">
+            浙江省杭州市西湖街道西湖区西斗门2155号2幢海绵 阁123街道办事处
           </div>
         </div>
+        <div :class="type == 1 ? 'pick_up' : 'delivery'" class="pick_up_type">
+          {{ type == 1 ? "自提" : "配送上门" }}
+        </div>
       </div>
-      <div class="price">合计：¥5.00</div>
-    </div>
-    <div class="order_info">
-      <div class="order_detail">
-        <div class="order_title">订单编号</div>
-        <div class="order_value">10000000000000</div>
+      <div class="note">
+        <div class="note_title">订单备注：</div>
+        <div class="note_text">
+          订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注
+        </div>
       </div>
-      <div class="order_detail">
-        <div class="order_title">下单时间</div>
-        <div class="order_value">2020/10/10 20:00:00</div>
+      <div class="goods_info">
+        <div class="goods_info_title">商品信息</div>
+        <div class="goods_item" v-for="(item, index) in 4" :key="index">
+          <img :src="require('../../share/images/share.png')" alt="" />
+          <div class="goods_detail">
+            <div class="goods_name">新鲜的大西瓜500kg/份</div>
+            <div class="goods_price_count">
+              <div>团购价格：¥5.00</div>
+              <div>X3</div>
+            </div>
+          </div>
+        </div>
+        <div class="price">合计：¥5.00</div>
       </div>
-      <div class="order_detail">
-        <div class="order_title">付款时间</div>
-        <div class="order_value">2020/10/10 20:00:00</div>
+      <div class="order_info">
+        <div class="order_detail">
+          <div class="order_title">订单编号</div>
+          <div class="order_value">10000000000000</div>
+        </div>
+        <div class="order_detail">
+          <div class="order_title">下单时间</div>
+          <div class="order_value">2020/10/10 20:00:00</div>
+        </div>
+        <div class="order_detail">
+          <div class="order_title">付款时间</div>
+          <div class="order_value">2020/10/10 20:00:00</div>
+        </div>
       </div>
-    </div>
-    <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
-      受理售后问题
+      <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
+        受理售后问题
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import navbar from "@/components/bulk/components/navbar/index.vue";
 export default {
   name: "orderDetail",
+  components: {
+    navbar,
+  },
   props: {},
   data() {
     return {
@@ -77,10 +84,13 @@ export default {
   background-color: #F6F6F6;
 }
 
-.orderDetail {
+.order {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+}
+
+.orderDetail {
   background: #F6F6F6;
   font-family: PingFangSC-Regular, PingFang SC;
   padding: 10px 10px 38.5px;

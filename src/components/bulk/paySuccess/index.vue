@@ -1,30 +1,42 @@
 <template>
   <!-- 支付成功列表页 -->
-  <div id="page-paySuccess">
-    <div>
-      <div class="pay-status-v">
-        <img src="./paysuccess-icon.png" alt="" />
-        <span>恭喜您，支付成功！</span>
+  <div class="pay_success">
+    <navbar :title="'确认订单'"></navbar>
+    <div id="page-paySuccess">
+      <div>
+        <div class="pay-status-v">
+          <img src="./paysuccess-icon.png" alt="" />
+          <span>恭喜您，支付成功！</span>
+        </div>
+        <div class="recommond-txt-v">
+          <div class="v-v">商品推荐</div>
+        </div>
       </div>
-      <div class="recommond-txt-v">
-        <div class="v-v">商品推荐</div>
+      <div class="recommond-list-v">
+        <recommondPanel
+          v-for="(item, index) in 8"
+          :key="index"
+          class="lux"
+        ></recommondPanel>
       </div>
-    </div>
-    <div class="recommond-list-v">
-        <recommondPanel v-for="(item,index) in 8" :key="index" class="lux"></recommondPanel>
     </div>
   </div>
 </template>
 <script>
-import recommondPanel from "@/components/bulk/components/recommondPanel"
+import recommondPanel from "@/components/bulk/components/recommondPanel";
+import navbar from "@/components/bulk/components/navbar";
 export default {
-  name: 'paySuccess',
-  components:{
-      recommondPanel
-  }
-}
+  name: "paySuccess",
+  components: {
+    recommondPanel,
+    navbar,
+  },
+};
 </script>
-<style>
+<style scoped>
+.router_class {
+  background-color: #f6f6f6 !important;
+}
 #page-paySuccess {
   width: 100%;
   height: 100vh;
@@ -39,14 +51,16 @@ export default {
   align-items: center;
 }
 .pay-status-v img {
-  width: 50%;
+  width: 169px;
+  height: 184.5px;
+  margin: 0 auto;
 }
 .pay-status-v span {
+  margin-top: 20px;
+  font-size: 14px;
   font-weight: 500;
   color: #666666;
-  line-height: 40px;
-  font-size: 20px;
-  margin-top: 10px;
+  line-height: 20px;
 }
 
 .recommond-txt-v {
@@ -57,38 +71,38 @@ export default {
 }
 
 .v-v {
-  width: 48%;
-  height: 18px;
-  background: url('./recommond-icon.png');
-  background-size: cover;
+  width: 175px;
+  height: 12px;
+  background: url("./recommond-icon.png");
+  background-size: 175px 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 500;
   color: #333333;
-  font-size: 18px;
+  line-height: 20px;
   margin-top: 30px;
-  letter-spacing: 3px;
 }
 .recommond-list-v {
-    flex:1;
-    height: 0;
-    flex-shrink: 0;
-    margin-top:25px;
-    padding:0 10px;
-    box-sizing: border-box;
-    overflow: auto;
-    padding-bottom:40px;
+  flex: 1;
+  height: 0;
+  flex-shrink: 0;
+  margin-top: 25px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  overflow: auto;
+  padding-bottom: 40px;
 }
 
-.lux:nth-last-child(1)::after{
+.lux:nth-last-child(1)::after {
   background: none !important;
 }
-.lux:nth-last-child(1){
+.lux:nth-last-child(1) {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.lux:first-child{
+.lux:first-child {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }

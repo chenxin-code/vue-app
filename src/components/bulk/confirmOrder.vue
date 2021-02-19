@@ -1,34 +1,42 @@
 <template>
-  <!-- // created by hjc 分享确认订单 -->
-  <div class="confirm_order" ref="confirmOrder">
+  <div class="body">
+    <nav-top bstyle="transparent" @backEvent="$router.go(-1)" title="确认订单"></nav-top>
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
-        <input type="text" placeholder="姓名" v-model="userName" />
-        <input
-          type="number"
-          placeholder="请输入手机号"
-          v-model.number="userPhone"
-        />
+        <input placeholder="姓名" />
+        <input placeholder="请输入手机号" />
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
-        <span>自提</span>
+        <select v-model="takeWay">
+          <option v-for="item in takeWays" :value="item.value">{{item.name}}</option>
+        </select>
       </div>
     </div>
-    <div class="pick_up_address">
+    <div class="pick_up_address" v-show="takeWay === 1">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
-        <div class="line"></div>
+        <div class="change" @click="$router.push('/selectAddress')">切换提货地址</div>
       </div>
+      <div class="line"></div>
       <div class="addres_info">
-        <img :src="require('../images/share.png')" alt="" />
+        <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
         <div class="addres_info_detail">
-          <div class="colonel_name">团长名称：奥利给</div>
+          <div class="colonel_name">奥利给</div>
           <div class="addres">
             提货地址：北京市西城区 五福 玲珑居物业管理中心
           </div>
         </div>
+      </div>
+    </div>
+    <div class="pick_up_address" v-show="takeWay === 2">
+      <div class="addres_title">
+        <div class="addres_title_text">团购提货地点</div>
+      </div>
+      <div class="line"></div>
+      <div class="addres_info">
+        <textarea placeholder="" />
       </div>
     </div>
     <div class="goods_info">
@@ -36,9 +44,9 @@
         <div class="goods_title_text">商品信息</div>
         <div class="line"></div>
       </div>
-      <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
+      <div class="goods_item">
         <div class="goods_info_item">
-          <img :src="require('../images/share.png')" alt="" />
+          <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">新鲜的大西瓜500kg/份</div>
             <div class="sell_price">销售价格：¥10.00</div>
@@ -48,102 +56,39 @@
             </div>
           </div>
         </div>
-        <div class="line" v-show="index !== goodsList.length <= 3"></div>
+        <div class="line"></div>
       </div>
-      <img
-        :src="require('./images/more_icon.png')"
-        alt=""
-        class="more"
-        v-if="isShowMore"
-        @click="showMore"
-      />
-      <div class="goods_detail" v-else>
+      <div class="goods_detail">
         <div class="sell_price_statistics">¥10.00</div>
         <div class="bulk_price_statistics">团购价格：¥5.00</div>
       </div>
     </div>
     <div class="remark">
-      <span>订单备注</span>
-      <textarea
-        ref="textarea"
-        :style="{ height: textareaHeight }"
-        v-model="textareaValue"
-      ></textarea>
+      <span>订单备注：</span>
+      <input />
     </div>
-    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
-    <div ref="nullBox"></div>
     <div class="pay_now">
       <div class="pay_price">¥10.00</div>
-      <div class="pay" @click="pay">立即支付</div>
+      <div class="pay" @click="$router.push('/paySuccess')">立即支付</div>
     </div>
   </div>
 </template>
 
 <script>
-import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
-import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
   props: {},
   data() {
     return {
-      goodsList: [],
-      isShowMore: true,
-      arr: [1, 2, 4],
-      textareaHeight: "20px",
-      textareaValue: "",
-      userPhone: "",
-      userName: "",
-    };
-  },
-  created() {
-    if (this.arr.length > 3) {
-      this.goodsList.push(this.arr[0]);
-      this.goodsList.push(this.arr[1]);
-      this.goodsList.push(this.arr[2]);
-      this.isShowMore = true;
-    } else {
-      this.goodsList = this.arr;
-      this.isShowMore = false;
+      takeWays: [
+        {name: '自提',value: 1},
+        {name: '送货上门',value: 2}
+      ],
+      takeWay: 2
     }
   },
-  methods: {
-    showMore() {
-      this.goodsList = this.arr;
-      this.isShowMore = false;
-    },
-    //实现文本域自适应大小
-    getHeight() {
-      this.textareaHeight = calcTextareaHeight(
-        this.$refs.textarea,
-        1,
-        null
-      ).height;
-      //浏览器随着内容大小滚动
-      this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
-    },
-    pay() {
-      if (this.userName !== "") {
-        if (util.checkMobile(this.userPhone)) {
-          this.$router.push("/paySuccess");
-        } else {
-          this.$toast("请输入正确的手机号码");
-        }
-      } else {
-        this.$toast("请输入提货人姓名");
-      }
-    },
-  },
-  watch: {
-    textareaValue() {
-      //限定150字
-      if (this.textareaValue.length <= 150) {
-        this.getHeight();
-      } else {
-        this.textareaValue = String(this.textareaValue).slice(0, 150);
-      }
-    },
-  },
+  created() {},
+  methods: {}
 };
 </script>
 
@@ -151,21 +96,15 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
-.router_class {
+.body {
   background-color: #F6F6F6;
-}
-
-.confirm_order {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  padding: 10px 10px 61px;
-  background-color: #F6F6F6;
-  font-family: PingFangSC-Medium, PingFang SC;
-  background-image: url('./images/background.png');
-  background-position: 0 -60px;
-  background-size: 100% 135.5px;
+  background-image:url("./activity/images/bg.png");
   background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top;
+  padding: 10px;
+  overflow: auto;
+  bottom: 49px !important;
 
   .line {
     width: 315px;
@@ -177,11 +116,12 @@ export default {
     width: 100%;
     height: 70px;
     background: #FFFFFF;
-    box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
+    box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin: 70px auto 0;
     padding: 10px 20px;
 
     .info {
@@ -215,11 +155,11 @@ export default {
       }
 
       input::-webkit-input-placeholder {
-        font-size: 14px;
-        font-weight: 400;
-        color: #999999;
-        line-height: 20px;
-      }
+              font-size: 14px;
+              font-weight: 400;
+              color: #999999;
+              line-height: 20px;
+            }
     }
 
     .pick_up_way {
@@ -227,6 +167,18 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      select {
+        margin-left 20px
+        font-size: 14px;
+        color: #424242;
+        width: 180px;
+        border: none;
+        resize: none;
+        outline: none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+      }
 
       span {
         font-size: 14px;
@@ -248,7 +200,7 @@ export default {
     width: 100%;
     height: 165px;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
     padding: 10px 10px 10px 20px;
     margin-top: 10px;
@@ -257,24 +209,41 @@ export default {
     justify-content: flex-start;
 
     .addres_title {
+      display flex
       .addres_title_text {
+        flex 1
         padding-bottom: 9.5px;
         font-size: 14px;
         font-weight: 500;
         color: #424242;
         line-height: 20px;
       }
+      .change {
+        line-height: 20px;
+        color: #a9a9a9;
+      }
     }
 
     .addres_info {
       display: flex;
       justify-content: flex-start;
+      align-items: center;
       padding-top: 9.5px;
+      textarea {
+        font-size: 14px;
+        color: #424242;
+        width: 100%;
+        height 100px
+        border: none;
+        resize: none;
+        outline: none;
+      }
 
       img {
-        width: 105px;
-        height: 105px;
+        width: 65px;
+        height: 65px;
         margin-right: 10px;
+        border-radius: 50%;
       }
 
       .addres_info_detail {
@@ -289,7 +258,7 @@ export default {
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          margin-bottom: 19.5px;
+          margin-bottom: 10px;
         }
 
         .addres {
@@ -306,7 +275,7 @@ export default {
   .goods_info {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
     padding: 10px 7px 10px 20px;
     margin-top: 10px;
@@ -318,7 +287,7 @@ export default {
       .goods_title_text {
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 700;
         color: #424242;
         line-height: 20px;
       }
@@ -389,20 +358,16 @@ export default {
         }
       }
     }
-
     .more {
       width: 20px;
       height: 20px;
       margin: 10px auto 0;
     }
-
     .goods_detail {
       flex: 1;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 10px 0 0;
-
       .sell_price_statistics {
         font-size: 12px;
         font-weight: 400;
@@ -411,7 +376,6 @@ export default {
         letter-spacing: 1px;
         text-decoration: line-through;
       }
-
       .bulk_price_statistics {
         font-size: 14px;
         font-weight: 600;
@@ -422,38 +386,33 @@ export default {
       }
     }
   }
-
   .remark {
     width: 100%;
+    height: 49px;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
     display: flex;
     justify-content: flex-start;
-    // align-items: center;
+    align-items: center;
     margin-top: 10px;
-    padding: 14.5px 20px 14.5px 20px;
+    padding: 14.5px 0 14.5px 20px;
 
     span {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 700;
       color: #424242;
       line-height: 20px;
       letter-spacing: 1px;
       margin-right: 10px;
     }
 
-    textarea {
-      flex: 1;
+    input {
       font-size: 14px;
       font-weight: 400;
       color: #424242;
       line-height: 20px;
       letter-spacing: 1px;
-      outline: none;
-      resize: none;
-      // height: 143px;
-      border: none;
     }
   }
 
@@ -468,7 +427,6 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
     .pay_price {
       font-size: 16px;
       font-weight: 600;
@@ -477,7 +435,6 @@ export default {
       letter-spacing: 1px;
       margin-right: 15px;
     }
-
     .pay {
       width: 86px;
       height: 27.5px;
