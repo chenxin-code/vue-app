@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="user_detail">
-          <img :src="shareData.picUrl" alt="" class="avatar" />
+          <img :src="shareData.headAvtUrl" alt="" class="avatar" />
           <div class="user_detail_detail">
             <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
             <div class="take_address">提货地址：{{ shareData.place }}</div>
@@ -105,28 +105,28 @@
     </div>
     <div class="other_user_buy_card">
       <div class="other_user_buy_title">
-        这些团友都买了（共84人参加了本次团购）
+        这些团友都买了（共{{ otherBuyList.length }}人参加了本次团购）
       </div>
-      <div class="other_user_item" v-for="(item, index) in 4" :key="index">
+      <div
+        class="other_user_item"
+        v-for="(item, index) in otherBuyList"
+        :key="index"
+      >
         <div class="other_user_item_user">
-          <img
-            :src="require('./images/share.png')"
-            alt=""
-            class="other_user_avatar"
-          />
+          <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" />
           <div class="other_user_info">
-            <div class="other_user_name">张三</div>
+            <div class="other_user_name">{{ item.buyerName }}</div>
             <div class="detail_btn">
-              <div class="other_user_date">2020-01-31 17:17</div>
+              <div class="other_user_date">{{ item.buyTime }}</div>
               <img
                 :src="
-                  isShowOther
+                  item.isShowOther > 1
                     ? require('./images/show_icon.png')
                     : require('./images/hidden_icon.png')
                 "
                 alt=""
                 class="detail_icon"
-                @click="isShowOther = !isShowOther"
+                @click="showOtherBuy(index)"
               />
             </div>
           </div>
@@ -137,7 +137,7 @@
           </div>
           <div class="other_user_buy_count">X1</div>
         </div>
-        <div class="other_user_buy" v-if="isShowOther">
+        <div class="other_user_buy" v-if="item.isShowOther">
           <div class="other_user_buy_text">
             【华农酸奶-经典绿杯原味酸奶】原味酸.…
           </div>
@@ -269,6 +269,7 @@ export default {
       ],
       shareData: {},
       goodsList: [],
+      otherBuyList: [],
     };
   },
   created() {
@@ -286,6 +287,10 @@ export default {
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
+          this.otherBuyList = this.shareData.currentActOrderList;
+          this.otherBuyList.forEach((e) => {
+            e["isShowOther"] = false;
+          });
         }
       });
   },
@@ -321,8 +326,14 @@ export default {
         this.isCheckAll = true;
       }
     },
-    scroll(scroll, fiexd) {
-      console.log(scroll, fiexd);
+    showOtherBuy(index) {
+      console.log(this.otherBuyList[index].isShowOther);
+      this.$set(
+        this.otherBuyList[index],
+        "isShowOther",
+        !this.otherBuyList[index]["isShowOther"]
+      );
+      console.log(this.otherBuyList[index].isShowOther);
     },
   },
 };

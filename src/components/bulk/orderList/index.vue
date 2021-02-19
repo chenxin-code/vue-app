@@ -108,10 +108,11 @@ export default {
     };
   },
   created() {
+    // Qs.stringify({ gbAcId: 11 })
+
     this.$http
       .post(
-        "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
-        Qs.stringify({ gbAcId: 11 })
+        "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId"
       )
       .then((res) => {
         console.log("res", res);

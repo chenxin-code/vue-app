@@ -9,14 +9,23 @@
     </van-tabs> -->
     <van-sticky>
       <div class="tab">
-        <div
-          class="tab_item"
-          v-for="(item, index) in tabTitle"
-          :key="index"
-          @click="changesTab(index)"
-          :class="currentTab == index ? 'current_tab' : ''"
-        >
-          {{ item.title }}
+        <van-icon
+          name="arrow-left"
+          class="arrow_left"
+          color="#000000"
+          size="0.471467rem"
+          @click="$router.push('/common')"
+        />
+        <div class="tab_item_box">
+          <div
+            class="tab_item"
+            v-for="(item, index) in tabTitle"
+            :key="index"
+            @click="changesTab(index)"
+            :class="currentTab == index ? 'current_tab' : ''"
+          >
+            {{ item.title }}
+          </div>
         </div>
       </div>
     </van-sticky>
@@ -32,6 +41,7 @@
       >
         <div
           class="box"
+          @click="$router.push('/bulkDetails')"
           v-for="(item, index) in currentTab == 0
             ? allList
             : currentTab == 1
@@ -64,8 +74,8 @@
                 ><span>共{{ item.productCount }}件商品></span>
               </p>
               <p>
-                <span @click="showShare = true">分享</span>
-                <span @click="navToDetail()">本团订单</span>
+                <span @click.stop="showShare = true">分享</span>
+                <span @click.stop="navToDetail()">本团订单</span>
               </p>
             </div>
           </div>
@@ -125,11 +135,11 @@ export default {
     changesTab(index) {
       this.currentTab = index;
       this.currentPage = 0;
-      (this.allList = []),
-        (this.goingList = []),
-        (this.notList = []),
-        (this.finishList = []),
-        this.onLoad();
+      this.allList = [];
+      this.goingList = [];
+      this.notList = [];
+      this.finishList = [];
+      this.onLoad();
     },
 
     //滚动条与底部距离小于 offset 时触发
@@ -140,8 +150,9 @@ export default {
       this.refreshing = false;
 
       let obj = {
-        pageIndex: page,
-        groupbuyActivityStatus:
+        pageNum: page,
+        pageSize: 10,
+        activityState:
           this.currentTab == 0
             ? undefined
             : this.currentTab == 1
@@ -153,12 +164,15 @@ export default {
             : undefined,
       };
       this.$http
-        .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
+        .post(
+          "http://192.168.31.172:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          Qs.stringify(obj)
+        )
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.totalPages || page == res.data.totalPages) {
+          if (page < res.data.data.pages || page == res.data.data.pages) {
             if (res.data.result == "success") {
-              var indexList = res.data.data; //将请求到的内容赋值给一个变量
+              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
 
               switch (this.currentTab) {
                 case 0:
@@ -172,7 +186,7 @@ export default {
                 default:
                   this.allList = this.allList.concat(indexList);
               }
-              this.page = res.data.page; //将总页数赋值给this
+              this.page = res.data.data.pages; //将总页数赋值给this
               setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
@@ -196,8 +210,9 @@ export default {
       this.finished = false; //将没有更多的状态改成false
       this.isLoading = true; //将下拉刷新状态改为true开始刷新
       let obj = {
-        pageIndex: page,
-        groupbuyActivityStatus:
+        pageNum: page,
+        pageSize: 10,
+        activityState:
           this.currentTab == 0
             ? undefined
             : this.currentTab == 1
@@ -209,7 +224,10 @@ export default {
             : undefined,
       };
       this.$http
-        .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
+        .post(
+          "http://192.168.31.172:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          Qs.stringify(obj)
+        )
         .then((res) => {
           if (res.status == 200) {
             switch (this.currentTab) {
@@ -245,7 +263,7 @@ export default {
     navToDetail() {
       //本团订单
       this.$router.push({
-        path: "/bulkDetails",
+        path: "/bulk_order_list",
       });
     },
   },
@@ -265,11 +283,20 @@ export default {
   .tab {
     width: 100%;
     height: 36.5px;
-    padding: 8px 20px;
+    padding: 8px 20px 8px 11.5px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     background-color: #fff;
+
+    .tab_item_box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 21px;
+    }
 
     .tab_item {
       font-size: 14px;
