@@ -17,7 +17,7 @@
     <div class="pick_up_address" v-show="takeWay === 1">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
-        <div class="change">切换提货地址</div>
+        <div class="change" @click="$router.push('/selectAddress')">切换提货地址</div>
       </div>
       <div class="line"></div>
       <div class="addres_info">
@@ -69,7 +69,7 @@
     </div>
     <div class="pay_now">
       <div class="pay_price">¥10.00</div>
-      <div class="pay">立即支付</div>
+      <div class="pay" @click="$router.push('/paySuccess')">立即支付</div>
     </div>
   </div>
 </template>

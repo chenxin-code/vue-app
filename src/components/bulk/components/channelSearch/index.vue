@@ -1,6 +1,6 @@
 <template>
   <div class="component-channelsearch">
-    <div class="back-icon-area">
+    <div class="back-icon-area" @click="$router.go(-1)">
       <img src="./back-icon.png" alt="" />
     </div>
     <div class="channel-name">频道名字</div>

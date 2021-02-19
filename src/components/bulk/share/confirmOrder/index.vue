@@ -4,7 +4,7 @@
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
-        <input type="text" placeholder="姓名" />
+        <input type="text" placeholder="姓名" v-model="userName" />
         <input
           type="number"
           placeholder="请输入手机号"
@@ -93,6 +93,7 @@ export default {
       textareaHeight: "20px",
       textareaValue: "",
       userPhone: "",
+      userName: "",
     };
   },
   created() {
@@ -122,10 +123,14 @@ export default {
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
     pay() {
-      if (util.checkMobile(this.userPhone)) {
-        console.log(util.checkMobile(this.userPhone));
+      if (this.userName !== "") {
+        if (util.checkMobile(this.userPhone)) {
+          this.$router.push("/paySuccess");
+        } else {
+          this.$toast("请输入正确的手机号码");
+        }
       } else {
-        this.$toast("请输入正确的手机号码");
+        this.$toast("请输入提货人姓名");
       }
     },
   },

@@ -1,5 +1,8 @@
 <template>
-  <div class="component-recommondPanel">
+  <div
+    class="component-recommondPanel"
+    @click="$router.push('/bulk_goods_deatil')"
+  >
     <dl class="good-ms">
       <dd>
         <img
@@ -31,7 +34,9 @@
       </div>
       <span>等购买了此商品</span>
     </div>
-    <button class="buy-button-x">立即购买</button>
+    <button class="buy-button-x" @click.stop="$router.push('/confirmOrder')">
+      立即购买
+    </button>
   </div>
 </template>
 <script>

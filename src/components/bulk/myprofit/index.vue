@@ -63,6 +63,11 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.$http.post("/app/json/group_buying_my_earnings/getMyEarnings").then((res) => {
+      console.log(res);
+    });
+  },
   methods: {},
 };
 </script>

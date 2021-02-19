@@ -8,6 +8,7 @@
           class="arrow_left"
           color="#000000"
           size="0.471467rem"
+          @click="$router.go(-1)"
         />
       </van-sticky>
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">

@@ -6,7 +6,7 @@
         <div class="bulk_time_share">
           <div class="bulk_time">
             拼团结束时间剩余
-            <van-count-down :time="time">
+            <van-count-down :time="shareData.remainingTime">
               <template #default="timeData">
                 <span class="block">{{ timeData.hours }}</span>
                 <span class="colon">:</span>
@@ -26,17 +26,17 @@
           </div>
         </div>
         <div class="user_detail">
-          <img :src="require('./images/share.png')" alt="" class="avatar" />
+          <img :src="shareData.picUrl" alt="" class="avatar" />
           <div class="user_detail_detail">
-            <div class="colonel_name">团长名称：张三</div>
-            <div class="take_address">提货地址：社 区物业管理中心</div>
+            <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
+            <div class="take_address">提货地址：{{ shareData.place }}</div>
           </div>
         </div>
       </div>
       <div class="line"></div>
       <div class="activity_description">
         <div class="activity_description_text">
-          团购活动描述：快过年了，是时候买点生鲜水果了，七大姑八大姨快来购买吧，新鲜的水果来吧...
+          团购活动描述：{{ shareData.groupDescriptionRichTxt }}
         </div>
         <div class="bulk_img">
           <img :src="require('./images/share.png')" alt="" />
@@ -48,7 +48,7 @@
       <div class="rule_description">
         <div class="rule_description_title">团购规则描述：</div>
         <div class="rule_description_text">
-          快过年了，是时候买点生鲜水果了，七大姑八大姨快来购买吧，新鲜的水果来吧...
+          {{ shareData.ruleDescription }}
         </div>
       </div>
     </div>
@@ -62,18 +62,24 @@
       </div>
     </van-sticky>
     <div class="category_card">
-      <div class="category_card_item" v-for="(item, index) in 4" :key="index">
+      <div
+        class="category_card_item"
+        v-for="(item, index) in goodsList"
+        :key="index"
+      >
         <div class="item_detail">
-          <img :src="require('./images/share.png')" alt="" class="item_img" />
+          <img :src="item.skuPicUrl" alt="" class="item_img" />
           <div class="item_detail_deatil">
-            <div class="item_name">产品名称：新鲜的大西瓜</div>
-            <div class="sell_price">销售价格：￥10.00</div>
-            <div class="bulk_price">团购价格：￥5.00</div>
+            <div class="item_name">产品名称：{{ item.skuName }}</div>
+            <div class="sell_price">销售价格：￥{{ item.crossedPrice }}</div>
+            <div class="bulk_price">团购价格：￥{{ item.groupPrice }}</div>
           </div>
         </div>
         <div class="item_other">
           <div class="item_other_box">
-            <div class="item_units">已抢2000件/剩余50件</div>
+            <div class="item_units">
+              已抢{{ item.purchasedItem }}件/剩余{{ item.remainingItem }}件
+            </div>
             <div class="item_other_user">
               <img
                 :src="require('./images/share.png')"
@@ -238,12 +244,12 @@
 </template>
 
 <script>
+import Qs from "qs";
 export default {
   name: "share",
   props: {},
   data() {
     return {
-      time: "10002312312312",
       value: 0,
       isShowNavigation: false,
       isShowOther: false,
@@ -255,13 +261,33 @@ export default {
         { id: 2, isCheck: true },
         { id: 3, isCheck: true },
         { id: 4, isCheck: true },
+        { id: 4, isCheck: true },
+        { id: 4, isCheck: true },
+        { id: 4, isCheck: true },
+        { id: 4, isCheck: true },
+        { id: 4, isCheck: true },
       ],
+      shareData: {},
+      goodsList: [],
     };
   },
   created() {
     this.checkList.forEach((e) => {
       this.result.push(e.id);
     });
+    // 72
+    this.$http
+      .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
+        purchaseId: 72,
+        chiefId: 1,
+      })
+      .then((res) => {
+        console.log("res", res);
+        if (res.data.result == "success") {
+          this.shareData = res.data.data;
+          this.goodsList = this.shareData.groupbuySkuInfoList;
+        }
+      });
   },
   methods: {
     checkAll() {
@@ -294,6 +320,9 @@ export default {
       } else {
         this.isCheckAll = true;
       }
+    },
+    scroll(scroll, fiexd) {
+      console.log(scroll, fiexd);
     },
   },
 };
@@ -827,14 +856,22 @@ export default {
   }
 
   .car_popup {
-    padding: 10px 20px 49px 15px;
+    padding: 0px 20px 49px 15px;
+    position: relative;
+    overflow: visible;
 
     .car_title {
+      width: 100%;
+      height: 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 9px;
       border-bottom: 1px solid #EEEDED;
+      background-color: #fff;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0px;
+      z-index: 99999;
 
       .check_all {
         display: flex;
