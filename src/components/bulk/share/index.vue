@@ -55,9 +55,7 @@
     <van-sticky>
       <div class="select_box">
         <div class="select_category">
-          <div class="select_item current_select">全部</div>
-          <div class="select_item">水果</div>
-          <div class="select_item">水果</div>
+          <div class="select_item current_select" v-for="(item,index) of categoryMap" :key="index">{{item.value}}</div>
         </div>
       </div>
     </van-sticky>
@@ -82,24 +80,22 @@
             </div>
             <div class="item_other_user">
               <img
-                :src="require('./images/share.png')"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              <img
-                :src="require('./images/share.png')"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              <img
-                :src="require('./images/share.png')"
+                v-for="(element, index) in item.buyerMap"
+                :key="index"
+                :src="element.buyerAvtUrl"
                 alt=""
                 class="item_other_user_avatar"
               />
               等购买了此商品
             </div>
           </div>
-          <van-stepper v-model="value" min="0" integer />
+          <van-stepper
+            v-model="item.count"
+            min="0"
+            integer
+            :max="item.remainingItem"
+            @change="goodsChange(item)"
+          />
         </div>
       </div>
     </div>
@@ -120,7 +116,7 @@
               <div class="other_user_date">{{ item.buyTime }}</div>
               <img
                 :src="
-                  item.isShowOther > 1
+                  item.isShowOther
                     ? require('./images/show_icon.png')
                     : require('./images/hidden_icon.png')
                 "
@@ -133,22 +129,29 @@
         </div>
         <div class="other_user_buy">
           <div class="other_user_buy_text">
-            【华农酸奶-经典绿杯原味酸奶】原味酸.…
+            {{ item.orderItemList[0].groupbuySkuName }}
           </div>
-          <div class="other_user_buy_count">X1</div>
+          <div class="other_user_buy_count">
+            X{{ item.orderItemList[0].buyNumber }}
+          </div>
         </div>
-        <div class="other_user_buy" v-if="item.isShowOther">
+        <div
+          class="other_user_buy"
+          v-show="item.isShowOther"
+          v-for="(element, index) in item.otherOrderItemList"
+          :key="index"
+        >
           <div class="other_user_buy_text">
-            【华农酸奶-经典绿杯原味酸奶】原味酸.…
+            {{ element.groupbuySkuName }}
           </div>
-          <div class="other_user_buy_count">X1</div>
+          <div class="other_user_buy_count">X{{ element.buyNumber }}</div>
         </div>
       </div>
     </div>
     <div class="submit_bar">
       <div class="price_detail">
         <div class="car" @click="isShowCar = !isShowCar"></div>
-        <div class="price">¥10.00</div>
+        <div class="price">¥{{ totalPrice }}</div>
       </div>
       <div
         class="sumbit_btn"
@@ -200,9 +203,9 @@
               }"
             ></div>
             <span>全选</span>
-            <span>（共5件）</span>
+            <span>（共{{ checkList.length }}件）</span>
           </div>
-          <div class="check_out">清空购物车</div>
+          <div class="check_out" @click="clearCar">清空购物车</div>
         </div>
         <div class="goods">
           <van-checkbox
@@ -231,7 +234,12 @@
                   <!-- 空事件是阻止步进器点击事件冒泡到checkbox  勿删 -->
                   <div class="goods_price_count" @click.stop="">
                     <div class="goods_price">¥5.00</div>
-                    <van-stepper v-model="value" integer />
+                    <van-stepper
+                      v-model="item.count"
+                      integer
+                      min="0"
+                      @change="checkChange(item)"
+                    />
                   </div>
                 </div>
               </div>
@@ -256,23 +264,15 @@ export default {
       isShowCar: false,
       isCheckAll: true,
       result: [],
-      checkList: [
-        { id: 1, isCheck: true },
-        { id: 2, isCheck: true },
-        { id: 3, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-      ],
+      checkList: [],
       shareData: {},
       goodsList: [],
       otherBuyList: [],
+      totalPrice: 0,
     };
   },
   created() {
+    this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);
     });
@@ -287,10 +287,19 @@ export default {
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
+          this.goodsList.forEach((item) => {
+            item["count"] = 0;
+            item["isCheck"] = true;
+          });
           this.otherBuyList = this.shareData.currentActOrderList;
           this.otherBuyList.forEach((e) => {
             e["isShowOther"] = false;
+            if (e.orderItemList.length > 1) {
+              e["otherOrderItemList"] = e.orderItemList.slice(1);
+            }
           });
+          this.categoryMap = Object.values(this.shareData.categoryMap);
+          console.log(this.categoryMap)
         }
       });
   },
@@ -327,13 +336,45 @@ export default {
       }
     },
     showOtherBuy(index) {
-      console.log(this.otherBuyList[index].isShowOther);
-      this.$set(
-        this.otherBuyList[index],
-        "isShowOther",
-        !this.otherBuyList[index]["isShowOther"]
-      );
-      console.log(this.otherBuyList[index].isShowOther);
+      if (this.otherBuyList[index].orderItemList.length > 1) {
+        this.$set(
+          this.otherBuyList[index],
+          "isShowOther",
+          !this.otherBuyList[index]["isShowOther"]
+        );
+        this.$forceUpdate();
+      } else {
+        return;
+      }
+    },
+    goodsChange(item) {
+      if (this.checkList.indexOf(item) == -1 && item.count >= 1) {
+        item.isCheck = true;
+        this.checkList.push(item);
+      } else if (this.checkList.indexOf(item) !== -1 && item.count == 0) {
+        let index = this.checkList.indexOf(item);
+        this.checkList.splice(index, 1);
+      }
+      this.totalPriceFn();
+    },
+    checkChange(item) {
+      if (item.count == 0) {
+        let index = this.checkList.indexOf(item);
+        this.checkList.splice(index, 1);
+      }
+      this.totalPriceFn();
+    },
+    clearCar() {
+      this.checkList.forEach((e) => {
+        e.count = 0;
+      });
+      this.checkList = [];
+    },
+    totalPriceFn() {
+      let price = this.checkList.reduce((pre, item) => {
+        return item.count * item.groupPrice + pre;
+      }, 0);
+      this.totalPrice = this.$util.toDecimal2(price);
     },
   },
 };

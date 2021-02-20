@@ -55,23 +55,23 @@
         >
           <div class="div1">
             <div>
-              <span>{{ item.groupbuyActivityName }}</span>
+              <span>{{ item.activityName }}</span>
             </div>
           </div>
           <div class="div2">
-            <img :src="item.groupbuyActivityPicurl" alt="" />
+            <img :src="item.activityIcon" alt="" />
             <div>
-              <p>截止日期：{{ item.groupbuyEndDatetime }}</p>
+              <p>截止日期：{{ item.activityEndTime }}</p>
               <p>
                 <span>{{
-                  item.status == 0
+                  item.activityState == 0
                     ? "未开始"
-                    : item.status == 1
+                    : item.activityState == 1
                     ? "进行中"
                     : "已结束"
                 }}</span
-                ><span>已团{{ item.orderCount }}单</span
-                ><span>共{{ item.productCount }}件商品></span>
+                ><span>已团{{ item.orderPlacedQuantity }}单</span
+                ><span>共{{ item.productQuantity }}件商品></span>
               </p>
               <p>
                 <span @click.stop="showShare = true">分享</span>
@@ -129,7 +129,8 @@ export default {
     };
   },
   created() {
-    this.onLoad();
+    // this.onLoad();
+    this.allList = [];
   },
   methods: {
     changesTab(index) {
@@ -171,20 +172,22 @@ export default {
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
           if (page < res.data.data.pages || page == res.data.data.pages) {
+            if (res.data.data.pages == page) {
+              this.finished = true;
+            }
             if (res.data.result == "success") {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
 
               switch (this.currentTab) {
                 case 0:
                   this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
+                  console.log(this.allList);
                 case 1:
                   this.goingList = this.goingList.concat(indexList);
                 case 2:
                   this.notList = this.notList.concat(indexList);
                 case 3:
                   this.finishList = this.finishList.concat(indexList);
-                default:
-                  this.allList = this.allList.concat(indexList);
               }
               this.page = res.data.data.pages; //将总页数赋值给this
               setTimeout(() => {
@@ -263,7 +266,7 @@ export default {
     navToDetail() {
       //本团订单
       this.$router.push({
-        path: "/bulk_order_list",
+        path: "/groupOrder",
       });
     },
   },

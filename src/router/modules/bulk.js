@@ -104,6 +104,16 @@ export default [{
     }
   },
   {
+    path: '/groupOrder',
+    name: '本团订单',
+    component: () => import('@/components/bulk/activity/order.vue'),
+    meta: {
+      title: '本团订单',
+      keepAlive: false
+    }
+  },
+
+  {
     path: '/bulk',
     name: '首页',
     component: () => import('@/components/bulk/index.vue'),
@@ -119,7 +129,7 @@ export default [{
           import('@/components/bulk/activity/index.vue'),
         meta: {
           title: '活动首页',
-          keepAlive: false
+          keepAlive: true
         }
 
       }, {
