@@ -921,7 +921,6 @@
       },
     },
     created() {
-      debugger
       if (this.$store.state.globalConfig.delivertype_default == '1') {
         this.deliveryTypes = [{
           text: '自提',
