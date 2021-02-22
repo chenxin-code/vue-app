@@ -41,7 +41,7 @@
       >
         <div
           class="box"
-          @click="$router.push('/bulkDetails')"
+          @click="goToDeatil(item.activityNo)"
           v-for="(item, index) in currentTab == 0
             ? allList
             : currentTab == 1
@@ -75,7 +75,7 @@
               </p>
               <p>
                 <span @click.stop="showShare = true">分享</span>
-                <span @click.stop="navToDetail()">本团订单</span>
+                <span @click.stop="navToDetail">本团订单</span>
               </p>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default {
       };
       this.$http
         .post(
-          "http://192.168.31.172:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
           Qs.stringify(obj)
         )
         .then((res) => {
@@ -228,7 +228,7 @@ export default {
       };
       this.$http
         .post(
-          "http://192.168.31.172:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
           Qs.stringify(obj)
         )
         .then((res) => {
@@ -267,6 +267,14 @@ export default {
       //本团订单
       this.$router.push({
         path: "/groupOrder",
+      });
+    },
+    goToDeatil(activityNo) {
+      this.$router.push({
+        path: "/bulkDetails",
+        query: {
+          activityNo: JSON.stringify(activityNo),
+        },
       });
     },
   },

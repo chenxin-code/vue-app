@@ -7,59 +7,48 @@
     ></nav-top>
     <nav-content>
       <div class="listBox">
-        <div class="listColumn">
+        <div class="listColumn" v-for="(item, index) in skuList" :key="index">
           <div class="leftBox">
-            <img src="static/image/microShop/lvyou.png" alt="" />
+            <img :src="item.skuPictureUrl" alt="" />
           </div>
           <div class="rightBox">
-            <p class="title">服装店展示架复古个性吊架悬挂 衣架铁艺</p>
-            <p class="price">￥2999.00</p>
-            <p class="salePrice">销售价：￥9999.99</p>
+            <p class="title">{{ item.skuName }}</p>
+            <p class="price">￥{{ item.headPrice }}</p>
+            <p class="salePrice">销售价：￥{{ item.sellPrice }}</p>
             <p class="quantity">
-              <span>剩余数量：1000</span>
-              <span>开团最低销量：100</span>
+              <span>剩余数量：{{ item.surplusNumber }}</span>
+              <span>开团最低销量：{{ item.minGroupNumber }}</span>
             </p>
           </div>
         </div>
-        <div class="listColumn">
-          <div class="leftBox">
-            <img src="static/image/microShop/lvyou.png" alt="" />
-          </div>
-          <div class="rightBox">
-            <p class="title">服装店展示架复古个性吊架悬挂 衣架铁艺</p>
-            <p class="price">￥2999.00</p>
-            <p class="salePrice">销售价：￥9999.99</p>
-            <p class="quantity">
-              <span>剩余数量：1000</span>
-              <span>开团最低销量：100</span>
-            </p>
-          </div>
+        <div class="show_more" v-show="isShowMore" @click="showMore">
+          查看更多
         </div>
       </div>
       <van-collapse v-model="activeNames" class="collapse">
         <van-collapse-item title="拼团规则">
           <div class="ruleBox">
             <div class="ruleNum">
-              <p><span>活动参与总人数</span>100</p>
-              <p><span>活销售总金额</span>100</p>
+              <p>
+                <span>活动总订单数</span>{{ groupData.minTotalOrderNumber }}
+              </p>
+              <p>
+                <span>活动销售总金额</span>{{ groupData.minTotalSaleAmount }}
+              </p>
             </div>
             <div class="ruleNum">
-              <p><span>活动总单数</span>100</p>
-              <p><span>本团总单数</span>100</p>
-            </div>
-            <div class="ruleNum">
-              <p><span>本团总销售金额</span>100</p>
-              <p><span>本团参与总人数</span>100</p>
-            </div>
-            <div class="ruleNum">
-              <p><span>开团最低销量</span>100</p>
-              <p><span>开团最低销售</span>1000</p>
+              <p>
+                <span>活动参与总人数</span>{{ groupData.minTotalPeopleNumber }}
+              </p>
+              <p>
+                <span>活动商品总件数</span>{{ groupData.minTotalSkuNumber }}
+              </p>
             </div>
             <div class="ruleNum ruleTime">
-              <p><span>活动开始时间</span>2021/10/10 20:00:00</p>
+              <p><span>活动开始时间</span>{{ groupData.startTime }}</p>
             </div>
             <div class="ruleNum">
-              <p><span>活动结束时间</span>2021/10/11 20:00:00</p>
+              <p><span>活动结束时间</span>{{ groupData.endTime }}</p>
             </div>
           </div>
         </van-collapse-item>
@@ -75,11 +64,41 @@ export default {
   data() {
     return {
       activeNames: ["1"],
+      activityNo: "",
+      goodsList: [],
+      skuList: [],
+      isShowMore: false,
+      groupData: {},
     };
   },
+  created() {
+    this.activityNo = JSON.parse(this.$route.query.activityNo);
+    this.$http
+      .post("/app/json/groupbuying_activity_app/getById", {
+        id: this.activityNo,
+      })
+      .then((res) => {
+        if (res.data.result == "success") {
+          this.groupData = res.data.data;
+          this.goodsList = this.groupData.skuInfos;
+          if (this.goodsList.length > 3) {
+            this.isShowMore = true;
+            for (let index = 0; index < 3; index++) {
+              this.skuList.push(this.goodsList[index]);
+            }
+          } else {
+            this.skuList = this.goodsList;
+          }
+        }
+      });
+  },
   mounted() {},
-  methods: {},
-  created() {},
+  methods: {
+    showMore() {
+      this.isShowMore = false;
+      this.skuList = this.goodsList;
+    },
+  },
 };
 </script>
 
@@ -90,18 +109,33 @@ export default {
 .body {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   background-color: #f6f6f6 !important;
   background-image: url('./images/bg.png');
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
+  overflow-y: scroll;
+
+  .nav-content {
+    overflow-y: scroll;
+    padding-bottom: 79px;
+  }
 
   .listBox {
     background-color: #fff;
     margin: 15px 10px;
     padding: 10px;
     border-radius: 15px 15px 0 0;
+
+    .show_more {
+      width: 100%;
+      height: 29px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999999;
+    }
   }
 
   .listColumn {
@@ -190,12 +224,10 @@ export default {
 
       p {
         flex: 1;
-        margin: 0 5px;
 
         span {
           flex: 1;
-          width: 105px;
-          display: inline-block;
+          margin: 0 5px;
         }
       }
     }
