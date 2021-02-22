@@ -7,11 +7,33 @@
     <div class="section-x">
       <purchaseNav></purchaseNav>
       <div class="goodlist-wraper">
-        <goodPanel
+        <van-pull-refresh
+          v-model="isLoading"
+          @refresh="onRefresh"
+          :style="{ height: wrapperHeight + 'px', overflow: 'auto' }"
+        >
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+            :offset="offset"
+            class="content"
+          >
+            <van-cell>
+              <goodPanel
+                v-for="(item, index) in saleDataList"
+                :key="index"
+                class="lux"
+              ></goodPanel>
+            </van-cell>
+          </van-list>
+        </van-pull-refresh>
+        <!-- <goodPanel
           v-for="(item, index) in 8"
           :key="index"
           class="lux"
-        ></goodPanel>
+        ></goodPanel> -->
       </div>
     </div>
   </div>
@@ -20,6 +42,9 @@
 import channelSearch from "@/components/bulk/components/channelSearch";
 import purchaseNav from "@/components/bulk/components/purchaseNav";
 import goodPanel from "@/components/bulk/components/goodPanel";
+import Vue from "vue";
+import { PullRefresh, Toast, List, Cell } from "vant";
+Vue.use(PullRefresh).use(Toast).use(List).use(Cell);
 export default {
   name: "purchase",
   components: {
@@ -29,6 +54,13 @@ export default {
   },
   data() {
     return {
+      wrapperHeight: 0,
+      saleDataList: [],
+      list: [],
+      isLoading: false,
+      loading: false,
+      finished: false,
+      offset: 15,
       goodsList: [
         {
           img:
@@ -56,6 +88,46 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.wrapperHeight = document.getElementsByClassName(
+        "goodlist-wraper"
+      )[0].offsetHeight;
+    });
+     this.getList();
+  },
+  methods: {
+    /**
+     *  下拉刷新方法
+     */
+    onRefresh() {
+      // 调用请求数据方法
+      this.getList();
+    },
+    /**
+     *  上拉加载方法
+     *  页面打开时初始化会调用onLoad方法 如果想去掉初始化调用使用,给List添加属性immediate-check=false
+     */
+    onLoad() {
+      // 调用请求数据方法
+      this.getList();
+    },
+    /**
+     *  请求数据方法
+     */
+    getList() {
+      setTimeout(() => {
+        this.list = [{}, {}, {}, {}, {}, {}];
+        this.saleDataList = this.saleDataList.concat(this.list);
+        this.loading = false;
+        this.isLoading = false;
+        if (this.saleDataList >= 100) {
+          this.finished = true;
+        }
+        console.log("加载");
+      }, 1000);
+    },
   },
 };
 </script>

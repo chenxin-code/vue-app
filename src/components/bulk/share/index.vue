@@ -55,7 +55,15 @@
     <van-sticky>
       <div class="select_box">
         <div class="select_category">
-          <div class="select_item current_select" v-for="(item,index) of categoryMap" :key="index">{{item.value}}</div>
+          <div
+            :class="index == currentSelectCategory ? 'current_select' : ''"
+            class="select_item"
+            v-for="(item, index) of categoryMap"
+            :key="index"
+            @click="selectCategory(item, index)"
+          >
+            {{ item.value }}
+          </div>
         </div>
       </div>
     </van-sticky>
@@ -153,12 +161,7 @@
         <div class="car" @click="isShowCar = !isShowCar"></div>
         <div class="price">¥{{ totalPrice }}</div>
       </div>
-      <div
-        class="sumbit_btn"
-        @click="$router.push('/bulk_share_confirm_order')"
-      >
-        去下单
-      </div>
+      <div class="sumbit_btn" @click="confirmOrder">去下单</div>
     </div>
     <transition name="van-slide-left">
       <div
@@ -224,16 +227,12 @@
                       : '',
                   }"
                 ></div>
-                <img
-                  :src="require('./images/share.png')"
-                  alt=""
-                  class="goods_img"
-                />
+                <img :src="item.skuPicUrl" alt="" class="goods_img" />
                 <div class="goods_detail">
-                  <div class="goods_name">新鲜的大西瓜呐喊声可是你上课</div>
+                  <div class="goods_name">{{ item.skuName }}</div>
                   <!-- 空事件是阻止步进器点击事件冒泡到checkbox  勿删 -->
                   <div class="goods_price_count" @click.stop="">
-                    <div class="goods_price">¥5.00</div>
+                    <div class="goods_price">¥{{ item.groupPrice }}</div>
                     <van-stepper
                       v-model="item.count"
                       integer
@@ -258,7 +257,6 @@ export default {
   props: {},
   data() {
     return {
-      value: 0,
       isShowNavigation: false,
       isShowOther: false,
       isShowCar: false,
@@ -269,6 +267,8 @@ export default {
       goodsList: [],
       otherBuyList: [],
       totalPrice: 0,
+      categoryMap: [{ key: "all", value: "全部" }],
+      currentSelectCategory: 0,
     };
   },
   created() {
@@ -298,8 +298,12 @@ export default {
               e["otherOrderItemList"] = e.orderItemList.slice(1);
             }
           });
-          this.categoryMap = Object.values(this.shareData.categoryMap);
-          console.log(this.categoryMap)
+          for (let i in this.shareData.categoryMap) {
+            this.categoryMap.push({
+              key: i,
+              value: this.shareData.categoryMap[i],
+            });
+          }
         }
       });
   },
@@ -311,6 +315,7 @@ export default {
         });
         this.result = [];
         this.isCheckAll = false;
+        this.totalPrice = this.$util.toDecimal2(0);
       } else {
         this.isCheckAll = true;
         this.result = [];
@@ -318,6 +323,7 @@ export default {
           e.isCheck = true;
           this.result.push(e.id);
         });
+        this.totalPriceFn();
       }
     },
     check(item) {
@@ -325,9 +331,11 @@ export default {
         let index = this.result.indexOf(item.id);
         this.result.splice(index, 1);
         item.isCheck = false;
+        this.totalPriceFn();
       } else {
         this.result.push(item.id);
         item.isCheck = true;
+        this.totalPriceFn();
       }
       if (this.result.length < this.checkList.length) {
         this.isCheckAll = false;
@@ -372,9 +380,37 @@ export default {
     },
     totalPriceFn() {
       let price = this.checkList.reduce((pre, item) => {
-        return item.count * item.groupPrice + pre;
+        if (item.isCheck) {
+          return item.count * item.groupPrice + pre;
+        }
       }, 0);
       this.totalPrice = this.$util.toDecimal2(price);
+    },
+    selectCategory(item, index) {
+      this.currentSelectCategory = index;
+      this.$http
+        .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
+          purchaseId: 72,
+          chiefId: 1,
+          skuCategory: item.key == "all" ? undefined : item.key,
+        })
+        .then((res) => {
+          this.goodsList = res.data.data;
+        });
+    },
+    confirmOrder() {
+      if (this.checkList.length == 0) {
+        this.$toast("请先选购商品");
+      } else {
+        this.$router.push({
+          path: "/bulk_share_confirm_order",
+          query: {
+            checkList: JSON.stringify(this.checkList),
+            totalPrice: JSON.stringify(this.totalPrice),
+            shareData: JSON.stringify(this.shareData),
+          },
+        });
+      }
     },
   },
 };
