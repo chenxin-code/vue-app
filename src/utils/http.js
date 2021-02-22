@@ -7,7 +7,9 @@ import util from "./util";
 import router from "../router";
 import Loading from '../components/Vendor/Loading/index'
 import Qs from 'qs'
-import {Base64} from 'js-base64'
+import {
+  Base64
+} from 'js-base64'
 import userCenter from "../components/usercenter/js/userCenter";
 import dataMergeInterceptor from "./staticData/dataMergeInterceptor";
 import Watchman from './watchman'
@@ -16,7 +18,7 @@ import Watchman from './watchman'
 let sunboxEncodeArray = ['/app/json/login/register', '/app/json/login/sendSms', '/app/json/login/emailLogin', '/app/json/login/emailRegister', '/app/json/login/login', '/app/json/login/smsLogin', '/app/json/login/smsRegister', '/app/json/coupon/getMyCouInfo', '/app/json/coupon/getMyCouInfoByPage', '/app/json/login/updateToken']
 
 // 网易易盾反作弊接口
-let antiSpam = ['/app/json/login/register', '/app/json/login/sendSms', '/app/json/login/emailLogin','/app/json/login/emailRegister', '/app/json/login/login', '/app/json/login/smsLogin','/app/json/user/identifySubmmit', '/app/json/user/driverInfoSubmmit', '/app/json/user/bindVehicle', '/app/json/login/updateToken']
+let antiSpam = ['/app/json/login/register', '/app/json/login/sendSms', '/app/json/login/emailLogin', '/app/json/login/emailRegister', '/app/json/login/login', '/app/json/login/smsLogin', '/app/json/user/identifySubmmit', '/app/json/user/driverInfoSubmmit', '/app/json/user/bindVehicle', '/app/json/login/updateToken']
 // 油惠通 某些接口需要跳过拦截器，token相关问题。增加下面参数。 尽量不要单独处理
 let yhtApiSkip = ['/app/json/login/getVerifyImg', '/app/json/login/sendSms', '/app/json/login/login', '/app/json/login/register', '/app/json/login/wechatAppLogin', '/app/json/user/forgetPwd', '/app/json/news/getNewsList']
 const pro = process.env.NODE_ENV === 'production'
@@ -33,6 +35,8 @@ let Axios = axios.create({
   withCredentials: false,
   headers
 })
+
+let bulkApi = ['/app/json/group_buying_my_earnings/getMyEarnings','http://192.168.31.172:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
@@ -51,128 +55,141 @@ Axios.post = function (url, data, config) {
 Axios.interceptors.request.use(
   async config => {
 
-    var time = new Date().getTime();
-    let urlStr = config.url;
+      if (bulkApi.indexOf(config.url) !== -1) {
+        config.headers.token = store.state.login.token;
+        config.headers.Authorization = store.state.login.token;
+      }
 
-    // 是否加密判断
-    let useEncode = false
-    let cToken = ''
-    let appId = ''
-    if (store.state.globalConfig.encyptDisable != 1) {
-      for (let i = 0; i < sunboxEncodeArray.length; i++) {
-        if (urlStr == sunboxEncodeArray[i]) {
-          useEncode = true
-          break;
+      var time = new Date().getTime();
+      let urlStr = config.url;
+
+      // 是否加密判断
+      let useEncode = false
+      let cToken = ''
+      let appId = ''
+      if (store.state.globalConfig.encyptDisable != 1) {
+        for (let i = 0; i < sunboxEncodeArray.length; i++) {
+          if (urlStr == sunboxEncodeArray[i]) {
+            useEncode = true
+            break;
+          }
         }
       }
-    }
 
-    if (urlStr.indexOf("?") == -1) {
-      config.url = config.url + '?ver=' + time;
-    } else {
-      config.url = config.url + '&ver=' + time;
-    }
+      if (urlStr.indexOf("?") == -1) {
+        config.url = config.url + '?ver=' + time;
+      } else {
+        config.url = config.url + '&ver=' + time;
+      }
 
-    if (store.state.globalConfig.isEnableAntiCheat == 1 && antiSpam.includes(urlStr)) {
-      cToken = await Watchman.getToken().catch(err => console.log(err))
-    }
-    if (config.method == 'post') {
-      let postData = config.data;
-      return new Promise((resolve, reject) => {
-        bridgefunc.getCommonArgs((cmArgs) => {
+      if (store.state.globalConfig.isEnableAntiCheat == 1 && antiSpam.includes(urlStr)) {
+        cToken = await Watchman.getToken().catch(err => console.log(err))
+      }
+      if (config.method == 'post') {
+        let postData = config.data;
+        return new Promise((resolve, reject) => {
+          bridgefunc.getCommonArgs((cmArgs) => {
 
-          let nArgs = JSON.parse(JSON.stringify(cmArgs))
-          if (util.isJsonObj(postData)) {
+            let nArgs = JSON.parse(JSON.stringify(cmArgs))
+            if (util.isJsonObj(postData)) {
 
-            nArgs.longitude = store.state.currentLocation.posx
-            nArgs.latitude = store.state.currentLocation.posy;
-            if (cToken) nArgs.cToken = cToken
-            if (store.state.login.token && store.state.login.token != '') {
-              nArgs.token = store.state.login.token
-            } else {
-              // if (store.state.deployType == 2) {
-              // 不得已而为之，跳过所有的没有传token的情况，这样兼容了，没有token的情况
-              nArgs.hbsy_web_tag_type = 1
-              // // 油惠通 某些接口需要跳过拦截器，token相关问题。增加下面参数。 尽量不要单独处理
-              // if (yhtApiSkip.indexOf(config.url) > -1) {
-              //   nArgs.hbsy_web_tag_type = 1
-              // }
-              // }
-            }
-
-            if (store.state.webtype == '8') {
-              if (store.state.etpAppId) {
-                nArgs.channel = store.state.etpAppId
-              }
-            }
-
-            for (let key in postData) {
-              nArgs[key] = postData[key]
-            }
-
-            let dic = {}
-            if (nArgs.isJsonData) {
-              dic = nArgs
-              let d = Qs.stringify(dic, {arrayFormat: 'repeat'});
-              config.data = d;
-              resolve(config);
-            } else {
-              if (useEncode == true) {
-                let encryptData = JSON.stringify(nArgs)
-                if (store.state.globalConfig.encyptBase64Enable == '1') { // 是否启用base64加密
-                  encryptData = Base64.encode(JSON.stringify(nArgs))
-                }
-                bridgefunc.sunboxencode(encryptData, 1, (result, resultStr) => {
-                  if (result == 1) {
-                    nArgs.ciphertext = resultStr
-                    dic = {
-                      jsonData: JSON.stringify(nArgs),
-                      hbsy_web_tag_type: nArgs.hbsy_web_tag_type
-                    }
-                    let d = Qs.stringify(dic, {arrayFormat: 'repeat'});
-                    config.data = d;
-                    resolve(config);
-                  } else {
-                    dic = {
-                      jsonData: JSON.stringify(nArgs),
-                      hbsy_web_tag_type: nArgs.hbsy_web_tag_type
-                    }
-                    let d = Qs.stringify(dic, {arrayFormat: 'repeat'});
-                    config.data = d;
-                    resolve(config);
-                  }
-                })
+              nArgs.longitude = store.state.currentLocation.posx
+              nArgs.latitude = store.state.currentLocation.posy;
+              if (cToken) nArgs.cToken = cToken
+              if (store.state.login.token && store.state.login.token != '') {
+                nArgs.token = store.state.login.token
               } else {
-                dic = {
-                  jsonData: JSON.stringify(nArgs),
-                  hbsy_web_tag_type: nArgs.hbsy_web_tag_type
+                // if (store.state.deployType == 2) {
+                // 不得已而为之，跳过所有的没有传token的情况，这样兼容了，没有token的情况
+                nArgs.hbsy_web_tag_type = 1
+                // // 油惠通 某些接口需要跳过拦截器，token相关问题。增加下面参数。 尽量不要单独处理
+                // if (yhtApiSkip.indexOf(config.url) > -1) {
+                //   nArgs.hbsy_web_tag_type = 1
+                // }
+                // }
+              }
+
+              if (store.state.webtype == '8') {
+                if (store.state.etpAppId) {
+                  nArgs.channel = store.state.etpAppId
                 }
-                let d = Qs.stringify(dic, {arrayFormat: 'repeat'});
+              }
+
+              for (let key in postData) {
+                nArgs[key] = postData[key]
+              }
+
+              let dic = {}
+              if (nArgs.isJsonData) {
+                dic = nArgs
+                let d = Qs.stringify(dic, {
+                  arrayFormat: 'repeat'
+                });
                 config.data = d;
                 resolve(config);
+              } else {
+                if (useEncode == true) {
+                  let encryptData = JSON.stringify(nArgs)
+                  if (store.state.globalConfig.encyptBase64Enable == '1') { // 是否启用base64加密
+                    encryptData = Base64.encode(JSON.stringify(nArgs))
+                  }
+                  bridgefunc.sunboxencode(encryptData, 1, (result, resultStr) => {
+                    if (result == 1) {
+                      nArgs.ciphertext = resultStr
+                      dic = {
+                        jsonData: JSON.stringify(nArgs),
+                        hbsy_web_tag_type: nArgs.hbsy_web_tag_type
+                      }
+                      let d = Qs.stringify(dic, {
+                        arrayFormat: 'repeat'
+                      });
+                      config.data = d;
+                      resolve(config);
+                    } else {
+                      dic = {
+                        jsonData: JSON.stringify(nArgs),
+                        hbsy_web_tag_type: nArgs.hbsy_web_tag_type
+                      }
+                      let d = Qs.stringify(dic, {
+                        arrayFormat: 'repeat'
+                      });
+                      config.data = d;
+                      resolve(config);
+                    }
+                  })
+                } else {
+                  dic = {
+                    jsonData: JSON.stringify(nArgs),
+                    hbsy_web_tag_type: nArgs.hbsy_web_tag_type
+                  }
+                  let d = Qs.stringify(dic, {
+                    arrayFormat: 'repeat'
+                  });
+                  config.data = d;
+                  resolve(config);
+                }
               }
+            } else {
+              resolve(config);
             }
-          } else {
-            resolve(config);
-          }
+          });
         });
-      });
-    } else if (config.method == 'get') {
-      let params = {}
-      if (cToken) {
-        params.cToken = cToken
-      }
-      if (store.state.globalConfig.channel) {
-        params.channel = store.state.globalConfig.channel
-      }
-      config.params = Object.assign(config.params || {}, params)
+      } else if (config.method == 'get') {
+        let params = {}
+        if (cToken) {
+          params.cToken = cToken
+        }
+        if (store.state.globalConfig.channel) {
+          params.channel = store.state.globalConfig.channel
+        }
+        config.params = Object.assign(config.params || {}, params)
 
-      return config;
+        return config;
+      }
+    },
+    error => {
+      return Promise.reject(error);
     }
-  },
-  error => {
-    return Promise.reject(error);
-  }
 );
 
 // 返回状态判断(添加响应拦截器)
