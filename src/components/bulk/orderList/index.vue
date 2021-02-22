@@ -25,8 +25,8 @@
         >
           <div
             class="goods_item"
-            v-for="item in 10"
-            :key="item"
+            v-for="(item,index) in list"
+            :key="index"
             @click="$router.push('/bulk_order_detail')"
           >
             <div class="goods_title">
@@ -98,7 +98,7 @@ export default {
         { name: "已关闭" },
       ],
       currentTab: 0,
-      list: [],
+      list: [{}],
       refreshing: false,
       loading: false,
       finished: false,
@@ -123,18 +123,19 @@ export default {
       this.showPopup = true;
     },
     onLoad() {
+      
       setTimeout(() => {
         if (this.refreshing) {
           this.list = [];
           this.refreshing = false;
         }
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 3; i++) {
           this.list.push(this.list.length + 1);
         }
         this.loading = false;
 
-        if (this.list.length >= 40) {
+        if (this.list.length >= 10) {
           this.finished = true;
         }
       }, 1000);

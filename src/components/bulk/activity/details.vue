@@ -7,7 +7,12 @@
     ></nav-top>
     <nav-content>
       <div class="listBox">
-        <div class="listColumn" v-for="(item, index) in skuList" :key="index">
+        <div
+          class="listColumn"
+          v-for="(item, index) in skuList"
+          :key="index"
+          @click="navToDeatil(item)"
+        >
           <div class="leftBox">
             <img :src="item.skuPictureUrl" alt="" />
           </div>
@@ -28,27 +33,63 @@
       <van-collapse v-model="activeNames" class="collapse">
         <van-collapse-item title="拼团规则">
           <div class="ruleBox">
-            <div class="ruleNum">
-              <p>
-                <span>活动总订单数</span>{{ groupData.minTotalOrderNumber }}
-              </p>
-              <p>
-                <span>活动销售总金额</span>{{ groupData.minTotalSaleAmount }}
-              </p>
+            <div class="rule_item">
+              <div class="rule_title">活动时间</div>
+              <div class="rule_time">
+                <div>{{ groupData.startTime }}</div>
+                <div>至</div>
+                <div>{{ groupData.endTime }}</div>
+              </div>
             </div>
-            <div class="ruleNum">
-              <p>
-                <span>活动参与总人数</span>{{ groupData.minTotalPeopleNumber }}
-              </p>
-              <p>
-                <span>活动商品总件数</span>{{ groupData.minTotalSkuNumber }}
-              </p>
+            <div class="rule_item">
+              <div class="rule_title">活动最低成团限制</div>
+              <div class="rule_detail">
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低参团人数</div>
+                    <div>{{ groupData.minTotalPeopleNumber }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低订单数量</div>
+                    <div>{{ groupData.minTotalOrderNumber }}</div>
+                  </div>
+                </div>
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低销售金额</div>
+                    <div>{{ groupData.minTotalSaleAmount }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低商品销售数量</div>
+                    <div>{{ groupData.minTotalSkuNumber }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="ruleNum ruleTime">
-              <p><span>活动开始时间</span>{{ groupData.startTime }}</p>
-            </div>
-            <div class="ruleNum">
-              <p><span>活动结束时间</span>{{ groupData.endTime }}</p>
+            <div class="rule_item">
+              <div class="rule_title">本团最低成团限制</div>
+              <div class="rule_detail">
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低参团人数</div>
+                    <div>{{ groupData.allMinTotalPeopleNumber }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低订单数量</div>
+                    <div>{{ groupData.allMinTotalOrderNumber }}</div>
+                  </div>
+                </div>
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低销售金额</div>
+                    <div>{{ groupData.allMinTotalSaleAmount }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低商品销售数量</div>
+                    <div>{{ groupData.allMinTotalSkuNumber }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </van-collapse-item>
@@ -97,6 +138,11 @@ export default {
     showMore() {
       this.isShowMore = false;
       this.skuList = this.goodsList;
+    },
+    navToDeatil(item) {
+      this.$router.push({
+        path: "/bulk_goods_deatil",
+      });
     },
   },
 };
@@ -216,24 +262,65 @@ export default {
     overflow: hidden;
   }
 
+  /deep/.van-collapse-item__content {
+    padding-top: 0px;
+  }
+
   .ruleBox {
-    margin: 15px 5px;
+    margin: 0px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: #666666;
 
-    .ruleNum {
+    .rule_item {
       display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-bottom: 10px;
 
-      p {
-        flex: 1;
+      .rule_title {
+        font-size: 14px;
+        font-weight: 700;
+      }
 
-        span {
-          flex: 1;
-          margin: 0 5px;
+      .rule_time {
+        font-size: 12px;
+        font-weight: 600px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 8px;
+
+        div {
+          margin-left: 4px;
         }
       }
-    }
 
-    .ruleTime {
-      margin-top: 20px;
+      .rule_detail {
+        display: flex;
+        justify-content: space-between;
+
+        .rule_detail_item {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+
+          .rule_detail_item_box {
+            min-width: 150px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 8px;
+
+            div {
+              margin-right: 5px;
+              font-size: 12px;
+              font-weight: 600px;
+            }
+          }
+        }
+      }
     }
   }
 
