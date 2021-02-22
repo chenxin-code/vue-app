@@ -103,7 +103,7 @@ import './common/font/iconfont.css'
 
 //swipercss
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import 'vue-awesome-swiper/node_modules/swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
 
 import 'lib-flexible/flexible'
