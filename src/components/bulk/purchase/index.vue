@@ -20,12 +20,14 @@
             :offset="offset"
             class="content"
           >
-            <van-cell>
+            <van-cell style="height:auto;padding:0;">
               <goodPanel
                 v-for="(item, index) in saleDataList"
                 :key="index"
                 class="lux"
-              ></goodPanel>
+                :resouce="item"
+              >
+              </goodPanel>
             </van-cell>
           </van-list>
         </van-pull-refresh>
@@ -56,7 +58,6 @@ export default {
     return {
       wrapperHeight: 0,
       saleDataList: [],
-      list: [],
       isLoading: false,
       loading: false,
       finished: false,
@@ -95,15 +96,23 @@ export default {
         "goodlist-wraper"
       )[0].offsetHeight;
     });
-     this.getList();
+    this.getList();
   },
   methods: {
     /**
      *  下拉刷新方法
      */
     onRefresh() {
-      // 调用请求数据方法
-      this.getList();
+      console.log("刷新")
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=`;
+        this.$http.get(url).then(res => {
+           this.loading = false;
+           this.isLoading = false;
+           this.saleDataList = res.data.data;
+           
+        }).catch(e=>{
+          console.log(e);
+        })
     },
     /**
      *  上拉加载方法
@@ -112,21 +121,24 @@ export default {
     onLoad() {
       // 调用请求数据方法
       this.getList();
+      this.loading = false;
+      this.isLoading = false;
     },
     /**
      *  请求数据方法
      */
     getList() {
-      setTimeout(() => {
-        this.list = [{}, {}, {}, {}, {}, {}];
-        this.saleDataList = this.saleDataList.concat(this.list);
-        this.loading = false;
-        this.isLoading = false;
-        if (this.saleDataList >= 100) {
-          this.finished = true;
-        }
-        console.log("加载");
-      }, 1000);
+       console.log("xxxxaaaaaaaaa",this.$store.state.login.token)
+        console.log("请求团购商品接口");
+        let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=`;
+        this.$http.get(url).then(res => {
+           this.loading = false;
+           this.isLoading = false;
+           this.saleDataList = this.saleDataList.concat(res.data.data);
+        }).catch(e=>{
+           console.log(e);
+        })
+        // this.finished = true;
     },
   },
 };
@@ -161,7 +173,7 @@ export default {
   padding: 10px 10px;
   box-sizing: border-box;
   background: #f6f6f6;
-  padding-bottom: 30px;
+  /* padding-bottom: 30px; */
   box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
 }
 .lux:nth-last-child(1)::after {
