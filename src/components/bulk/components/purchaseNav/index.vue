@@ -34,7 +34,21 @@ export default {
       ]
     }
   },
+  created() {
+    this.getList();
+  },
   methods: {
+      getList(){
+        let url = `/api/system/json/groupbuying_category/queryGroupbuyingCategoryList`;
+        this.$http.post(url,{}).then(res => {
+           this.loading = false;
+           this.isLoading = false;
+           console.log("nav",res);
+        }).catch(e=>{
+          console.log(e);
+        })
+        
+      },
       enterNav(item,index){
           this.navIndex = index;
       }
