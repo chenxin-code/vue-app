@@ -13,7 +13,9 @@
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
-        <span>自提</span>
+        <van-dropdown-menu active-color="#b52232">
+          <van-dropdown-item v-model="takeWay" :options="takeWays" disabled  />
+        </van-dropdown-menu>
       </div>
     </div>
     <div class="pick_up_address">
@@ -85,16 +87,21 @@
 </template>
 
 <script>
+import {DropdownMenu, DropdownItem} from 'vant'
 export default {
   name: "confirmOrder",
+  components: {
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem
+  },
   props: {},
   data() {
     return {
       takeWays: [
-        { name: "自提", value: 1 },
-        { name: "送货上门", value: 2 },
+        {text: '自提',value: 1},
+        {text: '送货上门',value: 2}
       ],
-      takeWay: 2,
+      takeWay: 1,
     };
   },
   created() {},
@@ -178,18 +185,22 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-
-      select {
-        margin-left: 20px;
-        font-size: 14px;
+      /deep/ .van-dropdown-menu {
+        //margin-left 20px
+        //font-size: 14px;
         color: #424242;
-        width: 180px;
+        //width: 180px;
         border: none;
         resize: none;
         outline: none;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+      }
+      /deep/ .van-dropdown-menu__bar {
+        height auto
+        -webkit-box-shadow none
+        box-shadow none
       }
 
       span {

@@ -1,9 +1,9 @@
 <template>
   <!-- // created by hjc 商品详情 -->
   <!-- https://blog.csdn.net/u014678583/article/details/103928102?utm_medium=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&dist_request_id=a48d2bc9-56c3-4cdf-96c9-e903fde58a76&depth_1-utm_source=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecas -->
-  <div class="goods_detail">
+  <div class="goods_detail" >
     <div class="goods_swiper">
-      <van-sticky>
+      <!-- <van-sticky> -->
         <van-icon
           name="arrow-left"
           class="arrow_left"
@@ -11,7 +11,7 @@
           size="0.471467rem"
           @click="$router.go(-1)"
         />
-      </van-sticky>
+      <!-- </van-sticky> -->
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
         <van-swipe-item v-for="item in 4" :key="item">
           <img
@@ -37,7 +37,7 @@
           </div>
           <div class="goods_time">
             <div class="goods_time_title">拼团剩余时间</div>
-            <van-count-down :time="time">
+            <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()">
               <template #default="timeData">
                 <span class="block">{{ timeData.hours }}</span>
                 <span class="colon">:</span>
@@ -68,25 +68,12 @@
     <div class="activity">
       <div class="activity_title">活动</div>
       <div class="activity_detail">
-        {{resouce.groupbuyRuleDescribe}}
-        <!-- <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div> -->
+       {{resouce.groupbuyRuleDescribe}}
       </div>
     </div>
-    <div class="goods_item_detail_info">
+    <div class="goods_item_detail_info" >
       <div class="goods_item_detail_info_title">商品详情</div>
-      <img
-        src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
-        alt=""
-        v-for="item in 3"
-        :key="item"
-      />
+      {{resouce.groupbuySkuDetail}}
     </div>
   </div>
 </template>
@@ -97,8 +84,8 @@ export default {
   props: {},
   data() {
     return {
-      time: 2131231,
-      resouce:null
+      time: 1614071248931,
+      resouce:{}
     };
   },
   created() {
