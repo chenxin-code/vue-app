@@ -6,7 +6,7 @@
     <div class="goodPanel-remain">
       <div class="remain_title">拼团结束时间剩余</div>
       <div class="remain-times">
-        <van-count-down :time="time">
+        <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()">
           <template #default="timeData">
             <span class="block">{{ timeData.hours }}</span>
             <span class="colon">:</span>
