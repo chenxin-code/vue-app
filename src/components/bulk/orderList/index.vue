@@ -43,17 +43,14 @@
             @click="navToDetail(item)"
           >
             <div class="goods_title">
-              <div class="goods_ID">#01</div>
+              <div class="goods_ID">#{{ item.activityOrderNo }}</div>
               <div class="goods_type">待发货</div>
             </div>
             <div class="good_user">
               <div class="user">
-                <img
-                  src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b"
-                  alt=""
-                />
-                <div class="user_name">张三</div>
-                <div class="user_phone">13510101010</div>
+                <img :src="item.contactAvatar" alt="" />
+                <div class="user_name">{{ item.contactName }}</div>
+                <div class="user_phone">{{ item.contactPhone }}</div>
               </div>
               <div
                 :class="type == 1 ? 'pick_up' : 'delivery'"
@@ -72,10 +69,10 @@
             </div>
             <div class="goods_detail">
               <div class="detail">
-                <span>共计5件商品，合计支付 </span>
-                <span>1000.00</span>
+                <span>共计{{ item.productQuantity }}件商品，合计支付 </span>
+                <span>{{ item.totalAmount }}</span>
               </div>
-              <div class="confirm" @click.stop="confirm">确认送达</div>
+              <div class="confirm" @click.stop="confirm(item)">确认送达</div>
             </div>
           </div>
         </van-list>
@@ -87,7 +84,7 @@
         <div class="popup_title">确认订单商品</div>
         <div class="popup_detail">抵达</div>
         <div class="popup_btn">
-          <div class="confirm_btn" @click="showPopup = false">确认</div>
+          <div class="confirm_btn" @click="confirmOrder()">确认</div>
           <div class="cancel_btn" @click="showPopup = false">取消</div>
         </div>
       </div>
@@ -126,14 +123,16 @@ export default {
       currentPage: 0,
       totalPage: 0,
       error: false,
+      skuInfo: {},
     };
   },
   created() {
     // Qs.stringify({ gbAcId: 11 })
   },
   methods: {
-    confirm() {
+    confirm(item) {
       this.showPopup = true;
+      this.skuInfo = item;
     },
     changesTab(index) {
       this.currentTab = index;
@@ -188,36 +187,22 @@ export default {
               switch (this.currentTab) {
                 case 0:
                   this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
-                // if (res.data.data.total == this.allList.length) {
-                //   this.loading = false;
-                // }
+
                 case 1:
                   this.waitPayList = this.waitPayList.concat(indexList);
-                // if (res.data.data.total == this.waitPayList.length) {
-                //   this.loading = false;
-                // }
+
                 case 2:
                   this.deliveryList = this.deliveryList.concat(indexList);
-                // if (res.data.data.total == this.deliveryList.length) {
-                //   this.loading = false;
-                // }
+
                 case 3:
                   this.distributionList = this.distributionList.concat(
                     indexList
                   );
-                // if (res.data.data.total == this.distributionList.length) {
-                //   this.loading = false;
-                // }
                 case 4:
                   this.pickUpList = this.pickUpList.concat(indexList);
-                // if (res.data.data.total == this.pickUpList.length) {
-                //   this.loading = false;
-                // }
+
                 case 5:
                   this.finishedList = this.finishedList.concat(indexList);
-                // if (res.data.data.total == this.finishedList.length) {
-                //   this.loading = false;
-                // }
               }
 
               this.page = res.data.data.pages; //将总页数赋值给this
@@ -298,15 +283,23 @@ export default {
         });
     },
 
-    onSelect: function (option) {
-      if (option.icon == "wechat") {
-      } else if (option.icon == "link") {
-      }
-    },
     navToDetail(item) {
       this.$router.push({
         path: "/bulk_order_detail",
+        query: {
+          id: JSON.stringify(item.activityOrderNo),
+        },
       });
+    },
+    confirmOrder() {
+      this.$http
+        .post("/app/json/group_buying_order/confirmReceiveDeliveryPickup", {
+          orderItemId: 1,
+          confirmType: 1,
+        })
+        .then((res) => {
+          console.log(res);
+        });
     },
   },
 };

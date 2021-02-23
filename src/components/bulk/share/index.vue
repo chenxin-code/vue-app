@@ -274,6 +274,8 @@ export default {
   created() {
     if (window.navigator.userAgent.indexOf("wechatdevtools") !== -1) {
       alert("用户设备：小程序");
+    }else{
+      alert('app')
     }
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {

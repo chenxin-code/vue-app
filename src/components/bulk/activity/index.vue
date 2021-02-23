@@ -141,6 +141,8 @@ export default {
       this.goingList = [];
       this.notList = [];
       this.finishList = [];
+      this.finished = false;
+      this.loading = true;
       this.onLoad();
     },
 
