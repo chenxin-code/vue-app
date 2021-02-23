@@ -1,5 +1,6 @@
 <template>
   <!-- // created by hjc 商品详情 -->
+  <!-- https://blog.csdn.net/u014678583/article/details/103928102?utm_medium=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&dist_request_id=a48d2bc9-56c3-4cdf-96c9-e903fde58a76&depth_1-utm_source=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecas -->
   <div class="goods_detail">
     <div class="goods_swiper">
       <van-sticky>
@@ -26,12 +27,12 @@
             <div class="goods_price_detail">
               <div class="goods_price_title">团购价格：</div>
               <div class="unit">￥</div>
-              <div class="price">7865</div>
-              <div class="line_price">¥10.00</div>
+              <div class="price">{{resouce.groupbuyBuyerPrice}}</div>
+              <div class="line_price">¥{{resouce.groupbuyLinePrice}}</div>
             </div>
             <div class="goods_count">
-              <div>已抢100件</div>
-              <div>剩余999件</div>
+              <div>已抢{{resouce.groupbuyPurchaseNumber}}件</div>
+              <div>剩余{{resouce.groupbuyStockNumber}}件</div>
             </div>
           </div>
           <div class="goods_time">
@@ -51,15 +52,15 @@
     </div>
     <div class="goods_detail_info">
       <div class="goods_item_detail">
-        <div class="goods_name">冰糖麒麟大西瓜 ·1000g/箱</div>
+        <div class="goods_name">{{resouce.groupbuySkuName}}</div>
         <div class="goods_other">
           <img
             src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
             alt=""
-            v-for="item in 3"
+            v-for="item in resouce.avatarList"
             :key="item"
           />
-          <div class="goods_other_text">等30人购买了此商品</div>
+          <div class="goods_other_text">等{{resouce.purchasedQuantity >999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</div>
         </div>
       </div>
       <div class="buy_btn" @click="$router.push('/confirmOrder')">立即购买</div>
@@ -67,14 +68,15 @@
     <div class="activity">
       <div class="activity_title">活动</div>
       <div class="activity_detail">
+        {{resouce.groupbuyRuleDescribe}}
+        <!-- <div>春节也送货</div>
         <div>春节也送货</div>
         <div>春节也送货</div>
         <div>春节也送货</div>
         <div>春节也送货</div>
         <div>春节也送货</div>
         <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
+        <div>春节也送货</div> -->
       </div>
     </div>
     <div class="goods_item_detail_info">
@@ -96,9 +98,12 @@ export default {
   data() {
     return {
       time: 2131231,
+      resouce:null
     };
   },
-  created() {},
+  created() {
+    this.resouce = this.$route.params.resouce;
+  },
 };
 </script>
 
