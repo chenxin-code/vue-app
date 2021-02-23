@@ -1,16 +1,16 @@
 <template>
   <div class="body">
     <nav-top @backEvent="$router.go(-1)" title="选择收货地址"></nav-top>
-    <nav-content>
+    <nav-content style="display:flex;flex-direction:column;">
       <div class="input-box">
         当前商品可选提货地点
       </div>
-      <div class="pick_up_address">
-        <div class="addres_info">
+      <div class="pick_up_address" style="flex:1;height:0;overflow:auto;">
+        <div class="lay-address" v-for="(item,index) in list" :key="index" style="padding:20px 8px;border-bottom:1px solid #f6f6f6">
           <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
           <div class="addres_info_detail">
-            <div class="colonel_name">张三</div>
-            <div class="addres">提货地点：北京市西城区 五福 玲珑居物业管理中心</div>
+            <div class="colonel_name">{{item.teamLeaderName}}</div>
+            <div class="addres">提货地点：{{item.cucName}} {{item.cudName}} {{item.cuName}}</div>
           </div>
         </div>
       </div>
@@ -23,10 +23,23 @@ export default {
   name: "confirmOrder",
   props: {},
   data() {
-    return {}
+    return {
+      list:[]
+    }
   },
-  created() {},
-  methods: {}
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList(){
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList`;
+      this.$http.get(url).then(res => {
+        if(res.data.status == 0)this.list = res.data.data.records;
+      }).catch(e=>{
+        console.log(e);
+      })
+    }
+  }
 };
 </script>
 
@@ -55,7 +68,7 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 2px 5px 10px 5px;
+    // padding: 2px 5px 10px 5px;
     margin: 10px;
     display: flex;
     flex-direction: column;
@@ -85,11 +98,10 @@ export default {
       top: 50%;
       right: 15px;
     }
-    .addres_info {
+    .lay-address {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding-top: 9.5px;
       img {
         width: 65px;
         height: 65px;
