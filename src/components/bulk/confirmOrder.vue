@@ -1,6 +1,10 @@
 <template>
   <div class="body">
-    <nav-top bstyle="transparent" @backEvent="$router.go(-1)" title="确认订单"></nav-top>
+    <nav-top
+      bstyle="transparent"
+      @backEvent="$router.go(-1)"
+      title="确认订单"
+    ></nav-top>
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
@@ -9,19 +13,22 @@
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
-        <select v-model="takeWay">
-          <option v-for="item in takeWays" :value="item.value">{{item.name}}</option>
-        </select>
+        <span>自提</span>
       </div>
     </div>
-    <div class="pick_up_address" v-show="takeWay === 1">
+    <div class="pick_up_address">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
-        <div class="change" @click="$router.push('/selectAddress')">切换提货地址</div>
+        <div class="change" @click="$router.push('/selectAddress')">
+          切换提货地址
+        </div>
       </div>
       <div class="line"></div>
       <div class="addres_info">
-        <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
+        <img
+          src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg"
+          alt=""
+        />
         <div class="addres_info_detail">
           <div class="colonel_name">奥利给</div>
           <div class="addres">
@@ -30,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="pick_up_address" v-show="takeWay === 2">
+    <div class="pick_up_address" v-show="false">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
       </div>
@@ -46,7 +53,10 @@
       </div>
       <div class="goods_item">
         <div class="goods_info_item">
-          <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
+          <img
+            src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg"
+            alt=""
+          />
           <div class="goods_info_detail">
             <div class="goods_name">新鲜的大西瓜500kg/份</div>
             <div class="sell_price">销售价格：¥10.00</div>
@@ -81,14 +91,14 @@ export default {
   data() {
     return {
       takeWays: [
-        {name: '自提',value: 1},
-        {name: '送货上门',value: 2}
+        { name: "自提", value: 1 },
+        { name: "送货上门", value: 2 },
       ],
-      takeWay: 2
-    }
+      takeWay: 2,
+    };
   },
   created() {},
-  methods: {}
+  methods: {},
 };
 </script>
 
@@ -98,12 +108,13 @@ export default {
 
 .body {
   background-color: #F6F6F6;
-  background-image:url("./activity/images/bg.png");
+  background-image: url('./activity/images/bg.png');
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
   padding: 10px;
-  overflow: auto;
+  // overflow: auto;
+  overflow-y: auto;
   bottom: 49px !important;
 
   .line {
@@ -155,11 +166,11 @@ export default {
       }
 
       input::-webkit-input-placeholder {
-              font-size: 14px;
-              font-weight: 400;
-              color: #999999;
-              line-height: 20px;
-            }
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
+        line-height: 20px;
+      }
     }
 
     .pick_up_way {
@@ -167,17 +178,18 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
       select {
-        margin-left 20px
+        margin-left: 20px;
         font-size: 14px;
         color: #424242;
         width: 180px;
         border: none;
         resize: none;
         outline: none;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-        appearance:none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
       }
 
       span {
@@ -209,15 +221,17 @@ export default {
     justify-content: flex-start;
 
     .addres_title {
-      display flex
+      display: flex;
+
       .addres_title_text {
-        flex 1
+        flex: 1;
         padding-bottom: 9.5px;
         font-size: 14px;
         font-weight: 500;
         color: #424242;
         line-height: 20px;
       }
+
       .change {
         line-height: 20px;
         color: #a9a9a9;
@@ -229,11 +243,12 @@ export default {
       justify-content: flex-start;
       align-items: center;
       padding-top: 9.5px;
+
       textarea {
         font-size: 14px;
         color: #424242;
         width: 100%;
-        height 100px
+        height: 100px;
         border: none;
         resize: none;
         outline: none;
@@ -358,16 +373,19 @@ export default {
         }
       }
     }
+
     .more {
       width: 20px;
       height: 20px;
       margin: 10px auto 0;
     }
+
     .goods_detail {
       flex: 1;
       display: flex;
       justify-content: flex-end;
       align-items: center;
+
       .sell_price_statistics {
         font-size: 12px;
         font-weight: 400;
@@ -376,6 +394,7 @@ export default {
         letter-spacing: 1px;
         text-decoration: line-through;
       }
+
       .bulk_price_statistics {
         font-size: 14px;
         font-weight: 600;
@@ -386,6 +405,7 @@ export default {
       }
     }
   }
+
   .remark {
     width: 100%;
     height: 49px;
@@ -427,6 +447,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
     .pay_price {
       font-size: 16px;
       font-weight: 600;
@@ -435,6 +456,7 @@ export default {
       letter-spacing: 1px;
       margin-right: 15px;
     }
+
     .pay {
       width: 86px;
       height: 27.5px;

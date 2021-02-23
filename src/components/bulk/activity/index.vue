@@ -71,7 +71,8 @@
                     : "已结束"
                 }}</span
                 ><span>已团{{ item.orderPlacedQuantity }}单</span
-                ><span>共{{ item.productQuantity }}件商品></span>
+                ><span>共{{ item.productQuantity }}件商品</span>
+                <span><van-icon name="arrow" /></span>
               </p>
               <p>
                 <span @click.stop="showShare = true">分享</span>
@@ -89,7 +90,7 @@
       title="分享到"
       :options="options"
       cancel-text=""
-      @select="onSelect"
+      @select="onShare"
     />
     <!-- </nav-content> -->
   </div>
@@ -235,15 +236,15 @@ export default {
           if (res.status == 200) {
             switch (this.currentTab) {
               case 0:
-                this.allList = res.data.data;
+                this.allList = res.data.data.records;
               case 1:
-                this.goingList = res.data.data;
+                this.goingList = res.data.data.records;
               case 2:
-                this.notList = res.data.data;
+                this.notList = res.data.data.records;
               case 3:
-                this.finishList = res.data.data;
+                this.finishList = res.data.data.records;
               default:
-                this.allList = res.data.data;
+                this.allList = res.data.data.records;
             }
             this.totalPage = res.data.page; //将总页数赋值上去
             setTimeout(() => {
@@ -258,8 +259,35 @@ export default {
         });
     },
 
-    onSelect: function (option) {
+    onShare: function (option) {
       if (option.icon == "wechat") {
+        if (window.navigator.userAgent.indexOf("wechatdevtools") !== -1) {
+          //判断小程序
+        } else {
+          window.shareForOpenWXMiniProgram = () => {
+            share
+              .shareForOpenWXMiniProgram({
+                userName: "wxc76cd2c3987620af",
+                path: "/bulk_share",
+                title: "微信分享商品",
+                desc: "test",
+                link: "http://www.baidu.com",
+                imageurl:
+                  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+                miniProgramType: 2,
+                __event__: (res) => {
+                  // document.getElementById(
+                  //   "debug_text"
+                  // ).innerText = JSON.stringify(res);
+                  console.log("shareRes----------", JSON.stringify(res));
+                },
+              })
+              .then((res) => {
+                // document.getElementById("debug_text").innerText = res;
+                console.log("shareThenRes----------", res);
+              });
+          };
+        }
       } else if (option.icon == "link") {
       }
     },
@@ -393,6 +421,7 @@ export default {
 
         p:nth-child(2) {
           display: flex;
+          justify-content: flex-start;
           color: #999999;
 
           span:nth-child(1) {
@@ -401,6 +430,12 @@ export default {
 
           span {
             flex: 1;
+          }
+
+          span:nth-child(4) {
+            max-width: 5px;
+            color: #333333;
+            font-size: 14px;
           }
         }
 

@@ -147,7 +147,7 @@ export default [{
         component: () => import('@/components/bulk/orderList/index.vue'),
         meta: {
           title: '订单列表',
-          keepAlive: false
+          keepAlive: true
         }
       },
       {

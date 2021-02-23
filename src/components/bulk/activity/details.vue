@@ -11,7 +11,6 @@
           class="listColumn"
           v-for="(item, index) in skuList"
           :key="index"
-          @click="navToDeatil(item)"
         >
           <div class="leftBox">
             <img :src="item.skuPictureUrl" alt="" />

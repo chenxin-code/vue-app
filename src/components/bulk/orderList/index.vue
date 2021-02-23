@@ -6,9 +6,9 @@
       <div class="tab">
         <div
           class="tab_item"
-          v-for="(item, index) in tabTitle"
+          v-for="(item, index) in tab"
           :key="index"
-          @click="currentTab = index"
+          @click="changesTab(index)"
           :class="currentTab == index ? 'current_tab' : ''"
         >
           {{ item.name }}
@@ -22,12 +22,25 @@
           :finished="finished"
           finished-text="没有更多了"
           @load="onLoad"
+          :error.sync="error"
         >
           <div
             class="goods_item"
-            v-for="(item,index) in list"
+            v-for="(item, index) in currentTab == 0
+              ? allList
+              : currentTab == 1
+              ? waitPayList
+              : currentTab == 2
+              ? deliveryList
+              : currentTab == 3
+              ? distributionList
+              : currentTab == 4
+              ? pickUpList
+              : currentTab == 5
+              ? finishedList
+              : allList"
             :key="index"
-            @click="$router.push('/bulk_order_detail')"
+            @click="navToDetail(item)"
           >
             <div class="goods_title">
               <div class="goods_ID">#01</div>
@@ -89,65 +102,211 @@ export default {
   props: {},
   data() {
     return {
-      tabTitle: [
+      tab: [
         { name: "全部" },
+        { name: "待支付" },
         { name: "待发货" },
-        { name: "代配送" },
+        { name: "待配送" },
         { name: "待提货" },
         { name: "已完成" },
-        { name: "已关闭" },
       ],
+      allList: [],
+      waitPayList: [],
+      deliveryList: [],
+      distributionList: [],
+      pickUpList: [],
+      finishedList: [],
       currentTab: 0,
-      list: [{}],
       refreshing: false,
       loading: false,
       finished: false,
       type: 2,
       showPopup: false,
       searchValue: "",
+      currentPage: 0,
+      totalPage: 0,
+      error: false,
     };
   },
   created() {
     // Qs.stringify({ gbAcId: 11 })
-
-    this.$http
-      .post(
-        "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId"
-      )
-      .then((res) => {
-        console.log("res", res);
-      });
   },
   methods: {
     confirm() {
       this.showPopup = true;
     },
-    onLoad() {
-      
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
-        }
-
-        for (let i = 0; i < 3; i++) {
-          this.list.push(this.list.length + 1);
-        }
-        this.loading = false;
-
-        if (this.list.length >= 10) {
-          this.finished = true;
-        }
-      }, 1000);
-    },
-    onRefresh() {
-      // 清空列表数据
+    changesTab(index) {
+      this.currentTab = index;
+      this.currentPage = 0;
+      this.allList = [];
+      this.waitPayList = [];
+      this.deliveryList = [];
+      this.distributionList = [];
+      this.pickUpList = [];
+      this.finishedList = [];
       this.finished = false;
-
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+
+    //滚动条与底部距离小于 offset 时触发
+    onLoad() {
+      this.loading = true;
+      let page = this.currentPage;
+      page = page + 1;
+      this.currentPage = page;
+      this.refreshing = false;
+      let obj = {
+        pageNum: page,
+        pageSize: 10,
+        orderItemState:
+          this.currentTab == 0
+            ? undefined
+            : this.currentTab == 1
+            ? 0
+            : this.currentTab == 2
+            ? 1
+            : this.currentTab == 3
+            ? 2
+            : this.currentTab == 4
+            ? 3
+            : this.currentTab == 5
+            ? 4
+            : undefined,
+      };
+      this.$http
+        .post(
+          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
+          Qs.stringify(obj)
+        )
+        .then((res) => {
+          // 判断当前页数是否超过总页数或者等于总页数
+          if (page < res.data.data.pages || page == res.data.data.pages) {
+            if (res.data.result == "success") {
+              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
+
+              switch (this.currentTab) {
+                case 0:
+                  this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
+                // if (res.data.data.total == this.allList.length) {
+                //   this.loading = false;
+                // }
+                case 1:
+                  this.waitPayList = this.waitPayList.concat(indexList);
+                // if (res.data.data.total == this.waitPayList.length) {
+                //   this.loading = false;
+                // }
+                case 2:
+                  this.deliveryList = this.deliveryList.concat(indexList);
+                // if (res.data.data.total == this.deliveryList.length) {
+                //   this.loading = false;
+                // }
+                case 3:
+                  this.distributionList = this.distributionList.concat(
+                    indexList
+                  );
+                // if (res.data.data.total == this.distributionList.length) {
+                //   this.loading = false;
+                // }
+                case 4:
+                  this.pickUpList = this.pickUpList.concat(indexList);
+                // if (res.data.data.total == this.pickUpList.length) {
+                //   this.loading = false;
+                // }
+                case 5:
+                  this.finishedList = this.finishedList.concat(indexList);
+                // if (res.data.data.total == this.finishedList.length) {
+                //   this.loading = false;
+                // }
+              }
+
+              this.page = res.data.data.pages; //将总页数赋值给this
+              setTimeout(() => {
+                // 加载状态结束
+                this.loading = false;
+              }, 1000);
+            } else {
+              this.loading = false; //将加载状态关掉
+              this.error = true; //大家错误状态
+            }
+          } else {
+            this.finished = true; //如果超过总页数就显示没有更多内容了
+          }
+        })
+        .catch((err) => {
+          this.$toast("请求失败，点击重新加载");
+          this.loading = false;
+          this.error = true;
+        });
+    },
+    // 下拉刷新时触发
+    onRefresh() {
+      let page = 1; //从第一页开始
+      this.page = page; //将当前页数赋值给this
+      this.finished = false; //将没有更多的状态改成false
+      this.loading = true; //将下拉刷新状态改为true开始刷新
+      let obj = {
+        pageNum: page,
+        pageSize: 10,
+        orderItemState:
+          this.currentTab == 0
+            ? undefined
+            : this.currentTab == 1
+            ? 0
+            : this.currentTab == 2
+            ? 1
+            : this.currentTab == 3
+            ? 2
+            : this.currentTab == 4
+            ? 3
+            : this.currentTab == 5
+            ? 4
+            : undefined,
+      };
+      this.$http
+        .post(
+          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
+          Qs.stringify(obj)
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            switch (this.currentTab) {
+              case 0:
+                this.allList = res.data.data.records; //将请求的数据追加到后面
+              case 1:
+                this.waitPayList = res.data.data.records;
+              case 2:
+                this.deliveryList = res.data.data.records;
+              case 3:
+                this.distributionList = res.data.data.records;
+              case 4:
+                this.pickUpList = res.data.data.records;
+              case 5:
+                this.finishedList = res.data.data.records;
+            }
+
+            this.totalPage = res.data.pages; //将总页数赋值上去
+            setTimeout(() => {
+              this.$toast("刷新成功");
+              this.loading = false;
+              this.refreshing = false; //刷新成功后将状态关掉
+            }, 1000); //1秒后关闭
+          }
+        })
+        .catch((res) => {
+          this.$toast("网络繁忙,请稍后再试~");
+        });
+    },
+
+    onSelect: function (option) {
+      if (option.icon == "wechat") {
+      } else if (option.icon == "link") {
+      }
+    },
+    navToDetail(item) {
+      this.$router.push({
+        path: "/bulk_order_detail",
+      });
     },
   },
 };
@@ -169,6 +328,7 @@ export default {
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
   background: #F6F6F6;
+  padding-bottom: 49px;
 
   .tab {
     width: 100%;
