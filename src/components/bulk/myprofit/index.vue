@@ -64,7 +64,7 @@ export default {
     return {};
   },
   created() {
-    this.$http.post("/app/json/group_buying_my_earnings/getMyEarnings").then((res) => {
+    this.$http.post("/app/json/app_my_earnings/getMyEarnings").then((res) => {
       console.log(res);
     });
   },
