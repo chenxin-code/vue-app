@@ -6,11 +6,24 @@
       <!--菜单. 如果up配置了isBounce为false,则需加上mescroll-touch-x,原因: http://www.mescroll.com/qa.html#q10 -->
       <div class="tabs-warp">
         <div ref="tabsContent" class="tabs-content mescroll-touch-x">
-          <div style="display: inline-block"> <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
+          <div style="display: inline-block">
+            <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
             <ul class="tabs" ref="tabs">
-              <li class="tab" v-for="(tab,i) in tabs" :class="{active: i===curIndex}" :style="{width: tabWidth+'px'}" :key="i" @click="changeTab(i)">{{tab.name}}</li>
+              <li
+                class="tab"
+                v-for="(tab, i) in tabs"
+                :class="{ active: i === curIndex }"
+                :style="{ width: tabWidth + 'px' }"
+                :key="i"
+                @click="changeTab(i)"
+              >
+                {{ tab.name }}
+              </li>
             </ul>
-            <div class="tab-bar" :style="{width: barWidth+'px', left: barLeft}"></div>
+            <div
+              class="tab-bar"
+              :style="{ width: barWidth + 'px', left: barLeft }"
+            ></div>
           </div>
         </div>
       </div>
@@ -19,20 +32,33 @@
     <swiper ref="mySwiper" :options="swiperOption">
       <!--首页-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll0" :down="getMescrollDown(0)" :up="getMescrollUp(0)" @init="mescrollInit(0,arguments)">
+        <mescroll-vue
+          ref="mescroll0"
+          :down="getMescrollDown(0)"
+          :up="getMescrollUp(0)"
+          @init="mescrollInit(0, arguments)"
+        >
           <ul id="dataList0">
-            <li class="data-li" v-for="pd in tabs[0].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[0].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -42,7 +68,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -50,20 +79,32 @@
       </swiper-slide>
       <!-- 奶粉 可不配down-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll1" :up="getMescrollUp(1)" @init="mescrollInit(1,arguments)">
+        <mescroll-vue
+          ref="mescroll1"
+          :up="getMescrollUp(1)"
+          @init="mescrollInit(1, arguments)"
+        >
           <ul id="dataList1">
-            <li class="data-li" v-for="pd in tabs[1].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[1].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -73,7 +114,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -81,20 +125,32 @@
       </swiper-slide>
       <!-- 面膜-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll2" :up="getMescrollUp(2)" @init="mescrollInit(2,arguments)">
+        <mescroll-vue
+          ref="mescroll2"
+          :up="getMescrollUp(2)"
+          @init="mescrollInit(2, arguments)"
+        >
           <ul id="dataList2">
-            <li class="data-li" v-for="pd in tabs[2].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[2].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -104,7 +160,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -112,20 +171,32 @@
       </swiper-slide>
       <!-- 图书-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll3" :up="getMescrollUp(3)" @init="mescrollInit(3,arguments)">
+        <mescroll-vue
+          ref="mescroll3"
+          :up="getMescrollUp(3)"
+          @init="mescrollInit(3, arguments)"
+        >
           <ul id="dataList3">
-            <li class="data-li" v-for="pd in tabs[3].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[3].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -135,7 +206,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -143,20 +217,32 @@
       </swiper-slide>
       <!-- 果汁-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll4" :up="getMescrollUp(4)" @init="mescrollInit(4,arguments)">
+        <mescroll-vue
+          ref="mescroll4"
+          :up="getMescrollUp(4)"
+          @init="mescrollInit(4, arguments)"
+        >
           <ul id="dataList4">
-            <li class="data-li" v-for="pd in tabs[4].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[4].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -166,7 +252,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -174,20 +263,32 @@
       </swiper-slide>
       <!-- 奶瓶-->
       <swiper-slide>
-        <mescroll-vue ref="mescroll5" :up="getMescrollUp(5)" @init="mescrollInit(5,arguments)">
+        <mescroll-vue
+          ref="mescroll5"
+          :up="getMescrollUp(5)"
+          @init="mescrollInit(5, arguments)"
+        >
           <ul id="dataList5">
-            <li class="data-li" v-for="pd in tabs[5].list" :key="pd.activityOrderItemNo">
+            <li
+              class="data-li"
+              v-for="pd in tabs[5].list"
+              :key="pd.activityOrderItemNo"
+            >
               <div class="title">
-                {{pd.activityOrderItemNo}}
-                <span class="tabState">{{pd.stateText}}</span>
+                {{ pd.activityOrderItemNo }}
+                <span class="tabState">{{ pd.stateText }}</span>
               </div>
               <div class="personal">
                 <div class="headPortrait">
                   <img :src="pd.contactAvatar" />
                 </div>
-                <div class="name">{{pd.contactName}}</div>
-                <div class="phone">{{pd.contactPhone}}</div>
-                <span class="extractState" :class="pd.deliveryMode == 1 ? 'since' : 'give'">{{pd.deliveryMode == 1 ? "自提" : "配送上门"}}</span>
+                <div class="name">{{ pd.contactName }}</div>
+                <div class="phone">{{ pd.contactPhone }}</div>
+                <span
+                  class="extractState"
+                  :class="pd.deliveryMode == 1 ? 'since' : 'give'"
+                  >{{ pd.deliveryMode == 1 ? "自提" : "配送上门" }}</span
+                >
               </div>
               <div class="commodity">
                 <ul class="commodityList">
@@ -197,7 +298,10 @@
                 </ul>
               </div>
               <div class="total">
-                <p>共计{{pd.productQuantity}}件商品，合计支付 <span>¥{{pd.totalAmount}}</span></p>
+                <p>
+                  共计{{ pd.productQuantity }}件商品，合计支付
+                  <span>¥{{ pd.totalAmount }}</span>
+                </p>
               </div>
             </li>
           </ul>
@@ -239,6 +343,7 @@ export default {
           },
         },
       },
+      activityOrderNo: 0,
     };
   },
   components: {
@@ -258,6 +363,9 @@ export default {
         "px"
       );
     },
+  },
+  created() {
+    this.activityOrderNo = JSON.parse(this.$route.query.id);
   },
   methods: {
     // 多mescroll的配置,需通过方法获取,保证每个配置是单例
@@ -385,47 +493,44 @@ export default {
     ) {
       // 延时一秒,模拟联网
       // setTimeout(() => {
-        let tabNum = '';
-        tabIndex == 0 ? tabNum = '' : tabNum = tabIndex;
-        let obj = {
-          groupBuyingOrderNo: 8,
-          pageNum: pageNum,
-          pageSize: pageSize,
-          orderItemState:tabNum
-        };
-        this.$http
-      .post(
-        "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
-         Qs.stringify(obj)
-      )
-      .then((res) => {
+      let tabNum = "";
+      tabIndex == 0 ? (tabNum = "") : (tabNum = tabIndex);
+      let obj = {
+        groupBuyingOrderNo: 8,
+        pageNum: pageNum,
+        pageSize: pageSize,
+        orderItemState: tabNum,
+      };
+      this.$http
+        .post(
+          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
+          Qs.stringify(obj)
+        )
+        .then((res) => {
           mockData = res.data.data.records;
-            var listData = [];
-            for (var i = 0; i < mockData.length; i++) {
-                if(mockData[i].productSkuInfo){
-                  mockData[i].productSkuInfo = JSON.parse(mockData[i].productSkuInfo);
-                }
-                if(mockData[i].activityOrderItemState == 1){
-                  mockData[i]["stateText"] = "待发货";
-                }
-                else if(mockData[i].activityOrderItemState == 2){
-                  mockData[i]["stateText"] = "待配送";
-                }
-                else if(mockData[i].activityOrderItemState == 3){
-                  mockData[i]["stateText"] = "已提货";
-                }
-                else if(mockData[i].activityOrderItemState == 4){
-                  mockData[i]["stateText"] = "已完成";
-                }
-                else if(mockData[i].activityOrderItemState == 5){
-                  mockData[i]["stateText"] = "已关闭";
-                }
-                listData.push(mockData[i]);
+          var listData = [];
+          for (var i = 0; i < mockData.length; i++) {
+            if (mockData[i].productSkuInfo) {
+              mockData[i].productSkuInfo = JSON.parse(
+                mockData[i].productSkuInfo
+              );
             }
-           
-            // 回调
-            successCallback && successCallback(listData);
-          
+            if (mockData[i].activityOrderItemState == 1) {
+              mockData[i]["stateText"] = "待发货";
+            } else if (mockData[i].activityOrderItemState == 2) {
+              mockData[i]["stateText"] = "待配送";
+            } else if (mockData[i].activityOrderItemState == 3) {
+              mockData[i]["stateText"] = "已提货";
+            } else if (mockData[i].activityOrderItemState == 4) {
+              mockData[i]["stateText"] = "已完成";
+            } else if (mockData[i].activityOrderItemState == 5) {
+              mockData[i]["stateText"] = "已关闭";
+            }
+            listData.push(mockData[i]);
+          }
+
+          // 回调
+          successCallback && successCallback(listData);
         });
       // }, 1000);
     },
@@ -498,13 +603,13 @@ export default {
   vertical-align: middle;
 }
 .tabs-warp .tabs-content .tabs .active {
-  color: #C61606;
+  color: #c61606;
 }
 /*菜单进度*/
 .tabs-warp .tab-bar {
   position: relative;
   height: 2px;
-  background-color: #C61606;
+  background-color: #c61606;
   transition: left 300ms;
 }
 /*列表*/
@@ -515,22 +620,77 @@ export default {
   right: 0;
   bottom: 0;
 }
-img{ max-width: 100%;}
-.data-li{ margin: 15px; padding: 15px; background-color: #fff; border-radius: 12px;}
-.title{ font-size: 16px; font-weight: 500; position: relative; line-height: 25px;}
-.tabState{ position: absolute; right: 0; color:#C82010;  line-height: 25px;}
+img {
+  max-width: 100%;
+}
+.data-li {
+  margin: 15px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+}
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  line-height: 25px;
+}
+.tabState {
+  position: absolute;
+  right: 0;
+  color: #c82010;
+  line-height: 25px;
+}
 
-.personal{ display: flex; font-size: 14px; line-height: 25px; position: relative; margin: 10px 0 0px 0;}
-.headPortrait img{ width: 25px; height: 25px; border-radius: 50%;}
-.name{ margin: 0 15px;}
-.extractState{ position: absolute; right: 0; padding: 0 5px; line-height: 20px; border-radius: 5px;}
-.extractState.since{ border:1px solid #FF9E4F; color:#FF9E4F;}
-.extractState.give{color:#4F87FF; border:1px solid #4F87FF;}
+.personal {
+  display: flex;
+  font-size: 14px;
+  line-height: 25px;
+  position: relative;
+  margin: 10px 0 0px 0;
+}
+.headPortrait img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.name {
+  margin: 0 15px;
+}
+.extractState {
+  position: absolute;
+  right: 0;
+  padding: 0 5px;
+  line-height: 20px;
+  border-radius: 5px;
+}
+.extractState.since {
+  border: 1px solid #ff9e4f;
+  color: #ff9e4f;
+}
+.extractState.give {
+  color: #4f87ff;
+  border: 1px solid #4f87ff;
+}
 
-.commodityList{display: flex; margin: 5px 0 10px 0; }
-.commodityList li{ margin-right: 10px;}
-.commodityList li img{width: 65px; height: 65px; border-radius: 8px;}
+.commodityList {
+  display: flex;
+  margin: 5px 0 10px 0;
+}
+.commodityList li {
+  margin-right: 10px;
+}
+.commodityList li img {
+  width: 65px;
+  height: 65px;
+  border-radius: 8px;
+}
 
-.total{ font-size: 14px;}
-.total span{ font-weight: bold; font-size: 16px;}
+.total {
+  font-size: 14px;
+}
+.total span {
+  font-weight: bold;
+  font-size: 16px;
+}
 </style>

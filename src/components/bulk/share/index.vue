@@ -94,7 +94,9 @@
                 alt=""
                 class="item_other_user_avatar"
               />
-              等购买了此商品
+              等{{
+                item.buyerCount <= 999 ? item.buyerCount : "999+"
+              }}人购买了此商品
             </div>
           </div>
           <van-stepper
@@ -272,11 +274,6 @@ export default {
     };
   },
   created() {
-    if (window.navigator.userAgent.indexOf("wechatdevtools") !== -1) {
-      alert("用户设备：小程序");
-    }else{
-      alert('app')
-    }
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);

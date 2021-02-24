@@ -36,7 +36,7 @@ let Axios = axios.create({
   headers
 })
 
-let bulkApi = ['/app/json/group_buying_my_earnings/getMyEarnings','http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/group_buying_my_earnings/getMyEarnings','http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。

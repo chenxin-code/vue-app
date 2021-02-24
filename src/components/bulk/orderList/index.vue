@@ -43,8 +43,22 @@
             @click="navToDetail(item)"
           >
             <div class="goods_title">
-              <div class="goods_ID">#{{ item.activityOrderNo }}</div>
-              <div class="goods_type">待发货</div>
+              <div class="goods_ID">#{{ item.activityOrderItemNo }}</div>
+              <div class="goods_type">
+                {{
+                  item.activityOrderItemState == 0
+                    ? "待支付"
+                    : item.activityOrderItemState == 1
+                    ? "待发货"
+                    : item.activityOrderItemState == 2
+                    ? "待配送"
+                    : item.activityOrderItemState == 3
+                    ? "待提货"
+                    : item.activityOrderItemState == 4
+                    ? "已完成"
+                    : ""
+                }}
+              </div>
             </div>
             <div class="good_user">
               <div class="user">
@@ -53,10 +67,26 @@
                 <div class="user_phone">{{ item.contactPhone }}</div>
               </div>
               <div
-                :class="type == 1 ? 'pick_up' : 'delivery'"
+                :class="
+                  item.activityOrderItemState == 2
+                    ? 'delivery'
+                    : item.activityOrderItemState == 3
+                    ? 'pick_up'
+                    : ''
+                "
                 class="user_type"
+                v-show="
+                  item.activityOrderItemState == 2 ||
+                  item.activityOrderItemState == 3
+                "
               >
-                {{ type == 1 ? "自提" : "配送上门" }}
+                {{
+                  item.activityOrderItemState == 2
+                    ? "配送上门"
+                    : item.activityOrderItemState == 3
+                    ? "自提"
+                    : ""
+                }}
               </div>
             </div>
             <div class="goods_img">
@@ -72,7 +102,24 @@
                 <span>共计{{ item.productQuantity }}件商品，合计支付 </span>
                 <span>{{ item.totalAmount }}</span>
               </div>
-              <div class="confirm" @click.stop="confirm(item)">确认送达</div>
+              <div
+                class="confirm"
+                v-show="
+                  item.activityOrderItemState !== 0 &&
+                  item.activityOrderItemState !== 4
+                "
+                @click.stop="confirm(item)"
+              >
+                确认{{
+                  item.activityOrderItemState == 1
+                    ? "送达"
+                    : item.activityOrderItemState == 2
+                    ? "配送"
+                    : item.activityOrderItemState == 3
+                    ? "提货"
+                    : ""
+                }}
+              </div>
             </div>
           </div>
         </van-list>
@@ -82,7 +129,17 @@
     <van-popup v-model="showPopup">
       <div class="popup">
         <div class="popup_title">确认订单商品</div>
-        <div class="popup_detail">抵达</div>
+        <div class="popup_detail">
+          {{
+            skuInfo.activityOrderItemState == 1
+              ? "抵达"
+              : skuInfo.activityOrderItemState == 2
+              ? "送达消费者"
+              : skuInfo.activityOrderItemState == 3
+              ? "被消费者提走"
+              : ""
+          }}
+        </div>
         <div class="popup_btn">
           <div class="confirm_btn" @click="confirmOrder()">确认</div>
           <div class="cancel_btn" @click="showPopup = false">取消</div>
@@ -130,10 +187,6 @@ export default {
     // Qs.stringify({ gbAcId: 11 })
   },
   methods: {
-    confirm(item) {
-      this.showPopup = true;
-      this.skuInfo = item;
-    },
     changesTab(index) {
       this.currentTab = index;
       this.currentPage = 0;
@@ -222,6 +275,7 @@ export default {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
+          console.log(this.error);
         });
     },
     // 下拉刷新时触发
@@ -287,18 +341,43 @@ export default {
       this.$router.push({
         path: "/bulk_order_detail",
         query: {
-          id: JSON.stringify(item.activityOrderNo),
+          id: JSON.stringify(item.activityOrderItemNo),
         },
       });
     },
+    confirm(item) {
+      this.showPopup = true;
+      this.skuInfo = item;
+    },
     confirmOrder() {
+      let confirmType = 0;
+      if (
+        this.skuInfo.activityOrderItemState == 1 ||
+        this.skuInfo.activityOrderItemState == 2 ||
+        this.skuInfo.activityOrderItemState == 3
+      ) {
+        confirmType = this.skuInfo.activityOrderItemState;
+      } else {
+        confirmType = undefined;
+      }
       this.$http
-        .post("/app/json/group_buying_order/confirmReceiveDeliveryPickup", {
-          orderItemId: 1,
-          confirmType: 1,
-        })
+        .post(
+          "http://192.168.31.173:18807/app/json/group_buying_order/confirmReceiveDeliveryPickup",
+          {
+            orderItemId: this.skuInfo.activityOrderItemNo,
+            confirmType,
+          }
+        )
         .then((res) => {
-          console.log(res);
+          if (res.data.data.isTrue) {
+            this.showPopup = false;
+            this.$toast("操作成功");
+            this.changesTab(this.currentTab);
+          }
+        })
+        .catch((err) => {
+          this.showPopup = false;
+          this.$toast("请求失败，请重新尝试");
         });
     },
   },

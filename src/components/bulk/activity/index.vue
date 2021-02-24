@@ -76,7 +76,9 @@
               </p>
               <p>
                 <span @click.stop="showShare = true">分享</span>
-                <span @click.stop="navToDetail">本团订单</span>
+                <span @click.stop="navToDetail(item.activityOrderNo)"
+                  >本团订单</span
+                >
               </p>
             </div>
           </div>
@@ -132,6 +134,10 @@ export default {
   created() {
     // this.onLoad();
     this.allList = [];
+    // this.$http.get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b').then(res=>{
+    //   console.log(res)
+    // })
+    // this.jsonpFn();
   },
   methods: {
     changesTab(index) {
@@ -169,7 +175,7 @@ export default {
       };
       this.$http
         .post(
-          "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
           Qs.stringify(obj)
         )
         .then((res) => {
@@ -263,9 +269,19 @@ export default {
 
     onShare: function (option) {
       if (option.icon == "wechat") {
-        if (window.navigator.userAgent.indexOf("wechatdevtools") !== -1) {
+        if (this.$store.state.webtype == 3) {
           //判断小程序
-        } else {
+          this.$http
+            .get(
+              "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b"
+            )
+            .then((res) => {
+              console.log(res);
+            });
+        } else if (
+          this.$store.state.webtype == 0 ||
+          this.$store.state.webtype == 1
+        ) {
           window.shareForOpenWXMiniProgram = () => {
             share
               .shareForOpenWXMiniProgram({
@@ -281,22 +297,25 @@ export default {
                   // document.getElementById(
                   //   "debug_text"
                   // ).innerText = JSON.stringify(res);
-                  console.log("shareRes----------", JSON.stringify(res));
+                  alert("shareRes----------", JSON.stringify(res));
                 },
               })
               .then((res) => {
                 // document.getElementById("debug_text").innerText = res;
-                console.log("shareThenRes----------", res);
+                alert("shareThenRes----------", res);
               });
           };
         }
       } else if (option.icon == "link") {
       }
     },
-    navToDetail() {
+    navToDetail(activityOrderNo) {
       //本团订单
       this.$router.push({
         path: "/groupOrder",
+        query: {
+          id: JSON.stringify(activityOrderNo),
+        },
       });
     },
     goToDeatil(activityNo) {
@@ -307,6 +326,19 @@ export default {
         },
       });
     },
+    // jsonpFn() {
+    //   const script = document.createElement("script");
+    //   script.setAttribute(
+    //     "src",
+    //     "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b&callback=getToken"
+    //   );
+    //   script.id = "script";
+    //   document.getElementsByTagName("head")[0].appendChild(script);
+    //   window["getToken"] = (res) => {
+    //     console.log(res);
+    //   };
+    //   window.getToken()
+    // },
   },
 };
 </script>
