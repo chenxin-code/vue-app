@@ -503,7 +503,7 @@ export default {
       };
       this.$http
         .post(
-          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
+          "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
           Qs.stringify(obj)
         )
         .then((res) => {
