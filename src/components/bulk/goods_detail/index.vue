@@ -89,7 +89,17 @@ export default {
     };
   },
   created() {
-    this.resouce = this.$route.params.resouce;
+    if(this.$route.params.resouce){
+      this.resouce = this.$route.params.resouce;
+    }
+  },
+  // activated 当keepalive包含的组件再次渲染的时候触发
+  // deactived 当keepalive包含的组件销毁的时候触发
+  activated() {
+    
+  },
+  deactivated() {
+    
   },
 };
 </script>

@@ -2,8 +2,8 @@
   <div class="component-purchaseNav">
     <div class="purchaseNav-column" v-for="(item,index) in navList" :key="index" @click="enterNav(item,index)">
        <div class="key-dom" :class="index == navIndex ? 'active':''">
-            <img :src="item.src" alt="">
-            <span>{{item.title}} </span>
+            <img :src="item.categoryPicurl" alt="">
+            <span>{{item.categoryName}} </span>
        </div>
     </div>
   </div>
@@ -14,24 +14,7 @@ export default {
   data() {
     return {
       navIndex:0,
-      navList: [
-        {
-          src: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg',
-          title: '蔬菜'
-        },
-        {
-          src: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg',
-          title: '蔬菜'
-        },
-        {
-          src: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg',
-          title: '蔬菜'
-        },
-        {
-          src: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg',
-          title: '蔬菜'
-        }
-      ]
+      navList: []
     }
   },
   created() {
@@ -39,11 +22,11 @@ export default {
   },
   methods: {
       getList(){
-        let url = `/api/system/json/groupbuying_category/queryGroupbuyingCategoryList`;
+        let url = `/app/json/groupbuying_sku_index_app/queryGroupbuyingCategoryList`;
         this.$http.post(url,{}).then(res => {
            this.loading = false;
            this.isLoading = false;
-           console.log("nav",res);
+           if(res.data.status == 0)this.navList = res.data.data;
         }).catch(e=>{
           console.log(e);
         })
@@ -66,10 +49,13 @@ export default {
   background: #f6f6f6;
   display: flex;
   justify-content: space-between;
+  overflow: auto;
 }
 .purchaseNav-column{
     width:25%;
     height: 100%;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
 }
 .key-dom{
     display: flex;
@@ -80,15 +66,21 @@ export default {
 }
 .key-dom img{
     width:60px;
+    height: 60px;
     border-radius:50%;
     border:1px solid #F6F6F6;
 }
 .key-dom span{
+    width:120%;
     color:#000000;
     margin-top:8px;
     width:var( --navWidth);
     height: var(--navHeight);
     text-align: center;
+    line-height: var(--navHeight);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .key-dom.active img{
     border:1px solid #B52232;
