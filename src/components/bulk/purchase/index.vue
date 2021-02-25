@@ -56,6 +56,8 @@ export default {
   },
   data() {
     return {
+      page:0,
+      pageSize:10,
       wrapperHeight: 0,
       saleDataList: [],
       isLoading: false,
@@ -96,23 +98,15 @@ export default {
         "goodlist-wraper"
       )[0].offsetHeight;
     });
-    this.getList();
+    this.getList(1);
   },
   methods: {
     /**
      *  下拉刷新方法
      */
     onRefresh() {
-      console.log("刷新")
-      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=`;
-        this.$http.get(url).then(res => {
-           this.loading = false;
-           this.isLoading = false;
-           this.saleDataList = res.data.data;
-           
-        }).catch(e=>{
-          console.log(e);
-        })
+        this.saleDataList = [];
+        this.getList(1);
     },
     /**
      *  上拉加载方法
@@ -127,10 +121,10 @@ export default {
     /**
      *  请求数据方法
      */
-    getList() {
-       console.log("xxxxaaaaaaaaa",this.$store.state.login.token)
-        console.log("请求团购商品接口");
-        let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=`;
+    getList(page) {
+        if(!page)this.page++;
+        if(page)this.page = page;
+        let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=&pageIndex=${this.page}&pageSize=${this.pageSize}`;
         this.$http.get(url).then(res => {
            this.loading = false;
            this.isLoading = false;
