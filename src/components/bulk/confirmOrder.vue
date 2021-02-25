@@ -13,15 +13,9 @@
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
-<<<<<<< HEAD
         <van-dropdown-menu active-color="#b52232">
           <van-dropdown-item v-model="takeWay" :options="takeWays" disabled  />
         </van-dropdown-menu>
-=======
-        <select v-model="takeWay">
-          <option v-for="(item,index) in takeWays" :value="item.value" :key="index">{{item.name}}</option>
-        </select>
->>>>>>> f1f990d293303a249cfbc7a24e00852182f160bd
       </div>
     </div>
     <div class="pick_up_address">
