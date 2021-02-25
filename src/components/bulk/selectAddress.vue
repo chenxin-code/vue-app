@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getList(){
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
       }).catch(e=>{
