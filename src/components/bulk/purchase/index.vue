@@ -128,6 +128,10 @@ export default {
         this.$http.get(url).then(res => {
            this.loading = false;
            this.isLoading = false;
+           res.data.data.map((item,index)=>{
+             console.log("item,index",item.avatarList);
+             if(item.avatarList.length > 3)item.avatarList = item.avatarList.slice(0,3)
+           })
            this.saleDataList = this.saleDataList.concat(res.data.data);
         }).catch(e=>{
            console.log(e);
