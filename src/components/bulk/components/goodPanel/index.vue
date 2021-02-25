@@ -46,9 +46,8 @@
     </div>
     <div class="use-buy-x">
       <div class="advantor-x">
-        <!-- data.avatarList -->
         <img
-          v-for="(item, index) in 2"
+          v-for="(item, index) in resouce.avatarList"
           :key="index"
           src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
           alt=""
