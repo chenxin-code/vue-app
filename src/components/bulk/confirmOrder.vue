@@ -10,7 +10,7 @@
       <div class="pick_up_way">
         <span> 提货方式：</span>
         <select v-model="takeWay">
-          <option v-for="item in takeWays" :value="item.value">{{item.name}}</option>
+          <option v-for="(item,index) in takeWays" :value="item.value" :key="index">{{item.name}}</option>
         </select>
       </div>
     </div>
@@ -84,7 +84,7 @@ export default {
         {name: '自提',value: 1},
         {name: '送货上门',value: 2}
       ],
-      takeWay: 2
+      takeWay:1
     }
   },
   created() {},
@@ -105,6 +105,8 @@ export default {
   padding: 10px;
   overflow: auto;
   bottom: 49px !important;
+  box-sizing:border-box;
+  overflow:hidden;
 
   .line {
     width: 315px;
