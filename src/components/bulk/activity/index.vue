@@ -129,15 +129,21 @@ export default {
       error: false,
       currentPage: 0,
       totalPage: 0,
+      teamLeaderNo: 0,
     };
   },
   created() {
     // this.onLoad();
     this.allList = [];
-    // this.$http.get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b').then(res=>{
-    //   console.log(res)
-    // })
-    // this.jsonpFn();
+    this.$http
+      .get(
+        "http://192.168.31.173:18807/app/json/group_buying_head_info/findSelfInfo"
+      )
+      .then((res) => {
+        if (res.data.result == "success") {
+          this.teamLeaderNo = res.data.data.teamLeaderNo;
+        }
+      });
   },
   methods: {
     changesTab(index) {
@@ -162,6 +168,7 @@ export default {
       let obj = {
         pageNum: page,
         pageSize: 10,
+        sortBy: "create_time_DESC",
         activityState:
           this.currentTab == 0
             ? undefined
@@ -224,6 +231,7 @@ export default {
       let obj = {
         pageNum: page,
         pageSize: 10,
+        sortBy: "create_time_DESC",
         activityState:
           this.currentTab == 0
             ? undefined
@@ -326,19 +334,6 @@ export default {
         },
       });
     },
-    // jsonpFn() {
-    //   const script = document.createElement("script");
-    //   script.setAttribute(
-    //     "src",
-    //     "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b&callback=getToken"
-    //   );
-    //   script.id = "script";
-    //   document.getElementsByTagName("head")[0].appendChild(script);
-    //   window["getToken"] = (res) => {
-    //     console.log(res);
-    //   };
-    //   window.getToken()
-    // },
   },
 };
 </script>

@@ -129,19 +129,31 @@ export default {
     pay() {
       if (this.userName !== "") {
         if (util.checkMobile(this.userPhone)) {
-          let skuItem = {};
+          let skuInfoList = [];
           this.checkList.forEach((e) => {
-            skuItem[e.skuId] = e.count;
+            skuInfoList.push({
+              skuId: 12001111,
+              skuName: e.skuName,
+              groupPrice: e.groupPrice,
+              buyCount: e.count,
+            });
           });
           this.$http
-            .post("/app/json/app_group_buying_share_home/makeOrder", {
-              purchaseId: 72,
-              chiefId: 1,
-              skuItem,
+            .post("/app/json/app_community_group_order/makeOrder", {
+              activityId: 72,
+              activityName: "开团啦",
+              headId: 2,
+              deliveryType: 2,
+              receiptAddress: "时代中国",
+              receiptName: this.userName,
+              receiptTel: this.userPhone,
+              orderAmount: this.totalPrice,
+              skuInfoList,
+              orderRemark: this.textareaValue,
             })
             .then((res) => {
               if (res.data.result == "success") {
-                this.$router.push("/paySuccess");
+                // this.$router.push("/paySuccess");
               }
             });
         } else {

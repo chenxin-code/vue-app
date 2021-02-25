@@ -36,12 +36,16 @@
       <div class="line"></div>
       <div class="activity_description">
         <div class="activity_description_text">
-          团购活动描述：{{ shareData.groupDescriptionRichTxt }}
+          团购活动描述:
+          <div v-html="str"></div>
         </div>
-        <div class="bulk_img">
-          <img :src="require('./images/share.png')" alt="" />
-          <img :src="require('./images/share.png')" alt="" />
-          <img :src="require('./images/share.png')" alt="" />
+        <div class="bulk_img" v-if="imgUrls.length !== 0">
+          <img
+            :src="item"
+            alt=""
+            v-for="(item, index) in imgUrls"
+            :key="index"
+          />
         </div>
       </div>
       <div class="line"></div>
@@ -95,7 +99,7 @@
                 class="item_other_user_avatar"
               />
               等{{
-                item.buyerCount <= 999 ? item.buyerCount : "999+"
+                999 >= item.buyerCount ? "999+" : item.buyerCount
               }}人购买了此商品
             </div>
           </div>
@@ -271,6 +275,9 @@ export default {
       totalPrice: 0,
       categoryMap: [{ key: "all", value: "全部" }],
       currentSelectCategory: 0,
+      descData: "",
+      imgUrls: [],
+      str: "",
     };
   },
   created() {
@@ -283,6 +290,7 @@ export default {
       .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
         purchaseId: 72,
         chiefId: 1,
+        userId: 2248629234467607163,
       })
       .then((res) => {
         console.log("res", res);
@@ -306,9 +314,22 @@ export default {
               value: this.shareData.categoryMap[i],
             });
           }
+          this.descData = this.shareData.groupDescriptionRichTxt;
+
+          this.str = this.descData.replace(/<img.*?>/g, "");
+
+          let imgStrs = this.shareData.groupDescriptionRichTxt.match(
+            /<img.*?>/g
+          );
+
+          // 获取每个img url
+          this.imgUrls = imgStrs.map((url) => {
+            return url.match(/\ssrc=['"](.*?)['"]/)[1];
+          });
         }
       });
   },
+
   methods: {
     checkAll() {
       if (this.isCheckAll) {
@@ -422,6 +443,10 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
+img {
+  max-width: 100% !important;
+}
+
 .router_class {
   background-color: #F6F6F6;
 }
@@ -519,7 +544,7 @@ export default {
 
   .share_card {
     width: 100%;
-    height: 338px;
+    // height: 338px;
     background-color: #fff;
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
@@ -629,6 +654,7 @@ export default {
       }
 
       .bulk_img {
+        overflow-x: auto;
         display: flex;
         justify-content: space-between;
         align-items: center;

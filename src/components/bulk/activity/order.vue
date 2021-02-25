@@ -496,7 +496,7 @@ export default {
       let tabNum = "";
       tabIndex == 0 ? (tabNum = "") : (tabNum = tabIndex);
       let obj = {
-        groupBuyingOrderNo: 8,
+        groupBuyingOrderNo: this.activityOrderNo,
         pageNum: pageNum,
         pageSize: pageSize,
         orderItemState: tabNum,

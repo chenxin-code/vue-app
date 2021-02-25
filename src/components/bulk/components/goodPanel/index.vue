@@ -6,7 +6,7 @@
     <div class="goodPanel-remain">
       <div class="remain_title">拼团结束时间剩余</div>
       <div class="remain-times">
-        <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()">
+        <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()" format="DD 天 HH 时 mm 分 ss 秒">
           <template #default="timeData">
             <span class="block">{{ timeData.hours }}</span>
             <span class="colon">:</span>
@@ -18,6 +18,7 @@
       </div>
     </div>
     <dl class="good-ms">
+      <!-- resouce.groupbuySkuPicurl -->
       <dd>
         <img
           src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
@@ -45,9 +46,8 @@
     </div>
     <div class="use-buy-x">
       <div class="advantor-x">
-        <!-- data.avatarList -->
         <img
-          v-for="(item, index) in 2"
+          v-for="(item, index) in resouce.avatarList"
           :key="index"
           src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
           alt=""
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      time: 2123123,
+      
     };
   },
   methods: {

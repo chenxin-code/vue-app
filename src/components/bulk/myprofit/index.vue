@@ -69,10 +69,9 @@ export default {
   },
   created() {
     this.$http
-      .post(
-        "/app/json/app_my_earnings/getMyEarnings",
-        { headId: 2 }
-      )
+      .post("/app/json/app_my_earnings/getMyEarnings", {
+        token: this.$store.state.login.token,
+      })
       .then((res) => {
         this.earningsData = res.data.data;
       });

@@ -106,7 +106,7 @@ export default [{
   {
     path: '/groupOrder',
     name: '本团订单',
-    component: () => import('@/components/bulk/activity/order.vue'),
+    component: () => import('@/components/bulk/activity/groupOrder.vue'),
     meta: {
       title: '本团订单',
       keepAlive: false

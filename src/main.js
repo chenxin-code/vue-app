@@ -89,6 +89,7 @@ Vue.use(navcontent)
 import popview from './components/commonui/pop-view/index'
 Vue.use(popview)
 
+
 //引入moment
 import moment from 'moment' //导入文件
 Vue.prototype.$moment = moment; //赋值使用

@@ -1,8 +1,9 @@
 <template>
-  <!-- // created by hjc 订单列表 -->
+  <!-- // created by hjc 本团订单 -->
   <div class="orderList">
     <van-sticky>
-      <van-search v-model="searchValue" shape="round" background="#fff" />
+      <navbar :title="'本团订单'"></navbar>
+
       <div class="tab">
         <div
           class="tab_item"
@@ -15,7 +16,7 @@
         </div>
       </div>
     </van-sticky>
-    <div class="goods_list">
+    <div class="goods_list">    
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list
           v-model="loading"
@@ -151,9 +152,13 @@
 
 <script>
 import Qs from "qs";
+import navbar from "@/components/bulk/components/navbar";
 export default {
   name: "orderList",
   props: {},
+  components: {
+    navbar,
+  },
   data() {
     return {
       tab: [
@@ -181,10 +186,12 @@ export default {
       totalPage: 0,
       error: false,
       skuInfo: {},
+      activityOrderNo: 0,
     };
   },
   created() {
     // Qs.stringify({ gbAcId: 11 })
+    this.activityOrderNo = JSON.parse(this.$route.query.id);
   },
   methods: {
     changesTab(index) {
@@ -212,6 +219,7 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
+        groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
           this.currentTab == 0
             ? undefined
@@ -229,7 +237,7 @@ export default {
       };
       this.$http
         .post(
-          "http://192.168.31.173:18807/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
+          "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
           Qs.stringify(obj)
         )
         .then((res) => {
@@ -289,6 +297,7 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
+        groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
           this.currentTab == 0
             ? undefined
@@ -399,7 +408,7 @@ export default {
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
   background: #F6F6F6;
-  padding-bottom: 49px;
+//   padding-bottom: 49px;
 
   .tab {
     width: 100%;
