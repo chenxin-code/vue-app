@@ -80,6 +80,7 @@
 <script>
 import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
 import util from "@/utils/util.js";
+import { mapGetters } from "vuex";
 export default {
   name: "confirmOrder",
   props: {},
@@ -91,8 +92,6 @@ export default {
       textareaValue: "",
       userPhone: "13611111111",
       userName: "hj",
-      checkList: [],
-      totalPrice: 0,
       shareData: {},
       purchaseId: "",
       chiefId: "",
@@ -102,8 +101,6 @@ export default {
   },
   created() {
     this.shareData = JSON.parse(this.$route.query.shareData);
-    this.checkList = JSON.parse(this.$route.query.checkList);
-    this.totalPrice = JSON.parse(this.$route.query.totalPrice);
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
@@ -188,6 +185,18 @@ export default {
         return item.count * item.groupPrice + pre;
       }, 0);
       return this.$util.toDecimal2(price);
+    },
+    totalPrice: {
+      get() {
+        return this.$store.state.bulkTotalPrice;
+      },
+      set() {},
+    },
+    checkList: {
+      get() {
+        return this.$store.state.bulkCheckList;
+      },
+      set() {},
     },
   },
 };

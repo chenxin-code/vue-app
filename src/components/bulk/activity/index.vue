@@ -41,7 +41,7 @@
       >
         <div
           class="box"
-          @click="goToDeatil(item.activityNo)"
+          @click="goToDeatil(item.id)"
           v-for="(item, index) in currentTab == 0
             ? allList
             : currentTab == 1
@@ -55,28 +55,28 @@
         >
           <div class="div1">
             <div>
-              <span>{{ item.activityName }}</span>
+              <span>{{ item.groupbuyActivityName }}</span>
             </div>
           </div>
           <div class="div2">
-            <img :src="item.activityIcon" alt="" />
+            <img :src="item.groupbuyActivityPicurl" alt="" />
             <div>
-              <p>截止日期：{{ item.activityEndTime }}</p>
+              <p>截止日期：{{ item.groupbuyEndDatetime }}</p>
               <p>
                 <span>{{
-                  item.activityState == 0
+                  item.groupbuyActivityStatus == 0
                     ? "未开始"
-                    : item.activityState == 1
+                    : item.groupbuyActivityStatus == 1
                     ? "进行中"
                     : "已结束"
                 }}</span
-                ><span>已团{{ item.orderPlacedQuantity }}单</span
-                ><span>共{{ item.productQuantity }}件商品</span>
+                ><span>已团{{ item.orderCount }}单</span
+                ><span>共{{ item.productCount }}件商品</span>
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
                 <span @click.stop="share(item)">分享</span>
-                <span @click.stop="navToDetail(item.activityOrderNo)"
+                <span @click.stop="navToDetail(item.id)"
                   >本团订单</span
                 >
               </p>
@@ -169,8 +169,8 @@ export default {
       let obj = {
         pageNum: page,
         pageSize: 10,
-        sortBy: "create_time_DESC",
-        activityState:
+        // sortBy: "create_time_DESC",
+        groupbuyActivityStatus:
           this.currentTab == 0
             ? undefined
             : this.currentTab == 1
@@ -183,17 +183,17 @@ export default {
       };
       this.$http
         .post(
-          "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
+          "http://192.168.31.173:18807/app/json/groupbuying_activity_app/list",
           Qs.stringify(obj)
         )
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.data.pages || page == res.data.data.pages) {
+          if (page < res.data.totalPages || page == res.data.totalPages) {
             if (res.data.data.pages == page) {
               this.finished = true;
             }
             if (res.data.result == "success") {
-              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
+              var indexList = res.data.data; //将请求到的内容赋值给一个变量
 
               switch (this.currentTab) {
                 case 0:
@@ -232,8 +232,8 @@ export default {
       let obj = {
         pageNum: page,
         pageSize: 10,
-        sortBy: "create_time_DESC",
-        activityState:
+        // sortBy: "create_time_DESC",
+        groupbuyActivityStatus:
           this.currentTab == 0
             ? undefined
             : this.currentTab == 1
@@ -253,17 +253,17 @@ export default {
           if (res.status == 200) {
             switch (this.currentTab) {
               case 0:
-                this.allList = res.data.data.records;
+                this.allList = res.data.data;
               case 1:
-                this.goingList = res.data.data.records;
+                this.goingList = res.data.data;
               case 2:
-                this.notList = res.data.data.records;
+                this.notList = res.data.data;
               case 3:
-                this.finishList = res.data.data.records;
+                this.finishList = res.data.data;
               default:
-                this.allList = res.data.data.records;
+                this.allList = res.data.data;
             }
-            this.totalPage = res.data.page; //将总页数赋值上去
+            this.totalPage = res.data.totalPages; //将总页数赋值上去
             setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
@@ -321,30 +321,30 @@ export default {
           this.$router.push({
             path: "/bulk_share",
             query: {
-              purchaseId: JSON.stringify(this.shareItemData.activityNo),
+              purchaseId: JSON.stringify(this.shareItemData.id),
               chiefId: JSON.stringify(this.userData.teamLeaderNo),
               userId: JSON.stringify(this.userData.userNo),
-              activityName:JSON.stringify(this.shareItemData.activityName)
+              activityName:JSON.stringify(this.shareItemData.groupbuyActivityName)
             },
           });
         }
       } else if (option.icon == "link") {
       }
     },
-    navToDetail(activityOrderNo) {
+    navToDetail(id) {
       //本团订单
       this.$router.push({
         path: "/groupOrder",
         query: {
-          id: JSON.stringify(activityOrderNo),
+          id: JSON.stringify(id),
         },
       });
     },
-    goToDeatil(activityNo) {
+    goToDeatil(id) {
       this.$router.push({
         path: "/bulkDetails",
         query: {
-          activityNo: JSON.stringify(activityNo),
+          activityNo: JSON.stringify(id),
         },
       });
     },

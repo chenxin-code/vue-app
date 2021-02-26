@@ -258,6 +258,7 @@
 
 <script>
 import Qs from "qs";
+import { mapMutations } from "vuex";
 export default {
   name: "share",
   props: {},
@@ -281,7 +282,7 @@ export default {
       purchaseId: "",
       chiefId: "",
       userId: "",
-      activityName:"",
+      activityName: "",
     };
   },
   created() {
@@ -294,7 +295,6 @@ export default {
     this.checkList.forEach((e) => {
       this.result.push(e.id);
     });
-    // 72
     this.$http
       .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
         purchaseId: this.purchaseId,
@@ -430,14 +430,14 @@ export default {
         });
     },
     confirmOrder() {
+      this.setBulkTotalPrice(this.totalPrice);
+      this.setBulkCheckList(this.checkList);
       if (this.checkList.length == 0) {
         this.$toast("请先选购商品");
       } else {
         this.$router.push({
           path: "/bulk_share_confirm_order",
           query: {
-            checkList: JSON.stringify(this.checkList),
-            totalPrice: JSON.stringify(this.totalPrice),
             shareData: JSON.stringify(this.shareData),
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
@@ -447,6 +447,7 @@ export default {
         });
       }
     },
+    ...mapMutations(["setBulkTotalPrice","setBulkCheckList"]),
   },
 };
 </script>
