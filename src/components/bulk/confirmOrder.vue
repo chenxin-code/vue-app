@@ -99,20 +99,22 @@ export default {
     }
   },
   created() {
+    this.getPlaceList();
     this.resouce = this.$store.state.CharseInfo;
-    if(this.$store.state.CharseInfo.masterPlace){
-       this.placelist = [this.$store.state.CharseInfo.masterPlace]
-    }else{
-      this.getPlaceList();
-    }
-    console.log("this.placelist",this.placelist)
+    console.log(this.$store.state.CharseInfo.masterPlace)
     this.total = BigNumber(this.buyPrice).multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice).toFixed(2);
   },
   methods: {
     getPlaceList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
       this.$http.get(url).then(res => {
-        if(res.data.status == 0)this.placelist = res.data.data.records;
+        if(res.data.status == 0){
+          if(this.$store.state.CharseInfo.masterPlace){
+            this.placelist = [this.$store.state.CharseInfo.masterPlace]
+          }else{
+            this.placelist = res.data.data.records;
+          }
+        }
       }).catch(e=>{
         console.log(e);
       })
