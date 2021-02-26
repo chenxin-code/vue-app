@@ -53,12 +53,21 @@ export default {
       this.sign = index;
       this.$store.commit("setCharseInfo",{
         masterPlace:item
-      })
+      });
+      this.sort();
+    },
+    sort(){
+      this.list.forEach((item,index) => {
+        if(item.cupNo == this.$store.state.CharseInfo.masterPlace.cupNo ){
+          this.sign = index;
+        }
+      });
     },
     getList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
+        this.sort();
       }).catch(e=>{
         console.log(e);
       })
