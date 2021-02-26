@@ -138,7 +138,7 @@ export default {
     this.allList = [];
     this.$http
       .get(
-        "http://192.168.31.173:18807/app/json/group_buying_head_info/findSelfInfo"
+        "/app/json/group_buying_head_info/findSelfInfo"
       )
       .then((res) => {
         if (res.data.result == "success") {
@@ -183,7 +183,7 @@ export default {
       };
       this.$http
         .post(
-          "http://192.168.31.173:18807/app/json/groupbuying_activity_app/list",
+          "/app/json/groupbuying_activity_app/list",
           Qs.stringify(obj)
         )
         .then((res) => {

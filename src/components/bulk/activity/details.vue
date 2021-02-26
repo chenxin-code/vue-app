@@ -114,7 +114,7 @@ export default {
   created() {
     this.activityNo = JSON.parse(this.$route.query.activityNo);
     this.$http
-      .post("http://192.168.31.173:18807/app/json/groupbuying_activity_app/getById", {
+      .post("/app/json/groupbuying_activity_app/getById", {
         id: this.activityNo,
       })
       .then((res) => {
