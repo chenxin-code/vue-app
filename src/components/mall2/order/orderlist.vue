@@ -498,14 +498,17 @@ export default {
         {
           text: '待支付',
           tag: '1',
-          type: '200015',
+          type: [
+            '200015',
+            '200502'
+          ],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待发货',
           tag: '16',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
@@ -513,21 +516,21 @@ export default {
           // text: '待收(提)货',
           text: '待收货',
           tag: '4',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已完成',
           tag: '9',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已取消',
           tag: '7',
-          type: '200018',
+          type: ['200018'],
           nowPage: 1,
           isCanLoadMore: true
         }
@@ -1102,7 +1105,8 @@ export default {
       let url = '/app/json/app_shopping_order/queryOrder'
       let paramsData = {
         token: this.$store.state.login.token,
-        orderType: item.type,
+        orderType: item.type[0],
+        orderTypeList:item.type,
         state: item.tag,
         page: {
           index: item.nowIndex,
@@ -1371,28 +1375,28 @@ export default {
         {
           text: '待支付',
           tag: '1',
-          type: '200015',
+          type: ['200015','200502'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待提货',
           tag: '4',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已完成',
           tag: '9',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已取消',
           tag: '7',
-          type: '200018',
+          type: ['200018'],
           nowPage: 1,
           isCanLoadMore: true
         }
@@ -1402,35 +1406,35 @@ export default {
         {
           text: '待支付',
           tag: '1',
-          type: '200015',
+          type: ['200015','200502'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待发货',
           tag: '16',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待收货',
           tag: '4',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已完成',
           tag: '9',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已取消',
           tag: '7',
-          type: '200018',
+          type: ['200018'],
           nowPage: 1,
           isCanLoadMore: true
         }
@@ -1440,42 +1444,42 @@ export default {
         {
           text: '待支付',
           tag: '1',
-          type: '200015',
+          type: ['200015','200502'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待发货',
           tag: '16',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待收货',
           tag: '4',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '待提货',
           tag: '4',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已完成',
           tag: '9',
-          type: '200017',
+          type: ['200017'],
           nowPage: 1,
           isCanLoadMore: true
         },
         {
           text: '已取消',
           tag: '7',
-          type: '200018',
+          type: ['200018'],
           nowPage: 1,
           isCanLoadMore: true
         }
@@ -1486,7 +1490,7 @@ export default {
       let dfw = {
         text: '待服务',
         tag: '99', // 虚拟的订单tag
-        type: '200017',
+        type: ['200017'],
         nowPage: 1,
         isCanLoadMore: true
       }
@@ -1496,7 +1500,7 @@ export default {
       let dfw = {
         text: '我的服务',
         tag: '9', // 虚拟的订单tag
-        type: '200017',
+        type: ['200017'],
         productType: '512',
         nowPage: 1,
         isCanLoadMore: true

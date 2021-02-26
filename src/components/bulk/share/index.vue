@@ -278,9 +278,18 @@ export default {
       descData: "",
       imgUrls: [],
       str: "",
+      purchaseId: "",
+      chiefId: "",
+      userId: "",
+      activityName:"",
     };
   },
   created() {
+    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    this.chiefId = JSON.parse(this.$route.query.chiefId);
+    this.userId = JSON.parse(this.$route.query.userId);
+    this.activityName = JSON.parse(this.$route.query.activityName);
+
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);
@@ -288,12 +297,11 @@ export default {
     // 72
     this.$http
       .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
-        purchaseId: 72,
-        chiefId: 1,
-        userId: 2248629234467607163,
+        purchaseId: this.purchaseId,
+        chiefId: this.chiefId,
+        userId: this.userId,
       })
       .then((res) => {
-        console.log("res", res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
@@ -431,6 +439,10 @@ export default {
             checkList: JSON.stringify(this.checkList),
             totalPrice: JSON.stringify(this.totalPrice),
             shareData: JSON.stringify(this.shareData),
+            purchaseId: JSON.stringify(this.purchaseId),
+            chiefId: JSON.stringify(this.chiefId),
+            userId: JSON.stringify(this.userId),
+            activityName: JSON.stringify(this.activityName),
           },
         });
       }

@@ -93,7 +93,7 @@ export default {
     line-height: var(--navHeight);
     text-align: center;
     border-radius: 13px;
-    font-size:14px;
+    font-size:12px;
 }
 
 </style>

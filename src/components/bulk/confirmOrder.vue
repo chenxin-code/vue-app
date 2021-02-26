@@ -55,32 +55,32 @@
       </div>
       <div class="goods_item">
         <div class="goods_info_item">
-          <img
-            src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg"
-            alt=""
-          />
+          <img :src="resouce.groupbuySkuPicurl" alt="" />
           <div class="goods_info_detail">
-            <div class="goods_name">新鲜的大西瓜500kg/份</div>
-            <div class="sell_price">销售价格：¥10.00</div>
+            <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
+            <div class="sell_price">销售价格：¥{{ resouce.groupbuyLinePrice }}</div>
             <div class="count_price">
-              <div class="bulk_price">团购价格：¥5.00</div>
+              <div class="bulk_price">团购价格：¥{{ resouce.groupbuyBuyerPrice }}</div>
               <div class="count">共一件</div>
             </div>
           </div>
         </div>
+        <div class="stepper">
+          <van-stepper v-model.number="buyPrice" @change="buyChange($event, resouce.groupbuyBuyerPrice)"/>
+        </div>
         <div class="line"></div>
       </div>
-      <div class="goods_detail">
-        <div class="sell_price_statistics">¥10.00</div>
-        <div class="bulk_price_statistics">团购价格：¥5.00</div>
-      </div>
+      <!-- <div class="goods_detail">
+        <div class="sell_price_statistics">¥{{ resouce.groupbuyLinePrice }}</div>
+        <div class="bulk_price_statistics">团购价格：¥{{ resouce.groupbuyBuyerPrice }}</div>
+      </div> -->
     </div>
     <div class="remark">
       <span>订单备注：</span>
       <input />
     </div>
     <div class="pay_now">
-      <div class="pay_price">¥10.00</div>
+      <div class="pay_price">¥{{total}}</div>
       <div class="pay" @click="$router.push('/paySuccess')">立即支付</div>
     </div>
   </div>
@@ -88,6 +88,10 @@
 
 <script>
 import {DropdownMenu, DropdownItem} from 'vant'
+import Vue from 'vue';
+import { Stepper } from 'vant';
+import { BigNumber } from 'bignumber.js'
+Vue.use(Stepper);
 export default {
   name: "confirmOrder",
   components: {
@@ -97,6 +101,9 @@ export default {
   props: {},
   data() {
     return {
+      resouce:{},
+      buyPrice: 1,
+      total:0,
       takeWays: [
         {text: '自提',value: 1},
         {text: '送货上门',value: 2}
@@ -104,8 +111,18 @@ export default {
       takeWay: 1,
     };
   },
-  created() {},
-  methods: {},
+  created() {
+    console.log("this.$route.params",this.$route.params)
+    if(this.$route.params.resouce){
+      this.resouce = this.$route.params.resouce;
+    }
+    this.total = BigNumber(this.buyPrice).multipliedBy(this.$route.params.resouce.groupbuyBuyerPrice).toFixed(2);
+  },
+  methods: {
+    buyChange(num,val){
+      this.total = BigNumber(val).multipliedBy(num).toFixed(2);
+    }
+  }
 };
 </script>
 
@@ -124,8 +141,7 @@ export default {
   overflow-y: auto;
   bottom: 49px !important;
   box-sizing:border-box;
-  overflow:hidden;
-
+  overflow-x:hidden;
   .line {
     width: 315px;
     height: 1px;
@@ -323,7 +339,12 @@ export default {
 
     .goods_item {
       padding-top: 9.5px;
-
+      .stepper{
+       height:40px;
+       display:flex;
+       align-items:center;
+       justify-content:flex-end;
+      }
       .goods_info_item {
         display: flex;
         justify-content: flex-start;

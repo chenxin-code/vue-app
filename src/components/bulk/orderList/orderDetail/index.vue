@@ -112,6 +112,8 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   padding: 10px 10px 38.5px;
   letter-spacing: 1px;
+  width: 100%;
+  height: 100%;
 
   .user_info {
     width: 100%;

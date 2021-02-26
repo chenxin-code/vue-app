@@ -20,7 +20,7 @@
             :offset="offset"
             class="content"
           >
-            <van-cell style="height:auto;padding:0;">
+            <van-cell style="height: auto; padding: 0">
               <goodPanel
                 v-for="(item, index) in saleDataList"
                 :key="index"
@@ -56,8 +56,8 @@ export default {
   },
   data() {
     return {
-      page:0,
-      pageSize:10,
+      page: 0,
+      pageSize: 10,
       wrapperHeight: 0,
       saleDataList: [],
       isLoading: false,
@@ -105,8 +105,8 @@ export default {
      *  下拉刷新方法
      */
     onRefresh() {
-        this.saleDataList = [];
-        this.getList(1);
+      this.saleDataList = [];
+      this.getList(1);
     },
     /**
      *  上拉加载方法
@@ -122,22 +122,26 @@ export default {
      *  请求数据方法
      */
     getList(page) {
-        if(!page)this.page++;
-        if(page)this.page = page;
-        let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=&pageIndex=${this.page}&pageSize=${this.pageSize}`;
-        this.$http.get(url).then(res => {
-           this.loading = false;
-           this.isLoading = false;
-           res.data.data.map((item,index)=>{
-             console.log("item,index",item.avatarList);
-             item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
-             if(item.avatarList.length > 3)item.avatarList = item.avatarList.slice(0,3)
-           })
-           this.saleDataList = this.saleDataList.concat(res.data.data);
-        }).catch(e=>{
-           console.log(e);
+      if (!page) this.page++;
+      if (page) this.page = page;
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=&pageIndex=${this.page}&pageSize=${this.pageSize}`;
+      this.$http
+        .get(url)
+        .then((res) => {
+          this.loading = false;
+          this.isLoading = false;
+          res.data.data.map((item, index) => {
+            console.log("item,index", item.avatarList);
+            item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
+            if (item.avatarList.length > 3)
+              item.avatarList = item.avatarList.slice(0, 3);
+          });
+          this.saleDataList = this.saleDataList.concat(res.data.data);
         })
-        // this.finished = true;
+        .catch((e) => {
+          console.log(e);
+        });
+      // this.finished = true;
     },
   },
 };

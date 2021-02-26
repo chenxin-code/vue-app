@@ -77,6 +77,15 @@ export default [{
     }
   },
   {
+    path: '/downLoad',
+    name: '下载',
+    component: () => import('@/components/bulk/downLoad/index.vue'),
+    meta: {
+      title: '下载',
+      keepAlive: false
+    }
+  },
+  {
     path: '/bulk_goods_deatil',
     name: '商品详情',
     component: () => import('@/components/bulk/goods_detail/index.vue'),

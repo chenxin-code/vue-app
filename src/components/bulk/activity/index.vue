@@ -75,7 +75,7 @@
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
-                <span @click.stop="showShare = true">分享</span>
+                <span @click.stop="share(item)">分享</span>
                 <span @click.stop="navToDetail(item.activityOrderNo)"
                   >本团订单</span
                 >
@@ -129,7 +129,8 @@ export default {
       error: false,
       currentPage: 0,
       totalPage: 0,
-      teamLeaderNo: 0,
+      userData: {},
+      shareItemData: {},
     };
   },
   created() {
@@ -141,7 +142,7 @@ export default {
       )
       .then((res) => {
         if (res.data.result == "success") {
-          this.teamLeaderNo = res.data.data.teamLeaderNo;
+          this.userData = res.data.data;
         }
       });
   },
@@ -274,7 +275,11 @@ export default {
           this.$toast("网络繁忙,请稍后再试~");
         });
     },
-
+    share(item) {
+      this.shareItemData = item;
+      this.showShare = true;
+      console.log(this.shareItemData);
+    },
     onShare: function (option) {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3) {
@@ -290,29 +295,38 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          window.shareForOpenWXMiniProgram = () => {
-            share
-              .shareForOpenWXMiniProgram({
-                userName: "wxc76cd2c3987620af",
-                path: "/bulk_share",
-                title: "微信分享商品",
-                desc: "test",
-                link: "http://www.baidu.com",
-                imageurl:
-                  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
-                miniProgramType: 2,
-                __event__: (res) => {
-                  // document.getElementById(
-                  //   "debug_text"
-                  // ).innerText = JSON.stringify(res);
-                  alert("shareRes----------", JSON.stringify(res));
-                },
-              })
-              .then((res) => {
-                // document.getElementById("debug_text").innerText = res;
-                alert("shareThenRes----------", res);
-              });
-          };
+          // window.shareForOpenWXMiniProgram = () => {
+          //   share
+          //     .shareForOpenWXMiniProgram({
+          //       userName: "wxc76cd2c3987620af",
+          //       path: "/bulk_share",
+          //       title: "微信分享商品",
+          //       desc: "test",
+          //       link: "http://www.baidu.com",
+          //       imageurl:
+          //         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+          //       miniProgramType: 2,
+          //       __event__: (res) => {
+          //         // document.getElementById(
+          //         //   "debug_text"
+          //         // ).innerText = JSON.stringify(res);
+          //         alert("shareRes----------", JSON.stringify(res));
+          //       },
+          //     })
+          //     .then((res) => {
+          //       // document.getElementById("debug_text").innerText = res;
+          //       alert("shareThenRes----------", res);
+          //     });
+          // };
+          this.$router.push({
+            path: "/bulk_share",
+            query: {
+              purchaseId: JSON.stringify(this.shareItemData.activityNo),
+              chiefId: JSON.stringify(this.userData.teamLeaderNo),
+              userId: JSON.stringify(this.userData.userNo),
+              activityName:JSON.stringify(this.shareItemData.activityName)
+            },
+          });
         }
       } else if (option.icon == "link") {
       }

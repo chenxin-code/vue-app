@@ -89,17 +89,25 @@ export default {
       isShowMore: true,
       textareaHeight: "20px",
       textareaValue: "",
-      userPhone: "",
-      userName: "",
+      userPhone: "13611111111",
+      userName: "hj",
       checkList: [],
       totalPrice: 0,
       shareData: {},
+      purchaseId: "",
+      chiefId: "",
+      userId: "",
+      activityName: "",
     };
   },
   created() {
     this.shareData = JSON.parse(this.$route.query.shareData);
     this.checkList = JSON.parse(this.$route.query.checkList);
     this.totalPrice = JSON.parse(this.$route.query.totalPrice);
+    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    this.chiefId = JSON.parse(this.$route.query.chiefId);
+    this.userId = JSON.parse(this.$route.query.userId);
+    this.activityName = JSON.parse(this.$route.query.activityName);
     if (this.checkList.length > 3) {
       this.goodsList.push(this.checkList[0]);
       this.goodsList.push(this.checkList[1]);
@@ -132,7 +140,7 @@ export default {
           let skuInfoList = [];
           this.checkList.forEach((e) => {
             skuInfoList.push({
-              skuId: 12001111,
+              skuId: 12001132,
               skuName: e.skuName,
               groupPrice: e.groupPrice,
               buyCount: e.count,
@@ -140,9 +148,9 @@ export default {
           });
           this.$http
             .post("/app/json/app_community_group_order/makeOrder", {
-              activityId: 72,
-              activityName: "开团啦",
-              headId: 2,
+              activityId: this.purchaseId,
+              activityName: this.activityName,
+              headId: this.chiefId,
               deliveryType: 2,
               receiptAddress: "时代中国",
               receiptName: this.userName,

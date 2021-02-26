@@ -18,10 +18,9 @@
       </div>
     </div>
     <dl class="good-ms">
-      <!-- resouce.groupbuySkuPicurl -->
       <dd>
         <img
-          src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
+          :src="resouce.groupbuySkuPicurl"
           alt=""
         />
       </dd>
@@ -49,13 +48,13 @@
         <img
           v-for="(item, index) in resouce.avatarList"
           :key="index"
-          src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
+          :src="item"
           alt=""
         />
       </div>
       <span>等{{resouce.purchasedQuantity >999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
     </div>
-    <button class="buy-button-x" @click.stop="$router.push('/confirmOrder')">
+    <button class="buy-button-x" @click.stop="goConfirm()">
       立即购买
     </button>
     <div class="line"></div>
@@ -77,12 +76,20 @@ export default {
   methods: {
     toDetails() {
         this.$router.push({
-        name: '商品详情',
-        params: {
-          resouce:this.resouce
-        }
-      });
+          name: '商品详情',
+          params: {
+            resouce:this.resouce
+          }
+        });
     },
+    goConfirm(){
+      this.$router.push({
+          name: '确认订单',
+          params: {
+            resouce:this.resouce
+          }
+        });
+    }
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <!-- 支付成功列表页 -->
   <div class="pay_success">
-    <navbar :title="'确认订单'"></navbar>
+    <navbar :title="'支付成功'"></navbar>
     <div id="page-paySuccess">
       <div>
         <div class="pay-status-v">
