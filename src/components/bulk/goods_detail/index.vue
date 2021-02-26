@@ -89,9 +89,7 @@ export default {
     };
   },
   created() {
-    if(this.$route.params.resouce){
-      this.resouce = this.$route.params.resouce;
-    }
+      this.resouce = this.$store.state.CharseInfo
   },
   methods: {
     goConfirm(){
