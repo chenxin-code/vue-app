@@ -13,10 +13,10 @@
         />
       <!-- </van-sticky> -->
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
-        <van-swipe-item v-for="item in 4" :key="item">
+        <van-swipe-item v-for="item in 1" :key="item">
           <img
             class="goods_img"
-            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
+            :src="resouce.groupbuySkuPicurl"
             alt=""
           />
         </van-swipe-item>
