@@ -296,7 +296,8 @@ const store = new Vuex.Store({
     // },
     yiDun: { // 易盾
       yidunInitLogin: '' // 一键登录
-    }
+    },
+    CharseInfo:{}
   },
   getters: {
     webtype: state => {
@@ -380,8 +381,14 @@ const store = new Vuex.Store({
     getYiDun: state => {
       return state.yiDun
     },
+    getCharseInfo:state => {
+      return state.purcharseInfo
+    },
   },
   mutations: {
+    setCharseInfo:(state, info) => {
+      state.CharseInfo = info
+    },
     setWebType: (state, info) => {
       state.webtype = info
     },
