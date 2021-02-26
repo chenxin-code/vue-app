@@ -98,11 +98,8 @@ export default {
     }
   },
   created() {
-    console.log("this.$route.params",this.$route.params)
-    if(this.$route.params.resouce){
-      this.resouce = this.$route.params.resouce;
-    }
-    this.total = BigNumber(this.buyPrice).multipliedBy(this.$route.params.resouce.groupbuyBuyerPrice).toFixed(2);
+    this.resouce = this.$store.state.CharseInfo
+    this.total = BigNumber(this.buyPrice).multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice).toFixed(2);
   },
   methods: {
     buyChange(num,val){
