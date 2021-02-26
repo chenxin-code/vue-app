@@ -63,7 +63,7 @@
           <div class="goods_other_text">等{{resouce.purchasedQuantity >999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</div>
         </div>
       </div>
-      <div class="buy_btn" @click="$router.push('/confirmOrder')">立即购买</div>
+      <div class="buy_btn" @click="goConfirm()">立即购买</div>
     </div>
     <div class="activity">
       <div class="activity_title">活动</div>
@@ -91,6 +91,16 @@ export default {
   created() {
     if(this.$route.params.resouce){
       this.resouce = this.$route.params.resouce;
+    }
+  },
+  methods: {
+    goConfirm(){
+      this.$router.push({
+          name: '确认订单',
+          params: {
+            resouce:this.resouce
+          }
+        });
     }
   },
   // activated 当keepalive包含的组件再次渲染的时候触发
