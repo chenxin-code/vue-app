@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <nav-top @backEvent="$router.go(-1)" title="选择收货地址"></nav-top>
-    <nav-content style="display:flex;flex-direction:column;">
+    <nav-content style="display:flex;flex-direction:column;background:#f6f6f6;">
       <div class="input-box">
        <input type="text" v-model="searchVal" placeholder="当前商品可选提货地点" style="width:100%;height:100%">
       </div>
@@ -29,13 +29,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="lay-address" v-for="(item,index) in list" :key="index" style="padding:20px 8px;border-bottom:1px solid #f6f6f6">
-          <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
-          <div class="addres_info_detail">
-            <div class="colonel_name">{{item.teamLeaderName}}</div>
-            <div class="addres">提货地点：{{item.cucName}} {{item.cudName}} {{item.cuName}}</div>
-          </div>
-        </div> -->
       </div>
     </nav-content>
   </div>
@@ -58,6 +51,9 @@ export default {
   methods: {
     changePlace(item,index){
       this.sign = index;
+      this.$store.commit("setCharseInfo",{
+        masterPlace:item
+      })
     },
     getList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
@@ -78,7 +74,6 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background:#f6f6f6;
   .input-box {
     height: 32px;
     font-size 14px

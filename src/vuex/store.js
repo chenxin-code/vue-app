@@ -387,7 +387,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     setCharseInfo:(state, info) => {
-      state.CharseInfo = info
+      state.CharseInfo = Object.assign(state.CharseInfo,info)
     },
     setWebType: (state, info) => {
       state.webtype = info
