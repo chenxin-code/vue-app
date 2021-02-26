@@ -1,16 +1,32 @@
 <template>
   <div class="body">
     <nav-top @backEvent="$router.go(-1)" title="选择收货地址"></nav-top>
-    <nav-content style="display:flex;flex-direction:column;">
+    <nav-content style="display:flex;flex-direction:column;background:#f6f6f6;">
       <div class="input-box">
-        当前商品可选提货地点
+       <input type="text" v-model="searchVal" placeholder="当前商品可选提货地点" style="width:100%;height:100%">
       </div>
       <div class="pick_up_address" style="flex:1;height:0;overflow:auto;">
-        <div class="lay-address" v-for="(item,index) in list" :key="index" style="padding:20px 8px;border-bottom:1px solid #f6f6f6">
-          <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
-          <div class="addres_info_detail">
-            <div class="colonel_name">{{item.teamLeaderName}}</div>
-            <div class="addres">提货地点：{{item.cucName}} {{item.cudName}} {{item.cuName}}</div>
+        <div class="master-info-list" v-for="(item,index) in list" :key="index" @click="changePlace(item,index)">
+          <div class="asyncSrc">
+            <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="">
+          </div>
+          <div class="asyncBox">
+            <div class="asyncBox-ul">
+              <div class="asyncBox-ul-dd">
+                <div class="mas-name">
+                  {{item.teamLeaderName}}
+                </div>
+                <div class="sign" v-if="sign == index ">
+                  默认
+                </div>
+              </div>
+              <div class="asyncBox-ul-dt">
+                <div class="asyncBox-ul-dt-place">提货地点：{{item.cucName}} {{item.cudName}} {{item.cuName}}</div>
+                <div class="asyncBox-ul-dt-icon">
+                  <img src="./components/channelSearch/arrow.png" alt="">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -24,17 +40,34 @@ export default {
   props: {},
   data() {
     return {
-      list:[]
+      list:[],
+      sign:0,
+      searchVal:""
     }
   },
   created() {
     this.getList();
   },
   methods: {
+    changePlace(item,index){
+      this.sign = index;
+      this.$store.commit("setCharseInfo",{
+        masterPlace:item
+      });
+      this.sort();
+    },
+    sort(){
+      this.list.forEach((item,index) => {
+        if(item.cupNo == this.$store.state.CharseInfo.masterPlace.cupNo ){
+          this.sign = index;
+        }
+      });
+    },
     getList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
+        this.sort();
       }).catch(e=>{
         console.log(e);
       })
@@ -64,67 +97,81 @@ export default {
     padding-left: 10px;
     color #666666
   }
-  .pick_up_address {
+  .pick_up_address{
+    padding:0 10px;
+    box-sizing:border-box;
+  }
+  .master-info-list{
+    width:100%;
+    height: 100px;
     background: #FFFFFF;
-    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
-    border-radius: 10px;
-    // padding: 2px 5px 10px 5px;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    position relative
-    &::before {
-      content: '默认';
-      padding: 1px;
-      font-size: 12px;
-      color: #b52232;
-      border: 1px solid #b52232;
-      border-radius: 3px;
-      position: absolute;
-      top: 9.5px;
-      right: 15px;
-    }
-    &::after {
-      content: '';
-      height: 7px;
-      width: 7px;
-      border-width: 1.5px 1.5px 0 0;
-      border-color: #c8c8cd;
-      border-style: solid;
-      transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-      margin-top: -5px;
-      position: absolute;
-      top: 50%;
-      right: 15px;
-    }
-    .lay-address {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      img {
-        width: 65px;
-        height: 65px;
-        margin-right: 10px;
-        border-radius: 50%;
+    box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
+    border-radius: 8px;
+    display:flex;
+    display :flex;
+    align-items :center;
+    margin-top:15px;
+    .asyncSrc{
+      width: 65px;
+      height: 65px;
+      border-radius:50%;
+      overflow :hidden;
+      flex-sharink:0;
+      margin-left:10px;
+      img{
+        width:100%;
+        height:100%;
       }
-      .addres_info_detail {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 0 70px 0 0;
-        .colonel_name {
-          font-size: 14px;
-          color: #424242;
-          line-height: 20px;
-          letter-spacing: 1px;
-          margin-bottom: 10px;
+    }
+    .asyncBox{
+     height:100%;
+     flex: 1;
+     flex-sharink:0;
+    }
+    .asyncBox-ul{
+      width:100%;
+      height:100%;
+      color:#666666;
+      font-size:14px;
+      display:flex;
+      flex-direction :column;
+      .asyncBox-ul-dd{
+        width:100%;
+        display :flex;
+        justify-content :space-between;
+        padding:0 15px;
+        box-sizing boreder-box;
+        flex:4;
+        flex-sharink:0;
+        display:flex;
+        align-items :center;
+        justify-content :space-between;
+        .mas-name{
+          width:80%;
         }
-        .addres {
-          font-size: 14px;
-          color: #424242;
-          line-height: 20px;
-          letter-spacing: 1px;
+        .sign{
+          padding: 2px ;
+          border:1px solid #B52232;
+          border-radius:2px;
+          color:#B52232;
+        }
+      }
+      .asyncBox-ul-dt{
+        flex:6;
+        flex-sharink:0;
+        width:100%;
+        display :flex;
+        justify-content :space-between;
+        padding:0 15px;
+        box-sizing boreder-box;
+      }
+      .asyncBox-ul-dt-place{
+        width:80%;
+        line-height:1.3;
+      }
+      .asyncBox-ul-dt-icon{
+        img{
+          width:8px;
         }
       }
     }

@@ -26,15 +26,12 @@
         </div>
       </div>
       <div class="line"></div>
-      <div class="addres_info">
-        <img
-          src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg"
-          alt=""
-        />
+      <div class="addres_info" v-if="placelist.length">
+        <img src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg" alt="" />
         <div class="addres_info_detail">
-          <div class="colonel_name">奥利给</div>
+          <div class="colonel_name">{{placelist[0].teamLeaderName}}</div>
           <div class="addres">
-            提货地址：北京市西城区 五福 玲珑居物业管理中心
+            提货地址：{{placelist[0].cucName}}{{placelist[0].cudName}}{{placelist[0].cuName}}
           </div>
         </div>
       </div>
@@ -101,6 +98,7 @@ export default {
   props: {},
   data() {
     return {
+      placelist:[],
       resouce:{},
       buyPrice: 1,
       total:0,
@@ -112,13 +110,26 @@ export default {
     };
   },
   created() {
-    console.log("this.$route.params",this.$route.params)
-    if(this.$route.params.resouce){
-      this.resouce = this.$route.params.resouce;
-    }
-    this.total = BigNumber(this.buyPrice).multipliedBy(this.$route.params.resouce.groupbuyBuyerPrice).toFixed(2);
+    this.getPlaceList();
+    this.resouce = this.$store.state.CharseInfo;
+    console.log(this.$store.state.CharseInfo.masterPlace)
+    this.total = BigNumber(this.buyPrice).multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice).toFixed(2);
   },
   methods: {
+    getPlaceList(){
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
+      this.$http.get(url).then(res => {
+        if(res.data.status == 0){
+          if(this.$store.state.CharseInfo.masterPlace){
+            this.placelist = [this.$store.state.CharseInfo.masterPlace]
+          }else{
+            this.placelist = res.data.data.records;
+          }
+        }
+      }).catch(e=>{
+        console.log(e);
+      })
+    },
     buyChange(num,val){
       this.total = BigNumber(val).multipliedBy(num).toFixed(2);
     }

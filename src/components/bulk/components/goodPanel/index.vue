@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     toDetails() {
+        this.$store.commit("setCharseInfo",this.resouce);
         this.$router.push({
           name: '商品详情',
           params: {
@@ -83,6 +84,7 @@ export default {
         });
     },
     goConfirm(){
+      this.$store.commit("setCharseInfo",this.resouce);
       this.$router.push({
           name: '确认订单',
           params: {
