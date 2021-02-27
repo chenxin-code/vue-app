@@ -76,9 +76,7 @@
               </p>
               <p>
                 <span @click.stop="share(item)">分享</span>
-                <span @click.stop="navToDetail(item.id)"
-                  >本团订单</span
-                >
+                <span @click.stop="navToDetail(item.id)">本团订单</span>
               </p>
             </div>
           </div>
@@ -137,9 +135,7 @@ export default {
     // this.onLoad();
     this.allList = [];
     this.$http
-      .get(
-        "/app/json/group_buying_head_info/findSelfInfo"
-      )
+      .get("/app/json/group_buying_head_info/findSelfInfo")
       .then((res) => {
         if (res.data.result == "success") {
           this.userData = res.data.data;
@@ -182,10 +178,7 @@ export default {
             : undefined,
       };
       this.$http
-        .post(
-          "/app/json/groupbuying_activity_app/list",
-          Qs.stringify(obj)
-        )
+        .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
           if (page < res.data.totalPages || page == res.data.totalPages) {
@@ -324,12 +317,27 @@ export default {
               purchaseId: JSON.stringify(this.shareItemData.id),
               chiefId: JSON.stringify(this.userData.teamLeaderNo),
               userId: JSON.stringify(this.userData.userNo),
-              activityName:JSON.stringify(this.shareItemData.groupbuyActivityName)
+              activityName: JSON.stringify(
+                this.shareItemData.groupbuyActivityName
+              ),
             },
           });
         }
       } else if (option.icon == "link") {
+        this.$http.post(
+          "http://192.168.31.173:18807/app/json/app_group_buying_share_home/generateShareLink",
+          {
+            path: "/bulk_share",
+            query: {
+              purchaseId: this.shareItemData.id,
+              chiefId: this.userData.teamLeaderNo,
+              userId: this.userData.userNo,
+              activityName: this.shareItemData.groupbuyActivityName,
+            },
+          }
+        );
       }
+      this.showShare = false;
     },
     navToDetail(id) {
       //本团订单

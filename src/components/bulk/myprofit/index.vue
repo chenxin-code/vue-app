@@ -6,7 +6,7 @@
         <dl class="profit-box-x">
           <dd class="profit-advantor-x">
             <img
-              src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=843941027,2522415533&fm=26&gp=0.jpg"
+              :src="earningsData.avtUrl"
               alt=""
             />
           </dd>

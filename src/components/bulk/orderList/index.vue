@@ -91,10 +91,10 @@
             </div>
             <div class="goods_img">
               <img
-                :src="require('../share/images/share.png')"
+                :src="element"
                 alt=""
-                v-for="item in 10"
-                :key="item"
+                v-for="element in item.orderSkuImg"
+                :key="element"
               />
             </div>
             <div class="goods_detail">
@@ -237,7 +237,23 @@ export default {
           if (page < res.data.data.pages || page == res.data.data.pages) {
             if (res.data.result == "success") {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-
+              let skuImg = [];
+              indexList.forEach((e) => {
+                skuImg.push(JSON.parse(e.productSkuInfo));
+              });
+              let img = [];
+              skuImg.forEach((i) => {
+                img.push(i[0].groupbuySkuPicurl);
+              });
+              let skuImgArr = [];
+              img.forEach((item) => {
+                skuImgArr.push(item.split(","));
+              });
+              indexList.forEach((a) => {
+                skuImgArr.forEach((b) => {
+                  a["orderSkuImg"] = b;
+                });
+              });
               switch (this.currentTab) {
                 case 0:
                   this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
@@ -311,19 +327,37 @@ export default {
         )
         .then((res) => {
           if (res.status == 200) {
+            let indexList = res.data.data.records;
+            let skuImg = [];
+            indexList.forEach((e) => {
+              skuImg.push(JSON.parse(e.productSkuInfo));
+            });
+            let img = [];
+            skuImg.forEach((i) => {
+              img.push(i[0].groupbuySkuPicurl);
+            });
+            let skuImgArr = [];
+            img.forEach((item) => {
+              skuImgArr.push(item.split(","));
+            });
+            indexList.forEach((a) => {
+              skuImgArr.forEach((b) => {
+                a["orderSkuImg"] = b;
+              });
+            });
             switch (this.currentTab) {
               case 0:
-                this.allList = res.data.data.records; //将请求的数据追加到后面
+                this.allList = indexList; //将请求的数据追加到后面
               case 1:
-                this.waitPayList = res.data.data.records;
+                this.waitPayList = indexList;
               case 2:
-                this.deliveryList = res.data.data.records;
+                this.deliveryList = indexList;
               case 3:
-                this.distributionList = res.data.data.records;
+                this.distributionList = indexList;
               case 4:
-                this.pickUpList = res.data.data.records;
+                this.pickUpList = indexList;
               case 5:
-                this.finishedList = res.data.data.records;
+                this.finishedList = indexList;
             }
 
             this.totalPage = res.data.pages; //将总页数赋值上去

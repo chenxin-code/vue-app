@@ -78,9 +78,8 @@
 </template>
 
 <script>
-import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
+import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
 import util from "@/utils/util.js";
-import { mapGetters } from "vuex";
 export default {
   name: "confirmOrder",
   props: {},
@@ -137,7 +136,7 @@ export default {
           let skuInfoList = [];
           this.checkList.forEach((e) => {
             skuInfoList.push({
-              skuId: 12001132,
+              skuId: e.id,
               skuName: e.skuName,
               groupPrice: e.groupPrice,
               buyCount: e.count,
@@ -148,7 +147,7 @@ export default {
               activityId: this.purchaseId,
               activityName: this.activityName,
               headId: this.chiefId,
-              deliveryType: 2,
+              deliveryType: 2,//配送1，自提2
               receiptAddress: "时代中国",
               receiptName: this.userName,
               receiptTel: this.userPhone,
@@ -158,7 +157,20 @@ export default {
             })
             .then((res) => {
               if (res.data.result == "success") {
-                // this.$router.push("/paySuccess");
+                this.$router.push({
+                  path: "/mall2/checkstand",
+                  query: {
+                    isBulk: JSON.stringify(true),
+                    bulkData: JSON.stringify({
+                      orderNo: res.data.data.tradeNo,
+                      orderType: res.data.data.orderType,
+                      occurOuCode: res.data.data.occurOuCode,
+                      orderId: res.data.data.orderId,
+                      shoppingOrderId: res.data.data.shoppingOrderId,
+                      payAmount: res.data.data.payAmount,
+                    }),
+                  },
+                });
               }
             });
         } else {

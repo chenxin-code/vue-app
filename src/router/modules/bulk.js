@@ -26,7 +26,7 @@ export default [{
     component: () => import('@/components/bulk/share/index.vue'),
     meta: {
       title: '微信团购分享',
-      keepAlive: true
+      keepAlive: false
     }
   },
   {

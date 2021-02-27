@@ -78,7 +78,7 @@
         :key="index"
       >
         <div class="item_detail">
-          <img :src="item.skuPicUrl" alt="" class="item_img" />
+          <img :src="item.skuImg[0]" alt="" class="item_img" />
           <div class="item_detail_deatil">
             <div class="item_name">产品名称：{{ item.skuName }}</div>
             <div class="sell_price">销售价格：￥{{ item.crossedPrice }}</div>
@@ -308,6 +308,7 @@ export default {
           this.goodsList.forEach((item) => {
             item["count"] = 0;
             item["isCheck"] = true;
+            item["skuImg"] = item.skuPicUrl.split(",");
           });
           this.otherBuyList = this.shareData.currentActOrderList;
           this.otherBuyList.forEach((e) => {
@@ -427,6 +428,11 @@ export default {
         })
         .then((res) => {
           this.goodsList = res.data.data;
+          this.goodsList.forEach((item) => {
+            item["count"] = 0;
+            item["isCheck"] = true;
+            item["skuImg"] = item.skuPicUrl.split(",");
+          });
         });
     },
     confirmOrder() {
@@ -447,7 +453,7 @@ export default {
         });
       }
     },
-    ...mapMutations(["setBulkTotalPrice","setBulkCheckList"]),
+    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"]),
   },
 };
 </script>
