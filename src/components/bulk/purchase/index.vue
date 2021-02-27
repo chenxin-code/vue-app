@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      communityId: '2331136913433427994',
+      communityId: '2253018072568823811',
       categoryId:'',
       page: 0,
       pageSize: 10,
@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     navToMsg(data){
+      this.saleDataList = [];
       this.categoryId = data.id;
       this.getList(1);
     },
