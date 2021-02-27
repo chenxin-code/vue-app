@@ -13,40 +13,66 @@
         </div>
       </div>
       <div class="recommond-list-v">
-        <recommondPanel
-          v-for="(item, index) in 8"
+        <goodPanel
+          v-for="(item, index) in saleDataList"
           :key="index"
           class="lux"
-        ></recommondPanel>
+          :resouce="item"
+        >
+        </goodPanel>
       </div>
     </div>
   </div>
 </template>
 <script>
+import goodPanel from "@/components/bulk/components/goodPanel";
 import recommondPanel from "@/components/bulk/components/recommondPanel";
 import navbar from "@/components/bulk/components/navbar";
 export default {
   name: "paySuccess",
   components: {
     recommondPanel,
+    goodPanel,
     navbar,
+  },
+  data() {
+    return {
+      saleDataList: [],
+    };
   },
   created() {
     this.recommend();
   },
-  methods:{
-    recommend(){
-      let url = `/app/json/group_buying_home/findGroupBuyingBySearchHotWords`;
-      this.$http.post(url,{
-       
-      }).then(res => {
-        console.log("response",res.data);
-      }).catch(e=>{
-        console.log(e);
-      })
+  methods: {
+    recommend() {
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=&pageIndex=1&pageSize=10`;
+      this.$http
+        .get(url)
+        .then((res) => {
+          if (res.data.status == 0) {
+            res.data.data.map((item, index) => {
+              item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
+              if (item.avatarList.length > 3)
+                item.avatarList = item.avatarList.slice(0, 3);
+            });
+            this.saleDataList = res.data.data;
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      // let url = `/app/json/group_buying_home/findGroupBuyingBySearchHotWords`;
+      // this.$http.post(url,{
+      //   pageNum:1,
+      //  pageSize:10,
+      //  sortBy:'groupbuyPurchaseNumber_DESC'
+      // }).then(res => {
+      //   console.log("response",res.data);
+      // }).catch(e=>{
+      //   console.log(e);
+      // })
     },
-    
-  }
+  },
 };
 </script>
 <style scoped>
