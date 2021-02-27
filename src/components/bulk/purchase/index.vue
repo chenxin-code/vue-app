@@ -105,6 +105,9 @@ export default {
         .then((res) => {
           this.loading = false;
           this.isLoading = false;
+          if(!res.data.data.length){
+            this.finished = true;
+          }
           res.data.data.map((item, index) => {
             item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
             if (item.avatarList.length > 3)
@@ -115,7 +118,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      // this.finished = true;
+      
     },
   },
 };
