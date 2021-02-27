@@ -31,6 +31,22 @@ export default {
     recommondPanel,
     navbar,
   },
+  created() {
+    this.recommend();
+  },
+  methods:{
+    recommend(){
+      let url = `/app/json/group_buying_home/findGroupBuyingBySearchHotWords`;
+      this.$http.post(url,{
+       
+      }).then(res => {
+        console.log("response",res.data);
+      }).catch(e=>{
+        console.log(e);
+      })
+    },
+    
+  }
 };
 </script>
 <style scoped>
