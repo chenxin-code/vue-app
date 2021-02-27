@@ -110,6 +110,7 @@ export default {
   },
   methods: {
     confirmOrder(){
+      console.log("this.$store.state.CharseInfo",this.$store.state.CharseInfo);
       let url = `/app/json/group_buying_order/createGroupBuyingOrder`;
       this.$http.post(url,{
         activityNo:this.resouce.activityId,
@@ -127,7 +128,6 @@ export default {
       }).catch(e=>{
         console.log(e);
       })
-      
     },
     getPlaceList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
