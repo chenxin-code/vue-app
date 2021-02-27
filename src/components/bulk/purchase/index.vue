@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      communityId: '2253018072568823811',
+      communityId: '2331136913433427994',
       categoryId:'',
       page: 0,
       pageSize: 10,
