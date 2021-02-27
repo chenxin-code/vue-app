@@ -4,8 +4,8 @@
     <div class="user_info">
       <div class="info">
         <span>提货人：</span>
-        <input placeholder="姓名" />
-        <input placeholder="请输入手机号" />
+        <input placeholder="姓名" v-model="consigneeName"/>
+        <input placeholder="请输入手机号" v-model="consigneePhoneNumber"/>
       </div>
       <div class="pick_up_way">
         <span> 提货方式：</span>
@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="stepper">
-          <van-stepper v-model.number="buyPrice" @change="buyChange($event, resouce.groupbuyBuyerPrice)"/>
+          <van-stepper v-model.number="buyNumber" @change="buyChange($event, resouce.groupbuyBuyerPrice)"/>
         </div>
         <div class="line"></div>
       </div>
@@ -68,10 +68,11 @@
     </div>
     <div class="remark">
       <span>订单备注：</span>
-      <input />
+      <input v-model="remark"/>
     </div>
     <div class="pay_now">
       <div class="pay_price">¥{{total}}</div>
+      <div class="pay" @click="confirmOrder">确认订单</div>
       <div class="pay" @click="$router.push('/paySuccess')">立即支付</div>
     </div>
   </div>
@@ -89,7 +90,10 @@ export default {
     return {
       placelist:[],
       resouce:{},
-      buyPrice: 1,
+      buyNumber: 1,
+      remark:'',
+      consigneeName:'',
+      consigneePhoneNumber:'',
       total:0,
       takeWays: [
         {name: '自提',value: 1},
@@ -102,11 +106,31 @@ export default {
     this.getPlaceList();
     this.resouce = this.$store.state.CharseInfo;
     console.log(this.$store.state.CharseInfo.masterPlace)
-    this.total = BigNumber(this.buyPrice).multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice).toFixed(2);
+    this.total = BigNumber(this.buyNumber).multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice).toFixed(2);
   },
   methods: {
+    confirmOrder(){
+      let url = `/app/json/group_buying_order/createGroupBuyingOrder`;
+      this.$http.post(url,{
+        activityNo:this.resouce.activityId,
+        teamLeaderNo:this.resouce.masterPlace.teamLeaderNo,
+        deliveryMode:0,//配送方式 0 -> 自提 1 -> 送货上门 暂不支持送货上门
+        consigneeName:this.consigneeName,
+        consigneePhoneNumber:this.consigneePhoneNumber,
+        preProductSkuInfoList:[{
+          skuId:this.resouce.skuid,
+          buyNumber:this.buyNumber,
+        }],
+        remark:this.remark
+      }).then(res => {
+        console.log("response",res.data);
+      }).catch(e=>{
+        console.log(e);
+      })
+      
+    },
     getPlaceList(){
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0){
           if(this.$store.state.CharseInfo.masterPlace){

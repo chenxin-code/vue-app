@@ -64,7 +64,7 @@ export default {
       });
     },
     getList(){
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
         this.sort();
