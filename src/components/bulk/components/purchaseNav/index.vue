@@ -34,6 +34,7 @@ export default {
       },
       enterNav(item,index){
           this.navIndex = index;
+          this.$emit("navToMsg",item);
       }
   },
 }
