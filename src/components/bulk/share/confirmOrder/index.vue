@@ -22,12 +22,10 @@
         <div class="line"></div>
       </div>
       <div class="addres_info">
-        <img :src="require('../images/share.png')" alt="" />
+        <img :src="shareData.headAvtUrl" alt="" />
         <div class="addres_info_detail">
-          <div class="colonel_name">团长名称：奥利给</div>
-          <div class="addres">
-            提货地址：北京市西城区 五福 玲珑居物业管理中心
-          </div>
+          <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
+          <div class="addres">提货地址：{{ shareData.place }}</div>
         </div>
       </div>
     </div>
@@ -38,13 +36,13 @@
       </div>
       <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
         <div class="goods_info_item">
-          <img :src="require('../images/share.png')" alt="" />
+          <img :src="item.skuPicUrl" alt="" />
           <div class="goods_info_detail">
-            <div class="goods_name">新鲜的大西瓜500kg/份</div>
-            <div class="sell_price">销售价格：¥10.00</div>
+            <div class="goods_name">{{ item.skuName }}</div>
+            <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>
             <div class="count_price">
-              <div class="bulk_price">团购价格：¥5.00</div>
-              <div class="count">共一件</div>
+              <div class="bulk_price">团购价格：¥{{ item.groupPrice }}</div>
+              <div class="count">共{{ item.count }}件</div>
             </div>
           </div>
         </div>
@@ -58,8 +56,8 @@
         @click="showMore"
       />
       <div class="goods_detail" v-else>
-        <div class="sell_price_statistics">¥10.00</div>
-        <div class="bulk_price_statistics">团购价格：¥5.00</div>
+        <div class="sell_price_statistics">¥{{ crossedPrice }}</div>
+        <div class="bulk_price_statistics">团购价格：¥{{ totalPrice }}</div>
       </div>
     </div>
     <div class="remark">
@@ -73,14 +71,14 @@
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
     <div class="pay_now">
-      <div class="pay_price">¥10.00</div>
+      <div class="pay_price">¥{{ totalPrice }}</div>
       <div class="pay" @click="pay">立即支付</div>
     </div>
   </div>
 </template>
 
 <script>
-import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
+import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
 import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
@@ -89,27 +87,37 @@ export default {
     return {
       goodsList: [],
       isShowMore: true,
-      arr: [1, 2, 4],
       textareaHeight: "20px",
       textareaValue: "",
-      userPhone: "",
-      userName: "",
+      userPhone: "13611111111",
+      userName: "hj",
+      shareData: {},
+      purchaseId: "",
+      chiefId: "",
+      userId: "",
+      activityName: "",
     };
   },
   created() {
-    if (this.arr.length > 3) {
-      this.goodsList.push(this.arr[0]);
-      this.goodsList.push(this.arr[1]);
-      this.goodsList.push(this.arr[2]);
+    this.shareData = JSON.parse(this.$route.query.shareData);
+    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    this.chiefId = JSON.parse(this.$route.query.chiefId);
+    this.userId = JSON.parse(this.$route.query.userId);
+    this.activityName = JSON.parse(this.$route.query.activityName);
+    if (this.checkList.length > 3) {
+      this.goodsList.push(this.checkList[0]);
+      this.goodsList.push(this.checkList[1]);
+      this.goodsList.push(this.checkList[2]);
       this.isShowMore = true;
     } else {
-      this.goodsList = this.arr;
+      this.goodsList = this.checkList;
       this.isShowMore = false;
     }
+    console.log(this.checkList);
   },
   methods: {
     showMore() {
-      this.goodsList = this.arr;
+      this.goodsList = this.checkList;
       this.isShowMore = false;
     },
     //实现文本域自适应大小
@@ -125,7 +133,46 @@ export default {
     pay() {
       if (this.userName !== "") {
         if (util.checkMobile(this.userPhone)) {
-          this.$router.push("/paySuccess");
+          let skuInfoList = [];
+          this.checkList.forEach((e) => {
+            skuInfoList.push({
+              skuId: e.id,
+              skuName: e.skuName,
+              groupPrice: e.groupPrice,
+              buyCount: e.count,
+            });
+          });
+          this.$http
+            .post("/app/json/app_community_group_order/makeOrder", {
+              activityId: this.purchaseId,
+              activityName: this.activityName,
+              headId: this.chiefId,
+              deliveryType: 2,//配送1，自提2
+              receiptAddress: "时代中国",
+              receiptName: this.userName,
+              receiptTel: this.userPhone,
+              orderAmount: this.totalPrice,
+              skuInfoList,
+              orderRemark: this.textareaValue,
+            })
+            .then((res) => {
+              if (res.data.result == "success") {
+                this.$router.push({
+                  path: "/mall2/checkstand",
+                  query: {
+                    isBulk: JSON.stringify(true),
+                    bulkData: JSON.stringify({
+                      orderNo: res.data.data.tradeNo,
+                      orderType: res.data.data.orderType,
+                      occurOuCode: res.data.data.occurOuCode,
+                      orderId: res.data.data.orderId,
+                      shoppingOrderId: res.data.data.shoppingOrderId,
+                      payAmount: res.data.data.payAmount,
+                    }),
+                  },
+                });
+              }
+            });
         } else {
           this.$toast("请输入正确的手机号码");
         }
@@ -142,6 +189,26 @@ export default {
       } else {
         this.textareaValue = String(this.textareaValue).slice(0, 150);
       }
+    },
+  },
+  computed: {
+    crossedPrice() {
+      let price = this.checkList.reduce((pre, item) => {
+        return item.count * item.groupPrice + pre;
+      }, 0);
+      return this.$util.toDecimal2(price);
+    },
+    totalPrice: {
+      get() {
+        return this.$store.state.bulkTotalPrice;
+      },
+      set() {},
+    },
+    checkList: {
+      get() {
+        return this.$store.state.bulkCheckList;
+      },
+      set() {},
     },
   },
 };

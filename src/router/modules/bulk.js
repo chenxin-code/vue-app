@@ -35,7 +35,7 @@ export default [{
     component: () => import('@/components/bulk/share/confirmOrder/index.vue'),
     meta: {
       title: '分享确认订单',
-      keepAlive: false
+      keepAlive: true
     }
   },
 
@@ -77,6 +77,15 @@ export default [{
     }
   },
   {
+    path: '/downLoad',
+    name: '下载',
+    component: () => import('@/components/bulk/downLoad/index.vue'),
+    meta: {
+      title: '下载',
+      keepAlive: false
+    }
+  },
+  {
     path: '/bulk_goods_deatil',
     name: '商品详情',
     component: () => import('@/components/bulk/goods_detail/index.vue'),
@@ -104,6 +113,16 @@ export default [{
     }
   },
   {
+    path: '/groupOrder',
+    name: '本团订单',
+    component: () => import('@/components/bulk/activity/groupOrder.vue'),
+    meta: {
+      title: '本团订单',
+      keepAlive: false
+    }
+  },
+
+  {
     path: '/bulk',
     name: '首页',
     component: () => import('@/components/bulk/index.vue'),
@@ -119,7 +138,7 @@ export default [{
           import('@/components/bulk/activity/index.vue'),
         meta: {
           title: '活动首页',
-          keepAlive: false
+          keepAlive: true
         }
 
       }, {
@@ -137,7 +156,7 @@ export default [{
         component: () => import('@/components/bulk/orderList/index.vue'),
         meta: {
           title: '订单列表',
-          keepAlive: false
+          keepAlive: true
         }
       },
       {

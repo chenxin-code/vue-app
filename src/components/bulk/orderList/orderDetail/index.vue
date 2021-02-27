@@ -7,49 +7,56 @@
         <img :src="require('../../share/images/share.png')" alt="" />
         <div class="info">
           <div class="user">
-            <div>张三</div>
-            <div>188****8979</div>
+            <div>{{ detailData.receiveTypeStr }}</div>
+            <div>{{ detailData.receiptTel }}</div>
           </div>
           <div class="address">
-            浙江省杭州市西湖街道西湖区西斗门2155号2幢海绵 阁123街道办事处
+            {{ detailData.receiptAddress }}
           </div>
         </div>
-        <div :class="type == 1 ? 'pick_up' : 'delivery'" class="pick_up_type">
-          {{ type == 1 ? "自提" : "配送上门" }}
+        <div
+          :class="detailData.receiveType == 0 ? 'pick_up' : 'delivery'"
+          class="pick_up_type"
+        >
+          {{ detailData.receiveType == 0 ? "自提" : "配送上门" }}
         </div>
       </div>
       <div class="note">
         <div class="note_title">订单备注：</div>
         <div class="note_text">
-          订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注订单备注
+          {{ detailData.orderRemark }}
         </div>
       </div>
       <div class="goods_info">
         <div class="goods_info_title">商品信息</div>
-        <div class="goods_item" v-for="(item, index) in 4" :key="index">
+        <div
+          class="goods_item"
+          v-for="(item, index) in detailData.groupbuySkuInfoList"
+          :key="index"
+        >
           <img :src="require('../../share/images/share.png')" alt="" />
           <div class="goods_detail">
-            <div class="goods_name">新鲜的大西瓜500kg/份</div>
+            <div class="goods_name">{{ item.skuName }}</div>
             <div class="goods_price_count">
-              <div>团购价格：¥5.00</div>
-              <div>X3</div>
+              <div>团购价格：¥{{ item.groupPrice }}</div>
+              <div>X{{ item.purchasedItem }}</div>
             </div>
           </div>
         </div>
-        <div class="price">合计：¥5.00</div>
+        <div class="price">合计：¥{{ detailData.orderAmount }}</div>
       </div>
       <div class="order_info">
         <div class="order_detail">
           <div class="order_title">订单编号</div>
-          <div class="order_value">10000000000000</div>
+          <div class="order_value">{{ detailData.payOrderNo }}</div>
         </div>
         <div class="order_detail">
           <div class="order_title">下单时间</div>
-          <div class="order_value">2020/10/10 20:00:00</div>
+          <div class="order_value">{{ detailData.makeOrderTime }}</div>
         </div>
         <div class="order_detail">
           <div class="order_title">付款时间</div>
-          <div class="order_value">2020/10/10 20:00:00</div>
+          <div class="order_value">{{ detailData.payTime }}</div>
         </div>
       </div>
       <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
@@ -69,10 +76,20 @@ export default {
   props: {},
   data() {
     return {
-      type: 2,
+      detailData: {},
     };
   },
-  created() {},
+  created() {
+    this.$http
+      .post("http://192.168.31.173:18807/app/json/group_buying_order/getOrderInfoListByItemId", {
+        orderItemId: JSON.parse(this.$route.query.id),
+        // orderItemId: 1,
+      })
+      .then((res) => {
+        console.log(res);
+        this.detailData = res.data.data;
+      });
+  },
 };
 </script>
 
@@ -95,6 +112,8 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   padding: 10px 10px 38.5px;
   letter-spacing: 1px;
+  width: 100%;
+  height: 100%;
 
   .user_info {
     width: 100%;

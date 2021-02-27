@@ -7,59 +7,88 @@
     ></nav-top>
     <nav-content>
       <div class="listBox">
-        <div class="listColumn">
+        <div
+          class="listColumn"
+          v-for="(item, index) in skuList"
+          :key="index"
+        >
           <div class="leftBox">
-            <img src="static/image/microShop/lvyou.png" alt="" />
+            <img :src="item.skuPictureUrl" alt="" />
           </div>
           <div class="rightBox">
-            <p class="title">服装店展示架复古个性吊架悬挂 衣架铁艺</p>
-            <p class="price">￥2999.00</p>
-            <p class="salePrice">销售价：￥9999.99</p>
+            <p class="title">{{ item.skuName }}</p>
+            <p class="price">￥{{ item.headPrice }}</p>
+            <p class="salePrice">销售价：￥{{ item.sellPrice }}</p>
             <p class="quantity">
-              <span>剩余数量：1000</span>
-              <span>开团最低销量：100</span>
+              <span>剩余数量：{{ item.surplusNumber }}</span>
+              <span>开团最低销量：{{ item.minGroupNumber }}</span>
             </p>
           </div>
         </div>
-        <div class="listColumn">
-          <div class="leftBox">
-            <img src="static/image/microShop/lvyou.png" alt="" />
-          </div>
-          <div class="rightBox">
-            <p class="title">服装店展示架复古个性吊架悬挂 衣架铁艺</p>
-            <p class="price">￥2999.00</p>
-            <p class="salePrice">销售价：￥9999.99</p>
-            <p class="quantity">
-              <span>剩余数量：1000</span>
-              <span>开团最低销量：100</span>
-            </p>
-          </div>
+        <div class="show_more" v-show="isShowMore" @click="showMore">
+          查看更多
         </div>
       </div>
       <van-collapse v-model="activeNames" class="collapse">
         <van-collapse-item title="拼团规则">
           <div class="ruleBox">
-            <div class="ruleNum">
-              <p><span>活动参与总人数</span>100</p>
-              <p><span>活销售总金额</span>100</p>
+            <div class="rule_item">
+              <div class="rule_title">活动时间</div>
+              <div class="rule_time">
+                <div>{{ groupData.startTime }}</div>
+                <div>至</div>
+                <div>{{ groupData.endTime }}</div>
+              </div>
             </div>
-            <div class="ruleNum">
-              <p><span>活动总单数</span>100</p>
-              <p><span>本团总单数</span>100</p>
+            <div class="rule_item">
+              <div class="rule_title">活动最低成团限制</div>
+              <div class="rule_detail">
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低参团人数</div>
+                    <div>{{ groupData.minTotalPeopleNumber }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低订单数量</div>
+                    <div>{{ groupData.minTotalOrderNumber }}</div>
+                  </div>
+                </div>
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低销售金额</div>
+                    <div>{{ groupData.minTotalSaleAmount }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低商品销售数量</div>
+                    <div>{{ groupData.minTotalSkuNumber }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="ruleNum">
-              <p><span>本团总销售金额</span>100</p>
-              <p><span>本团参与总人数</span>100</p>
-            </div>
-            <div class="ruleNum">
-              <p><span>开团最低销量</span>100</p>
-              <p><span>开团最低销售</span>1000</p>
-            </div>
-            <div class="ruleNum ruleTime">
-              <p><span>活动开始时间</span>2021/10/10 20:00:00</p>
-            </div>
-            <div class="ruleNum">
-              <p><span>活动结束时间</span>2021/10/11 20:00:00</p>
+            <div class="rule_item">
+              <div class="rule_title">本团最低成团限制</div>
+              <div class="rule_detail">
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低参团人数</div>
+                    <div>{{ groupData.allMinTotalPeopleNumber }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低订单数量</div>
+                    <div>{{ groupData.allMinTotalOrderNumber }}</div>
+                  </div>
+                </div>
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低销售金额</div>
+                    <div>{{ groupData.allMinTotalSaleAmount }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低商品销售数量</div>
+                    <div>{{ groupData.allMinTotalSkuNumber }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </van-collapse-item>
@@ -75,11 +104,46 @@ export default {
   data() {
     return {
       activeNames: ["1"],
+      activityNo: "",
+      goodsList: [],
+      skuList: [],
+      isShowMore: false,
+      groupData: {},
     };
   },
+  created() {
+    this.activityNo = JSON.parse(this.$route.query.activityNo);
+    this.$http
+      .post("/app/json/groupbuying_activity_app/getById", {
+        id: this.activityNo,
+      })
+      .then((res) => {
+        if (res.data.result == "success") {
+          this.groupData = res.data.data;
+          this.goodsList = this.groupData.skuInfos;
+          if (this.goodsList.length > 3) {
+            this.isShowMore = true;
+            for (let index = 0; index < 3; index++) {
+              this.skuList.push(this.goodsList[index]);
+            }
+          } else {
+            this.skuList = this.goodsList;
+          }
+        }
+      });
+  },
   mounted() {},
-  methods: {},
-  created() {},
+  methods: {
+    showMore() {
+      this.isShowMore = false;
+      this.skuList = this.goodsList;
+    },
+    navToDeatil(item) {
+      this.$router.push({
+        path: "/bulk_goods_deatil",
+      });
+    },
+  },
 };
 </script>
 
@@ -90,18 +154,33 @@ export default {
 .body {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   background-color: #f6f6f6 !important;
   background-image: url('./images/bg.png');
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
+  overflow-y: scroll;
+
+  .nav-content {
+    overflow-y: scroll;
+    padding-bottom: 79px;
+  }
 
   .listBox {
     background-color: #fff;
     margin: 15px 10px;
     padding: 10px;
     border-radius: 15px 15px 0 0;
+
+    .show_more {
+      width: 100%;
+      height: 29px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999999;
+    }
   }
 
   .listColumn {
@@ -182,26 +261,65 @@ export default {
     overflow: hidden;
   }
 
+  /deep/.van-collapse-item__content {
+    padding-top: 0px;
+  }
+
   .ruleBox {
-    margin: 15px 5px;
+    margin: 0px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: #666666;
 
-    .ruleNum {
+    .rule_item {
       display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-bottom: 10px;
 
-      p {
-        flex: 1;
-        margin: 0 5px;
+      .rule_title {
+        font-size: 14px;
+        font-weight: 700;
+      }
 
-        span {
-          flex: 1;
-          width: 105px;
-          display: inline-block;
+      .rule_time {
+        font-size: 12px;
+        font-weight: 600px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 8px;
+
+        div {
+          margin-left: 4px;
         }
       }
-    }
 
-    .ruleTime {
-      margin-top: 20px;
+      .rule_detail {
+        display: flex;
+        justify-content: space-between;
+
+        .rule_detail_item {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+
+          .rule_detail_item_box {
+            min-width: 150px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 8px;
+
+            div {
+              margin-right: 5px;
+              font-size: 12px;
+              font-weight: 600px;
+            }
+          }
+        }
+      }
     }
   }
 

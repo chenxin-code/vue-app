@@ -1,23 +1,20 @@
 <template>
   <!-- // created by hjc 商品详情 -->
+  <!-- https://blog.csdn.net/u014678583/article/details/103928102?utm_medium=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&dist_request_id=a48d2bc9-56c3-4cdf-96c9-e903fde58a76&depth_1-utm_source=distribute.pc_feed_404.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecas -->
   <div class="goods_detail">
     <div class="goods_swiper">
-      <van-sticky>
-        <van-icon
-          name="arrow-left"
-          class="arrow_left"
-          color="#000000"
-          size="0.471467rem"
-          @click="$router.go(-1)"
-        />
-      </van-sticky>
+      <!-- <van-sticky> -->
+      <van-icon
+        name="arrow-left"
+        class="arrow_left"
+        color="#000000"
+        size="0.471467rem"
+        @click="$router.go(-1)"
+      />
+      <!-- </van-sticky> -->
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
-        <van-swipe-item v-for="item in 4" :key="item">
-          <img
-            class="goods_img"
-            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
-            alt=""
-          />
+        <van-swipe-item v-for="item in 1" :key="item">
+          <img class="goods_img" :src="resouce.groupbuySkuPicurl" alt="" />
         </van-swipe-item>
       </van-swipe>
       <div class="goods_info_box">
@@ -26,79 +23,114 @@
             <div class="goods_price_detail">
               <div class="goods_price_title">团购价格：</div>
               <div class="unit">￥</div>
-              <div class="price">7865</div>
-              <div class="line_price">¥10.00</div>
+              <div class="price">{{ resouce.groupbuyBuyerPrice }}</div>
+              <div class="line_price">¥{{ resouce.groupbuyLinePrice }}</div>
             </div>
             <div class="goods_count">
-              <div>已抢100件</div>
-              <div>剩余999件</div>
+              <div>已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
+              <div>剩余{{ resouce.groupbuyStockNumber }}件</div>
             </div>
           </div>
           <div class="goods_time">
-            <div class="goods_time_title">拼团剩余时间</div>
-            <van-count-down :time="time">
-              <template #default="timeData">
-                <span class="block">{{ timeData.hours }}</span>
-                <span class="colon">:</span>
-                <span class="block">{{ timeData.minutes }}</span>
-                <span class="colon">:</span>
-                <span class="block">{{ timeData.seconds }}</span>
-              </template>
-            </van-count-down>
+            <div class="goods_time_title">{{ getTimeTitle() }}</div>
+            <Countdown :endTime="getCountdownTime()" color="blue"></Countdown>
           </div>
         </div>
       </div>
     </div>
     <div class="goods_detail_info">
       <div class="goods_item_detail">
-        <div class="goods_name">冰糖麒麟大西瓜 ·1000g/箱</div>
+        <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
         <div class="goods_other">
           <img
-            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
+            :src="item"
             alt=""
-            v-for="item in 3"
+            v-for="item in resouce.avatarList"
             :key="item"
           />
-          <div class="goods_other_text">等30人购买了此商品</div>
+          <div class="goods_other_text">
+            等{{
+              resouce.purchasedQuantity > 999
+                ? "999+"
+                : resouce.purchasedQuantity
+            }}人购买了此商品
+          </div>
         </div>
       </div>
-      <div class="buy_btn" @click="$router.push('/confirmOrder')">立即购买</div>
+      <div class="buy_btn" @click="goConfirm()">立即购买</div>
     </div>
     <div class="activity">
       <div class="activity_title">活动</div>
       <div class="activity_detail">
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
-        <div>春节也送货</div>
+        {{ resouce.groupbuyRuleDescribe }}
       </div>
     </div>
     <div class="goods_item_detail_info">
       <div class="goods_item_detail_info_title">商品详情</div>
-      <img
-        src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F06%2F20200606192747_zmbbn.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615305439&t=6a054dde42a9b2bb717f30ee09686365"
-        alt=""
-        v-for="item in 3"
-        :key="item"
-      />
+      {{ resouce.groupbuySkuDetail }}
     </div>
   </div>
 </template>
 
 <script>
+import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "orderList",
   props: {},
+  components:{
+    Countdown
+  },
   data() {
     return {
-      time: 2131231,
+      time: 1614071248931,
+      resouce: {},
     };
   },
-  created() {},
+  created() {
+    this.resouce = this.$store.state.CharseInfo;
+  },
+  methods: {
+    getTimeTitle: function () {
+      let nowT = this.$store.state.severTime.currentTime;
+      let startT = this.$util.getDateFromString(
+        this.resouce.groupbuyEndDatetime
+      );
+      if (nowT < startT) {
+        return "距离开始还剩:";
+      }
+      let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
+      if (nowT < endT) {
+        return "距离结束还剩:";
+      }
+      return "活动已结束";
+    },
+    getCountdownTime: function () {
+      let nowT = this.$store.state.severTime.currentTime;
+      let startT = this.$util.getDateFromString(
+        this.resouce.groupbuyEndDatetime
+      );
+      if (nowT < startT) {
+        return startT;
+      }
+      let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
+      if (nowT < endT) {
+        return endT;
+      }
+      return endT;
+    },
+    goConfirm() {
+      this.$router.push({
+        name: "确认订单",
+        params: {
+          resouce: this.resouce,
+        },
+      });
+    },
+  },
+  // activated 当keepalive包含的组件再次渲染的时候触发
+  // deactived 当keepalive包含的组件销毁的时候触发
+  activated() {},
+  deactivated() {},
 };
 </script>
 
@@ -155,7 +187,7 @@ export default {
       background-size: 100% 70px;
       display: flex;
       justify-content: space-between;
-      padding: 8px 23.5px 8px 20.5px;
+      padding: 8px 10px 8px 20.5px;
       background-color: #fff;
 
       .goods_price {
@@ -219,6 +251,7 @@ export default {
           color: #FFFFFF;
           line-height: 16.5px;
           margin-bottom: 5px;
+          text-align :center;
         }
 
         .block {
@@ -319,6 +352,7 @@ export default {
       display: flex;
       justify-content: flex-start;
       flex-wrap: wrap;
+      align-items: center;
 
       div {
         font-size: 13px;

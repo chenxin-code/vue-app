@@ -1,61 +1,117 @@
 <template>
-  <div class="component-goodPanel" @click="$router.push('/bulk_goods_deatil')">
+  <div
+    class="component-goodPanel"
+    @click="toDetails"
+  >
     <div class="goodPanel-remain">
-      <div class="remain_title">拼团结束时间剩余</div>
-      <div class="remain-times">
-        <van-count-down :time="time">
-          <template #default="timeData">
-            <span class="block">{{ timeData.hours }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.minutes }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.seconds }}</span>
-          </template>
-        </van-count-down>
+      <div class="remain_title">{{getTimeTitle()}}</div>
+      <div class="remain-times" v-if="getTimeTitle() !== '活动已结束'">
+         <Countdown :endTime="getCountdownTime()"></Countdown>
       </div>
     </div>
     <dl class="good-ms">
       <dd>
         <img
-          src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
+          :src="resouce.groupbuySkuPicurl"
           alt=""
         />
       </dd>
       <dt>
-        <div class="good-name">新鲜的大西瓜</div>
+        <div class="good-name">{{ resouce.groupbuySkuName }}</div>
         <div class="price-x">
           <div class="sale-price line-through">
-            <span>销售价格&nbsp;:</span><em>&nbsp;&nbsp;¥5.00</em>
+            <span>销售价格&nbsp;:</span
+            ><em>&nbsp;&nbsp;¥{{ resouce.groupbuyLinePrice }}</em>
           </div>
           <div class="purchase-price">
-            <span>团购价格&nbsp;:</span><em>&nbsp;&nbsp;¥5.00</em>
+            <span>团购价格&nbsp;:</span
+            ><em>&nbsp;&nbsp;¥{{ resouce.groupbuyBuyerPrice }}</em>
           </div>
         </div>
       </dt>
     </dl>
-    <div class="remain-num-x">已抢2000件/剩余50件</div>
+    <div class="remain-num-x">
+      已抢{{ resouce.groupbuyPurchaseNumber }}件/剩余{{
+        resouce.groupbuyStockNumber
+      }}件
+    </div>
     <div class="use-buy-x">
       <div class="advantor-x">
         <img
-          v-for="(item, index) in 3"
+          v-for="(item, index) in resouce.avatarList"
           :key="index"
-          src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg"
+          :src="item"
           alt=""
         />
       </div>
-      <span>等购买了此商品</span>
+      <span>等{{resouce.purchasedQuantity >999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
     </div>
-    <button class="buy-button-x" @click.stop="$router.push('/confirmOrder')">立即购买</button>
+    <button class="buy-button-x" @click.stop="goConfirm()">
+      立即购买
+    </button>
     <div class="line"></div>
   </div>
 </template>
 <script>
+import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "goodPanel",
+  components:{
+    Countdown
+  },
+  props: {
+    resouce: {
+      type: Object,
+    },
+  },
   data() {
     return {
-      time: 2123123,
+      
     };
+  },
+  methods: {
+    getTimeTitle: function () {
+        let nowT = this.$store.state.severTime.currentTime;
+        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < startT) {
+          return '距离开始还剩:'
+        }
+        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < endT) {
+          return '距离结束还剩:'
+        }
+        return '活动已结束'
+    },
+     getCountdownTime: function () {
+        let nowT = this.$store.state.severTime.currentTime;
+        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < startT) {
+          return startT
+        }
+        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < endT) {
+          return endT
+        }
+        return endT
+      },
+    toDetails() {
+        this.$store.commit("setCharseInfo",this.resouce);
+        this.$router.push({
+          name: '商品详情',
+          params: {
+            resouce:this.resouce
+          }
+        });
+    },
+    goConfirm(){
+      this.$store.commit("setCharseInfo",this.resouce);
+      this.$router.push({
+          name: '确认订单',
+          params: {
+            resouce:this.resouce
+          }
+        });
+    }
   },
 };
 </script>

@@ -6,13 +6,15 @@
         <dl class="profit-box-x">
           <dd class="profit-advantor-x">
             <img
-              src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=843941027,2522415533&fm=26&gp=0.jpg"
+              :src="earningsData.avtUrl"
               alt=""
             />
           </dd>
           <dt class="profit-msg-x">
-            <div class="profit-name-x">张三</div>
-            <div class="profit-jointime-x">加入时间：2020/10/10-2021/10/10</div>
+            <div class="profit-name-x">{{ earningsData.headName }}</div>
+            <div class="profit-jointime-x">
+              加入时间：{{ earningsData.joinDatetime }}
+            </div>
           </dt>
         </dl>
       </div>
@@ -25,7 +27,7 @@
           </div>
           <div class="total-profit-bot">
             <span>¥</span>
-            <i>1000</i>
+            <i>{{ earningsData.totalProfit }}</i>
           </div>
         </div>
         <div class="wait-profit">
@@ -34,7 +36,7 @@
           </div>
           <div class="total-profit-bot">
             <span>¥</span>
-            <i>1000</i>
+            <i>{{ earningsData.waitSettleProfit }}</i>
           </div>
         </div>
       </div>
@@ -45,11 +47,11 @@
         <div class="profit-scroll-auto">
           <div
             class="profit-amount-item"
-            v-for="(item, index) in 20"
+            v-for="(item, index) in earningsData.earningsMap"
             :key="index"
           >
-            <span>2020/10/10 20:00:00</span>
-            <em>¥30:00</em>
+            <span>{{ item.creatTime }}</span>
+            <em>¥ {{ item.earnings }}</em>
           </div>
         </div>
       </div>
@@ -61,12 +63,18 @@ export default {
   name: "myprofit",
   components: {},
   data() {
-    return {};
+    return {
+      earningsData: {},
+    };
   },
   created() {
-    this.$http.post("/app/json/group_buying_my_earnings/getMyEarnings").then((res) => {
-      console.log(res);
-    });
+    this.$http
+      .post("/app/json/app_my_earnings/getMyEarnings", {
+        token: this.$store.state.login.token,
+      })
+      .then((res) => {
+        this.earningsData = res.data.data;
+      });
   },
   methods: {},
 };
@@ -248,5 +256,8 @@ em {
   line-height: 20px;
   letter-spacing: 1px;
   margin-bottom: 20px;
+}
+.profit-amount-item em {
+  min-width: 60px;
 }
 </style>

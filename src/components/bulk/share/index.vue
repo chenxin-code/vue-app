@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="user_detail">
-          <img :src="shareData.picUrl" alt="" class="avatar" />
+          <img :src="shareData.headAvtUrl" alt="" class="avatar" />
           <div class="user_detail_detail">
             <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
             <div class="take_address">提货地址：{{ shareData.place }}</div>
@@ -36,12 +36,16 @@
       <div class="line"></div>
       <div class="activity_description">
         <div class="activity_description_text">
-          团购活动描述：{{ shareData.groupDescriptionRichTxt }}
+          团购活动描述:
+          <div v-html="str"></div>
         </div>
-        <div class="bulk_img">
-          <img :src="require('./images/share.png')" alt="" />
-          <img :src="require('./images/share.png')" alt="" />
-          <img :src="require('./images/share.png')" alt="" />
+        <div class="bulk_img" v-if="imgUrls.length !== 0">
+          <img
+            :src="item"
+            alt=""
+            v-for="(item, index) in imgUrls"
+            :key="index"
+          />
         </div>
       </div>
       <div class="line"></div>
@@ -55,9 +59,15 @@
     <van-sticky>
       <div class="select_box">
         <div class="select_category">
-          <div class="select_item current_select">全部</div>
-          <div class="select_item">水果</div>
-          <div class="select_item">水果</div>
+          <div
+            :class="index == currentSelectCategory ? 'current_select' : ''"
+            class="select_item"
+            v-for="(item, index) of categoryMap"
+            :key="index"
+            @click="selectCategory(item, index)"
+          >
+            {{ item.value }}
+          </div>
         </div>
       </div>
     </van-sticky>
@@ -68,7 +78,7 @@
         :key="index"
       >
         <div class="item_detail">
-          <img :src="item.skuPicUrl" alt="" class="item_img" />
+          <img :src="item.skuImg[0]" alt="" class="item_img" />
           <div class="item_detail_deatil">
             <div class="item_name">产品名称：{{ item.skuName }}</div>
             <div class="sell_price">销售价格：￥{{ item.crossedPrice }}</div>
@@ -82,80 +92,82 @@
             </div>
             <div class="item_other_user">
               <img
-                :src="require('./images/share.png')"
+                v-for="(element, index) in item.buyerMap"
+                :key="index"
+                :src="element.buyerAvtUrl"
                 alt=""
                 class="item_other_user_avatar"
               />
-              <img
-                :src="require('./images/share.png')"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              <img
-                :src="require('./images/share.png')"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              等购买了此商品
+              等{{
+                999 >= item.buyerCount ? "999+" : item.buyerCount
+              }}人购买了此商品
             </div>
           </div>
-          <van-stepper v-model="value" min="0" integer />
+          <van-stepper
+            v-model="item.count"
+            min="0"
+            integer
+            :max="item.remainingItem"
+            @change="goodsChange(item)"
+          />
         </div>
       </div>
     </div>
     <div class="other_user_buy_card">
       <div class="other_user_buy_title">
-        这些团友都买了（共84人参加了本次团购）
+        这些团友都买了（共{{ otherBuyList.length }}人参加了本次团购）
       </div>
-      <div class="other_user_item" v-for="(item, index) in 4" :key="index">
+      <div
+        class="other_user_item"
+        v-for="(item, index) in otherBuyList"
+        :key="index"
+      >
         <div class="other_user_item_user">
-          <img
-            :src="require('./images/share.png')"
-            alt=""
-            class="other_user_avatar"
-          />
+          <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" />
           <div class="other_user_info">
-            <div class="other_user_name">张三</div>
+            <div class="other_user_name">{{ item.buyerName }}</div>
             <div class="detail_btn">
-              <div class="other_user_date">2020-01-31 17:17</div>
+              <div class="other_user_date">{{ item.buyTime }}</div>
               <img
                 :src="
-                  isShowOther
+                  item.isShowOther
                     ? require('./images/show_icon.png')
                     : require('./images/hidden_icon.png')
                 "
                 alt=""
                 class="detail_icon"
-                @click="isShowOther = !isShowOther"
+                @click="showOtherBuy(index)"
               />
             </div>
           </div>
         </div>
         <div class="other_user_buy">
           <div class="other_user_buy_text">
-            【华农酸奶-经典绿杯原味酸奶】原味酸.…
+            {{ item.orderItemList[0].groupbuySkuName }}
           </div>
-          <div class="other_user_buy_count">X1</div>
+          <div class="other_user_buy_count">
+            X{{ item.orderItemList[0].buyNumber }}
+          </div>
         </div>
-        <div class="other_user_buy" v-if="isShowOther">
+        <div
+          class="other_user_buy"
+          v-show="item.isShowOther"
+          v-for="(element, index) in item.otherOrderItemList"
+          :key="index"
+        >
           <div class="other_user_buy_text">
-            【华农酸奶-经典绿杯原味酸奶】原味酸.…
+            {{ element.groupbuySkuName }}
           </div>
-          <div class="other_user_buy_count">X1</div>
+          <div class="other_user_buy_count">X{{ element.buyNumber }}</div>
         </div>
       </div>
     </div>
     <div class="submit_bar">
       <div class="price_detail">
         <div class="car" @click="isShowCar = !isShowCar"></div>
-        <div class="price">¥10.00</div>
+        <div class="price">¥{{ totalPrice }}</div>
       </div>
-      <div
-        class="sumbit_btn"
-        @click="$router.push('/bulk_share_confirm_order')"
-      >
-        去下单
-      </div>
+      <div class="sumbit_btn" @click="confirmOrder">去下单</div>
     </div>
     <transition name="van-slide-left">
       <div
@@ -200,9 +212,9 @@
               }"
             ></div>
             <span>全选</span>
-            <span>（共5件）</span>
+            <span>（共{{ checkList.length }}件）</span>
           </div>
-          <div class="check_out">清空购物车</div>
+          <div class="check_out" @click="clearCar">清空购物车</div>
         </div>
         <div class="goods">
           <van-checkbox
@@ -221,17 +233,18 @@
                       : '',
                   }"
                 ></div>
-                <img
-                  :src="require('./images/share.png')"
-                  alt=""
-                  class="goods_img"
-                />
+                <img :src="item.skuPicUrl" alt="" class="goods_img" />
                 <div class="goods_detail">
-                  <div class="goods_name">新鲜的大西瓜呐喊声可是你上课</div>
+                  <div class="goods_name">{{ item.skuName }}</div>
                   <!-- 空事件是阻止步进器点击事件冒泡到checkbox  勿删 -->
                   <div class="goods_price_count" @click.stop="">
-                    <div class="goods_price">¥5.00</div>
-                    <van-stepper v-model="value" integer />
+                    <div class="goods_price">¥{{ item.groupPrice }}</div>
+                    <van-stepper
+                      v-model="item.count"
+                      integer
+                      min="0"
+                      @change="checkChange(item)"
+                    />
                   </div>
                 </div>
               </div>
@@ -245,50 +258,87 @@
 
 <script>
 import Qs from "qs";
+import { mapMutations } from "vuex";
 export default {
   name: "share",
   props: {},
   data() {
     return {
-      value: 0,
       isShowNavigation: false,
       isShowOther: false,
       isShowCar: false,
       isCheckAll: true,
       result: [],
-      checkList: [
-        { id: 1, isCheck: true },
-        { id: 2, isCheck: true },
-        { id: 3, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-        { id: 4, isCheck: true },
-      ],
+      checkList: [],
       shareData: {},
       goodsList: [],
+      otherBuyList: [],
+      totalPrice: 0,
+      categoryMap: [{ key: "all", value: "全部" }],
+      currentSelectCategory: 0,
+      descData: "",
+      imgUrls: [],
+      str: "",
+      purchaseId: "",
+      chiefId: "",
+      userId: "",
+      activityName: "",
     };
   },
   created() {
+    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    this.chiefId = JSON.parse(this.$route.query.chiefId);
+    this.userId = JSON.parse(this.$route.query.userId);
+    this.activityName = JSON.parse(this.$route.query.activityName);
+
+    this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);
     });
-    // 72
     this.$http
       .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
-        purchaseId: 72,
-        chiefId: 1,
+        purchaseId: this.purchaseId,
+        chiefId: this.chiefId,
+        userId: this.userId,
       })
       .then((res) => {
-        console.log("res", res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
+          this.goodsList.forEach((item) => {
+            item["count"] = 0;
+            item["isCheck"] = true;
+            item["skuImg"] = item.skuPicUrl.split(",");
+          });
+          this.otherBuyList = this.shareData.currentActOrderList;
+          this.otherBuyList.forEach((e) => {
+            e["isShowOther"] = false;
+            if (e.orderItemList.length > 1) {
+              e["otherOrderItemList"] = e.orderItemList.slice(1);
+            }
+          });
+          for (let i in this.shareData.categoryMap) {
+            this.categoryMap.push({
+              key: i,
+              value: this.shareData.categoryMap[i],
+            });
+          }
+          this.descData = this.shareData.groupDescriptionRichTxt;
+
+          this.str = this.descData.replace(/<img.*?>/g, "");
+
+          let imgStrs = this.shareData.groupDescriptionRichTxt.match(
+            /<img.*?>/g
+          );
+
+          // 获取每个img url
+          this.imgUrls = imgStrs.map((url) => {
+            return url.match(/\ssrc=['"](.*?)['"]/)[1];
+          });
         }
       });
   },
+
   methods: {
     checkAll() {
       if (this.isCheckAll) {
@@ -297,6 +347,7 @@ export default {
         });
         this.result = [];
         this.isCheckAll = false;
+        this.totalPrice = this.$util.toDecimal2(0);
       } else {
         this.isCheckAll = true;
         this.result = [];
@@ -304,6 +355,7 @@ export default {
           e.isCheck = true;
           this.result.push(e.id);
         });
+        this.totalPriceFn();
       }
     },
     check(item) {
@@ -311,9 +363,11 @@ export default {
         let index = this.result.indexOf(item.id);
         this.result.splice(index, 1);
         item.isCheck = false;
+        this.totalPriceFn();
       } else {
         this.result.push(item.id);
         item.isCheck = true;
+        this.totalPriceFn();
       }
       if (this.result.length < this.checkList.length) {
         this.isCheckAll = false;
@@ -321,9 +375,85 @@ export default {
         this.isCheckAll = true;
       }
     },
-    scroll(scroll, fiexd) {
-      console.log(scroll, fiexd);
+    showOtherBuy(index) {
+      if (this.otherBuyList[index].orderItemList.length > 1) {
+        this.$set(
+          this.otherBuyList[index],
+          "isShowOther",
+          !this.otherBuyList[index]["isShowOther"]
+        );
+        this.$forceUpdate();
+      } else {
+        return;
+      }
     },
+    goodsChange(item) {
+      if (this.checkList.indexOf(item) == -1 && item.count >= 1) {
+        item.isCheck = true;
+        this.checkList.push(item);
+      } else if (this.checkList.indexOf(item) !== -1 && item.count == 0) {
+        let index = this.checkList.indexOf(item);
+        this.checkList.splice(index, 1);
+      }
+      this.totalPriceFn();
+    },
+    checkChange(item) {
+      if (item.count == 0) {
+        let index = this.checkList.indexOf(item);
+        this.checkList.splice(index, 1);
+      }
+      this.totalPriceFn();
+    },
+    clearCar() {
+      this.checkList.forEach((e) => {
+        e.count = 0;
+      });
+      this.checkList = [];
+    },
+    totalPriceFn() {
+      let price = this.checkList.reduce((pre, item) => {
+        if (item.isCheck) {
+          return item.count * item.groupPrice + pre;
+        }
+      }, 0);
+      this.totalPrice = this.$util.toDecimal2(price);
+    },
+    selectCategory(item, index) {
+      this.currentSelectCategory = index;
+      this.$http
+        .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
+          purchaseId: 72,
+          chiefId: 1,
+          skuCategory: item.key == "all" ? undefined : item.key,
+        })
+        .then((res) => {
+          this.goodsList = res.data.data;
+          this.goodsList.forEach((item) => {
+            item["count"] = 0;
+            item["isCheck"] = true;
+            item["skuImg"] = item.skuPicUrl.split(",");
+          });
+        });
+    },
+    confirmOrder() {
+      this.setBulkTotalPrice(this.totalPrice);
+      this.setBulkCheckList(this.checkList);
+      if (this.checkList.length == 0) {
+        this.$toast("请先选购商品");
+      } else {
+        this.$router.push({
+          path: "/bulk_share_confirm_order",
+          query: {
+            shareData: JSON.stringify(this.shareData),
+            purchaseId: JSON.stringify(this.purchaseId),
+            chiefId: JSON.stringify(this.chiefId),
+            userId: JSON.stringify(this.userId),
+            activityName: JSON.stringify(this.activityName),
+          },
+        });
+      }
+    },
+    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"]),
   },
 };
 </script>
@@ -331,6 +461,10 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+img {
+  max-width: 100% !important;
+}
 
 .router_class {
   background-color: #F6F6F6;
@@ -429,7 +563,7 @@ export default {
 
   .share_card {
     width: 100%;
-    height: 338px;
+    // height: 338px;
     background-color: #fff;
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
@@ -539,6 +673,7 @@ export default {
       }
 
       .bulk_img {
+        overflow-x: auto;
         display: flex;
         justify-content: space-between;
         align-items: center;

@@ -89,6 +89,7 @@ Vue.use(navcontent)
 import popview from './components/commonui/pop-view/index'
 Vue.use(popview)
 
+
 //引入moment
 import moment from 'moment' //导入文件
 Vue.prototype.$moment = moment; //赋值使用
@@ -103,7 +104,7 @@ import './common/font/iconfont.css'
 
 //swipercss
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import 'vue-awesome-swiper/node_modules/swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
 
 import 'lib-flexible/flexible'
