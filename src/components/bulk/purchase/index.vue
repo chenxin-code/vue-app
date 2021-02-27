@@ -5,7 +5,7 @@
       <channelSearch></channelSearch>
     </div>
     <div class="section-x">
-      <purchaseNav></purchaseNav>
+      <purchaseNav @navToMsg="navToMsg"></purchaseNav>
       <div class="goodlist-wraper">
         <van-pull-refresh
           v-model="isLoading"
@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      categoryId:'',
       page: 0,
       pageSize: 10,
       wrapperHeight: 0,
@@ -101,6 +102,10 @@ export default {
     this.getList(1);
   },
   methods: {
+    navToMsg(data){
+      this.categoryId = data.id;
+      this.getList(1);
+    },
     /**
      *  下拉刷新方法
      */
@@ -124,7 +129,7 @@ export default {
     getList(page) {
       if (!page) this.page++;
       if (page) this.page = page;
-      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=&pageIndex=${this.page}&pageSize=${this.pageSize}`;
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=${this.categoryId}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
       this.$http
         .get(url)
         .then((res) => {
