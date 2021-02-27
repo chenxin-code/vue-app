@@ -16,7 +16,7 @@
                 <div class="mas-name">
                   {{item.teamLeaderName}}
                 </div>
-                <div class="sign" v-if="sign == index ">
+                <div class="sign" v-if="item.userNo == defaultID">
                   默认
                 </div>
               </div>
@@ -42,11 +42,13 @@ export default {
     return {
       list:[],
       sign:0,
-      searchVal:""
+      searchVal:"",
+      defaultID:''
     }
   },
   created() {
     this.getList();
+    this.defaultID = this.$store.state.CharseInfo.masterPlace.userNo;
   },
   methods: {
     changePlace(item,index){
@@ -54,20 +56,12 @@ export default {
       this.$store.commit("setCharseInfo",{
         masterPlace:item
       });
-      this.sort();
-    },
-    sort(){
-      this.list.forEach((item,index) => {
-        if(item.cupNo == this.$store.state.CharseInfo.masterPlace.cupNo ){
-          this.sign = index;
-        }
-      });
+      this.defaultID = item.userNo;
     },
     getList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
-        this.sort();
       }).catch(e=>{
         console.log(e);
       })

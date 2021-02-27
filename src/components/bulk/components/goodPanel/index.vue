@@ -4,17 +4,9 @@
     @click="toDetails"
   >
     <div class="goodPanel-remain">
-      <div class="remain_title">拼团结束时间剩余</div>
-      <div class="remain-times">
-        <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()" format="DD 天 HH 时 mm 分 ss 秒">
-          <template #default="timeData">
-            <span class="block">{{ timeData.hours }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.minutes }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.seconds }}</span>
-          </template>
-        </van-count-down>
+      <div class="remain_title">{{getTimeTitle()}}</div>
+      <div class="remain-times" v-if="getTimeTitle() !== '活动已结束'">
+         <Countdown :endTime="getCountdownTime()"></Countdown>
       </div>
     </div>
     <dl class="good-ms">
@@ -61,8 +53,12 @@
   </div>
 </template>
 <script>
+import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "goodPanel",
+  components:{
+    Countdown
+  },
   props: {
     resouce: {
       type: Object,
@@ -74,6 +70,30 @@ export default {
     };
   },
   methods: {
+    getTimeTitle: function () {
+        let nowT = this.$store.state.severTime.currentTime;
+        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < startT) {
+          return '距离开始还剩:'
+        }
+        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < endT) {
+          return '距离结束还剩:'
+        }
+        return '活动已结束'
+    },
+     getCountdownTime: function () {
+        let nowT = this.$store.state.severTime.currentTime;
+        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < startT) {
+          return startT
+        }
+        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        if (nowT < endT) {
+          return endT
+        }
+        return endT
+      },
     toDetails() {
         this.$store.commit("setCharseInfo",this.resouce);
         this.$router.push({
