@@ -33,7 +33,7 @@
           </div>
           <div class="goods_time">
             <div class="goods_time_title">{{ getTimeTitle() }}</div>
-            <Countdown :endTime="getCountdownTime()"></Countdown>
+            <Countdown :endTime="getCountdownTime()" color="blue"></Countdown>
           </div>
         </div>
       </div>
@@ -73,9 +73,13 @@
 </template>
 
 <script>
+import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "orderList",
   props: {},
+  components:{
+    Countdown
+  },
   data() {
     return {
       time: 1614071248931,
@@ -183,7 +187,7 @@ export default {
       background-size: 100% 70px;
       display: flex;
       justify-content: space-between;
-      padding: 8px 23.5px 8px 20.5px;
+      padding: 8px 10px 8px 20.5px;
       background-color: #fff;
 
       .goods_price {
@@ -247,6 +251,7 @@ export default {
           color: #FFFFFF;
           line-height: 16.5px;
           margin-bottom: 5px;
+          text-align :center;
         }
 
         .block {
