@@ -149,16 +149,6 @@ export default {
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
     confirmOrder() {
-      // let skuInfoList = [];
-      // this.checkList.forEach((e) => {
-      //   skuInfoList.push({
-      //     skuId: e.id,
-      //     skuName: e.skuName,
-      //     groupPrice: e.groupPrice,
-      //     buyCount: e.count,
-      //   });
-      // });
-      console.log(this.$store.state.CharseInfo);
       this.$http
         .post("/app/json/app_community_group_order/makeOrder", {
           activityId: this.$store.state.CharseInfo.activityId,
