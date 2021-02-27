@@ -58,9 +58,9 @@ export default {
     },
     sort(){
       this.list.forEach((item,index) => {
-        if(item.cupNo == this.$store.state.CharseInfo.masterPlace.cupNo ){
-          this.sign = index;
-        }
+        // if(item.cupNo == this.$store.state.CharseInfo.masterPlace.cupNo ){
+        //   this.sign = index;
+        // }
       });
     },
     getList(){
