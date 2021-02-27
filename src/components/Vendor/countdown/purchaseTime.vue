@@ -1,14 +1,14 @@
 /**Created by liaoyingchao on 2018/12/20.*/
 
 <template>
-  <div class="countdown" :class="{quan: type == 'theme_bg_quan'}">
-    <div class="red-div theme_font_white" :class="[type || 'grewColor']" v-if="d != 0 && !hiddenDay">{{d}}</div>
-    <span v-if="d != 0 && !hiddenDay">天</span>
-    <div class="red-div theme_font_white" :class="[type || 'grewColor']">{{h}}</div>
+  <div class="countdown" :class="{quan: type == 'theme_bg_quan'}" :style="color == 'blue' ? 'color:#fff;' :''">
+    <div :style="color == 'blue' ? 'color:#fff;background:none' :''" class="red-div theme_font_white" :class="[type || 'grewColor']" v-if="d != 0 && !hiddenDay">{{d}}</div>
+    <span :style="color == 'blue' ? 'color:#fff;background:none' :''" v-if="d != 0 && !hiddenDay">天</span>
+    <div :style="color == 'blue' ? 'color:#fff;background:none' :''" class="red-div theme_font_white" :class="[type || 'grewColor']">{{h}}</div>
     :
-    <div class="red-div theme_font_white" :class="[type || 'grewColor']">{{m}}</div>
+    <div :style="color == 'blue' ? 'color:#fff;background:none' :''" class="red-div theme_font_white" :class="[type || 'grewColor']">{{m}}</div>
     :
-    <div class="red-div theme_font_white" :class="[type || 'grewColor']">{{s}}</div>
+    <div :style="color == 'blue' ? 'color:#fff;background:none' :''" class="red-div theme_font_white" :class="[type || 'grewColor']">{{s}}</div>
   </div>
 </template>
 
@@ -18,7 +18,7 @@
   export default {
     name: "countdown",
     // 这里都传时间戳，方便计算
-    props: ['endTime', 'type', 'hiddenDay'], // 默认红色 type: className 秒杀倒计时样式
+    props: ['endTime', 'type', 'hiddenDay','color'], // 默认红色 type: className 秒杀倒计时样式
     components: {},
     data() {
       return {
