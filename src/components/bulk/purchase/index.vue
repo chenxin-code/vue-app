@@ -31,11 +31,6 @@
             </van-cell>
           </van-list>
         </van-pull-refresh>
-        <!-- <goodPanel
-          v-for="(item, index) in 8"
-          :key="index"
-          class="lux"
-        ></goodPanel> -->
       </div>
     </div>
   </div>
@@ -56,6 +51,7 @@ export default {
   },
   data() {
     return {
+      communityId: '2253018072568823811',
       categoryId:'',
       page: 0,
       pageSize: 10,
@@ -65,32 +61,6 @@ export default {
       loading: false,
       finished: false,
       offset: 15,
-      goodsList: [
-        {
-          img:
-            "https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=246823831,3207833213&fm=26&gp=0.jpg",
-          name: "新鲜大西瓜",
-          price: "20.82",
-          purchasePrice: "18.82",
-          alreadyNum: "18",
-          remainNum: "2",
-          remainPurchaseTime: "05:04:31",
-          advantors: [
-            {
-              src:
-                "https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg",
-            },
-            {
-              src:
-                "https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg",
-            },
-            {
-              src:
-                "https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1429175118,2649084526&fm=111&gp=0.jpg",
-            },
-          ],
-        },
-      ],
     };
   },
   mounted() {
@@ -129,7 +99,7 @@ export default {
     getList(page) {
       if (!page) this.page++;
       if (page) this.page = page;
-      let url = `/app/json/groupbuying_sku_index_app/index?communityId=2331136913433427994&categoryId=${this.categoryId}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
       this.$http
         .get(url)
         .then((res) => {
