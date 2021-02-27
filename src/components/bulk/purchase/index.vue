@@ -136,7 +136,6 @@ export default {
           this.loading = false;
           this.isLoading = false;
           res.data.data.map((item, index) => {
-            console.log("item,index", item.avatarList);
             item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
             if (item.avatarList.length > 3)
               item.avatarList = item.avatarList.slice(0, 3);

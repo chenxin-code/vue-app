@@ -7,15 +7,6 @@
       <div class="remain_title">{{getTimeTitle()}}</div>
       <div class="remain-times" v-if="getTimeTitle() !== '活动已结束'">
          <Countdown :endTime="getCountdownTime()"></Countdown>
-        <!-- <van-count-down :time="new Date(resouce.groupbuyEndDatetime).getTime()" format="DD 天 HH 时 mm 分 ss 秒">
-          <template #default="timeData">
-            <span class="block">{{ timeData.hours }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.minutes }}</span>
-            <span class="colon">:</span>
-            <span class="block">{{ timeData.seconds }}</span>
-          </template> 
-        </van-count-down> -->
       </div>
     </div>
     <dl class="good-ms">
@@ -62,7 +53,7 @@
   </div>
 </template>
 <script>
-import Countdown from "@/components/Vendor/countdown/countdown";
+import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "goodPanel",
   components:{
@@ -80,7 +71,7 @@ export default {
   },
   methods: {
     getTimeTitle: function () {
-        let nowT = new Date().getTime();
+        let nowT = this.$store.state.severTime.currentTime;
         let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
         if (nowT < startT) {
           return '距离开始还剩:'
@@ -92,11 +83,10 @@ export default {
         return '活动已结束'
     },
      getCountdownTime: function () {
-        let nowT = new Date().getTime();
+        let nowT = this.$store.state.severTime.currentTime;
         let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
         if (nowT < startT) {
           return startT
-
         }
         let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
         if (nowT < endT) {
