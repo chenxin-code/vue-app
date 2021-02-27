@@ -124,7 +124,9 @@ export default {
         }],
         remark:this.remark
       }).then(res => {
-        console.log("response",res.data);
+        if(res.data.status != 0){
+          this.$Message.error(res.data.result);
+        }
       }).catch(e=>{
         console.log(e);
       })
