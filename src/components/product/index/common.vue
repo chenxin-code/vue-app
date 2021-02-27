@@ -450,6 +450,7 @@
           tempArr.push(pdata);
         }
         this.tabbarSubDatas = tempArr;
+        console.log("tabbarSubDatas",this.tabbarSubDatas)
         // for (let i = 0; i < this.tabbarSubDatas.length; i++) {
         //   let item = this.tabbarSubDatas[i]
         //   if (item.code == 'PreviewComponent') {

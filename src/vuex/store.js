@@ -148,8 +148,8 @@ const store = new Vuex.Store({
       },
       searchHistory: [],
       browsingHistory: [], // 里面的对象 {y：年，m：月，d：日，list：[skuId]}
-      tripPeopleList: [],//出行人
-      servicecontact: {//售后联系人
+      tripPeopleList: [], //出行人
+      servicecontact: { //售后联系人
         contactname: '',
         contactphone: ''
       },
@@ -296,7 +296,10 @@ const store = new Vuex.Store({
     // },
     yiDun: { // 易盾
       yidunInitLogin: '' // 一键登录
-    }
+    },
+    bulkTotalPrice: 0,
+    bulkCheckList: [],
+    CharseInfo:{}
   },
   getters: {
     webtype: state => {
@@ -380,8 +383,20 @@ const store = new Vuex.Store({
     getYiDun: state => {
       return state.yiDun
     },
+    getBulkTotalPrice: state => {
+      return state.bulkTotalPrice
+    },
+    getBulkCheckList: state => {
+      return state.bulkCheckList
+    },
+    getCharseInfo:state => {
+      return state.purcharseInfo
+    },
   },
   mutations: {
+    setCharseInfo:(state, info) => {
+      state.CharseInfo = Object.assign(state.CharseInfo,info)
+    },
     setWebType: (state, info) => {
       state.webtype = info
     },
@@ -442,10 +457,21 @@ const store = new Vuex.Store({
     setYiDunLogin: (state, info) => {
       state.yiDun.yidunInitLogin = info
     },
+    setBulkTotalPrice: (state, info) => {
+      state.bulkTotalPrice = info
+    },
+    setBulkCheckList: (state, info) => {
+      state.bulkCheckList = info
+    },
   },
   actions: {
-    rfrCodeMapAction({state, commit}) {
-      http.post('/app/json/user/getLastReferrer', {token: state.login.token}).then(res => {
+    rfrCodeMapAction({
+      state,
+      commit
+    }) {
+      http.post('/app/json/user/getLastReferrer', {
+        token: state.login.token
+      }).then(res => {
           let data = res.data;
           if (data.status == 0) {
             commit('setRfrCodeMap', data.data || {})

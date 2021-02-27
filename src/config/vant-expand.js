@@ -40,7 +40,8 @@ import {
   Collapse,
   Tab,
   NoticeBar,
-  Tabs, List,
+  Tabs,
+  List,
   DatetimePicker,
   IndexBar,
   IndexAnchor,
@@ -49,8 +50,13 @@ import {
   Circle,
   Col,
   Row,
-  Empty
+  Empty,
+  CountDown,
+  Sticky,
+  ShareSheet,
+  Uploader,
+  NavBar,
 } from 'vant'
 
 Vue.use(PasswordInput).use(Switch).use(Overlay).use(Area).use(NoticeBar).use(AddressEdit).use(NumberKeyboard).use(Field).use(Button).use(Dialog).use(Popup).use(ActionSheet).use(RadioGroup).use(Radio).use(Cell).use(CellGroup).use(Checkbox).use(CheckboxGroup).use(Step).use(Steps).use(Rate).use(Search).use(Stepper).use(Icon).use(Card).use(SwipeCell).use(Tab).use(Tabs).use(Swipe).use(SwipeItem).use(TreeSelect).use(Picker).use(Panel).use(SwitchCell).use(PullRefresh).use(Tag).use(Collapse).use(CollapseItem).use(DatetimePicker).use(ImagePreview)
-Vue.use(List).use(IndexBar).use(IndexAnchor).use(Progress).use(Circle).use(Col).use(Row).use(Empty)
+Vue.use(List).use(IndexBar).use(IndexAnchor).use(Progress).use(Circle).use(Col).use(Row).use(Empty).use(CountDown).use(Sticky).use(ShareSheet).use(Uploader).use(NavBar)
