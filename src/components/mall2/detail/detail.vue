@@ -1983,7 +1983,6 @@
         }
       },
       buyNowEvent: function () {
-
         if (this.canSale == false) {
           this.$Toast('该商品在该地区暂不支持购买！')
           return ;
