@@ -59,7 +59,7 @@
           <div class="order_value">{{ detailData.payTime }}</div>
         </div>
       </div>
-      <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
+      <div class="after_sales" @click="$router.push('/bulk_after_sales_select_goods')">
         受理售后问题
       </div>
     </div>

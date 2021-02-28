@@ -50,6 +50,15 @@ export default [{
   },
 
   {
+    path: '/bulk_after_sales_select_goods',
+    name: '售后申请选择商品',
+    component: () => import('@/components/bulk/afterSales/afterSalesSelectGoods/index.vue'),
+    meta: {
+      title: '售后申请选择商品',
+      keepAlive: false
+    }
+  },
+  {
     path: '/bulk_after_sales_edit',
     name: '售后申请编辑',
     component: () => import('@/components/bulk/afterSales/afterSalesEdit/index.vue'),

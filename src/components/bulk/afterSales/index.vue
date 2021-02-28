@@ -77,6 +77,7 @@ export default {
       refreshing: false,
       loading: false,
       finished: false,
+      value: "",
     };
   },
   created() {},

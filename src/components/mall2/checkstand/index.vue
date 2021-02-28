@@ -290,8 +290,8 @@ export default {
             payHelper
               .payEvent(
                 this.selectedPayWay,
-                this.payInfo.orderType,
-                this.payInfo.orderId,
+                this.bulkData.orderType,
+                this.bulkData.orderId,
                 redirectUrl
               )
               .then((res1) => {

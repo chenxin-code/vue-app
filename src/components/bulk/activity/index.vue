@@ -163,8 +163,7 @@ export default {
       this.refreshing = false;
 
       let obj = {
-        pageNum: page,
-        pageSize: 10,
+        pageIndex: page,
         // sortBy: "create_time_DESC",
         groupbuyActivityStatus:
           this.currentTab == 0
@@ -223,8 +222,7 @@ export default {
       this.finished = false; //将没有更多的状态改成false
       this.isLoading = true; //将下拉刷新状态改为true开始刷新
       let obj = {
-        pageNum: page,
-        pageSize: 10,
+        pageIndex: page,
         // sortBy: "create_time_DESC",
         groupbuyActivityStatus:
           this.currentTab == 0
