@@ -203,6 +203,7 @@ export default {
         this.$Toast("暂未开通！");
         return;
       }
+      console.log(item)
       this.selectedPayWay = item;
       this.substitutePayActive = -1;
     },
@@ -507,7 +508,7 @@ export default {
         this.payWay = await payHelper.getPayWays("200030", this.occurOuCode);
       } else if (this.isBulk) {
         this.payWay = await payHelper.getPayWays(
-          this.bulkData.orderType,
+          '200501',
           this.bulkData.occurOuCode
         );
       } else {
