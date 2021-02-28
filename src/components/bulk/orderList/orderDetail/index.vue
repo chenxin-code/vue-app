@@ -81,7 +81,7 @@ export default {
   },
   created() {
     this.$http
-      .post("http://192.168.31.173:18807/app/json/group_buying_order/getOrderInfoListByItemId", {
+      .post("/app/json/group_buying_order/getOrderInfoListByItemId", {
         orderItemId: JSON.parse(this.$route.query.id),
         // orderItemId: 1,
       })

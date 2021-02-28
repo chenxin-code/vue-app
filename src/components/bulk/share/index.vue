@@ -113,7 +113,7 @@
         </div>
       </div>
     </div>
-    <div class="other_user_buy_card">
+    <div class="other_user_buy_card" v-show="otherBuyList.length > 0">
       <div class="other_user_buy_title">
         这些团友都买了（共{{ otherBuyList.length }}人参加了本次团购）
       </div>

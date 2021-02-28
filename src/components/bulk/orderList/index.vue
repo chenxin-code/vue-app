@@ -237,23 +237,16 @@ export default {
           if (page < res.data.data.pages || page == res.data.data.pages) {
             if (res.data.result == "success") {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-              let skuImg = [];
               indexList.forEach((e) => {
-                skuImg.push(JSON.parse(e.productSkuInfo));
+                if (e.productSkuInfo !== "") {
+                  e["orderSkuImg"] = JSON.parse(
+                    e.productSkuInfo
+                  )[0].groupbuySkuPicurl.split(",");
+                } else {
+                  e["orderSkuImg"] = [];
+                }
               });
-              let img = [];
-              skuImg.forEach((i) => {
-                img.push(i[0].groupbuySkuPicurl);
-              });
-              let skuImgArr = [];
-              img.forEach((item) => {
-                skuImgArr.push(item.split(","));
-              });
-              indexList.forEach((a) => {
-                skuImgArr.forEach((b) => {
-                  a["orderSkuImg"] = b;
-                });
-              });
+
               switch (this.currentTab) {
                 case 0:
                   this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
@@ -292,7 +285,7 @@ export default {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
-          console.log(this.error);
+          console.log(err);
         });
     },
     // 下拉刷新时触发
@@ -328,22 +321,14 @@ export default {
         .then((res) => {
           if (res.status == 200) {
             let indexList = res.data.data.records;
-            let skuImg = [];
             indexList.forEach((e) => {
-              skuImg.push(JSON.parse(e.productSkuInfo));
-            });
-            let img = [];
-            skuImg.forEach((i) => {
-              img.push(i[0].groupbuySkuPicurl);
-            });
-            let skuImgArr = [];
-            img.forEach((item) => {
-              skuImgArr.push(item.split(","));
-            });
-            indexList.forEach((a) => {
-              skuImgArr.forEach((b) => {
-                a["orderSkuImg"] = b;
-              });
+              if (e.productSkuInfo !== "") {
+                e["orderSkuImg"] = JSON.parse(
+                  e.productSkuInfo
+                )[0].groupbuySkuPicurl.split(",");
+              } else {
+                e["orderSkuImg"] = [];
+              }
             });
             switch (this.currentTab) {
               case 0:

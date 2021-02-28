@@ -133,27 +133,23 @@ export default {
     pay() {
       if (this.userName !== "") {
         if (util.checkMobile(this.userPhone)) {
-          let skuInfoList = [];
+          let preProductSkuInfoList = [];
           this.checkList.forEach((e) => {
-            skuInfoList.push({
-              skuId: e.id,
-              skuName: e.skuName,
-              groupPrice: e.groupPrice,
-              buyCount: e.count,
+            preProductSkuInfoList.push({
+              skuId: e.skuId,
+              buyNumber: e.count,
             });
           });
+          console.log(this.checkList);
           this.$http
-            .post("/app/json/app_community_group_order/makeOrder", {
-              activityId: this.purchaseId,
-              activityName: this.activityName,
-              headId: this.chiefId,
-              deliveryType: 2,//配送1，自提2
-              receiptAddress: "时代中国",
-              receiptName: this.userName,
-              receiptTel: this.userPhone,
-              orderAmount: this.totalPrice,
-              skuInfoList,
-              orderRemark: this.textareaValue,
+            .post("/app/json/group_buying_order/createGroupBuyingOrder", {
+              activityNo: this.purchaseId,
+              teamLeaderNo: this.chiefId,
+              deliveryMode: 2,
+              consigneeName: this.userName,
+              consigneePhoneNumber: this.userPhone,
+              preProductSkuInfoList,
+              remark: this.textareaValue,
             })
             .then((res) => {
               if (res.data.result == "success") {
@@ -162,7 +158,7 @@ export default {
                   query: {
                     isBulk: JSON.stringify(true),
                     bulkData: JSON.stringify({
-                      orderNo: res.data.data.tradeNo,
+                      tradeNo: res.data.data.tradeNo,
                       orderType: res.data.data.orderType,
                       occurOuCode: res.data.data.occurOuCode,
                       orderId: res.data.data.orderId,

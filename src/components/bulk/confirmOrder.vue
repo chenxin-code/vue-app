@@ -150,23 +150,19 @@ export default {
     },
     confirmOrder() {
       this.$http
-        .post("/app/json/app_community_group_order/makeOrder", {
-          activityId: this.$store.state.CharseInfo.activityId,
-          headId: this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
-          deliveryType: 2, //配送1，自提2
-          receiptAddress: "时代中国",
-          receiptName: this.consigneeName,
-          receiptTel: this.consigneePhoneNumber,
-          orderAmount: this.total,
-          skuInfoList: [
+        .post("/app/json/group_buying_order/createGroupBuyingOrder", {
+          activityNo: this.$store.state.CharseInfo.activityId,
+          teamLeaderNo: this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
+          deliveryMode: 2,
+          consigneeName: this.consigneeName,
+          consigneePhoneNumber: this.consigneePhoneNumber,
+          preProductSkuInfoList: [
             {
               skuId: this.$store.state.CharseInfo.skuid,
-              skuName: this.$store.state.CharseInfo.groupbuySkuName,
-              groupPrice: this.$store.state.CharseInfo.groupbuyBuyerPrice,
-              buyCount: this.buyNumber,
+              buyNumber: this.buyNumber,
             },
           ],
-          orderRemark: this.textareaValue,
+          remark: this.textareaValue,
         })
         .then((res) => {
           if (res.data.result == "success") {
@@ -175,7 +171,7 @@ export default {
               query: {
                 isBulk: JSON.stringify(true),
                 bulkData: JSON.stringify({
-                  orderNo: res.data.data.tradeNo,
+                  tradeNo: res.data.data.tradeNo,
                   orderType: res.data.data.orderType,
                   occurOuCode: res.data.data.occurOuCode,
                   orderId: res.data.data.orderId,

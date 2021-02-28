@@ -28,7 +28,7 @@
               交易号：{{ payInfo.tradeNo }}
             </div>
             <div class="theme_font_common" v-else>
-              交易号：{{ bulkData.orderNo }}
+              交易号：{{ bulkData.tradeNo }}
             </div>
           </div>
         </div>
@@ -283,6 +283,27 @@ export default {
             }
           } else if (this.$route.query.isGroup == "1") {
             redirectUrl = `/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1`;
+          }
+
+          if (this.isBulk) {
+            payHelper
+              .payEvent(
+                this.selectedPayWay,
+                this.payInfo.orderType,
+                this.payInfo.orderId,
+                redirectUrl
+              )
+              .then((res1) => {
+                if (this.$route.query.payInfo.style == "travel") {
+                  this.enterSuccess();
+                } else {
+                  this.enterSuccess(res1);
+                }
+              })
+              .catch(() => {
+                this.hasToPay = false;
+              });
+            return;
           }
 
           payHelper
