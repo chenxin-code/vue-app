@@ -105,6 +105,7 @@ import Vue from "vue";
 import { Stepper } from "vant";
 import { BigNumber } from "bignumber.js";
 Vue.use(Stepper);
+import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
   components: {
@@ -149,39 +150,48 @@ export default {
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
     confirmOrder() {
-      this.$http
-        .post("/app/json/group_buying_order/createGroupBuyingOrder", {
-          activityNo: this.$store.state.CharseInfo.activityId,
-          teamLeaderNo: this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
-          deliveryMode: 2,
-          consigneeName: this.consigneeName,
-          consigneePhoneNumber: this.consigneePhoneNumber,
-          preProductSkuInfoList: [
-            {
-              skuId: this.$store.state.CharseInfo.skuid,
-              buyNumber: this.buyNumber,
-            },
-          ],
-          remark: this.textareaValue,
-        })
-        .then((res) => {
-          if (res.data.result == "success") {
-            this.$router.push({
-              path: "/mall2/checkstand",
-              query: {
-                isBulk: JSON.stringify(true),
-                bulkData: JSON.stringify({
-                  tradeNo: res.data.data.tradeNo,
-                  orderType: res.data.data.orderType,
-                  occurOuCode: res.data.data.occurOuCode,
-                  orderId: res.data.data.orderId,
-                  shoppingOrderId: res.data.data.shoppingOrderId,
-                  payAmount: res.data.data.payAmount,
-                }),
-              },
+      if (this.consigneeName !== "") {
+        if (util.checkMobile(this.consigneePhoneNumber)) {
+          this.$http
+            .post("/app/json/group_buying_order/createGroupBuyingOrder", {
+              activityNo: this.$store.state.CharseInfo.activityId,
+              teamLeaderNo: this.$store.state.CharseInfo.masterPlace
+                .teamLeaderNo,
+              deliveryMode: 2,
+              consigneeName: this.consigneeName,
+              consigneePhoneNumber: this.consigneePhoneNumber,
+              preProductSkuInfoList: [
+                {
+                  skuId: this.$store.state.CharseInfo.skuid,
+                  buyNumber: this.buyNumber,
+                },
+              ],
+              remark: this.textareaValue,
+            })
+            .then((res) => {
+              if (res.data.result == "success") {
+                this.$router.push({
+                  path: "/mall2/checkstand",
+                  query: {
+                    isBulk: JSON.stringify(true),
+                    bulkData: JSON.stringify({
+                      tradeNo: res.data.data.tradeNo,
+                      orderType: res.data.data.orderType,
+                      occurOuCode: res.data.data.occurOuCode,
+                      orderId: res.data.data.orderId,
+                      shoppingOrderId: res.data.data.shoppingOrderId,
+                      payAmount: res.data.data.payAmount,
+                    }),
+                  },
+                });
+              }
             });
-          }
-        });
+        } else {
+          this.$toast("请输入正确的手机号码");
+        }
+      } else {
+        this.$toast("请输入提货人姓名");
+      }
     },
     getPlaceList() {
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
@@ -193,6 +203,10 @@ export default {
               this.placelist = [this.$store.state.CharseInfo.masterPlace];
             } else {
               this.placelist = res.data.data.records;
+              this.$store.commit("setCharseInfo", {
+                masterPlace: this.placelist[0],
+              });
+              console.log(this.placelist);
             }
           }
         })

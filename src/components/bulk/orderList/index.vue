@@ -23,6 +23,7 @@
           finished-text="没有更多了"
           @load="onLoad"
           :error.sync="error"
+          error-text="请求失败，点击重新加载"
         >
           <div
             class="goods_item"

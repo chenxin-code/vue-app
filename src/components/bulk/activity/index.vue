@@ -75,7 +75,7 @@
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
-                <span @click.stop="share(item)">分享</span>
+                <span @click.stop="share(item)" v-if="item.groupbuyActivityStatus == 1">分享</span>
                 <span @click.stop="navToDetail(item.id)">本团订单</span>
               </p>
             </div>
@@ -210,10 +210,12 @@ export default {
           } else {
             this.finished = true; //如果超过总页数就显示没有更多内容了
           }
+        })
+        .catch((err) => {
+          this.$toast("请求失败，点击重新加载");
+          this.loading = false;
+          this.error = true;
         });
-      // .catch((err) => {
-      //   this.$toast("请求失败，点击重新加载");
-      // });
     },
     // 下拉刷新时触发
     onRefresh() {

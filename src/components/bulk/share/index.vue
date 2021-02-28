@@ -422,8 +422,8 @@ export default {
       this.currentSelectCategory = index;
       this.$http
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
-          purchaseId: 72,
-          chiefId: 1,
+          purchaseId: this.purchaseId,
+          chiefId: this.chiefId,
           skuCategory: item.key == "all" ? undefined : item.key,
         })
         .then((res) => {

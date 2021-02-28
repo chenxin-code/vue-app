@@ -203,7 +203,7 @@ export default {
         this.$Toast("暂未开通！");
         return;
       }
-      console.log(item)
+      console.log(item);
       this.selectedPayWay = item;
       this.substitutePayActive = -1;
     },
@@ -285,21 +285,17 @@ export default {
           } else if (this.$route.query.isGroup == "1") {
             redirectUrl = `/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1`;
           }
-
           if (this.isBulk) {
             payHelper
               .payEvent(
                 this.selectedPayWay,
                 this.bulkData.orderType,
                 this.bulkData.orderId,
-                redirectUrl
+                "/paySuccess"
               )
               .then((res1) => {
-                if (this.$route.query.payInfo.style == "travel") {
-                  this.enterSuccess();
-                } else {
-                  this.enterSuccess(res1);
-                }
+                console.log("paySuccess");
+                this.enterSuccess(res1);
               })
               .catch(() => {
                 this.hasToPay = false;
@@ -451,6 +447,7 @@ export default {
         });
         return;
       } else {
+        console.log("唤起邻里邦支付平台");
         // 唤起邻里邦支付平台
         var payInfo = JSON.parse(JSON.parse(res.payInfo));
         window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
@@ -508,7 +505,7 @@ export default {
         this.payWay = await payHelper.getPayWays("200030", this.occurOuCode);
       } else if (this.isBulk) {
         this.payWay = await payHelper.getPayWays(
-          '200501',
+          "200501",
           this.bulkData.occurOuCode
         );
       } else {
