@@ -22,10 +22,12 @@
           :finished="finished"
           finished-text="没有更多了"
           @load="onLoad"
+          :error.sync="error"
+          error-text="请求失败，点击重新加载"
         >
           <div
             class="goods_item"
-            v-for="item in 10"
+            v-for="item in 0"
             :key="item"
             @click="$router.push('/bulk_after_sales_detail')"
           >
@@ -61,6 +63,7 @@
 </template>
 
 <script>
+import Qs from "qs";
 export default {
   name: "afterSales",
   props: {},
@@ -72,40 +75,174 @@ export default {
         { name: "已完成" },
         { name: "已关闭" },
       ],
+      value: "",
       currentTab: 0,
       list: [],
       refreshing: false,
       loading: false,
       finished: false,
+      currentPage: 0,
+      totalPage: 0,
+      error: false,
+      allList: [],
+      auditList: [],
+      finishedList: [],
+      closedList: [],
     };
   },
-  created() {},
+  created() {
+    this.onLoad();
+  },
   methods: {
+    //滚动条与底部距离小于 offset 时触发
     onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
-        }
-
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
-        }
-        this.loading = false;
-
-        if (this.list.length >= 40) {
-          this.finished = true;
-        }
-      }, 1000);
-    },
-    onRefresh() {
-      // 清空列表数据
-      this.finished = false;
-
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
-      this.onLoad();
+      let page = this.currentPage;
+      page = page + 1;
+      this.currentPage = page;
+      this.refreshing = false;
+      let obj = {
+        pageNum: page,
+        pageSize: 10,
+        // orderItemState:
+        //   this.currentTab == 0
+        //     ? undefined
+        //     : this.currentTab == 1
+        //     ? 0
+        //     : this.currentTab == 2
+        //     ? 1
+        //     : this.currentTab == 3
+        //     ? 2
+        //     : this.currentTab == 4
+        //     ? 3
+        //     : this.currentTab == 5
+        //     ? 4
+        //     : undefined,
+        token: this.$store.state.login.token,
+      };
+      this.$http
+        .post("/app/json/app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
+        .then((res) => {
+          // 判断当前页数是否超过总页数或者等于总页数
+          if (page < res.data.data.pages || page == res.data.data.pages) {
+            if (res.data.result == "success") {
+              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
+              indexList.forEach((e) => {
+                if (e.productSkuInfo !== "") {
+                  e["orderSkuImg"] = JSON.parse(
+                    e.productSkuInfo
+                  )[0].groupbuySkuPicurl.split(",");
+                } else {
+                  e["orderSkuImg"] = [];
+                }
+              });
+
+              switch (this.currentTab) {
+                case 0:
+                  this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
+
+                case 1:
+                  this.waitPayList = this.waitPayList.concat(indexList);
+
+                case 2:
+                  this.deliveryList = this.deliveryList.concat(indexList);
+
+                case 3:
+                  this.distributionList = this.distributionList.concat(
+                    indexList
+                  );
+                case 4:
+                  this.pickUpList = this.pickUpList.concat(indexList);
+
+                case 5:
+                  this.finishedList = this.finishedList.concat(indexList);
+              }
+
+              this.page = res.data.data.pages; //将总页数赋值给this
+              setTimeout(() => {
+                // 加载状态结束
+                this.loading = false;
+              }, 1000);
+            } else {
+              this.loading = false; //将加载状态关掉
+              this.error = true; //大家错误状态
+            }
+          } else {
+            this.finished = true; //如果超过总页数就显示没有更多内容了
+          }
+        })
+        .catch((err) => {
+          this.$toast("请求失败，点击重新加载");
+          this.loading = false;
+          this.error = true;
+          console.log(err);
+        });
+    },
+    // 下拉刷新时触发
+    onRefresh() {
+      let page = 1; //从第一页开始
+      this.page = page; //将当前页数赋值给this
+      this.finished = false; //将没有更多的状态改成false
+      this.loading = true; //将下拉刷新状态改为true开始刷新
+      let obj = {
+        pageNum: page,
+        pageSize: 10,
+        sortBy: "create_time_DESC",
+        orderItemState:
+          this.currentTab == 0
+            ? undefined
+            : this.currentTab == 1
+            ? 0
+            : this.currentTab == 2
+            ? 1
+            : this.currentTab == 3
+            ? 2
+            : this.currentTab == 4
+            ? 3
+            : this.currentTab == 5
+            ? 4
+            : undefined,
+      };
+      this.$http
+        .post("app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
+        .then((res) => {
+          if (res.status == 200) {
+            let indexList = res.data.data.records;
+            indexList.forEach((e) => {
+              if (e.productSkuInfo !== "") {
+                e["orderSkuImg"] = JSON.parse(
+                  e.productSkuInfo
+                )[0].groupbuySkuPicurl.split(",");
+              } else {
+                e["orderSkuImg"] = [];
+              }
+            });
+            switch (this.currentTab) {
+              case 0:
+                this.allList = indexList; //将请求的数据追加到后面
+              case 1:
+                this.waitPayList = indexList;
+              case 2:
+                this.deliveryList = indexList;
+              case 3:
+                this.distributionList = indexList;
+              case 4:
+                this.pickUpList = indexList;
+              case 5:
+                this.finishedList = indexList;
+            }
+
+            this.totalPage = res.data.pages; //将总页数赋值上去
+            setTimeout(() => {
+              this.$toast("刷新成功");
+              this.loading = false;
+              this.refreshing = false; //刷新成功后将状态关掉
+            }, 1000); //1秒后关闭
+          }
+        })
+        .catch((res) => {
+          this.$toast("网络繁忙,请稍后再试~");
+        });
     },
   },
 };

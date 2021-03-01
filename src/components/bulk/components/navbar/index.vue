@@ -2,7 +2,7 @@
   <!-- navbar -->
   <div class="navbar">
     <van-sticky>
-      <van-nav-bar :title="title" @click-left="$router.go(-1)">
+      <van-nav-bar :title="title" @click-left="navBack">
         <template #left>
           <van-icon
             name="arrow-left"
@@ -18,9 +18,18 @@
 <script>
 export default {
   name: "navbar",
-  props: ["title"],
+  props: ["title", "backUrl"],
   data() {
     return {};
+  },
+  methods: {
+    navBack() {
+      if (this.backUrl) {
+        this.$router.push(this.backUrl);
+      } else {
+        this.$router.go(-1);
+      }
+    },
   },
 };
 </script>

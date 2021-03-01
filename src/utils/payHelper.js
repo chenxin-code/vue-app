@@ -7,6 +7,7 @@ import wxfunc from "./wxfunc";
 import router from '@/router'
 import Cookie from 'js-cookie'
 import util from "./util";
+import jsonp from "jsonp";
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -14,7 +15,7 @@ const dev = process.env.NODE_ENV !== 'production'
 var payHelper = {
   getPayWays: function (orderType, occurOuCode) {
     // app 1 h5 2 mp 3 mnp 4 offline 5 IS_FJSH 6
-    let payScene = 1  // 这里本来为2的，为了调试方便写成1
+    let payScene = 1 // 这里本来为2的，为了调试方便写成1
     payScene = payHelper.queryOrderScene()
     if (dev) {
       payScene = 1
@@ -128,7 +129,7 @@ var payHelper = {
       partnerChannel: store.state.channel,
       // ipAddress: window.returnCitySN ? window.returnCitySN["cip"] : '', // 远端ip
     };
-    if(payway.payMode != 305){
+    if (payway.payMode != 305) {
       delete paramsData.returnUrl
     }
     // 支付额外参数， 目前加油支付用到
@@ -173,7 +174,9 @@ var payHelper = {
   // 代付支付
   substitutePayEvent: function (payway, orderType, orderId, payAmount, redirectUrl) {
     let url = '/app/json/app_replace_pay_order/userPay';
-    return this.payRequest(payway, orderType, orderId, url, redirectUrl, {payAmount: payAmount})
+    return this.payRequest(payway, orderType, orderId, url, redirectUrl, {
+      payAmount: payAmount
+    })
   },
   trafficPayEvent: function (payway, orderType, orderId) {
     let url = '/app/json/fee_life_order/pay';
@@ -265,7 +268,9 @@ var payHelper = {
           }
           params.redirectUrl = redirectUrl
         }
-        wx.miniProgram.navigateTo({url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`})
+        wx.miniProgram.navigateTo({
+          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+        })
       } else if (payway.payModeSub == '210004') {
         // 微信H5支付
         let h5Url = payInfo
@@ -331,10 +336,12 @@ var payHelper = {
           }
           params.redirectUrl = redirectUrl
         }
-        wx.miniProgram.navigateTo({url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`})
+        wx.miniProgram.navigateTo({
+          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+        })
       } else if (payway.payModeSub == 500001 || payway.payModeSub == 500002) {
         resolve();
-      } else if(payway.payModeSub == 305005 || payway.payModeSub == 305007 || payway.payModeSub == 305013){
+      } else if (payway.payModeSub == 305005 || payway.payModeSub == 305007 || payway.payModeSub == 305013) {
         let tradeData = {
           tradeNo: tradeNo,
           orderType: orderType
@@ -351,6 +358,23 @@ var payHelper = {
       } else if (payway.payModeSub == '260001' || payway.payModeSub == '260002') {
         // 邻里邦支付平台
         resolve();
+      } else if (payway.payModeSub == '260003') {
+        //团购微信小程序支付
+        let info = JSON.parse(JSON.parse(payInfo))
+        let params = {
+          package: info.package,
+          noncestr: info.noncestr,
+          timestamp: info.timestamp,
+          sign: info.sign
+        }
+        console.log('-----------------------------------------------', redirectUrl)
+        if (redirectUrl) {
+          params.redirectUrl = redirectUrl
+        }
+        wx.miniProgram.navigateTo({
+          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+        })
+
       } else {
         console.log(payway)
         reject()

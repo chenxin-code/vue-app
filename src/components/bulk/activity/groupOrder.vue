@@ -24,6 +24,7 @@
           finished-text="没有更多了"
           @load="onLoad"
           :error.sync="error"
+          error-text="请求失败，点击重新加载"
         >
           <div
             class="goods_item"
@@ -245,22 +246,14 @@ export default {
           if (page < res.data.data.pages || page == res.data.data.pages) {
             if (res.data.result == "success") {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-              let skuImg = [];
               indexList.forEach((e) => {
-                skuImg.push(JSON.parse(e.productSkuInfo));
-              });
-              let img = [];
-              skuImg.forEach((i) => {
-                img.push(i[0].groupbuySkuPicurl);
-              });
-              let skuImgArr = [];
-              img.forEach((item) => {
-                skuImgArr.push(item.split(","));
-              });
-              indexList.forEach((a) => {
-                skuImgArr.forEach((b) => {
-                  a["orderSkuImg"] = b;
-                });
+                if (e.productSkuInfo !== "") {
+                  e["orderSkuImg"] = JSON.parse(
+                    e.productSkuInfo
+                  )[0].groupbuySkuPicurl.split(",");
+                } else {
+                  e["orderSkuImg"] = [];
+                }
               });
               switch (this.currentTab) {
                 case 0:
@@ -337,22 +330,14 @@ export default {
         .then((res) => {
           if (res.status == 200) {
             let indexList = res.data.data.records;
-            let skuImg = [];
             indexList.forEach((e) => {
-              skuImg.push(JSON.parse(e.productSkuInfo));
-            });
-            let img = [];
-            skuImg.forEach((i) => {
-              img.push(i[0].groupbuySkuPicurl);
-            });
-            let skuImgArr = [];
-            img.forEach((item) => {
-              skuImgArr.push(item.split(","));
-            });
-            indexList.forEach((a) => {
-              skuImgArr.forEach((b) => {
-                a["orderSkuImg"] = b;
-              });
+              if (e.productSkuInfo !== "") {
+                e["orderSkuImg"] = JSON.parse(
+                  e.productSkuInfo
+                )[0].groupbuySkuPicurl.split(",");
+              } else {
+                e["orderSkuImg"] = [];
+              }
             });
             switch (this.currentTab) {
               case 0:

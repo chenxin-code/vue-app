@@ -59,7 +59,7 @@
           <div class="order_value">{{ detailData.payTime }}</div>
         </div>
       </div>
-      <div class="after_sales" @click="$router.push('/bulk_after_sales_edit')">
+      <div class="after_sales" @click="$router.push('/bulk_after_sales_select_goods')">
         受理售后问题
       </div>
     </div>
@@ -81,7 +81,7 @@ export default {
   },
   created() {
     this.$http
-      .post("http://192.168.31.173:18807/app/json/group_buying_order/getOrderInfoListByItemId", {
+      .post("/app/json/group_buying_order/getOrderInfoListByItemId", {
         orderItemId: JSON.parse(this.$route.query.id),
         // orderItemId: 1,
       })

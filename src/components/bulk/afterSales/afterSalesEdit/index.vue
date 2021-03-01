@@ -126,6 +126,7 @@ export default {
       fileList: [],
       selectType: false,
       select: 1, // 1退款  2 退货  3换货
+      value: 0,
     };
   },
   components: {
