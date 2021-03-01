@@ -140,7 +140,7 @@ export default {
     // this.activityOrderId = JSON.parse(this.$route.query.activityOrderId);
     this.$http
       .post(
-        "http://192.168.31.9:18807/app/json/app_group_buying_after_sale/afterSalesType",
+        "/app/json/app_group_buying_after_sale/afterSalesType",
         {
           tradeNo: this.goodsData.payTradeNo,
           skuId: this.goodsData.skuId,
@@ -179,7 +179,7 @@ export default {
 
       this.$http
         .post(
-          "http://192.168.31.9:18807/app/json/app_order_after_sale/applyPage",
+          "/app/json/app_order_after_sale/applyPage",
           {
             mainOrderId: this.goodsStatusData.mainOrderId,
             id: this.goodsStatusData.id,
@@ -193,7 +193,7 @@ export default {
 
             this.$http
               .post(
-                "http://192.168.31.9:18807/app/json/app_order_after_sale/afterSubmit",
+                "/app/json/app_order_after_sale/afterSubmit",
                 {
                   address: this.afterSalesData.address,
                   skuDetailList: this.afterSalesData.skuDetailList,

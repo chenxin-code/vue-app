@@ -41,7 +41,7 @@ export default {
     // this.activityOrderId = JSON.parse(this.$route.query.activityOrderId);
     this.activityOrderItemId = JSON.parse(this.$route.query.activityOrderItemId);
     this.$http
-      .post("http://192.168.31.9:18807/app/json/app_group_buying_after_sale/queryAfterOrderByIdList", {
+      .post("/app/json/app_group_buying_after_sale/queryAfterOrderByIdList", {
         groupbuyOrderItemId: this.activityOrderItemId,
       })
       .then((res) => {

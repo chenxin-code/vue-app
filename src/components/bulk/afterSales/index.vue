@@ -122,7 +122,7 @@ export default {
         token: this.$store.state.login.token,
       };
       this.$http
-        .post("http://192.168.31.9:18807/app/json/app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
+        .post("/app/json/app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
           // if (page < res.data.data.pages || page == res.data.data.pages) {

@@ -36,7 +36,7 @@ let Axios = axios.create({
   headers
 })
 
-let bulkApi = ['http://192.168.31.173:18807/app/json/app_group_buying_share_home/generateShareLink','/app/json/groupbuying_activity_app/list','/app/json/group_buying_head_info/findHeadInfoByList','/app/json/group_buying_head_info/findSelfInfo','/app/json/group_buying_my_earnings/getMyEarnings','/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/app_group_buying_share_home/generateShareLink','/app/json/groupbuying_activity_app/list','/app/json/group_buying_head_info/findHeadInfoByList','/app/json/group_buying_head_info/findSelfInfo','/app/json/group_buying_my_earnings/getMyEarnings','/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
