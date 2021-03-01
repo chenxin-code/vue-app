@@ -27,10 +27,7 @@
       </div>
       <div class="line"></div>
       <div class="addres_info" v-if="placelist.length">
-        <img
-          src="https://times-mall-uat.oss-cn-shenzhen.aliyuncs.com/0ed8ff39422447d68f3c16234519df2d.jpg"
-          alt=""
-        />
+        <img :src="placelist[0].teamLeaderAvatar" alt="" />
         <div class="addres_info_detail">
           <div class="colonel_name">{{ placelist[0].teamLeaderName }}</div>
           <div class="addres">
@@ -157,7 +154,7 @@ export default {
               activityNo: this.$store.state.CharseInfo.activityId,
               teamLeaderNo: this.$store.state.CharseInfo.masterPlace
                 .teamLeaderNo,
-              deliveryMode: 2,
+              deliveryMode: 0,//0自提1送货上门
               consigneeName: this.consigneeName,
               consigneePhoneNumber: this.consigneePhoneNumber,
               preProductSkuInfoList: [
@@ -236,6 +233,8 @@ export default {
 @import '~@/common/stylus/mixin.styl';
 
 .body {
+  width: 100%;
+  height: 100%;
   background-color: #F6F6F6;
   background-image: url('./activity/images/bg.png');
   background-repeat: no-repeat;
@@ -247,6 +246,7 @@ export default {
   bottom: 49px !important;
   box-sizing: border-box;
   overflow-x: hidden;
+  position: relative;
 
   .line {
     width: 315px;

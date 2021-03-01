@@ -75,7 +75,11 @@
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
-                <span @click.stop="share(item)" v-if="item.groupbuyActivityStatus == 1">分享</span>
+                <span
+                  @click.stop="share(item)"
+                  v-show="item.groupbuyActivityStatus == 1"
+                  >分享</span
+                >
                 <span @click.stop="navToDetail(item.id)">本团订单</span>
               </p>
             </div>
@@ -92,12 +96,20 @@
       cancel-text=""
       @select="onShare"
     />
+    <!-- <button
+      v-show="false"
+      ref="copybtn"
+      class="copy-btn"
+      @click="copyLink"
+      :data-clipboard-text="this.link"
+    ></button> -->
     <!-- </nav-content> -->
   </div>
 </template>
 
 <script>
 import Qs from "qs";
+import ClipboardJS from "clipboard";
 export default {
   name: "activity",
   // mixins: [api],
@@ -109,7 +121,7 @@ export default {
         { name: "微信", icon: "wechat" },
         { name: "复制链接", icon: "link" },
       ],
-      copybtn: "",
+      copybtn: null,
       tabTitle: [
         { title: "全部" },
         { title: "进行中" },
@@ -129,6 +141,7 @@ export default {
       totalPage: 0,
       userData: {},
       shareItemData: {},
+      link: "",
     };
   },
   created() {
@@ -324,18 +337,25 @@ export default {
           });
         }
       } else if (option.icon == "link") {
-        this.$http.post(
-          "http://192.168.31.173:18807/app/json/app_group_buying_share_home/generateShareLink",
-          {
-            path: "/bulk_share",
-            query: {
-              purchaseId: this.shareItemData.id,
-              chiefId: this.userData.teamLeaderNo,
-              userId: this.userData.userNo,
-              activityName: this.shareItemData.groupbuyActivityName,
-            },
-          }
-        );
+        this.$http
+          .post(
+            "http://192.168.28.119:18807/app/json/app_group_buying_share_home/generateShareLink",
+            {
+              path: "/pages/homePage/temporaryCapture",
+              query: `?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`,
+            }
+          )
+          .then((res) => {
+            if (res.data.data.errcode == 0) {
+              this.link = res.data.data.openlink;
+              // weixin://dl/business/?t=lzjYaPnRpgo
+              new ClipboardJS(".btn", {
+                text: function (trigger) {
+                  return this.link;
+                },
+              });
+            }
+          });
       }
       this.showShare = false;
     },

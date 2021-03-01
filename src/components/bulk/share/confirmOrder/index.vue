@@ -145,7 +145,7 @@ export default {
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
               activityNo: this.purchaseId,
               teamLeaderNo: this.chiefId,
-              deliveryMode: 2,
+              deliveryMode: 0, //0自提1送货上门
               consigneeName: this.userName,
               consigneePhoneNumber: this.userPhone,
               preProductSkuInfoList,

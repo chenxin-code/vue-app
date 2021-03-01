@@ -92,6 +92,7 @@ export default {
   },
   created() {
     this.onLoad();
+    // this.$http.post('/app/json/group_buying_head_info/findSelfInfo')
   },
   methods: {
     //滚动条与底部距离小于 offset 时触发
@@ -121,21 +122,21 @@ export default {
         token: this.$store.state.login.token,
       };
       this.$http
-        .post("/app/json/app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
+        .post("http://192.168.31.9:18807/app/json/app_group_buying_after_sale/queryAfterOrder", Qs.stringify(obj))
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.data.pages || page == res.data.data.pages) {
+          // if (page < res.data.data.pages || page == res.data.data.pages) {
             if (res.data.result == "success") {
-              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-              indexList.forEach((e) => {
-                if (e.productSkuInfo !== "") {
-                  e["orderSkuImg"] = JSON.parse(
-                    e.productSkuInfo
-                  )[0].groupbuySkuPicurl.split(",");
-                } else {
-                  e["orderSkuImg"] = [];
-                }
-              });
+              var indexList = res.data.data; //将请求到的内容赋值给一个变量
+              // indexList.forEach((e) => {
+              //   if (e.productSkuInfo !== "") {
+              //     e["orderSkuImg"] = JSON.parse(
+              //       e.productSkuInfo
+              //     )[0].groupbuySkuPicurl.split(",");
+              //   } else {
+              //     e["orderSkuImg"] = [];
+              //   }
+              // });
 
               switch (this.currentTab) {
                 case 0:
@@ -167,9 +168,9 @@ export default {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
             }
-          } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
-          }
+          // } else {
+          //   this.finished = true; //如果超过总页数就显示没有更多内容了
+          // }
         })
         .catch((err) => {
           this.$toast("请求失败，点击重新加载");
