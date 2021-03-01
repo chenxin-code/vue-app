@@ -113,7 +113,7 @@
         </div>
       </div>
     </div>
-    <div class="other_user_buy_card">
+    <div class="other_user_buy_card" v-show="otherBuyList.length > 0">
       <div class="other_user_buy_title">
         这些团友都买了（共{{ otherBuyList.length }}人参加了本次团购）
       </div>
@@ -422,8 +422,8 @@ export default {
       this.currentSelectCategory = index;
       this.$http
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
-          purchaseId: 72,
-          chiefId: 1,
+          purchaseId: this.purchaseId,
+          chiefId: this.chiefId,
           skuCategory: item.key == "all" ? undefined : item.key,
         })
         .then((res) => {

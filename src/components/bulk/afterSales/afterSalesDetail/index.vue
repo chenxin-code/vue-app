@@ -1,7 +1,7 @@
 <template>
   <!-- // created by hjc 售后申请 -->
   <div class="afterSalesDetail">
-    <navbar :title="'售后申请'"></navbar>
+    <navbar :title="'售后申请'" :backUrl="'/bulk_after_sales'"></navbar>
     <div class="afterSalesDetail_box">
       <div class="after_sales">
         <div class="after_sales_type">
@@ -69,7 +69,9 @@ export default {
   },
   props: {},
   data() {
-    return {};
+    return {
+      value: 1,
+    };
   },
   created() {},
 };

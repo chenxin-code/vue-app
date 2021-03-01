@@ -12,7 +12,7 @@
         <div class="app_name">邻里邦RRO</div>
         <div>客户端</div>
       </div>
-      <div class="down_btn">前往商店下载</div>
+      <div class="down_btn" @click="appDown">前往商店下载</div>
     </div>
   </div>
 </template>
@@ -23,8 +23,34 @@ export default {
   data() {
     return {};
   },
-  created() {},
-  methods: {},
+  created() {
+    if (this.is_weixn()) {
+      return;
+    } else {
+      this.appDown();
+    }
+  },
+  methods: {
+    is_weixn() {
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    //点击下载按钮判断
+    appDown() {
+      var u = navigator.userAgent;
+      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
+      if (isiOS) {
+        window.location.href = "https://www.pgyer.com/Times-App-C-Prod";
+      } else if (isAndroid) {
+        window.location.href = "https://www.pgyer.com/Times-App-C-Prod";
+      }
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
