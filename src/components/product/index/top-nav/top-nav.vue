@@ -659,8 +659,8 @@
   }
 
   .pfixed {
-    position absolute;
-    top 0px
-    z-index 99;
+    // position absolute;
+    // top 0px
+    // z-index 99;
   }
 </style>

@@ -901,7 +901,8 @@
     },
     created() {
       console.log('000000000000000', appUi)
-      if (this.$store.state.webType !== '3') {
+      if (this.$store.state.webType != '3') {
+        alert('不是微信小程序')
         appUi.showTabbar();
       }
       this.$store.state.clientWidth = document.documentElement.clientWidth;
