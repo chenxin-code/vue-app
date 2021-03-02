@@ -4,7 +4,7 @@
     <navbar :title="'售后申请'"></navbar>
     <div class="afterSalesEdit">
       <div class="after_sales">
-        <div class="after_sales_type" @click="selectType = true">
+        <div class="after_sales_type" @click="showSelectType">
           <div class="after_sales_title">
             <div>售后类型</div>
             <div>
@@ -19,35 +19,36 @@
         </div>
         <div class="goods_info">
           <div class="goods_info_title">商品信息</div>
-          <div class="goods_item" v-for="(item, index) in 4" :key="index">
-            <img :src="require('../../share/images/share.png')" alt="" />
+          <div class="goods_item">
+            <img :src="goodsData.groupbuySkuPicurl" alt="" />
             <div class="goods_item_detail">
-              <div class="goods_name">新鲜的大西瓜</div>
+              <div class="goods_name">{{ goodsData.groupbuySkuName }}</div>
               <div class="goods_count">
                 商品数量：
                 <van-stepper
-                  v-model="value"
+                  v-model="goodsCount"
                   input-width="0.466667rem"
                   button-size="0.466667rem"
                   integer
+                  :max="goodsData.buyNumber"
                 />
               </div>
               <div class="goods_price_btn">
                 <div class="price">
                   <div>商品价格：</div>
-                  <div>¥5.00</div>
+                  <div>¥{{ goodsData.groupbuyBuyerPrice }}</div>
                 </div>
-                <div class="delet_btn">删除</div>
+                <!-- <div class="delet_btn">删除</div> -->
               </div>
             </div>
           </div>
           <div class="line"></div>
-          <div class="refund_price">合计退款金额：¥20.00</div>
+          <div class="refund_price">合计退款金额：¥{{ totalPrice }}</div>
         </div>
       </div>
       <div class="problem_description">
         <div class="problem_title">问题描述</div>
-        <textarea rows="3" cols="20"></textarea>
+        <textarea rows="3" cols="20" v-model="problemText"></textarea>
         <van-uploader
           v-model="fileList"
           multiple
@@ -62,9 +63,7 @@
           </template>
         </van-uploader>
       </div>
-      <div class="submit_btn" @click="$router.push('/bulk_after_sales_detail')">
-        发起售后
-      </div>
+      <div class="submit_btn" @click="afterSales">发起售后</div>
       <van-popup
         v-model="selectType"
         position="bottom"
@@ -126,13 +125,111 @@ export default {
       fileList: [],
       selectType: false,
       select: 1, // 1退款  2 退货  3换货
-      value: 0,
+      goodsCount: 1,
+      goodsData: {},
+      activityOrderId: "",
+      problemText: "",
+      afterSalesData: {},
     };
   },
   components: {
     navbar,
   },
-  created() {},
+  created() {
+    this.goodsData = JSON.parse(this.$route.query.goodsData);
+    // this.activityOrderId = JSON.parse(this.$route.query.activityOrderId);
+    this.$http
+      .post(
+        "/app/json/app_group_buying_after_sale/afterSalesType",
+        {
+          tradeNo: this.goodsData.payTradeNo,
+          skuId: this.goodsData.skuId,
+          shoppingOrderId: this.goodsData.groupbuyOrderId,
+          afterType: "0",
+        }
+      )
+      .then((res) => {
+        this.goodsStatusData = res.data.data;
+      });
+  },
+  computed: {
+    totalPrice: {
+      get() {
+        return this.$util.toDecimal2(
+          this.goodsData.groupbuyBuyerPrice * this.goodsCount
+        );
+      },
+      set() {},
+    },
+  },
+  methods: {
+    showSelectType() {
+      this.$toast("目前仅支持退款售后");
+      return;
+
+      this.selectType = true;
+    },
+    afterSales() {
+      let picList = [];
+      if (this.fileList.length !== 0) {
+        this.fileList.forEach((e) => {
+          picList.push(e.content);
+        });
+      }
+
+      this.$http
+        .post(
+          "/app/json/app_order_after_sale/applyPage",
+          {
+            mainOrderId: this.goodsStatusData.mainOrderId,
+            id: this.goodsStatusData.id,
+            skuId: this.goodsStatusData.skuId,
+            type: "5",
+          }
+        )
+        .then((res) => {
+          if (res.data.result == "success") {
+            this.afterSalesData = res.data.data;
+
+            this.$http
+              .post(
+                "/app/json/app_order_after_sale/afterSubmit",
+                {
+                  address: this.afterSalesData.address,
+                  skuDetailList: this.afterSalesData.skuDetailList,
+                  issueDesc: this.problemText,
+                  consignee: "",
+                  realName: this.afterSalesData.realName,
+                  phone: this.afterSalesData.phone,
+                  remark: "",
+                  applyReason: "4",
+                  receiver: this.afterSalesData.receiver,
+                  mobile: this.afterSalesData.mobile,
+                  number: this.goodsCount,
+                  mainOrderId: this.afterSalesData.mainOrderId,
+                  id: this.afterSalesData.id,
+                  skuId: this.afterSalesData.skuId,
+                  phPictureUrl: this.goodsData.groupbuySkuPicurl,
+                  repairType: this.afterSalesData.repairType,
+                  picList,
+                  type: "5",
+                }
+              )
+              .then((res) => {
+                if (res.data.result == "success") {
+                  this.$router.push({
+                    path: "/bulk_after_sales_detail",
+                    query: {
+                      id: JSON.parse(res.data.data.id),
+                    },
+                  });
+                  this.$toast("申请成功，请耐心等待审核");
+                }
+              });
+          }
+        });
+    },
+  },
 };
 //
 </script>
@@ -142,13 +239,14 @@ export default {
 @import '~@/common/stylus/mixin.styl';
 
 .router_class {
-  background-color: #F6F6F6;
+  background-color: #F6F6F6 !important;
 }
 
 .after {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  background-color: #F6F6F6;
 }
 
 .afterSalesEdit {

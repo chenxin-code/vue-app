@@ -9,18 +9,19 @@
             <div>售后类型</div>
             <div>退款</div>
           </div>
+          <!-- state 0 待审核 -->
           <div class="order_status">待审核</div>
         </div>
         <div class="goods_info">
           <div class="goods_info_title">商品信息</div>
-          <div class="goods_item" v-for="(item, index) in 4" :key="index">
-            <img :src="require('../../share/images/share.png')" alt="" />
+          <div class="goods_item">
+            <img :src="afterSalesData.phPictureUrl" alt="" />
             <div class="goods_item_detail">
-              <div class="goods_name">新鲜的大西瓜</div>
+              <div class="goods_name">{{ afterSalesData.skuName }}</div>
               <div class="goods_count">
                 商品数量：
                 <van-stepper
-                  v-model="value"
+                  v-model="afterSalesData.payNumber"
                   input-width="0.466667rem"
                   button-size="0.466667rem"
                   disabled
@@ -30,25 +31,21 @@
               <div class="goods_price_btn">
                 <div class="price">
                   <div>商品价格：</div>
-                  <div>¥5.00</div>
+                  <div>¥{{ afterSalesData.salePrice }}</div>
                 </div>
               </div>
             </div>
           </div>
           <div class="line"></div>
-          <div class="refund_price">合计退款金额：¥20.00</div>
+          <div class="refund_price">
+            合计退款金额：¥{{ afterSalesData.predictRefundAmount }}
+          </div>
         </div>
       </div>
       <div class="problem_description">
         <div class="problem_title">问题描述</div>
         <div class="problem_text">
-          你好数不胜数你打电话点点滴滴年大家都等你多久
-          还得不到你电脑都记得你当年的弟弟看到你懂得的
-          点点滴滴反反复还是不是收拾收拾睡觉时手机少男
-          书生本色江苏苏宁少男少女思考思考世界室内设计
-          实话实说今生今世你说你是莫斯科市开始世界室内
-          和少男少女设计师设计说明书上劳斯莱斯少男少女
-          还是十八世纪四十就是奈史密斯上…..
+          {{ afterSalesData.issueDesc }}
         </div>
         <div class="problem_img">
           <img :src="require('../../share/images/share.png')" alt="" />
@@ -71,9 +68,20 @@ export default {
   data() {
     return {
       value: 1,
+      id: "",
+      afterSalesData: {},
     };
   },
-  created() {},
+  created() {
+    this.id = JSON.parse(this.$route.query.id);
+    this.$http
+      .post("/app/json/app_order_after_sale/queryAfterDetail", { id: this.id })
+      .then((res) => {
+        if (res.data.result == "success") {
+          this.afterSalesData = res.data.data;
+        }
+      });
+  },
 };
 //
 </script>
@@ -83,7 +91,7 @@ export default {
 @import '~@/common/stylus/mixin.styl';
 
 .router_class {
-  background-color: #F6F6F6;
+  background-color: #F6F6F6 !important;
 }
 
 .afterSalesDetail {
