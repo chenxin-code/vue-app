@@ -154,7 +154,7 @@ export default {
               activityNo: this.$store.state.CharseInfo.activityId,
               teamLeaderNo: this.$store.state.CharseInfo.masterPlace
                 .teamLeaderNo,
-              deliveryMode: 0,//0自提1送货上门
+              deliveryMode: 0, //0自提1送货上门
               consigneeName: this.consigneeName,
               consigneePhoneNumber: this.consigneePhoneNumber,
               preProductSkuInfoList: [
@@ -181,6 +181,8 @@ export default {
                     }),
                   },
                 });
+              } else {
+                this.$toast(res.data.info);
               }
             });
         } else {
