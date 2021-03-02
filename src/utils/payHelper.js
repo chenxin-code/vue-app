@@ -367,12 +367,12 @@ var payHelper = {
           timestamp: info.timestamp,
           sign: info.sign
         }
-        console.log('-----------------------------------------------', redirectUrl)
+        console.log('-----------------------------------------------', info)
         if (redirectUrl) {
           params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
-          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `/pages/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
 
       } else {

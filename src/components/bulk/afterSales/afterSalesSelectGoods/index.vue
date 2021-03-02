@@ -3,18 +3,19 @@
   <div class="afterSalesSelectGoods">
     <navbar :title="'售后/申请'"></navbar>
     <div class="goods_list">
-      <div class="goods_item" v-for="item in 10" :key="item">
-        <img
-          src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b"
-          alt=""
-        />
+      <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
+        <img :src="item.groupbuySkuPicurl" alt="" />
         <div class="goods_item_detail">
-          <div class="goods_item_name">万宝路</div>
-          <div class="goods_item_count">商品数量：<span>4</span></div>
-          <div class="goods_item_price">商品价格：<span>￥75.00</span></div>
+          <div class="goods_item_name">{{ item.groupbuySkuName }}</div>
+          <div class="goods_item_count">
+            商品数量：<span>{{ item.buyNumber }}</span>
+          </div>
+          <div class="goods_item_price">
+            商品价格：<span>￥{{ item.groupbuyBuyerPrice }}</span>
+          </div>
         </div>
         <div class="btn_box">
-          <div class="after_btn" @click="navToAfterSales">申请售后</div>
+          <div class="after_btn" @click="navToAfterSales(item)">申请售后</div>
         </div>
       </div>
     </div>
@@ -30,13 +31,34 @@ export default {
   },
   props: {},
   data() {
-    return {};
+    return {
+      goodsList: [],
+      activityOrderId:"",
+      activityOrderItemId:"",
+    };
   },
-  created() {},
+  created() {
+    // this.activityOrderId = JSON.parse(this.$route.query.activityOrderId);
+    this.activityOrderItemId = JSON.parse(this.$route.query.activityOrderItemId);
+    this.$http
+      .post("/app/json/app_group_buying_after_sale/queryAfterOrderByIdList", {
+        groupbuyOrderItemId: this.activityOrderItemId,
+      })
+      .then((res) => {
+        if (res.data.result == "success") {
+          console.log("res", res);
+          this.goodsList = res.data.data;
+        }
+      });
+  },
   methods: {
-    navToAfterSales() {
+    navToAfterSales(item) {
       this.$router.push({
         path: "/bulk_after_sales_edit",
+        query: {
+          goodsData: JSON.stringify(item),
+          // activityOrderId: JSON.stringify(this.activityOrderId),
+        },
       });
     },
   },
@@ -102,7 +124,7 @@ export default {
       .btn_box {
         flex: 1;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
 
         .after_btn {

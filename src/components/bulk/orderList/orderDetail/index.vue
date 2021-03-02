@@ -4,7 +4,7 @@
     <navbar :title="'订单详情'"></navbar>
     <div class="orderDetail">
       <div class="user_info">
-        <img :src="require('../../share/images/share.png')" alt="" />
+        <img :src="detailData.createUserAvtUrl" alt="" />
         <div class="info">
           <div class="user">
             <div>{{ detailData.receiveTypeStr }}</div>
@@ -34,7 +34,7 @@
           v-for="(item, index) in detailData.groupbuySkuInfoList"
           :key="index"
         >
-          <img :src="require('../../share/images/share.png')" alt="" />
+          <img :src="item.skuPicUrl" alt="" />
           <div class="goods_detail">
             <div class="goods_name">{{ item.skuName }}</div>
             <div class="goods_price_count">
@@ -59,9 +59,7 @@
           <div class="order_value">{{ detailData.payTime }}</div>
         </div>
       </div>
-      <div class="after_sales" @click="$router.push('/bulk_after_sales_select_goods')">
-        受理售后问题
-      </div>
+      <div class="after_sales" @click="navToAfterSales">受理售后问题</div>
     </div>
   </div>
 </template>
@@ -83,12 +81,24 @@ export default {
     this.$http
       .post("/app/json/group_buying_order/getOrderInfoListByItemId", {
         orderItemId: JSON.parse(this.$route.query.id),
-        // orderItemId: 1,
       })
       .then((res) => {
         console.log(res);
         this.detailData = res.data.data;
       });
+  },
+  methods: {
+    navToAfterSales() {
+      this.$router.push({
+        path: "/bulk_after_sales_select_goods",
+        query: {
+          // activityOrderId: JSON.stringify(this.detailData.activityOrderId),
+          activityOrderItemId: JSON.stringify(
+            this.detailData.activityOrderItemId
+          ),
+        },
+      });
+    },
   },
 };
 </script>
