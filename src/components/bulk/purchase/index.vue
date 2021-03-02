@@ -51,8 +51,8 @@ export default {
   },
   data() {
     return {
-      communityId: '2253018072568823811',
-      categoryId:'',
+      communityId: "2253018072568823811",
+      categoryId: "",
       page: 0,
       pageSize: 10,
       wrapperHeight: 0,
@@ -63,6 +63,13 @@ export default {
       offset: 15,
     };
   },
+  created() {
+    if (window.localStorage.getItem("LLBProjectId")) {
+      this.communityId = window.localStorage.getItem("LLBProjectId");
+    } else {
+      this.$toast("未获取到社区id,默认为2253018072568823811");
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.wrapperHeight = document.getElementsByClassName(
@@ -72,7 +79,7 @@ export default {
     this.getList(1);
   },
   methods: {
-    navToMsg(data){
+    navToMsg(data) {
       this.saleDataList = [];
       this.categoryId = data.id;
       this.getList(1);
@@ -106,7 +113,7 @@ export default {
         .then((res) => {
           this.loading = false;
           this.isLoading = false;
-          if(!res.data.data.length){
+          if (!res.data.data.length) {
             this.finished = true;
           }
           res.data.data.map((item, index) => {
@@ -119,7 +126,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      
     },
   },
 };

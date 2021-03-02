@@ -235,7 +235,7 @@ export default {
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
-      this.isLoading = true; //将下拉刷新状态改为true开始刷新
+      this.loading = false; //将下拉刷新状态改为true开始刷新
       let obj = {
         pageIndex: page,
         // sortBy: "create_time_DESC",
@@ -338,13 +338,12 @@ export default {
         }
       } else if (option.icon == "link") {
         this.$http
-          .post(
-            "http://192.168.28.119:18807/app/json/app_group_buying_share_home/generateShareLink",
-            {
-              path: "/pages/homePage/temporaryCapture",
-              query: `?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`,
-            }
-          )
+          .post("/app/json/app_group_buying_share_home/generateShareLink", {
+            path: "/pages/homePage/temporaryCapture",
+            query: `redirect=${encodeURIComponent(
+              `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+            )}`,
+          })
           .then((res) => {
             if (res.data.data.errcode == 0) {
               this.link = res.data.data.openlink;
