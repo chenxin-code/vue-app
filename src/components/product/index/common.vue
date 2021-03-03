@@ -70,7 +70,7 @@
 
 <script>
   import Tabbar from './tabbar/tabbar'
-  import {mapGetters} from 'vuex'
+  // import {mapGetters} from 'vuex'
   import logCenter from '@/utils/logCenter'
   import Config from '@/api/config'
   import AdPage from '@/components/product/index/subpage/adpage'
@@ -82,7 +82,7 @@
   import Cookie from 'js-cookie'
   import staticDataRequest from "../../../utils/staticData/staticDataRequest";
   import createGuide from '@/components/commonui/exchange-guide/guide-event';
-  import appUi from '@zkty-team/x-engine-module-ui'
+  import {mapMutations, mapGetters} from 'vuex'
 
   export default {
     name: 'index',
@@ -900,11 +900,6 @@
       next()
     },
     created() {
-      console.log('000000000000000', appUi)
-      if (this.$store.state.webType != '3') {
-        alert('不是微信小程序')
-        appUi.showTabbar();
-      }
       this.$store.state.clientWidth = document.documentElement.clientWidth;
       this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : '';
       this.businessType = this.$route.query.businessType ? this.$route.query.businessType : '';

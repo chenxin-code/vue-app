@@ -467,7 +467,7 @@
     },
     components: {
       // BindOilCard
-    }
+    },
   };
 </script>
 

@@ -17,6 +17,7 @@ import Cookie from 'js-cookie'
 import {getUserInfo} from '../utils/login'
 import hbJwx from '../utils/deploy/hbsy/hb-jwx'
 import Watchman from '../utils/watchman'
+import appUi from '@zkty-team/x-engine-module-ui'
 
 
 Vue.use(Router);
@@ -280,6 +281,9 @@ let skip = ['/icbc', '/mall2/scanbuyproduct', '/mall2/ylpay', '/mall2/ylpayredir
 // 下面这些里面没法使用globalConfig
 let skipAll = ['/usercenter/agreementcommon'];
 router.beforeEach((to, from, next) => {
+  if (!/^\/common$/.test('/common')) {
+    appUi.hideTabbar()
+  }
   //记录微信公众号首次进入的路径
   if (!window.initUrl) {
     window.initUrl = window.location.href.split('#')[0];
