@@ -299,7 +299,8 @@ const store = new Vuex.Store({
     },
     bulkTotalPrice: 0,
     bulkCheckList: [],
-    CharseInfo:{}
+    CharseInfo: {},
+    showCategory: true,
   },
   getters: {
     webtype: state => {
@@ -389,13 +390,17 @@ const store = new Vuex.Store({
     getBulkCheckList: state => {
       return state.bulkCheckList
     },
-    getCharseInfo:state => {
+    getCharseInfo: state => {
       return state.purcharseInfo
     },
+    getShowCategory: state => {
+      return state.showCategory
+    },
+
   },
   mutations: {
-    setCharseInfo:(state, info) => {
-      state.CharseInfo = Object.assign(state.CharseInfo,info)
+    setCharseInfo: (state, info) => {
+      state.CharseInfo = Object.assign(state.CharseInfo, info)
     },
     setWebType: (state, info) => {
       state.webtype = info
@@ -462,6 +467,9 @@ const store = new Vuex.Store({
     },
     setBulkCheckList: (state, info) => {
       state.bulkCheckList = info
+    },
+    setShowCategory: (state, info) => {
+      state.showCategory = info
     },
   },
   actions: {

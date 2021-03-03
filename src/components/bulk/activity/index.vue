@@ -75,7 +75,11 @@
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
-                <span @click.stop="share(item)" v-if="item.groupbuyActivityStatus == 1">分享</span>
+                <span
+                  @click.stop="share(item)"
+                  v-show="item.groupbuyActivityStatus == 1"
+                  >分享</span
+                >
                 <span @click.stop="navToDetail(item.id)">本团订单</span>
               </p>
             </div>
@@ -92,12 +96,20 @@
       cancel-text=""
       @select="onShare"
     />
+    <!-- <button
+      v-show="false"
+      ref="copybtn"
+      class="copy-btn"
+      @click="copyLink"
+      :data-clipboard-text="this.link"
+    ></button> -->
     <!-- </nav-content> -->
   </div>
 </template>
 
 <script>
 import Qs from "qs";
+import ClipboardJS from "clipboard";
 export default {
   name: "activity",
   // mixins: [api],
@@ -109,7 +121,7 @@ export default {
         { name: "微信", icon: "wechat" },
         { name: "复制链接", icon: "link" },
       ],
-      copybtn: "",
+      copybtn: null,
       tabTitle: [
         { title: "全部" },
         { title: "进行中" },
@@ -129,6 +141,7 @@ export default {
       totalPage: 0,
       userData: {},
       shareItemData: {},
+      link: "",
     };
   },
   created() {
@@ -222,7 +235,7 @@ export default {
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
-      this.isLoading = true; //将下拉刷新状态改为true开始刷新
+      this.loading = false; //将下拉刷新状态改为true开始刷新
       let obj = {
         pageIndex: page,
         // sortBy: "create_time_DESC",
@@ -277,65 +290,62 @@ export default {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3) {
           //判断小程序
-          this.$http
-            .get(
-              "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b"
-            )
-            .then((res) => {
-              console.log(res);
-            });
+          this.options = [{ name: "复制链接", icon: "link" }];
         } else if (
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          // window.shareForOpenWXMiniProgram = () => {
-          //   share
-          //     .shareForOpenWXMiniProgram({
-          //       userName: "wxc76cd2c3987620af",
-          //       path: "/bulk_share",
-          //       title: "微信分享商品",
-          //       desc: "test",
-          //       link: "http://www.baidu.com",
-          //       imageurl:
-          //         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
-          //       miniProgramType: 2,
-          //       __event__: (res) => {
-          //         // document.getElementById(
-          //         //   "debug_text"
-          //         // ).innerText = JSON.stringify(res);
-          //         alert("shareRes----------", JSON.stringify(res));
-          //       },
-          //     })
-          //     .then((res) => {
-          //       // document.getElementById("debug_text").innerText = res;
-          //       alert("shareThenRes----------", res);
-          //     });
-          // };
-          this.$router.push({
-            path: "/bulk_share",
-            query: {
-              purchaseId: JSON.stringify(this.shareItemData.id),
-              chiefId: JSON.stringify(this.userData.teamLeaderNo),
-              userId: JSON.stringify(this.userData.userNo),
-              activityName: JSON.stringify(
-                this.shareItemData.groupbuyActivityName
-              ),
-            },
-          });
+          window.shareForOpenWXMiniProgram = () => {
+            share
+              .shareForOpenWXMiniProgram({
+                userName: "wxc76cd2c3987620af",
+                path: `/pages/homePage/temporaryCapture?redirect=${encodeURIComponent(
+                  `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+                )}`,
+                title: "微信分享商品",
+                desc: "test",
+                link: "http://www.baidu.com",
+                imageurl:
+                  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+                miniProgramType: 2,
+                __event__: (res) => {},
+              })
+              .then((res) => {
+                // document.getElementById("debug_text").innerText = res;
+                alert("shareThenRes----------", JSON.stringify(res));
+              });
+          };
+          // this.$router.push({
+          //   path: "/bulk_share",
+          //   query: {
+          //     purchaseId: JSON.stringify(this.shareItemData.id),
+          //     chiefId: JSON.stringify(this.userData.teamLeaderNo),
+          //     userId: JSON.stringify(this.userData.userNo),
+          //     activityName: JSON.stringify(
+          //       this.shareItemData.groupbuyActivityName
+          //     ),
+          //   },
+          // });
         }
       } else if (option.icon == "link") {
-        this.$http.post(
-          "http://192.168.31.173:18807/app/json/app_group_buying_share_home/generateShareLink",
-          {
-            path: "/bulk_share",
-            query: {
-              purchaseId: this.shareItemData.id,
-              chiefId: this.userData.teamLeaderNo,
-              userId: this.userData.userNo,
-              activityName: this.shareItemData.groupbuyActivityName,
-            },
-          }
-        );
+        this.$http
+          .post("/app/json/app_group_buying_share_home/generateShareLink", {
+            path: "/pages/homePage/temporaryCapture",
+            query: `redirect=${encodeURIComponent(
+              `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+            )}`,
+          })
+          .then((res) => {
+            if (res.data.data.errcode == 0) {
+              this.link = res.data.data.openlink;
+              // weixin://dl/business/?t=lzjYaPnRpgo
+              new ClipboardJS(".btn", {
+                text: function (trigger) {
+                  return this.link;
+                },
+              });
+            }
+          });
       }
       this.showShare = false;
     },

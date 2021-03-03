@@ -98,9 +98,7 @@
                 alt=""
                 class="item_other_user_avatar"
               />
-              等{{
-                999 >= item.buyerCount ? "999+" : item.buyerCount
-              }}人购买了此商品
+              等{{ item.buyerCount }}人购买了此商品
             </div>
           </div>
           <van-stepper
