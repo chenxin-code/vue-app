@@ -31,6 +31,7 @@ module.exports = {
             // target: 'http://tbdapp.deepermobile.com',
             // target: 'http://39.105.84.126:28807',
             target: 'http://mall-uat-app-linli.timesgroup.cn/',
+            // target: 'http://mall-uat-app-linli.timesgroup.cn/',
             changeOrigin: true,
         },
     }
