@@ -64,11 +64,15 @@ export default {
     };
   },
   created() {
-    if (window.localStorage.getItem("LLBProjectId")) {
-      this.communityId = window.localStorage.getItem("LLBProjectId");
-    } else {
-      this.$toast("未获取到社区id,默认为2253018072568823811");
-    }
+    localstorage
+      .get({
+        key: "LLBProjectId",
+        isPublic: true,
+      })
+      .then((res) => {
+        alert("res", JSON.stringify(res));
+        this.communityId = res.result
+      });
   },
   mounted() {
     this.$nextTick(() => {

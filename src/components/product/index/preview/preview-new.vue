@@ -5,6 +5,7 @@
       <!--MyCenterHeader-->
       <TopNav :usePorpData="true" :propData="pageData" v-if="pageData.header.data.type == 'custom'" :barHeight="barHeight" :scrollSite="scrollSite"></TopNav>
       <div :id="modulesDomId" class="modules-div" :style="getTopStyle()">
+        <NewCategory></NewCategory>
         <div class="screen-module" v-if="pageData.screenModule && pageData.screenModule.code != ''">
           <component :is="pageData.screenModule.code" :usePorpData="true" :propData="pageData"></component>
         </div>
@@ -43,11 +44,15 @@
 <script>
   // import TopNav from '@/views/design/components/top-nav/top-nav';
   import TopNav from '../top-nav/top-nav';
+  import NewCategory from '../category/index';
   // import PullTo from '@/components/Vendor/vue-pull-to/vue-pull-to'
   // import Scroll from '@/components/base/scroll/scroll'
   export default {
     name: 'preview-component',
     components: {
+      //新增首页顶部分类
+      NewCategory,
+
       TopNav,
       // PullTo,
       // Scroll,
@@ -89,7 +94,7 @@
       HYStation: () => import('../hy-station/hy-station'),
       CardProvincial: () => import('../card-provincial/card-provincial'),
       BtnProduct: () => import('../btn-product/btn-product'),
-      GetCoupon: () => import('../get-coupon/get-coupon')
+      GetCoupon: () => import('../get-coupon/get-coupon'),
     },
     props: [
       'pageData',

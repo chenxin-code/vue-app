@@ -290,51 +290,42 @@ export default {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3) {
           //判断小程序
-          this.$http
-            .get(
-              "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc76cd2c3987620af&secret=d736b766f1b77c5def2f179a53f2577b"
-            )
-            .then((res) => {
-              console.log(res);
-            });
+          this.options = [{ name: "复制链接", icon: "link" }];
         } else if (
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          // window.shareForOpenWXMiniProgram = () => {
-          //   share
-          //     .shareForOpenWXMiniProgram({
-          //       userName: "wxc76cd2c3987620af",
-          //       path: "/bulk_share",
-          //       title: "微信分享商品",
-          //       desc: "test",
-          //       link: "http://www.baidu.com",
-          //       imageurl:
-          //         "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
-          //       miniProgramType: 2,
-          //       __event__: (res) => {
-          //         // document.getElementById(
-          //         //   "debug_text"
-          //         // ).innerText = JSON.stringify(res);
-          //         alert("shareRes----------", JSON.stringify(res));
-          //       },
-          //     })
-          //     .then((res) => {
-          //       // document.getElementById("debug_text").innerText = res;
-          //       alert("shareThenRes----------", res);
-          //     });
-          // };
-          this.$router.push({
-            path: "/bulk_share",
-            query: {
-              purchaseId: JSON.stringify(this.shareItemData.id),
-              chiefId: JSON.stringify(this.userData.teamLeaderNo),
-              userId: JSON.stringify(this.userData.userNo),
-              activityName: JSON.stringify(
-                this.shareItemData.groupbuyActivityName
-              ),
-            },
-          });
+          window.shareForOpenWXMiniProgram = () => {
+            share
+              .shareForOpenWXMiniProgram({
+                userName: "wxc76cd2c3987620af",
+                path: `/pages/homePage/temporaryCapture?redirect=${encodeURIComponent(
+                  `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+                )}`,
+                title: "微信分享商品",
+                desc: "test",
+                link: "http://www.baidu.com",
+                imageurl:
+                  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+                miniProgramType: 2,
+                __event__: (res) => {},
+              })
+              .then((res) => {
+                // document.getElementById("debug_text").innerText = res;
+                alert("shareThenRes----------", JSON.stringify(res));
+              });
+          };
+          // this.$router.push({
+          //   path: "/bulk_share",
+          //   query: {
+          //     purchaseId: JSON.stringify(this.shareItemData.id),
+          //     chiefId: JSON.stringify(this.userData.teamLeaderNo),
+          //     userId: JSON.stringify(this.userData.userNo),
+          //     activityName: JSON.stringify(
+          //       this.shareItemData.groupbuyActivityName
+          //     ),
+          //   },
+          // });
         }
       } else if (option.icon == "link") {
         this.$http
