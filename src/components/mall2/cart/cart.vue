@@ -4,7 +4,8 @@
   <div class="cart">
     <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent">
       <div class="cart-top">
-        <div class="cart-title" @click="chooseAddress(deliverType)">
+        <!-- @click="chooseAddress(deliverType)" -->
+        <div class="cart-title">
           <span class="title theme_font_black">购物车({{ goodsCount }})</span>
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span> -->
           <!-- <i class="iconfont mall-dingwei theme_font_black"></i> -->
@@ -252,6 +253,8 @@ export default {
         (res) => {
           let data = res.data;
           if (data.status == 0) {
+            this.goodsCount = data.data;
+
             // this.$store.state.mall2.cartNum = data.data
             if (deliverType == 1) {
               this.zitiNum = data.data;
