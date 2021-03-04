@@ -17,12 +17,6 @@
       </div>
     </div>
 
-    <!-- 假定团购入口 -->
-    <div style="width:100%;display:flex;justifyContent:space-around;">
-      <van-button type="info" @click="$router.push('/bulk')">团长入口</van-button>
-      <van-button type="info" @click="$router.push('/purchase')">消费者入口</van-button>
-      <van-button type="info" @click="$router.push('/bulk_share')">微信分享</van-button>
-    </div>
 
     <div v-if="moduleData.styleTempl == '2'" class="style1">
       <div class="content">

@@ -2093,7 +2093,6 @@
         }
       },
       buyNowEvent: function () {
-
         if (this.canSale == false) {
           this.$Toast('该商品在该地区暂不支持购买！')
           return ;
@@ -2710,7 +2709,7 @@
             this.$Loading.close();
             this.$Toast('请求数据失败！')
           }
-        );
+        )
       },
       // 获取是否收藏
       _getCollectState: function () {
@@ -3010,7 +3009,6 @@
       }
     },
     created() {
-
       this.lastPath = this.$route.query.lastPath ? this.$route.query.lastPath : ''
       this.orderCategory = this.$route.query.orderCategory ? this.$route.query.orderCategory : ''
       this.vipUnitUserCode = this.$route.query.vipUnitUserCode ? this.$route.query.vipUnitUserCode : ''

@@ -77,7 +77,6 @@ const staticDataRequest = {
     if (url.indexOf('http') != 0) {
       url = config.baseURL + url
     }
-
     args.forEach(item => {
       if (typeof item === 'object') {
         for (const key in item) {

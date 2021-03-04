@@ -81,7 +81,8 @@
   import HyActivityModal from '@/deploy/cnooc/views/activity-modal/activity-modal.vue'; // 海油活动弹窗
   import Cookie from 'js-cookie'
   import staticDataRequest from "../../../utils/staticData/staticDataRequest";
-  import createGuide from '@/components/commonui/exchange-guide/guide-event'
+  import createGuide from '@/components/commonui/exchange-guide/guide-event';
+  import appUi from '@zkty-team/x-engine-module-ui'
 
   export default {
     name: 'index',
@@ -325,7 +326,7 @@
             this.pageLoaded = true;
             let fdata = data.data.pageData;
             if (!fdata.pageDataJson) {
-              this.$toast('首页布局获取失败')
+              this.$toast('首页布局获取失败11')
               return
             }
             let pdata = JSON.parse(fdata.pageDataJson);
@@ -899,13 +900,16 @@
       next()
     },
     created() {
+      console.log('000000000000000', appUi)
+      if (this.$store.state.webType !== '3') {
+        appUi.showTabbar();
+      }
       this.$store.state.clientWidth = document.documentElement.clientWidth;
       this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : '';
       this.businessType = this.$route.query.businessType ? this.$route.query.businessType : '';
       this.pageType = this.$route.query.pageType ? this.$route.query.pageType : '';
       // sessionStorage.setItem('Other_Common_PageType', this.pageType)
       this.jkmName = this.$route.query.name ? this.$route.query.name : '';
-      console.log('store=======', this.$store.state);
       if (this.pgCode == '') {
         //  创建首页（第一个页面）的时候，走用户信息相关流程
         // this.$userCenter.rootEvents()
