@@ -42,6 +42,10 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
+        <span class="home-shoppingCart">
+          <i>{{shoppingCartCount}}</i>
+          <img src="static/images/card-provincial/shopping_cart.png" />
+        </span>
         <!-- 退出登录 -->
         <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
           <img :style="imgStyle" src="static/images/header/login-out-w.png"/>
@@ -204,6 +208,7 @@
     mixins:[hee],
     data() {
       return {
+        shoppingCartCount: null,
         currentValue: '',
         imgStyle: {
           display: 'block',
@@ -236,7 +241,30 @@
         }
       }
     },
+    created() {
+      console.log('lllllllllllll')
+      this._getCartCount()
+    },
     methods: {
+      _getCartCount: function () {
+        let url = '/app/json/app_cart/getCartCount';
+        let paramsData = {
+          token: this.$store.state.login.token,
+          deliveryType: '2',
+          orderCategory: '0',
+          vipUnitUserCode: ''
+        };
+        this.$http.post(url, paramsData).then(
+          res => {
+            console.log('carttttttttttttt', res)
+            this.shoppingCartCount = res.data.data
+          },
+          error => {
+            this.$Loading.close();
+            this.$Toast('请求数据失败！')
+          }
+        );
+      },
       /**
        * @description 热力统计事件
        */
@@ -369,6 +397,29 @@
 <style lang="stylus" scoped type="text/stylus">
   @import '~@/common/stylus/variable.styl'
   @import '~@/common/stylus/mixin.styl'
+  .home-shoppingCart{
+    display inline-block
+    width 28px
+    height 28px
+    margin 0 15px 0
+    position relative
+    i{
+      width 18px
+      height 18px
+      position absolute
+      border 1px solid #fff
+      text-align center
+      line-height 18px
+      color #fff
+      right -9px
+      border-radius 50%
+      top -7px
+    }
+    img{
+      width 100%
+      height 100%
+    }
+  }
   .top-nav {
     width 100%
     .default-div {
