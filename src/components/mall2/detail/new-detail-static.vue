@@ -844,6 +844,7 @@
   import CouponAndActivity from './base/couponAndActivity'
   import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
   import cartEvent from "../../../utils/presale/cart";
+  import appUi from '@zkty-team/x-engine-module-ui'
 
   export default {
     name: "detail",
@@ -3009,6 +3010,7 @@
       }
     },
     created() {
+      appUi.hideTabbar();
       this.lastPath = this.$route.query.lastPath ? this.$route.query.lastPath : ''
       this.orderCategory = this.$route.query.orderCategory ? this.$route.query.orderCategory : ''
       this.vipUnitUserCode = this.$route.query.vipUnitUserCode ? this.$route.query.vipUnitUserCode : ''
