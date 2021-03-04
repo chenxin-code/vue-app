@@ -56,10 +56,11 @@ li
 body
   -webkit-text-size-adjust: none
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
-
+  padding-top: constant(safe-area-inset-top) !important
+  padding-bottom: constant(safe-area-inset-bottom)!important
+  padding-top: env(safe-area-inset-top) !important
+  padding-bottmo: env(safe-area-inset-bottom) !important
   //font-family: BlinkMacSystemFont, 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif
-
-
 
 body, html
   width: 100%
