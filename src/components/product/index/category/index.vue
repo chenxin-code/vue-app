@@ -23,7 +23,7 @@
               ? require('./images/selectIconRed.png')
               : ''
           "
-          v-show="index == currentSelect"
+          v-show="item.id == currentSelect"
           alt=""
         />
       </div>
@@ -58,6 +58,7 @@ export default {
     if (this.current) {
       this.currentSelect = this.current;
     }
+    console.log(this.$route);
   },
   components: {},
   methods: {
