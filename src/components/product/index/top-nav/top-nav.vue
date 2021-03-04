@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
-        <span class="home-shoppingCart">
+        <span class="home-shoppingCart" @click="navToCar">
           <i>{{shoppingCartCount}}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
@@ -203,7 +203,7 @@
       },
       myData: function () {
         return this.pageData.header.data
-      }
+      },
     },
     mixins:[hee],
     data() {
@@ -242,7 +242,9 @@
       }
     },
     created() {
-      console.log('lllllllllllll')
+      this._getCartCount()
+    },
+    activated(){
       this._getCartCount()
     },
     methods: {
@@ -264,6 +266,15 @@
             this.$Toast('请求数据失败！')
           }
         );
+      },
+      navToCar(){
+        this.$router.push({
+          path: '/mall2/cart',
+          query: {
+            orderCategory: "",
+            vipUnitUserCode: ""
+          }
+        })
       },
       /**
        * @description 热力统计事件
