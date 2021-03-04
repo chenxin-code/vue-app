@@ -661,7 +661,8 @@
       </div>
     </div>
     <div class="bottom-btns" v-else-if="!easyCardId && detailShow && !recommendCommodity">
-      <div class="btn full" ref="gouwuche" @click="toCart">
+      <!-- 2021-03-04 按需求单独在购物车及收藏按钮更改样式 新增类名 padding_car padding_collect -->
+      <div class="btn full padding_car" ref="gouwuche" @click="toCart">
         <template v-if="detailData.supportPreSale == 1 && $store.state.globalConfig.presaleType == 2">
           <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>
         </template>
@@ -675,7 +676,7 @@
         <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
         <p class="text">店铺</p>
       </div>
-      <div class="btn full" @click="collectEvent">
+      <div class="btn full padding_collect" @click="collectEvent">
         <i class="iconfont mall-shoucang btn-icon theme_font_gray" v-if="isCollect == false"></i>
         <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
         <transition :name="collectName">
@@ -3738,6 +3739,12 @@
 
       .full {
         flex 1;
+      }
+      .padding_car{
+        margin-left 20px
+      }
+      .padding_collect{
+        margin-right 20px
       }
     }
 
