@@ -35,7 +35,7 @@
     },
     computed: {
       navTitle() {
-        return this.title || document.title || this.$route.meta.title || this.$route.name
+        return this.$route.name || this.title || document.title || this.$route.meta.title 
       },
       hideBackBtn() {
         return this.noBack || this.$store.state.firstEntryLocationPath == this.$route.path || this.$route.query.hideBackBtn == 1
