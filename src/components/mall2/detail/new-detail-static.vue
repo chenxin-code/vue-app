@@ -660,9 +660,8 @@
         <p class="title">立即购买</p>
       </div>
     </div>
-    <div class="bottom-btns" v-else-if="!easyCardId && detailShow && !recommendCommodity">
-      <!-- 2021-03-04 按需求单独在购物车及收藏按钮更改样式 新增类名 padding_car padding_collect -->
-      <div class="btn full padding_car" ref="gouwuche" @click="toCart">
+    <div class="bottom-btns bottom_btns_padding" v-else-if="!easyCardId && detailShow && !recommendCommodity">
+      <div class="btn full" ref="gouwuche" @click="toCart">
         <template v-if="detailData.supportPreSale == 1 && $store.state.globalConfig.presaleType == 2">
           <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>
         </template>
@@ -676,7 +675,7 @@
         <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
         <p class="text">店铺</p>
       </div>
-      <div class="btn full padding_collect" @click="collectEvent">
+      <div class="btn full" @click="collectEvent">
         <i class="iconfont mall-shoucang btn-icon theme_font_gray" v-if="isCollect == false"></i>
         <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
         <transition :name="collectName">
@@ -689,30 +688,30 @@
         <img class="btn-sl-img" src="./img/sl.png">
         <p class="text">送礼</p>
       </div>
-      <div class="btn theme_standard_bg theme_font_white" @click="addToCart"
+      <div class="btn theme_standard_bg theme_font_white radius" @click="addToCart"
            v-if="stockNum != 0 && canSale == true && detailData.status != '0' && productType != 511 && (detailData.supportPreSale != '1' || $store.state.globalConfig.presaleType == 2)">
         <p class="title">加入购物车</p>
       </div>
-      <div class="btn theme_bg_y theme_font_white" @click="buyNowEvent"
+      <div class="btn theme_bg_y theme_font_white radius" @click="buyNowEvent"
            v-if="stockNum != 0 && canSale == true && detailData.status != '0' && isPayTime() && detailData.supportPreSale != '1'">
         <p class="title">立即购买</p>
       </div>
-      <div class="btn theme_bg_y theme_font_white" :class="{'big-btn': $store.state.globalConfig.presaleType != 2}" @click="preSaleEvent"
+      <div class="btn theme_bg_y theme_font_white radius" :class="{'big-btn': $store.state.globalConfig.presaleType != 2}" @click="preSaleEvent"
            v-if="stockNum != 0 && canSale == true && detailData.status != '0' && isPayTime() && detailData.supportPreSale == '1'">
         <p class="title">预购下单</p>
       </div>
       <!--<div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent" v-if="detailData.status">-->
       <!--<p class="title">'商品已下架'</p>-->
       <!--</div>-->
-      <div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent"
+      <div class="btn big-btn theme_bg_y theme_font_white radius" @click="noStockEvent"
            v-if="stockNum == 0 && canSale == true && detailData.status != '0'">
         <p class="title">商品缺货</p>
       </div>
-      <div class="btn big-btn theme_bg_y theme_font_white" @click="canNotSaleEvent"
+      <div class="btn big-btn theme_bg_y theme_font_white radius" @click="canNotSaleEvent"
            v-if="canSale == true && detailData.status == '0'">
         <p class="title">商品已下架</p>
       </div>
-      <div class="btn big-btn theme_bg_y theme_font_white" @click="canNotSaleEvent" v-if="canSale == false">
+      <div class="btn big-btn theme_bg_y theme_font_white radius" @click="canNotSaleEvent" v-if="canSale == false">
         <p class="title">不在可售区域</p>
       </div>
     </div>
@@ -3650,6 +3649,17 @@
       text-align center;
     }
 
+    .bottom_btns_padding{
+      // padding-right 8px;
+      
+      .radius{
+        border-radius 27px
+        height 35px
+        margin-top 7.5px
+        line-height 0px
+        margin-right 8px
+      }
+    }
     .bottom-btns {
       position absolute;
       left 0px;
@@ -3660,6 +3670,8 @@
       box-shadow 0 -2px 2px #efefef;
       z-index 9;
       display flex;
+
+      
 
       .recommend {
         width 100%;
@@ -3740,12 +3752,7 @@
       .full {
         flex 1;
       }
-      .padding_car{
-        margin-left 20px
-      }
-      .padding_collect{
-        margin-right 20px
-      }
+
     }
 
     .yj-card {
