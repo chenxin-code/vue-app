@@ -580,11 +580,7 @@ export default {
             });
 
             //新增商品种类数量
-            let goodsCount = 0;
-            this.occurArr[0].store.forEach((item) => {
-              goodsCount += item.noActivityCart.length;
-            });
-            this.$emit("changeGoodsCount", goodsCount);
+
           } else {
             this.$Toast(data.info);
           }
@@ -683,7 +679,9 @@ export default {
       this.$http.post(url, paramsData).then(
         (res) => {
           let data = res.data;
+
           if (data.status == 0) {
+            this.$emit('changeGoodsCount',data.data)
             this.$store.state.mall2.cartNum = data.data;
           } else {
             this.$Toast(data.info);
@@ -772,6 +770,7 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
+            this._getCartCount()
             this.$Toast("删除成功");
             this.getDataList();
           } else {

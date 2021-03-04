@@ -26,7 +26,7 @@
             </van-step>
           </van-steps>
         </div>
-        <div class="no-data" v-if="!expressDetails">暂未查询到物流信息</div>
+        <div class="no-data" v-if="expressDetails.length == 0">暂未查询到物流信息</div>
       </div>
     </nav-content>
   </div>
