@@ -63,7 +63,7 @@
 import http from "@/utils/http";
 import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
-import appUi from '@zkty-team/x-engine-module-ui'
+import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "App",
@@ -142,10 +142,10 @@ export default {
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
     if (rate > limit) {
-      document.getElementsByTagName("body")[0].style.paddingTop = "0.933333rem";
-      alert("刘海屏");
-    } else {
-      alert("不是刘海屏");
+      if (this.$store.state.webtype != "3") {
+        document.getElementsByTagName("body")[0].style.paddingTop =
+          "0.933333rem";
+      }
     }
 
     sessionStorage.setItem("js_css_loaded", "1");
@@ -164,8 +164,7 @@ export default {
 
     // 注册通知回调Watchman.yidunLoginInit()
     this.$bridgefunc.registeBridge("notificationCallBack", () => {
-      this.$bridgefunc.getItem("notificationU", (res) => {
-      });
+      this.$bridgefunc.getItem("notificationU", (res) => {});
     });
 
     // 注册appjump回调
@@ -443,13 +442,13 @@ export default {
     },
   },
   watch: {
-    '$route.path':function(newVal,oldVal){
+    "$route.path": function (newVal, oldVal) {
       if (/^\/common$/.test(newVal)) {
         appUi.showTabbar();
       } else {
         appUi.hideTabbar();
       }
-    }
+    },
     // '$route'(to, from) {
     //   let arr = sessionStorage.getItem("routePathArrs");
     //   if (arr && arr != undefined) {
