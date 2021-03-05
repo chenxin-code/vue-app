@@ -425,6 +425,7 @@ export default {
       .scroll-div {
         height: 100%;
         overflow-y: auto;
+        padding-bottom 50px;
         -webkit-overflow-scrolling: touch;
       }
 
