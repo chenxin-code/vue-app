@@ -1,5 +1,6 @@
 <template>
   <!-- // created by hjc  -->
+  <!-- 首页顶部新增类目 -->
   <div class="category" :style="{ backgroundColor: bgColor }">
     <div class="categoryList">
       <div
@@ -12,6 +13,7 @@
           class="categoryName"
           :class="item.id == currentSelect ? 'select' : ''"
           :style="{ color: textColor }"
+          :ref="'category' + index"
         >
           {{ item.name }}
         </div>
@@ -35,7 +37,7 @@
 import { mapMutations } from "vuex";
 export default {
   name: "category",
-  props: ["current"],
+  props: ["current", "domIndex"],
   data() {
     return {
       categoryList: [],
@@ -54,16 +56,25 @@ export default {
         phUrl: "",
         sort: "",
       });
+
+      if (this.domIndex) {
+        this.$nextTick(() => {
+          this.$refs["category" + this.domIndex][0].scrollIntoView(false);
+        });
+      }
     });
     if (this.current) {
       this.currentSelect = this.current;
     }
+
     console.log(this.$route);
   },
+  mounted() {},
   components: {},
   methods: {
-    navToSearch(item) {
+    navToSearch(item, index) {
       this.currentSelect = item.id;
+
       if (item.id == 0) {
         this.$router.push("/common");
       } else {
@@ -74,6 +85,7 @@ export default {
             query: {
               category: item.id,
               cateLevel: 1,
+              domIndex: index,
             },
           });
         } else if (this.$route.name == "商品列表") {

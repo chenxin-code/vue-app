@@ -18,7 +18,7 @@
         <div class="tab-item" v-for="(item, idx) in tabs" @click="tabEvent(item, idx)">
           <div
             class="text theme_font_black"
-            :class="{'selected-btn-1': tabIndex == idx}"
+            :class="tabIndex == idx&&'selected-btn-1'"
           >{{item.text}}</div>
           <!--<div class="line" :class="{theme_bg_red_i: tabSelectedItem.tag == item.tag}"></div>-->
         </div>
@@ -962,6 +962,8 @@ export default {
     },
     tabEvent: function(item, idx) {
       this.tabIndex = idx
+
+      console.log('----------------------------------------------------',this.tabIndex,idx)
       if (this.$store.state.globalConfig.order_list_tabs_type == '2') {
         if (idx == 3) {
           this.deliveryType = 1
@@ -1653,7 +1655,7 @@ export default {
     position: absolute;
     left: 0px;
     right: 0px;
-    top: 30px;
+    top: 38px;
     bottom: 0px;
     overflow-x: hidden;
     overflow-y: auto;
