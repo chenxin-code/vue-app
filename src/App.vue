@@ -141,11 +141,9 @@ export default {
     let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
-    if (rate > limit) {
-      if (this.$store.state.webtype != "3") {
-        document.getElementsByTagName("body")[0].style.paddingTop =
-          "0.933333rem";
-      }
+    console.log('-------------------------------',this.$store.state.webtype)
+    if (rate > limit && this.$store.state.webtype !== "3") {
+      document.getElementsByTagName("body")[0].style.paddingTop = "0.933333rem";
     }
 
     sessionStorage.setItem("js_css_loaded", "1");
