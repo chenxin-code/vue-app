@@ -2,7 +2,7 @@
   <div class="nav-top theme_bg_white" :style="{height: (this.$store.state.barHeight+$market.getNavHeight(isMust))+ 'px', background:bstyle, backgroundImage: 'url('+ bgImg +')', ...navTopStyle}">
     <div class="navcontent" :style="{top: this.$store.state.barHeight+ 'px','height': $market.getNavHeight(isMust)+'px','line-height': $market.getNavHeight(isMust)+'px'}">
       <div v-if="!noTitle" class="title-div" :class="[bgImg || bstyle ? 'theme_font_white' :'theme_font_black' ]" >{{navTitle}}</div>
-      <div v-if="!hideBackBtn" class="nav-back-btn"  @click="backEvent">
+      <div class="nav-back-btn"  @click="backEvent">
         <i class="iconfont mall-fanhui" :class="[bgImg || bstyle ? 'theme_font_white' :'theme_font_black' ]" style="margin-left: 10px; font-size: 20px;"></i>
       </div>
       <slot></slot>
@@ -40,8 +40,6 @@
       hideBackBtn() {
         return this.noBack || this.$store.state.firstEntryLocationPath == this.$route.path || this.$route.query.hideBackBtn == 1
       }
-    },
-    created() {
     },
     methods: {
       backEvent: function () {
