@@ -4,9 +4,6 @@
     <!--@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"-->
     <!--<div id="app" class="theme_sys_base">-->
 
-    <!-- 解决刘海屏问题 -->
-    <div class="fullScreen" v-if="isFullScreen"></div>
-
     <!--app结构请勿随意变动，利用耦合性写了部分代码，慎之-->
 
     <transition :name="$router.customRouterData.transitionName">
@@ -103,8 +100,6 @@ export default {
       homeBtnSeat: "right",
 
       ani: false,
-      //是否是刘海屏
-      isFullScreen: false,
     };
   },
   created() {
@@ -141,17 +136,16 @@ export default {
     },
   },
   mounted() {
-
     // 判断是否是刘海屏
     const rate = window.screen.height / window.screen.width;
     let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
     if (rate > limit) {
-      this.isFullScreen = true;
-      console.log('刘海屏')
-    }else{
-      console.log('不是刘海屏')
+      document.getElementsByTagName("body")[0].style.paddingTop = "0.933333rem";
+      alert("刘海屏");
+    } else {
+      alert("不是刘海屏");
     }
 
     sessionStorage.setItem("js_css_loaded", "1");
@@ -552,10 +546,6 @@ export default {
   font-family: BlinkMacSystemFont, 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  .fullScreen {
-    padding-top: 35px;
-  }
 
   .router_class {
     position: absolute;

@@ -92,7 +92,7 @@ export default {
           case "首页":
             this.currentSelect = 0;
             this.setShowCategory(true);
-            return "#FB3C3C";
+            return "rgb(244, 55, 55)";
 
           default:
             return "#ffffff";
@@ -104,7 +104,7 @@ export default {
       get() {
         switch (this.$route.name) {
           case "商品列表":
-            return "#FB3C3C";
+            return "rgb(244, 55, 55)";
           case "首页":
             this.setShowCategory(true);
             this.currentSelect = 0;
