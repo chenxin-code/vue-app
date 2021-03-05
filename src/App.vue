@@ -165,7 +165,6 @@ export default {
     // 注册通知回调Watchman.yidunLoginInit()
     this.$bridgefunc.registeBridge("notificationCallBack", () => {
       this.$bridgefunc.getItem("notificationU", (res) => {
-        console.log(res);
       });
     });
 
@@ -173,7 +172,6 @@ export default {
     this.$bridgefunc.registeBridge("appjumpCallBack", () => {
       this.$bridgefunc.getItem("appjumpU", (res) => {
         // res 是编码后的json字符串
-        console.log(res);
         let resStr = decodeURIComponent(res);
         let resJson = JSON.parse(resStr);
         let weburl = resJson.weburl;
