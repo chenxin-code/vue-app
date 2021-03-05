@@ -51,10 +51,12 @@
       </div>
     </nav-top>
     <nav-content>
+      <!-- 优化新增类目 -->
       <NewCategory
         @toggle="toggle"
         :current="current"
         v-show="showNewCategory"
+        :domIndex="domIndex"
       ></NewCategory>
       <div class="all-content">
         <div
@@ -469,6 +471,8 @@ export default {
       current: 0,
       // 新类目显示隐藏
       showNewCategory: true,
+      //新类目dom下标
+      domIndex:0,
     };
   },
   mounted() {
@@ -1151,6 +1155,9 @@ export default {
     },
   },
   created() {
+    if (this.$route.query.domIndex) {
+      this.domIndex = this.$route.query.domIndex;
+    }
     this.showNewCategory = this.$store.state.showCategory;
     if (this.$store.state.globalConfig.delivertype_default == "1") {
       this.deliveryTypes = [
