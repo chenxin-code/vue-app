@@ -114,7 +114,7 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
-        <span class="home-shoppingCart" @click="navToCar" v-if="isCommon">
+        <span class="home-shoppingCart" @click="navToCar" v-if="isCommon && !$store.state.webtype == '3'">
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
@@ -529,7 +529,6 @@ export default {
       };
       this.$http.post(url, paramsData).then(
         (res) => {
-          console.log("carttttttttttttt", res);
           this.shoppingCartCount = res.data.data;
         },
         (error) => {
@@ -644,7 +643,6 @@ export default {
         message: "您确定要退出登录吗？",
       })
         .then(() => {
-          console.log("确定");
           this.$market.loginOut();
         })
         .catch(() => {

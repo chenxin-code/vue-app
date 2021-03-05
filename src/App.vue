@@ -66,6 +66,7 @@
 import http from "@/utils/http";
 import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
+import appUi from '@zkty-team/x-engine-module-ui'
 
 export default {
   name: "App",
@@ -111,7 +112,6 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
-    console.log("----$router-----", this.$router);
   },
   computed: {
     appBackHomeImg() {
@@ -121,6 +121,7 @@ export default {
       //   return require('./assets/app/home.png')
       // }
     },
+
     theme() {
       let theme = "theme_sys_base";
       const themeColor = this.$store.state.globalConfig.themeColor;
@@ -450,6 +451,13 @@ export default {
     },
   },
   watch: {
+    '$route.path':function(newVal,oldVal){
+      if (/^\/common$/.test(newVal)) {
+        appUi.showTabbar();
+      } else {
+        appUi.hideTabbar();
+      }
+    }
     // '$route'(to, from) {
     //   let arr = sessionStorage.getItem("routePathArrs");
     //   if (arr && arr != undefined) {

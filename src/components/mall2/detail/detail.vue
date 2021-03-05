@@ -1000,7 +1000,6 @@
         this.$http.post(url, params).then(res => {
           this.$Loading.close()
           let data = res.data;
-          // console.log(data);
           if (data.status == 0) {
             this.jdSilmilarSkus = data.data
           } else {
@@ -1013,7 +1012,6 @@
       },
       // player is ready
       playerReadied(player) {
-        console.log('the player is readied', player)
         // you can use it to do something...
         // player.[methods]
       },
@@ -1299,7 +1297,6 @@
       },
       productPickageEvent: function (product) {
         // this.$Toast('开发中')
-        console.log(product)
         let path = '/mall2/detail/' + this.$util.getDataString()
         if (product.productType == 2) {
           path = '/mall2/ticketdetail';
@@ -1340,7 +1337,6 @@
         this.showBigImage = true
       },
       productEvent: function (product) {
-        console.log(product)
         let path = '/mall2/detail/' + this.$util.getDataString()
         if (product.productType == 2) {
           path = '/mall2/ticketdetail';
@@ -1431,7 +1427,6 @@
       touchend: function () {
         let mySite = this.$refs.scrollView1.scrollTop
         let maxSize = this.$refs.scrollView1.scrollHeight - this.$refs.scrollView1.offsetHeight
-        console.log(mySite, maxSize)
         if (mySite > maxSize + 50) {
           this.proView = 2;
         }
@@ -1540,7 +1535,6 @@
         })
       },
       couponProducts: function (coupon) {
-        console.log(coupon)
         let path = '/mall2/list/' + this.$util.getDataString()
         this.$router.push({
           path: path,
@@ -1580,7 +1574,6 @@
             listData: this.detailData.proCanUseCouList
           },
           selectedCoupon: (coupon) => {
-            console.log(coupon)
             Coupon.close();
           },
           getedCoupon: (coupon) => {
@@ -1609,7 +1602,6 @@
             jfhqData: this.jfhqList
           },
           selectedCoupon: (coupon) => {
-            console.log(coupon)
             Coupon.close();
           },
           getedCoupon: (coupon) => {
@@ -1807,7 +1799,6 @@
       },
       _getRegionData: function (parentId) {
         this.$Loading.open()
-        // console.log(parentId)
         let url = '/app/json/area/loadAreaList';
         let params1 = {
           token: this.$store.state.login.token,
@@ -1816,13 +1807,10 @@
         this.$http.post(url, params1).then(res => {
           this.$Loading.close()
           let data = res.data;
-          // console.log(data);
           if (data.status == 0) {
             let arr = data.data;
-            console.log(arr)
             if (arr.length > 0) {
               this.$nextTick(function () {
-                console.log(this.$refs.regionselect)
                 this.$refs.regionselect.pushCustomOptions(arr);
               })
             } else {
@@ -1835,7 +1823,6 @@
           }
         }, error => {
           this.$Loading.close()
-          console.log('获取失败', error);
           this.$Toast('获取数据失败')
         });
       },
@@ -1887,7 +1874,6 @@
         } else if (this.toptab == 4) {
           this.load4 = true
         }
-        console.log(this.$refs.mySwiper)
         this.$refs.mySwiper.swiper.slideTo(idx - 1)
         // this.commentListShow = false;
         // this.recommendListShow = false;
@@ -2148,7 +2134,6 @@
               if (this.detailData.discountGoodsCntPerOrder != undefined && this.detailData.discountGoodsCntPerOrder != '') {
                 if (this.maxNum > this.detailData.discountGoodsCntPerOrder) {
                   this.maxNum = this.detailData.discountGoodsCntPerOrder
-                  console.log(this.maxNum)
                 }
               }
               this.mktStockNum = this.detailData.mktStockNum != '' ? this.detailData.mktStockNum : -1
@@ -2480,7 +2465,6 @@
           shareData.detailurl = shareData.detailurl + '&recommendPhone=' + this.$store.state.login.phone
         }
 
-        console.log(shareData.detailurl)
         this.$bridgefunc.wechatShare(shareData);
       },
       getDatas: function () {
@@ -2559,7 +2543,6 @@
 
             });
           } else {
-            console.log('签名失败');
             this.getDatas();
           }
 
@@ -2603,7 +2586,6 @@
             if (isSignature) {
               wxfunc.wxSetShareData(shareData);
             } else {
-              console.log('签名失败');
               this.$Toast('签名失败!')
             }
           });
@@ -2637,7 +2619,6 @@
       },
       // 添加心愿单
       addWishLish() {
-        console.log(this.$store.state.globalConfig)
         this.$Loading.open()
         this.$http.post('/app/json/wish_order/addWishOrder', {
           skuId: this.detailData.skuId,
