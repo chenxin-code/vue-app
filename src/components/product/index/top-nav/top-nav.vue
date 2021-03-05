@@ -114,7 +114,7 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
-        <span class="home-shoppingCart" @click="navToCar" v-if="isCommon && !$store.state.webtype == '3'">
+        <span class="home-shoppingCart" @click="navToCar" v-if="isCommon && $store.state.webtype !== '3' ">
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
