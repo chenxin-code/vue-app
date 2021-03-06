@@ -16,7 +16,9 @@
         :scrollSite="scrollSite"
       ></TopNav>
       <div :id="modulesDomId" class="modules-div" :style="getTopStyle()">
-        <NewCategory v-if="isCommon"></NewCategory>
+        <NewCategory
+          v-if="isCommon && $store.state.webtype !== '3'"
+        ></NewCategory>
         <div
           class="screen-module"
           v-if="pageData.screenModule && pageData.screenModule.code != ''"
@@ -425,7 +427,7 @@ export default {
       .scroll-div {
         height: 100%;
         overflow-y: auto;
-        padding-bottom 50px;
+        padding-bottom: 50px;
         -webkit-overflow-scrolling: touch;
       }
 
