@@ -142,7 +142,7 @@ export default {
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
     if (rate > limit) {
-      if (this.$store.state.webtype != "3") {
+      if (this.$store.state.webtype !== "3" || this.$store.state.webtype !== "2") {
         document.getElementsByTagName("body")[0].style.paddingTop =
           "0.933333rem";
       }
