@@ -305,8 +305,8 @@
         let jsonString = result;
         let jsonData = JSON.parse(decodeURIComponent(jsonString))
         this.browsingHistory = jsonData
-        this._loadProList();
       })
+      this._loadProList();
     },
     created() {
     }
