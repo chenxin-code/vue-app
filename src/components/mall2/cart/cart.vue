@@ -58,7 +58,6 @@
           :ref="getCartRef(item.type)"
           v-if="item.hasShow"
           v-show="deliverType == item.type"
-          @changeGoodsCount="changeGoodsCount"
           :deliverType="item.type"
           :key="index"
           :isEditing="isEditing"
@@ -112,13 +111,9 @@ export default {
       vipUnitUserCode: undefined,
       lastPath: "",
       cartNum: 0,
-      goodsCount: 0,
     };
   },
   methods: {
-    changeGoodsCount(count) {
-      this.goodsCount = count;
-    },
 
     toPresaleCart: function () {
       this.$router.push({
@@ -367,6 +362,14 @@ export default {
       }
     },
   },
+  computed:{
+    goodsCount:{
+      get(){
+        return this.$store.state.mall2.cartNum
+      },
+      set(){},
+    }
+  }
 };
 </script>
 

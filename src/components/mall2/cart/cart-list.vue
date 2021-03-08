@@ -276,14 +276,15 @@ export default {
       return "mall2cart" + index;
     },
     goShopList: function () {
-      let path = "/mall2/list/" + this.$util.getDataString();
-      this.$router.push({
-        path: path,
-        query: {
-          lastPath: this.$route.path,
-          delivertype: this.deliverType,
-        },
-      });
+      // let path = "/mall2/list/" + this.$util.getDataString();
+      // this.$router.push({
+      //   path: path,
+      //   query: {
+      //     lastPath: this.$route.path,
+      //     delivertype: this.deliverType,
+      //   },
+      // });
+      this.$router.push('/common')
     },
     coupon: function (storeitem) {
       Coupon.open({
@@ -681,7 +682,6 @@ export default {
           let data = res.data;
 
           if (data.status == 0) {
-            this.$emit('changeGoodsCount',data.data)
             this.$store.state.mall2.cartNum = data.data;
           } else {
             this.$Toast(data.info);

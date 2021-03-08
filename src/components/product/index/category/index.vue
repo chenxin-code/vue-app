@@ -2,7 +2,7 @@
   <!-- // created by hjc  -->
   <!-- 首页顶部新增类目 -->
   <div class="category" :style="{ backgroundColor: bgColor }">
-    <div class="categoryList">
+    <div class="categoryList" ref="categoryList">
       <div
         class="categoryItem"
         v-for="(item, index) in categoryList"
@@ -59,7 +59,10 @@ export default {
 
       if (this.domIndex) {
         this.$nextTick(() => {
-          this.$refs["category" + this.domIndex][0].scrollIntoView(false);
+          this.$refs.categoryList.scrollTo(
+            this.$refs["category" + this.domIndex][0].offsetLeft - 18,
+            0
+          );
         });
       }
     });
@@ -144,12 +147,18 @@ export default {
   display: flex;
   align-items: center;
 
+  // overflow-y: auto;
+  // position: relative;
   .categoryList {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     overflow-x: auto;
     height: 100%;
+
+    // position: absolute;
+    // left: 0;
+    // top: 0;
 
     // padding-top: 10px;
     .categoryItem {
