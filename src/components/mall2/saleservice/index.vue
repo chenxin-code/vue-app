@@ -100,6 +100,7 @@
 <script>
   import Receipt from '../common/receipt-pop'
   import PullTo from '@/components/Vendor/vue-pull-to/vue-pull-to'
+  import appNav from '@zkty-team/x-engine-module-nav'
 
   export default {
     name: "index",
@@ -421,7 +422,13 @@
         return str;
       },
       turnback:function () {//返回
-        this.$router.go(-1);
+        if (this.$route.query.backApp) {
+          appNav.navigatorBack({ url: '0' }).then( res => {
+            console.log(res)
+          })
+        } else {
+          this.$router.go(-1)
+        }
       },
     },
     created() {

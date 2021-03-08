@@ -2,7 +2,7 @@
 
 <template>
   <div class="index">
-    <nav-top @backEvent="$router.go(-1)"></nav-top>
+    <nav-top @backEvent="goBack"></nav-top>
     <nav-content v-if="loaded">
       <div class="no-collection" ref="collection">
         <van-tabs v-model="active" @change="changeTabs" class="van-tab-container">
@@ -121,6 +121,7 @@
   import Recommend from '../../list/recommend/index'
   import {Toast} from "vant";
   import api from "./api"
+  import appNav from '@zkty-team/x-engine-module-nav'
 
   export default {
     name: "index",
@@ -160,6 +161,15 @@
       }
     },
     methods: {
+      goBack: function () {
+        if (this.$route.query.backApp) {
+          appNav.navigatorBack({ url: '0' }).then( res => {
+            console.log(res)
+          })
+        } else {
+          this.$router.go(-1)
+        }
+      },
       // 添加收藏或者取消收藏
       collectEvent: function (item) {
         let url = '/app/json/user_pro_collect/addOrCancelUserProCollect';

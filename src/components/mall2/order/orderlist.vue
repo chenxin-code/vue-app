@@ -474,7 +474,7 @@ import Recommend from '../list/recommend/index'
 import PriceOrder from '@/components/commonui/price/price-order'
 import {Dialog} from 'vant'
 import utils from "@/utils/util"
-
+import appNav from '@zkty-team/x-engine-module-nav'
 
 export default {
   name: 'order',
@@ -955,10 +955,17 @@ export default {
         .catch(action => {})
     },
     backEvent: function() {
-      this.$util.wxmpBackHome(() => {
+      if (this.$route.query.backApp) {
+        appNav.navigatorBack({ url: '0' }).then( res => {
+          console.log(res)
+        })
+      } else {
         this.$router.go(-1)
-        this.$keepaliveHelper.deleteCache(this)
-      })
+      }
+      // this.$util.wxmpBackHome(() => {
+        
+      //   this.$keepaliveHelper.deleteCache(this)
+      // })
     },
     tabEvent: function(item, idx) {
       this.tabIndex = idx

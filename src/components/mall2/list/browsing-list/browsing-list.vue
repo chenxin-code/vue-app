@@ -2,7 +2,7 @@
 
 <template>
   <div class="browsing-list mall2">
-    <nav-top @backEvent="$router.go(-1)">
+    <nav-top @backEvent="goBack">
       <div class="right-btn edit-btn theme_font_tint" style="right: 0px; line-height: 44px; height: 44px; top: 0px; padding-right: 10px;" v-if="showList.length > 0">
         <span @click="clearAll" v-if="!isEdit">清空</span>
         <span @click="showEdit" v-if="!isEdit">编辑</span>
@@ -32,6 +32,7 @@
 
 <script>
   import DetailList from '../base/detail-list'
+  import appNav from '@zkty-team/x-engine-module-nav'
 
   export default {
     name: "browsing-list",
@@ -48,6 +49,15 @@
       }
     },
     methods: {
+      goBack: function () {
+        if (this.$route.query.backApp) {
+          appNav.navigatorBack({ url: '0' }).then( res => {
+            console.log(res)
+          })
+        } else {
+          this.$router.go(-1)
+        }
+      },
       deleteEvent: function () {
         let arr = [];
         let sArr = [];

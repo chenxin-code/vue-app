@@ -1148,8 +1148,8 @@ var utils = {
     }
   },
   wxmpBackHome: function (callback) {
-    if (store.state.webtype == 3 && window.history.length <= 2) {
-      wx.miniProgram.reLaunch({url: `/pages/index/main`})
+    if ((store.state.webtype == 2 || store.state.webtype == 3) && window.history.length <= 2) {
+      wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
     } else {
       callback && callback()
     }
