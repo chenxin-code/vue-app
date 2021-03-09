@@ -233,7 +233,11 @@ var mallCommon = {
     }
     browsingHistory = arr;
     let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
+    console.log('jsonString1jsonString1jsonString1jsonString1', jsonString1)
     if (store.state.webtype == '2' || store.state.webtype == '3') {
+      bridgefunc.setItem('browsingHistory', jsonString1, () => {
+      })
+    } else {
       appLocalstorage
       .set({
         key: "browsingHistory",
@@ -242,9 +246,6 @@ var mallCommon = {
       })
       .then((res) => {
       });
-    } else {
-      bridgefunc.setItem('browsingHistory', jsonString1, () => {
-      })
     }
   },
   // 添加浏览记录
@@ -264,6 +265,7 @@ var mallCommon = {
         isPublic: true,
       })
       .then((res) => {
+        console.log('resrrrrrrrr', res)
         this.commonLocalStorage(skuId, deliverType, res)
       });
     }
