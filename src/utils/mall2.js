@@ -4,6 +4,124 @@ import bridgefunc from "./bridgefunc";
 import Toast from '@/components/Vendor/toast/index'
 import jsonp from 'jsonp'
 import Config from '@/api/config'
+import { result } from "lodash";
+import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
+
+function commonLocalStorage (skuId, deliverType, result) {
+  let curTime = store.state.severTime.currentTime
+  let cDate = new Date(curTime * 1000);
+  let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
+
+  let arr = []
+  let total = 0
+  let browsingHistory = [];
+  if (!result || result == '' || result == 'null' || result == undefined) {
+
+  } else {
+    let jsonString = result;
+    let jsonData = JSON.parse(decodeURIComponent(jsonString))
+    browsingHistory = jsonData
+  }
+
+  if (browsingHistory.length > 0) {
+    let fitem = browsingHistory[0]
+    if (y == fitem.y && m == fitem.m && d == fitem.d) {
+      total++;
+      for (let i = 0; i < browsingHistory.length; i++) {
+        if (total > 100) {
+          break;
+        }
+        let odItem = browsingHistory[i];
+        let dItem = {
+          y: odItem.y,
+          m: odItem.m,
+          d: odItem.d,
+          list: []
+        };
+        if (i == 0) {
+          dItem.list.push({
+            skuId: skuId,
+            deliverType: deliverType,
+          })
+        }
+        let ol = odItem.list;
+        for (let j = 0; j < ol.length; j++) {
+          if (total > 100) {
+            break;
+          }
+          let oskuD = ol[j]
+          if (oskuD.skuId != skuId) {
+            dItem.list.push(oskuD)
+            total++;
+          }
+        }
+        arr.push(dItem)
+      }
+    } else {
+      arr.push({
+        y: y,
+        m: m,
+        d: d,
+        list: [{
+          skuId: skuId,
+          deliverType: deliverType,
+        }]
+      })
+      total++;
+      for (let i = 0; i < browsingHistory.length; i++) {
+        if (total > 100) {
+          break;
+        }
+        let odItem = browsingHistory[i];
+        let dItem = {
+          y: odItem.y,
+          m: odItem.m,
+          d: odItem.d,
+          list: []
+        };
+        let ol = odItem.list;
+        for (let j = 0; j < ol.length; j++) {
+          if (total > 100) {
+            break;
+          }
+          let oskuD = ol[j]
+          if (oskuD.skuId != skuId) {
+            dItem.list.push({
+              skuId: oskuD.skuId,
+              deliverType: deliverType,
+            })
+          }
+        }
+        arr.push(dItem)
+      }
+    }
+  } else {
+    arr.push({
+      y: y,
+      m: m,
+      d: d,
+      list: [{
+        skuId: skuId,
+        deliverType: deliverType,
+      }]
+    })
+  }
+  browsingHistory = arr;
+  let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
+  if (store.state.webtype == '2' || store.state.webtype == '3') {
+    bridgefunc.setItem('browsingHistory', jsonString1, () => {
+    })
+  } else {
+    appLocalstorage
+    .set({
+      key: "browsingHistory",
+      value: jsonString1,
+      isPublic: true,
+    })
+    .then((res) => {
+    });
+  }
+}
 
 var mallCommon = {
   // 孙哥价格处理（返回结构不一样，0.0）
@@ -128,116 +246,130 @@ var mallCommon = {
     store.state.mall2.searchHistory = arr;
     bridgefunc.vuexStorage()
   },
+
   // 添加浏览记录
   pushBrowsingHistory: function (skuId, deliverType) {
     if (skuId == '') {
       return
     }
-    let curTime = store.state.severTime.currentTime
-    let cDate = new Date(curTime * 1000);
-    let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
-
-    let arr = []
-    let total = 0
-    let browsingHistory = [];
-    bridgefunc.getItem('browsingHistory', (result) => {
-      if (!result || result == '' || result == 'null' || result == undefined) {
-
-      } else {
-        let jsonString = result;
-        let jsonData = JSON.parse(decodeURIComponent(jsonString))
-        browsingHistory = jsonData
-      }
-
-      if (browsingHistory.length > 0) {
-        let fitem = browsingHistory[0]
-        if (y == fitem.y && m == fitem.m && d == fitem.d) {
-          total++;
-          for (let i = 0; i < browsingHistory.length; i++) {
-            if (total > 100) {
-              break;
-            }
-            let odItem = browsingHistory[i];
-            let dItem = {
-              y: odItem.y,
-              m: odItem.m,
-              d: odItem.d,
-              list: []
-            };
-            if (i == 0) {
-              dItem.list.push({
-                skuId: skuId,
-                deliverType: deliverType,
-              })
-            }
-            let ol = odItem.list;
-            for (let j = 0; j < ol.length; j++) {
-              if (total > 100) {
-                break;
-              }
-              let oskuD = ol[j]
-              if (oskuD.skuId != skuId) {
-                dItem.list.push(oskuD)
-                total++;
-              }
-            }
-            arr.push(dItem)
-          }
-        } else {
-          arr.push({
-            y: y,
-            m: m,
-            d: d,
-            list: [{
-              skuId: skuId,
-              deliverType: deliverType,
-            }]
-          })
-          total++;
-          for (let i = 0; i < browsingHistory.length; i++) {
-            if (total > 100) {
-              break;
-            }
-            let odItem = browsingHistory[i];
-            let dItem = {
-              y: odItem.y,
-              m: odItem.m,
-              d: odItem.d,
-              list: []
-            };
-            let ol = odItem.list;
-            for (let j = 0; j < ol.length; j++) {
-              if (total > 100) {
-                break;
-              }
-              let oskuD = ol[j]
-              if (oskuD.skuId != skuId) {
-                dItem.list.push({
-                  skuId: oskuD.skuId,
-                  deliverType: deliverType,
-                })
-              }
-            }
-            arr.push(dItem)
-          }
-        }
-      } else {
-        arr.push({
-          y: y,
-          m: m,
-          d: d,
-          list: [{
-            skuId: skuId,
-            deliverType: deliverType,
-          }]
-        })
-      }
-      console.log('browsingHistory-------', arr)
-      browsingHistory = arr;
-      let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
-      bridgefunc.setItem('browsingHistory', jsonString1, () => {
+    if (store.state.webtype == '2' || store.state.webtype == '3') {
+      bridgefunc.getItem('browsingHistory', (result) => {
+        commonLocalStorage(skuid, deliverType, result)
       })
-    })
+    } else {
+      appLocalstorage
+      .get({
+        key: "browsingHistory",
+        isPublic: true,
+      })
+      .then((res) => {
+        commonLocalStorage(skuid, deliverType, res)
+      });
+    }
+    // let curTime = store.state.severTime.currentTime
+    // let cDate = new Date(curTime * 1000);
+    // let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
+
+    // let arr = []
+    // let total = 0
+    // let browsingHistory = [];
+    // bridgefunc.getItem('browsingHistory', (result) => {
+    //   if (!result || result == '' || result == 'null' || result == undefined) {
+
+    //   } else {
+    //     let jsonString = result;
+    //     let jsonData = JSON.parse(decodeURIComponent(jsonString))
+    //     browsingHistory = jsonData
+    //   }
+
+    //   if (browsingHistory.length > 0) {
+    //     let fitem = browsingHistory[0]
+    //     if (y == fitem.y && m == fitem.m && d == fitem.d) {
+    //       total++;
+    //       for (let i = 0; i < browsingHistory.length; i++) {
+    //         if (total > 100) {
+    //           break;
+    //         }
+    //         let odItem = browsingHistory[i];
+    //         let dItem = {
+    //           y: odItem.y,
+    //           m: odItem.m,
+    //           d: odItem.d,
+    //           list: []
+    //         };
+    //         if (i == 0) {
+    //           dItem.list.push({
+    //             skuId: skuId,
+    //             deliverType: deliverType,
+    //           })
+    //         }
+    //         let ol = odItem.list;
+    //         for (let j = 0; j < ol.length; j++) {
+    //           if (total > 100) {
+    //             break;
+    //           }
+    //           let oskuD = ol[j]
+    //           if (oskuD.skuId != skuId) {
+    //             dItem.list.push(oskuD)
+    //             total++;
+    //           }
+    //         }
+    //         arr.push(dItem)
+    //       }
+    //     } else {
+    //       arr.push({
+    //         y: y,
+    //         m: m,
+    //         d: d,
+    //         list: [{
+    //           skuId: skuId,
+    //           deliverType: deliverType,
+    //         }]
+    //       })
+    //       total++;
+    //       for (let i = 0; i < browsingHistory.length; i++) {
+    //         if (total > 100) {
+    //           break;
+    //         }
+    //         let odItem = browsingHistory[i];
+    //         let dItem = {
+    //           y: odItem.y,
+    //           m: odItem.m,
+    //           d: odItem.d,
+    //           list: []
+    //         };
+    //         let ol = odItem.list;
+    //         for (let j = 0; j < ol.length; j++) {
+    //           if (total > 100) {
+    //             break;
+    //           }
+    //           let oskuD = ol[j]
+    //           if (oskuD.skuId != skuId) {
+    //             dItem.list.push({
+    //               skuId: oskuD.skuId,
+    //               deliverType: deliverType,
+    //             })
+    //           }
+    //         }
+    //         arr.push(dItem)
+    //       }
+    //     }
+    //   } else {
+    //     arr.push({
+    //       y: y,
+    //       m: m,
+    //       d: d,
+    //       list: [{
+    //         skuId: skuId,
+    //         deliverType: deliverType,
+    //       }]
+    //     })
+    //   }
+    //   browsingHistory = arr;
+    //   let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
+    //   bridgefunc.setItem('browsingHistory', jsonString1, () => {
+    //   })
+    // })
   },
   nearAddress: function (callBack, locationinfo) {
     let url = 'https://api.map.baidu.com/place/v2/search?query='+'楼$座$门$区$村$栋$店$馆$厅'+'&radius=3000&output=json&page_size=1&ak='+Config.mapak+'&location='+locationinfo.latitude+','+locationinfo.longitude;

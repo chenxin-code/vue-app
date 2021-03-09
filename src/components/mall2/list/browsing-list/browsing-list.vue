@@ -33,6 +33,7 @@
 <script>
   import DetailList from '../base/detail-list'
   import appNav from '@zkty-team/x-engine-module-nav'
+  import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
 
   export default {
     name: "browsing-list",
@@ -298,15 +299,32 @@
       next()
     },
     activated() {
-      this.$bridgefunc.getItem('browsingHistory', (result) => {
-        if (!result || result == '' || result == 'null' || result == undefined) {
-          return;
-        }
-        let jsonString = result;
-        let jsonData = JSON.parse(decodeURIComponent(jsonString))
-        this.browsingHistory = jsonData
-        this._loadProList();
-      })
+      if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+        this.$bridgefunc.getItem('browsingHistory', (result) => {
+          if (!result || result == '' || result == 'null' || result == undefined) {
+            return;
+          }
+          let jsonString = result;
+          let jsonData = JSON.parse(decodeURIComponent(jsonString))
+          this.browsingHistory = jsonData
+          this._loadProList();
+        })
+      } else {
+        appLocalstorage
+        .get({
+          key: "browsingHistory",
+          isPublic: true,
+        })
+        .then((result) => {
+          if (!result || result == '' || result == 'null' || result == undefined) {
+            return;
+          }
+          let jsonString = result;
+          let jsonData = JSON.parse(decodeURIComponent(jsonString))
+          this.browsingHistory = jsonData
+          this._loadProList();
+        });
+      }
     },
     created() {
     }
