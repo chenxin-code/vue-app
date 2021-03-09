@@ -448,6 +448,17 @@ export default {
         return;
       } else {
         console.log("唤起邻里邦支付平台");
+        let currentOrderDetails = {
+            "state": 3,
+            "orderId": this.payInfo.orderId,
+            "orderType": this.payInfo.orderType,
+            "tradeNo": this.payInfo.tradeNo,
+            "deliverCheckcode": this.payInfo.deliverCheckcode,
+            "deviceCode": this.$route.query.deviceCode,
+            "storeOuCode": this.$route.query.storeOuCode,
+            "stationName": this.$route.query.stationName,
+        }
+        localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
         // 唤起邻里邦支付平台
         var payInfo = JSON.parse(JSON.parse(res.payInfo));
         window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
