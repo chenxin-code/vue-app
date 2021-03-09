@@ -367,7 +367,9 @@
         return styleStr;
       },
       enterNav: function (nav) {
-        console.log(nav);
+        if(nav.link.url == 'http://8.129.64.205:8088/') {
+          nav.link.url = nav.link.url + '?tooken=' + this.$store.state.login.token
+        }
         if (this.canEnterNav) {
           this.$market.enterNav(nav, this.pageData.pgCode);
         } else {
