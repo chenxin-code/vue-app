@@ -196,7 +196,17 @@ export default {
       });
     },
     backEvent: function () {
-      this.$router.go(-1);
+      if(localStorage.getItem('fromShoppingCar')) {
+        localStorage.removeItem('fromShoppingCar')
+        this.$router.push({
+          path: '/mall2/orderlist',
+          query: {
+              selectedIndex: 0
+          }
+        })
+      } else {
+        this.$router.go(-1);
+      }
     },
     payWaySelected: function (item) {
       if (item.payModeSub == "") {
