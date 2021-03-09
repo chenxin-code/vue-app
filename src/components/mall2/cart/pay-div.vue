@@ -98,6 +98,7 @@
         this.$emit('setOccSel',occuritem);
       },
       toPay:function (occuritem) {
+        localStorage.setItem('fromShoppingCar', true)
         if (this.$route.query.productType == '501') {
           occuritem.name = 'phone' //话费充值
         }
