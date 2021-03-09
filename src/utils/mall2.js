@@ -233,7 +233,7 @@ var mallCommon = {
     }
     browsingHistory = arr;
     let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
-    if (store.state.webtype == '1') {
+    if (store.state.webtype == '2' || store.state.webtype == '3') {
       appLocalstorage
       .set({
         key: "browsingHistory",

@@ -317,8 +317,8 @@
     activated() {
     },
     created() {
-      console.log('pppppppppppp', this.$store.webtype)
-      if (store.state.webtype == '2' || store.state.webtype == '3') {
+      console.log('pppppppppppp', this.$store.state.webtype)
+      if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
         this.$bridgefunc.getItem('browsingHistory', (result) => {
           console.log('h5 localstorage', result)
           if (!result || result == '' || result == 'null' || result == undefined) {
