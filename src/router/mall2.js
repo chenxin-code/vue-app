@@ -152,7 +152,7 @@ module.exports = [
     }
   }, {
     path: '/mall2/aliexpressinfo',
-    name: 'aliexpressinfo',
+    name: '物流详情',
     component: () => import('@/components/mall2/order/ali-express-info'),
     meta: {
       keepAlive: false,

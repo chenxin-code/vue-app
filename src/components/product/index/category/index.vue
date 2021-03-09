@@ -60,7 +60,7 @@ export default {
       if (this.domIndex) {
         this.$nextTick(() => {
           this.$refs.categoryList.scrollTo(
-            this.$refs["category" + this.domIndex][0].offsetLeft - 18,
+            this.$refs["category" + this.domIndex][0].offsetLeft - 20,
             0
           );
         });

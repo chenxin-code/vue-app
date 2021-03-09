@@ -433,10 +433,12 @@ export default {
     "$route.path": function (newVal, oldVal) {
       if (/^\/common$/.test(newVal)) {
         appUi.showTabbar();
-      } else if (/^\/common2$/.test(newVal)) {
-        appUi.hideTabbar();
       } else {
         appUi.hideTabbar();
+      }
+    },
+    "$route.matched"(value) {
+      if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
         // 判断是否是刘海屏
         const rate = window.screen.height / window.screen.width;
         let limit =
@@ -452,6 +454,9 @@ export default {
               "0.933333rem";
           }
         }
+      } else {
+        document.getElementsByTagName("body")[0].style.paddingTop =
+          "0rem";
       }
     },
     // '$route'(to, from) {

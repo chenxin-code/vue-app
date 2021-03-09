@@ -269,7 +269,7 @@ export default {
       if (
         this.$store.state.webtype !== "3" &&
         this.$store.state.webtype !== "2" &&
-        this.$route.path == "/common2"
+        this.$route.name == "首页"
       ) {
         this.notch = true;
       }

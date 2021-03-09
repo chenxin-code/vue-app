@@ -992,6 +992,7 @@ export default {
         this.notch = true;
       }
     }
+    console.log('------------------------------',this.notch)
   },
   activated() {
     // 爱心积分特殊处理
