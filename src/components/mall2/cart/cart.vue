@@ -7,8 +7,8 @@
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
           <span class="title theme_font_black">购物车({{ goodsCount }})</span>
-          <!-- <span class="address theme_font_gray">{{getAddressName()}}</span> -->
-          <!-- <i class="iconfont mall-dingwei theme_font_black"></i> -->
+          <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
+          <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
         <p class="cart-edit theme_font_gray" @click="setEdit">
           {{ isEditing ? "完成" : "编辑" }}
@@ -16,21 +16,21 @@
       </div>
     </nav-top>
     <nav-content>
-      <!--      <div class="row"-->
-      <!--           v-if="$store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.delivertype_default != '2'">-->
-      <!--        <div class="type-btn" v-for="(item,index) in topArr"-->
-      <!--             :class="{theme_light_bg: deliverType == item.type, theme_standard_bdr_i: deliverType == item.type}"-->
-      <!--             @click="deliverTypeEvent(item)">-->
-      <!--          <i class="iconfont  theme_font_common icon-size"-->
-      <!--             :class="[item.class,{theme_standard_font_i: deliverType == item.type}]"></i>-->
-      <!--          <span class="theme_font_common"-->
-      <!--                :class="{theme_standard_font_i: deliverType == item.type}">{{item.name}}</span>-->
-      <!--          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"-->
-      <!--                v-if="peisongNum > 0 && item.type == 2">({{peisongNum}})</span>-->
-      <!--          <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"-->
-      <!--                v-if="zitiNum > 0 && item.type == 1">({{zitiNum}})</span>-->
-      <!--        </div>-->
-      <!--      </div>-->
+           <!-- <div class="row"
+                v-if="$store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.delivertype_default != '2'">
+             <div class="type-btn" v-for="(item,index) in topArr"
+                  :class="{theme_light_bg: deliverType == item.type, theme_standard_bdr_i: deliverType == item.type}"
+                  @click="deliverTypeEvent(item)">
+               <i class="iconfont  theme_font_common icon-size"
+                  :class="[item.class,{theme_standard_font_i: deliverType == item.type}]"></i>
+               <span class="theme_font_common"
+                     :class="{theme_standard_font_i: deliverType == item.type}">{{item.name}}</span>
+               <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"
+                     v-if="peisongNum > 0 && item.type == 2">({{peisongNum}})</span>
+               <span class="theme_font_common" :class="{theme_standard_font_i: deliverType == item.type}"
+                     v-if="zitiNum > 0 && item.type == 1">({{zitiNum}})</span>
+             </div>
+           </div> -->
       <div
         class="list-content"
         :class="{
@@ -39,20 +39,20 @@
             $store.state.globalConfig.delivertype_default == '2',
         }"
       >
-        <!--        <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">-->
-        <!--          <div class="content" @click="toPresaleCart">-->
-        <!--            <div class="icon">-->
-        <!--              <i class="iconfont mall-gouwuche theme_font_red"></i>-->
-        <!--              <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>-->
-        <!--            </div>-->
-        <!--            <div class="text">-->
-        <!--              预售购物车-->
-        <!--            </div>-->
-        <!--            <div class="jt">-->
-        <!--              <i class="iconfont mall-gengduojiantou theme_font_gray"></i>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
+               <!-- <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">
+                 <div class="content" @click="toPresaleCart">
+                   <div class="icon">
+                     <i class="iconfont mall-gouwuche theme_font_red"></i>
+                     <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">{{cartNum}}</p>
+                   </div>
+                   <div class="text">
+                     预售购物车
+                   </div>
+                   <div class="jt">
+                     <i class="iconfont mall-gengduojiantou theme_font_gray"></i>
+                   </div>
+                 </div>
+               </div> -->
         <CartList
           v-for="(item, index) in topArr"
           :ref="getCartRef(item.type)"
