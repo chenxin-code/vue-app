@@ -232,7 +232,7 @@ var mallCommon = {
           }]
         })
       }
-
+      console.log('browsingHistory-------', arr)
       browsingHistory = arr;
       let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
       bridgefunc.setItem('browsingHistory', jsonString1, () => {
