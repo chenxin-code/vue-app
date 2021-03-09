@@ -293,7 +293,7 @@ export default {
               redirectUrl = `/carWash/scanPaySuccess?state=3&orderId=${this.payInfo.orderId}&orderType=${this.payInfo.orderType}&tradeNo=${this.payInfo.tradeNo}&deliverCheckcode=${this.payInfo.deliverCheckcode}&deviceCode=${this.$route.query.deviceCode}&storeOuCode=${this.$route.query.storeOuCode}&stationName=${this.$route.query.stationName}`;
             }
           } else if (this.$route.query.isGroup == "1") {
-            redirectUrl = `/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1`;
+            redirectUrl = `/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1`;
           }
           if (this.isBulk) {
             payHelper
@@ -513,7 +513,6 @@ export default {
       // }
     },
     async setPayWays() {
-      console.log("-------------------------", this.isBulk);
       if (this.$route.query.style == "travel") {
         // 旅游
         this.payWay = await payHelper.getPayWays("200104", this.occurOuCode);
