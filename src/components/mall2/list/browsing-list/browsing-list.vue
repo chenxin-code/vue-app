@@ -317,7 +317,6 @@
     activated() {
     },
     created() {
-      console.log('pppppppppppp', this.$store.state.webtype)
       if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
         this.$bridgefunc.getItem('browsingHistory', (result) => {
           console.log('h5 localstorage', result)
@@ -330,18 +329,17 @@
           this._loadProList();
         })
       } else {
-        console.log('app localstorage browsingHistory');
         appLocalstorage
         .get({
           key: "browsingHistory",
           isPublic: true,
         })
         .then((result) => {
-          console.log('app locastorage', result)
-          if (!result || result == '' || result == 'null' || result == undefined) {
+          let _result = result.result
+          if (!_result || _result == '' || _result == 'null' || _result == undefined) {
             return;
           }
-          let jsonString = result;
+          let jsonString = _result;
           let jsonData = JSON.parse(decodeURIComponent(jsonString))
           this.browsingHistory = jsonData
           console.log(this.browsingHistory)

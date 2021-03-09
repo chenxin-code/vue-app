@@ -14,7 +14,8 @@ module.exports = {
     proxyTable: proxyConfig.proxy,
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    // host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', 
     // host: '172.16.2.65',
     // host: '172.16.1.28',  // LiuYong-Locol
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined

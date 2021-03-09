@@ -133,21 +133,27 @@ var mallCommon = {
 
   commonLocalStorage (skuId, deliverType, result) {
     console.log('2222222', skuId, deliverType, result)
+    let _result;
+    if (store.state.webtype == '2' || store.state.webtype == '3') {
+      _result = result
+    } else {
+      _result = result.result
+    }
     let curTime = store.state.severTime.currentTime
     let cDate = new Date(curTime * 1000);
     let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
-  
     let arr = []
     let total = 0
     let browsingHistory = [];
-    if (!result || result == '' || result == 'null' || result == undefined) {
-  
+    if (!_result || _result == '' || _result == 'null' || _result == undefined ) {
+      
     } else {
-      let jsonString = result;
+      console.log(_result)
+      let jsonString = _result
       let jsonData = JSON.parse(decodeURIComponent(jsonString))
       browsingHistory = jsonData
     }
-  
+    console.log('browsingHistorybrowsingHistory', browsingHistory)
     if (browsingHistory.length > 0) {
       let fitem = browsingHistory[0]
       if (y == fitem.y && m == fitem.m && d == fitem.d) {
@@ -238,6 +244,8 @@ var mallCommon = {
       bridgefunc.setItem('browsingHistory', jsonString1, () => {
       })
     } else {
+      // bridgefunc.setItem('browsingHistory', jsonString1, () => {
+      // })
       appLocalstorage
       .set({
         key: "browsingHistory",
@@ -253,7 +261,6 @@ var mallCommon = {
     if (skuId == '') {
       return
     }
-    console.log('kkkkkkkkkk', store.state.webtype)
     if (store.state.webtype == '2' || store.state.webtype == '3') {
       bridgefunc.getItem('browsingHistory', (result) => {
         this.commonLocalStorage(skuId, deliverType, result)
@@ -265,114 +272,9 @@ var mallCommon = {
         isPublic: true,
       })
       .then((res) => {
-        console.log('resrrrrrrrr', res)
         this.commonLocalStorage(skuId, deliverType, res)
       });
     }
-    // let curTime = store.state.severTime.currentTime
-    // let cDate = new Date(curTime * 1000);
-    // let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
-
-    // let arr = []
-    // let total = 0
-    // let browsingHistory = [];
-    // bridgefunc.getItem('browsingHistory', (result) => {
-    //   if (!result || result == '' || result == 'null' || result == undefined) {
-
-    //   } else {
-    //     let jsonString = result;
-    //     let jsonData = JSON.parse(decodeURIComponent(jsonString))
-    //     browsingHistory = jsonData
-    //   }
-
-    //   if (browsingHistory.length > 0) {
-    //     let fitem = browsingHistory[0]
-    //     if (y == fitem.y && m == fitem.m && d == fitem.d) {
-    //       total++;
-    //       for (let i = 0; i < browsingHistory.length; i++) {
-    //         if (total > 100) {
-    //           break;
-    //         }
-    //         let odItem = browsingHistory[i];
-    //         let dItem = {
-    //           y: odItem.y,
-    //           m: odItem.m,
-    //           d: odItem.d,
-    //           list: []
-    //         };
-    //         if (i == 0) {
-    //           dItem.list.push({
-    //             skuId: skuId,
-    //             deliverType: deliverType,
-    //           })
-    //         }
-    //         let ol = odItem.list;
-    //         for (let j = 0; j < ol.length; j++) {
-    //           if (total > 100) {
-    //             break;
-    //           }
-    //           let oskuD = ol[j]
-    //           if (oskuD.skuId != skuId) {
-    //             dItem.list.push(oskuD)
-    //             total++;
-    //           }
-    //         }
-    //         arr.push(dItem)
-    //       }
-    //     } else {
-    //       arr.push({
-    //         y: y,
-    //         m: m,
-    //         d: d,
-    //         list: [{
-    //           skuId: skuId,
-    //           deliverType: deliverType,
-    //         }]
-    //       })
-    //       total++;
-    //       for (let i = 0; i < browsingHistory.length; i++) {
-    //         if (total > 100) {
-    //           break;
-    //         }
-    //         let odItem = browsingHistory[i];
-    //         let dItem = {
-    //           y: odItem.y,
-    //           m: odItem.m,
-    //           d: odItem.d,
-    //           list: []
-    //         };
-    //         let ol = odItem.list;
-    //         for (let j = 0; j < ol.length; j++) {
-    //           if (total > 100) {
-    //             break;
-    //           }
-    //           let oskuD = ol[j]
-    //           if (oskuD.skuId != skuId) {
-    //             dItem.list.push({
-    //               skuId: oskuD.skuId,
-    //               deliverType: deliverType,
-    //             })
-    //           }
-    //         }
-    //         arr.push(dItem)
-    //       }
-    //     }
-    //   } else {
-    //     arr.push({
-    //       y: y,
-    //       m: m,
-    //       d: d,
-    //       list: [{
-    //         skuId: skuId,
-    //         deliverType: deliverType,
-    //       }]
-    //     })
-    //   }
-    //   browsingHistory = arr;
-    //   let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
-    //   bridgefunc.setItem('browsingHistory', jsonString1, () => {
-    //   })
-    // })
   },
   nearAddress: function (callBack, locationinfo) {
     let url = 'https://api.map.baidu.com/place/v2/search?query='+'楼$座$门$区$村$栋$店$馆$厅'+'&radius=3000&output=json&page_size=1&ak='+Config.mapak+'&location='+locationinfo.latitude+','+locationinfo.longitude;
