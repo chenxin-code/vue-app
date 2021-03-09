@@ -78,7 +78,8 @@
               query: {
                 orderId: currentOrderDetails.orderId,
                 orderType: currentOrderDetails.orderType,
-                tradeNo:currentOrderDetails.tradeNo,
+                tradeNo: currentOrderDetails.tradeNo,
+                tag: currentOrderDetails.tag,
                 awardActivity: JSON.stringify(awardActivity)
               }
             })

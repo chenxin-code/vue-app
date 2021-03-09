@@ -453,10 +453,12 @@ export default {
             "orderId": this.payInfo.orderId,
             "orderType": this.payInfo.orderType,
             "tradeNo": this.payInfo.tradeNo,
+            "tag": 1,
             "deliverCheckcode": this.payInfo.deliverCheckcode,
             "deviceCode": this.$route.query.deviceCode,
             "storeOuCode": this.$route.query.storeOuCode,
             "stationName": this.$route.query.stationName,
+
         }
         localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
         // 唤起邻里邦支付平台
