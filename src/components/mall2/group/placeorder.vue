@@ -401,6 +401,7 @@
                 //     mktGroupBuyId: this.mktGroupBuyId
                 //   }
                 // })
+                console.log('-----------------------------------',this.$route)
                 this.$router.replace({
                   path: '/mall2/checkstand',
                   query: {
@@ -408,7 +409,10 @@
                     occurOuCode: this.settleData.ouCode,
                     isGroup: '1',
                     orderId: data.data.orderId,
-                    mktGroupBuyId: this.mktGroupBuyId
+                    mktGroupBuyId: this.mktGroupBuyId,
+                    skuId:this.$route.params.skuId,
+                    productType:this.$route.params.productType,
+                    groupId:this.$route.params.groupId,
                   }
                 })
               }

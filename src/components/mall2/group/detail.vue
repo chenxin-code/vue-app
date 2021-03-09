@@ -1991,7 +1991,10 @@
             type: '1', // 1 开团； 2 参团
             paramsData: JSON.stringify(paramsData),
             mktGroupBuyId: this.groupData.mktGroupBuyId,
-            orderId: this.groupData.id
+            orderId: this.groupData.id,
+            skuId:this.skuId,
+            productType:this.productType,
+            groupId:this.groupId,
           }
           // path: 'groupplaceorder',
           // query: {
@@ -2026,7 +2029,10 @@
             type: '2', // 1 开团； 2 参团
             paramsData: JSON.stringify(paramsData),
             mktGroupBuyId: this.groupData.mktGroupBuyId,
-            orderId: this.joinOrderId
+            orderId: this.joinOrderId,
+            skuId:this.skuId,
+            productType:this.productType,
+            groupId:this.groupId,
           }
           // path: 'groupplaceorder',
           // query: {
