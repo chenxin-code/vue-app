@@ -44,6 +44,10 @@
         </div>
       </div>
     </nav-content>
+
+
+
+
     <nav-content class="expressinfoStep">
       <van-steps direction="vertical" :active="0">
         <van-step v-for="(item, index) in expressinfoList" :key="index">
@@ -95,43 +99,44 @@ export default {
       //返回
       this.$router.go(-1);
     },
-    getExpressInfo: function () {
-      this.$Loading.open();
-      let url = "/app/json/app_shopping_order/queryAliDeliver";
-      let paramsData = {
-        orderType: this.orderType,
-        orderId: this.orderId,
-      };
-      this.$http.post(url, paramsData).then(
-        (res) => {
-          this.$Loading.close();
-          let data = res.data;
-          if (data.status == 0) {
-            console.log(data);
-            this.expressDetails = data.data.showapi_res_body.data;
-            console.log(this.expressDetails);
-          } else {
-            this.$Toast(data.info);
-          }
-        },
-        (error) => {
-          this.$Loading.close();
-          this.$Toast("请求数据失败！");
-        }
-      );
-    },
+    // getExpressInfo: function () {
+    //   this.$Loading.open();
+    //   let url = "/app/json/app_shopping_order/queryAliDeliver";
+    //   let paramsData = {
+    //     orderType: this.orderType,
+    //     orderId: this.orderId,
+    //   };
+    //   this.$http.post(url, paramsData).then(
+    //     (res) => {
+    //       this.$Loading.close();
+    //       let data = res.data;
+    //       if (data.status == 0) {
+    //         console.log(data);
+    //         this.expressDetails = data.data.showapi_res_body.data;
+    //         console.log(this.expressDetails);
+    //       } else {
+    //         this.$Toast(data.info);
+    //       }
+    //     },
+    //     (error) => {
+    //       this.$Loading.close();
+    //       this.$Toast("请求数据失败！");
+    //     }
+    //   );
+    // },
     getExpressInfoList: function () {
       this.$Loading.open();
       let url = "/app/json/logistics_system/queryLogisticsInfo";
       let paramsData = {
         orderType: this.orderType,
-        orderId: this.orderId,
+        orderNo: this.orderId,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
           this.$Loading.close();
-          if (data.status == 0) {
+          if (res.data.status == 0) {
             this.expressinfoList = res.data.data.logisticsDetailList;
+            console.log('-----------------------------------------',this.expressinfoList)
           } else {
             this.$Toast(res.data.data.info);
           }

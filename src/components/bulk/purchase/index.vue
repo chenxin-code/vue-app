@@ -36,6 +36,7 @@
   </div>
 </template>
 <script>
+import appLocalstorage from '@zkty-team/x-engine-module-localstorage';
 import channelSearch from "@/components/bulk/components/channelSearch";
 import purchaseNav from "@/components/bulk/components/purchaseNav";
 import goodPanel from "@/components/bulk/components/goodPanel";
@@ -64,13 +65,13 @@ export default {
     };
   },
   created() {
-    localstorage
+    appLocalstorage
       .get({
         key: "LLBProjectId",
         isPublic: true,
       })
       .then((res) => {
-        alert("res", JSON.stringify(res));
+        console.log("res-------------------", JSON.stringify(res));
         this.communityId = res.result
       });
   },

@@ -57,6 +57,7 @@
         :current="current"
         v-show="showNewCategory"
         :domIndex="domIndex"
+        v-if="isProgram"
       ></NewCategory>
       <div class="all-content">
         <div
@@ -472,7 +473,8 @@ export default {
       // 新类目显示隐藏
       showNewCategory: true,
       //新类目dom下标
-      domIndex:0,
+      domIndex: 0,
+      isProgram: false,
     };
   },
   mounted() {
@@ -1158,6 +1160,16 @@ export default {
     if (this.$route.query.domIndex) {
       this.domIndex = this.$route.query.domIndex;
     }
+    //小程序不需要类目
+    if (
+      this.$store.state.webtype !== "3" &&
+      this.$store.state.webtype !== "2"
+    ) {
+      this.isProgram = true;
+    } else {
+      this.isProgram = false;
+    }
+
     this.showNewCategory = this.$store.state.showCategory;
     if (this.$store.state.globalConfig.delivertype_default == "1") {
       this.deliveryTypes = [
