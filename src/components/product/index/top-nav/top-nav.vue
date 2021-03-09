@@ -685,22 +685,24 @@ export default {
 
 .home-shoppingCart {
   display: inline-block;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   margin: 0 15px 0;
   position: relative;
 
   i {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     position: absolute;
     border: 1px solid #fff;
     text-align: center;
-    line-height: 18px;
+    line-height: 16px;
     color: #fff;
     right: -9px;
     border-radius: 50%;
     top: -7px;
+    background:#FF4A4A;
+    font-size: 13px;
   }
 
   img {
