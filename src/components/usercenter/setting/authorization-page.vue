@@ -57,19 +57,19 @@ export default {
 
     authEvent:function () {
       let authorizationType = this.itemInfo.link.authorizationType
-      if (this.$store.state.webtype == '1') {
-        appLocalstorage.set({
-          key: this.moduleId+'gndhPageArr',
-          value: encodeURIComponent(JSON.stringify(arr)),
-          isPublic: true,
-        }).then(res => {
+      if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+        this.$bridgefunc.setItem('auth_'+ authorizationType, '1',()=>{
           this.backEvent();
           setTimeout(() => {
             this.$market.enterNav(this.itemInfo);
           }, 50)
         })
       } else {
-        this.$bridgefunc.setItem('auth_'+ authorizationType, '1',()=>{
+        appLocalstorage.set({
+          key: this.moduleId+'gndhPageArr',
+          value: encodeURIComponent(JSON.stringify(arr)),
+          isPublic: true,
+        }).then(res => {
           this.backEvent();
           setTimeout(() => {
             this.$market.enterNav(this.itemInfo);

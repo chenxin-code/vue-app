@@ -246,14 +246,14 @@
         this.submitOrder()
       },
       enterSuccess:function () {
-        if (this.$store.state.webtype == '1') {
+        if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+          this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+        } else {
           appLocalstorage.set({
             key: 'scanbuy_cart_number',
             value: '0',
             isPublic: true,
           })
-        } else {
-          this.$bridgefunc.setItem('scanbuy_cart_number', '0')
         }
         this.$bridgefunc.destroyPreviousController()
         window.localStorage.removeItem('historyPros')
@@ -590,14 +590,14 @@
           let item = this.historyPros[i]
           num += item.number
         }
-        if (this.$store.state.webtype == '1') {
+        if (this.$store.state.webtype == '3'||this.$store.state.webtype == '2') {
+          this.$bridgefunc.setItem('scanbuy_cart_number', num)
+        } else {
           appLocalstorage.set({
             key: 'scanbuy_cart_number',
             value: num,
             isPublic: true,
           })
-        } else {
-          this.$bridgefunc.setItem('scanbuy_cart_number', num)
         }
 
         this.$http.post(url, paramsData).then(

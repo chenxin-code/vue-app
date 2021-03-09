@@ -129,14 +129,14 @@
           let item = this.gndhPageArr[i];
           arr.push(item.idCode);
         }
-        if (this.$store.state.webtype == '1') {
+        if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+          this.$bridgefunc.setItem(this.moduleId+'gndhPageArr', encodeURIComponent(JSON.stringify(arr)))
+        } else {
           appLocalstorage.set({
             key: this.moduleId+'gndhPageArr',
             value: encodeURIComponent(JSON.stringify(arr)),
             isPublic: true,
           })
-        } else {
-          this.$bridgefunc.setItem(this.moduleId+'gndhPageArr', encodeURIComponent(JSON.stringify(arr)))
         }
         this.$router.go(-1);
       },

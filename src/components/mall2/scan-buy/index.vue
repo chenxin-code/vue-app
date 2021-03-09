@@ -116,14 +116,14 @@ import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
     },
     created() {
       this.lastPath = this.$route.query.lastPath ? this.$route.query.lastPath : '';
-      if (this.$store.state.webtype == '1') {
+      if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+        this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+      } else {
         appLocalstorage.set({
           key: 'scanbuy_cart_number',
           value: '0',
           isPublic: true,
         })
-      } else {
-        this.$bridgefunc.setItem('scanbuy_cart_number', '0')
       }
       window.localStorage.setItem('historyPros', JSON.stringify(this.historyPros))
       window.localStorage.removeItem('historyPros')

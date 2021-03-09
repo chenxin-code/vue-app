@@ -252,7 +252,12 @@ var mallCommon = {
     if (skuId == '') {
       return
     }
-    if (store.state.webtype == '1') {
+    console.log('kkkkkkkkkk', store.state.webtype)
+    if (store.state.webtype == '2' || store.state.webtype == '3') {
+      bridgefunc.getItem('browsingHistory', (result) => {
+        this.commonLocalStorage(skuId, deliverType, result)
+      })
+    } else {
       appLocalstorage
       .get({
         key: "browsingHistory",
@@ -261,11 +266,6 @@ var mallCommon = {
       .then((res) => {
         this.commonLocalStorage(skuId, deliverType, res)
       });
-    } else {
-      console.log('kkkkkkkkkk', store.state.webtype)
-      bridgefunc.getItem('browsingHistory', (result) => {
-        this.commonLocalStorage(skuId, deliverType, result)
-      })
     }
     // let curTime = store.state.severTime.currentTime
     // let cDate = new Date(curTime * 1000);

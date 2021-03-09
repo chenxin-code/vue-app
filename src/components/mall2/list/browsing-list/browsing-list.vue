@@ -93,14 +93,14 @@
         })
         this.browsingHistory = arr;
         let jsonString = encodeURIComponent(JSON.stringify(this.browsingHistory))
-        if (this.$store.state.webtype == '1') {
+        if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        } else {
           appLocalstorage.set({
             key: 'browsingHistory',
             value: jsonString,
             isPublic: true,
           })
-        } else {
-          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
         }
       },
       isSelectedAll: function () {
@@ -162,14 +162,14 @@
         this.showList = [];
         this.browsingHistory = [];
         let jsonString = encodeURIComponent(JSON.stringify(this.browsingHistory))
-        if (this.$store.state.webtype == '1') {
+        if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        } else {
           appLocalstorage.set({
             key: 'browsingHistory',
             value: jsonString,
             isPublic: true,
           })
-        } else {
-          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
         }
       },
       addToCart: function (item) {
@@ -317,8 +317,19 @@
     activated() {
     },
     created() {
-      console.log('pppppppppppp')
-      if (this.$store.state.webtype == '1') {
+      console.log('pppppppppppp', this.$store.webtype)
+      if (store.state.webtype == '2' || store.state.webtype == '3') {
+        this.$bridgefunc.getItem('browsingHistory', (result) => {
+          console.log('h5 localstorage', result)
+          if (!result || result == '' || result == 'null' || result == undefined) {
+            return;
+          }
+          let jsonString = result;
+          let jsonData = JSON.parse(decodeURIComponent(jsonString))
+          this.browsingHistory = jsonData
+          this._loadProList();
+        })
+      } else {
         console.log('app localstorage browsingHistory');
         appLocalstorage
         .get({
@@ -336,17 +347,6 @@
           console.log(this.browsingHistory)
           this._loadProList();
         });
-      } else {
-        this.$bridgefunc.getItem('browsingHistory', (result) => {
-          console.log('h5 localstorage', result)
-          if (!result || result == '' || result == 'null' || result == undefined) {
-            return;
-          }
-          let jsonString = result;
-          let jsonData = JSON.parse(decodeURIComponent(jsonString))
-          this.browsingHistory = jsonData
-          this._loadProList();
-        })
       }
     }
   }
