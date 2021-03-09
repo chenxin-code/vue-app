@@ -385,7 +385,7 @@ module.exports = [
     name: '浏览记录',
     component: () => import('@/components/mall2/list/browsing-list/browsing-list'),
     meta: {
-      keepAlive: true
+      keepAlive: false
     }
   }, {
     path: '/mall2/ranking_list',

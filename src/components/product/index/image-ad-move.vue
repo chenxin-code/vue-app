@@ -40,6 +40,7 @@
 
   import {mapGetters} from 'vuex';
   import CornerMark from './cornermark/cornerMark';
+  import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
 
   export default {
     name: "image-ad-move",
@@ -128,7 +129,15 @@
           let item = this.gndhPageArr[i];
           arr.push(item.idCode);
         }
-        this.$bridgefunc.setItem(this.moduleId+'gndhPageArr',encodeURIComponent(JSON.stringify(arr)));
+        if (this.$store.state.webtype == '1') {
+          appLocalstorage.set({
+            key: this.moduleId+'gndhPageArr',
+            value: encodeURIComponent(JSON.stringify(arr)),
+            isPublic: true,
+          })
+        } else {
+          this.$bridgefunc.setItem(this.moduleId+'gndhPageArr', encodeURIComponent(JSON.stringify(arr)))
+        }
         this.$router.go(-1);
       },
 

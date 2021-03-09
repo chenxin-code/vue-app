@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
   export default {
     name: "index",
     components: {},
@@ -115,7 +116,15 @@
     },
     created() {
       this.lastPath = this.$route.query.lastPath ? this.$route.query.lastPath : '';
-      this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+      if (this.$store.state.webtype == '1') {
+        appLocalstorage.set({
+          key: 'scanbuy_cart_number',
+          value: '0',
+          isPublic: true,
+        })
+      } else {
+        this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+      }
       window.localStorage.setItem('historyPros', JSON.stringify(this.historyPros))
       window.localStorage.removeItem('historyPros')
     },

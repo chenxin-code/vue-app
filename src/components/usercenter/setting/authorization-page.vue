@@ -32,6 +32,7 @@
 
 <script>
   import { Button } from 'vant';
+  import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
 
 export default {
   name: "authorization-page",
@@ -56,13 +57,25 @@ export default {
 
     authEvent:function () {
       let authorizationType = this.itemInfo.link.authorizationType
-
-      this.$bridgefunc.setItem('auth_'+ authorizationType,'1',()=>{
-        this.backEvent();
-        setTimeout(() => {
-          this.$market.enterNav(this.itemInfo);
-        }, 50)
-      });
+      if (this.$store.state.webtype == '1') {
+        appLocalstorage.set({
+          key: this.moduleId+'gndhPageArr',
+          value: encodeURIComponent(JSON.stringify(arr)),
+          isPublic: true,
+        }).then(res => {
+          this.backEvent();
+          setTimeout(() => {
+            this.$market.enterNav(this.itemInfo);
+          }, 50)
+        })
+      } else {
+        this.$bridgefunc.setItem('auth_'+ authorizationType, '1',()=>{
+          this.backEvent();
+          setTimeout(() => {
+            this.$market.enterNav(this.itemInfo);
+          }, 50)
+        })
+      }
     }
   },
   created () {

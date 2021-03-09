@@ -161,6 +161,7 @@
   import Coupon from '../common/coupon'
   import Invoice from '../common/invoice'
   import payHelper from "../../../utils/payHelper";
+  import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
 
   export default {
     name: "place-order",
@@ -245,7 +246,15 @@
         this.submitOrder()
       },
       enterSuccess:function () {
-        this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+        if (this.$store.state.webtype == '1') {
+          appLocalstorage.set({
+            key: 'scanbuy_cart_number',
+            value: '0',
+            isPublic: true,
+          })
+        } else {
+          this.$bridgefunc.setItem('scanbuy_cart_number', '0')
+        }
         this.$bridgefunc.destroyPreviousController()
         window.localStorage.removeItem('historyPros')
         this.$router.replace({
@@ -581,7 +590,15 @@
           let item = this.historyPros[i]
           num += item.number
         }
-        this.$bridgefunc.setItem('scanbuy_cart_number', num)
+        if (this.$store.state.webtype == '1') {
+          appLocalstorage.set({
+            key: 'scanbuy_cart_number',
+            value: num,
+            isPublic: true,
+          })
+        } else {
+          this.$bridgefunc.setItem('scanbuy_cart_number', num)
+        }
 
         this.$http.post(url, paramsData).then(
           res => {

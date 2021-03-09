@@ -93,7 +93,15 @@
         })
         this.browsingHistory = arr;
         let jsonString = encodeURIComponent(JSON.stringify(this.browsingHistory))
-        this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        if (this.$store.state.webtype == '1') {
+          appLocalstorage.set({
+            key: 'browsingHistory',
+            value: jsonString,
+            isPublic: true,
+          })
+        } else {
+          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        }
       },
       isSelectedAll: function () {
         for (let i = 0; i < this.showList.length; i++) {
@@ -154,7 +162,15 @@
         this.showList = [];
         this.browsingHistory = [];
         let jsonString = encodeURIComponent(JSON.stringify(this.browsingHistory))
-        this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        if (this.$store.state.webtype == '1') {
+          appLocalstorage.set({
+            key: 'browsingHistory',
+            value: jsonString,
+            isPublic: true,
+          })
+        } else {
+          this.$bridgefunc.setItem('browsingHistory', jsonString, () => {})
+        }
       },
       addToCart: function (item) {
         this.$Loading.open();
@@ -299,23 +315,30 @@
       next()
     },
     activated() {
-      if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-        this.$bridgefunc.getItem('browsingHistory', (result) => {
-          if (!result || result == '' || result == 'null' || result == undefined) {
-            return;
-          }
-          let jsonString = result;
-          let jsonData = JSON.parse(decodeURIComponent(jsonString))
-          this.browsingHistory = jsonData
-          this._loadProList();
-        })
-      } else {
+    },
+    created() {
+      console.log('pppppppppppp')
+      if (this.$store.state.webtype == '1') {
+        console.log('app localstorage browsingHistory');
         appLocalstorage
         .get({
           key: "browsingHistory",
           isPublic: true,
         })
         .then((result) => {
+          console.log('app locastorage', result)
+          if (!result || result == '' || result == 'null' || result == undefined) {
+            return;
+          }
+          let jsonString = result;
+          let jsonData = JSON.parse(decodeURIComponent(jsonString))
+          this.browsingHistory = jsonData
+          console.log(this.browsingHistory)
+          this._loadProList();
+        });
+      } else {
+        this.$bridgefunc.getItem('browsingHistory', (result) => {
+          console.log('h5 localstorage', result)
           if (!result || result == '' || result == 'null' || result == undefined) {
             return;
           }
@@ -323,10 +346,8 @@
           let jsonData = JSON.parse(decodeURIComponent(jsonString))
           this.browsingHistory = jsonData
           this._loadProList();
-        });
+        })
       }
-    },
-    created() {
     }
   }
 </script>

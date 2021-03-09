@@ -7,122 +7,6 @@ import Config from '@/api/config'
 import { result } from "lodash";
 import appLocalstorage from '@zkty-team/x-engine-module-localstorage'
 
-function commonLocalStorage (skuId, deliverType, result) {
-  let curTime = store.state.severTime.currentTime
-  let cDate = new Date(curTime * 1000);
-  let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
-
-  let arr = []
-  let total = 0
-  let browsingHistory = [];
-  if (!result || result == '' || result == 'null' || result == undefined) {
-
-  } else {
-    let jsonString = result;
-    let jsonData = JSON.parse(decodeURIComponent(jsonString))
-    browsingHistory = jsonData
-  }
-
-  if (browsingHistory.length > 0) {
-    let fitem = browsingHistory[0]
-    if (y == fitem.y && m == fitem.m && d == fitem.d) {
-      total++;
-      for (let i = 0; i < browsingHistory.length; i++) {
-        if (total > 100) {
-          break;
-        }
-        let odItem = browsingHistory[i];
-        let dItem = {
-          y: odItem.y,
-          m: odItem.m,
-          d: odItem.d,
-          list: []
-        };
-        if (i == 0) {
-          dItem.list.push({
-            skuId: skuId,
-            deliverType: deliverType,
-          })
-        }
-        let ol = odItem.list;
-        for (let j = 0; j < ol.length; j++) {
-          if (total > 100) {
-            break;
-          }
-          let oskuD = ol[j]
-          if (oskuD.skuId != skuId) {
-            dItem.list.push(oskuD)
-            total++;
-          }
-        }
-        arr.push(dItem)
-      }
-    } else {
-      arr.push({
-        y: y,
-        m: m,
-        d: d,
-        list: [{
-          skuId: skuId,
-          deliverType: deliverType,
-        }]
-      })
-      total++;
-      for (let i = 0; i < browsingHistory.length; i++) {
-        if (total > 100) {
-          break;
-        }
-        let odItem = browsingHistory[i];
-        let dItem = {
-          y: odItem.y,
-          m: odItem.m,
-          d: odItem.d,
-          list: []
-        };
-        let ol = odItem.list;
-        for (let j = 0; j < ol.length; j++) {
-          if (total > 100) {
-            break;
-          }
-          let oskuD = ol[j]
-          if (oskuD.skuId != skuId) {
-            dItem.list.push({
-              skuId: oskuD.skuId,
-              deliverType: deliverType,
-            })
-          }
-        }
-        arr.push(dItem)
-      }
-    }
-  } else {
-    arr.push({
-      y: y,
-      m: m,
-      d: d,
-      list: [{
-        skuId: skuId,
-        deliverType: deliverType,
-      }]
-    })
-  }
-  browsingHistory = arr;
-  let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
-  if (store.state.webtype == '2' || store.state.webtype == '3') {
-    bridgefunc.setItem('browsingHistory', jsonString1, () => {
-    })
-  } else {
-    appLocalstorage
-    .set({
-      key: "browsingHistory",
-      value: jsonString1,
-      isPublic: true,
-    })
-    .then((res) => {
-    });
-  }
-}
-
 var mallCommon = {
   // 孙哥价格处理（返回结构不一样，0.0）
   dataProcessing: function (item) {
@@ -247,24 +131,141 @@ var mallCommon = {
     bridgefunc.vuexStorage()
   },
 
+  commonLocalStorage (skuId, deliverType, result) {
+    console.log('2222222', skuId, deliverType, result)
+    let curTime = store.state.severTime.currentTime
+    let cDate = new Date(curTime * 1000);
+    let y = cDate.getFullYear(), m = cDate.getMonth() + 1, d = cDate.getDate();
+  
+    let arr = []
+    let total = 0
+    let browsingHistory = [];
+    if (!result || result == '' || result == 'null' || result == undefined) {
+  
+    } else {
+      let jsonString = result;
+      let jsonData = JSON.parse(decodeURIComponent(jsonString))
+      browsingHistory = jsonData
+    }
+  
+    if (browsingHistory.length > 0) {
+      let fitem = browsingHistory[0]
+      if (y == fitem.y && m == fitem.m && d == fitem.d) {
+        total++;
+        for (let i = 0; i < browsingHistory.length; i++) {
+          if (total > 100) {
+            break;
+          }
+          let odItem = browsingHistory[i];
+          let dItem = {
+            y: odItem.y,
+            m: odItem.m,
+            d: odItem.d,
+            list: []
+          };
+          if (i == 0) {
+            dItem.list.push({
+              skuId: skuId,
+              deliverType: deliverType,
+            })
+          }
+          let ol = odItem.list;
+          for (let j = 0; j < ol.length; j++) {
+            if (total > 100) {
+              break;
+            }
+            let oskuD = ol[j]
+            if (oskuD.skuId != skuId) {
+              dItem.list.push(oskuD)
+              total++;
+            }
+          }
+          arr.push(dItem)
+        }
+      } else {
+        arr.push({
+          y: y,
+          m: m,
+          d: d,
+          list: [{
+            skuId: skuId,
+            deliverType: deliverType,
+          }]
+        })
+        total++;
+        for (let i = 0; i < browsingHistory.length; i++) {
+          if (total > 100) {
+            break;
+          }
+          let odItem = browsingHistory[i];
+          let dItem = {
+            y: odItem.y,
+            m: odItem.m,
+            d: odItem.d,
+            list: []
+          };
+          let ol = odItem.list;
+          for (let j = 0; j < ol.length; j++) {
+            if (total > 100) {
+              break;
+            }
+            let oskuD = ol[j]
+            if (oskuD.skuId != skuId) {
+              dItem.list.push({
+                skuId: oskuD.skuId,
+                deliverType: deliverType,
+              })
+            }
+          }
+          arr.push(dItem)
+        }
+      }
+    } else {
+      arr.push({
+        y: y,
+        m: m,
+        d: d,
+        list: [{
+          skuId: skuId,
+          deliverType: deliverType,
+        }]
+      })
+    }
+    browsingHistory = arr;
+    let jsonString1 = encodeURIComponent(JSON.stringify(browsingHistory))
+    if (store.state.webtype == '1') {
+      appLocalstorage
+      .set({
+        key: "browsingHistory",
+        value: jsonString1,
+        isPublic: true,
+      })
+      .then((res) => {
+      });
+    } else {
+      bridgefunc.setItem('browsingHistory', jsonString1, () => {
+      })
+    }
+  },
   // 添加浏览记录
   pushBrowsingHistory: function (skuId, deliverType) {
     if (skuId == '') {
       return
     }
-    if (store.state.webtype == '2' || store.state.webtype == '3') {
-      bridgefunc.getItem('browsingHistory', (result) => {
-        commonLocalStorage(skuid, deliverType, result)
-      })
-    } else {
+    if (store.state.webtype == '1') {
       appLocalstorage
       .get({
         key: "browsingHistory",
         isPublic: true,
       })
       .then((res) => {
-        commonLocalStorage(skuid, deliverType, res)
+        this.commonLocalStorage(skuId, deliverType, res)
       });
+    } else {
+      console.log('kkkkkkkkkk', store.state.webtype)
+      bridgefunc.getItem('browsingHistory', (result) => {
+        this.commonLocalStorage(skuId, deliverType, result)
+      })
     }
     // let curTime = store.state.severTime.currentTime
     // let cDate = new Date(curTime * 1000);
