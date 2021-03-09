@@ -110,7 +110,7 @@
           }
         }else if (type == 2){//继续购物
           if (this.$store.state.webtype == 3) {
-            wx.miniProgram.reLaunch({url: `/pages/index/main`})
+            wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
             // this.$util.wxmpBackHome()
           } else {
             this.turnback()
