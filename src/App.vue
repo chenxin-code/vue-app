@@ -107,13 +107,14 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
-    let initArr = []
-    if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+    if (this.$store.state.webtype == '0' || this.$store.state.webtype == '3') {
+      let initObj = {}
       location.href.split('?')[1].split('&').forEach( item => {
-        initArr.push(item.split('=')[1])
+        initObj[item.split('=')[0]] = item.split('=')[1]
       })
-      this.$store.state.projectId = initArr[2]
-      this.$store.state.ythToken = initArr[1]
+      console.log(initObj)
+      this.$store.state.projectId = initObj.projectId
+      this.$store.state.ythToken = initObj.ythToken
       console.log('-------获取一体化token-------')
       console.log(this.$store.state.projectId)
       console.log(this.$store.state.ythToken)
