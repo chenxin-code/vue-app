@@ -107,12 +107,16 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
+    let initArr = []
     if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-      this.$store.state.projectId = this.$route.query.projectId
-      this.$store.state.ythToken = this.$route.query.ythToken
+      location.href.split('?')[1].split('&').forEach( item => {
+        initArr.push(item.split('=')[1])
+      })
+      this.$store.state.projectId = initArr[2]
+      this.$store.state.ythToken = initArr[1]
       console.log('-------获取一体化token-------')
-      console.log(this.$store.state.projectId, this.$route.query.projectId)
-      console.log(this.$store.state.ythToken, this.$route.query.ythToken)
+      console.log(this.$store.state.projectId)
+      console.log(this.$store.state.ythToken)
       console.log('-------获取一体化token-------')
     }
   },
