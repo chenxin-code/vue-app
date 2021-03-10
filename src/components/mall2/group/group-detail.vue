@@ -349,9 +349,9 @@ export default {
           )}`,
           title: shareData.title,
           desc: shareData.sharetext,
-          link: "http://www.baidu.com",
+          link: "https://www.baidu.com",
           imageurl:shareData.imageurl,
-          miniProgramType: 2,
+          miniProgramType: 1,
           __event__: (res) => {},
         })
         .then((res) => {
