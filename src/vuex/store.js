@@ -7,6 +7,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    projectId: '', //社区id （微信小程序时使用)
+    ythToken: '', // 一体化原token
     version: '1.0.0',
     // protocolVersion: 2.0,
     webtype: '0', // -1 内容管理配置， 0 网页访问， 1 app， 2 公众号， 3 小程序， 4 e生活app， 5 支付宝，6 加油河北老app，7 掌厅app 8 企业微信

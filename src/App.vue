@@ -107,6 +107,14 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
+    if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+      this.$store.state.projectId = this.$route.query.projectId
+      this.$store.state.ythToken = this.$route.query.ythToken
+      console.log('-------获取一体化token-------')
+      console.log(this.$store.state.projectId, this.$route.query.projectId)
+      console.log(this.$store.state.ythToken, this.$route.query.ythToken)
+      console.log('-------获取一体化token-------')
+    }
   },
   computed: {
     appBackHomeImg() {
