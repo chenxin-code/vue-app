@@ -119,7 +119,7 @@
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
-        <van-icon name="photograph" size="30" class="home-shoppingCart" v-if="isCommon && $store.state.webtype == '2' || $store.state.webtype == '3'" @click="scanCode" />
+        <van-icon name="photograph" size="30" class="home-shoppingCart" v-if="isCommon && $store.state.webtype == '2' || $store.state.webtype == '3'" @click="scanCode"/>
 
         <!-- 退出登录 -->
         <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
@@ -449,7 +449,7 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-import Jwx from '@/deploy/hbsy/utils/jwx.js';
+import bridgefunc from "@/utils/bridgefunc";
 
 export default {
   name: "top-nav",
@@ -526,7 +526,8 @@ export default {
   methods: {
     //微信扫一扫
     scanCode(){
-      this.wxFn.scanCode();
+      console.log('scanCode------------------------------', bridgefunc)
+      bridgefunc.scanCode();
     },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";
@@ -683,7 +684,6 @@ export default {
     if (this.myData.isShowMsg) {
       this.getMessageNumber();
     }
-    this.wxFn = new Jwx();
   },
 };
 </script>
