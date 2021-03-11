@@ -80,7 +80,6 @@ export default {
       if (this.category) {
         this.currentSelect = this.category;
       }
-      console.log("2222222222222222222222", this.category);
     });
 
     console.log(this.$route);
