@@ -345,7 +345,7 @@ export default {
         .shareForOpenWXMiniProgram({
           userName: "gh_2a45a4d38d81",
           path: `pages/weView/weView?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}`
+            `/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}`
           )}`,
           title: shareData.title,
           desc: shareData.sharetext,

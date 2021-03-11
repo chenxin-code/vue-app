@@ -300,7 +300,7 @@ export default {
             .shareForOpenWXMiniProgram({
               userName: "gh_2a45a4d38d81",
               path: `pages/weView/weView?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+                `/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
               )}`,
               title: "微信分享商品",
               desc: "test",
