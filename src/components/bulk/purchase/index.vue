@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import appLocalstorage from '@zkty-team/x-engine-module-localstorage';
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 import channelSearch from "@/components/bulk/components/channelSearch";
 import purchaseNav from "@/components/bulk/components/purchaseNav";
 import goodPanel from "@/components/bulk/components/goodPanel";
@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      communityId: "2253018072568823811",
+      communityId: 0,
       categoryId: "",
       page: 0,
       pageSize: 10,
@@ -65,15 +65,20 @@ export default {
     };
   },
   created() {
-    appLocalstorage
-      .get({
-        key: "LLBProjectId",
-        isPublic: true,
-      })
-      .then((res) => {
-        console.log("res-------------------", JSON.stringify(res));
-        this.communityId = res.result
-      });
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      this.communityId = this.$store.state.projectId;
+      console.log("res-------------------", this.communityId);
+    } else {
+      appLocalstorage
+        .get({
+          key: "LLBProjectId",
+          isPublic: true,
+        })
+        .then((res) => {
+          this.communityId = res.result;
+          console.log("res-------------------", JSON.stringify(res));
+        });
+    }
   },
   mounted() {
     this.$nextTick(() => {
