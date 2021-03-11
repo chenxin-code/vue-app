@@ -144,6 +144,7 @@ import Cookie from "js-cookie";
 import staticDataRequest from "../../../utils/staticData/staticDataRequest";
 import createGuide from "@/components/commonui/exchange-guide/guide-event";
 import { mapMutations, mapGetters } from "vuex";
+import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "index",
@@ -1067,6 +1068,7 @@ export default {
     next();
   },
   created() {
+    appUi.showTabbar();
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType
