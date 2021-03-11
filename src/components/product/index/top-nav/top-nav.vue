@@ -462,7 +462,6 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-import bridgefunc from "@/utils/bridgefunc";
 import wx from "weixin-js-sdk";
 
 export default {
@@ -540,7 +539,6 @@ export default {
   methods: {
     //微信扫一扫
     scanCode() {
-      console.log("scanCode------------------------------", bridgefunc);
       // bridgefunc.scanCode();
       wx.scanQRCode({
         needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
