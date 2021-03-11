@@ -449,7 +449,7 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-import Jwx from '@/deploy/hbsy/utils/jwx.js';
+import bridgefunc from "@/utils/bridgefunc";
 
 export default {
   name: "top-nav",
@@ -499,7 +499,6 @@ export default {
       isShowAddWechat: false,
       isShowWechatFavDesc: false,
       wechatDescPicUrl: "",
-      wxFn:null,
     };
   },
   watch: {
@@ -526,7 +525,8 @@ export default {
   methods: {
     //微信扫一扫
     scanCode(){
-      this.wxFn.scanCode();
+      console.log('scanCode----------------------------',bridgefunc)
+      bridgefunc.scanCode();
     },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";
@@ -683,7 +683,6 @@ export default {
     if (this.myData.isShowMsg) {
       this.getMessageNumber();
     }
-    this.wxFn = new Jwx();
   },
 };
 </script>
