@@ -37,7 +37,7 @@
 import { mapMutations } from "vuex";
 export default {
   name: "category",
-  props: ["current", "domIndex"],
+  props: ["category", "NoCategory", "domIndex"],
   data() {
     return {
       categoryList: [],
@@ -64,11 +64,24 @@ export default {
             0
           );
         });
+      } else if (this.NoCategory && this.$route.name == "商品列表") {
+        this.$nextTick(() => {
+          this.$refs.categoryList.scrollTo(
+            this.$refs["category" + "1"][0].offsetLeft - 20,
+            0
+          );
+        });
       }
+
+      if (this.NoCategory && this.$route.name == "商品列表") {
+        this.$emit("toggle", this.categoryList[1].id);
+        this.currentSelect = this.categoryList[1].id;
+      }
+      if (this.category) {
+        this.currentSelect = this.category;
+      }
+      console.log("2222222222222222222222", this.category);
     });
-    if (this.current) {
-      this.currentSelect = this.current;
-    }
 
     console.log(this.$route);
   },

@@ -545,8 +545,13 @@ export default {
       return styleStr;
     },
     enterNav: function (nav) {
-      if (nav.link.url == "http://8.129.64.205:8088/applyDistribution") {
-        nav.link.url = nav.link.url + "?token=" + this.$store.state.login.token;
+      if (
+        nav.link.url == "http://8.129.64.205:8088/applyDistribution" ||
+        (nav.link.url == "http://8.129.64.205:8088/wxApplyDistribution" &&
+          (this.$store.state.webtype == "2" ||
+            this.$store.state.webtype == "3"))
+      ) {
+        nav.link.url = nav.link.url + "?token=" + this.$store.state.ythToken;
       }
 
       if (this.canEnterNav) {

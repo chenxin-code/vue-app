@@ -64,7 +64,7 @@ import http from "@/utils/http";
 import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
 import appUi from "@zkty-team/x-engine-module-ui";
-
+import localstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "App",
   data() {
@@ -107,19 +107,28 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
-    if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-      let initObj = {}
-      location.href.split('?')[1].split('&').forEach( item => {
-        initObj[item.split('=')[0]] = item.split('=')[1]
-      })
-      console.log(initObj)
-      this.$store.state.projectId = initObj.projectId
-      this.$store.state.ythToken = initObj.ythToken
-      console.log('-------获取一体化token-------')
-      console.log(this.$store.state.projectId)
-      console.log(this.$store.state.ythToken)
-      console.log('-------获取一体化token-------')
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      let initObj = {};
+      location.href
+        .split("?")[1]
+        .split("&")
+        .forEach((item) => {
+          initObj[item.split("=")[0]] = item.split("=")[1];
+        });
+      console.log(initObj);
+      this.$store.state.projectId = initObj.projectId;
+      this.$store.state.ythToken = initObj.ythToken;
+      console.log("-------获取一体化token-------");
+      console.log(this.$store.state.projectId);
+      console.log(this.$store.state.ythToken);
+      console.log("-------获取一体化token-------");
+    } else {
+      localstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
+        this.$store.state.ythToken = res.result;
+        console.log("-------获取一体化token-------");
+      });
     }
+    console.log("---------------------------", this.$route);
   },
   computed: {
     appBackHomeImg() {
@@ -451,25 +460,26 @@ export default {
       }
     },
     "$route.matched"(value) {
-      if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
-        // 判断是否是刘海屏
-        const rate = window.screen.height / window.screen.width;
-        let limit =
-          window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-        // window.screen.height为屏幕高度
-        //  window.screen.availHeight 为浏览器 可用高度
-        if (rate > limit) {
-          if (
-            this.$store.state.webtype !== "3" &&
-            this.$store.state.webtype !== "2"
-          ) {
-            document.getElementsByTagName("body")[0].style.paddingTop =
-              "0.933333rem";
+      if (value.length !== 0) {
+        if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
+          // 判断是否是刘海屏
+          const rate = window.screen.height / window.screen.width;
+          let limit =
+            window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+          // window.screen.height为屏幕高度
+          //  window.screen.availHeight 为浏览器 可用高度
+          if (rate > limit) {
+            if (
+              this.$store.state.webtype !== "3" &&
+              this.$store.state.webtype !== "2"
+            ) {
+              document.getElementsByTagName("body")[0].style.paddingTop =
+                "0.933333rem";
+            }
           }
+        } else {
+          document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
-      } else {
-        document.getElementsByTagName("body")[0].style.paddingTop =
-          "0rem";
       }
     },
     // '$route'(to, from) {
