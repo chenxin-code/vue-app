@@ -114,10 +114,13 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
+
         <span class="home-shoppingCart" @click="navToCar" v-if="isCommon && $store.state.webtype !== '3' ">
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
+        <van-icon name="photograph" size="30" class="home-shoppingCart" v-if="isCommon && $store.state.webtype == '2' || $store.state.webtype == '3'" @click="scanCode" />
+
         <!-- 退出登录 -->
         <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
           <img :style="imgStyle" src="static/images/header/login-out-w.png"/>
@@ -446,6 +449,7 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
+import Jwx from '@/deploy/hbsy/utils/jwx.js';
 
 export default {
   name: "top-nav",
@@ -495,6 +499,7 @@ export default {
       isShowAddWechat: false,
       isShowWechatFavDesc: false,
       wechatDescPicUrl: "",
+      wxFn:null,
     };
   },
   watch: {
@@ -519,6 +524,10 @@ export default {
     this._getCartCount();
   },
   methods: {
+    //微信扫一扫
+    scanCode(){
+      this.wxFn.scanCode();
+    },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";
       let paramsData = {
@@ -674,6 +683,7 @@ export default {
     if (this.myData.isShowMsg) {
       this.getMessageNumber();
     }
+    this.wxFn = new Jwx();
   },
 };
 </script>
