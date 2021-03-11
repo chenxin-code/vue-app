@@ -525,7 +525,7 @@ export default {
   methods: {
     //微信扫一扫
     scanCode(){
-      console.log('scanCode----------------------------',bridgefunc)
+      console.log('scanCode------------------------------',bridgefunc)
       bridgefunc.scanCode();
     },
     _getCartCount: function () {
