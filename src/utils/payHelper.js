@@ -355,9 +355,12 @@ var payHelper = {
         document.body.appendChild(textNode)
         document.forms[0].submit()
         // resolve()
-      } else if (payway.payModeSub == '260001' || payway.payModeSub == '260002') {
+      } else if (payway.payModeSub == '260001') {
         // 邻里邦支付平台
         resolve();
+      } else if (payway.payModeSub == '260002') {
+        // 临时使用 为了微信小程序测试流程
+        router.push('/mall2/paysuccess')
       } else if (payway.payModeSub == '260003') {
         //团购微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
