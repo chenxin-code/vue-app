@@ -341,6 +341,7 @@ export default {
       shareData.detailurl += "&mktGroupBuyId=" + this.groupDetail.mktGroupBuyId;
       shareData.detailurl += "&spuId=" + this.groupDetail.spuId;
 
+
       appShare
         .shareForOpenWXMiniProgram({
           userName: "gh_2a45a4d38d81",
