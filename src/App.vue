@@ -64,6 +64,7 @@ import http from "@/utils/http";
 import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
 import appUi from "@zkty-team/x-engine-module-ui";
+import appNav from "@zkty-team/x-engine-module-nav";
 import localstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "App",
@@ -104,6 +105,11 @@ export default {
   },
   created() {
     // this.viewPortSet();
+    appNav.setNavBarHidden({
+      isHidden: true,
+      isAnimation: false,
+    })
+    .then((res) => {});
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
