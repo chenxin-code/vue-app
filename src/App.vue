@@ -128,6 +128,7 @@ export default {
         console.log("-------获取一体化token-------");
       });
     }
+    console.log("---------------------------", this.$route);
   },
   computed: {
     appBackHomeImg() {
@@ -459,24 +460,26 @@ export default {
       }
     },
     "$route.matched"(value) {
-      if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
-        // 判断是否是刘海屏
-        const rate = window.screen.height / window.screen.width;
-        let limit =
-          window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-        // window.screen.height为屏幕高度
-        //  window.screen.availHeight 为浏览器 可用高度
-        if (rate > limit) {
-          if (
-            this.$store.state.webtype !== "3" &&
-            this.$store.state.webtype !== "2"
-          ) {
-            document.getElementsByTagName("body")[0].style.paddingTop =
-              "0.933333rem";
+      if (value.length !== 0) {
+        if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
+          // 判断是否是刘海屏
+          const rate = window.screen.height / window.screen.width;
+          let limit =
+            window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+          // window.screen.height为屏幕高度
+          //  window.screen.availHeight 为浏览器 可用高度
+          if (rate > limit) {
+            if (
+              this.$store.state.webtype !== "3" &&
+              this.$store.state.webtype !== "2"
+            ) {
+              document.getElementsByTagName("body")[0].style.paddingTop =
+                "0.933333rem";
+            }
           }
+        } else {
+          document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
-      } else {
-        document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
       }
     },
     // '$route'(to, from) {

@@ -54,10 +54,11 @@
       <!-- 优化新增类目 -->
       <NewCategory
         @toggle="toggle"
-        :current="current"
+        :NoCategory="NoCategory"
         v-show="showNewCategory"
         :domIndex="domIndex"
         v-if="isProgram"
+        :category="category"
       ></NewCategory>
       <div class="all-content">
         <div
@@ -468,8 +469,8 @@ export default {
       channels: [],
       selectedChannel: {},
       nowCouponAmount: 0,
-      //新类目传值
-      current: 0,
+      //是否有类目id
+      NoCategory: false,
       // 新类目显示隐藏
       showNewCategory: true,
       //新类目dom下标
@@ -1157,9 +1158,16 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.domIndex) {
-      this.domIndex = this.$route.query.domIndex;
+    this.domIndex = this.$route.query.domIndex ? this.$route.query.domIndex : 1;
+    if (this.$route.query.category) {
+      this.category = this.$route.query.category;
+      console.log("11111111111111111111111111111111111111", this.category);
+    } else {
+      this.NoCategory = true;
     }
+    this.cateLevel = this.$route.query.cateLevel
+      ? this.$route.query.cateLevel
+      : 1;
     //小程序不需要类目
     if (
       this.$store.state.webtype !== "3" &&
@@ -1237,10 +1245,6 @@ export default {
       }
     }
 
-    if (this.$route.query.category) {
-      this.current = this.$route.query.category;
-    }
-
     if (
       this.$store.state.list_guide_show == true &&
       (this.$store.state.webtype == "0" ||
@@ -1263,12 +1267,7 @@ export default {
         ? this.$route.query.question
         : "";
     }
-    this.category = this.$route.query.category
-      ? this.$route.query.category
-      : "";
-    this.cateLevel = this.$route.query.cateLevel
-      ? this.$route.query.cateLevel
-      : "";
+
     this.pageType = this.$route.query.pageType
       ? this.$route.query.pageType
       : "";
