@@ -450,6 +450,7 @@
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
 import Jwx from '@/deploy/hbsy/utils/jwx.js';
+import jwx from '../../../../deploy/hbsy/utils/jwx';
 
 export default {
   name: "top-nav",
@@ -526,6 +527,7 @@ export default {
   methods: {
     //微信扫一扫
     scanCode(){
+      console.log('--------------------s',this.wxFn)
       this.wxFn.scanCode();
     },
     _getCartCount: function () {
@@ -684,6 +686,7 @@ export default {
       this.getMessageNumber();
     }
     this.wxFn = new Jwx();
+    console.log('111111111111111111111111111111111111',new Jwx())
   },
 };
 </script>
