@@ -546,10 +546,8 @@ export default {
     },
     enterNav: function (nav) {
       if (
-        nav.link.url == "http://8.129.64.205:8088/applyDistribution" ||
-        (nav.link.url == "http://8.129.64.205:8088/wxApplyDistribution" &&
-          (this.$store.state.webtype == "2" ||
-            this.$store.state.webtype == "3"))
+        nav.link.url.indexOf("/applyDistribution") !== -1 ||
+        nav.link.url.indexOf("/wxApplyDistribution") !== -1
       ) {
         nav.link.url = nav.link.url + "?token=" + this.$store.state.ythToken;
       }
