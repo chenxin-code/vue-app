@@ -321,7 +321,7 @@ export default {
         wx.miniProgram.postMessage({ data: JSON.stringify(shareData) });
       }
     },
-    sharegoods: function () {
+    shareForOpenWXMiniProgramsharegoods: function () {
       //分享
       if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
         this.shareView = true;

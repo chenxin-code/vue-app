@@ -128,8 +128,8 @@
           size="30"
           class="home-shoppingCart"
           v-if="
-            (isCommon && $store.state.webtype == '2') ||
-            $store.state.webtype == '3'
+            isCommon &&
+            ($store.state.webtype == '2' || $store.state.webtype == '3')
           "
           @click="scanCode"
         />
@@ -462,8 +462,7 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-import wx from "weixin-js-sdk";
-
+var wx = require("weixin-js-sdk");
 export default {
   name: "top-nav",
   components: {
@@ -512,7 +511,7 @@ export default {
       isShowAddWechat: false,
       isShowWechatFavDesc: false,
       wechatDescPicUrl: "",
-      wxFn:null,
+      wxReady:false,
     };
   },
   watch: {
@@ -532,6 +531,59 @@ export default {
   },
   created() {
     this._getCartCount();
+    console.log("-------------this.$store.state.webtype--------------", this.$store.state.webtype);
+
+    console.log("------------created----------------------------");
+    console.log(wx);
+    this.$http.post("/app/json/we_chat/signature").then((res) => {
+      let data = res.data;
+      if (data.status == 0) {
+        console.log(
+          "----isSignature-------------------------------------------------签名成功",
+          data
+        );
+        try {
+          wx.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.data.appId, // 必填，公众号的唯一标识
+            timestamp: data.data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
+            signature: data.data.signature, // 必填，签名
+            beta: true,
+            jsApiList: [
+              "getLocation",
+              "updateAppMessageShareData",
+              "updateTimelineShareData",
+              "onMenuShareTimeline",
+              "scanQRCode",
+              "onMenuShareAppMessage",
+              "chooseImage",
+              "getLocalImgData",
+              "uploadImage",
+              "downloadImage",
+              "openLocation",
+              "chooseInvoiceTitle",
+              "hideAllNonBaseMenuItem",
+              "hideMenuItems",
+            ], // 必填，需要使用的JS接口列表
+          });
+          wx.ready(function () {
+            this.wxReady = true;
+            console.log(
+              "----isSignature-------------------------------------------------签名成功"
+            );
+          });
+          wx.error(function (res) {
+            alert(
+              "----isSignature---------------------------------------------签名失败",
+              res
+            );
+          });
+        } catch (e) {
+          alert(JSON.stringify(e));
+        }
+      }
+    });
   },
   activated() {
     this._getCartCount();
@@ -540,15 +592,16 @@ export default {
     //微信扫一扫
     scanCode() {
       // bridgefunc.scanCode();
-      console.log('wwwwwwwwwwwwwwwwwwwwwww', wx)
-      // wx.scanQRCode({
-      //   needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-      //   scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-      //   success: function (res) {
-      //     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-      //     console.log("seac ===== > ", res);
-      //   },
-      // });
+      if(this.wxReady){
+        wx.scanQRCode({
+          needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+          success: function (res) {
+            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+            console.log('----------------scanCode----------------------',res)
+          }
+        });
+      }
     },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";

@@ -1618,7 +1618,6 @@ import staticDataRequest from "@/utils/staticData/staticDataRequest.js";
 import CouponAndActivity from "./base/couponAndActivity";
 import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
-var wx = require("weixin-js-sdk");
 
 export default {
   name: "detail",
@@ -1844,57 +1843,7 @@ export default {
     this.easyCardId = this.$route.query.easyCardId;
     this.recommendCommodity = this.$route.query.recommendCommodity;
     this.cardType = this.$route.query.cardType;
-
-    console.log("------------mounted----------------------------");
-    console.log(wx);
-    this.$http.post("/app/json/we_chat/signature").then((res) => {
-      let data = res.data;
-      if (data.status == 0) {
-        console.log(
-          "----isSignature-------------------------------------------------签名成功",
-          data
-        );
-        try {
-          wx.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: data.data.appId, // 必填，公众号的唯一标识
-            timestamp: data.data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
-            signature: data.data.signature, // 必填，签名
-            beta: true,
-            jsApiList: [
-              "getLocation",
-              "updateAppMessageShareData",
-              "updateTimelineShareData",
-              "onMenuShareTimeline",
-              "scanQRCode",
-              "onMenuShareAppMessage",
-              "chooseImage",
-              "getLocalImgData",
-              "uploadImage",
-              "downloadImage",
-              "openLocation",
-              "chooseInvoiceTitle",
-              "hideAllNonBaseMenuItem",
-              "hideMenuItems",
-            ], // 必填，需要使用的JS接口列表
-          });
-          wx.ready(function () {
-            console.log(
-              "----isSignature-------------------------------------------------签名成功"
-            );
-          });
-          wx.error(function (res) {
-            alert(
-              "----isSignature---------------------------------------------签名失败",
-              res
-            );
-          });
-        } catch (e) {
-          alert(JSON.stringify(e));
-        }
-      }
-    });
+   
   },
   watch: {
     "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
@@ -2492,7 +2441,7 @@ export default {
       }
       if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
         if(window.history.length === 1){
-          this.$route.push('/common')
+          this.$router.push('/common')
         }
       } else {
         this.$router.go(-1);

@@ -105,8 +105,6 @@ export default {
   },
   created() {  
     // this.viewPortSet();
-
-
     appNav
       .setNavBarHidden({
         isHidden: true,
@@ -118,6 +116,12 @@ export default {
     this.$store.state.microSho.groupbuyingCarts = [];
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       let initObj = {};
+      location.href
+        .split("?")[1]
+        .split("&")
+        .forEach((item) => {
+          initObj[item.split("=")[0]] = item.split("=")[1];
+        });
       console.log(initObj);
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.ythToken = initObj.ythToken;
@@ -128,10 +132,10 @@ export default {
     } else {
       localstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
-        console.log("-------获取一体化token-------");
+        console.log("-------获取一体化token-------",this.$store.state.ythToken);
       });
     }
-    console.log("---------------------------", this.$route);
+
   },
   computed: {
     appBackHomeImg() {
