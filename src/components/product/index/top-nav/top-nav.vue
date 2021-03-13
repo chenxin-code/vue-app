@@ -115,11 +115,24 @@
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
 
-        <span class="home-shoppingCart" @click="navToCar" v-if="isCommon && $store.state.webtype !== '3' ">
+        <span
+          class="home-shoppingCart"
+          @click="navToCar"
+          v-if="isCommon && $store.state.webtype !== '3'"
+        >
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
-        <van-icon name="photograph" size="30" class="home-shoppingCart" v-if="isCommon && $store.state.webtype == '2' || $store.state.webtype == '3'" @click="scanCode" />
+        <van-icon
+          name="photograph"
+          size="30"
+          class="home-shoppingCart"
+          v-if="
+            (isCommon && $store.state.webtype == '2') ||
+            $store.state.webtype == '3'
+          "
+          @click="scanCode"
+        />
 
         <!-- 退出登录 -->
         <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
@@ -449,7 +462,7 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-import bridgefunc from "@/utils/bridgefunc";
+import wx from "weixin-js-sdk";
 
 export default {
   name: "top-nav",
@@ -499,6 +512,7 @@ export default {
       isShowAddWechat: false,
       isShowWechatFavDesc: false,
       wechatDescPicUrl: "",
+      wxFn:null,
     };
   },
   watch: {
@@ -524,9 +538,17 @@ export default {
   },
   methods: {
     //微信扫一扫
-    scanCode(){
-      console.log('scanCode----------------------------',bridgefunc)
-      bridgefunc.scanCode();
+    scanCode() {
+      // bridgefunc.scanCode();
+      console.log('wwwwwwwwwwwwwwwwwwwwwww', wx)
+      // wx.scanQRCode({
+      //   needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+      //   scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      //   success: function (res) {
+      //     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+      //     console.log("seac ===== > ", res);
+      //   },
+      // });
     },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";
@@ -660,6 +682,9 @@ export default {
     },
   },
   mounted() {
+    // console.log('bridgefunc-------------------------------------',bridgefunc)
+    // bridgefunc.scanCode();
+
     // 小程序环境 webtype = 3 未将小程序添加到”我的小程序“ isAddToFavorites != 1 配置了添加”我的小程序“说明图片 hasFavoritesDescriptionPic = 图片地址
     if (
       this.$store.state.webtype == 3 &&
@@ -710,7 +735,7 @@ export default {
     right: -9px;
     border-radius: 50%;
     top: -7px;
-    background:#FF4A4A;
+    background: #FF4A4A;
     font-size: 13px;
   }
 

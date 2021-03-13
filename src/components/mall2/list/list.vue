@@ -376,6 +376,7 @@ import InitialLoadPickupAny from "@/utils/initialLoadPickupAny.js";
 import AdPage from "@/components/product/index/subpage/adpage";
 import NewCategory from "@/components/product/index/category/index";
 import { mapMutations } from "vuex";
+import appNav from '@zkty-team/x-engine-module-nav';
 
 export default {
   name: "list",
@@ -601,7 +602,13 @@ export default {
       );
     },
     backEvent: function () {
-      this.$router.go(-1);
+      if (this.$route.query.backApp) {
+        appNav.navigatorBack({ url: '0' }).then( res => {
+          console.log(res)
+        })
+      } else {
+        this.$router.go(-1)
+      }
     },
     toSearchEvent: function () {
       Search.open({
