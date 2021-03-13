@@ -577,7 +577,7 @@ export default {
           _this.wxReady = true;
         });
         wx.error(function (res) {
-          alert(
+          console(
             "----isSignature---------------------------------------------签名失败",
             res
           );
