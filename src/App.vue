@@ -103,13 +103,16 @@ export default {
       ani: false,
     };
   },
-  created() {
+  created() {  
     // this.viewPortSet();
-    appNav.setNavBarHidden({
-      isHidden: true,
-      isAnimation: false,
-    })
-    .then((res) => {});
+
+
+    appNav
+      .setNavBarHidden({
+        isHidden: true,
+        isAnimation: false,
+      })
+      .then((res) => {});
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
@@ -158,6 +161,7 @@ export default {
     },
   },
   mounted() {
+
     sessionStorage.setItem("js_css_loaded", "1");
 
     this.phone = this.$store.state.login.phone;
