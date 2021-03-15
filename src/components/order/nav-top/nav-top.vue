@@ -1,7 +1,7 @@
 <template>
   <div class="nav-top">
     <i class="icon"><</i>
-    <span class="title">我是标题</span>
+    <span class="title">我的订单</span>
   </div>
 </template>
 
@@ -26,6 +26,8 @@ export default {
   .title {
     font-size: 24px;
     color: #121212;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
   }
 }
 </style>
