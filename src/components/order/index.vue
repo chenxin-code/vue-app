@@ -52,8 +52,6 @@ export default {
   computed: {
     active: {
       get() {
-        console.log(this.$route.path);
-
         switch (this.$route.path) {
           case "/order/allOrder":
             return "/order/allOrder";

@@ -106,11 +106,21 @@ router.afterEach((to, from) => {
   }, 3000)
 });
 
+//新订单子路由psuh无须动画效果
+let orderRouterList = ['/order/allOrder','/order/waitPay','/order/waitDelivery','/order/waitTakeDelivery','/order/finish','/order/cancel',]
+
 router.push = function push(location, onComplete, onAbort) {
 
   router.addRouterPath(location.path);
 
-  router.customRouterData.transitionName = 'slide_left';
+  //新订单子路由psuh无须动画效果  去除
+  if(orderRouterList.indexOf(location.path) !== -1){
+    router.customRouterData.transitionName ='';
+  }else{
+    router.customRouterData.transitionName = 'slide_left';
+
+  }
+  console.log('router----------------------------------------------------------------',router.customRouterData)
 
   this.history.push(location, onComplete, onAbort);
 };
