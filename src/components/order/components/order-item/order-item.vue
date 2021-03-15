@@ -1,13 +1,20 @@
 <template>
   <div class="order-item">
     <div class="title">
+      <van-checkbox v-model="checked" checked-color="#f80f16" icon-size="18px"></van-checkbox>
       <i class="icon"></i>
       <span>邻里选星</span>
     </div>
     <div class="content">
       <div class="img">
         <img src="../../img/product1.jpg" />
-        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
+        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
+        <div class="desc">
+          <strong>物业缴费</strong>
+          <p>时代地产中心2202房</p>
+          <p>车位管理服务费</p>
+          <p>2020年2月</p>
+        </div>
       </div>
       <div class="price">
         <p class="pr">￥2289.09</p>
@@ -23,6 +30,10 @@
         <p class="pr">￥2289.09</p>
         <p class="am">x 1</p>
       </div>
+    </div>
+    <div class="need-pay">
+      <p class="time">2020-03-05 22:08:09</p>
+      <p class="pr"><i>实付款：</i>￥2289.00</p>
     </div>
     <div class="total">
       <span class="to">共<i>1</i>件商品</span>
@@ -39,7 +50,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      checked: true
+    };
   },
 };
 </script>
@@ -56,8 +69,14 @@ export default {
   margin-bottom: 12px;
 
   .title {
+    display: flex;
     height: 30px;
     line-height: 30px;
+    .van-checkbox {
+       position: relative;
+       top: 0px;
+       margin-right: 4px;
+    }
 
     .icon {
       display: inline-block;
@@ -99,6 +118,23 @@ export default {
         font-weight: 400;
         color: #121212;
         line-height: 21px;
+      }
+      .desc {
+        padding-left: 8px;
+        strong {
+          font-size: 17px;
+          font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+          font-weight: 400;
+          line-height: 27px;
+          color: #121212;
+        }
+        p {
+          font-size: 13px;
+          font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+          font-weight: 400;
+          line-height: 21px;
+          color: #D8D8D8;
+        }
       }
     }
 
@@ -144,6 +180,29 @@ export default {
       i {
         color: #8D8D8D;
         font-size: 14px;
+      }
+    }
+  }
+  .need-pay {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    .time {
+      font-size: 13px;
+      font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+      font-weight: 400;
+      color: #999999;
+    }
+    .pr {
+      font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+      font-weight: 500;
+      color: #121212;
+      font-size: 16px;
+      i {
+        font-size: 14px;
+        font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+        font-weight: 400;
+        color: #999999;
       }
     }
   }

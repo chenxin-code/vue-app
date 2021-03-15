@@ -20,12 +20,14 @@
     </van-tabs>
     <order-item></order-item>
     <order-item></order-item>
+    <pay-div></pay-div>
   </div>
 </template>
 
 <script>
 import navTop from "@/components/order/components/nav-top/nav-top";
 import orderItem from "@/components/order/components/order-item/order-item";
+import payDiv from "@/components/order/components/pay-div/pay-div";
 export default {
   data() {
     return {
@@ -41,7 +43,8 @@ export default {
   },
   components: {
     navTop,
-    orderItem
+    orderItem,
+    payDiv
   },
   methods: {
     navTo(name, title) {
@@ -89,6 +92,8 @@ export default {
   @import '~@/common/stylus/variable.styl';
 #app .router_class.order {
   background: #F9F9F9;
+  overflow: auto;
+  padding-bottom: 52px;
 }
 .van-tab__pane, .van-tab__pane-wrapper {
   padding-top: 10px;
