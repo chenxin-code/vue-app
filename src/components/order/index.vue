@@ -19,6 +19,7 @@
       </van-tab>
     </van-tabs>
     <order-item></order-item>
+    <order-item></order-item>
   </div>
 </template>
 
