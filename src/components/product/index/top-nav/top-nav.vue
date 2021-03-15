@@ -629,6 +629,7 @@ export default {
         (res) => {
           debugger;
           let data = res.data;
+          console.log('--------res------------',res)
           if (data.status == 0) {
             wx.config({
               debug: debug, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -654,7 +655,7 @@ export default {
                 "hideMenuItems",
               ], // 必填，需要使用的JS接口列表
             });
-            wx.onload(function () {
+            wx.ready(function () {
               console.log("----isSignature--------签名成功");
               if (callback) {
                 callback(true);
@@ -667,15 +668,15 @@ export default {
               }
             });
           } else {
-            // console.log(data.info);
-            // Toast(`signature err ${data.info}`)
+            console.log(data.info);
+            Toast(`signature err ${data.info}`)
             if (callback) {
               callback(false);
             }
           }
         },
         (error) => {
-          // console.log('获取失败', error);
+          console.log('获取失败', error);
           Toast("获取数据失败");
           if (callback) {
             callback(false);
