@@ -1,21 +1,22 @@
 <template>
   <div class="order">
     <nav-top></nav-top>
-
     <van-tabs
       v-model="active"
-      animated
       swipeable
       swipe-threshold="6"
       title-active-color="#E8374A"
+      @click="navTo"
     >
       <van-tab
         :title="item.title"
         v-for="(item, index) in orderStatusList"
         :key="index"
         title-class="tabTitle"
-        >内容 1</van-tab
+        :name="item.path"
       >
+        <router-view></router-view>
+      </van-tab>
     </van-tabs>
   </div>
 </template>
@@ -25,19 +26,56 @@ import navTop from "@/components/order/nav-top/nav-top";
 export default {
   data() {
     return {
-      active: 0,
       orderStatusList: [
-        { title: "全部", path: "" },
-        { title: "待支付", path: "" },
-        { title: "待发货", path: "" },
-        { title: "待收货", path: "" },
-        { title: "已完成", path: "" },
-        { title: "已取消", path: "" },
+        { title: "全部", path: "/order/allOrder" },
+        { title: "待支付", path: "/order/waitPay" },
+        { title: "待发货", path: "/order/waitDelivery" },
+        { title: "待收货", path: "/order/waitTakeDelivery" },
+        { title: "已完成", path: "/order/finish" },
+        { title: "已取消", path: "/order/cancel" },
       ],
     };
   },
   components: {
     navTop,
+  },
+  methods: {
+    navTo(name, title) {
+      this.$router.push({
+        path: name,
+      });
+    },
+  },
+  computed: {
+    active: {
+      get() {
+        console.log(this.$route.path);
+
+        switch (this.$route.path) {
+          case "/order/allOrder":
+            return "/order/allOrder";
+
+          case "/order/waitPay":
+            return "/order/waitPay";
+
+          case "/order/waitDelivery":
+            return "/order/waitDelivery";
+
+          case "/order/waitTakeDelivery":
+            return "/order/waitTakeDelivery";
+
+          case "/order/finish":
+            return "/order/finish";
+            
+          case "/order/cancel":
+            return "/order/cancel";
+
+          default:
+            return "/order/allOrder";
+        }
+      },
+      set() {},
+    },
   },
 };
 </script>
