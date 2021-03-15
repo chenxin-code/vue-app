@@ -552,29 +552,23 @@ export default {
           nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
           signature: data.data.signature, // 必填，签名
           beta: true,
-          jsApiList: [
-            "getLocation",
-            "updateAppMessageShareData",
-            "updateTimelineShareData",
-            "onMenuShareTimeline",
-            "scanQRCode",
-            "onMenuShareAppMessage",
-            "chooseImage",
-            "getLocalImgData",
-            "uploadImage",
-            "downloadImage",
-            "openLocation",
-            "chooseInvoiceTitle",
-            "hideAllNonBaseMenuItem",
-            "hideMenuItems",
-          ], // 必填，需要使用的JS接口列表
+          jsApiList: ["scanQRCode", "chooseImage"], // 必填，需要使用的JS接口列表
         });
-        let _this = this;
         wx.ready(function () {
           console.log(
-            "----isSignature-------------------------------------------------签名成功"
+            "----isSignature-------------------------------------------------ready"
           );
-          _this.wxReady = true;
+          wx.checkJsApi({
+            jsApiList: ["chooseImage", "scanQRCode"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+              // 以键值对的形式返回，可用的api值true，不可用为false
+              // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+              console.log(
+                "----isSignature-------------------------------------------------checkJsApi",
+                res
+              );
+            },
+          });
         });
         wx.error(function (res) {
           console(
@@ -592,16 +586,23 @@ export default {
     //微信扫一扫
     scanCode() {
       // bridgefunc.scanCode();
-      if (this.wxReady) {
-        wx.scanQRCode({
-          needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-            console.log("----------------scanCode----------------------", res);
-          },
-        });
-      }
+      // wx.scanQRCode({
+      //   needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+      //   scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      //   success: function (res) {
+      //     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+      //     console.log("----------------scanCode----------------------", result);
+      //   },
+      // });
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          console.log("----------------scanCode----------------------", localIds);
+        },
+      });
     },
     _getCartCount: function () {
       let url = "/app/json/app_cart/getCartCount";
