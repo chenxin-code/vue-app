@@ -11,7 +11,17 @@
       </div>
       <div class="price">
         <p class="pr">￥2289.09</p>
-        <p class="am">x1</p>
+        <p class="am">x 1</p>
+      </div>
+    </div>
+    <div class="content">
+      <div class="img">
+        <img src="../../img/product1.jpg" />
+        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
+      </div>
+      <div class="price">
+        <p class="pr">￥2289.09</p>
+        <p class="am">x 1</p>
       </div>
     </div>
     <div class="total">
