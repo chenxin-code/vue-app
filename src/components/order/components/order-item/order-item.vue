@@ -27,14 +27,20 @@ export default {
   border-radius: 16px;
   padding: 16px;
   .title {
+    height: 30px;
+    line-height: 30px;
     .icon {
       display: inline-block;
       width: 20px;
       height: 20px;
-      // background: url("@/assets/order/icon.png");
+      background: url("../../img/icon1.png") no-repeat;
+      background-size: 20px 20px;
+      position relative;
+      top: 5px;
     }
     span {
       font-size: 16px;
+      padding-left: 6px;
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
       font-weight: 500;
       color: #121212;
