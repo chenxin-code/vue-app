@@ -307,4 +307,9 @@ import yearBill from './modules/year-bill'
 
 routerArr = routerArr.concat(yearBill);
 
+// 新order
+import order from './order'
+
+routerArr = routerArr.concat(order);
+
 export default routerArr
