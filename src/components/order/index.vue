@@ -1,73 +1,64 @@
 <template>
-  <div>
+  <div class="order">
     <nav-top></nav-top>
-    <div class="nav">
-      <div class="nav-content">
-        <ul>
-          <li>
-            <span>全部</span>
-            <i></i>
-          </li>
-          <li>
-            <span>待支付</span>
-            <i></i>
-          </li>
-          <li>
-            <span>待发货</span>
-            <i></i>
-          </li>
-          <li>
-            <span>待收货</span>
-            <i></i>
-          </li>
-          <li>
-            <span>已完成</span>
-            <i></i>
-          </li>
-          <li>
-            <span>已取消</span>
-            <i></i>
-          </li>
-        </ul>
-      </div>
-    </div>
+
+    <van-tabs
+      v-model="active"
+      animated
+      swipeable
+      swipe-threshold="6"
+      title-active-color="#E8374A"
+    >
+      <van-tab
+        :title="item.title"
+        v-for="(item, index) in orderStatusList"
+        :key="index"
+        title-class="tabTitle"
+        >内容 1</van-tab
+      >
+    </van-tabs>
   </div>
 </template>
 
 <script>
-import navTop from '@/components/order/nav-top/nav-top'
+import navTop from "@/components/order/nav-top/nav-top";
 export default {
   data() {
+    return {
+      active: 0,
+      orderStatusList: [
+        { title: "全部", path: "" },
+        { title: "待支付", path: "" },
+        { title: "待发货", path: "" },
+        { title: "待收货", path: "" },
+        { title: "已完成", path: "" },
+        { title: "已取消", path: "" },
+      ],
+    };
   },
   components: {
-    navTop
-  }
-}
+    navTop,
+  },
+};
 </script>
 
 
 <style lang="stylus" scoped type="text/stylus">
-  @import '~@/common/stylus/variable.styl';
-.nav {
-  .nav-content {
-    padding: 0 10px;
-  }
-  ul {
-    display: flex;
-    justify-content: space-between;
-    li {
-      color: #8D8D8D;
-      font-size: 14px;
-      
-      i {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background: #000;
-        margin-top:10px;
-      }
-    }
+@import '~@/common/stylus/variable.styl';
+
+.order {
+  font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+
+  /deep/.van-tab {
+    font-size: 14px;
+    font-weight: 400;
+    color: #121212;
+    line-height: 21px;
   }
 
+  /deep/.van-tab--active {
+    font-size: 15px;
+    font-weight: 500;
+  }
 }
 </style>
