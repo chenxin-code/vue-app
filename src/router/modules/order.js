@@ -1,4 +1,6 @@
-module.exports = [
+//create by hjc 团购模块
+
+export default [
   // order 新
   {
     path: '/order',
@@ -9,3 +11,4 @@ module.exports = [
     }
   }
 ]
+
