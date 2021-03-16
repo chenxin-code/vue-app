@@ -5,33 +5,7 @@
       <i class="icon"></i>
       <span>邻里选星</span>
     </div>
-    <!-- <div class="content">
-      <div class="img">
-        <img src="../../img/product1.jpg" />
-        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
-        <div class="desc">
-          <strong>物业缴费</strong>
-          <p>时代地产中心2202房</p>
-          <p>车位管理服务费</p>
-          <p>2020年2月</p>
-        </div>
-      </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
-      </div>
-    </div> -->
     <product-item></product-item>
-    <!-- <div class="content">
-      <div class="img">
-        <img src="../../img/product1.jpg" />
-        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
-      </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
-      </div>
-    </div> -->
     <div class="need-pay">
       <p class="time">2020-03-05 22:08:09</p>
       <p class="pr"><i>实付款：</i>￥2289.00</p>
