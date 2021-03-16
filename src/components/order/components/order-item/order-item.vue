@@ -1,7 +1,7 @@
 <template>
   <div class="order-item">
     <div class="title">
-      <van-checkbox v-model="checked" checked-color="#f80f16" icon-size="18px"></van-checkbox>
+      <van-checkbox v-model="isChecked" :disabled="isDisabled" :name="type" :id="id" @change="checkEvent($event, {name: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
       <i class="icon" :class="iconClass('icon2')"></i>
       <span>邻里选星</span>
     </div>
@@ -32,9 +32,14 @@
 <script>
 import productItem from "@/components/order/components/product-item/product-item";
 export default {
+  props: [
+    'type',
+    'id'
+  ],
   data() {
     return {
-      checked: true,
+      isChecked: false,
+      isDisabled: false,
       isShow: false
     }
   },
@@ -78,6 +83,11 @@ export default {
   methods: {
     switchProductList() {
       this.isShow = !this.isShow
+    },
+    checkEvent(event,data) {
+      // console.log(event, data)
+      data.checked = event
+      this.$emit('checkEvent', data)
     }
   }
 };
