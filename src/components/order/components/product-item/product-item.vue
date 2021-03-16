@@ -19,6 +19,38 @@
     <div class="content">
       <div class="img">
         <img src="../../img/product1.jpg" />
+        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
+        <div class="desc">
+          <strong>物业缴费</strong>
+          <p>时代地产中心2202房</p>
+          <p>车位管理服务费</p>
+          <p>2020年2月</p>
+        </div>
+      </div>
+      <div class="price">
+        <p class="pr">￥2289.09</p>
+        <p class="am">x 1</p>
+      </div>
+    </div>
+    <div class="content">
+      <div class="img">
+        <img src="../../img/product1.jpg" />
+        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
+        <div class="desc">
+          <strong>物业缴费</strong>
+          <p>时代地产中心2202房</p>
+          <p>车位管理服务费</p>
+          <p>2020年2月</p>
+        </div>
+      </div>
+      <div class="price">
+        <p class="pr">￥2289.09</p>
+        <p class="am">x 1</p>
+      </div>
+    </div>
+    <div class="content">
+      <div class="img">
+        <img src="../../img/product1.jpg" />
         <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
       </div>
       <div class="price">
@@ -35,6 +67,8 @@ export default {
     return {
     };
   },
+  methods: {
+  }
 };
 </script>
 
