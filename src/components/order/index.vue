@@ -48,6 +48,13 @@ export default {
         { title: "已完成", components: "Finish", id: 5 },
         { title: "已取消", components: "Cancel", id: 6 },
       ],
+      checkData: new Set(),
+      item: [
+        {type: 'xuanXing', id: 1},
+        {type: 'wuyeFei', id: 2},
+        {type: 'xuanXing', id: 3},
+        {type: 'wuyeFei', id: 4}
+      ]
     };
   },
   components: {
@@ -76,11 +83,35 @@ export default {
         this.active = component[0].components;
       }
     },
+    checkEvent(data) {
+      let refs = this.$refs.order.filter((item) => {
+        return item.type !== data.name
+      })
+      refs.forEach(item => {
+        if (item.type !== data.name) {
+          item.isDisabled = true
+        }
+      })
+      if (data.checked) { // 选中
+        this.checkData.add({type: data.name, id: data.id})
+      } else { // 取消
+        this.checkData.forEach(item => {
+          if(item.id == data.id) {
+            this.checkData.delete(item)
+          }
+        })
+        if(this.checkData.size ==0) {
+          this.$refs.order.forEach(item => {
+            item.isDisabled = false
+          })
+        }
+      }
+      console.log(this.checkData)
+    }
   },
+
 };
 </script>
-
-
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
@@ -93,17 +124,14 @@ export default {
 .van-tab__pane, .van-tab__pane-wrapper {
   padding-top: 10px;
 }
-
 .order {
   font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-
   /deep/.van-tab {
     font-size: 14px;
     font-weight: 400;
     color: #121212;
     line-height: 21px;
   }
-
   /deep/.van-tab--active {
     font-size: 15px;
     font-weight: 500;
