@@ -1,6 +1,8 @@
 <template>
   <div class="pay-div">
-    <van-checkbox v-model="isChecked" checked-color="#f80f16" icon-size="18px"></van-checkbox>
+    <div>
+      <van-checkbox v-if="isShow" v-model="isChecked" checked-color="#f80f16" @change="checkEvent($event)" icon-size="18px"></van-checkbox>
+    </div>
     <div class="pay">
       <p class="pr">合计<span>￥0.00</span></p>
       <div class="btn"><p>去结算</p></div>
@@ -10,9 +12,23 @@
 
 <script>
 export default {
-  data () {
+  props: [
+    'checkData',
+  ],
+  data() {
     return {
-      isChecked: false
+      isChecked: false,
+      isShow: false
+    }
+  },
+  methods: {
+    checkEvent(event) {
+      let arr = Array.from(this.checkData)
+      let data = {}
+      data.type = arr[0].type
+      data.checked = event
+      data.checkAll = true
+      this.$emit('checkEvent', data)
     }
   }
 }
