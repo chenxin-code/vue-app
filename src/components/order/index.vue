@@ -22,6 +22,13 @@
     <div class="scroll">
       <component v-bind:is="active"></component>
     </div>
+     <order-item 
+      v-for="(item) in item" 
+      :key="item.id" ref="order" 
+      :type="item.type" 
+      :id="item.id" 
+      @checkEvent="checkEvent"
+    ></order-item>
     <pay-div></pay-div>
   </div>
 </template>
