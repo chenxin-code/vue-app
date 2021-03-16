@@ -18,8 +18,13 @@
         <router-view></router-view>
       </van-tab>
     </van-tabs>
-    <order-item></order-item>
-    <order-item></order-item>
+    <order-item 
+      v-for="(item, index) in item" 
+      :key="item.id" ref="order" 
+      :type="item.type" 
+      :id="item.id" 
+      @checkEvent="checkEvent"
+    ></order-item>
     <pay-div></pay-div>
   </div>
 </template>
@@ -39,6 +44,13 @@ export default {
         { title: "已完成", path: "/order/finish" },
         { title: "已取消", path: "/order/cancel" },
       ],
+      checkData: new Set(),
+      item: [
+        {type: 'xuanXing', id: 1},
+        {type: 'wuyeFei', id: 2},
+        {type: 'xuanXing', id: 3},
+        {type: 'wuyeFei', id: 4}
+      ]
     };
   },
   components: {
@@ -52,6 +64,31 @@ export default {
         path: name,
       });
     },
+    checkEvent(data) {
+      let refs = this.$refs.order.filter((item) => {
+        return item.type !== data.name
+      })
+      refs.forEach(item => {
+        if (item.type !== data.name) {
+          item.isDisabled = true
+        }
+      })
+      if (data.checked) { // 选中
+        this.checkData.add({type: data.name, id: data.id})
+      } else { // 取消
+        this.checkData.forEach(item => {
+          if(item.id == data.id) {
+            this.checkData.delete(item)
+          }
+        })
+        if(this.checkData.size ==0) {
+          this.$refs.order.forEach(item => {
+            item.isDisabled = false
+          })
+        }
+      }
+      console.log(this.checkData)
+    }
   },
   computed: {
     active: {
@@ -84,8 +121,6 @@ export default {
   },
 };
 </script>
-
-
 <style lang="stylus" scoped type="text/stylus">
   @import '~@/common/stylus/variable.styl';
 #app .router_class.order {
@@ -96,17 +131,14 @@ export default {
 .van-tab__pane, .van-tab__pane-wrapper {
   padding-top: 10px;
 }
-
 .order {
   font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-
   /deep/.van-tab {
     font-size: 14px;
     font-weight: 400;
     color: #121212;
     line-height: 21px;
   }
-
   /deep/.van-tab--active {
     font-size: 15px;
     font-weight: 500;
