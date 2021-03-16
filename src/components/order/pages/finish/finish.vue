@@ -1,11 +1,13 @@
 <template>
-  <div class="waitTakeDelivery">
-      待收货
+  <div class="finish">
+      已完成
   </div>
 </template>
 
 <script>
 export default {
+  name:'finish',
+
   data() {
     return {
 

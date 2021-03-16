@@ -1,20 +1,19 @@
 <template>
-  <div class="allOrder">
-      全部
-      <order-item></order-item>
+  <div class="waitPay">
+      待支付
   </div>
 </template>
 
 <script>
-import orderItem from "@/components/order/components/order-item/order-item";
 export default {
+  name:'waitPay',
+
   data() {
     return {
 
     };
   },
   components: {
-    orderItem
   },
 };
 </script>

@@ -13,14 +13,11 @@
         v-for="(item, index) in orderStatusList"
         :key="index"
         title-class="tabTitle"
-        :name="item.id"
+        :name="item.components"
       >
-        <!-- <router-view></router-view> -->
       </van-tab>
     </van-tabs>
-    <all-Pages v-if="id == 1"/>
-    <!-- <order-item></order-item>
-    <order-item></order-item> -->
+    <component v-bind:is="active"></component>
     <pay-div></pay-div>
   </div>
 </template>
@@ -29,24 +26,23 @@
 import navTop from "@/components/order/components/nav-top/nav-top";
 import orderItem from "@/components/order/components/order-item/order-item";
 import payDiv from "@/components/order/components/pay-div/pay-div";
-import allPages from "./allOrder/allOrder";
-const renderList = [
-  {
-    id: 1,
-    component: 'allPages'
-  }
-]
+import AllPages from "./pages/allOrder/allOrder";
+import Cancel from "./pages/cancel/cancel";
+import Finish from "./pages/finish/finish";
+import WaitDelivery from "./pages/waitDelivery/waitDelivery";
+import WaitPay from "./pages/waitPay/waitPay";
+import WaitTakeDelivery from "./pages/waitTakeDelivery/waitTakeDelivery";
 export default {
   data() {
     return {
-      id: 1,
+      active: "AllPages",
       orderStatusList: [
-        { title: "全部", path: "/order/allOrder", id: 1 },
-        { title: "待支付", path: "/order/waitPay", id: 2 },
-        { title: "待发货", path: "/order/waitDelivery", id: 3 },
-        { title: "待收货", path: "/order/waitTakeDelivery", id: 4 },
-        { title: "已完成", path: "/order/finish", id: 5 },
-        { title: "已取消", path: "/order/cancel", id: 6 },
+        { title: "全部", components: "AllPages", id: 1 },
+        { title: "待支付", components: "WaitPay", id: 2 },
+        { title: "待发货", components: "WaitDelivery", id: 3 },
+        { title: "待收货", components: "WaitTakeDelivery", id: 4 },
+        { title: "已完成", components: "Finish", id: 5 },
+        { title: "已取消", components: "Cancel", id: 6 },
       ],
     };
   },
@@ -54,43 +50,27 @@ export default {
     navTop,
     orderItem,
     payDiv,
-    allPages
+    AllPages,
+    Cancel,
+    Finish,
+    WaitDelivery,
+    WaitPay,
+    WaitTakeDelivery,
+  },
+  created() {
+    this.initPage(this.$route.params.id);
   },
   methods: {
     navTo(name, title) {
-      this.id = name
-      // this.$router.push({
-      //   path: name,
-      // });
+      this.active = name;
     },
-  },
-  computed: {
-    active: {
-      get() {
-        switch (this.$route.path) {
-          case "/order/allOrder":
-            return "/order/allOrder";
-
-          case "/order/waitPay":
-            return "/order/waitPay";
-
-          case "/order/waitDelivery":
-            return "/order/waitDelivery";
-
-          case "/order/waitTakeDelivery":
-            return "/order/waitTakeDelivery";
-
-          case "/order/finish":
-            return "/order/finish";
-            
-          case "/order/cancel":
-            return "/order/cancel";
-
-          default:
-            return "/order/allOrder";
-        }
-      },
-      set() {},
+    initPage(id) {
+      let component = this.orderStatusList.filter((e) => {
+        return e.id == id;
+      });
+      if (component.length != 0) {
+        this.active = component[0].components;
+      }
     },
   },
 };
@@ -98,12 +78,14 @@ export default {
 
 
 <style lang="stylus" scoped type="text/stylus">
-  @import '~@/common/stylus/variable.styl';
+@import '~@/common/stylus/variable.styl';
+
 #app .router_class.order {
   background: #F9F9F9;
   overflow: auto;
   padding-bottom: 52px;
 }
+
 .van-tab__pane, .van-tab__pane-wrapper {
   padding-top: 10px;
 }

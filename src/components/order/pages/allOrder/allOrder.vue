@@ -1,17 +1,21 @@
 <template>
-  <div class="finish">
-      已完成
+  <div class="allOrder">
+      全部
+      <order-item></order-item>
   </div>
 </template>
 
 <script>
+import orderItem from "@/components/order/components/order-item/order-item";
 export default {
+  name:'allOrder',
   data() {
     return {
 
     };
   },
   components: {
+    orderItem
   },
 };
 </script>

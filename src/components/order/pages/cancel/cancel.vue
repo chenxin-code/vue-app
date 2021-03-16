@@ -6,6 +6,8 @@
 
 <script>
 export default {
+  name:'cancel',
+
   data() {
     return {
 

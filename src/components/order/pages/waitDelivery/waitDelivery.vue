@@ -1,11 +1,13 @@
 <template>
-  <div class="waitPay">
-      待支付
+  <div class="waitDelivery">
+      待发货
   </div>
 </template>
 
 <script>
 export default {
+  name:'waitDelivery',
+
   data() {
     return {
 

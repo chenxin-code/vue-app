@@ -14,7 +14,9 @@ import ProductInit from './../api/productInit'
 import utils from "../utils/util";
 import wxfunc from '@/utils/wxfunc'
 import Cookie from 'js-cookie'
-import {getUserInfo} from '../utils/login'
+import {
+  getUserInfo
+} from '../utils/login'
 import hbJwx from '../utils/deploy/hbsy/hb-jwx'
 import Watchman from '../utils/watchman'
 
@@ -25,7 +27,9 @@ import actionStatistics from '../utils/actionStatistics'
 
 import Config from "../api/config";
 import Toast from "../components/Vendor/toast";
-import {assign} from "lodash";
+import {
+  assign
+} from "lodash";
 
 const router = new Router({
   // mode: 'history',
@@ -106,21 +110,12 @@ router.afterEach((to, from) => {
   }, 3000)
 });
 
-//新订单子路由psuh无须动画效果
-let orderRouterList = ['/order/allOrder','/order/waitPay','/order/waitDelivery','/order/waitTakeDelivery','/order/finish','/order/cancel',]
-
 router.push = function push(location, onComplete, onAbort) {
 
   router.addRouterPath(location.path);
 
-  //新订单子路由psuh无须动画效果  去除
-  if(orderRouterList.indexOf(location.path) !== -1){
-    router.customRouterData.transitionName ='';
-  }else{
-    router.customRouterData.transitionName = 'slide_left';
+  router.customRouterData.transitionName = 'slide_left';
 
-  }
-  console.log('router----------------------------------------------------------------',router.customRouterData)
 
   this.history.push(location, onComplete, onAbort);
 };
@@ -410,7 +405,9 @@ router.beforeEach((to, from, next) => {
               store.state.isAddToFavorites = to.query.isAddToFavorites || '';
               // wxAuthUserInfo 1 需要授权小程序信息取unionId
               if (to.query.wxAuthUserInfo == 1 && (!to.query.unionId || to.query.unionId === 'undefined')) {
-                wx.miniProgram.redirectTo({url: `/packages/func-pages/auth-userinfo/main?redirectUrl=${encodeURIComponent(Config.shareUrl + router.history.current.fullPath)}`})
+                wx.miniProgram.redirectTo({
+                  url: `/packages/func-pages/auth-userinfo/main?redirectUrl=${encodeURIComponent(Config.shareUrl + router.history.current.fullPath)}`
+                })
               }
               // 小程序登录
               wxMnpLogin()
@@ -452,7 +449,7 @@ router.beforeEach((to, from, next) => {
     })
   }
 
-// 结束函数 跳转路由
+  // 结束函数 跳转路由
   function endFunc(next) {
     if (!wxAuthExcludePage.includes(to.path) && to.query.skipPermissions != '1') {
       userCenter.rootEvents();
@@ -487,7 +484,7 @@ router.beforeEach((to, from, next) => {
         path += `${key}=${query[key]}&`
       }
     }
-    path = path.substr(0, path.length-1)
+    path = path.substr(0, path.length - 1)
 
     let title = window.document.title
     let sharetext = ''
@@ -530,7 +527,9 @@ router.beforeEach((to, from, next) => {
       path: `${config.shareUrl}${path}`,
       rfrCode
     };
-    wx.miniProgram.postMessage({data: JSON.stringify(shareData)});
+    wx.miniProgram.postMessage({
+      data: JSON.stringify(shareData)
+    });
   }
 
   function renameTitle() {

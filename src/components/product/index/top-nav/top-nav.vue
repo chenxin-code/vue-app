@@ -462,7 +462,6 @@
 <script>
 import hee from "../_js/hotarea-extend-event";
 import { Dialog } from "vant";
-var wx = require("weixin-js-sdk");
 export default {
   name: "top-nav",
   components: {
@@ -536,48 +535,7 @@ export default {
       this.$store.state.webtype
     );
 
-    console.log("------------created----------------------------");
-    console.log(wx);
-    this.$http.post("/app/json/we_chat/signature").then((res) => {
-      let data = res.data;
-      if (data.status == 0) {
-        console.log(
-          "----isSignature-------------------------------------------------",
-          data
-        );
-        wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: data.data.appId, // 必填，公众号的唯一标识
-          timestamp: data.data.timestamp, // 必填，生成签名的时间戳
-          nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
-          signature: data.data.signature, // 必填，签名
-          beta: true,
-          jsApiList: ["scanQRCode", "chooseImage"], // 必填，需要使用的JS接口列表
-        });
-        wx.ready(function () {
-          console.log(
-            "----isSignature-------------------------------------------------ready"
-          );
-          wx.checkJsApi({
-            jsApiList: ["chooseImage", "scanQRCode"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-            success: function (res) {
-              // 以键值对的形式返回，可用的api值true，不可用为false
-              // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-              console.log(
-                "----isSignature-------------------------------------------------checkJsApi",
-                res
-              );
-            },
-          });
-        });
-        wx.error(function (res) {
-          console(
-            "----isSignature---------------------------------------------签名失败",
-            res
-          );
-        });
-      }
-    });
+   
   },
   activated() {
     this._getCartCount();
@@ -629,7 +587,7 @@ export default {
         (res) => {
           debugger;
           let data = res.data;
-          console.log('--------res------------',res)
+          console.log("--------res------------", res);
           if (data.status == 0) {
             wx.config({
               debug: debug, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -658,7 +616,16 @@ export default {
             wx.ready(function () {
               console.log("----isSignature--------签名成功");
               if (callback) {
-                callback(true);
+                // callback(true);
+                wx.chooseImage({
+                  count: 1, // 默认9
+                  sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+                  sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+                  success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    console.log("------------localIds-----------", localIds);
+                  },
+                });
               }
             });
             wx.error(function (res) {
@@ -669,14 +636,14 @@ export default {
             });
           } else {
             console.log(data.info);
-            Toast(`signature err ${data.info}`)
+            Toast(`signature err ${data.info}`);
             if (callback) {
               callback(false);
             }
           }
         },
         (error) => {
-          console.log('获取失败', error);
+          console.log("获取失败", error);
           Toast("获取数据失败");
           if (callback) {
             callback(false);
