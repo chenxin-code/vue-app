@@ -16,10 +16,10 @@
           <p>2020年2月</p>
         </div>
       </div>
-      <div class="price">
+      <!-- <div class="price">
         <p class="pr">￥2289.09</p>
         <p class="am">x 1</p>
-      </div>
+      </div> -->
     </div>
     <div class="content">
       <div class="img">
