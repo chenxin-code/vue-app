@@ -2,10 +2,17 @@
   <div class="order-item">
     <div class="title">
       <van-checkbox v-model="checked" checked-color="#f80f16" icon-size="18px"></van-checkbox>
-      <i class="icon"></i>
+      <i class="icon" :class="iconClass('icon2')"></i>
       <span>邻里选星</span>
     </div>
-    <product-item></product-item>
+    <div class="product-box" :class="[isShow ? 'show' : '']">
+      <product-item></product-item>
+    </div>
+    <div class="show-product-btn" @click="switchProductList">
+      <p v-show="!isShow">显示剩余1件商品</p>
+      <p v-show="isShow">收起商品</p>
+      <i class="ico">></i>
+    </div>
     <div class="need-pay">
       <p class="time">2020-03-05 22:08:09</p>
       <p class="pr"><i>实付款：</i>￥2289.00</p>
@@ -27,11 +34,51 @@ import productItem from "@/components/order/components/product-item/product-item
 export default {
   data() {
     return {
-      checked: true
+      checked: true,
+      isShow: false
+    }
+  },
+  computed: {
+    iconClass() {
+      return (str) => {
+        let sClass = ''
+        switch (str) {
+          case 'icon1':
+            sClass = 'icon1'
+          break
+          case 'icon2':
+            sClass = 'icon2'
+          break
+          case 'icon3':
+            sClass = 'icon3'
+          break
+          case 'icon4':
+            sClass = 'icon4'
+          break
+          case 'icon5':
+            sClass = 'icon5'
+          break
+          case 'icon6':
+            sClass = 'icon6'
+          break
+          case 'icon7':
+            sClass = 'icon7'
+          break
+          case 'icon8':
+            sClass = 'icon8'
+          break
+        }
+        return sClass
+      }
     }
   },
   components: {
     productItem
+  },
+  methods: {
+    switchProductList() {
+      this.isShow = !this.isShow
+    }
   }
 };
 </script>
@@ -62,6 +109,30 @@ export default {
       background-size: 20px 20px;
       position: relative;
       top: 5px;
+      &.icon1 {
+        background-image: ur('../../img/icon1.png');
+      }
+      &.icon2 {
+        background-image: url('../../img/icon2.png');
+      }
+      &.icon3 {
+        background-image: url('../../img/icon3.png');
+      }
+      &.icon4 {
+        background-image: url('../../img/icon4.png');
+      }
+      &.icon5 {
+        background-image: url('../../img/icon5.png');
+      }
+      &.icon6 {
+        background-image: url('../../img/icon6.png');
+      }
+      &.icon7 {
+        background-image: url('../../img/icon7.png');
+      }
+      &.icon8 {
+        background-image: url('../../img/icon8.png');
+      }
     }
     span {
       font-size: 16px;
@@ -198,6 +269,26 @@ export default {
         position relative;
         top: -1px;
       }
+    }
+  }
+  .product-box {
+    height: 220px;
+    overflow: hidden;
+    &.show {
+      height: auto;
+    }
+  }
+  .show-product-btn {
+    display: flex;
+    justify-content: space-between;
+    width: 120px;
+    padding: 10px 0;
+    p {
+      font-size: 14px;
+      font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+      font-weight: 400;
+      color: #8D8D8D;
+      line-height: 14px;
     }
   }
 }
