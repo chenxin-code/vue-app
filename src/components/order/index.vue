@@ -1,23 +1,27 @@
 <template>
   <div class="order">
-    <nav-top></nav-top>
-    <van-tabs
-      v-model="active"
-      swipeable
-      swipe-threshold="6"
-      title-active-color="#E8374A"
-      @click="navTo"
-    >
-      <van-tab
-        :title="item.title"
-        v-for="(item, index) in orderStatusList"
-        :key="index"
-        title-class="tabTitle"
-        :name="item.components"
+    <van-sticky>
+      <nav-top></nav-top>
+      <van-tabs
+        v-model="active"
+        swipeable
+        swipe-threshold="6"
+        title-active-color="#E8374A"
+        @click="navTo"
       >
-      </van-tab>
-    </van-tabs>
-    <component v-bind:is="active"></component>
+        <van-tab
+          :title="item.title"
+          v-for="(item, index) in orderStatusList"
+          :key="index"
+          title-class="tabTitle"
+          :name="item.components"
+        >
+        </van-tab>
+      </van-tabs>
+    </van-sticky>
+    <div class="scroll">
+      <component v-bind:is="active"></component>
+    </div>
     <pay-div></pay-div>
   </div>
 </template>
@@ -103,6 +107,10 @@ export default {
   /deep/.van-tab--active {
     font-size: 15px;
     font-weight: 500;
+  }
+
+  .scroll {
+    overflow-y: auto;
   }
 }
 </style>
