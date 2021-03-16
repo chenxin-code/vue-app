@@ -122,17 +122,11 @@ export default {
         .forEach((item) => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
-      console.log(initObj);
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.ythToken = initObj.ythToken;
-      console.log("-------获取一体化token-------");
-      console.log(this.$store.state.projectId);
-      console.log(this.$store.state.ythToken);
-      console.log("-------获取一体化token-------");
     } else {
       localstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
-        console.log("-------获取一体化token-------",this.$store.state.ythToken);
       });
     }
 

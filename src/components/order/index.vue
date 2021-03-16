@@ -13,13 +13,14 @@
         v-for="(item, index) in orderStatusList"
         :key="index"
         title-class="tabTitle"
-        :name="item.path"
+        :name="item.id"
       >
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
       </van-tab>
     </van-tabs>
-    <order-item></order-item>
-    <order-item></order-item>
+    <all-Pages v-if="id == 1"/>
+    <!-- <order-item></order-item>
+    <order-item></order-item> -->
     <pay-div></pay-div>
   </div>
 </template>
@@ -28,29 +29,39 @@
 import navTop from "@/components/order/components/nav-top/nav-top";
 import orderItem from "@/components/order/components/order-item/order-item";
 import payDiv from "@/components/order/components/pay-div/pay-div";
+import allPages from "./allOrder/allOrder";
+const renderList = [
+  {
+    id: 1,
+    component: 'allPages'
+  }
+]
 export default {
   data() {
     return {
+      id: 1,
       orderStatusList: [
-        { title: "全部", path: "/order/allOrder" },
-        { title: "待支付", path: "/order/waitPay" },
-        { title: "待发货", path: "/order/waitDelivery" },
-        { title: "待收货", path: "/order/waitTakeDelivery" },
-        { title: "已完成", path: "/order/finish" },
-        { title: "已取消", path: "/order/cancel" },
+        { title: "全部", path: "/order/allOrder", id: 1 },
+        { title: "待支付", path: "/order/waitPay", id: 2 },
+        { title: "待发货", path: "/order/waitDelivery", id: 3 },
+        { title: "待收货", path: "/order/waitTakeDelivery", id: 4 },
+        { title: "已完成", path: "/order/finish", id: 5 },
+        { title: "已取消", path: "/order/cancel", id: 6 },
       ],
     };
   },
   components: {
     navTop,
     orderItem,
-    payDiv
+    payDiv,
+    allPages
   },
   methods: {
     navTo(name, title) {
-      this.$router.push({
-        path: name,
-      });
+      this.id = name
+      // this.$router.push({
+      //   path: name,
+      // });
     },
   },
   computed: {
