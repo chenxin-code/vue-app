@@ -108,7 +108,7 @@ export default {
 
       img {
         width: 90px;
-        heigth: 90px;
+        height: 90px;
       }
 
       .text {
