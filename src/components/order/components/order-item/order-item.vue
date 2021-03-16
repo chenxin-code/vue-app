@@ -3,7 +3,7 @@
     <div class="title">
       <van-checkbox v-model="isChecked" :disabled="isDisabled" :name="type" :id="id" @change="checkEvent($event, {name: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
       <i class="icon" :class="iconClass('icon2')"></i>
-      <span>邻里选星</span>
+      <span>邻里星选</span>
     </div>
     <div class="product-box" :class="[isShow ? 'show' : '']">
       <product-item></product-item>
