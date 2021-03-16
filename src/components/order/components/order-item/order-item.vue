@@ -5,10 +5,10 @@
       <i class="icon"></i>
       <span>邻里选星</span>
     </div>
-    <div class="content">
+    <!-- <div class="content">
       <div class="img">
         <img src="../../img/product1.jpg" />
-        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
+        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
         <div class="desc">
           <strong>物业缴费</strong>
           <p>时代地产中心2202房</p>
@@ -16,12 +16,13 @@
           <p>2020年2月</p>
         </div>
       </div>
-      <!-- <div class="price">
+      <div class="price">
         <p class="pr">￥2289.09</p>
         <p class="am">x 1</p>
-      </div> -->
-    </div>
-    <div class="content">
+      </div>
+    </div> -->
+    <product-item></product-item>
+    <!-- <div class="content">
       <div class="img">
         <img src="../../img/product1.jpg" />
         <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
@@ -30,7 +31,7 @@
         <p class="pr">￥2289.09</p>
         <p class="am">x 1</p>
       </div>
-    </div>
+    </div> -->
     <div class="need-pay">
       <p class="time">2020-03-05 22:08:09</p>
       <p class="pr"><i>实付款：</i>￥2289.00</p>
@@ -48,18 +49,21 @@
 </template>
 
 <script>
+import productItem from "@/components/order/components/product-item/product-item";
 export default {
   data() {
     return {
       checked: true
-    };
+    }
   },
+  components: {
+    productItem
+  }
 };
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-
 .order-item {
   width: 359px;
   background: #FFFFFF;
@@ -67,7 +71,6 @@ export default {
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 12px;
-
   .title {
     display: flex;
     height: 30px;
@@ -77,7 +80,6 @@ export default {
        top: 0px;
        margin-right: 4px;
     }
-
     .icon {
       display: inline-block;
       width: 20px;
@@ -87,7 +89,6 @@ export default {
       position: relative;
       top: 5px;
     }
-
     span {
       font-size: 16px;
       padding-left: 6px;
@@ -96,21 +97,17 @@ export default {
       color: #121212;
     }
   }
-
   .content {
     padding-top: 16px;
     display: flex;
     justify-content: space-between;
-
     .img {
       display: flex;
       width: 240px;
-
       img {
         width: 90px;
         height: 90px;
       }
-
       .text {
         padding-left: 8px;
         font-size: 14px;
@@ -137,7 +134,6 @@ export default {
         }
       }
     }
-
     .price {
       .pr {
         font-size: 16px;
@@ -146,7 +142,6 @@ export default {
         color: #121212;
         line-height: 24px;
       }
-
       .am {
         font-size: 13px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
