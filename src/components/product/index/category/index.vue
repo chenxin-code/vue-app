@@ -73,7 +73,7 @@ export default {
         });
       }
 
-      if (this.NoCategory && this.$route.name == "商品列表") {
+      if (this.NoCategory && this.$route.name == "商品列表" && !this.$route.query.searchKey) {
         this.$emit("toggle", this.categoryList[1].id);
         this.currentSelect = this.categoryList[1].id;
       }
