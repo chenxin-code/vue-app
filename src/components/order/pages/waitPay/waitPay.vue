@@ -41,54 +41,59 @@ export default {
   },
   methods: {
     checkEvent(data) {
+      // 从全选checkbox进来
       if (data.checkAll) {
-        let refs = this.$refs.order.filter((item) => {
+        let refs = this.$refs.order.filter((item) => {  // 找出全选的类型并保存起来
           return item.type == data.type;
         });
-        if (data.checked) {
-          refs.forEach((item) => {
-            this.checkData.add({ type: item.type, id: item.id });
+        if (data.checked) { //全部选中
+          refs.forEach((item) => { //保存选中数据并设置每个checkbox选中状态
+            this.checkData.add({ type: item.type, id: item.id }); 
             item.isChecked = true;
           });
-        } else {
-          this.checkData.clear();
+        } else { // 全部取消
+          this.checkData.clear();  //清空checkData
           refs.forEach((item) => {
-            item.isChecked = false;
-            this.$refs.payDiv.isShow = false;
+            item.isChecked = false;  // 设置每个checkbox为没选中状态
+            this.$refs.payDiv.isShow = false;  //隐藏全选按钮
           });
         }
         return;
       }
-      let refs = this.$refs.order.filter((item) => {
+
+      // 选中或取消当个checkbox
+      let refs = this.$refs.order.filter((item) => {  // 找到不能选的checkbox
         return item.type !== data.type;
       });
-      refs.forEach((item) => {
+      refs.forEach((item) => {   // 并设置不能选择属性
         if (item.type !== data.type) {
           item.isDisabled = true;
         }
       });
-      let checkedTotal = this.$refs.order.length - refs.length;
+
+      let checkedTotal = this.$refs.order.length - refs.length;  // 计算出所有可以选的checkbox
+
       if (data.checked) {
         // 选中
         this.checkData.add({ type: data.type, id: data.id });
         this.$refs.payDiv.type = data.type;
-        this.$refs.payDiv.isShow = true;
-        if (this.checkData.size == checkedTotal) {
-          this.$refs.payDiv.isChecked = true;
+        this.$refs.payDiv.isShow = true; // 显示全选按钮
+        if (this.checkData.size == checkedTotal) {  //checkData数量跟可选checkbox数量相等 =>全选
+          this.$refs.payDiv.isChecked = true;  // 全选按钮变成选中
         }
       } else {
         // 取消
         this.checkData.forEach((item) => {
           if (item.id == data.id) {
-            this.checkData.delete(item);
-            this.$refs.payDiv.isChecked = false;
+            this.checkData.delete(item); // 删除数据中取消选中的数据
+            this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }
         });
-        if (this.checkData.size == 0) {
+        if (this.checkData.size == 0) { // 个数为0，全部取消选中
           this.$refs.order.forEach((item) => {
-            item.isDisabled = false;
-            this.$refs.payDiv.isShow = false;
+            item.isDisabled = false; // 所有checkbox变成可选
           });
+          this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
       console.log(this.checkData);
