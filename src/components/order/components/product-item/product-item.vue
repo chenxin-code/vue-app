@@ -3,59 +3,17 @@
     <div class="content">
       <div class="img">
         <img src="../../img/product1.jpg" />
-        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
-        <div class="desc">
+        <p class="text" v-if="productItem.billType==11">{{productItem.skuName}}</p>
+        <div class="desc" v-if="productItem.billType != 11">
           <strong>物业缴费</strong>
           <p>时代地产中心2202房</p>
           <p>车位管理服务费</p>
-          <p>2020年2月</p>
+          <p>{{productItem.billType}}</p>
         </div>
       </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
-      </div>
-    </div>
-    <div class="content">
-      <div class="img">
-        <img src="../../img/product1.jpg" />
-        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
-        <div class="desc">
-          <strong>物业缴费</strong>
-          <p>时代地产中心2202房</p>
-          <p>车位管理服务费</p>
-          <p>2020年2月</p>
-        </div>
-      </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
-      </div>
-    </div>
-    <div class="content">
-      <div class="img">
-        <img src="../../img/product1.jpg" />
-        <!-- <p class="text">视觉动态导航/高精度米家扫地机器人IC</p> -->
-        <div class="desc">
-          <strong>物业缴费</strong>
-          <p>时代地产中心2202房</p>
-          <p>车位管理服务费</p>
-          <p>2020年2月</p>
-        </div>
-      </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
-      </div>
-    </div>
-    <div class="content">
-      <div class="img">
-        <img src="../../img/product1.jpg" />
-        <p class="text">视觉动态导航/高精度米家扫地机器人IC</p>
-      </div>
-      <div class="price">
-        <p class="pr">￥2289.09</p>
-        <p class="am">x 1</p>
+      <div class="price" v-if="productItem.billType==11">
+        <p class="pr">￥{{productItem.salePrice}}</p>
+        <p class="am">x {{productItem.number}}</p>
       </div>
     </div>
   </div>
@@ -63,6 +21,12 @@
 
 <script>
 export default {
+  props: [
+    'productItem'
+  ],
+   created() {
+    console.log(this.productItem)
+  },
   data() {
     return {
     };

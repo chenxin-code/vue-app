@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <OrderItem v-for="(item, index) in orderList" :key="index"></OrderItem>
+        <OrderItem v-for="(item, index) in orderList" :key="index" :orderItem="item"></OrderItem>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>
@@ -81,6 +81,14 @@ export default {
             if (res.data.status == 0) {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
+              if (this.orderList.length > 0) {
+                this.orderList.forEach(item => {
+                  item['billType'] = 11;
+                  item.itemAbstractList.forEach(tab => {
+                    tab['billType'] = 11;
+                  })
+                })
+              }
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
               if (this.orderList.length == 0) {
                 this.showEmpty = true;
@@ -122,6 +130,14 @@ export default {
         .then((res) => {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
+            if (this.orderList.length > 0) {
+              this.orderList.forEach(item => {
+                item['billType'] = 11;
+                item.itemAbstractList.forEach(tab => {
+                  this.$set(tab, 'billType', 11);
+                })
+              })
+            }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
             if (this.orderList.length == 0) {
               this.showEmpty = true;
