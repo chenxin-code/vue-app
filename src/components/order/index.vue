@@ -138,8 +138,9 @@ export default {
           });
         }
       }
-    }
-  }
+      console.log(this.checkData);
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
