@@ -4,7 +4,7 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
+        :finished-text="showEmpty ? '' : '- 亲, 没有更多订单了 -'"
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
@@ -13,11 +13,13 @@
         <OrderItem v-for="(item, index) in orderList" :key="index"></OrderItem>
       </van-list>
     </van-pull-refresh>
+    <Empty v-show="showEmpty"></Empty>
   </div>
 </template>
 
 <script>
 import OrderItem from "../../components/order-item/order-item";
+import Empty from "../../components/empty/empty.vue";
 export default {
   name: "waitDelivery",
   data() {
@@ -31,10 +33,12 @@ export default {
       totalPage: 0,
       queryBadge: {},
       page: 0,
+      showEmpty: false,
     };
   },
   components: {
     OrderItem,
+    Empty,
   },
   created() {
     this.initQueryBadge();
@@ -78,6 +82,9 @@ export default {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
+              if (this.orderList.length == 0) {
+                this.showEmpty = true;
+              }
               setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
@@ -116,6 +123,9 @@ export default {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
             this.totalPage = res.data.totalPages; //将总页数赋值上去
+            if (this.orderList.length == 0) {
+              this.showEmpty = true;
+            }
             setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;

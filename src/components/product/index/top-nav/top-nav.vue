@@ -534,7 +534,6 @@ export default {
       "-------------this.$store.state.webtype--------------",
       this.$store.state.webtype
     );
-
    
   },
   activated() {
