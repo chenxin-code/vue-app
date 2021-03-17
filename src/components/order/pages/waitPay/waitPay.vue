@@ -7,7 +7,7 @@
       :type="item.type"
       :id="item.id"
       @checkEvent="checkEvent"
-      :pageType="waitPay"
+      pageType="waitPay"
     ></order-item>
     <pay-div
       ref="payDiv"

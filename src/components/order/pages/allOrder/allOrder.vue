@@ -1,6 +1,6 @@
 <template>
   <div class="allOrder">
-      <order-item></order-item>
+      <order-item pageType="allOrder"></order-item>
   </div>
 </template>
 
