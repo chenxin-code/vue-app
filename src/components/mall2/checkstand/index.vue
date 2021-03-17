@@ -218,9 +218,12 @@ export default {
       this.substitutePayActive = -1;
     },
     payEvent: function () {
-      console.log(123);
-      console.log(this.$route);
-      console.log(this.payWay);
+      console.log('微信h5支付：：：：：：', this.selectedPayWay.payModeSub)
+      console.log('代付支付：：：：：：：：：', this.$store.state.globalConfig.replace_pay_enable, this.isSubstitutePay)
+      console.log('团购订单：：：：：：：：：', this.$route.query.type)
+      console.log('砍价订单：：：：：：：：：', this.$route.query.isWashCarOrder)
+      console.log('砍价订单：：：：：：：：：', this.$route.query.washingWay)
+      console.log('砍价订单：：：：：：：：：', this.$route.query.isGroup)
       if (this.selectedPayWay == null) {
         this.$Toast("请选择支付方式！");
         return;
