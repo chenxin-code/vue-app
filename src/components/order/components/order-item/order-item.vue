@@ -1,7 +1,7 @@
 <template>
   <div class="order-item">
     <div class="title">
-      <van-checkbox v-model="isChecked" :disabled="isDisabled" :name="type" :id="id" @change="checkEvent($event, {name: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
+      <van-checkbox v-model="isChecked" :disabled="isDisabled" :type="type" :id="id" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
       <i class="icon" :class="iconClass('icon2')"></i>
       <span>邻里星选</span>
     </div>

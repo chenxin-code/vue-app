@@ -1,7 +1,13 @@
 <template>
   <div class="pay-div">
     <div>
-      <van-checkbox v-if="isShow" v-model="isChecked" checked-color="#f80f16" @change="checkEvent($event)" icon-size="18px"></van-checkbox>
+      <div class="pay-box" v-show="isShow">
+        <van-checkbox v-model="isChecked" checked-color="#f80f16" @click="checkEvent($event)" icon-size="18px"></van-checkbox>
+        <div class="text">
+          <p class="p1">全选</p>
+          <p class="p2">(仅可全选{{type}}类订单)</p>
+        </div>
+      </div>
     </div>
     <div class="pay">
       <p class="pr">合计<span>￥0.00</span></p>
@@ -18,15 +24,17 @@ export default {
   data() {
     return {
       isChecked: false,
-      isShow: false
+      isShow: false,
+      type: ''
     }
   },
   methods: {
     checkEvent(event) {
       let arr = Array.from(this.checkData)
+      if (arr.length == 0) return
       let data = {}
       data.type = arr[0].type
-      data.checked = event
+      data.checked = this.isChecked
       data.checkAll = true
       this.$emit('checkEvent', data)
     }
@@ -48,7 +56,29 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
-  padding: 0 14px;
+  padding: 0 10px;
+  .pay-box {
+    display: flex;
+    .text {
+      p {
+        padding-left: 4px;
+      }
+      .p1 {
+        font-size: 16px;
+        font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+        font-weight: 400;
+        color: #121212;
+        line-height: 16px;
+      }
+      .p2 {
+        font-size: 10px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #666666;
+        line-height: 16px;
+      }
+    }
+  }
   .pay {
     display: flex;
     justify-content: flex-end;
@@ -72,7 +102,7 @@ export default {
       line-height: 40px;
       background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
       border-radius: 20px;
-      margin-left: 10px;
+      margin-left: 6px;
       p {
         font-weight: 500;
         color: #FFFFFF;

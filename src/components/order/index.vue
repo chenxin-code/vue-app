@@ -98,9 +98,8 @@ export default {
         })
         if (data.checked) {
           refs.forEach(item => {
-            this.checkData.add({type: item.name, id: item.id})
+            this.checkData.add({type: item.type, id: item.id})
             item.isChecked = true
-            this.$refs.payDiv.isShow = true;
           })
         } else {
           this.checkData.clear();
@@ -112,30 +111,35 @@ export default {
         return
       }
       let refs = this.$refs.order.filter((item) => {
-        return item.type !== data.name
+        return item.type !== data.type
       })
       refs.forEach(item => {
-        if (item.type !== data.name) {
+        if (item.type !== data.type) {
           item.isDisabled = true
         }
       })
+      let checkedTotal = this.$refs.order.length - refs.length
       if (data.checked) { // 选中
-        this.checkData.add({type: data.name, id: data.id})
+        this.checkData.add({type: data.type, id: data.id})
+        this.$refs.payDiv.type = data.type
         this.$refs.payDiv.isShow = true;
+        if (this.checkData.size == checkedTotal) {
+          this.$refs.payDiv.isChecked = true;
+        }
       } else { // 取消
         this.checkData.forEach(item => {
           if(item.id == data.id) {
             this.checkData.delete(item)
+            this.$refs.payDiv.isChecked = false;
           }
         })
-        if(this.checkData.size ==0) {
+        if(this.checkData.size == 0) {
           this.$refs.order.forEach(item => {
             item.isDisabled = false
             this.$refs.payDiv.isShow = false;
           })
         }
       }
-      console.log(this.checkData)
     }
   }
 };
