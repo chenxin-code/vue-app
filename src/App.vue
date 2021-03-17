@@ -103,7 +103,7 @@ export default {
       ani: false,
     };
   },
-  created() {  
+  created() {
     // this.viewPortSet();
     appNav
       .setNavBarHidden({
@@ -129,7 +129,6 @@ export default {
         this.$store.state.ythToken = res.result;
       });
     }
-
   },
   computed: {
     appBackHomeImg() {
@@ -159,7 +158,6 @@ export default {
     },
   },
   mounted() {
-
     sessionStorage.setItem("js_css_loaded", "1");
 
     this.phone = this.$store.state.login.phone;
@@ -455,10 +453,13 @@ export default {
   },
   watch: {
     "$route.path": function (newVal, oldVal) {
-      if (/^\/common$/.test(newVal)) {
-        appUi.showTabbar();
-      } else {
-        appUi.hideTabbar();
+      //app环境
+      if (this.$store.state.webtype == 0) {
+        if (/^\/common$/.test(newVal)) {
+          appUi.showTabbar();
+        } else {
+          appUi.hideTabbar();
+        }
       }
     },
     "$route.matched"(value) {

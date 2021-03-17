@@ -1068,7 +1068,7 @@ export default {
     next();
   },
   created() {
-    appUi.showTabbar();
+    this.$store.state.webtype == 1 && appUi.showTabbar();  
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType
