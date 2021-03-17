@@ -715,7 +715,6 @@ export default {
     },
     // 获取普通商品列表
     _loadProList: function (loaded) {
-      console.log(3333333333333333333333);
       if (this.selectedType == "1") {
         InitialLoadPickupAny.checkIsInitialLoad((address) => {
           if (address) {
@@ -1168,7 +1167,6 @@ export default {
     this.domIndex = this.$route.query.domIndex ? this.$route.query.domIndex : 1;
     if (this.$route.query.category) {
       this.category = this.$route.query.category;
-      console.log("11111111111111111111111111111111111111", this.category);
     } else {
       this.NoCategory = true;
     }
