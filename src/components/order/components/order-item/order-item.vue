@@ -14,8 +14,8 @@
       <i class="ico">></i>
     </div>
     <div class="need-pay" v-if="orderItem.billType!=11">
-      <p class="time">2020-03-05 22:08:09</p>
-      <p class="pr"><i>实付款：</i>￥2289.00</p>
+      <p class="time">{{orderItem.submitTime}}</p>
+      <p class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</p>
     </div>
     <div class="total" v-if="orderItem.billType==11">
       <span class="to">共<i>{{orderItem.itemAbstractList.length}}</i>件商品</span>
