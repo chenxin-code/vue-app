@@ -454,7 +454,7 @@ export default {
   watch: {
     "$route.path": function (newVal, oldVal) {
       //app环境
-      if (this.$store.state.webtype == 0) {
+      if (this.$store.state.webtype == 1) {
         if (/^\/common$/.test(newVal)) {
           appUi.showTabbar();
         } else {
