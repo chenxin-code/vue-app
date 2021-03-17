@@ -1,15 +1,34 @@
 <template>
   <div class="pay-div">
-    <p class="pr">合计<span>￥0.00</span></p>
-    <div class="btn"><p>去结算</p></div>
+    <div>
+      <van-checkbox v-if="isShow" v-model="isChecked" checked-color="#f80f16" @change="checkEvent($event)" icon-size="18px"></van-checkbox>
+    </div>
+    <div class="pay">
+      <p class="pr">合计<span>￥0.00</span></p>
+      <div class="btn"><p>去结算</p></div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  props: [
+    'checkData',
+  ],
+  data() {
     return {
-
+      isChecked: false,
+      isShow: false
+    }
+  },
+  methods: {
+    checkEvent(event) {
+      let arr = Array.from(this.checkData)
+      let data = {}
+      data.type = arr[0].type
+      data.checked = event
+      data.checkAll = true
+      this.$emit('checkEvent', data)
     }
   }
 }
@@ -19,7 +38,7 @@ export default {
   @import '~@/common/stylus/variable.styl';
 .pay-div {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 52px;
@@ -29,33 +48,38 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
-  .pr {
-    font-size: 16px;
-    font-family: SourceHanSansCN-Normal, SourceHanSansCN;
-    font-weight: 400;
-    line-height: 52px;
-    p {
-      color: #2C2C2C;
+  padding: 0 14px;
+  .pay {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .pr {
+      font-size: 16px;
+      font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+      font-weight: 400;
+      line-height: 52px;
+      p {
+        color: #2C2C2C;
+      }
+      span {
+        color: #FD3A3A;
+      }
     }
-    span {
-      color: #FD3A3A;
-    }
-  }
-  .btn {
-    width: 100px;
-    height: 40px;
-    text-align:center;
-    line-height: 40px;
-    background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
-    border-radius: 20px;
-    margin-left: 10px;
-    margin-right: 14px;
-    p {
-      font-weight: 500;
-      color: #FFFFFF;
-      font-size: 14px;
-      position: relative;
-      top: -1px;
+    .btn {
+      width: 100px;
+      height: 40px;
+      text-align:center;
+      line-height: 40px;
+      background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
+      border-radius: 20px;
+      margin-left: 10px;
+      p {
+        font-weight: 500;
+        color: #FFFFFF;
+        font-size: 14px;
+        position: relative;
+        top: -1px;
+      }
     }
   }
 }
