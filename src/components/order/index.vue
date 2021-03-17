@@ -51,7 +51,6 @@ export default {
   },
   components: {
     navTop,
-    orderItem,
     AllPages,
     Cancel,
     Finish,
