@@ -91,6 +91,7 @@ export default {
           });
         }
       }
+      console.log(this.checkData);
     },
   },
 };
