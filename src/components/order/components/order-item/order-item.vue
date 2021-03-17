@@ -34,7 +34,7 @@ import productItem from "@/components/order/components/product-item/product-item
 export default {
   props: [
     'type',
-    'id'
+    'id',
   ],
   data() {
     return {
