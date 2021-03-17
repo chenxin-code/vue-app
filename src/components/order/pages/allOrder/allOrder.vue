@@ -1,6 +1,5 @@
 <template>
   <div class="allOrder">
-      全部
       <order-item></order-item>
   </div>
 </template>
