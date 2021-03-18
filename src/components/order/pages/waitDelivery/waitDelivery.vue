@@ -16,7 +16,7 @@
             :billType="item.billType" 
             :amount="item.amount"
             :submitTime="item.submitTime"
-            pageType="finish"></OrderItem>
+            pageType="waitDelivery"></OrderItem>
         </div>
       </van-list>
     </van-pull-refresh>
