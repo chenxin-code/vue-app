@@ -16,6 +16,7 @@
           :dataList="item.dataList"
           :billType="item.billType" 
           :amount="item.amount"
+          :submitTime="item.submitTime"
           pageType="finish"></OrderItem>
       </div>
       </van-list>
@@ -169,6 +170,7 @@ export default {
         return {
           billType: item.billType,
           amount: item.costAmount,
+          submitTime: item.submitTime,
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,

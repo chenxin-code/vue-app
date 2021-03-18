@@ -11,6 +11,7 @@
   ]
   surplusCommodity: 剩余商品
   amount: 金额
+  submitTime: 提交时间
 
  -->
   <div class="order-item">
@@ -52,6 +53,7 @@ export default {
     'pageType',
     'amount',
     'billType',
+    'submitTime',
     'dataList'
   ],
   data() {
@@ -167,6 +169,9 @@ export default {
       console.log(this.orderItem)
     }
   },
+  created() {
+    console.log('3333333333', this.submitTime)
+  }
 };
 </script>
 
