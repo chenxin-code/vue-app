@@ -175,6 +175,7 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
+          orderCanEvaluate: item.orderCanEvaluate,
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
@@ -198,6 +199,7 @@ export default {
         this.params.orderId = item.orderId
         this.params.orderType = item.orderType
         this.params.orderCategory = item.orderCategory
+        this.params.orderCanEvaluate = item.orderCanEvaluate
       })
     }
   },

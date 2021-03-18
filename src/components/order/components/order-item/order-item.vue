@@ -44,6 +44,7 @@
         <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct"><p>确认收货</p></div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment"><p>立即评价</p></div>
         <div class="btn" v-if="isFinish"><p>已完成</p></div>
+        <div class="btn" v-if="isPayAtOnce"><p>立即付款</p></div>
       </div>
     </div>
     <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
@@ -86,7 +87,7 @@ export default {
   },
   computed: {
     isEvalute() { //评价
-      return this.pageType == 'finish'
+      return this.pageType == 'finish' && this.params.orderCanEvaluate
     },
     isBuyAgain() { //再次购买
       return (this.pageType == 'waitDelivery' || this.pageType == 'cancel' || this.pageType == 'finish') && this.billType == 11
@@ -99,6 +100,9 @@ export default {
     },
     isWaitTakeDelivery() { //确认收货
        return this.pageType=='waitTakeDelivery' && this.billType == 11
+    },
+    isPayAtOnce () { //立即付款
+      return this.pageType=='waitPay'
     },
     isWaitPay() { //支付页
       return this.pageType == 'waitPay' ? true : false
