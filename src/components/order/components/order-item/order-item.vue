@@ -40,7 +40,7 @@
       <div class="btn-box">
         <div class="btn default" v-if="isBuyAgain" @click="buyAgain"><p>再次购买</p></div>
         <!-- v-if="isViewLogistics" -->
-        <div class="btn default"><p>查看物流</p></div>
+        <div class="btn default" @click="expressType(dataList)"><p>查看物流</p></div>
         <div class="btn" v-if="isWaitTakeDelivery" @click="confirmProduct"><p>确认收货</p></div>
         <div class="btn" v-if="isEvalute" @click="toComment"><p>立即评价</p></div>
         <div class="btn" v-if="isFinish"><p>已完成</p></div>
@@ -49,9 +49,9 @@
     <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
       <van-radio-group v-model="expressNo">
         <van-cell-group>
-          <van-cell @click="selExpress(item2)" v-for="(item2,index) in expressNoList" :key="index" :title="item2" clickable >
+          <van-cell @click="selExpress(item)" v-for="(item,index) in expressNoList" :key="index" :title="item2" clickable >
             <template #right-icon>
-              <van-radio checked-color="#ee0a24" :name="item2" />
+              <van-radio checked-color="#ee0a24" :name="item" />
             </template>
           </van-cell>
         </van-cell-group>
@@ -78,7 +78,8 @@ export default {
       isShow: false,
       showDialog: false,
       expressNo: '',
-      expressNoList: ''
+      expressNoList: [],
+      formItem: {}
     }
   },
   computed: {
@@ -279,7 +280,7 @@ export default {
         }
       )
     },
-    viewLogistics(obj) { //查看物流
+    expressType(obj) {
       this.formItem = this.$util.deepClone(obj);
       let expressArr = []
       if(this.formItem.expressNo && typeof(this.formItem.expressNo) == 'string') {

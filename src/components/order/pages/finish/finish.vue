@@ -185,7 +185,10 @@ export default {
               skuId: sub.skuId,
               id: sub.id,
               orderType: sub.orderType,
-              storeOuCode: sub.storeOuCode
+              storeOuCode: sub.storeOuCode,
+              expressNo: sub.expressNo,
+              expressName: sub.expressName,
+              interfaceType: sub.interfaceType
             }
           })
         }
