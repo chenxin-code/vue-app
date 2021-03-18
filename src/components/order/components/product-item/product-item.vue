@@ -10,7 +10,7 @@
   <div class="product-item">
     <div class="content">
       <div class="img">
-        <img :src="productItem.billImg" />
+        <img :src="productItem.billImg" @click.stop="gotoProductDetail(productItem)" />
         <p class="text" v-if="productItem.billType==11">{{productItem.billName}}</p>
         <div class="desc" v-if="productItem.billType != 11">
           <strong>物业缴费</strong>
@@ -37,6 +37,29 @@ export default {
     };
   },
   methods: {
+    gotoProductDetail: function (product) {
+      // 砍价订单禁止进入详情
+      if(this.$store.state.globalConfig.cut_price_strict==1){
+        return
+      }
+      if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
+        return ;
+      }
+      if (this.watermark == 1) {
+        // 蜂鸟配送无法查看详情
+        return ;
+      }
+      let path = '/mall2/detail/' + this.$util.getDataString()
+      this.$router.push({
+        path: path,
+        query: {
+          storeOuCode: product.storeOuCode,
+          skuId: product.skuId,
+          lastPath: '/order/3',
+          productType: product.productType
+        }
+      })
+    }
   }
 };
 </script>

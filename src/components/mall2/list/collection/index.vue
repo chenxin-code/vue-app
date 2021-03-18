@@ -421,7 +421,7 @@
       }
     },
     created() {
-
+      this.active = this.$route.query.active ? Number(this.$route.query.active) : 0
     },
     mounted() {
       // this.collectionStore()

@@ -28,7 +28,11 @@
         <i class="icon" :class="iconClass"></i>
         <span>{{ billTypeName }}</span>
       </div>
-      <div class="product-box" :class="[isShow ? 'show' : '']">
+      <div
+        class="product-box"
+        :class="[isShow ? 'show' : '']"
+        @click.stop="gotoBillDetail"
+      >
         <product-item
           v-for="(item, index) in showMore ? dataList : smallDataList"
           :key="index"
@@ -113,6 +117,7 @@ export default {
     "res",
     "orderType",
     "payInfo",
+    "billDetailObj",
   ],
   data() {
     return {
@@ -272,14 +277,14 @@ export default {
                 mktGroupBuyId = goodsItem[0].mktGroupBuyId;
               }
               callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfo.orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
-              this.enginePay(payInfo,callbackUrl)
+              this.enginePay(payInfo, callbackUrl);
             }
           });
       } else {
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
       }
     },
-    enginePay(payInfo,callbackUrl) {
+    enginePay(payInfo, callbackUrl) {
       window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
         JSON.stringify({
           businessCstNo: payInfo.businessCstNo,
@@ -296,6 +301,39 @@ export default {
       this.isShow = !this.isShow;
       this.showMore = !this.showMore;
     },
+    gotoBillDetail() {
+      // 跳转订单详情
+      if (this.orderType == "200202") {
+        this.$router.push({
+          path: "/group_detail",
+          query: {
+            orderId: this.billDetailObj.groupBuyId,
+            mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
+          },
+        });
+      } else {
+        let awardActivity =
+          this.billDetailObj.awardActivityList &&
+          this.billDetailObj.awardActivityList.length
+            ? this.billDetailObj.awardActivityList[0]
+            : {};
+        this.$router.push({
+          path: "/mall2/orderdetail",
+          query: {
+            payMode: this.billDetailObj.payMode,
+            tradeNo: this.billDetailObj.tradeNo,
+            shoppingOrderId: this.billDetailObj.shoppingOrderId,
+            orderPayType: this.billDetailObj.orderPayType,
+            orderId: this.billDetailObj.id,
+            tag: this.billDetailObj.tag,
+            orderType: this.orderType,
+            orderIndex: this.billDetailObj.tabIndex,
+            awardActivity: JSON.stringify(awardActivity),
+          },
+        });
+      }
+    },
+
     checkEvent(event, data) {
       // console.log(event, data)
       data.checked = event;
