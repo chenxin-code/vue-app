@@ -22,9 +22,11 @@
       <span class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</span>
     </div>
     <div class="btn-box">
-      <div class="btn"><p>再次购买</p></div>
-      <div class="btn default"><p>查看物流</p></div>
-      <div class="btn"><p>确认收货</p></div>
+      <div class="btn default" v-if="isBuyAgain"><p>再次购买</p></div>
+      <div class="btn default" v-if="isViewLogistics"><p>查看物流</p></div>
+      <div class="btn" v-if="isWaitTakeDelivery"><p>确认收货</p></div>
+      <div class="btn" v-if="isEvalute"><p>立即评价</p></div>
+      <div class="btn" v-if="isFinish"><p>已完成</p></div>
     </div>
   </div>
 </template>
@@ -44,10 +46,25 @@ export default {
     }
   },
   computed: {
-    isWaitPay() {
+    isEvalute() { //评价
+      return this.pageType == 'finish'
+    },
+    isBuyAgain() { //再次购买
+      return (this.pageType == 'waitDelivery' || this.pageType == 'cancel' || this.pageType == 'finish') && this.orderItem.billType == 11
+    },
+    isFinish() { //已完成
+      return this.pageType=='finish' && this.orderItem.billType != 11
+    },
+    isViewLogistics() { //查看物流
+      return this.pageType=='waitTakeDelivery' && this.orderItem.billType == 11
+    },
+    isWaitTakeDelivery() { //确认收货
+       return this.pageType=='waitTakeDelivery' && this.orderItem.billType == 11
+    },
+    isWaitPay() { //支付页
       return this.pageType == 'waitPay' ? true : false
     },
-    itemAbstractList () {
+    itemAbstractList() { //productList
       return this.orderItem.itemAbstractList
     },
     billName() {
