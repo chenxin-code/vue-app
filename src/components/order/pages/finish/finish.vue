@@ -184,7 +184,8 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-              orderType: sub.orderType
+              orderType: sub.orderType,
+              storeOuCode: sub.storeOuCode
             }
           })
         }
@@ -192,7 +193,7 @@ export default {
       this.currentOrderList.forEach(item => {
         this.params.deliverType = item.deliverType
         this.params.orderId = item.orderId
-        this.params.orderType = item.orderId
+        this.params.orderType = item.orderType
         this.params.orderCategory = item.orderCategory
       })
     }
