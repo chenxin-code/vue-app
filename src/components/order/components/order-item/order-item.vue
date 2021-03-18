@@ -37,7 +37,7 @@
       <span class="pr"><i>实付款：</i>￥{{amount}}</span>
     </div>
     <div class="btn-box">
-      <div class="btn default" v-if="isBuyAgain"><p>再次购买</p></div>
+      <div class="btn default" v-if="isBuyAgain" @click="buyAgain"><p>再次购买</p></div>
       <div class="btn default" v-if="isViewLogistics"><p>查看物流</p></div>
       <div class="btn" v-if="isWaitTakeDelivery"><p>确认收货</p></div>
       <div class="btn" v-if="isEvalute"><p>立即评价</p></div>
@@ -54,7 +54,8 @@ export default {
     'amount',
     'billType',
     'submitTime',
-    'dataList'
+    'dataList',
+    'params'
   ],
   data() {
     return {
@@ -159,7 +160,7 @@ export default {
     productItem
   },
   methods: {
-    switchProductList() {
+    switchProductList() {  //订单商品列表显示隐藏剩余商品
       this.isShow = !this.isShow
     },
     checkEvent(event,data) {
@@ -167,12 +168,102 @@ export default {
       data.checked = event
       this.$emit('checkEvent', data)
       console.log(this.orderItem)
+    },
+    buyAgain() {  //再次购买
+      if (this.params.deliverType == 3) {
+        let arr = []
+        for (let i = 0; i < this.dataList.length; i++) {
+          let product = this.dataList[i]
+          if (product.isGift == 0) {
+            let cd = {
+              skuId: product.skuId,
+              storeOuCode: product.storeOuCode,
+              number: product.billNum
+            }
+            arr.push(cd)
+          }
+        }
+        sessionStorage.setItem('MDPS_Carts', JSON.stringify(arr))
+        this.$router.push({
+          path: '/mall2/store-delivery/list'
+        })
+        return;
+      }
+       // 重新购买修改为直接重新下单
+      this.$Loading.open()
+      let url = '/app/json/app_cart/SettleCart'
+      let paramsData = {
+        token: this.$store.state.login.token,
+        deliveryType: this.params.deliverType,
+        orderCategory: '', // 路由传递，旧订单为空可不传
+        vipUnitUserCode: '',// 路由传递，旧订单为空可不传
+        userAddress: this.$store.state.mall2.selectAddress,
+        pickupId: this.$store.state.mall2.zitiAddress.id,
+        userAddressId: '',
+      }
+      if (paramsData.deliveryType == 2) {
+        if (this.$store.state.mall2.selectAddress.id > 0) {
+          paramsData.userAddressId = this.$store.state.mall2.selectAddress.id
+        }
+      }
+      let arr = []
+      for (let i = 0; i < this.dataList.length; i++) {
+        let product = this.dataList[i]
+        let cd = {
+          skuId: product.skuId,
+          storeOuCode: product.storeOuCode,
+          number: product.billNum
+        }
+        arr.push(cd)
+      }
+      paramsData.carts = arr
+
+      this.$http.post(url, paramsData).then(
+        res => {
+          this.$Loading.close()
+          let data = res.data
+          if (data.status == 0) {
+            let params = {
+              res: data.data,
+              paramsData: paramsData,
+              deliveryType: paramsData.deliveryType
+            };
+
+            if (!(this.$store.state.mall2.selectAddress.id > 0) && this.detailData.deliveryType == 2) {
+              if (this.matchAddress) {
+                this.$store.state.mall2.selectAddress = this.matchAddress;
+                this.$bridgefunc.vuexStorage(() => {
+                })
+              } else {
+                params.noMatch = true;
+              }
+            }
+            if (this.$mallCommon.isExistCanNotAttendActivity(data.data.occur) == true) {
+              this.$MessageBox.confirm('部分商品不能参加活动</br>将按原价购买，是否继续？', '提示', {confirmButtonText: '确定'}).then(action => {
+                this.$router.push({
+                  name: '填写订单',
+                  params: params
+                })
+              }).catch(action => {
+              });
+            } else {
+              this.$router.push({
+                name: '填写订单',
+                params: params
+              })
+            }
+          } else {
+            this.$Toast(data.info)
+          }
+        },
+        error => {
+          this.$Loading.close()
+          this.$Toast('请求数据失败！')
+        }
+      )
     }
   },
-  created() {
-    console.log('3333333333', this.submitTime)
-  }
-};
+}
 </script>
 
 <style lang="stylus" scoped type="text/stylus">

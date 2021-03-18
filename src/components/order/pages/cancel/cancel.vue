@@ -13,6 +13,7 @@
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
+            :params='params'
             :billType="item.billType" 
             :amount="item.amount"
             :submitTime="item.submitTime"
@@ -42,6 +43,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
+      params:{}
     };
   },
   components: {
@@ -168,16 +170,23 @@ export default {
           billType: item.billType,
           amount: item.costAmount,
           submitTime: item.submitTime,
+          deliverType: item.deliverType,
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
               billImg: sub.phPictureUrl,
               billName: sub.skuName,
               billAmount: sub.salePrice,
-              billNum: sub.number
+              billNum: sub.number,
+              isGift: sub.isGift,
+              skuId: sub.skuId,
+              storeOuCode: sub.storeOuCode,
             }
           })
         }
+      })
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
       })
     }
   },
