@@ -21,7 +21,7 @@
         <i class="icon" :class="iconClass"></i>
         <span>{{billTypeName}}</span>
       </div>
-      <div class="product-box" :class="[isShow ? 'show' : '']">
+      <div class="product-box" :class="[isShow ? 'show' : '']" @click.stop="gotoBillDetail">
         <product-item v-for="(item,index) in dataList" :key="index" :productItem="item"></product-item>
       </div>
       <div class="show-product-btn" @click.stop="switchProductList" v-if="dataList.length > 2">
@@ -70,7 +70,9 @@ export default {
     'billType',
     'submitTime',
     'dataList',
-    'params'
+    'params',
+    'orderType',
+    'billDetailObj'
   ],
   data() {
     return {
@@ -184,6 +186,36 @@ export default {
     productItem
   },
   methods: {
+    gotoBillDetail() { // 跳转订单详情
+      if ( this.orderType == '200202' ) {
+        this.$router.push({
+          path: '/group_detail',
+          query: {
+            orderId: this.billDetailObj.groupBuyId,
+            mktGroupBuyId: this.billDetailObj.groupBuyActivityId
+          }
+        })
+      } else {
+        let awardActivity =
+          this.billDetailObj.awardActivityList && this.billDetailObj.awardActivityList.length
+            ? this.billDetailObj.awardActivityList[0]
+            : {}
+        this.$router.push({
+          path: '/mall2/orderdetail',
+          query: {
+            payMode: this.billDetailObj.payMode,
+            tradeNo: this.billDetailObj.tradeNo,
+            shoppingOrderId: this.billDetailObj.shoppingOrderId,
+            orderPayType: this.billDetailObj.orderPayType,
+            orderId: this.billDetailObj.id,
+            tag: this.billDetailObj.tag,
+            orderType: this.orderType,
+            orderIndex: this.billDetailObj.tabIndex,
+            awardActivity: JSON.stringify(awardActivity),
+          }
+        })
+      }
+    },
     switchProductList() {  //订单商品列表显示隐藏剩余商品
       this.isShow = !this.isShow
     },
