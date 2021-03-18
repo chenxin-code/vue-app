@@ -1,11 +1,9 @@
 <template>
 <!-- 
-  typeName: 订单类型名称
+  billType: 
   dataList: [ 商品数组
     {
       billType: 订单类型
-      billDate: 订单日期
-      billImg: 订单图片
       billName: 订单名称
       billAmount: 订单金额
       billNum: 订单数量
@@ -19,23 +17,23 @@
     <div class="title">
       <van-checkbox v-if="isWaitPay" v-model="isChecked" :disabled="isDisabled" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
       <i class="icon" :class="iconClass"></i>
-      <span>{{billName}}</span>
+      <span>{{billTypeName}}</span>
     </div>
     <div class="product-box" :class="[isShow ? 'show' : '']">
-      <product-item v-for="(item,index) in itemAbstractList" :key="index" :productItem="item"></product-item>
+      <product-item v-for="(item,index) in dataList" :key="index" :productItem="item"></product-item>
     </div>
-    <div class="show-product-btn" @click="switchProductList" v-if="orderItem.itemAbstractList.length > 2">
-      <p v-show="!isShow">显示剩余{{orderItem.itemAbstractList.length - 2}}件商品</p>
+    <div class="show-product-btn" @click="switchProductList" v-if="dataList.length > 2">
+      <p v-show="!isShow">显示剩余{{dataList.length - 2}}件商品</p>
       <p v-show="isShow">收起商品</p>
       <i class="ico">></i>
     </div>
-    <div class="need-pay" v-if="orderItem.billType!=11">
-      <p class="time">{{orderItem.submitTime}}</p>
-      <p class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</p>
+    <div class="need-pay" v-if="billType!=11">
+      <p class="time">{{submitTime}}</p>
+      <p class="pr"><i>实付款：</i>￥{{amount}}</p>
     </div>
-    <div class="total" v-if="orderItem.billType==11">
-      <span class="to">共<i>{{orderItem.itemAbstractList.length}}</i>件商品</span>
-      <span class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</span>
+    <div class="total" v-if="billType==11">
+      <span class="to">共<i>{{dataList.length}}</i>件商品</span>
+      <span class="pr"><i>实付款：</i>￥{{amount}}</span>
     </div>
     <div class="btn-box">
       <div class="btn default" v-if="isBuyAgain"><p>再次购买</p></div>
@@ -51,8 +49,10 @@
 import productItem from "@/components/order/components/product-item/product-item";
 export default {
   props: [
-    'orderItem',
-    'pageType'
+    'pageType',
+    'amount',
+    'billType',
+    'dataList'
   ],
   data() {
     return {
@@ -66,26 +66,23 @@ export default {
       return this.pageType == 'finish'
     },
     isBuyAgain() { //再次购买
-      return (this.pageType == 'waitDelivery' || this.pageType == 'cancel' || this.pageType == 'finish') && this.orderItem.billType == 11
+      return (this.pageType == 'waitDelivery' || this.pageType == 'cancel' || this.pageType == 'finish') && this.billType == 11
     },
     isFinish() { //已完成
-      return this.pageType=='finish' && this.orderItem.billType != 11
+      return this.pageType=='finish' && this.billType != 11
     },
     isViewLogistics() { //查看物流
-      return this.pageType=='waitTakeDelivery' && this.orderItem.billType == 11
+      return this.pageType=='waitTakeDelivery' && this.billType == 11
     },
     isWaitTakeDelivery() { //确认收货
-       return this.pageType=='waitTakeDelivery' && this.orderItem.billType == 11
+       return this.pageType=='waitTakeDelivery' && this.billType == 11
     },
     isWaitPay() { //支付页
       return this.pageType == 'waitPay' ? true : false
     },
-    itemAbstractList() { //productList
-      return this.orderItem.itemAbstractList
-    },
-    billName() {
+    billTypeName() {
       let billName = ''
-      switch(this.orderItem.billType) {
+      switch(this.billType) {
       case 11:
         billName = '邻里星选'
         break;
@@ -121,7 +118,7 @@ export default {
     },
     iconClass() {
       let sClass = ''
-      switch (this.orderItem.billType) {
+      switch (this.billType) {
         case 11:
           sClass = 'icon1'
         break
@@ -168,9 +165,8 @@ export default {
       data.checked = event
       this.$emit('checkEvent', data)
       console.log(this.orderItem)
-      console.log(this.itemAbstractList)
     }
-  }
+  },
 };
 </script>
 

@@ -10,7 +10,14 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <OrderItem v-for="(item, index) in orderList" :key="index" :orderItem="item" pageType="finish"></OrderItem>
+
+      <div v-for="(item, index) in currentOrderList" :key="index">
+        <OrderItem
+          :dataList="item.dataList"
+          :billType="item.billType" 
+          :amount="item.amount"
+          pageType="finish"></OrderItem>
+      </div>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>
@@ -34,6 +41,7 @@ export default {
       queryBadge: {},
       page: 0,
       showEmpty: false,
+      currentOrderList: [],
     };
   },
   components: {
@@ -88,6 +96,7 @@ export default {
                     tab['billType'] = 11;
                   })
                 })
+                this.initData()
               }
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
               if (this.orderList.length == 0) {
@@ -134,9 +143,10 @@ export default {
               this.orderList.forEach(item => {
                 item['billType'] = 11;
                 item.itemAbstractList.forEach(tab => {
-                  this.$set(tab, 'billType', 11);
+                  tab['billType'] = 11;
                 })
               })
+              this.initData()
             }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
             if (this.orderList.length == 0) {
@@ -153,6 +163,24 @@ export default {
           this.$toast("网络繁忙,请稍后再试~");
         });
     },
+    // 初始化数据
+    initData () {
+      this.currentOrderList = this.orderList.map( item => {
+        return {
+          billType: item.billType,
+          amount: item.costAmount,
+          dataList: item.itemAbstractList.map( sub => {
+            return {
+              billType: sub.billType,
+              // billImg: 订单图片
+              billName: sub.skuName,
+              billAmount: sub.salePrice,
+              billNum: sub.number
+            }
+          })
+        }
+      })
+    }
   },
 };
 </script>
