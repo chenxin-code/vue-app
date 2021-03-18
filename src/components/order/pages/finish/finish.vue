@@ -91,13 +91,13 @@ export default {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
               if (this.orderList.length > 0) {
-                this.orderList.forEach((item) => {
-                  item["billType"] = 11;
-                  item.itemAbstractList.forEach((tab) => {
-                    tab["billType"] = 11;
-                  });
-                });
-                this.initData();
+                this.orderList.forEach(item => {
+                  item['billType'] = 11;
+                  item.itemAbstractList.forEach(tab => {
+                    tab['billType'] = 11;
+                  })
+                })
+                this.initData()
               } else {
                 this.showEmpty = true;
               }
@@ -140,18 +140,17 @@ export default {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
             if (this.orderList.length > 0) {
-              this.orderList.forEach((item) => {
-                item["billType"] = 11;
-                item.itemAbstractList.forEach((tab) => {
-                  tab["billType"] = 11;
-                });
-              });
-              this.initData();
+              this.orderList.forEach(item => {
+                item['billType'] = 11;
+                item.itemAbstractList.forEach(tab => {
+                  tab['billType'] = 11;
+                })
+              })
+              this.initData()
             } else {
               this.showEmpty = true;
             }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
-
             setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
@@ -173,7 +172,7 @@ export default {
           dataList: item.itemAbstractList.map((sub) => {
             return {
               billType: sub.billType,
-              // billImg: 订单图片
+              billImg: sub.phPictureUrl,
               billName: sub.skuName,
               billAmount: sub.salePrice,
               billNum: sub.number,
