@@ -1,8 +1,8 @@
 <template>
   <div class="paysuccess">
-    <nav-top :no-back="true" :title="payResult == 'icbcFailed' ? '支付失败' : '支付成功'">
+    <nav-top :no-back="true" :title="payResult == 'icbcFailed' ? '支付失败' : '支付成功'" @backEvent="backEvent">
       <div class="right-btn theme_font_gray" v-if="$store.state.webtype != 3" style="right: 0px; height: 44px; top: 0px; padding-right: 12px;font-size: 16px;" @click="turnback">完成</div>
-      <!--<div class="right-btn">完成</div>-->
+      <!--<div class="right-btn">完成</div>-->backEvent
     </nav-top>
     <nav-content>
       <div class="scroll-div">
@@ -65,6 +65,9 @@
       }
     },
     methods: {
+      backEvent(){
+        this.$router.push('/common')
+      },
       eventClick: function (type) {
         if (type == 1){//我的订单
           if (this.payResult == 'icbcFailed') { //支付失败

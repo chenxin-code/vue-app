@@ -78,6 +78,7 @@ export default {
       expressDetails: [],
       indexPrev: "0",
       // inputVal: ''
+      logisticsOrderNo:"",
 
       expressinfoList: [],
     };
@@ -130,6 +131,7 @@ export default {
       let paramsData = {
         orderType: this.orderType,
         orderNo: this.orderId,
+        logisticsOrderNo:this.logisticsOrderNo,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
@@ -151,6 +153,7 @@ export default {
   created() {
     this.orderType = this.$route.query.orderType;
     this.orderId = this.$route.query.orderId;
+    this.logisticsOrderNo = this.$route.query.logisticsOrderNo;
     this.getExpressInfoList();
   },
 };

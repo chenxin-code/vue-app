@@ -63,6 +63,8 @@ export default {
       isShow: false
     }
   },
+  created() {
+  },
   computed: {
     isEvalute() { //评价
       return this.pageType == 'finish'
@@ -169,9 +171,7 @@ export default {
       console.log(this.orderItem)
     }
   },
-  created() {
-    console.log('3333333333', this.submitTime)
-  }
+
 };
 </script>
 
@@ -364,7 +364,7 @@ export default {
     }
   }
   .product-box {
-    height: 220px;
+    // height: 220px;
     overflow: hidden;
     &.show {
       height: auto;
