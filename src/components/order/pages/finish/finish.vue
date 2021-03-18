@@ -10,15 +10,15 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-
-      <div v-for="(item, index) in currentOrderList" :key="index">
-        <OrderItem
-          :dataList="item.dataList"
-          :billType="item.billType" 
-          :amount="item.amount"
-          :submitTime="item.submitTime"
-          pageType="finish"></OrderItem>
-      </div>
+        <div v-for="(item, index) in currentOrderList" :key="index">
+          <OrderItem
+            :dataList="item.dataList"
+            :billType="item.billType"
+            :amount="item.amount"
+            :submitTime="item.submitTime"
+            pageType="finish"
+          ></OrderItem>
+        </div>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>
@@ -163,24 +163,24 @@ export default {
         });
     },
     // 初始化数据
-    initData () {
-      this.currentOrderList = this.orderList.map( item => {
+    initData() {
+      this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
           amount: item.costAmount,
           submitTime: item.submitTime,
-          dataList: item.itemAbstractList.map( sub => {
+          dataList: item.itemAbstractList.map((sub) => {
             return {
               billType: sub.billType,
               billImg: sub.phPictureUrl,
               billName: sub.skuName,
               billAmount: sub.salePrice,
-              billNum: sub.number
-            }
-          })
-        }
-      })
-    }
+              billNum: sub.number,
+            };
+          }),
+        };
+      });
+    },
   },
 };
 </script>

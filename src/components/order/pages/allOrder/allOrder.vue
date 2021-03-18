@@ -10,12 +10,13 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="true"
       >
-        <OrderItem
-          v-for="(item, index) in orderList"
-          :key="index"
-          pageType="allOrder"
-          :orderItem="item"
-        ></OrderItem>
+        <div v-for="(item, index) in currentOrderList" :key="index">
+          <OrderItem
+            pageType="allOrder"
+            :billType="item.billType"
+            :dataList="item.orderFormItemList"
+          ></OrderItem>
+        </div>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>
@@ -39,6 +40,7 @@ export default {
       totalPage: 0,
       page: 0,
       showEmpty: false,
+      currentOrderList: [],
     };
   },
   components: {
@@ -71,6 +73,8 @@ export default {
               this.page = res.data.data.pages; //将总页数赋值给this
               if (this.orderList.length == 0) {
                 this.showEmpty = true;
+              } else {
+                this.initData();
               }
               setTimeout(() => {
                 // 加载状态结束
@@ -107,6 +111,8 @@ export default {
             this.totalPage = res.data.data.pages; //将总页数赋值上去
             if (this.orderList.length == 0) {
               this.showEmpty = true;
+            } else {
+              this.initData();
             }
             setTimeout(() => {
               this.$toast("刷新成功");
@@ -118,6 +124,27 @@ export default {
         .catch((res) => {
           this.$toast("网络繁忙,请稍后再试~");
         });
+    },
+    initData() {
+      this.currentOrderList = this.orderList.map((item) => {
+        if (item.billType == 11) {
+          return {
+            billType: item.billType,
+            amount: item.totalPrice,
+            submitTime: item.submitTime,
+            dataList: item.orderFormItemList.map((sub) => {
+              return {
+                billType: item.billType,
+                billImg: sub.iconUrl,
+                billName: sub.name,
+                billAmount: sub.unitPrice,
+                billNum: sub.quantity,
+              };
+            }),
+          };
+        }
+      });
+
     },
   },
 };
