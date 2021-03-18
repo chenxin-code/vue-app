@@ -859,7 +859,8 @@ export default {
           path: '/mall2/aliexpressinfo',
           query: {
             orderType: item.orderType,
-            orderId: item.id
+            orderId: item.id,
+            logisticsOrderNo: item.expressNo,
           }
         })
       } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {

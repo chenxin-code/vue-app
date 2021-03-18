@@ -8,13 +8,15 @@
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
-        :immediate-check="true"
+        :immediate-check="false"
       >
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             pageType="allOrder"
             :billType="item.billType"
-            :dataList="item.orderFormItemList"
+            :dataList="item.dataList"
+            :amount="item.amount"
+            :submitTime="item.submitTime"
           ></OrderItem>
         </div>
       </van-list>
@@ -47,7 +49,9 @@ export default {
     OrderItem,
     Empty,
   },
-  created() {},
+  created() {
+    this.onLoad();
+  },
   methods: {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
@@ -144,7 +148,6 @@ export default {
           };
         }
       });
-
     },
   },
 };

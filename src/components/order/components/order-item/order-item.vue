@@ -82,6 +82,8 @@ export default {
       formItem: {}
     }
   },
+  created() {
+  },
   computed: {
     isEvalute() { //评价
       return this.pageType == 'finish'
@@ -442,7 +444,8 @@ export default {
       }
     }
   },
-}
+
+};
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
@@ -634,7 +637,7 @@ export default {
     }
   }
   .product-box {
-    height: 220px;
+    // height: 220px;
     overflow: hidden;
     &.show {
       height: auto;
