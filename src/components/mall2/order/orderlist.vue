@@ -1110,6 +1110,8 @@ export default {
       this._getTabOrders(this.tabSelectedItem, loaded)
     },
     _getTabOrders: function(item, loaded) {
+    console.log('this.$store.state.globalConfig.delivertype_default',this.tabs)
+
       this.$Loading.open()
       let url = '/app/json/app_shopping_order/queryOrder'
       let paramsData = {
