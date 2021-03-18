@@ -119,7 +119,7 @@ export default {
   }
 
   .scroll {
-    overflow-y: auto;
+    // overflow-y: auto;
     padding-top: 12px;
   }
 }
