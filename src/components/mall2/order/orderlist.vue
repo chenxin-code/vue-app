@@ -1379,6 +1379,7 @@ export default {
   created() {
     //this.$store.state.globalConfig.pickup_cancel_order_tip = '123123123'
     //this.$store.state.globalConfig.delivery_cancel_order_tip = '4444545454'
+    console.log('ppppppppppppppppp', this.$store.state.globalConfig)
     if (this.$store.state.globalConfig.delivertype_default == '1') {
       this.tabs = [
         {
