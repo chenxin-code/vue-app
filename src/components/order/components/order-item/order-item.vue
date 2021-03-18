@@ -24,7 +24,7 @@
       <div class="product-box" :class="[isShow ? 'show' : '']">
         <product-item v-for="(item,index) in dataList" :key="index" :productItem="item"></product-item>
       </div>
-      <div class="show-product-btn" @click="switchProductList" v-if="dataList.length > 2">
+      <div class="show-product-btn" @click.stop="switchProductList" v-if="dataList.length > 2">
         <p v-show="!isShow">显示剩余{{dataList.length - 2}}件商品</p>
         <p v-show="isShow">收起商品</p>
         <i class="ico">></i>
@@ -38,18 +38,18 @@
         <span class="pr"><i>实付款：</i>￥{{amount}}</span>
       </div>
       <div class="btn-box">
-        <div class="btn default" v-if="isBuyAgain" @click="buyAgain"><p>再次购买</p></div>
+        <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain"><p>再次购买</p></div>
         <!-- v-if="isViewLogistics" -->
-        <div class="btn default" @click="expressType(dataList)"><p>查看物流</p></div>
-        <div class="btn" v-if="isWaitTakeDelivery" @click="confirmProduct"><p>确认收货</p></div>
-        <div class="btn" v-if="isEvalute" @click="toComment"><p>立即评价</p></div>
+        <div class="btn default" @click.stop="expressType(dataList)"><p>查看物流</p></div>
+        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct"><p>确认收货</p></div>
+        <div class="btn" v-if="isEvalute" @click.stop="toComment"><p>立即评价</p></div>
         <div class="btn" v-if="isFinish"><p>已完成</p></div>
       </div>
     </div>
     <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
       <van-radio-group v-model="expressNo">
         <van-cell-group>
-          <van-cell @click="selExpress(item)" v-for="(item,index) in expressNoList" :key="index" :title="item2" clickable >
+          <van-cell @click.stop="selExpress(item)" v-for="(item,index) in expressNoList" :key="index" :title="item2" clickable >
             <template #right-icon>
               <van-radio checked-color="#ee0a24" :name="item" />
             </template>
