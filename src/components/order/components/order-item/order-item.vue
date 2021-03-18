@@ -419,23 +419,11 @@ export default {
       )
     },
     toComment: function(item) { // 评价晒单
-      //console.log(item.itemAbstractList, 'toComment')
       if (this.dataList.length > 0) {
         if (this.dataList.length > 1) {
-          // let arr = []
-          // item.itemAbstractList.map(ele => {
-          //   arr.push({
-          //     skuId: ele.skuId,
-          //     orderId: ele.id,
-          //     phPictureUrl: ele.phPictureUrl,
-          //     skuName: ele.skuName,
-          //     number: ele.number
-          //   })
-          // })
           this.$router.push({
             path: '/mall2/comment2',
             query: {
-              // itemList: JSON.stringify(arr)
               orderId: this.params.orderId
             }
           })
