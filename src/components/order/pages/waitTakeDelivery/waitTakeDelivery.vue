@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <OrderItem v-for="(item, index) in orderList" :key="index"></OrderItem>
+        <OrderItem v-for="(item, index) in orderList" :key="index" pageType="waitTakeDelivery"></OrderItem>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>

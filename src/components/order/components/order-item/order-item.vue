@@ -1,25 +1,41 @@
 <template>
+<!-- 
+  typeName: 订单类型名称
+  dataList: [ 商品数组
+    {
+      billType: 订单类型
+      billDate: 订单日期
+      billImg: 订单图片
+      billName: 订单名称
+      billAmount: 订单金额
+      billNum: 订单数量
+    }
+  ]
+  surplusCommodity: 剩余商品
+  amount: 金额
+
+ -->
   <div class="order-item">
     <div class="title">
-      <van-checkbox v-model="isChecked" :disabled="isDisabled" :type="type" :id="id" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
-      <i class="icon" :class="iconClass('icon2')"></i>
-      <span>邻里星选</span>
+      <van-checkbox v-if="isWaitPay" v-model="isChecked" :disabled="isDisabled" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
+      <i class="icon" :class="iconClass"></i>
+      <span>{{billName}}</span>
     </div>
     <div class="product-box" :class="[isShow ? 'show' : '']">
-      <product-item></product-item>
+      <product-item v-for="(item,index) in itemAbstractList" :key="index" :productItem="item"></product-item>
     </div>
-    <div class="show-product-btn" @click="switchProductList">
-      <p v-show="!isShow">显示剩余1件商品</p>
+    <div class="show-product-btn" @click="switchProductList" v-if="orderItem.itemAbstractList.length > 2">
+      <p v-show="!isShow">显示剩余{{orderItem.itemAbstractList.length - 2}}件商品</p>
       <p v-show="isShow">收起商品</p>
       <i class="ico">></i>
     </div>
-    <div class="need-pay">
-      <p class="time">2020-03-05 22:08:09</p>
-      <p class="pr"><i>实付款：</i>￥2289.00</p>
+    <div class="need-pay" v-if="orderItem.billType!=11">
+      <p class="time">{{orderItem.submitTime}}</p>
+      <p class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</p>
     </div>
-    <div class="total">
-      <span class="to">共<i>1</i>件商品</span>
-      <span class="pr"><i>实付款：</i>￥2289.00</span>
+    <div class="total" v-if="orderItem.billType==11">
+      <span class="to">共<i>{{orderItem.itemAbstractList.length}}</i>件商品</span>
+      <span class="pr"><i>实付款：</i>￥{{orderItem.totalAmount}}</span>
     </div>
     <div class="btn-box">
       <div class="btn"><p>再次购买</p></div>
@@ -33,8 +49,8 @@
 import productItem from "@/components/order/components/product-item/product-item";
 export default {
   props: [
-    'type',
-    'id',
+    'orderItem',
+    'pageType'
   ],
   data() {
     return {
@@ -44,37 +60,83 @@ export default {
     }
   },
   computed: {
+    isWaitPay() {
+      return this.pageType == 'waitPay' ? true : false
+    },
+    itemAbstractList () {
+      return this.orderItem.itemAbstractList
+    },
+    billName() {
+      let billName = ''
+      switch(this.orderItem.billType) {
+      case 11:
+        billName = '邻里星选'
+        break;
+      case 1:
+        billName = '物业缴费'
+        break;
+      case 2:
+         billName = '月保续费'
+         break;
+      case 3:
+         billName = '临停缴费'
+         break;
+      case 6:
+         billName = '预缴费'
+         break;
+      case 4:
+         billName = '临时缴费'
+         break;
+      case 7:
+         billName = '旅游'
+         break;
+      case 8:
+         billName = '家政'
+         break;
+      case 9:
+         billName = '拎包'
+         break;
+      case 10:
+         billName = '押金'
+         break; 
+     }
+     return billName
+    },
     iconClass() {
-      return (str) => {
-        let sClass = ''
-        switch (str) {
-          case 'icon1':
-            sClass = 'icon1'
-          break
-          case 'icon2':
-            sClass = 'icon2'
-          break
-          case 'icon3':
-            sClass = 'icon3'
-          break
-          case 'icon4':
-            sClass = 'icon4'
-          break
-          case 'icon5':
-            sClass = 'icon5'
-          break
-          case 'icon6':
-            sClass = 'icon6'
-          break
-          case 'icon7':
-            sClass = 'icon7'
-          break
-          case 'icon8':
-            sClass = 'icon8'
-          break
-        }
-        return sClass
+      let sClass = ''
+      switch (this.orderItem.billType) {
+        case 11:
+          sClass = 'icon1'
+        break
+        case 1:
+          sClass = 'icon7'
+        break
+        case 2:
+          sClass = 'icon8'
+        break
+        case 3:
+          sClass = 'icon5'
+        break
+        case 6:
+          sClass = 'icon4'
+        break
+        case 4:
+          sClass = 'icon4'
+        break
+        case 7:
+          sClass = 'icon6'
+        break
+        case 8:
+          sClass = 'icon2'
+        break
+        case 9:
+          sClass = 'icon3'
+        break
+        case 10:
+          sClass = 'icon4'
+        break
       }
+      return sClass
     }
   },
   components: {
@@ -88,6 +150,8 @@ export default {
       // console.log(event, data)
       data.checked = event
       this.$emit('checkEvent', data)
+      console.log(this.orderItem)
+      console.log(this.itemAbstractList)
     }
   }
 };
