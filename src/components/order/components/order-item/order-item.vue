@@ -27,7 +27,7 @@
       <div class="show-product-btn" @click.stop="switchProductList" v-if="dataList.length > 2">
         <p v-show="!isShow">显示剩余{{dataList.length - 2}}件商品</p>
         <p v-show="isShow">收起商品</p>
-        <i class="ico">></i>
+        <i class="ico" :class="[isShow ? 'up' : '']"></i>
       </div>
       <div class="need-pay" v-if="billType!=11">
         <p class="time">{{submitTime}}</p>
@@ -641,8 +641,9 @@ export default {
     }
   }
   .product-box {
-    // height: 220px;
+    height: 220px;
     overflow: hidden;
+    transition:1s;
     &.show {
       height: auto;
     }
@@ -650,7 +651,8 @@ export default {
   .show-product-btn {
     display: flex;
     justify-content: space-between;
-    width: 120px;
+    align-items: center;
+    width: 130px;
     padding: 10px 0;
     p {
       font-size: 14px;
@@ -658,6 +660,16 @@ export default {
       font-weight: 400;
       color: #8D8D8D;
       line-height: 14px;
+    }
+    .ico {
+      width: 10px;
+      height: 10px;
+      display: block;
+      background: url('../../img/down.jpg') no-repeat;
+      background-size: 10px auto;
+      &.up {
+        background-image: url('../../img/up.jpg')
+      }
     }
   }
 }
