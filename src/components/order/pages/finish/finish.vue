@@ -98,11 +98,10 @@ export default {
                   })
                 })
                 this.initData()
-              }
-              this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              if (this.orderList.length == 0) {
+              } else {
                 this.showEmpty = true;
               }
+              this.page = res.data.data.page.totalPages; //将总页数赋值给this
               setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
@@ -148,11 +147,10 @@ export default {
                 })
               })
               this.initData()
-            }
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
-            if (this.orderList.length == 0) {
+            } else {
               this.showEmpty = true;
             }
+            this.totalPage = res.data.totalPages; //将总页数赋值上去
             setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
@@ -174,7 +172,7 @@ export default {
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
-              // billImg: 订单图片
+              billImg: sub.phPictureUrl,
               billName: sub.skuName,
               billAmount: sub.salePrice,
               billNum: sub.number
