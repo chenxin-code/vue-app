@@ -10,7 +10,15 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <OrderItem v-for="(item, index) in orderList" :key="index" pageType="waitDelivery"></OrderItem>
+        <div v-for="(item, index) in currentOrderList" :key="index">
+          <OrderItem
+            :dataList="item.dataList"
+            :params='params'
+            :billType="item.billType" 
+            :amount="item.amount"
+            :submitTime="item.submitTime"
+            pageType="waitDelivery"></OrderItem>
+        </div>
       </van-list>
     </van-pull-refresh>
     <Empty v-show="showEmpty"></Empty>
@@ -34,6 +42,8 @@ export default {
       queryBadge: {},
       page: 0,
       showEmpty: false,
+      currentOrderList: [],
+      params:{}
     };
   },
   components: {
@@ -81,10 +91,18 @@ export default {
             if (res.data.status == 0) {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
-              this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              if (this.orderList.length == 0) {
+              if (this.orderList.length > 0) {
+                this.orderList.forEach(item => {
+                  item['billType'] = 11;
+                  item.itemAbstractList.forEach(tab => {
+                    tab['billType'] = 11;
+                  })
+                })
+                this.initData()
+              } else {
                 this.showEmpty = true;
               }
+              this.page = res.data.data.page.totalPages; //将总页数赋值给this
               setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
@@ -122,10 +140,18 @@ export default {
         .then((res) => {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
-            if (this.orderList.length == 0) {
+            if (this.orderList.length > 0) {
+              this.orderList.forEach(item => {
+                item['billType'] = 11;
+                item.itemAbstractList.forEach(tab => {
+                  tab['billType'] = 11;
+                })
+              })
+              this.initData()
+            } else {
               this.showEmpty = true;
             }
+            this.totalPage = res.data.totalPages; //将总页数赋值上去
             setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
@@ -137,6 +163,39 @@ export default {
           this.$toast("网络繁忙,请稍后再试~");
         });
     },
+    // 初始化数据
+    initData () {
+      this.currentOrderList = this.orderList.map( item => {
+        return {
+          billType: item.billType,
+          amount: item.costAmount,
+          submitTime: item.submitTime,
+          deliverType: item.deliverType,
+          orderId: item.id,
+          orderType: item.orderType,
+          orderCategory: item.orderCategory,
+          dataList: item.itemAbstractList.map( sub => {
+            return {
+              billType: sub.billType,
+              billImg: sub.phPictureUrl,
+              billName: sub.skuName,
+              billAmount: sub.salePrice,
+              billNum: sub.number,
+              skuId: sub.skuId,
+              id: sub.id,
+              orderType: sub.orderType,
+              storeOuCode: sub.storeOuCode
+            }
+          })
+        }
+      })
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderType
+        this.params.orderCategory = item.orderCategory
+      })
+    }
   },
 };
 </script>

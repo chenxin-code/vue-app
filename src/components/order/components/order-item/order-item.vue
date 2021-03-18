@@ -14,35 +14,49 @@
   submitTime: 提交时间
 
  -->
-  <div class="order-item">
-    <div class="title">
-      <van-checkbox v-if="isWaitPay" v-model="isChecked" :disabled="isDisabled" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
-      <i class="icon" :class="iconClass"></i>
-      <span>{{billTypeName}}</span>
+  <div>
+    <div class="order-item">
+      <div class="title">
+        <van-checkbox v-if="isWaitPay" v-model="isChecked" :disabled="isDisabled" @change="checkEvent($event, {type: type, id:id})" checked-color="#f80f16" icon-size="18px"></van-checkbox>
+        <i class="icon" :class="iconClass"></i>
+        <span>{{billTypeName}}</span>
+      </div>
+      <div class="product-box" :class="[isShow ? 'show' : '']">
+        <product-item v-for="(item,index) in dataList" :key="index" :productItem="item"></product-item>
+      </div>
+      <div class="show-product-btn" @click="switchProductList" v-if="dataList.length > 2">
+        <p v-show="!isShow">显示剩余{{dataList.length - 2}}件商品</p>
+        <p v-show="isShow">收起商品</p>
+        <i class="ico">></i>
+      </div>
+      <div class="need-pay" v-if="billType!=11">
+        <p class="time">{{submitTime}}</p>
+        <p class="pr"><i>实付款：</i>￥{{amount}}</p>
+      </div>
+      <div class="total" v-if="billType==11">
+        <span class="to">共<i>{{dataList.length}}</i>件商品</span>
+        <span class="pr"><i>实付款：</i>￥{{amount}}</span>
+      </div>
+      <div class="btn-box">
+        <div class="btn default" v-if="isBuyAgain" @click="buyAgain"><p>再次购买</p></div>
+        <!-- v-if="isViewLogistics" -->
+        <div class="btn default"><p>查看物流</p></div>
+        <div class="btn" v-if="isWaitTakeDelivery" @click="confirmProduct"><p>确认收货</p></div>
+        <div class="btn" v-if="isEvalute" @click="toComment"><p>立即评价</p></div>
+        <div class="btn" v-if="isFinish"><p>已完成</p></div>
+      </div>
     </div>
-    <div class="product-box" :class="[isShow ? 'show' : '']">
-      <product-item v-for="(item,index) in dataList" :key="index" :productItem="item"></product-item>
-    </div>
-    <div class="show-product-btn" @click="switchProductList" v-if="dataList.length > 2">
-      <p v-show="!isShow">显示剩余{{dataList.length - 2}}件商品</p>
-      <p v-show="isShow">收起商品</p>
-      <i class="ico">></i>
-    </div>
-    <div class="need-pay" v-if="billType!=11">
-      <p class="time">{{submitTime}}</p>
-      <p class="pr"><i>实付款：</i>￥{{amount}}</p>
-    </div>
-    <div class="total" v-if="billType==11">
-      <span class="to">共<i>{{dataList.length}}</i>件商品</span>
-      <span class="pr"><i>实付款：</i>￥{{amount}}</span>
-    </div>
-    <div class="btn-box">
-      <div class="btn default" v-if="isBuyAgain"><p>再次购买</p></div>
-      <div class="btn default" v-if="isViewLogistics"><p>查看物流</p></div>
-      <div class="btn" v-if="isWaitTakeDelivery"><p>确认收货</p></div>
-      <div class="btn" v-if="isEvalute"><p>立即评价</p></div>
-      <div class="btn" v-if="isFinish"><p>已完成</p></div>
-    </div>
+    <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
+      <van-radio-group v-model="expressNo">
+        <van-cell-group>
+          <van-cell @click="selExpress(item2)" v-for="(item2,index) in expressNoList" :key="index" :title="item2" clickable >
+            <template #right-icon>
+              <van-radio checked-color="#ee0a24" :name="item2" />
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </van-dialog>
   </div>
 </template>
 
@@ -54,13 +68,17 @@ export default {
     'amount',
     'billType',
     'submitTime',
-    'dataList'
+    'dataList',
+    'params'
   ],
   data() {
     return {
       isChecked: false,
       isDisabled: false,
-      isShow: false
+      isShow: false,
+      showDialog: false,
+      expressNo: '',
+      expressNoList: ''
     }
   },
   created() {
@@ -161,7 +179,7 @@ export default {
     productItem
   },
   methods: {
-    switchProductList() {
+    switchProductList() {  //订单商品列表显示隐藏剩余商品
       this.isShow = !this.isShow
     },
     checkEvent(event,data) {
@@ -169,6 +187,260 @@ export default {
       data.checked = event
       this.$emit('checkEvent', data)
       console.log(this.orderItem)
+    },
+    buyAgain() {  //再次购买
+      if (this.params.deliverType == 3) {
+        let arr = []
+        for (let i = 0; i < this.dataList.length; i++) {
+          let product = this.dataList[i]
+          if (product.isGift == 0) {
+            let cd = {
+              skuId: product.skuId,
+              storeOuCode: product.storeOuCode,
+              number: product.billNum
+            }
+            arr.push(cd)
+          }
+        }
+        sessionStorage.setItem('MDPS_Carts', JSON.stringify(arr))
+        this.$router.push({
+          path: '/mall2/store-delivery/list'
+        })
+        return;
+      }
+       // 重新购买修改为直接重新下单
+      this.$Loading.open()
+      let url = '/app/json/app_cart/SettleCart'
+      let paramsData = {
+        token: this.$store.state.login.token,
+        deliveryType: this.params.deliverType,
+        orderCategory: this.params.orderCategory, // 路由传递，旧订单为空可不传
+        vipUnitUserCode: '',// 路由传递，旧订单为空可不传
+        userAddress: this.$store.state.mall2.selectAddress,
+        pickupId: this.$store.state.mall2.zitiAddress.id,
+        userAddressId: '',
+      }
+      if (paramsData.deliveryType == 2) {
+        if (this.$store.state.mall2.selectAddress.id > 0) {
+          paramsData.userAddressId = this.$store.state.mall2.selectAddress.id
+        }
+      }
+      let arr = []
+      for (let i = 0; i < this.dataList.length; i++) {
+        let product = this.dataList[i]
+        let cd = {
+          skuId: product.skuId,
+          storeOuCode: product.storeOuCode,
+          number: product.billNum
+        }
+        arr.push(cd)
+      }
+      paramsData.carts = arr
+
+      this.$http.post(url, paramsData).then(
+        res => {
+          this.$Loading.close()
+          let data = res.data
+          if (data.status == 0) {
+            let params = {
+              res: data.data,
+              paramsData: paramsData,
+              deliveryType: paramsData.deliveryType
+            };
+
+            if (!(this.$store.state.mall2.selectAddress.id > 0) && this.detailData.deliveryType == 2) {
+              if (this.matchAddress) {
+                this.$store.state.mall2.selectAddress = this.matchAddress;
+                this.$bridgefunc.vuexStorage(() => {
+                })
+              } else {
+                params.noMatch = true;
+              }
+            }
+            if (this.$mallCommon.isExistCanNotAttendActivity(data.data.occur) == true) {
+              this.$MessageBox.confirm('部分商品不能参加活动</br>将按原价购买，是否继续？', '提示', {confirmButtonText: '确定'}).then(action => {
+                this.$router.push({
+                  name: '填写订单',
+                  params: params
+                })
+              }).catch(action => {
+              });
+            } else {
+              this.$router.push({
+                name: '填写订单',
+                params: params
+              })
+            }
+          } else {
+            this.$Toast(data.info)
+          }
+        },
+        error => {
+          this.$Loading.close()
+          this.$Toast('请求数据失败！')
+        }
+      )
+    },
+    viewLogistics(obj) { //查看物流
+      this.formItem = this.$util.deepClone(obj);
+      let expressArr = []
+      if(this.formItem.expressNo && typeof(this.formItem.expressNo) == 'string') {
+        expressArr = this.formItem.expressNo.split(",");
+      }
+      if(expressArr.length == 1) {
+        this.showExpress(this.formItem)
+      } else {
+        this.showDialog = true; //选择快递单号弹窗
+        this.expressNoList = expressArr;//快递单号数组
+      }
+    },
+    selExpress(item) { // 弹窗选择快递单号方法
+      this.expressNo = item;
+      this.formItem.expressNo = item;
+      console.log(this.formItem)
+    },
+    confirmForm() { // 弹窗确认方法
+      this.showExpress(this.formItem)
+    },
+    showExpress: function(item) { // 确认之后方法
+      console.log(item,'item')
+      //京东快递
+      if (item.interfaceType == 2 || item.interfaceType == 1) {
+        //请求详情
+        this.$Loading.open()
+        let url = '/app/json/app_shopping_order/detail'
+        let paramsData = {
+          token: this.$store.state.login.token,
+          orderId: item.id,
+          orderType: item.orderType,
+          orderCategory: this.params.orderCategory,
+          vipUnitUserCode: ''
+        }
+        this.$http.post(url, paramsData).then(
+          res => {
+            this.$Loading.close()
+            let data = res.data
+            if (data.status == 0) {
+              this.$router.push({
+                name: 'expressinfo',
+                params: {
+                  expressinfo: encodeURIComponent(
+                    JSON.stringify(data.data.tracksList)
+                  )
+                }
+              })
+            } else {
+              this.$Toast(data.info)
+            }
+          },
+          error => {
+            this.$Loading.close()
+            this.$Toast('请求数据失败！')
+          }
+        )
+      } else if (
+        // EMS快递
+        this.$store.state.globalConfig.enableEMS == 1 &&
+        item.interfaceType == 0 &&
+        item.expressSendingMode == '1'
+      ) {
+        this.$router.push({
+          path: '/mall2/orderlogistics',
+          query: {
+            traceNo: item.expressNo
+          }
+        })
+      } else if (
+        // 阿里物流
+        this.$store.state.globalConfig.order_ali_deliver_enable == '1' &&
+        item.interfaceType == '0' &&
+        item.deliverType == '2'
+      ) {
+        this.$router.push({
+          path: '/mall2/aliexpressinfo',
+          query: {
+            orderType: item.orderType,
+            orderId: item.id
+          }
+        })
+      } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
+        // 快递100API版本
+        this.$router.push({
+          path: '/mall2/100expressinfo',
+          query: {
+            expressNo: item.expressNo,
+            expressName: item.expressName
+          }
+        })
+      } else {
+        // 快递100web版本
+        let url =
+          'https://m.kuaidi100.com/index_all.html?type=' +
+          encodeURIComponent(item.expressName) +
+          '&postid=' +
+          encodeURIComponent(item.expressNo)
+        this.$bridgefunc.customPush({
+          path: url,
+          isnativetop: '1',
+          isVuePage: false
+        })
+      }
+    },
+    confirmProduct: function(item) { // 确认收货
+      this.$MessageBox
+        .confirm('您确定已经收到商品了吗？', '提示')
+        .then(action => {
+          this._confirmProductApi(item)
+        })
+        .catch(action => {})
+    },
+    _confirmProductApi: function(item) {
+      this.$Loading.open()
+      let url = '/app/json/app_shopping_order/orderConfirm'
+      let paramsData = {
+        token: this.$store.state.login.token,
+        orderId: this.params.orderId,
+        orderType: this.params.orderType,
+        orderCategory: this.params.orderCategory,
+        vipUnitUserCode: ''
+      }
+      this.$http.post(url, paramsData).then(
+        res => {
+          this.$Loading.close()
+          let data = res.data
+          if (data.status == 0) {
+            this.tabEvent(this.tabs[3], 3)
+          } else {
+            this.$Toast(data.info)
+          }
+        },
+        error => {
+          this.$Loading.close()
+          this.$Toast('请求数据失败！')
+        }
+      )
+    },
+    toComment: function(item) { // 评价晒单
+      if (this.dataList.length > 0) {
+        if (this.dataList.length > 1) {
+          this.$router.push({
+            path: '/mall2/comment2',
+            query: {
+              orderId: this.params.orderId
+            }
+          })
+        } else {
+          this.$router.push({
+            path: '/mall2/comment',
+            query: {
+              skuId: this.dataList[0].skuId,
+              orderId: this.dataList[0].id,
+              phPictureUrl: this.dataList[0].billImg,
+              skuName: this.dataList[0].billName
+            }
+          })
+        }
+      }
     }
   },
 

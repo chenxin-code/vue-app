@@ -32,9 +32,6 @@ export default {
   props: [
     'productItem'
   ],
-   created() {
-    console.log(this.productItem)
-  },
   data() {
     return {
     };
