@@ -13,6 +13,7 @@
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
+            :params='params'
             :billType="item.billType"
             :amount="item.amount"
             :submitTime="item.submitTime"
@@ -43,6 +44,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
+      params:{}
     };
   },
   components: {
@@ -163,24 +165,37 @@ export default {
         });
     },
     // 初始化数据
-    initData() {
-      this.currentOrderList = this.orderList.map((item) => {
+    initData () {
+      this.currentOrderList = this.orderList.map( item => {
         return {
           billType: item.billType,
           amount: item.costAmount,
           submitTime: item.submitTime,
-          dataList: item.itemAbstractList.map((sub) => {
+          deliverType: item.deliverType,
+          orderId: item.id,
+          orderType: item.orderType,
+          orderCategory: item.orderCategory,
+          dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
               billImg: sub.phPictureUrl,
               billName: sub.skuName,
               billAmount: sub.salePrice,
               billNum: sub.number,
-            };
-          }),
-        };
-      });
-    },
+              skuId: sub.skuId,
+              id: sub.id,
+              orderType: sub.orderType
+            }
+          })
+        }
+      })
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderId
+        this.params.orderCategory = item.orderCategory
+      })
+    }
   },
 };
 </script>

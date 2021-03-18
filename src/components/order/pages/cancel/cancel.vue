@@ -164,13 +164,16 @@ export default {
         });
     },
     // 初始化数据
-    initData () {
+   initData () {
       this.currentOrderList = this.orderList.map( item => {
         return {
           billType: item.billType,
           amount: item.costAmount,
           submitTime: item.submitTime,
           deliverType: item.deliverType,
+          orderId: item.id,
+          orderType: item.orderType,
+          orderCategory: item.orderCategory,
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
@@ -178,15 +181,18 @@ export default {
               billName: sub.skuName,
               billAmount: sub.salePrice,
               billNum: sub.number,
-              isGift: sub.isGift,
               skuId: sub.skuId,
-              storeOuCode: sub.storeOuCode,
+              id: sub.id,
+              orderType: sub.orderType
             }
           })
         }
       })
       this.currentOrderList.forEach(item => {
         this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderId
+        this.params.orderCategory = item.orderCategory
       })
     }
   },
