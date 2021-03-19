@@ -2013,7 +2013,6 @@ export default {
     this.awardActivity = { orderId: this.orderId, ...JSON.parse(this.$route.query.awardActivity) }
     this.orderCategory = this.$route.query.orderCategory;
     this.vipUnitUserCode = this.$route.query.vipUnitUserCode;
-    console.log('detailvipppppppppp', this.vipUnitUserCode)
 
     // 代付相关
     this.payMode = this.$route.query.payMode

@@ -360,6 +360,8 @@ export default {
     },
     gotoBillDetail() {
       // 跳转订单详情
+      // billType: 判断物业或是商城类型
+      // orderType: 订单状态
       if (this.orderType == "200202") {
         this.$router.push({
           path: "/group_detail",
