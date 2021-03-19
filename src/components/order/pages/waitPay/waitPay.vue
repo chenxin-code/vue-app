@@ -23,7 +23,7 @@
             :orderType="item.orderType"
             :payInfo="item.payInfo"
             :params="item.params"
-            :id="item.orderId"
+            :orderItem="item"
           ></OrderItem>
         </div>
       </van-list>
@@ -217,13 +217,13 @@ export default {
       if (data.checkAll) {
         let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
-          return item.type == data.type;
+          return item.orderType == data.orderType;
         });
         if (data.checked) {
           //全部选中
           refs.forEach((item) => {
             //保存选中数据并设置每个checkbox选中状态
-            this.checkData.add({ type: item.type, id: item.id });
+            this.checkData.add(data);
             item.isChecked = true;
           });
         } else {
@@ -240,11 +240,11 @@ export default {
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        return item.type !== data.type;
+        return item.orderType !== data.orderType;
       });
       refs.forEach((item) => {
         // 并设置不能选择属性
-        if (item.type !== data.type) {
+        if (item.orderType !== data.orderType) {
           item.isDisabled = true;
         }
       });
@@ -253,8 +253,8 @@ export default {
 
       if (data.checked) {
         // 选中
-        this.checkData.add({ type: data.type, id: data.id });
-        this.$refs.payDiv.type = data.type;
+        this.checkData.add(data);
+        this.$refs.payDiv.type = data.orderType;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
@@ -263,7 +263,7 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if (item.id == data.id) {
+          if (item.orderId == data.orderId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }

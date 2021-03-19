@@ -21,7 +21,7 @@
           v-if="isWaitPay"
           v-model="isChecked"
           :disabled="isDisabled"
-          @change="checkEvent($event, { type: type, id: id })"
+          @change="checkEvent($event, orderItem)"
           checked-color="#f80f16"
           icon-size="18px"
         ></van-checkbox>
@@ -123,8 +123,8 @@ export default {
     "orderType",
     "payInfo",
     "billDetailObj",
-    "type",
-    "id"
+    "orderItem",
+    "type"
   ],
   data() {
     return {
@@ -395,7 +395,7 @@ export default {
       // console.log(event, data)
       data.checked = event;
       this.$emit("checkEvent", data);
-      console.log(this.orderItem);
+      console.log(data);
     },
     buyAgain() {
       //再次购买
