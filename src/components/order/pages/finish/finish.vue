@@ -188,7 +188,8 @@ export default {
               storeOuCode: item.storeOuCode,
               expressNo: item.expressNo,
               expressName: item.expressName,
-              interfaceType: item.interfaceType
+              interfaceType: item.interfaceType,
+              deliverType: item.deliverType
             }
           })
         }

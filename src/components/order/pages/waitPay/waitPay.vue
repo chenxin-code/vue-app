@@ -61,6 +61,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
+      params: []
     };
   },
   components: {
@@ -171,6 +172,7 @@ export default {
             submitTime: item.submitTime,
             orderType: item.orderType,
             orderId: item.orderId,
+            state: item.state,
             payInfo: {
               businessCstNo: item.businessCstNo,
               platMerCstNo: item.platMerCstNo,
@@ -197,10 +199,17 @@ export default {
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
               };
-            }),
+            })
           };
         }
       });
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderType
+        this.params.orderCategory = item.orderCategory
+        this.params.state = item.state
+      })
     },
 
     checkEvent(data) {

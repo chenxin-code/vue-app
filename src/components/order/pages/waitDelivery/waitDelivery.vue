@@ -197,16 +197,26 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-              orderType: sub.orderType,
-              storeOuCode: sub.storeOuCode,
-              expressNo: sub.expressNo,
-              expressName: sub.expressName,
-              interfaceType: sub.interfaceType,
-              productType: sub.productType
+              storeOuCode: item.storeOuCode,
+              expressNo: item.expressNo,
+              expressName: item.expressName,
+              interfaceType: item.interfaceType,
+              deliverType: item.deliverType,
+              address: item.address,
+              cityId: item.cityId,
+              countryId: item.countryId,
+              countryName: item.countryName,
+              provinceId: item.provinceId,
+              provinceName: item.provinceName,
+              townId: item.townId,
+              townName: item.townName,
+              receiver: item.receiver,
+              mobile: item.mobile
             }
           })
         }
       })
+      console.log(this.currentOrderList)
       this.currentOrderList.forEach(item => {
         this.params.deliverType = item.deliverType
         this.params.orderId = item.orderId

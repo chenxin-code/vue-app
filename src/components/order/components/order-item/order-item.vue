@@ -63,14 +63,16 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
-        <div class="btn default" v-if="isChangeOrder">
+        <!-- v-if="isChangeOrder" -->
+        <div class="btn default" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
         <!-- v-if="isViewLogistics" -->
         <div class="btn default" @click.stop="expressType(dataList[0])">
           <p>查看物流</p>
         </div>
-        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct">
+        <!-- v-if="isWaitTakeDelivery" -->
+        <div class="btn" @click.stop="confirmProduct()">
           <p>确认收货</p>
         </div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment">
@@ -121,6 +123,8 @@ export default {
     "orderType",
     "payInfo",
     "billDetailObj",
+    "type",
+    "id"
   ],
   data() {
     return {
@@ -612,16 +616,16 @@ export default {
         });
       }
     },
-    confirmProduct: function (item) {
+    confirmProduct: function () {
       // 确认收货
       this.$MessageBox
         .confirm("您确定已经收到商品了吗？", "提示")
         .then((action) => {
-          this._confirmProductApi(item);
+          this._confirmProductApi();
         })
         .catch((action) => {});
     },
-    _confirmProductApi: function (item) {
+    _confirmProductApi: function () {
       this.$Loading.open();
       let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
@@ -636,7 +640,7 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.tabEvent(this.tabs[3], 3);
+            this.$router.push('/order/5')
           } else {
             this.$Toast(data.info);
           }
@@ -669,6 +673,30 @@ export default {
           });
         }
       }
+    },
+    modifyAddress: function (item) {
+      this.$router.push({
+        path: '/mall2/modifyorderaddress',
+        query: {
+          address: JSON.stringify({
+            address: item.address || '',
+            addressFull: item.addressFull || '',
+            cityId: item.cityId || '',
+            cityName: item.cityName || '',
+            countryId: item.countryId || '',
+            countryName: item.countryName || '',
+            provinceId: item.provinceId || '',
+            provinceName: item.provinceName || '',
+            townId: item.townId || '',
+            townName: item.townName || '',
+            receiver: item.receiver || '',
+            mobile: item.mobile || ''
+          }),
+          orderId: this.params.orderId,
+          tradeNo: this.params.tradeNo,
+          orderType: this.params.orderType
+        }
+      });
     },
   },
 };
