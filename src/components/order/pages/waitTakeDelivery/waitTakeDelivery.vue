@@ -192,7 +192,7 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: '16',
+            tag: '4',
             tabIndex: 4,
             awardActivityList: item.awardActivityList,
           },
