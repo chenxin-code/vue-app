@@ -156,6 +156,7 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
+        if (item.billType != 12) {
           return {
             billType: item.billType,
             amount: item.totalPrice,
@@ -168,7 +169,7 @@ export default {
               tradeMerCstNo: item.tradeMerCstNo,
               billNo: item.billNo,
               orderId: item.orderId,
-              orderCategory:item.orderCategory,
+              orderCategory: item.orderCategory,
             },
             dataList: item.orderFormItemList.map((sub) => {
               return {
@@ -180,6 +181,7 @@ export default {
               };
             })
           };
+        }
       });
       this.currentOrderList.forEach(item => {
         this.params.deliverType = item.deliverType

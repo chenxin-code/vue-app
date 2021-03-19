@@ -131,21 +131,23 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-        return {
-          billType: item.billType,
-          amount: item.totalPrice,
-          submitTime: item.submitTime,
+        if (item.billType != 12) {
+          return {
+            billType: item.billType,
+            amount: item.totalPrice,
+            submitTime: item.submitTime,
 
-          dataList: item.orderFormItemList.map((sub) => {
-            return {
-              billType: item.billType,
-              billImg: sub.iconUrl,
-              billName: sub.name,
-              billAmount: sub.unitPrice,
-              billNum: sub.quantity,
-            };
-          }),
-        };
+            dataList: item.orderFormItemList.map((sub) => {
+              return {
+                billType: item.billType,
+                billImg: sub.iconUrl,
+                billName: sub.name,
+                billAmount: sub.unitPrice,
+                billNum: sub.quantity,
+              };
+            }),
+          };
+        }
       });
     },
   },
