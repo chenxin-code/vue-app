@@ -15,6 +15,7 @@
             pageType="waitPay"
             :billType="item.billType"
             :dataList="item.dataList"
+            :params="params"
             :amount="item.amount"
             :submitTime="item.submitTime"
             @checkEvent="checkEvent"
@@ -58,6 +59,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
+      params: []
     };
   },
   components: {
@@ -159,6 +161,7 @@ export default {
             amount: item.totalPrice,
             submitTime: item.submitTime,
             orderType: item.orderType,
+            state: item.state,
             payInfo: {
               businessCstNo: item.businessCstNo,
               platMerCstNo: item.platMerCstNo,
@@ -175,9 +178,16 @@ export default {
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
               };
-            }),
+            })
           };
       });
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderType
+        this.params.orderCategory = item.orderCategory
+        this.params.state = item.state
+      })
     },
 
     checkEvent(data) {

@@ -167,6 +167,7 @@ export default {
     },
     // 初始化数据
     initData () {
+      debugger
       this.currentOrderList = this.orderList.map( item => {
         return {
           billType: item.billType,
@@ -197,16 +198,17 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-              orderType: sub.orderType,
-              storeOuCode: sub.storeOuCode,
-              expressNo: sub.expressNo,
-              expressName: sub.expressName,
-              interfaceType: sub.interfaceType,
-              productType: sub.productType
+
+              storeOuCode: item.storeOuCode,
+              expressNo: item.expressNo,
+              expressName: item.expressName,
+              interfaceType: item.interfaceType,
+              deliverType: item.deliverType
             }
           })
         }
       })
+      console.log(this.currentOrderList)
       this.currentOrderList.forEach(item => {
         this.params.deliverType = item.deliverType
         this.params.orderId = item.orderId
