@@ -61,7 +61,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params: []
+      params: [],
     };
   },
   components: {
@@ -73,12 +73,42 @@ export default {
     this.onLoad();
   },
   methods: {
-
     //合并支付
-    mergePay(){
-      console.log(this.checkData)
+    mergePay() {
+      let payInfo = Array.from(this.checkData);
+      console.log("唤起邻里邦支付平台", payInfo);
+      let currentOrderDetails = {
+        state: 3,
+        orderId: payInfo[0].orderId,
+        orderType: payInfo[0].orderType,
+        tradeNo: payInfo[0].tradeNo,
+        tag: 1,
+        deliverCheckcode: payInfo[0].deliverCheckcode,
+        deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+        storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+      };
+      localStorage.setItem(
+        "currentOrderDetails",
+        JSON.stringify(currentOrderDetails)
+      );
+      let billNo = "";
+      payInfo.forEach((e) => {
+        billNo += e.payInfo.billNo + ',';
+      });
+      //vipUnitUserCode type  为空  待保留
+      let callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo[0].orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+      window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+        JSON.stringify({
+          businessCstNo: payInfo[0].businessCstNo,
+          platMerCstNo: payInfo[0].platMerCstNo,
+          tradeMerCstNo: payInfo[0].tradeMerCstNo,
+          billNo: billNo,
+          appScheme: "x-engine-c",
+          payType: false,
+        })
+      )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
-
 
     //滚动条与底部距离小于 offset 时触发
     // orderType":"200015","orderTypeList":["200015","200502"],"state":"1"
@@ -199,17 +229,17 @@ export default {
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
               };
-            })
+            }),
           };
         }
       });
-      this.currentOrderList.forEach(item => {
-        this.params.deliverType = item.deliverType
-        this.params.orderId = item.orderId
-        this.params.orderType = item.orderType
-        this.params.orderCategory = item.orderCategory
-        this.params.state = item.state
-      })
+      this.currentOrderList.forEach((item) => {
+        this.params.deliverType = item.deliverType;
+        this.params.orderId = item.orderId;
+        this.params.orderType = item.orderType;
+        this.params.orderCategory = item.orderCategory;
+        this.params.state = item.state;
+      });
     },
 
     checkEvent(data) {
@@ -219,9 +249,9 @@ export default {
           // 找出全选的类型并保存起来
           return item.orderType == data.orderType;
         });
-        let checkData = this.currentOrderList.filter(item => {
-          return item.orderType = data.orderType
-        })
+        let checkData = this.currentOrderList.filter((item) => {
+          return (item.orderType = data.orderType);
+        });
         if (data.checked) {
           //全部选中
           this.checkData.clear(); //清空checkData
