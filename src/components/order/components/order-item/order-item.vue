@@ -63,8 +63,11 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
+        <div class="btn default" v-if="isChangeOrder">
+          <p>修改订单</p>
+        </div>
         <!-- v-if="isViewLogistics" -->
-        <div class="btn default" @click.stop="expressType(dataList)">
+        <div class="btn default" @click.stop="expressType(dataList[0])">
           <p>查看物流</p>
         </div>
         <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct">
@@ -141,34 +144,37 @@ export default {
     }
   },
   computed: {
+    isChangeOrder() {
+      //修改订单
+      return this.params.orderType === 2017 && this.params.state == 16 && this.billType == 11;
+    },
     isEvalute() {
       //评价
-      return this.pageType == "finish" && this.params.orderCanEvaluate;
+      return this.params.orderType === 2017 && this.params.state == 9 && this.billType == 11;
     },
     isBuyAgain() {
       //再次购买
-      return (
-        (this.pageType == "waitDelivery" ||
-          this.pageType == "cancel" ||
-          this.pageType == "finish") &&
-        this.billType == 11
-      );
+      return (this.params.orderType === 2017 && (this.params.state == 16 || this.params.state == 4 || this.params.state == 9)) || this.params.orderType === 2018 && this.billType == 11;
     },
     isFinish() {
       //已完成
-      return this.pageType == "finish" && this.billType != 11;
+      return this.params.orderType === 2017 && this.params.state == 9 && this.billType != 11;
     },
     isViewLogistics() {
       //查看物流
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return this.params.orderType === 2017 && this.params.state == 4 && this.billType == 11;
     },
     isWaitTakeDelivery() {
       //确认收货
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return this.params.orderType === 2017 && this.params.state == 4 && this.billType == 11;
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay";
+      if (this.billType == 11 && (this.params.orderType == 20015 || this.params.orderType == 200001)) {
+        return true
+      } else if (this.billType != 11 && this.params.state ==10) {
+        return true
+      }
     },
     isWaitPay() {
       //支付页
@@ -448,9 +454,10 @@ export default {
     expressType(obj) {
       this.formItem = this.$util.deepClone(obj);
       let expressArr = [];
-      if (
-        this.formItem.expressNo &&
-        typeof this.formItem.expressNo == "string"
+      console.log(this.formItem)
+      console.log(this.formItem.expressNo)
+      console.log(typeof this.formItem.expressNo)
+      if (this.formItem.expressNo && typeof this.formItem.expressNo == "string"
       ) {
         expressArr = this.formItem.expressNo.split(",");
       }
@@ -482,7 +489,7 @@ export default {
         let paramsData = {
           token: this.$store.state.login.token,
           orderId: item.id,
-          orderType: item.orderType,
+          orderType: this.params.orderType,
           orderCategory: this.params.orderCategory,
           vipUnitUserCode: "",
         };
@@ -529,7 +536,7 @@ export default {
         this.$router.push({
           path: "/mall2/aliexpressinfo",
           query: {
-            orderType: item.orderType,
+            orderType: this.params.orderType,
             orderId: item.id,
           },
         });
