@@ -213,6 +213,7 @@ export default {
         this.params.orderType = item.orderType
         this.params.orderCategory = item.orderCategory
       })
+      console.log('---------', this.currentOrderList)
     }
   },
 };
