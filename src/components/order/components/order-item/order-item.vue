@@ -868,11 +868,11 @@ export default {
     }
 
     .ico {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       display: block;
-      background: url('../../img/down.jpg') no-repeat;
-      background-size: 10px auto;
+      background: url('../../img/down.png') no-repeat;
+      background-size: 12px auto;
 
       &.up {
         background-image: url('../../img/up.jpg');
