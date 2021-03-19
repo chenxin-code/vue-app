@@ -20,6 +20,8 @@
             @checkEvent="checkEvent"
             ref="order"
             :type="item.billType"
+            :orderType="item.orderType"
+            :payInfo="item.payInfo"
           ></OrderItem>
         </div>
       </van-list>
@@ -152,11 +154,19 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-        if (item.billType == 11) {
           return {
             billType: item.billType,
             amount: item.totalPrice,
             submitTime: item.submitTime,
+            orderType: item.orderType,
+            payInfo: {
+              businessCstNo: item.businessCstNo,
+              platMerCstNo: item.platMerCstNo,
+              tradeMerCstNo: item.tradeMerCstNo,
+              billNo: item.billNo,
+              orderId: item.orderId,
+              orderCategory:item.orderCategory,
+            },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,
@@ -167,7 +177,6 @@ export default {
               };
             }),
           };
-        }
       });
     },
 

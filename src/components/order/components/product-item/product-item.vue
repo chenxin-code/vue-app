@@ -16,7 +16,7 @@
           <strong>物业缴费</strong>
           <p>时代地产中心2202房</p>
           <p>车位管理服务费</p>
-          <p>2020年2月</p>
+          <p>{{productItem.submitTime}}</p>
         </div>
       </div>
       <div class="price" v-if="productItem.billType==11">
