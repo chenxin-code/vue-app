@@ -17,6 +17,7 @@
             :dataList="item.dataList"
             :amount="item.amount"
             :submitTime="item.submitTime"
+            :params="item.params"
           ></OrderItem>
         </div>
       </van-list>
@@ -136,7 +137,14 @@ export default {
             billType: item.billType,
             amount: item.totalPrice,
             submitTime: item.submitTime,
-
+            orderType: item.orderType,
+            params: {
+              deliverType: item.deliverType,
+              orderId: item.orderId,
+              orderType: item.orderType,
+              orderCategory: item.orderCategory,
+              orderCanEvaluate: item.orderCanEvaluate,
+            },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,

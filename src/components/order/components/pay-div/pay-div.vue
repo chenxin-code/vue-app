@@ -11,7 +11,7 @@
     </div>
     <div class="pay">
       <p class="pr">合计<span>￥0.00</span></p>
-      <div class="btn"><p>去结算</p></div>
+      <div class="btn" @click="mergePay"><p>去结算</p></div>
     </div>
   </div>
 </template>
@@ -37,6 +37,9 @@ export default {
       data.checked = this.isChecked
       data.checkAll = true
       this.$emit('checkEvent', data)
+    },
+    mergePay(){
+      this.$emit('mergePay')
     }
   }
 }

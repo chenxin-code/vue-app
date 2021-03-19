@@ -22,6 +22,8 @@
             :type="item.billType"
             :orderType="item.orderType"
             :payInfo="item.payInfo"
+            :params="item.params"
+            :id="item.orderId"
           ></OrderItem>
         </div>
       </van-list>
@@ -31,6 +33,7 @@
       ref="payDiv"
       :checkData="checkData"
       @checkEvent="checkEvent"
+      @mergePay="mergePay"
     ></pay-div>
   </div>
 </template>
@@ -69,6 +72,13 @@ export default {
     this.onLoad();
   },
   methods: {
+
+    //合并支付
+    mergePay(){
+      console.log(this.checkData)
+    },
+
+
     //滚动条与底部距离小于 offset 时触发
     // orderType":"200015","orderTypeList":["200015","200502"],"state":"1"
     onLoad() {
@@ -160,6 +170,7 @@ export default {
             amount: item.totalPrice,
             submitTime: item.submitTime,
             orderType: item.orderType,
+            orderId: item.orderId,
             payInfo: {
               businessCstNo: item.businessCstNo,
               platMerCstNo: item.platMerCstNo,
@@ -167,6 +178,16 @@ export default {
               billNo: item.billNo,
               orderId: item.orderId,
               orderCategory: item.orderCategory,
+              orderType: item.orderType,
+              tradeNo: item.tradeNo,
+              deliverCheckcode: item.deliverCheckcode,
+            },
+            params: {
+              deliverType: item.deliverType,
+              orderId: item.orderId,
+              orderType: item.orderType,
+              orderCategory: item.orderCategory,
+              orderCanEvaluate: item.orderCanEvaluate,
             },
             dataList: item.orderFormItemList.map((sub) => {
               return {

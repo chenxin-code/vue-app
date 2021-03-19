@@ -146,34 +146,63 @@ export default {
   computed: {
     isChangeOrder() {
       //修改订单
-      return this.params.orderType === 2017 && this.params.state == 16 && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 16 &&
+        this.billType == 11
+      );
     },
     isEvalute() {
       //评价
-      return this.params.orderType === 2017 && this.params.state == 9 && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 9 &&
+        this.billType == 11
+      );
     },
     isBuyAgain() {
       //再次购买
-      return (this.params.orderType === 2017 && (this.params.state == 16 || this.params.state == 4 || this.params.state == 9)) || this.params.orderType === 2018 && this.billType == 11;
+      return (
+        (this.params.orderType === 2017 &&
+          (this.params.state == 16 ||
+            this.params.state == 4 ||
+            this.params.state == 9)) ||
+        (this.params.orderType === 2018 && this.billType == 11)
+      );
     },
     isFinish() {
       //已完成
-      return this.params.orderType === 2017 && this.params.state == 9 && this.billType != 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 9 &&
+        this.billType != 11
+      );
     },
     isViewLogistics() {
       //查看物流
-      return this.params.orderType === 2017 && this.params.state == 4 && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 4 &&
+        this.billType == 11
+      );
     },
     isWaitTakeDelivery() {
       //确认收货
-      return this.params.orderType === 2017 && this.params.state == 4 && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 4 &&
+        this.billType == 11
+      );
     },
     isPayAtOnce() {
       //立即付款
-      if (this.billType == 11 && (this.params.orderType == 20015 || this.params.orderType == 200001)) {
-        return true
-      } else if (this.billType != 11 && this.params.state ==10) {
-        return true
+      if (
+        this.billType == 11 &&
+        (this.params.orderType == 20015 || this.params.orderType == 200001)
+      ) {
+        return true;
+      } else if (this.billType != 11 && this.params.state == 10) {
+        return true;
       }
     },
     isWaitPay() {
@@ -287,7 +316,25 @@ export default {
             }
           });
       } else {
+        console.log("唤起邻里邦支付平台");
+        let currentOrderDetails = {
+          state: 3,
+          orderId: payInfo.orderId,
+          orderType: payInfo.orderType,
+          tradeNo: payInfo.tradeNo,
+          tag: 1,
+          deliverCheckcode: payInfo.deliverCheckcode,
+          deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+          storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+          stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+        };
+        localStorage.setItem(
+          "currentOrderDetails",
+          JSON.stringify(currentOrderDetails)
+        );
+        //vipUnitUserCode type  为空  待保留
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        this.enginePay(payInfo, callbackUrl);
       }
     },
     enginePay(payInfo, callbackUrl) {
@@ -454,10 +501,12 @@ export default {
     expressType(obj) {
       this.formItem = this.$util.deepClone(obj);
       let expressArr = [];
-      console.log(this.formItem)
-      console.log(this.formItem.expressNo)
-      console.log(typeof this.formItem.expressNo)
-      if (this.formItem.expressNo && typeof this.formItem.expressNo == "string"
+      console.log(this.formItem);
+      console.log(this.formItem.expressNo);
+      console.log(typeof this.formItem.expressNo);
+      if (
+        this.formItem.expressNo &&
+        typeof this.formItem.expressNo == "string"
       ) {
         expressArr = this.formItem.expressNo.split(",");
       }
@@ -882,7 +931,7 @@ export default {
       background-size: 12px auto;
 
       &.up {
-        background-image: url('../../img/up.jpg');
+        background-image: url('../../img/up.png');
       }
     }
   }
