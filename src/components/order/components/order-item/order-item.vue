@@ -63,11 +63,16 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
+        <!-- v-if="isChangeOrder" -->
+        <div class="btn default" @click="modifyAddress(dataList[0])">
+          <p>修改订单</p>
+        </div>
         <!-- v-if="isViewLogistics" -->
-        <div class="btn default" @click.stop="expressType(dataList)">
+        <div class="btn default" @click.stop="expressType(dataList[0])">
           <p>查看物流</p>
         </div>
-        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct">
+        <!-- v-if="isWaitTakeDelivery" -->
+        <div class="btn" @click.stop="confirmProduct()">
           <p>确认收货</p>
         </div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment">
@@ -118,6 +123,8 @@ export default {
     "orderType",
     "payInfo",
     "billDetailObj",
+    "type",
+    "id"
   ],
   data() {
     return {
@@ -141,34 +148,66 @@ export default {
     }
   },
   computed: {
+    isChangeOrder() {
+      //修改订单
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 16 &&
+        this.billType == 11
+      );
+    },
     isEvalute() {
       //评价
-      return this.pageType == "finish" && this.params.orderCanEvaluate;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 9 &&
+        this.billType == 11
+      );
     },
     isBuyAgain() {
       //再次购买
       return (
-        (this.pageType == "waitDelivery" ||
-          this.pageType == "cancel" ||
-          this.pageType == "finish") &&
-        this.billType == 11
+        (this.params.orderType === 2017 &&
+          (this.params.state == 16 ||
+            this.params.state == 4 ||
+            this.params.state == 9)) ||
+        (this.params.orderType === 2018 && this.billType == 11)
       );
     },
     isFinish() {
       //已完成
-      return this.pageType == "finish" && this.billType != 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 9 &&
+        this.billType != 11
+      );
     },
     isViewLogistics() {
       //查看物流
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 4 &&
+        this.billType == 11
+      );
     },
     isWaitTakeDelivery() {
       //确认收货
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (
+        this.params.orderType === 2017 &&
+        this.params.state == 4 &&
+        this.billType == 11
+      );
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay";
+      if (
+        this.billType == 11 &&
+        (this.params.orderType == 20015 || this.params.orderType == 200001)
+      ) {
+        return true;
+      } else if (this.billType != 11 && this.params.state == 10) {
+        return true;
+      }
     },
     isWaitPay() {
       //支付页
@@ -281,7 +320,25 @@ export default {
             }
           });
       } else {
+        console.log("唤起邻里邦支付平台");
+        let currentOrderDetails = {
+          state: 3,
+          orderId: payInfo.orderId,
+          orderType: payInfo.orderType,
+          tradeNo: payInfo.tradeNo,
+          tag: 1,
+          deliverCheckcode: payInfo.deliverCheckcode,
+          deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+          storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+          stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+        };
+        localStorage.setItem(
+          "currentOrderDetails",
+          JSON.stringify(currentOrderDetails)
+        );
+        //vipUnitUserCode type  为空  待保留
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        this.enginePay(payInfo, callbackUrl);
       }
     },
     enginePay(payInfo, callbackUrl) {
@@ -448,6 +505,9 @@ export default {
     expressType(obj) {
       this.formItem = this.$util.deepClone(obj);
       let expressArr = [];
+      console.log(this.formItem);
+      console.log(this.formItem.expressNo);
+      console.log(typeof this.formItem.expressNo);
       if (
         this.formItem.expressNo &&
         typeof this.formItem.expressNo == "string"
@@ -482,7 +542,7 @@ export default {
         let paramsData = {
           token: this.$store.state.login.token,
           orderId: item.id,
-          orderType: item.orderType,
+          orderType: this.params.orderType,
           orderCategory: this.params.orderCategory,
           vipUnitUserCode: "",
         };
@@ -529,7 +589,7 @@ export default {
         this.$router.push({
           path: "/mall2/aliexpressinfo",
           query: {
-            orderType: item.orderType,
+            orderType: this.params.orderType,
             orderId: item.id,
           },
         });
@@ -556,16 +616,16 @@ export default {
         });
       }
     },
-    confirmProduct: function (item) {
+    confirmProduct: function () {
       // 确认收货
       this.$MessageBox
         .confirm("您确定已经收到商品了吗？", "提示")
         .then((action) => {
-          this._confirmProductApi(item);
+          this._confirmProductApi();
         })
         .catch((action) => {});
     },
-    _confirmProductApi: function (item) {
+    _confirmProductApi: function () {
       this.$Loading.open();
       let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
@@ -580,7 +640,7 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.tabEvent(this.tabs[3], 3);
+            this.$router.push('/order/5')
           } else {
             this.$Toast(data.info);
           }
@@ -613,6 +673,30 @@ export default {
           });
         }
       }
+    },
+    modifyAddress: function (item) {
+      this.$router.push({
+        path: '/mall2/modifyorderaddress',
+        query: {
+          address: JSON.stringify({
+            address: item.address || '',
+            addressFull: item.addressFull || '',
+            cityId: item.cityId || '',
+            cityName: item.cityName || '',
+            countryId: item.countryId || '',
+            countryName: item.countryName || '',
+            provinceId: item.provinceId || '',
+            provinceName: item.provinceName || '',
+            townId: item.townId || '',
+            townName: item.townName || '',
+            receiver: item.receiver || '',
+            mobile: item.mobile || ''
+          }),
+          orderId: this.params.orderId,
+          tradeNo: this.params.tradeNo,
+          orderType: this.params.orderType
+        }
+      });
     },
   },
 };
@@ -868,14 +952,14 @@ export default {
     }
 
     .ico {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       display: block;
-      background: url('../../img/down.jpg') no-repeat;
-      background-size: 10px auto;
+      background: url('../../img/down.png') no-repeat;
+      background-size: 12px auto;
 
       &.up {
-        background-image: url('../../img/up.jpg');
+        background-image: url('../../img/up.png');
       }
     }
   }

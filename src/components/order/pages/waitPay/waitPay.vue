@@ -22,6 +22,8 @@
             :type="item.billType"
             :orderType="item.orderType"
             :payInfo="item.payInfo"
+            :params="item.params"
+            :id="item.orderId"
           ></OrderItem>
         </div>
       </van-list>
@@ -31,6 +33,7 @@
       ref="payDiv"
       :checkData="checkData"
       @checkEvent="checkEvent"
+      @mergePay="mergePay"
     ></pay-div>
   </div>
 </template>
@@ -58,6 +61,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
+      params: []
     };
   },
   components: {
@@ -69,6 +73,13 @@ export default {
     this.onLoad();
   },
   methods: {
+
+    //合并支付
+    mergePay(){
+      console.log(this.checkData)
+    },
+
+
     //滚动条与底部距离小于 offset 时触发
     // orderType":"200015","orderTypeList":["200015","200502"],"state":"1"
     onLoad() {
@@ -154,18 +165,31 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
+        if (item.billType != 12) {
           return {
             billType: item.billType,
             amount: item.totalPrice,
             submitTime: item.submitTime,
             orderType: item.orderType,
+            orderId: item.orderId,
+            state: item.state,
             payInfo: {
               businessCstNo: item.businessCstNo,
               platMerCstNo: item.platMerCstNo,
               tradeMerCstNo: item.tradeMerCstNo,
               billNo: item.billNo,
               orderId: item.orderId,
-              orderCategory:item.orderCategory,
+              orderCategory: item.orderCategory,
+              orderType: item.orderType,
+              tradeNo: item.tradeNo,
+              deliverCheckcode: item.deliverCheckcode,
+            },
+            params: {
+              deliverType: item.deliverType,
+              orderId: item.orderId,
+              orderType: item.orderType,
+              orderCategory: item.orderCategory,
+              orderCanEvaluate: item.orderCanEvaluate,
             },
             dataList: item.orderFormItemList.map((sub) => {
               return {
@@ -175,9 +199,17 @@ export default {
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
               };
-            }),
+            })
           };
+        }
       });
+      this.currentOrderList.forEach(item => {
+        this.params.deliverType = item.deliverType
+        this.params.orderId = item.orderId
+        this.params.orderType = item.orderType
+        this.params.orderCategory = item.orderCategory
+        this.params.state = item.state
+      })
     },
 
     checkEvent(data) {

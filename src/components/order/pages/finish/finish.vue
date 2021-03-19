@@ -17,6 +17,8 @@
             :billType="item.billType"
             :amount="item.amount"
             :submitTime="item.submitTime"
+            :billDetailObj="item.billDetailObj"
+            :orderType="item.orderType"
             pageType="finish"
           ></OrderItem>
         </div>
@@ -176,6 +178,18 @@ export default {
           orderType: item.orderType,
           orderCategory: item.orderCategory,
           orderCanEvaluate: item.orderCanEvaluate,
+          billDetailObj: {
+            groupBuyActivityId: item.groupBuyActivityId,
+            groupBuyId: item.groupBuyId,
+            payMode: item.payMode,
+            tradeNo: item.tradeNo,
+            shoppingOrderId: item.shoppingOrderId,
+            orderPayType: item.orderPayType,
+            id: item.id,
+            tag: '16',
+            tabIndex: 5,
+            awardActivityList: item.awardActivityList,
+          },
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,
@@ -185,11 +199,11 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-              orderType: sub.orderType,
-              storeOuCode: sub.storeOuCode,
-              expressNo: sub.expressNo,
-              expressName: sub.expressName,
-              interfaceType: sub.interfaceType
+              storeOuCode: item.storeOuCode,
+              expressNo: item.expressNo,
+              expressName: item.expressName,
+              interfaceType: item.interfaceType,
+              deliverType: item.deliverType
             }
           })
         }
