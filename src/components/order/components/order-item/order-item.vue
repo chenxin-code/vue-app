@@ -71,7 +71,8 @@
         <div class="btn default" @click.stop="expressType(dataList[0])">
           <p>查看物流</p>
         </div>
-        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct">
+        <!-- v-if="isWaitTakeDelivery" -->
+        <div class="btn" @click.stop="confirmProduct()">
           <p>确认收货</p>
         </div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment">
@@ -564,16 +565,17 @@ export default {
         });
       }
     },
-    confirmProduct: function (item) {
+    confirmProduct: function () {
       // 确认收货
       this.$MessageBox
         .confirm("您确定已经收到商品了吗？", "提示")
         .then((action) => {
-          this._confirmProductApi(item);
+          this._confirmProductApi();
         })
         .catch((action) => {});
     },
-    _confirmProductApi: function (item) {
+    _confirmProductApi: function () {
+      debugger
       this.$Loading.open();
       let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
