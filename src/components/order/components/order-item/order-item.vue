@@ -395,7 +395,6 @@ export default {
       // console.log(event, data)
       data.checked = event;
       this.$emit("checkEvent", data);
-      console.log(data);
     },
     buyAgain() {
       //再次购买

@@ -219,11 +219,15 @@ export default {
           // 找出全选的类型并保存起来
           return item.orderType == data.orderType;
         });
+        let checkData = this.currentOrderList.filter(item => {
+          return item.orderType = data.orderType
+        })
         if (data.checked) {
           //全部选中
-          refs.forEach((item) => {
+          this.checkData.clear(); //清空checkData
+          refs.forEach((item, index) => {
             //保存选中数据并设置每个checkbox选中状态
-            this.checkData.add(data);
+            this.checkData.add(checkData[index]);
             item.isChecked = true;
           });
         } else {
