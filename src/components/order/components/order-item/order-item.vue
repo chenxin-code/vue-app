@@ -63,7 +63,8 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
-        <div class="btn default" v-if="isChangeOrder">
+        <!-- v-if="isChangeOrder" -->
+        <div class="btn default" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
         <!-- v-if="isViewLogistics" -->
@@ -620,6 +621,30 @@ export default {
           });
         }
       }
+    },
+    modifyAddress: function (item) {
+      this.$router.push({
+        path: '/mall2/modifyorderaddress',
+        query: {
+          address: JSON.stringify({
+            address: item.address || '',
+            addressFull: item.addressFull || '',
+            cityId: item.cityId || '',
+            cityName: item.cityName || '',
+            countryId: item.countryId || '',
+            countryName: item.countryName || '',
+            provinceId: item.provinceId || '',
+            provinceName: item.provinceName || '',
+            townId: item.townId || '',
+            townName: item.townName || '',
+            receiver: item.receiver || '',
+            mobile: item.mobile || ''
+          }),
+          orderId: this.params.orderId,
+          tradeNo: this.params.tradeNo,
+          orderType: this.params.orderType
+        }
+      });
     },
   },
 };

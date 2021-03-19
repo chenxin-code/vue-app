@@ -198,12 +198,21 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-
               storeOuCode: item.storeOuCode,
               expressNo: item.expressNo,
               expressName: item.expressName,
               interfaceType: item.interfaceType,
-              deliverType: item.deliverType
+              deliverType: item.deliverType,
+              address: item.address,
+              cityId: item.cityId,
+              countryId: item.countryId,
+              countryName: item.countryName,
+              provinceId: item.provinceId,
+              provinceName: item.provinceName,
+              townId: item.townId,
+              townName: item.townName,
+              receiver: item.receiver,
+              mobile: item.mobile
             }
           })
         }
