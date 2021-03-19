@@ -23,7 +23,7 @@
             :orderType="item.orderType"
             :payInfo="item.payInfo"
             :params="item.params"
-            :id="item.orderId"
+            :orderItem="item"
           ></OrderItem>
         </div>
       </van-list>
@@ -61,7 +61,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params: []
+      params: [],
     };
   },
   components: {
@@ -73,12 +73,42 @@ export default {
     this.onLoad();
   },
   methods: {
-
     //合并支付
-    mergePay(){
-      console.log(this.checkData)
+    mergePay() {
+      let payInfo = Array.from(this.checkData);
+      console.log("唤起邻里邦支付平台", payInfo);
+      let currentOrderDetails = {
+        state: 3,
+        orderId: payInfo[0].orderId,
+        orderType: payInfo[0].orderType,
+        tradeNo: payInfo[0].tradeNo,
+        tag: 1,
+        deliverCheckcode: payInfo[0].deliverCheckcode,
+        deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+        storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+      };
+      localStorage.setItem(
+        "currentOrderDetails",
+        JSON.stringify(currentOrderDetails)
+      );
+      let billNo = "";
+      payInfo.forEach((e) => {
+        billNo += e.payInfo.billNo + ',';
+      });
+      //vipUnitUserCode type  为空  待保留
+      let callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo[0].orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+      window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+        JSON.stringify({
+          businessCstNo: payInfo[0].businessCstNo,
+          platMerCstNo: payInfo[0].platMerCstNo,
+          tradeMerCstNo: payInfo[0].tradeMerCstNo,
+          billNo: billNo,
+          appScheme: "x-engine-c",
+          payType: false,
+        })
+      )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
-
 
     //滚动条与底部距离小于 offset 时触发
     // orderType":"200015","orderTypeList":["200015","200502"],"state":"1"
@@ -199,17 +229,17 @@ export default {
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
               };
-            })
+            }),
           };
         }
       });
-      this.currentOrderList.forEach(item => {
-        this.params.deliverType = item.deliverType
-        this.params.orderId = item.orderId
-        this.params.orderType = item.orderType
-        this.params.orderCategory = item.orderCategory
-        this.params.state = item.state
-      })
+      this.currentOrderList.forEach((item) => {
+        this.params.deliverType = item.deliverType;
+        this.params.orderId = item.orderId;
+        this.params.orderType = item.orderType;
+        this.params.orderCategory = item.orderCategory;
+        this.params.state = item.state;
+      });
     },
 
     checkEvent(data) {
@@ -217,13 +247,17 @@ export default {
       if (data.checkAll) {
         let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
-          return item.type == data.type;
+          return item.orderType == data.orderType;
+        });
+        let checkData = this.currentOrderList.filter((item) => {
+          return (item.orderType = data.orderType);
         });
         if (data.checked) {
           //全部选中
-          refs.forEach((item) => {
+          this.checkData.clear(); //清空checkData
+          refs.forEach((item, index) => {
             //保存选中数据并设置每个checkbox选中状态
-            this.checkData.add({ type: item.type, id: item.id });
+            this.checkData.add(checkData[index]);
             item.isChecked = true;
           });
         } else {
@@ -240,11 +274,11 @@ export default {
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        return item.type !== data.type;
+        return item.orderType !== data.orderType;
       });
       refs.forEach((item) => {
         // 并设置不能选择属性
-        if (item.type !== data.type) {
+        if (item.orderType !== data.orderType) {
           item.isDisabled = true;
         }
       });
@@ -253,8 +287,8 @@ export default {
 
       if (data.checked) {
         // 选中
-        this.checkData.add({ type: data.type, id: data.id });
-        this.$refs.payDiv.type = data.type;
+        this.checkData.add(data);
+        this.$refs.payDiv.type = data.orderType;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
@@ -263,7 +297,7 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if (item.id == data.id) {
+          if (item.orderId == data.orderId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }

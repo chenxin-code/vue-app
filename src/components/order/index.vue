@@ -20,7 +20,7 @@
       </van-tabs>
     </van-sticky>
     <div class="scroll">
-      <component v-bind:is="active"></component>
+      <component v-bind:is="active" :key="active"></component>
     </div>
 
   </div>

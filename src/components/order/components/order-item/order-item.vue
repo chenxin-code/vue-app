@@ -21,7 +21,7 @@
           v-if="isWaitPay"
           v-model="isChecked"
           :disabled="isDisabled"
-          @change="checkEvent($event, { type: type, id: id })"
+          @change="checkEvent($event, orderItem)"
           checked-color="#f80f16"
           icon-size="18px"
         ></van-checkbox>
@@ -63,16 +63,13 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
-        <!-- v-if="isChangeOrder" -->
-        <div class="btn default" @click="modifyAddress(dataList[0])">
+        <div class="btn default" v-if="isChangeOrder" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
-        <!-- v-if="isViewLogistics" -->
-        <div class="btn default" @click.stop="expressType(dataList[0])">
+        <div class="btn default" v-if="isViewLogistics" @click.stop="expressType(dataList[0])">
           <p>查看物流</p>
         </div>
-        <!-- v-if="isWaitTakeDelivery" -->
-        <div class="btn" @click.stop="confirmProduct()">
+        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct()">
           <p>确认收货</p>
         </div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment">
@@ -123,8 +120,8 @@ export default {
     "orderType",
     "payInfo",
     "billDetailObj",
-    "type",
-    "id"
+    "orderItem",
+    "type"
   ],
   data() {
     return {
@@ -148,66 +145,101 @@ export default {
     }
   },
   computed: {
+    // isChangeOrder() {
+    //   //修改订单
+    //   return (
+    //     this.params.orderType === 2017 &&
+    //     this.params.state == 16 &&
+    //     this.billType == 11
+    //   );
+    // },
+    // isEvalute() {
+    //   //评价
+    //   return (
+    //     this.params.orderType === 2017 &&
+    //     this.params.state == 9 &&
+    //     this.billType == 11
+    //   );
+    // },
+    // isBuyAgain() {
+    //   //再次购买
+    //   return (
+    //     (this.params.orderType === 2017 &&
+    //       (this.params.state == 16 ||
+    //         this.params.state == 4 ||
+    //         this.params.state == 9)) ||
+    //     (this.params.orderType === 2018 && this.billType == 11)
+    //   );
+    // },
+    // isFinish() {
+    //   //已完成
+    //   return (
+    //     this.params.orderType === 2017 &&
+    //     this.params.state == 9 &&
+    //     this.billType != 11
+    //   );
+    // },
+    // isViewLogistics() {
+    //   //查看物流
+    //   return (
+    //     this.params.orderType === 2017 &&
+    //     this.params.state == 4 &&
+    //     this.billType == 11
+    //   );
+    // },
+    // isWaitTakeDelivery() {
+    //   //确认收货
+    //   return (
+    //     this.params.orderType === 2017 &&
+    //     this.params.state == 4 &&
+    //     this.billType == 11
+    //   );
+    // },
+    // isPayAtOnce() {
+    //   //立即付款
+    //   if (
+    //     this.billType == 11 &&
+    //     (this.params.orderType == 20015 || this.params.orderType == 200001)
+    //   ) {
+    //     return true;
+    //   } else if (this.billType != 11 && this.params.state == 10) {
+    //     return true;
+    //   }
+    // },
+    
     isChangeOrder() {
-      //修改订单
-      return (
-        this.params.orderType === 2017 &&
-        this.params.state == 16 &&
-        this.billType == 11
-      );
-    },
+    //修改订单
+      return this.pageType == "waitDelivery" && this.billType == 11;
+     },
     isEvalute() {
       //评价
-      return (
-        this.params.orderType === 2017 &&
-        this.params.state == 9 &&
-        this.billType == 11
-      );
+      return this.pageType == "finish" && this.params.orderCanEvaluate && this.billType == 11;
     },
     isBuyAgain() {
       //再次购买
       return (
-        (this.params.orderType === 2017 &&
-          (this.params.state == 16 ||
-            this.params.state == 4 ||
-            this.params.state == 9)) ||
-        (this.params.orderType === 2018 && this.billType == 11)
+        (this.pageType == "waitDelivery" ||
+          this.pageType == "waitTakeDelivery" ||
+          this.pageType == "cancel" ||
+          this.pageType == "finish") &&
+        this.billType == 11
       );
     },
     isFinish() {
       //已完成
-      return (
-        this.params.orderType === 2017 &&
-        this.params.state == 9 &&
-        this.billType != 11
-      );
+      return this.pageType == "finish" && this.billType != 11;
     },
     isViewLogistics() {
       //查看物流
-      return (
-        this.params.orderType === 2017 &&
-        this.params.state == 4 &&
-        this.billType == 11
-      );
+      return this.pageType == "waitTakeDelivery" && this.billType == 11;
     },
     isWaitTakeDelivery() {
       //确认收货
-      return (
-        this.params.orderType === 2017 &&
-        this.params.state == 4 &&
-        this.billType == 11
-      );
+      return this.pageType == "waitTakeDelivery" && this.billType == 11;
     },
     isPayAtOnce() {
       //立即付款
-      if (
-        this.billType == 11 &&
-        (this.params.orderType == 20015 || this.params.orderType == 200001)
-      ) {
-        return true;
-      } else if (this.billType != 11 && this.params.state == 10) {
-        return true;
-      }
+      return this.pageType == "waitPay";
     },
     isWaitPay() {
       //支付页
@@ -397,7 +429,6 @@ export default {
       // console.log(event, data)
       data.checked = event;
       this.$emit("checkEvent", data);
-      console.log(this.orderItem);
     },
     buyAgain() {
       //再次购买
@@ -642,7 +673,12 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$router.push('/order/5')
+            this.$router.push({
+              name: '我的订单',
+              params: {
+                id: 5
+              }
+            })
           } else {
             this.$Toast(data.info);
           }
@@ -929,7 +965,7 @@ export default {
   }
 
   .product-box {
-    // height: 220px;
+    height: 110px;
     overflow: hidden;
     transition: 1s;
 
