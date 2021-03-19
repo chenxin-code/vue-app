@@ -575,7 +575,6 @@ export default {
         .catch((action) => {});
     },
     _confirmProductApi: function () {
-      debugger
       this.$Loading.open();
       let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
@@ -590,7 +589,7 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.tabEvent(this.tabs[3], 3);
+            this.$router.push('/order/5')
           } else {
             this.$Toast(data.info);
           }

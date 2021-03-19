@@ -167,7 +167,6 @@ export default {
     },
     // 初始化数据
     initData () {
-      debugger
       this.currentOrderList = this.orderList.map( item => {
         return {
           billType: item.billType,
