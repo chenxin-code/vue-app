@@ -123,6 +123,8 @@ export default {
     "orderType",
     "payInfo",
     "billDetailObj",
+    "type",
+    "id"
   ],
   data() {
     return {
