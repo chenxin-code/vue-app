@@ -185,11 +185,10 @@ export default {
               billNum: sub.number,
               skuId: sub.skuId,
               id: sub.id,
-              orderType: sub.orderType,
-              storeOuCode: sub.storeOuCode,
-              expressNo: sub.expressNo,
-              expressName: sub.expressName,
-              interfaceType: sub.interfaceType
+              storeOuCode: item.storeOuCode,
+              expressNo: item.expressNo,
+              expressName: item.expressName,
+              interfaceType: item.interfaceType
             }
           })
         }
