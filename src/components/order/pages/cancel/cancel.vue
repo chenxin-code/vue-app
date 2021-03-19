@@ -17,6 +17,8 @@
             :billType="item.billType" 
             :amount="item.amount"
             :submitTime="item.submitTime"
+            :billDetailObj="item.billDetailObj"
+            :orderType="item.orderType"
             pageType="cancel"></OrderItem>
         </div>
       </van-list>
@@ -174,6 +176,18 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
+          billDetailObj: {
+            groupBuyActivityId: item.groupBuyActivityId,
+            groupBuyId: item.groupBuyId,
+            payMode: item.payMode,
+            tradeNo: item.tradeNo,
+            shoppingOrderId: item.shoppingOrderId,
+            orderPayType: item.orderPayType,
+            id: item.id,
+            tag: '16',
+            tabIndex: 6,
+            awardActivityList: item.awardActivityList,
+          },
           dataList: item.itemAbstractList.map( sub => {
             return {
               billType: sub.billType,

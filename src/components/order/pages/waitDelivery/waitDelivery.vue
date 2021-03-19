@@ -185,7 +185,7 @@ export default {
             orderPayType: item.orderPayType,
             id: item.id,
             tag: '16',
-            tabIndex: 2,
+            tabIndex: 3,
             awardActivityList: item.awardActivityList,
           },
           dataList: item.itemAbstractList.map( sub => {
