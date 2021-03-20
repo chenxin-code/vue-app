@@ -10,7 +10,7 @@
   <div class="product-item">
     <div class="content">
       <div class="img">
-        <img :src="productItem.billImg" @click.stop="gotoProductDetail(productItem)" />
+        <img :src="productItem.billType == 11 ? productItem.billImg:billCenterImg" @click.stop="gotoProductDetail(productItem)" />
         <p class="text" v-if="productItem.billType==11">{{productItem.billName}}</p>
         <div class="desc" v-if="productItem.billType != 11">
           <strong>物业缴费</strong>
@@ -59,6 +59,48 @@ export default {
           productType: product.productType
         }
       })
+    }
+  },
+  computed:{
+    billCenterImg:{
+      get(){
+        switch (this.productItem.billType) {
+          case 1:
+            
+            return '../../img/property.png';
+          case 2:
+            
+            return '../../img/warranty.png';
+          case 3:
+            
+            return '../../img/temporary.png';
+          case 4:
+            
+            return '../../img/payCost.png';
+          case 5:
+            
+            return '../../img/property.png';
+          case 6:
+            
+            return '../../img/expect.png';
+          case 7:
+            
+            return '../../img/tourism.png';
+          case 8:
+            
+            return '../../img/housekeeping.png';
+          case 9:
+            
+            return '../../img/bag.png';
+          case 10:
+            
+            return '../../img/deposit.png';
+        
+          default:
+            return '../../img/property.png';
+        }
+      },
+      set(){}
     }
   }
 };

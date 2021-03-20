@@ -18,6 +18,7 @@
             :amount="item.amount"
             :submitTime="item.submitTime"
             :params="item.params"
+            :payInfo="item.payInfo"
           ></OrderItem>
         </div>
       </van-list>
@@ -140,10 +141,21 @@ export default {
             orderType: item.orderType,
             params: {
               deliverType: item.deliverType,
-              orderId: item.orderId,
+              orderId: item.shoppingOrderId,
               orderType: item.orderType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
+            },
+            payInfo: {
+              businessCstNo: item.loginUserPhone,
+              platMerCstNo: item.platMerCstNo,
+              tradeMerCstNo: item.tradeMerCstNo,
+              billNo: item.billNo,
+              orderId: item.shoppingOrderId,
+              orderCategory: item.orderCategory,
+              orderType: item.orderType,
+              tradeNo: item.tradeNo,
+              deliverCheckcode: item.deliverCheckcode,
             },
             dataList: item.orderFormItemList.map((sub) => {
               return {

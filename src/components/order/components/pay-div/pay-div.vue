@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="pay">
-      <p class="pr">合计<span>￥0.00</span></p>
+      <p class="pr">合计<span>￥{{mergeAmount}}</span></p>
       <div class="btn" @click="mergePay"><p>去结算</p></div>
     </div>
   </div>
@@ -20,6 +20,7 @@
 export default {
   props: [
     'checkData',
+    'mergeAmount',
   ],
   data() {
     return {
@@ -41,7 +42,8 @@ export default {
     mergePay(){
       this.$emit('mergePay')
     }
-  }
+  },
+
 }
 </script>
 
