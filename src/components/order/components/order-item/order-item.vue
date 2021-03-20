@@ -186,7 +186,7 @@ export default {
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay" || (this.pageType == "allOrder" && this.params.orderStateType == '20015' && this.params.state == 1)
+      return this.pageType == "waitPay" || (this.pageType == "allOrder" && this.params.orderStateType == '200015' && this.params.state == 1)
     },
     isWaitPay() {
       //支付页

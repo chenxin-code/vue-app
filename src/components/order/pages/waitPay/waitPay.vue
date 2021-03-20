@@ -64,8 +64,7 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params: [],
-      mergeAmount:0,
+      mergeAmount:0
     };
   },
   components: {
@@ -257,13 +256,6 @@ export default {
             }),
           };
       });
-      this.currentOrderList.forEach((item) => {
-        this.params.deliverType = item.deliverType;
-        this.params.orderId = item.shoppingOrderId;
-        this.params.orderType = item.orderType;
-        this.params.orderCategory = item.orderCategory;
-        this.params.state = item.state;
-      });
     },
 
     checkEvent(data) {
@@ -271,10 +263,10 @@ export default {
       if (data.checkAll) {
         let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
-          return item.orderType == data.orderType;
+          return item.billType == data.billType;
         });
         let checkData = this.currentOrderList.filter((item) => {
-          return (item.orderType = data.orderType);
+          return (item.billType = data.billType);
         });
         if (data.checked) {
           //全部选中
@@ -298,11 +290,11 @@ export default {
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        return item.orderType !== data.orderType;
+        return item.billType !== data.billType;
       });
       refs.forEach((item) => {
         // 并设置不能选择属性
-        if (item.orderType !== data.orderType) {
+        if (item.billType !== data.billType) {
           item.isDisabled = true;
         }
       });
@@ -312,7 +304,7 @@ export default {
       if (data.checked) {
         // 选中
         this.checkData.add(data);
-        this.$refs.payDiv.type = data.orderType;
+        this.$refs.payDiv.billType = data.billType;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
