@@ -202,7 +202,6 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-        if (item.billType != 12) {
           return {
             billType: item.billType,
             amount: item.totalPrice,
@@ -239,7 +238,6 @@ export default {
               };
             }),
           };
-        }
       });
       this.currentOrderList.forEach((item) => {
         this.params.deliverType = item.deliverType;
