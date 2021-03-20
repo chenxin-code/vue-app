@@ -1127,7 +1127,7 @@ export default {
         url = '/app/json/app_shopping_order/queryOrderItem'
         paramsData.productType = 512
       }
-      if (item.tag == 4) {
+      if (item.tag == 4) {  
         paramsData.deliverType = this.deliveryType
         // // queryOrder接口屏蔽扫码购订单
         // if (this.deliveryType == 1) {
