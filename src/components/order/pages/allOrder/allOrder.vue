@@ -149,7 +149,8 @@ export default {
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
               orderStateType: item.orderStateType,
-              state: item.state
+              state: item.state,
+              tradeNo: item.tradeNo
             },
             billDetailObj: {
               groupBuyActivityId: item.groupBuyActivityId,
@@ -183,6 +184,21 @@ export default {
                 billNum: sub.quantity,
                 skuId: sub.itemId,
                 storeOuCode: sub.storeOuCode,
+                id: sub.itemId,
+                expressNo: item.expressNo,
+                expressName: item.expressName,
+                interfaceType: item.interfaceType,
+                deliverType: item.deliverType,
+                address: item.address,
+                cityId: item.cityId,
+                countryId: item.countryId,
+                countryName: item.countryName,
+                provinceId: item.provinceId,
+                provinceName: item.provinceName,
+                townId: item.townId,
+                townName: item.townName,
+                receiver: item.receiver,
+                mobile: item.mobile
               };
             }),
           };
