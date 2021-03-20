@@ -85,10 +85,8 @@ export default {
               } else {
                 this.initData();
               }
-              setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
-              }, 1000);
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -123,11 +121,9 @@ export default {
             } else {
               this.initData();
             }
-            setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
               this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
           }
         })
         .catch((res) => {
