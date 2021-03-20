@@ -160,68 +160,6 @@ export default {
     }
   },
   computed: {
-    // isChangeOrder() {
-    //   //修改订单
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 16 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isEvalute() {
-    //   //评价
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 9 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isBuyAgain() {
-    //   //再次购买
-    //   return (
-    //     (this.params.orderType === 2017 &&
-    //       (this.params.state == 16 ||
-    //         this.params.state == 4 ||
-    //         this.params.state == 9)) ||
-    //     (this.params.orderType === 2018 && this.billType == 11)
-    //   );
-    // },
-    // isFinish() {
-    //   //已完成
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 9 &&
-    //     this.billType != 11
-    //   );
-    // },
-    // isViewLogistics() {
-    //   //查看物流
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 4 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isWaitTakeDelivery() {
-    //   //确认收货
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 4 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isPayAtOnce() {
-    //   //立即付款
-    //   if (
-    //     this.billType == 11 &&
-    //     (this.params.orderType == 20015 || this.params.orderType == 200001)
-    //   ) {
-    //     return true;
-    //   } else if (this.billType != 11 && this.params.state == 10) {
-    //     return true;
-    //   }
-    // },
-
     isChangeOrder() {
     //修改订单
       return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
