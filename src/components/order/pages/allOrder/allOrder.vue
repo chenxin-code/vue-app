@@ -18,6 +18,9 @@
             :amount="item.amount"
             :submitTime="item.submitTime"
             :params="item.params"
+            :billId="item.billId"
+            :billDetailObj="item.billDetailObj"
+            :orderType="item.orderType"
           ></OrderItem>
         </div>
       </van-list>
@@ -131,32 +134,34 @@ export default {
         });
     },
     initData() {
+      console.log('popopopopopopopopopop', this.orderList)
       this.currentOrderList = this.orderList.map((item) => {
         if (item.billType != 12) {
           return {
             billType: item.billType,
+            billId: item.billId,
             amount: item.totalPrice,
             submitTime: item.submitTime,
-            orderType: item.orderType,
+            orderType: item.orderStateType,
             params: {
               deliverType: item.deliverType,
               orderId: item.orderId,
-              orderType: item.orderType,
+              orderType: item.orderStateType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
             },
-            // billDetailObj: {
-            //   groupBuyActivityId: item.groupBuyActivityId,
-            //   groupBuyId: item.groupBuyId,
-            //   payMode: item.payMode,
-            //   tradeNo: item.tradeNo,
-            //   shoppingOrderId: item.shoppingOrderId,
-            //   orderPayType: item.orderPayType,
-            //   id: item.id,
-            //   tag: '16',
-            //   tabIndex: 3,
-            //   awardActivityList: item.awardActivityList,
-            // },
+            billDetailObj: {
+              groupBuyActivityId: item.groupBuyActivityId,
+              groupBuyId: item.groupBuyId,
+              payMode: item.payMode,
+              tradeNo: item.tradeNo,
+              shoppingOrderId: item.shoppingOrderId,
+              orderPayType: item.orderPayType,
+              id: item.id,
+              tag: this.getTag(item.state, item.orderStateType),
+              tabIndex: 0,
+              awardActivityList: item.awardActivityList,
+            },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,
@@ -164,12 +169,32 @@ export default {
                 billName: sub.name,
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
+                skuId: sub.itemId,
+                storeOuCode: sub.storeOuCode,
               };
             }),
           };
         }
       });
     },
+    getTag(state, type) {
+      if (state == 3 && type == '200015') {
+        // 待支付
+        return '1'
+      } else if (state == 17 && type == '200017') {
+        // 待发货
+        return '16'
+      } else if ( state == 4 && type == '200017') {
+        // 待收货
+        return '4'
+      } else if (state == 9 && type == '200017') {
+        // 已完成
+        return '9'
+      } else if (state == 7 && type == '200018') {
+        // 已取消
+        return '7'
+      }
+    }
   },
 };
 </script>

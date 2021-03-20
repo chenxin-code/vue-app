@@ -37,6 +37,8 @@
           v-for="(item, index) in showMore ? dataList : smallDataList"
           :key="index"
           :productItem="item"
+          :billType="billType"
+          :billId="billId"
         ></product-item>
       </div>
       <div
@@ -121,7 +123,8 @@ export default {
     "payInfo",
     "billDetailObj",
     "orderItem",
-    "type"
+    "type",
+    "billId"
   ],
   data() {
     return {
@@ -394,34 +397,44 @@ export default {
       // 跳转订单详情
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
-      if (this.orderType == "200202") {
-        this.$router.push({
-          path: "/group_detail",
-          query: {
-            orderId: this.billDetailObj.groupBuyId,
-            mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
-          },
-        });
+      if(this.billType == '11') {
+        if (this.orderType == "200202") {
+          this.$router.push({
+            path: "/group_detail",
+            query: {
+              orderId: this.billDetailObj.groupBuyId,
+              mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
+            },
+          });
+        } else {
+          let awardActivity =
+            this.billDetailObj.awardActivityList &&
+            this.billDetailObj.awardActivityList.length
+              ? this.billDetailObj.awardActivityList[0]
+              : {};
+          this.$router.push({
+            path: "/mall2/orderdetail",
+            query: {
+              payMode: this.billDetailObj.payMode,
+              tradeNo: this.billDetailObj.tradeNo,
+              shoppingOrderId: this.billDetailObj.shoppingOrderId,
+              orderPayType: this.billDetailObj.orderPayType,
+              orderId: this.billDetailObj.id,
+              tag: this.billDetailObj.tag,
+              orderType: this.orderType,
+              orderIndex: this.billDetailObj.tabIndex,
+              awardActivity: JSON.stringify(awardActivity),
+            },
+          });
+        }
       } else {
-        let awardActivity =
-          this.billDetailObj.awardActivityList &&
-          this.billDetailObj.awardActivityList.length
-            ? this.billDetailObj.awardActivityList[0]
-            : {};
-        this.$router.push({
-          path: "/mall2/orderdetail",
-          query: {
-            payMode: this.billDetailObj.payMode,
-            tradeNo: this.billDetailObj.tradeNo,
-            shoppingOrderId: this.billDetailObj.shoppingOrderId,
-            orderPayType: this.billDetailObj.orderPayType,
-            orderId: this.billDetailObj.id,
-            tag: this.billDetailObj.tag,
-            orderType: this.orderType,
-            orderIndex: this.billDetailObj.tabIndex,
-            awardActivity: JSON.stringify(awardActivity),
-          },
-        });
+        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
+          encodeURIComponent(JSON.stringify({
+            billId: this.billId,
+            payType: 'no',
+            isRefund: 'no'
+          }))
+        }`
       }
     },
 
