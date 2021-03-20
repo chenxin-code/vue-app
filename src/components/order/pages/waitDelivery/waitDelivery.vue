@@ -8,18 +8,19 @@
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
-        :immediate-check="true"
+        :immediate-check="false"
       >
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
-            :params='item.params'
-            :billType="item.billType" 
+            :params="item.params"
+            :billType="item.billType"
             :amount="item.amount"
             :submitTime="item.submitTime"
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
-            pageType="waitDelivery"></OrderItem>
+            pageType="waitDelivery"
+          ></OrderItem>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -41,18 +42,16 @@ export default {
       orderList: [],
       currentPage: 0,
       totalPage: 0,
-      queryBadge: {},
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params:{},
+      params: {},
       tabs: {
-        text: '待发货',
-        tag: '16',
-        type: ['200017'],
+        text: "待发货",
+        tag: "16",
+        type: ["200017"],
       },
-      deliveryType:"",
-      currentOrderList: []
+      currentOrderList: [],
     };
   },
   components: {
@@ -60,12 +59,9 @@ export default {
     Empty,
   },
   created() {
-    this.deliveryType = this.$store.state.mall2.staticDeliverType
-      ? this.$store.state.mall2.staticDeliverType
-      : '2'
+    this.onLoad();
   },
   methods: {
-
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       // "orderType":"200017","orderTypeList":["200017"],"state":"16","page":{"index":1,"pageSize":10}
@@ -75,7 +71,7 @@ export default {
       this.refreshing = false;
       let obj = {
         orderType: this.tabs.type[0],
-        orderTypeList:this.tabs.type,
+        orderTypeList: this.tabs.type,
         state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
       };
@@ -94,21 +90,19 @@ export default {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
               if (this.orderList.length > 0) {
-                this.orderList.forEach(item => {
-                  item['billType'] = 11;
-                  item.itemAbstractList.forEach(tab => {
-                    tab['billType'] = 11;
-                  })
-                })
-                this.initData()
+                this.orderList.forEach((item) => {
+                  item["billType"] = 11;
+                  item.itemAbstractList.forEach((tab) => {
+                    tab["billType"] = 11;
+                  });
+                });
+                this.initData();
               } else {
                 this.showEmpty = true;
               }
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              setTimeout(() => {
-                // 加载状态结束
-                this.loading = false;
-              }, 1000);
+              // 加载状态结束
+              this.loading = false;
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -129,12 +123,10 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
       this.loading = false; //将下拉刷新状态改为true开始刷新
-      let orderTypeList = [];
-      orderTypeList.push(this.queryBadge.orderType);
       let obj = {
-        orderType: this.queryBadge.orderType,
-        orderTypeList,
-        state: this.queryBadge.state,
+        orderType: this.tabs.type[0],
+        orderTypeList: this.tabs.type,
+        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
       };
       this.$http
@@ -143,22 +135,20 @@ export default {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
             if (this.orderList.length > 0) {
-              this.orderList.forEach(item => {
-                item['billType'] = 11;
-                item.itemAbstractList.forEach(tab => {
-                  tab['billType'] = 11;
-                })
-              })
-              this.initData()
+              this.orderList.forEach((item) => {
+                item["billType"] = 11;
+                item.itemAbstractList.forEach((tab) => {
+                  tab["billType"] = 11;
+                });
+              });
+              this.initData();
             } else {
               this.showEmpty = true;
             }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
-            setTimeout(() => {
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
+            this.$toast("刷新成功");
+            this.loading = false;
+            this.refreshing = false; //刷新成功后将状态关掉
           }
         })
         .catch((res) => {
@@ -166,8 +156,8 @@ export default {
         });
     },
     // 初始化数据
-    initData () {
-      this.currentOrderList = this.orderList.map( item => {
+    initData() {
+      this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
           amount: item.costAmount,
@@ -182,7 +172,7 @@ export default {
             orderType: item.orderType,
             orderCategory: item.orderCategory,
             orderStateType: item.orderStateType,
-            state: item.state
+            state: item.state,
           },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,
@@ -192,11 +182,11 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: '16',
+            tag: "16",
             tabIndex: 3,
             awardActivityList: item.awardActivityList,
           },
-          dataList: item.itemAbstractList.map( sub => {
+          dataList: item.itemAbstractList.map((sub) => {
             return {
               billType: sub.billType,
               billImg: sub.phPictureUrl,
@@ -219,12 +209,12 @@ export default {
               townId: item.townId,
               townName: item.townName,
               receiver: item.receiver,
-              mobile: item.mobile
-            }
-          })
-        }
-      })
-    }
+              mobile: item.mobile,
+            };
+          }),
+        };
+      });
+    },
   },
 };
 </script>

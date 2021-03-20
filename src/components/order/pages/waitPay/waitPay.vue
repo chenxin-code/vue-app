@@ -64,7 +64,8 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      mergeAmount:0
+      params: [],
+      mergeAmount: 0,
     };
   },
   components: {
@@ -78,18 +79,54 @@ export default {
   methods: {
     //合并支付
     mergePay() {
-      let payInfo = Array.from(this.checkData);
-      if (payInfo.length == 0) {
+      let payInfoList = Array.from(this.checkData);
+      let billNo = "";
+      let callbackUrl = "";
+      if (payInfoList.length == 0) {
         this.$toast("请选择订单");
+      } else if (
+        payInfoList.length == 1 &&
+        payInfoList[0].orderType == 200201
+      ) {
+        billNo = payInfoList[0].payInfo.billNo;
+        //团购订单
+        this.$http
+          .post("/app/json/app_fight_group_order/queryAll", {
+            groupBuyType: 1,
+            deliveryType: 2,
+            pickupId: this.$store.state.mall2.zitiAddress.id,
+          })
+          .then((res) => {
+            if (res.data.status == 0) {
+              let mktGroupBuyId = "";
+              let goodsItem = res.data.data.orderList.filter((e) => {
+                return (
+                  payInfoList[0].dataList.itemId ==
+                  e.leaderUserAward[0].sku.skuId
+                );
+              });
+              if (goodsItem.length !== 0) {
+                mktGroupBuyId = goodsItem[0].mktGroupBuyId;
+              }
+              callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
+              console.log("------------团购订单-----------------", callbackUrl);
+              console.log(
+                "------------payInfo-----------------",
+                payInfoList[0]
+              );
+
+              this.enginePay(payInfoList[0], billNo, callbackUrl);
+            }
+          });
       } else {
-        console.log("唤起邻里邦支付平台", payInfo);
+        console.log("唤起邻里邦支付平台", payInfoList);
         let currentOrderDetails = {
           state: 3,
-          orderId: payInfo[0].orderId,
-          orderType: payInfo[0].orderType,
-          tradeNo: payInfo[0].payInfo.tradeNo,
+          orderId: payInfoList[0].orderId,
+          orderType: payInfoList[0].orderType,
+          tradeNo: payInfoList[0].payInfo.tradeNo,
           tag: 1,
-          deliverCheckcode: payInfo[0].payInfo.deliverCheckcode,
+          deliverCheckcode: payInfoList[0].payInfo.deliverCheckcode,
           deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
           storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
           stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
@@ -98,24 +135,30 @@ export default {
           "currentOrderDetails",
           JSON.stringify(currentOrderDetails)
         );
-        let billNo = "";
-        payInfo.forEach((e) => {
+        payInfoList.forEach((e) => {
           billNo += e.payInfo.billNo + ",";
         });
         //vipUnitUserCode type  为空  待保留
-        let callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
-        console.log('------------payInfo-----------------',payInfo[0].payInfo)
-        window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
-          JSON.stringify({
-            businessCstNo: payInfo[0].payInfo.businessCstNo,
-            platMerCstNo: payInfo[0].payInfo.platMerCstNo,
-            tradeMerCstNo: payInfo[0].payInfo.tradeMerCstNo,
-            billNo: billNo,
-            appScheme: "x-engine-c",
-            payType: false,
-          })
-        )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
+        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        console.log(
+          "------------payInfo-----------------",
+          payInfoList[0].payInfo
+        );
+        this.enginePay(payInfoList[0], billNo, callbackUrl);
       }
+    },
+    enginePay(payInfo, billNo, callbackUrl) {
+      console.log("唤起邻里邦支付平台", payInfo);
+      window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+        JSON.stringify({
+          businessCstNo: payInfo.businessCstNo,
+          platMerCstNo: payInfo.platMerCstNo,
+          tradeMerCstNo: payInfo.tradeMerCstNo,
+          billNo: billNo,
+          appScheme: "x-engine-c",
+          payType: false,
+        })
+      )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
 
     //滚动条与底部距离小于 offset 时触发
@@ -149,10 +192,8 @@ export default {
               } else {
                 this.initData();
               }
-              setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
-              }, 1000);
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -190,11 +231,9 @@ export default {
             } else {
               this.initData();
             }
-            setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
               this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
           }
         })
         .catch((res) => {
@@ -203,58 +242,58 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-          return {
-            billType: item.billType,
-            amount: item.totalPrice,
-            submitTime: item.submitTime,
-            orderType: item.orderType,
+        return {
+          billType: item.billType,
+          amount: item.totalPrice,
+          submitTime: item.submitTime,
+          orderType: item.orderType,
+          orderId: item.shoppingOrderId,
+          state: item.state,
+          totalPrice: item.totalPrice,
+          payInfo: {
+            businessCstNo: item.loginUserPhone,
+            platMerCstNo: item.platMerCstNo,
+            tradeMerCstNo: item.tradeMerCstNo,
+            billNo: item.billNo,
             orderId: item.shoppingOrderId,
-            state: item.state,
-            totalPrice: item.totalPrice,
-            payInfo: {
-              businessCstNo: item.loginUserPhone,
-              platMerCstNo: item.platMerCstNo,
-              tradeMerCstNo: item.tradeMerCstNo,
-              billNo: item.billNo,
-              orderId: item.shoppingOrderId,
-              orderCategory: item.orderCategory,
-              orderType: item.orderType,
-              tradeNo: item.tradeNo,
-              deliverCheckcode: item.deliverCheckcode,
-            },
-            params: {
-              deliverType: item.deliverType,
-              orderId: item.shoppingOrderId,
-              orderType: item.orderType,
-              orderCategory: item.orderCategory,
-              orderCanEvaluate: item.orderCanEvaluate,
-              orderStateType: item.orderStateType,
-              state: item.state
-            },
-            billDetailObj: {
-              groupBuyActivityId: item.groupBuyActivityId,
-              groupBuyId: item.groupBuyId,
-              payMode: item.payMode,
-              tradeNo: item.tradeNo,
-              shoppingOrderId: item.shoppingOrderId,
-              orderPayType: item.orderPayType,
-              id: item.id,
-              tag: '1',
-              tabIndex: 2,
-              awardActivityList: item.awardActivityList,
-            },
-            dataList: item.orderFormItemList.map((sub) => {
-              return {
-                billType: item.billType,
-                billImg: sub.iconUrl,
-                billName: sub.name,
-                billAmount: sub.unitPrice,
-                billNum: sub.quantity,
-                skuId: sub.itemId,
-                storeOuCode: sub.storeOuCode,
-              };
-            }),
-          };
+            orderCategory: item.orderCategory,
+            orderType: item.orderType,
+            tradeNo: item.tradeNo,
+            deliverCheckcode: item.deliverCheckcode,
+          },
+          params: {
+            deliverType: item.deliverType,
+            orderId: item.shoppingOrderId,
+            orderType: item.orderType,
+            orderCategory: item.orderCategory,
+            orderCanEvaluate: item.orderCanEvaluate,
+            orderStateType: item.orderStateType,
+            state: item.state
+          },
+          billDetailObj: {
+            groupBuyActivityId: item.groupBuyActivityId,
+            groupBuyId: item.groupBuyId,
+            payMode: item.payMode,
+            tradeNo: item.tradeNo,
+            shoppingOrderId: item.shoppingOrderId,
+            orderPayType: item.orderPayType,
+            id: item.id,
+            tag: '1',
+            tabIndex: 2,
+            awardActivityList: item.awardActivityList,
+          },
+          dataList: item.orderFormItemList.map((sub) => {
+            return {
+              billType: item.billType,
+              billImg: sub.iconUrl,
+              billName: sub.name,
+              billAmount: sub.unitPrice,
+              billNum: sub.quantity,
+              skuId: sub.itemId,
+              storeOuCode: sub.storeOuCode,
+            };
+          }),
+        };
       });
     },
 
