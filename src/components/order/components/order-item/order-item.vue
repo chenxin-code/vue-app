@@ -380,8 +380,8 @@ export default {
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
           encodeURIComponent(JSON.stringify({
             billId: this.billId,
-            payType: 'no',
-            isRefund: 'no'
+            payType: '0',
+            isRefund: this.billDetailObj.isRefund
           }))
         }`
       }

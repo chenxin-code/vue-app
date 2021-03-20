@@ -260,6 +260,7 @@ export default {
             orderType: item.orderType,
             tradeNo: item.tradeNo,
             deliverCheckcode: item.deliverCheckcode,
+            isRefund: item.isRefund
           },
           params: {
             deliverType: item.deliverType,

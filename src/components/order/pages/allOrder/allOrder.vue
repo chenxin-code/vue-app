@@ -158,6 +158,7 @@ export default {
               tag: this.getTag(item.state, item.orderStateType),
               tabIndex: 0,
               awardActivityList: item.awardActivityList,
+              isRefund: item.isRefund,
             },
             payInfo: {
               businessCstNo: item.loginUserPhone,

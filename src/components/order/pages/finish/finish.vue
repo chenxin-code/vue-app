@@ -58,6 +58,7 @@ export default {
     Empty,
   },
   created() {
+    this.onLoad();
   },
   methods: {
 
