@@ -209,37 +209,31 @@ export default {
     
     isChangeOrder() {
     //修改订单
-      return this.pageType == "waitDelivery" && this.billType == 11;
-     },
+      return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
+    },
     isEvalute() {
       //评价
-      return this.pageType == "finish" && this.params.orderCanEvaluate && this.billType == 11;
+      return this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9) && this.billType == 11;
     },
     isBuyAgain() {
       //再次购买
-      return (
-        (this.pageType == "waitDelivery" ||
-          this.pageType == "waitTakeDelivery" ||
-          this.pageType == "cancel" ||
-          this.pageType == "finish") &&
-        this.billType == 11
-      );
+      return ((this.pageType == "waitDelivery" || this.pageType == "waitTakeDelivery" || this.pageType == "cancel" || this.pageType == "finish") || (this.pageType == "allOrder" && ((this.params.orderStateType == '200017' && this.params.state == 17) || (this.params.orderStateType == '200017' && this.params.state == 4) || (this.params.orderStateType == '200017' && this.params.state == 9) || (this.params.orderStateType == '200017' && this.params.state == 7)))) && this.billType == 11
     },
     isFinish() {
       //已完成
-      return this.pageType == "finish" && this.billType != 11;
+      return (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9)) && this.billType != 11;
     },
     isViewLogistics() {
       //查看物流
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
     },
     isWaitTakeDelivery() {
       //确认收货
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay";
+      return this.pageType == "waitPay" || (this.pageType == "allOrder" && this.params.orderStateType == '20015' && this.params.state == 1)
     },
     isWaitPay() {
       //支付页

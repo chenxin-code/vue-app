@@ -13,7 +13,7 @@
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
-            :params='params'
+            :params='item.params'
             :billType="item.billType" 
             :amount="item.amount"
             :submitTime="item.submitTime"
@@ -45,8 +45,7 @@ export default {
       queryBadge: {},
       page: 0,
       showEmpty: false,
-      currentOrderList: [],
-      params:{}
+      currentOrderList: []
     };
   },
   components: {
@@ -184,6 +183,14 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
+          params: {
+            deliverType: item.deliverType,
+            orderId: item.id,
+            orderType: item.orderType,
+            orderCategory: item.orderCategory,
+            orderStateType: item.orderStateType,
+            state: item.state
+          },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
@@ -213,12 +220,6 @@ export default {
             }
           })
         }
-      })
-      this.currentOrderList.forEach(item => {
-        this.params.deliverType = item.deliverType
-        this.params.orderId = item.orderId
-        this.params.orderType = item.orderType
-        this.params.orderCategory = item.orderCategory
       })
     }
   },

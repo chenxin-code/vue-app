@@ -201,14 +201,14 @@ export default {
             amount: item.totalPrice,
             submitTime: item.submitTime,
             orderType: item.orderType,
-            orderId: item.orderId,
+            orderId: item.id,
             state: item.state,
             payInfo: {
               businessCstNo: item.businessCstNo,
               platMerCstNo: item.platMerCstNo,
               tradeMerCstNo: item.tradeMerCstNo,
               billNo: item.billNo,
-              orderId: item.orderId,
+              orderId: item.id,
               orderCategory: item.orderCategory,
               orderType: item.orderType,
               tradeNo: item.tradeNo,
@@ -220,6 +220,8 @@ export default {
               orderType: item.orderType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
+              orderStateType: item.orderStateType,
+              state: item.state
             },
             dataList: item.orderFormItemList.map((sub) => {
               return {
