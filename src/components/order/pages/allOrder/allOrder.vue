@@ -144,10 +144,12 @@ export default {
             orderType: item.orderStateType,
             params: {
               deliverType: item.deliverType,
-              orderId: item.orderId,
+              orderId: item.shoppingOrderId,
               orderType: item.orderStateType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
+              orderStateType: item.orderStateType,
+              state: item.state
             },
             billDetailObj: {
               groupBuyActivityId: item.groupBuyActivityId,

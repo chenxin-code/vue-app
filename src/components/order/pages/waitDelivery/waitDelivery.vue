@@ -8,12 +8,12 @@
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
-        :immediate-check="false"
+        :immediate-check="true"
       >
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
-            :params='params'
+            :params='item.params'
             :billType="item.billType" 
             :amount="item.amount"
             :submitTime="item.submitTime"
@@ -45,7 +45,14 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params:{}
+      params:{},
+      tabs: {
+        text: '待发货',
+        tag: '16',
+        type: ['200017'],
+      },
+      deliveryType:"",
+      currentOrderList: []
     };
   },
   components: {
@@ -53,17 +60,12 @@ export default {
     Empty,
   },
   created() {
-    this.initQueryBadge();
+    this.deliveryType = this.$store.state.mall2.staticDeliverType
+      ? this.$store.state.mall2.staticDeliverType
+      : '2'
   },
   methods: {
-    initQueryBadge() {
-      this.$http.post("/app/json/app_shopping_order/queryBadge").then((res) => {
-        if (res.data.status == 0) {
-          this.queryBadge = res.data.data[1];
-          this.onLoad();
-        }
-      });
-    },
+
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       // "orderType":"200017","orderTypeList":["200017"],"state":"16","page":{"index":1,"pageSize":10}
@@ -71,12 +73,10 @@ export default {
       page = page + 1;
       this.currentPage = page;
       this.refreshing = false;
-      let orderTypeList = [];
-      orderTypeList.push(this.queryBadge.orderType);
       let obj = {
-        orderType: this.queryBadge.orderType,
-        orderTypeList,
-        state: this.queryBadge.state,
+        orderType: this.tabs.type[0],
+        orderTypeList:this.tabs.type,
+        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
       };
       this.$http
@@ -176,6 +176,14 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
+          params: {
+            deliverType: item.deliverType,
+            orderId: item.id,
+            orderType: item.orderType,
+            orderCategory: item.orderCategory,
+            orderStateType: item.orderStateType,
+            state: item.state
+          },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
@@ -215,13 +223,6 @@ export default {
             }
           })
         }
-      })
-      console.log(this.currentOrderList)
-      this.currentOrderList.forEach(item => {
-        this.params.deliverType = item.deliverType
-        this.params.orderId = item.orderId
-        this.params.orderType = item.orderType
-        this.params.orderCategory = item.orderCategory
       })
     }
   },
