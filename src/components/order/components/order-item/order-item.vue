@@ -65,13 +65,25 @@
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
-        <div class="btn default" v-if="isChangeOrder" @click="modifyAddress(dataList[0])">
+        <div
+          class="btn default"
+          v-if="isChangeOrder"
+          @click="modifyAddress(dataList[0])"
+        >
           <p>修改订单</p>
         </div>
-        <div class="btn default" v-if="isViewLogistics" @click.stop="expressType(dataList[0])">
+        <div
+          class="btn default"
+          v-if="isViewLogistics"
+          @click.stop="expressType(dataList[0])"
+        >
           <p>查看物流</p>
         </div>
-        <div class="btn" v-if="isWaitTakeDelivery" @click.stop="confirmProduct()">
+        <div
+          class="btn"
+          v-if="isWaitTakeDelivery"
+          @click.stop="confirmProduct()"
+        >
           <p>确认收货</p>
         </div>
         <div class="btn" v-if="isEvalute" @click.stop="toComment">
@@ -209,14 +221,18 @@ export default {
     //     return true;
     //   }
     // },
-    
+
     isChangeOrder() {
-    //修改订单
+      //修改订单
       return this.pageType == "waitDelivery" && this.billType == 11;
-     },
+    },
     isEvalute() {
       //评价
-      return this.pageType == "finish" && this.params.orderCanEvaluate && this.billType == 11;
+      return (
+        this.pageType == "finish" &&
+        this.params.orderCanEvaluate &&
+        this.billType == 11
+      );
     },
     isBuyAgain() {
       //再次购买
@@ -351,11 +367,13 @@ export default {
                 mktGroupBuyId = goodsItem[0].mktGroupBuyId;
               }
               callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfo.orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
+              console.log("------------团购订单-----------------", callbackUrl);
+              console.log("------------payInfo-----------------", payInfo);
+
               this.enginePay(payInfo, callbackUrl);
             }
           });
       } else {
-        console.log("唤起邻里邦支付平台");
         let currentOrderDetails = {
           state: 3,
           orderId: payInfo.orderId,
@@ -373,10 +391,13 @@ export default {
         );
         //vipUnitUserCode type  为空  待保留
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        console.log("------------普通订单-----------------", callbackUrl);
+        console.log("------------payInfo-----------------", payInfo);
         this.enginePay(payInfo, callbackUrl);
       }
     },
     enginePay(payInfo, callbackUrl) {
+      console.log("唤起邻里邦支付平台", payInfo);
       window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
         JSON.stringify({
           businessCstNo: payInfo.businessCstNo,
@@ -727,26 +748,26 @@ export default {
     },
     modifyAddress: function (item) {
       this.$router.push({
-        path: '/mall2/modifyorderaddress',
+        path: "/mall2/modifyorderaddress",
         query: {
           address: JSON.stringify({
-            address: item.address || '',
-            addressFull: item.addressFull || '',
-            cityId: item.cityId || '',
-            cityName: item.cityName || '',
-            countryId: item.countryId || '',
-            countryName: item.countryName || '',
-            provinceId: item.provinceId || '',
-            provinceName: item.provinceName || '',
-            townId: item.townId || '',
-            townName: item.townName || '',
-            receiver: item.receiver || '',
-            mobile: item.mobile || ''
+            address: item.address || "",
+            addressFull: item.addressFull || "",
+            cityId: item.cityId || "",
+            cityName: item.cityName || "",
+            countryId: item.countryId || "",
+            countryName: item.countryName || "",
+            provinceId: item.provinceId || "",
+            provinceName: item.provinceName || "",
+            townId: item.townId || "",
+            townName: item.townName || "",
+            receiver: item.receiver || "",
+            mobile: item.mobile || "",
           }),
           orderId: this.params.orderId,
           tradeNo: this.params.tradeNo,
-          orderType: this.params.orderType
-        }
+          orderType: this.params.orderType,
+        },
       });
     },
   },

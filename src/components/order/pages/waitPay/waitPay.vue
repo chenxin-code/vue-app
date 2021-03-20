@@ -34,6 +34,7 @@
       :checkData="checkData"
       @checkEvent="checkEvent"
       @mergePay="mergePay"
+      :mergeAmount="mergeAmount"
     ></pay-div>
   </div>
 </template>
@@ -62,6 +63,7 @@ export default {
       showEmpty: false,
       currentOrderList: [],
       params: [],
+      mergeAmount:0,
     };
   },
   components: {
@@ -76,38 +78,43 @@ export default {
     //合并支付
     mergePay() {
       let payInfo = Array.from(this.checkData);
-      console.log("唤起邻里邦支付平台", payInfo);
-      let currentOrderDetails = {
-        state: 3,
-        orderId: payInfo[0].orderId,
-        orderType: payInfo[0].orderType,
-        tradeNo: payInfo[0].tradeNo,
-        tag: 1,
-        deliverCheckcode: payInfo[0].deliverCheckcode,
-        deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
-        storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
-      };
-      localStorage.setItem(
-        "currentOrderDetails",
-        JSON.stringify(currentOrderDetails)
-      );
-      let billNo = "";
-      payInfo.forEach((e) => {
-        billNo += e.payInfo.billNo + ',';
-      });
-      //vipUnitUserCode type  为空  待保留
-      let callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo[0].orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
-      window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
-        JSON.stringify({
-          businessCstNo: payInfo[0].businessCstNo,
-          platMerCstNo: payInfo[0].platMerCstNo,
-          tradeMerCstNo: payInfo[0].tradeMerCstNo,
-          billNo: billNo,
-          appScheme: "x-engine-c",
-          payType: false,
-        })
-      )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
+      if (payInfo.length == 0) {
+        this.$toast("请选择订单");
+      } else {
+        console.log("唤起邻里邦支付平台", payInfo);
+        let currentOrderDetails = {
+          state: 3,
+          orderId: payInfo[0].orderId,
+          orderType: payInfo[0].orderType,
+          tradeNo: payInfo[0].payInfo.tradeNo,
+          tag: 1,
+          deliverCheckcode: payInfo[0].payInfo.deliverCheckcode,
+          deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+          storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+          stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+        };
+        localStorage.setItem(
+          "currentOrderDetails",
+          JSON.stringify(currentOrderDetails)
+        );
+        let billNo = "";
+        payInfo.forEach((e) => {
+          billNo += e.payInfo.billNo + ",";
+        });
+        //vipUnitUserCode type  为空  待保留
+        let callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        console.log('------------payInfo-----------------',payInfo[0].payInfo)
+        window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+          JSON.stringify({
+            businessCstNo: payInfo[0].payInfo.businessCstNo,
+            platMerCstNo: payInfo[0].payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo[0].payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine-c",
+            payType: false,
+          })
+        )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
+      }
     },
 
     //滚动条与底部距离小于 offset 时触发
@@ -195,20 +202,20 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-        if (item.billType != 12) {
           return {
             billType: item.billType,
             amount: item.totalPrice,
             submitTime: item.submitTime,
             orderType: item.orderType,
-            orderId: item.orderId,
+            orderId: item.shoppingOrderId,
             state: item.state,
+            totalPrice: item.totalPrice,
             payInfo: {
-              businessCstNo: item.businessCstNo,
+              businessCstNo: item.loginUserPhone,
               platMerCstNo: item.platMerCstNo,
               tradeMerCstNo: item.tradeMerCstNo,
               billNo: item.billNo,
-              orderId: item.orderId,
+              orderId: item.shoppingOrderId,
               orderCategory: item.orderCategory,
               orderType: item.orderType,
               tradeNo: item.tradeNo,
@@ -216,7 +223,7 @@ export default {
             },
             params: {
               deliverType: item.deliverType,
-              orderId: item.orderId,
+              orderId: item.shoppingOrderId,
               orderType: item.orderType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
@@ -231,11 +238,10 @@ export default {
               };
             }),
           };
-        }
       });
       this.currentOrderList.forEach((item) => {
         this.params.deliverType = item.deliverType;
-        this.params.orderId = item.orderId;
+        this.params.orderId = item.shoppingOrderId;
         this.params.orderType = item.orderType;
         this.params.orderCategory = item.orderCategory;
         this.params.state = item.state;
@@ -310,7 +316,13 @@ export default {
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
-      console.log(this.checkData);
+      console.log(Array.from(this.checkData));
+      let mergeList = Array.from(this.checkData);
+      let amount = 0;
+      mergeList.forEach((e) => {
+        amount += e.totalPrice;
+      });
+      this.mergeAmount = amount;
     },
   },
 };

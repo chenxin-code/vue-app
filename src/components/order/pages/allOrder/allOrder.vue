@@ -21,6 +21,7 @@
             :billId="item.billId"
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
+            :payInfo="item.payInfo"
           ></OrderItem>
         </div>
       </van-list>
@@ -134,9 +135,7 @@ export default {
         });
     },
     initData() {
-      console.log('popopopopopopopopopop', this.orderList)
       this.currentOrderList = this.orderList.map((item) => {
-        if (item.billType != 12) {
           return {
             billType: item.billType,
             billId: item.billId,
@@ -162,6 +161,17 @@ export default {
               tabIndex: 0,
               awardActivityList: item.awardActivityList,
             },
+            payInfo: {
+              businessCstNo: item.loginUserPhone,
+              platMerCstNo: item.platMerCstNo,
+              tradeMerCstNo: item.tradeMerCstNo,
+              billNo: item.billNo,
+              orderId: item.shoppingOrderId,
+              orderCategory: item.orderCategory,
+              orderType: item.orderType,
+              tradeNo: item.tradeNo,
+              deliverCheckcode: item.deliverCheckcode,
+            },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,
@@ -174,7 +184,6 @@ export default {
               };
             }),
           };
-        }
       });
     },
     getTag(state, type) {
