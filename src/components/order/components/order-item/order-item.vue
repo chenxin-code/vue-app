@@ -37,6 +37,8 @@
           v-for="(item, index) in showMore ? dataList : smallDataList"
           :key="index"
           :productItem="item"
+          :billType="billType"
+          :billId="billId"
         ></product-item>
       </div>
       <div
@@ -134,6 +136,7 @@ export default {
     "billDetailObj",
     "orderItem",
     "type",
+    "billId"
   ],
   data() {
     return {
@@ -157,105 +160,33 @@ export default {
     }
   },
   computed: {
-    // isChangeOrder() {
-    //   //修改订单
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 16 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isEvalute() {
-    //   //评价
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 9 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isBuyAgain() {
-    //   //再次购买
-    //   return (
-    //     (this.params.orderType === 2017 &&
-    //       (this.params.state == 16 ||
-    //         this.params.state == 4 ||
-    //         this.params.state == 9)) ||
-    //     (this.params.orderType === 2018 && this.billType == 11)
-    //   );
-    // },
-    // isFinish() {
-    //   //已完成
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 9 &&
-    //     this.billType != 11
-    //   );
-    // },
-    // isViewLogistics() {
-    //   //查看物流
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 4 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isWaitTakeDelivery() {
-    //   //确认收货
-    //   return (
-    //     this.params.orderType === 2017 &&
-    //     this.params.state == 4 &&
-    //     this.billType == 11
-    //   );
-    // },
-    // isPayAtOnce() {
-    //   //立即付款
-    //   if (
-    //     this.billType == 11 &&
-    //     (this.params.orderType == 20015 || this.params.orderType == 200001)
-    //   ) {
-    //     return true;
-    //   } else if (this.billType != 11 && this.params.state == 10) {
-    //     return true;
-    //   }
-    // },
-
     isChangeOrder() {
-      //修改订单
-      return this.pageType == "waitDelivery" && this.billType == 11;
+    //修改订单
+      return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
     },
     isEvalute() {
       //评价
-      return (
-        this.pageType == "finish" &&
-        this.params.orderCanEvaluate &&
-        this.billType == 11
-      );
+      return this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9) && this.billType == 11;
     },
     isBuyAgain() {
       //再次购买
-      return (
-        (this.pageType == "waitDelivery" ||
-          this.pageType == "waitTakeDelivery" ||
-          this.pageType == "cancel" ||
-          this.pageType == "finish") &&
-        this.billType == 11
-      );
+      return ((this.pageType == "waitDelivery" || this.pageType == "waitTakeDelivery" || this.pageType == "cancel" || this.pageType == "finish") || (this.pageType == "allOrder" && ((this.params.orderStateType == '200017' && this.params.state == 17) || (this.params.orderStateType == '200017' && this.params.state == 4) || (this.params.orderStateType == '200017' && this.params.state == 9) || (this.params.orderStateType == '200017' && this.params.state == 7)))) && this.billType == 11
     },
     isFinish() {
       //已完成
-      return this.pageType == "finish" && this.billType != 11;
+      return (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9)) && this.billType != 11;
     },
     isViewLogistics() {
       //查看物流
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
     },
     isWaitTakeDelivery() {
       //确认收货
-      return this.pageType == "waitTakeDelivery" && this.billType == 11;
+      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay";
+      return this.pageType == "waitPay" || (this.pageType == "allOrder" && this.params.orderStateType == '20015' && this.params.state == 1)
     },
     isWaitPay() {
       //支付页
@@ -415,34 +346,44 @@ export default {
       // 跳转订单详情
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
-      if (this.orderType == "200202") {
-        this.$router.push({
-          path: "/group_detail",
-          query: {
-            orderId: this.billDetailObj.groupBuyId,
-            mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
-          },
-        });
+      if(this.billType == '11') {
+        if (this.orderType == "200202") {
+          this.$router.push({
+            path: "/group_detail",
+            query: {
+              orderId: this.billDetailObj.groupBuyId,
+              mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
+            },
+          });
+        } else {
+          let awardActivity =
+            this.billDetailObj.awardActivityList &&
+            this.billDetailObj.awardActivityList.length
+              ? this.billDetailObj.awardActivityList[0]
+              : {};
+          this.$router.push({
+            path: "/mall2/orderdetail",
+            query: {
+              payMode: this.billDetailObj.payMode,
+              tradeNo: this.billDetailObj.tradeNo,
+              shoppingOrderId: this.billDetailObj.shoppingOrderId,
+              orderPayType: this.billDetailObj.orderPayType,
+              orderId: this.billDetailObj.id,
+              tag: this.billDetailObj.tag,
+              orderType: this.orderType,
+              orderIndex: this.billDetailObj.tabIndex,
+              awardActivity: JSON.stringify(awardActivity),
+            },
+          });
+        }
       } else {
-        let awardActivity =
-          this.billDetailObj.awardActivityList &&
-          this.billDetailObj.awardActivityList.length
-            ? this.billDetailObj.awardActivityList[0]
-            : {};
-        this.$router.push({
-          path: "/mall2/orderdetail",
-          query: {
-            payMode: this.billDetailObj.payMode,
-            tradeNo: this.billDetailObj.tradeNo,
-            shoppingOrderId: this.billDetailObj.shoppingOrderId,
-            orderPayType: this.billDetailObj.orderPayType,
-            orderId: this.billDetailObj.id,
-            tag: this.billDetailObj.tag,
-            orderType: this.orderType,
-            orderIndex: this.billDetailObj.tabIndex,
-            awardActivity: JSON.stringify(awardActivity),
-          },
-        });
+        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
+          encodeURIComponent(JSON.stringify({
+            billId: this.billId,
+            payType: 'no',
+            isRefund: 'no'
+          }))
+        }`
       }
     },
 

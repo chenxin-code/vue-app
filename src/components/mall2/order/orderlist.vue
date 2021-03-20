@@ -970,8 +970,6 @@ export default {
     },
     tabEvent: function(item, idx) {
       this.tabIndex = idx
-
-      console.log('----------------------------------------------------',this.tabIndex,idx)
       if (this.$store.state.globalConfig.order_list_tabs_type == '2') {
         if (idx == 3) {
           this.deliveryType = 1

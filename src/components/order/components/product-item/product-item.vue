@@ -30,7 +30,9 @@
 <script>
 export default {
   props: [
-    'productItem'
+    'productItem',
+    'billId',
+    'billType'
   ],
   data() {
     return {
@@ -50,15 +52,25 @@ export default {
         return ;
       }
       let path = '/mall2/detail/' + this.$util.getDataString()
-      this.$router.push({
-        path: path,
-        query: {
-          storeOuCode: product.storeOuCode,
-          skuId: product.skuId,
-          lastPath: '/order/3',
-          productType: product.productType
-        }
-      })
+      if (this.billType == '11') {
+        this.$router.push({
+          path: path,
+          query: {
+            storeOuCode: product.storeOuCode,
+            skuId: product.skuId,
+            lastPath: '/order/3',
+            productType: product.productType
+          }
+        })
+      } else {
+        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
+          encodeURIComponent(JSON.stringify({
+            billId: this.billId,
+            payType: 'no',
+            isRefund: 'no'
+          }))
+        }`
+      }
     }
   },
   computed:{
