@@ -187,7 +187,7 @@ export default {
       });
     },
     getTag(state, type) {
-      if (state == 3 && type == '200015') {
+      if (state == 1 && type == '200015') {
         // 待支付
         return '1'
       } else if (state == 17 && type == '200017') {
