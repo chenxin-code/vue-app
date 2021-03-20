@@ -75,7 +75,7 @@ export default {
       let arr = Array.from(this.checkData)
       if (arr.length == 0) return
       let data = {}
-      data.orderType = arr[0].orderType
+      data.billType = arr[0].billType
       data.checked = this.isChecked
       data.checkAll = true
       this.$emit('checkEvent', data)
