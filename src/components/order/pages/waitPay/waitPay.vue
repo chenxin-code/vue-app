@@ -24,6 +24,8 @@
             :payInfo="item.payInfo"
             :params="item.params"
             :orderItem="item"
+            :billId="item.billId"
+            :billDetailObj="item.billDetailObj"
           ></OrderItem>
         </div>
       </van-list>
@@ -230,6 +232,18 @@ export default {
               orderStateType: item.orderStateType,
               state: item.state
             },
+            billDetailObj: {
+              groupBuyActivityId: item.groupBuyActivityId,
+              groupBuyId: item.groupBuyId,
+              payMode: item.payMode,
+              tradeNo: item.tradeNo,
+              shoppingOrderId: item.shoppingOrderId,
+              orderPayType: item.orderPayType,
+              id: item.id,
+              tag: '1',
+              tabIndex: 2,
+              awardActivityList: item.awardActivityList,
+            },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,
@@ -237,6 +251,8 @@ export default {
                 billName: sub.name,
                 billAmount: sub.unitPrice,
                 billNum: sub.quantity,
+                skuId: sub.itemId,
+                storeOuCode: sub.storeOuCode,
               };
             }),
           };

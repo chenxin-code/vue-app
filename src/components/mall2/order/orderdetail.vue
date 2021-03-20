@@ -1057,6 +1057,8 @@ export default {
         return '微信支付'
       } else if (payModel == '200') {
         return '支付宝支付'
+      } else if(payModel == '260') {
+        return '时代支付'
       } else if (payModel == '210') {
         return '微信支付'
       } else if (payModel == 500) {
