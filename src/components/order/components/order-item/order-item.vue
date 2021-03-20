@@ -413,6 +413,8 @@ export default {
     },
     gotoBillDetail() {
       // 跳转订单详情
+      // billType: 判断物业或是商城类型
+      // orderType: 订单状态
       if (this.orderType == "200202") {
         this.$router.push({
           path: "/group_detail",
@@ -692,7 +694,12 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$router.push("/order/5");
+            this.$router.push({
+              name: '我的订单',
+              params: {
+                id: 5
+              }
+            })
           } else {
             this.$Toast(data.info);
           }
@@ -979,7 +986,7 @@ export default {
   }
 
   .product-box {
-    // height: 220px;
+    height: 110px;
     overflow: hidden;
     transition: 1s;
 

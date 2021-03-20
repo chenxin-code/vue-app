@@ -157,6 +157,18 @@ export default {
               tradeNo: item.tradeNo,
               deliverCheckcode: item.deliverCheckcode,
             },
+            // billDetailObj: {
+            //   groupBuyActivityId: item.groupBuyActivityId,
+            //   groupBuyId: item.groupBuyId,
+            //   payMode: item.payMode,
+            //   tradeNo: item.tradeNo,
+            //   shoppingOrderId: item.shoppingOrderId,
+            //   orderPayType: item.orderPayType,
+            //   id: item.id,
+            //   tag: '16',
+            //   tabIndex: 3,
+            //   awardActivityList: item.awardActivityList,
+            // },
             dataList: item.orderFormItemList.map((sub) => {
               return {
                 billType: item.billType,
