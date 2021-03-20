@@ -296,7 +296,7 @@ export default {
       if (data.checked) {
         // 选中
         this.checkData.add(data);
-        this.$refs.payDiv.type = data.orderType;
+        this.$refs.payDiv.billType = data.billType;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
