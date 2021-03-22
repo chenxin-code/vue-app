@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index">
+        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
           <OrderItem
             :dataList="item.dataList"
             :params="item.params"
@@ -22,9 +22,9 @@
             pageType="waitDelivery"
           ></OrderItem>
         </div>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
-    <Empty v-show="showEmpty"></Empty>
   </div>
 </template>
 
@@ -65,6 +65,7 @@ export default {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       // "orderType":"200017","orderTypeList":["200017"],"state":"16","page":{"index":1,"pageSize":10}
+      this.loading = true;
       let page = this.currentPage;
       page = page + 1;
       this.currentPage = page;
@@ -220,4 +221,8 @@ export default {
 </script>
 
 
-<style lang="stylus" scoped type="text/stylus"></style>
+<style lang="stylus" scoped type="text/stylus">
+.scroll {
+  padding-top: 12px;
+}
+</style>

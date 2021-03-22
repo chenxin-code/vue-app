@@ -35,15 +35,15 @@
       <transition-group
         :name="homeBtnSeat == 'right' ? 'backIndexBtn_r' : 'backIndexBtn_l'"
       >
-        <div
+        <!-- <div
           class="div-shy"
           v-show="isShy == true"
           key="backIndexBtn_shy"
           @click.stop="dontShy"
         >
           <img :src="appBackHomeImg" />
-        </div>
-        <div
+        </div> -->
+        <!-- <div
           class="btn-img"
           :class="{ 'btn-img-left': homeBtnSeat == 'left' }"
           v-show="isShy == false"
@@ -51,7 +51,7 @@
           @click.stop="backIndex"
         >
           <img :src="appBackHomeImg" />
-        </div>
+        </div> -->
       </transition-group>
     </div>
     <!--    <BindOilCard :showPopup="showPopup" :messagePopup="messagePopup" :giftList="giftList" :cardList="cardList" :haveCard="haveCard" :phone="phone"></BindOilCard>-->

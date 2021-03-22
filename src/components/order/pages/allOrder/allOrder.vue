@@ -10,7 +10,11 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index">
+        <div
+          v-for="(item, index) in currentOrderList"
+          :key="index"
+          class="scroll"
+        >
           <OrderItem
             pageType="allOrder"
             :billType="item.billType"
@@ -24,9 +28,9 @@
             :payInfo="item.payInfo"
           ></OrderItem>
         </div>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
-    <Empty v-show="showEmpty"></Empty>
   </div>
 </template>
 
@@ -85,8 +89,8 @@ export default {
               } else {
                 this.initData();
               }
-                // 加载状态结束
-                this.loading = false;
+              // 加载状态结束
+              this.loading = false;
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -121,9 +125,9 @@ export default {
             } else {
               this.initData();
             }
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
+            this.$toast("刷新成功");
+            this.loading = false;
+            this.refreshing = false; //刷新成功后将状态关掉
           }
         })
         .catch((res) => {
@@ -132,80 +136,102 @@ export default {
     },
     initData() {
       this.currentOrderList = this.orderList.map((item) => {
-          return {
-            billType: item.billType,
-            billId: item.billId,
-            amount: item.totalPrice,
-            submitTime: item.submitTime,
+        return {
+          billType: item.billType,
+          billId: item.billId,
+          amount: item.totalPrice,
+          submitTime: item.submitTime,
+          orderType: item.orderStateType,
+          params: {
+            deliverType: item.deliverType,
+            orderId: item.id,
             orderType: item.orderStateType,
-            params: {
+            orderPayType: item.orderPayType,
+            orderCategory: item.orderCategory,
+            orderCanEvaluate: item.orderCanEvaluate,
+            orderStateType: item.orderStateType,
+            state: item.state,
+            tradeNo: item.tradeNo,
+          },
+          billDetailObj: {
+            groupBuyActivityId: item.groupBuyActivityId,
+            groupBuyId: item.groupBuyId,
+            payMode: item.payMode,
+            tradeNo: item.tradeNo,
+            shoppingOrderId: item.shoppingOrderId,
+            orderPayType: item.orderPayType,
+            id: item.id,
+            tag: this.getTag(item.state, item.orderStateType),
+            tabIndex: 0,
+            awardActivityList: item.awardActivityList,
+            isRefund: item.isRefund,
+          },
+          payInfo: {
+            businessCstNo: item.loginUserPhone,
+            platMerCstNo: item.platMerCstNo,
+            tradeMerCstNo: item.tradeMerCstNo,
+            billNo: item.billNo,
+            orderId: item.id,
+            orderCategory: item.orderCategory,
+            orderType: item.orderType,
+            tradeNo: item.tradeNo,
+            deliverCheckcode: item.deliverCheckcode,
+          },
+          dataList: item.orderFormItemList.map((sub) => {
+            return {
+              billType: item.billType,
+              billImg: sub.iconUrl,
+              billName: sub.name,
+              billAmount: sub.unitPrice,
+              billNum: sub.quantity,
+              skuId: sub.itemId,
+              storeOuCode: sub.storeOuCode,
+              id: sub.itemId,
+              expressNo: item.expressNo,
+              expressName: item.expressName,
+              interfaceType: item.interfaceType,
               deliverType: item.deliverType,
-              orderId: item.shoppingOrderId,
-              orderType: item.orderStateType,
-              orderCategory: item.orderCategory,
-              orderCanEvaluate: item.orderCanEvaluate,
-              orderStateType: item.orderStateType,
-              state: item.state
-            },
-            billDetailObj: {
-              groupBuyActivityId: item.groupBuyActivityId,
-              groupBuyId: item.groupBuyId,
-              payMode: item.payMode,
-              tradeNo: item.tradeNo,
-              shoppingOrderId: item.shoppingOrderId,
-              orderPayType: item.orderPayType,
-              id: item.id,
-              tag: this.getTag(item.state, item.orderStateType),
-              tabIndex: 0,
-              awardActivityList: item.awardActivityList,
-              isRefund: item.isRefund,
-            },
-            payInfo: {
-              businessCstNo: item.loginUserPhone,
-              platMerCstNo: item.platMerCstNo,
-              tradeMerCstNo: item.tradeMerCstNo,
-              billNo: item.billNo,
-              orderId: item.shoppingOrderId,
-              orderCategory: item.orderCategory,
-              orderType: item.orderType,
-              tradeNo: item.tradeNo,
-              deliverCheckcode: item.deliverCheckcode,
-            },
-            dataList: item.orderFormItemList.map((sub) => {
-              return {
-                billType: item.billType,
-                billImg: sub.iconUrl,
-                billName: sub.name,
-                billAmount: sub.unitPrice,
-                billNum: sub.quantity,
-                skuId: sub.itemId,
-                storeOuCode: sub.storeOuCode,
-              };
-            }),
-          };
+              address: item.address,
+              cityId: item.cityId,
+              countryId: item.countryId,
+              countryName: item.countryName,
+              provinceId: item.provinceId,
+              provinceName: item.provinceName,
+              townId: item.townId,
+              townName: item.townName,
+              receiver: item.receiver,
+              mobile: item.mobile,
+            };
+          }),
+        };
       });
+      // console.log(this.currentOrderList[0].dataList)
     },
     getTag(state, type) {
-      if (state == 1 && type == '200015') {
+      if (state == 1 && type == "200015") {
         // 待支付
-        return '1'
-      } else if (state == 17 && type == '200017') {
+        return "1";
+      } else if (state == 17 && type == "200017") {
         // 待发货
-        return '16'
-      } else if ( state == 4 && type == '200017') {
+        return "16";
+      } else if (state == 4 && type == "200017") {
         // 待收货
-        return '4'
-      } else if (state == 9 && type == '200017') {
+        return "4";
+      } else if (state == 9 && type == "200017") {
         // 已完成
-        return '9'
-      } else if (state == 7 && type == '200018') {
+        return "9";
+      } else if (state == 7 && type == "200018") {
         // 已取消
-        return '7'
+        return "7";
       }
-    }
+    },
   },
 };
 </script>
 
 
-<style lang="stylus" scoped type="text/stylus"></style>
+<style lang="stylus" scoped type="text/stylus">
+.scroll {
+  padding-top: 12px;
+}
+</style>

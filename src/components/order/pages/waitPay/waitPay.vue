@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index">
+        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
           <OrderItem
             pageType="waitPay"
             :billType="item.billType"
@@ -28,9 +28,9 @@
             :billDetailObj="item.billDetailObj"
           ></OrderItem>
         </div>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
-    <Empty v-show="showEmpty"></Empty>
     <pay-div
       ref="payDiv"
       :checkData="checkData"
@@ -115,7 +115,7 @@ export default {
                 payInfoList[0]
               );
 
-              this.enginePay(payInfoList[0], billNo, callbackUrl);
+              this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
             }
           });
       } else {
@@ -144,11 +144,11 @@ export default {
           "------------payInfo-----------------",
           payInfoList[0].payInfo
         );
-        this.enginePay(payInfoList[0], billNo, callbackUrl);
+        this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
       }
     },
     enginePay(payInfo, billNo, callbackUrl) {
-      console.log("唤起邻里邦支付平台", payInfo);
+      console.log("唤起邻里邦支付平台", billNo);
       window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
         JSON.stringify({
           businessCstNo: payInfo.businessCstNo,
@@ -192,8 +192,8 @@ export default {
               } else {
                 this.initData();
               }
-                // 加载状态结束
-                this.loading = false;
+              // 加载状态结束
+              this.loading = false;
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -231,9 +231,9 @@ export default {
             } else {
               this.initData();
             }
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
+            this.$toast("刷新成功");
+            this.loading = false;
+            this.refreshing = false; //刷新成功后将状态关掉
           }
         })
         .catch((res) => {
@@ -255,7 +255,7 @@ export default {
             platMerCstNo: item.platMerCstNo,
             tradeMerCstNo: item.tradeMerCstNo,
             billNo: item.billNo,
-            orderId: item.shoppingOrderId,
+            orderId: item.id,
             orderCategory: item.orderCategory,
             orderType: item.orderType,
             tradeNo: item.tradeNo,
@@ -269,7 +269,7 @@ export default {
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
-            state: item.state
+            state: item.state,
           },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,
@@ -279,7 +279,7 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: '1',
+            tag: "1",
             tabIndex: 2,
             awardActivityList: item.awardActivityList,
           },
@@ -382,5 +382,8 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 .waitPay {
   padding-bottom: 52px;
+}
+.scroll {
+  padding-top: 12px;
 }
 </style>

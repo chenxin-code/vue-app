@@ -44,7 +44,7 @@
       <div
         class="show-product-btn"
         @click.stop="switchProductList"
-        v-if="dataList.length > 2"
+        v-if="dataList.length >= 3"
       >
         <p v-show="!isShow">显示剩余{{ dataList.length - 2 }}件商品</p>
         <p v-show="isShow">收起商品</p>
@@ -95,21 +95,10 @@
         </div>
       </div>
     </div>
-    <van-dialog
-      v-model="showDialog"
-      title="选择快递单号"
-      @confirm="confirmForm"
-      show-cancel-button
-    >
+    <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
       <van-radio-group v-model="expressNo">
         <van-cell-group>
-          <van-cell
-            @click.stop="selExpress(item)"
-            v-for="(item, index) in expressNoList"
-            :key="index"
-            :title="item2"
-            clickable
-          >
+          <van-cell @click.stop="selExpress(item)" v-for="(item,index) in expressNoList" :key="index" :title="item" clickable >
             <template #right-icon>
               <van-radio checked-color="#ee0a24" :name="item" />
             </template>
@@ -149,15 +138,18 @@ export default {
       formItem: {},
       smallDataList: [],
       showMore: false,
+      vipUnitUserCode: '' // type  为空  待保留 旧订间为空，可不传
     };
   },
   created() {
+
     if (this.dataList.length >= 3) {
       this.smallDataList.push(this.dataList[0]);
       this.smallDataList.push(this.dataList[1]);
     } else {
       this.smallDataList = this.dataList;
     }
+
   },
   computed: {
     isChangeOrder() {
@@ -497,23 +489,47 @@ export default {
         }
       );
     },
-    expressType(obj) {
-      this.formItem = this.$util.deepClone(obj);
-      let expressArr = [];
-      console.log(this.formItem);
-      console.log(this.formItem.expressNo);
-      console.log(typeof this.formItem.expressNo);
-      if (
-        this.formItem.expressNo &&
-        typeof this.formItem.expressNo == "string"
-      ) {
-        expressArr = this.formItem.expressNo.split(",");
+    async expressType(obj) {
+      let url = '/app/json/app_shopping_order/detail';
+      let paramsData = {
+        token: this.$store.state.login.token,
+        orderPayType: this.params.orderPayType,
+        orderType: this.orderType,
+        orderId: this.params.orderId,
+        orderCategory: this.params.orderCategory,
+        vipUnitUserCode: this.vipUnitUserCode
+      };
+      if (this.$route.query.payUserId) {
+        paramsData.payUserId = this.$route.query.payUserId
       }
-      if (expressArr.length == 1) {
-        this.showExpress(this.formItem);
-      } else {
-        this.showDialog = true; //选择快递单号弹窗
-        this.expressNoList = expressArr; //快递单号数组
+      try {
+        let awaitData = await this.$http.post(url, paramsData);
+        let data = awaitData.data.data;
+        obj.expressNo = data.expressNo;
+        obj.expressName = data.expressName;
+        obj.orderType = data.orderType;
+        obj.id = data.id;
+        obj.interfaceType = data.interfaceType;
+
+        this.formItem = this.$util.deepClone(obj);
+        let expressArr = [];
+        console.log(this.formItem);
+        console.log(this.formItem.expressNo);
+        console.log(typeof this.formItem.expressNo);
+        if (
+          this.formItem.expressNo &&
+          typeof this.formItem.expressNo == "string"
+        ) {
+          expressArr = this.formItem.expressNo.split(",");
+        }
+        if (expressArr.length == 1) {
+          this.showExpress(this.formItem);
+        } else {
+          this.showDialog = true; //选择快递单号弹窗
+          this.expressNoList = expressArr; //快递单号数组
+        }
+      } catch(e) {
+        this.$Toast(e);
       }
     },
     selExpress(item) {
@@ -526,89 +542,89 @@ export default {
       // 弹窗确认方法
       this.showExpress(this.formItem);
     },
-    showExpress: function (item) {
-      // 确认之后方法
-      console.log(item, "item");
+    showExpress: function(item) {
+      console.log(item,'item')
       //京东快递
       if (item.interfaceType == 2 || item.interfaceType == 1) {
         //请求详情
-        this.$Loading.open();
-        let url = "/app/json/app_shopping_order/detail";
+        this.$Loading.open()
+        let url = '/app/json/app_shopping_order/detail'
         let paramsData = {
           token: this.$store.state.login.token,
           orderId: item.id,
-          orderType: this.params.orderType,
+          orderType: item.orderType,
           orderCategory: this.params.orderCategory,
-          vipUnitUserCode: "",
-        };
+          vipUnitUserCode: this.vipUnitUserCode
+        }
         this.$http.post(url, paramsData).then(
-          (res) => {
-            this.$Loading.close();
-            let data = res.data;
+          res => {
+            this.$Loading.close()
+            let data = res.data
             if (data.status == 0) {
               this.$router.push({
-                name: "expressinfo",
+                name: 'expressinfo',
                 params: {
                   expressinfo: encodeURIComponent(
                     JSON.stringify(data.data.tracksList)
-                  ),
-                },
-              });
+                  )
+                }
+              })
             } else {
-              this.$Toast(data.info);
+              this.$Toast(data.info)
             }
           },
-          (error) => {
-            this.$Loading.close();
-            this.$Toast("请求数据失败！");
+          error => {
+            this.$Loading.close()
+            this.$Toast('请求数据失败！')
           }
-        );
+        )
       } else if (
         // EMS快递
         this.$store.state.globalConfig.enableEMS == 1 &&
         item.interfaceType == 0 &&
-        item.expressSendingMode == "1"
+        item.expressSendingMode == '1'
       ) {
         this.$router.push({
-          path: "/mall2/orderlogistics",
+          path: '/mall2/orderlogistics',
           query: {
-            traceNo: item.expressNo,
-          },
-        });
+            traceNo: item.expressNo
+          }
+        })
       } else if (
         // 阿里物流
-        this.$store.state.globalConfig.order_ali_deliver_enable == "1" &&
-        item.interfaceType == "0" &&
-        item.deliverType == "2"
+        this.$store.state.globalConfig.order_ali_deliver_enable == '1' &&
+        item.interfaceType == '0' &&
+        item.deliverType == '2'
       ) {
         this.$router.push({
-          path: "/mall2/aliexpressinfo",
+          path: '/mall2/aliexpressinfo',
           query: {
-            orderType: this.params.orderType,
+            orderType: item.orderType,
             orderId: item.id,
-          },
-        });
+            logisticsOrderNo: item.expressNo,
+          }
+        })
       } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
         // 快递100API版本
         this.$router.push({
-          path: "/mall2/100expressinfo",
+          path: '/mall2/100expressinfo',
           query: {
             expressNo: item.expressNo,
-            expressName: item.expressName,
-          },
-        });
+            expressName: item.expressName
+          }
+        })
       } else {
         // 快递100web版本
         let url =
-          "https://m.kuaidi100.com/index_all.html?type=" +
+          'https://m.kuaidi100.com/index_all.html?type=' +
           encodeURIComponent(item.expressName) +
-          "&postid=" +
-          encodeURIComponent(item.expressNo);
+          '&postid=' +
+          encodeURIComponent(item.expressNo)
         this.$bridgefunc.customPush({
           path: url,
-          isnativetop: "1",
-          isVuePage: false,
-        });
+          isnativetop: '1',
+          isVuePage: false
+        })
       }
     },
     confirmProduct: function () {
@@ -628,7 +644,7 @@ export default {
         orderId: this.params.orderId,
         orderType: this.params.orderType,
         orderCategory: this.params.orderCategory,
-        vipUnitUserCode: "",
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
@@ -927,7 +943,7 @@ export default {
   }
 
   .product-box {
-    height: 110px;
+    // height: 110px;
     overflow: hidden;
     transition: 1s;
 

@@ -137,10 +137,14 @@ export default {
         (res) => {
           this.$Loading.close();
           if (res.data.status == 0) {
-            this.expressinfoList = res.data.data.logisticsDetailList;
+            if (res.data.data) {
+              this.expressinfoList = res.data.data.logisticsDetailList;
+            } else {
+              this.$Toast(res.info);
+            }
             console.log('-----------------------------------------',this.expressinfoList)
           } else {
-            this.$Toast(res.data.data.info);
+            this.$Toast(res.data.info);
           }
         },
         (error) => {

@@ -9,7 +9,9 @@
         <div class="padding-con shadow-cell">
           <div class="top-image">
             <div class="title-con">
-              <img src="static/image/mall2/finish.png"/>
+              <img src="static/image/mall2/fail.png" v-if="payResult == 'icbcFailed'" />
+              <img src="static/image/mall2/succ.png" v-else />
+              <!-- <img src="static/image/mall2/finish.png"/> -->
               <p class="theme_font_red" v-if="payResult == 'icbcFailed'">支付失败！</p>
               <p class="theme_font_red" v-else>支付成功！</p>
             </div>
@@ -217,7 +219,7 @@
         display flex
         align-items center
         img {
-          width 41px
+          width 45px
           height 45px
         }
         p{
