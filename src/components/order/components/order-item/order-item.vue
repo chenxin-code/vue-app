@@ -142,7 +142,6 @@ export default {
     };
   },
   created() {
-
     if (this.dataList.length >= 3) {
       this.smallDataList.push(this.dataList[0]);
       this.smallDataList.push(this.dataList[1]);
