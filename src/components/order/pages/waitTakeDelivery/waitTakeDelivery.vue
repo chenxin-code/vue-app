@@ -13,13 +13,14 @@
         <div v-for="(item, index) in currentOrderList" :key="index">
           <OrderItem
             :dataList="item.dataList"
-            :params='item.params'
-            :billType="item.billType" 
+            :params="item.params"
+            :billType="item.billType"
             :amount="item.amount"
             :submitTime="item.submitTime"
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
-            pageType="waitTakeDelivery"></OrderItem>
+            pageType="waitTakeDelivery"
+          ></OrderItem>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -45,14 +46,15 @@ export default {
       page: 0,
       showEmpty: false,
       currentOrderList: [],
-      params:{},
+      params: {},
       tabs: {
         // text: '待收(提)货',
-        text: '待收货',
-        tag: '4',
-        type: ['200017'],
+        text: "待收货",
+        tag: "4",
+        type: ["200017"],
       },
-      currentOrderList: []
+      currentOrderList: [],
+      deliveryType: "",
     };
   },
   components: {
@@ -60,6 +62,10 @@ export default {
     Empty,
   },
   created() {
+    this.deliveryType = this.$store.state.mall2.staticDeliverType
+      ? this.$store.state.mall2.staticDeliverType
+      : "2";
+    this.onLoad();
   },
   methods: {
     //滚动条与底部距离小于 offset 时触发
@@ -69,17 +75,18 @@ export default {
       page = page + 1;
       this.currentPage = page;
       this.refreshing = false;
-      let orderTypeList = [];
-      orderTypeList.push(this.queryBadge.orderType);
-      let deliveryType = this.queryBadge.deliveryType.toString().split("");
       let obj = {
-        orderType: this.queryBadge.orderType,
-        orderTypeList,
-        state: this.queryBadge.state,
+        orderType: this.tabs.type[0],
+        orderTypeList: this.tabs.type,
+        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
-        deliveryType: deliveryType[0],
-        deliverTypeList: deliveryType,
       };
+      if (this.tabs.tag == 4) {
+        obj.deliverType = this.deliveryType;
+        if (this.deliveryType == 2) {
+          obj.deliverTypeList = [2, 3];
+        }
+      }
       this.$http
         .post("/app/json/app_shopping_order/queryOrder", obj)
         .then((res) => {
@@ -95,21 +102,19 @@ export default {
               var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
               if (this.orderList.length > 0) {
-                this.orderList.forEach(item => {
-                  item['billType'] = 11;
-                  item.itemAbstractList.forEach(tab => {
-                    tab['billType'] = 11;
-                  })
-                })
-                this.initData()
+                this.orderList.forEach((item) => {
+                  item["billType"] = 11;
+                  item.itemAbstractList.forEach((tab) => {
+                    tab["billType"] = 11;
+                  });
+                });
+                this.initData();
               } else {
                 this.showEmpty = true;
               }
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              setTimeout(() => {
-                // 加载状态结束
-                this.loading = false;
-              }, 1000);
+              // 加载状态结束
+              this.loading = false;
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -130,39 +135,38 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
       this.loading = false; //将下拉刷新状态改为true开始刷新
-      let orderTypeList = [];
-      orderTypeList.push(this.queryBadge.orderType);
-      let deliveryType = this.queryBadge.deliveryType.toString().split("");
       let obj = {
-        orderType: this.queryBadge.orderType,
-        orderTypeList,
-        state: this.queryBadge.state,
+        orderType: this.tabs.type[0],
+        orderTypeList: this.tabs.type,
+        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
-        deliveryType: deliveryType[0],
-        deliverTypeList: deliveryType,
       };
+      if (this.tabs.tag == 4) {
+        obj.deliverType = this.deliveryType;
+        if (this.deliveryType == 2) {
+          obj.deliverTypeList = [2, 3];
+        }
+      }
       this.$http
         .post("/app/json/app_shopping_order/queryOrder", obj)
         .then((res) => {
           if (res.data.status == 0) {
             this.orderList = res.data.data.orderList;
             if (this.orderList.length > 0) {
-              this.orderList.forEach(item => {
-                item['billType'] = 11;
-                item.itemAbstractList.forEach(tab => {
-                  tab['billType'] = 11;
-                })
-              })
-              this.initData()
+              this.orderList.forEach((item) => {
+                item["billType"] = 11;
+                item.itemAbstractList.forEach((tab) => {
+                  tab["billType"] = 11;
+                });
+              });
+              this.initData();
             } else {
               this.showEmpty = true;
             }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
-            setTimeout(() => {
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
+            this.$toast("刷新成功");
+            this.loading = false;
+            this.refreshing = false; //刷新成功后将状态关掉
           }
         })
         .catch((res) => {
@@ -170,8 +174,8 @@ export default {
         });
     },
     // 初始化数据
-    initData () {
-      this.currentOrderList = this.orderList.map( item => {
+    initData() {
+      this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
           amount: item.costAmount,
@@ -186,7 +190,7 @@ export default {
             orderType: item.orderType,
             orderCategory: item.orderCategory,
             orderStateType: item.orderStateType,
-            state: item.state
+            state: item.state,
           },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,
@@ -196,11 +200,11 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: '4',
+            tag: "4",
             tabIndex: 4,
             awardActivityList: item.awardActivityList,
           },
-          dataList: item.itemAbstractList.map( sub => {
+          dataList: item.itemAbstractList.map((sub) => {
             return {
               billType: sub.billType,
               billImg: sub.phPictureUrl,
@@ -213,12 +217,12 @@ export default {
               expressNo: item.expressNo,
               expressName: item.expressName,
               interfaceType: item.interfaceType,
-              deliverType: item.deliverType
-            }
-          })
-        }
-      })
-    }
+              deliverType: item.deliverType,
+            };
+          }),
+        };
+      });
+    },
   },
 };
 </script>

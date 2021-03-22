@@ -275,7 +275,7 @@ export default {
     //立即支付
     payAtOnce(payInfo) {
       let callbackUrl = "";
-      if (this.orderType == 200202) {
+      if (this.orderType == 200201) {
         //团购订单
         this.$http
           .post("/app/json/app_fight_group_order/queryAll", {
@@ -347,7 +347,7 @@ export default {
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
       if(this.billType == '11') {
-        if (this.orderType == "200202") {
+        if (this.orderType == "200201") {
           this.$router.push({
             path: "/group_detail",
             query: {
@@ -380,8 +380,8 @@ export default {
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
           encodeURIComponent(JSON.stringify({
             billId: this.billId,
-            payType: 'no',
-            isRefund: 'no'
+            payType: '0',
+            isRefund: this.billDetailObj.isRefund
           }))
         }`
       }

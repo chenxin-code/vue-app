@@ -85,10 +85,8 @@ export default {
               } else {
                 this.initData();
               }
-              setTimeout(() => {
                 // 加载状态结束
                 this.loading = false;
-              }, 1000);
             } else {
               this.loading = false; //将加载状态关掉
               this.error = true; //大家错误状态
@@ -123,11 +121,9 @@ export default {
             } else {
               this.initData();
             }
-            setTimeout(() => {
               this.$toast("刷新成功");
               this.loading = false;
               this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
           }
         })
         .catch((res) => {
@@ -163,6 +159,7 @@ export default {
               tag: this.getTag(item.state, item.orderStateType),
               tabIndex: 0,
               awardActivityList: item.awardActivityList,
+              isRefund: item.isRefund,
             },
             payInfo: {
               businessCstNo: item.loginUserPhone,
@@ -205,7 +202,7 @@ export default {
       });
     },
     getTag(state, type) {
-      if (state == 3 && type == '200015') {
+      if (state == 1 && type == '200015') {
         // 待支付
         return '1'
       } else if (state == 17 && type == '200017') {
