@@ -24,9 +24,9 @@
             :payInfo="item.payInfo"
           ></OrderItem>
         </div>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
-    <Empty v-show="showEmpty"></Empty>
   </div>
 </template>
 

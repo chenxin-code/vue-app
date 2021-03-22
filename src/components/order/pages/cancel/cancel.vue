@@ -22,9 +22,9 @@
             pageType="cancel"
           ></OrderItem>
         </div>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
-    <Empty v-show="showEmpty"></Empty>
   </div>
 </template>
 
@@ -64,6 +64,7 @@ export default {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       // "orderType":"200017","orderTypeList":["200017"],"state":"9","page":{"index":1,"pageSize":10}
+      this.loading = true;
       let page = this.currentPage;
       page = page + 1;
       this.currentPage = page;
