@@ -64,44 +64,31 @@ export default {
 
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
-      // "orderType":"200017","orderTypeList":["200017"],"state":"9","page":{"index":1,"pageSize":10}
       this.loading = true;
       let page = this.currentPage;
       page = page + 1;
       this.currentPage = page;
       this.refreshing = false;
       let obj = {
-        orderType: this.tabs.type[0],
-        orderTypeList:this.tabs.type,
-        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
       };
       this.$http
-        .post("/app/json/app_shopping_order/queryOrder", obj)
+        .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (
-            page < res.data.data.page.totalPages ||
-            page == res.data.data.page.totalPages
-          ) {
-            if (res.data.data.page.totalPages == page) {
+          if (page < res.data.data.pages || page == res.data.data.pages) {
+            if (res.data.data.pages == page) {
               this.finished = true;
             }
             if (res.data.status == 0) {
-              var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
+              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
-              if (this.orderList.length > 0) {
-                this.orderList.forEach((item) => {
-                  item["billType"] = 11;
-                  item.itemAbstractList.forEach((tab) => {
-                    tab["billType"] = 11;
-                  });
-                });
-                this.initData();
-              } else {
+              this.page = res.data.data.pages; //将总页数赋值给this
+              if (this.orderList.length == 0) {
                 this.showEmpty = true;
+              } else {
+                this.initData();
               }
-              this.page = res.data.data.page.totalPages; //将总页数赋值给this
               // 加载状态结束
               this.loading = false;
             } else {
@@ -131,22 +118,16 @@ export default {
         page: { index: page, pageSize: 10 },
       };
       this.$http
-        .post("/app/json/app_shopping_order/queryOrder", obj)
+        .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
           if (res.data.status == 0) {
-            this.orderList = res.data.data.orderList;
-            if (this.orderList.length > 0) {
-              this.orderList.forEach((item) => {
-                item["billType"] = 11;
-                item.itemAbstractList.forEach((tab) => {
-                  tab["billType"] = 11;
-                });
-              });
-              this.initData();
-            } else {
+            this.orderList = res.data.data.records;
+            this.totalPage = res.data.data.pages; //将总页数赋值上去
+            if (this.orderList.length == 0) {
               this.showEmpty = true;
+            } else {
+              this.initData();
             }
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
             this.$toast("刷新成功");
             this.loading = false;
             this.refreshing = false; //刷新成功后将状态关掉
@@ -161,17 +142,17 @@ export default {
       this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
-          amount: item.costAmount,
+          amount: item.totalPrice,
           submitTime: item.submitTime,
           deliverType: item.deliverType,
           orderId: item.id,
-          orderType: item.orderType,
+          orderType: item.orderStateType,
           orderCategory: item.orderCategory,
           orderCanEvaluate: item.orderCanEvaluate,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
-            orderType: item.orderType,
+            orderType: item.orderStateType,
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
@@ -189,24 +170,25 @@ export default {
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
           },
-          dataList: item.itemAbstractList.map((sub) => {
+          dataList: item.orderFormItemList.map((sub) => {
             return {
-              billType: sub.billType,
-              billImg: sub.phPictureUrl,
-              billName: sub.skuName,
-              billAmount: sub.salePrice,
-              billNum: sub.number,
-              skuId: sub.skuId,
-              id: sub.id,
-              storeOuCode: item.storeOuCode,
+              billType: item.billType,
+              billImg: sub.iconUrl,
+              billName: sub.name,
+              billAmount: sub.unitPrice,
+              billNum: sub.quantity,
+              skuId: sub.itemId,
+              id: sub.itemId,
+              storeOuCode: sub.storeOuCode,
               expressNo: item.expressNo,
               expressName: item.expressName,
               interfaceType: item.interfaceType,
-              deliverType: item.deliverType,
+              deliverType: item.deliverType
             };
           }),
         };
       });
+      console.log(this.currentOrderList)
     },
   },
 };
