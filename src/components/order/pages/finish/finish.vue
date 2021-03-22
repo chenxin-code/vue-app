@@ -19,6 +19,7 @@
             :submitTime="item.submitTime"
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
+            :billId="item.billId"
             pageType="finish"
           ></OrderItem>
         </div>
@@ -142,6 +143,7 @@ export default {
       this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
+          billId: item.billId,
           amount: item.totalPrice,
           submitTime: item.submitTime,
           deliverType: item.deliverType,
@@ -169,6 +171,7 @@ export default {
             tag: "9",
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
+            isRefund: item.isRefund,
           },
           dataList: item.orderFormItemList.map((sub) => {
             return {
@@ -188,7 +191,6 @@ export default {
           }),
         };
       });
-      console.log(this.currentOrderList)
     },
   },
 };
