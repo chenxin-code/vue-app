@@ -56,7 +56,7 @@
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
-          >共<i>{{ amountTotal() }}</i
+          >共<i>{{ amountTotal }}</i
           >件商品</span
         >
         <span class="pr"><i>实付款：</i>￥{{ amount }}</span>
@@ -151,6 +151,13 @@ export default {
 
   },
   computed: {
+    amountTotal() {
+      let amount = 0
+      this.dataList.forEach(item => {
+        amount += item.billNum
+      });
+      return amount
+    },
     isChangeOrder() {
     //修改订单
       return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
@@ -263,13 +270,6 @@ export default {
     productItem,
   },
   methods: {
-    amountTotal() {
-      let amount = 0
-      this.dataList.forEach(item => {
-        amount += item.billNum
-      });
-      return amount
-    },
     //立即支付
     payAtOnce(payInfo) {
       let callbackUrl = "";
