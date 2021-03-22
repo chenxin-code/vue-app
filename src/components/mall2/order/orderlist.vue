@@ -305,11 +305,11 @@
                   v-if="$store.state.deployType == 4"
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
-                <div
+                <!-- <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   @click.stop="showInvoice"
                   v-if="$store.state.globalConfig.invoice_shopping_enable != 'false'"
-                >查看发票</div>
+                >查看发票</div> -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   v-if="item.orderCanEvaluate"
@@ -369,11 +369,11 @@
                   v-if="$store.state.deployType == 4"
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
-                <div
+                <!-- <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   @click.stop="showInvoice"
                   v-if="$store.state.globalConfig.invoice_shopping_enable != 'false'"
-                >查看发票</div>
+                >查看发票</div> -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   v-if="item.orderCanEvaluate"
