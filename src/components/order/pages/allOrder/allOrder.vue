@@ -140,8 +140,9 @@ export default {
             orderType: item.orderStateType,
             params: {
               deliverType: item.deliverType,
-              orderId: item.shoppingOrderId,
+              orderId: item.id,
               orderType: item.orderStateType,
+              orderPayType: item.orderPayType,
               orderCategory: item.orderCategory,
               orderCanEvaluate: item.orderCanEvaluate,
               orderStateType: item.orderStateType,

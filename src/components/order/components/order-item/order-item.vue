@@ -138,7 +138,7 @@ export default {
       formItem: {},
       smallDataList: [],
       showMore: false,
-      vipUnitUserCode: ''
+      vipUnitUserCode: '' // type  为空  待保留 旧订间为空，可不传
     };
   },
   created() {
@@ -495,17 +495,19 @@ export default {
         orderType: this.orderType,
         orderId: this.params.orderId,
         orderCategory: this.params.orderCategory,
-        vipUnitUserCode: ''
+        vipUnitUserCode: this.vipUnitUserCode
       };
       if (this.$route.query.payUserId) {
         paramsData.payUserId = this.$route.query.payUserId
       }
       try {
-        let data = await this.$http.post(url, paramsData);
-        obj.expressNo = data.data.data.expressNo;
-        obj.expressName = data.data.data.expressName;
-        obj.orderType = data.data.data.orderType;
-        obj.id = data.data.data.id;
+        let awaitData = await this.$http.post(url, paramsData);
+        let data = awaitData.data.data;
+        obj.expressNo = data.expressNo;
+        obj.expressName = data.expressName;
+        obj.orderType = data.orderType;
+        obj.id = data.id;
+        obj.interfaceType = data.interfaceType;
 
         this.formItem = this.$util.deepClone(obj);
         let expressArr = [];
@@ -549,8 +551,8 @@ export default {
           token: this.$store.state.login.token,
           orderId: item.id,
           orderType: item.orderType,
-          orderCategory: this.orderCategory,
-          vipUnitUserCode: ''
+          orderCategory: this.params.orderCategory,
+          vipUnitUserCode: this.vipUnitUserCode
         }
         this.$http.post(url, paramsData).then(
           res => {
