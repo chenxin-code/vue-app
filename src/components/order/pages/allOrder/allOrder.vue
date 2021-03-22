@@ -71,7 +71,9 @@ export default {
       this.refreshing = false;
       let obj = {
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId,
       };
+      console.log('---------------this.$store.state.userRoomId----------',this.$store.state.userRoomId)
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
@@ -113,6 +115,7 @@ export default {
       this.loading = false; //将下拉刷新状态改为true开始刷新
       let obj = {
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId,
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)

@@ -45,7 +45,7 @@
 import payDiv from "@/components/order/components/pay-div/pay-div";
 import OrderItem from "@/components/order/components/order-item/order-item";
 import Empty from "../../components/empty/empty.vue";
-
+import { BigNumber } from "bignumber.js";
 export default {
   name: "waitPay",
 
@@ -174,6 +174,7 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId,
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -219,7 +220,9 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId,
       };
+      console.log('---------------this.$store.state.userRoomId----------',this.$store.state.userRoomId)
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
@@ -366,13 +369,11 @@ export default {
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
-      console.log(Array.from(this.checkData));
       let mergeList = Array.from(this.checkData);
-      let amount = 0;
-      mergeList.forEach((e) => {
-        amount += e.totalPrice;
-      });
-      this.mergeAmount = amount;
+      let num = mergeList.reduce((total,e)=>{
+        return BigNumber(total).plus(e.totalPrice)
+      },0)
+      this.mergeAmount = num;
     },
   },
 };
