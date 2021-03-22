@@ -146,6 +146,7 @@ export default {
             deliverType: item.deliverType,
             orderId: item.id,
             orderType: item.orderStateType,
+            orderPayType: item.orderPayType,
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
@@ -170,7 +171,7 @@ export default {
             platMerCstNo: item.platMerCstNo,
             tradeMerCstNo: item.tradeMerCstNo,
             billNo: item.billNo,
-            orderId: item.shoppingOrderId,
+            orderId: item.id,
             orderCategory: item.orderCategory,
             orderType: item.orderType,
             tradeNo: item.tradeNo,
@@ -204,8 +205,7 @@ export default {
           }),
         };
       });
-    // console.log(this.currentOrderList[0].dataList)
-      
+      // console.log(this.currentOrderList[0].dataList)
     },
     getTag(state, type) {
       if (state == 1 && type == "200015") {
