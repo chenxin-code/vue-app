@@ -1,6 +1,6 @@
 <template>
   <div class="order">
-    <van-sticky>
+    <van-sticky :offset-top="offsetTop">
       <nav-top></nav-top>
       <van-tabs
         v-model="active"
@@ -19,10 +19,7 @@
         </van-tab>
       </van-tabs>
     </van-sticky>
-    <div class="scroll">
       <component v-bind:is="active" :key="active"></component>
-    </div>
-
   </div>
 </template>
 
@@ -46,7 +43,7 @@ export default {
         { title: "已完成", components: "Finish", id: 5 },
         { title: "已取消", components: "Cancel", id: 6 },
       ],
-
+      offsetTop: "0rem",
     };
   },
   components: {
@@ -60,6 +57,11 @@ export default {
   },
   created() {
     this.initPage(this.$route.params.id);
+    let padding = "";
+    padding = document.getElementsByTagName("body")[0].style.paddingTop;
+    if (padding !== "") {
+      this.offsetTop = padding;
+    }
   },
   methods: {
     navTo(name, title) {
@@ -73,7 +75,6 @@ export default {
         this.active = component[0].components;
       }
     },
-
   },
 };
 </script>
@@ -116,11 +117,6 @@ export default {
     background-size: 32px 4px;
     padding-bottom: 9px;
     border-radius: 0px;
-  }
-
-  .scroll {
-    // overflow-y: auto;
-    padding-top: 12px;
   }
 }
 </style>

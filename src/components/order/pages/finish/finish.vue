@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index">
+        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
           <OrderItem
             :dataList="item.dataList"
             :params="item.params"
@@ -213,4 +213,8 @@ export default {
 </script>
 
 
-<style lang="stylus" scoped type="text/stylus"></style>
+<style lang="stylus" scoped type="text/stylus">
+.scroll {
+  padding-top: 12px;
+}
+</style>

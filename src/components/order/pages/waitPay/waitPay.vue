@@ -10,7 +10,7 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index">
+        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
           <OrderItem
             pageType="waitPay"
             :billType="item.billType"
@@ -255,7 +255,7 @@ export default {
             platMerCstNo: item.platMerCstNo,
             tradeMerCstNo: item.tradeMerCstNo,
             billNo: item.billNo,
-            orderId: item.shoppingOrderId,
+            orderId: item.id,
             orderCategory: item.orderCategory,
             orderType: item.orderType,
             tradeNo: item.tradeNo,
@@ -382,5 +382,8 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 .waitPay {
   padding-bottom: 52px;
+}
+.scroll {
+  padding-top: 12px;
 }
 </style>

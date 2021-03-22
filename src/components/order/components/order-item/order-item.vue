@@ -44,7 +44,7 @@
       <div
         class="show-product-btn"
         @click.stop="switchProductList"
-        v-if="dataList.length > 2"
+        v-if="dataList.length >= 3"
       >
         <p v-show="!isShow">显示剩余{{ dataList.length - 2 }}件商品</p>
         <p v-show="isShow">收起商品</p>
@@ -142,12 +142,14 @@ export default {
     };
   },
   created() {
+
     if (this.dataList.length >= 3) {
       this.smallDataList.push(this.dataList[0]);
       this.smallDataList.push(this.dataList[1]);
     } else {
       this.smallDataList = this.dataList;
     }
+
   },
   computed: {
     isChangeOrder() {
@@ -939,7 +941,7 @@ export default {
   }
 
   .product-box {
-    height: 110px;
+    // height: 110px;
     overflow: hidden;
     transition: 1s;
 
