@@ -1,5 +1,5 @@
 <template>
-<!-- 
+  <!-- 
   billType: 订单类型
   billDate: 订单日期
   billImg: 订单图片
@@ -10,18 +10,25 @@
   <div class="product-item">
     <div class="content">
       <div class="img">
-        <img :src="productItem.billType == 11 ? productItem.billImg:billCenterImg" @click.stop="gotoProductDetail(productItem)" />
-        <p class="text" v-if="productItem.billType==11">{{productItem.billName}}</p>
+        <img
+          :src="
+            productItem.billType == 11 ? productItem.billImg : billCenterImg
+          "
+          @click.stop="gotoProductDetail(productItem)"
+        />
+        <p class="text" v-if="productItem.billType == 11">
+          {{ productItem.billName }}
+        </p>
         <div class="desc" v-if="productItem.billType != 11">
-          <strong>物业缴费</strong>
-          <p>时代地产中心2202房</p>
-          <p>车位管理服务费</p>
-          <p>{{productItem.submitTime}}</p>
+          <strong>{{billTypeName}}</strong>
+          <p>{{ productItem.billName }}</p>
+          <!-- <p>车位管理服务费</p> -->
+          <p>{{ productItem.submitTime }}</p>
         </div>
       </div>
-      <div class="price" v-if="productItem.billType==11">
-        <p class="pr">￥{{productItem.billAmount}}</p>
-        <p class="am">x {{productItem.billNum}}</p>
+      <div class="price" v-if="productItem.billType == 11">
+        <p class="pr">￥{{ productItem.billAmount }}</p>
+        <p class="am">x {{ productItem.billNum }}</p>
       </div>
     </div>
   </div>
@@ -29,92 +36,116 @@
 
 <script>
 export default {
-  props: [
-    'productItem',
-    'billId',
-    'billType'
-  ],
+  props: ["productItem", "billId", "billType"],
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     gotoProductDetail: function (product) {
       // 砍价订单禁止进入详情
-      if(this.$store.state.globalConfig.cut_price_strict==1){
-        return
+      if (this.$store.state.globalConfig.cut_price_strict == 1) {
+        return;
       }
-      if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
-        return ;
+      if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
+        return;
       }
       if (this.watermark == 1) {
         // 蜂鸟配送无法查看详情
-        return ;
+        return;
       }
-      let path = '/mall2/detail/' + this.$util.getDataString()
-      if (this.billType == '11') {
+      let path = "/mall2/detail/" + this.$util.getDataString();
+      if (this.billType == "11") {
         this.$router.push({
           path: path,
           query: {
             storeOuCode: product.storeOuCode,
             skuId: product.skuId,
-            lastPath: '/order/3',
-            productType: product.productType
-          }
-        })
+            lastPath: "/order/3",
+            productType: product.productType,
+          },
+        });
       } else {
-        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
-          encodeURIComponent(JSON.stringify({
+        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
+          JSON.stringify({
             billId: this.billId,
-            payType: 'no',
-            isRefund: 'no'
-          }))
-        }`
+            payType: "no",
+            isRefund: "no",
+          })
+        )}`;
       }
-    }
+    },
   },
-  computed:{
-    billCenterImg:{
-      get(){
+  computed: {
+    billCenterImg: {
+      get() {
         switch (this.productItem.billType) {
           case 1:
-            
-            return '../../img/property.png';
+            return require("../../img/property.png");
           case 2:
-            
-            return '../../img/warranty.png';
+            return require("../../img/warranty.png");
           case 3:
-            
-            return '../../img/temporary.png';
+            return require("../../img/temporary.png");
           case 4:
-            
-            return '../../img/payCost.png';
+            return require("../../img/payCost.png");
           case 5:
-            
-            return '../../img/property.png';
+            return require("../../img/property.png");
           case 6:
-            
-            return '../../img/expect.png';
+            return require("../../img/expect.png");
           case 7:
-            
-            return '../../img/tourism.png';
+            return require("../../img/tourism.png");
           case 8:
-            
-            return '../../img/housekeeping.png';
+            return require("../../img/housekeeping.png");
           case 9:
-            
-            return '../../img/bag.png';
+            return require("../../img/bag.png");
           case 10:
-            
-            return '../../img/deposit.png';
-        
+            return require("../../img/deposit.png");
+
           default:
-            return '../../img/property.png';
+            return require("../../img/property.png");
         }
       },
-      set(){}
-    }
-  }
+      set() {},
+    },
+    billTypeName() {
+      let billName = "";
+      switch (this.billType) {
+        case 11:
+          billName = "邻里星选";
+          break;
+        case 1:
+          billName = "物业缴费";
+          break;
+        case 2:
+          billName = "月保续费";
+          break;
+        case 3:
+          billName = "临停缴费";
+          break;
+        case 6:
+          billName = "预缴费";
+          break;
+        case 4:
+          billName = "临时缴费";
+          break;
+        case 7:
+          billName = "旅游";
+          break;
+        case 8:
+          billName = "家政";
+          break;
+        case 9:
+          billName = "拎包";
+          break;
+        case 10:
+          billName = "押金";
+          break;
+        case 12:
+          billName = "美居";
+          break;
+      }
+      return billName;
+    },
+  },
 };
 </script>
 
@@ -126,13 +157,16 @@ export default {
     padding-top: 16px;
     display: flex;
     justify-content: space-between;
+
     .img {
       display: flex;
       width: 240px;
+
       img {
         width: 90px;
         height: 90px;
       }
+
       .text {
         padding-left: 8px;
         font-size: 14px;
@@ -141,8 +175,10 @@ export default {
         color: #121212;
         line-height: 21px;
       }
+
       .desc {
         padding-left: 8px;
+
         strong {
           font-size: 17px;
           font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -150,6 +186,7 @@ export default {
           line-height: 27px;
           color: #121212;
         }
+
         p {
           font-size: 13px;
           font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -159,6 +196,7 @@ export default {
         }
       }
     }
+
     .price {
       .pr {
         font-size: 16px;
@@ -167,6 +205,7 @@ export default {
         color: #121212;
         line-height: 24px;
       }
+
       .am {
         font-size: 13px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;

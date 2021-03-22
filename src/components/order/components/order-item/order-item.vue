@@ -56,7 +56,7 @@
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
-          >共<i>{{ dataList.length }}</i
+          >共<i>{{ amountTotal }}</i
           >件商品</span
         >
         <span class="pr"><i>实付款：</i>￥{{ amount }}</span>
@@ -138,11 +138,10 @@ export default {
       formItem: {},
       smallDataList: [],
       showMore: false,
-      vipUnitUserCode: '' // type  为空  待保留 旧订间为空，可不传
+      vipUnitUserCode: '', // type  为空  待保留 旧订间为空，可不传
     };
   },
   created() {
-
     if (this.dataList.length >= 3) {
       this.smallDataList.push(this.dataList[0]);
       this.smallDataList.push(this.dataList[1]);
@@ -152,6 +151,13 @@ export default {
 
   },
   computed: {
+    amountTotal() {
+      let amount = 0
+      this.dataList.forEach(item => {
+        amount += item.billNum
+      });
+      return amount
+    },
     isChangeOrder() {
     //修改订单
       return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
