@@ -209,6 +209,7 @@ export default {
         };
       });
       // console.log(this.currentOrderList[0].dataList)
+      console.log(this.currentOrderList)
     },
     getTag(state, type) {
       if (state == 1 && type == "200015") {
