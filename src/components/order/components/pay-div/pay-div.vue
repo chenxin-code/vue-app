@@ -2,15 +2,22 @@
   <div class="pay-div">
     <div>
       <div class="pay-box" v-show="isShow">
-        <van-checkbox v-model="isChecked" checked-color="#f80f16" @click="checkEvent($event)" icon-size="18px"></van-checkbox>
+        <van-checkbox
+          v-model="isChecked"
+          checked-color="#f80f16"
+          @click="checkEvent($event)"
+          icon-size="18px"
+        ></van-checkbox>
         <div class="text">
           <p class="p1">全选</p>
-          <p class="p2">(仅可全选{{billTypeName}}类订单)</p>
+          <p class="p2">(仅可全选{{ billTypeName }}类订单)</p>
         </div>
       </div>
     </div>
     <div class="pay">
-      <p class="pr">合计<span>￥{{mergeAmount}}</span></p>
+      <p class="pr">
+        合计<span>￥{{ mergeAmount }}</span>
+      </p>
       <div class="btn" @click="mergePay"><p>去结算</p></div>
     </div>
   </div>
@@ -18,16 +25,13 @@
 
 <script>
 export default {
-  props: [
-    'checkData',
-    'mergeAmount',
-  ],
+  props: ["checkData", "mergeAmount"],
   data() {
     return {
       isChecked: false,
       isShow: false,
-      billType: '',
-    }
+      billType: "",
+    };
   },
   computed: {
     billTypeName() {
@@ -68,21 +72,21 @@ export default {
           break;
       }
       return billName;
-    }
+    },
   },
   methods: {
     checkEvent(event) {
-      let arr = Array.from(this.checkData)
-      if (arr.length == 0) return
-      let data = {}
-      data.billType = arr[0].billType
-      data.checked = this.isChecked
-      data.checkAll = true
-      this.$emit('checkEvent', data)
+      let arr = Array.from(this.checkData);
+      if (arr.length == 0) return;
+      let data = {};
+      data.billType = arr[0].billType;
+      data.checked = this.isChecked;
+      data.checkAll = true;
+      this.$emit("checkEvent", data);
     },
-    mergePay(){
-      this.$emit('mergePay')
-    }
+    mergePay() {
+      this.$emit("mergePay");
+    },
   },
   watch: {
     // billType () {
@@ -124,13 +128,13 @@ export default {
     //   }
     //   this.billTypeName = billTypeName;
     // }
-  }
-
-}
+  },
+};
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
-  @import '~@/common/stylus/variable.styl';
+@import '~@/common/stylus/variable.styl';
+
 .pay-div {
   display: flex;
   justify-content: space-between;
@@ -143,13 +147,16 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
-  padding: 0 10px;
+  padding: 0 14px 0 8px;
+
   .pay-box {
     display: flex;
+
     .text {
       p {
         padding-left: 4px;
       }
+
       .p1 {
         font-size: 16px;
         font-family: SourceHanSansCN-Normal, SourceHanSansCN;
@@ -157,39 +164,49 @@ export default {
         color: #121212;
         line-height: 16px;
       }
+
       .p2 {
         font-size: 10px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #666666;
         line-height: 16px;
+        white-space: nowrap;
       }
     }
   }
+
   .pay {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
     .pr {
+      display: flex;
       font-size: 16px;
       font-family: SourceHanSansCN-Normal, SourceHanSansCN;
       font-weight: 400;
       line-height: 52px;
+      white-space: nowrap;
+
       p {
         color: #2C2C2C;
       }
+
       span {
         color: #FD3A3A;
       }
     }
+
     .btn {
-      width: 100px;
+      width: 90px;
       height: 40px;
-      text-align:center;
+      text-align: center;
       line-height: 40px;
       background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
       border-radius: 20px;
       margin-left: 6px;
+
       p {
         font-weight: 500;
         color: #FFFFFF;
