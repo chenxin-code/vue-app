@@ -22,7 +22,7 @@
         <div class="desc" v-if="productItem.billType != 11">
           <strong>{{billTypeName}}</strong>
           <p>{{ productItem.billName }}</p>
-          <!-- <p>车位管理服务费</p> -->
+          <p>{{productItem.info}}</p>
           <p>{{ productItem.submitTime }}</p>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default {
 
     .img {
       display: flex;
-      width: 240px;
+      // width: 240px;
 
       img {
         width: 90px;
