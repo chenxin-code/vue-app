@@ -381,7 +381,7 @@ export default {
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
-      console.log(this.checkData)
+      // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
       let num = mergeList.reduce((total,e)=>{
         return BigNumber(total).plus(e.totalPrice)
