@@ -130,7 +130,7 @@ export default {
       });
     }
     localstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
-      this.$store.state.userRoomId = res;
+      this.$store.state.userRoomId = res.result;
       console.log('---------------this.$store.state.userRoomId----------',res)
     });
   },

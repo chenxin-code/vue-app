@@ -160,7 +160,6 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
-    console.log("--------------------跳转账单中心详情----------------------");
   },
   computed: {
     amountTotal() {
