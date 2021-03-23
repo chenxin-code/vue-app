@@ -667,7 +667,10 @@ export default {
               name: '我的订单',
               params: {
                 id: 5
-              }
+              },
+              query:{
+                time: Date.now(),
+              },
             })
           } else {
             this.$Toast(data.info);
