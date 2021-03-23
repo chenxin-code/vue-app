@@ -345,6 +345,7 @@ export default {
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
       if(this.billType == '11') {
+        console.log(',,,,,,,,,,,,,,,,,,,,', this.orderType)
         if (this.orderType == "200201") {
           this.$router.push({
             path: "/group_detail",

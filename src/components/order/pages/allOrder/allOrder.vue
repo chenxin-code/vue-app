@@ -144,7 +144,7 @@ export default {
           billId: item.billId,
           amount: item.totalPrice,
           submitTime: item.submitTime,
-          orderType: item.orderStateType,
+          orderType: item.orderType,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
