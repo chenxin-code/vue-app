@@ -95,10 +95,21 @@
         </div>
       </div>
     </div>
-    <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
+    <van-dialog
+      v-model="showDialog"
+      title="选择快递单号"
+      @confirm="confirmForm"
+      show-cancel-button
+    >
       <van-radio-group v-model="expressNo">
         <van-cell-group>
-          <van-cell @click.stop="selExpress(item)" v-for="(item,index) in expressNoList" :key="index" :title="item" clickable >
+          <van-cell
+            @click.stop="selExpress(item)"
+            v-for="(item, index) in expressNoList"
+            :key="index"
+            :title="item"
+            clickable
+          >
             <template #right-icon>
               <van-radio checked-color="#ee0a24" :name="item" />
             </template>
@@ -126,7 +137,7 @@ export default {
     "orderItem",
     "type",
     "billId",
-    "orderStateType"
+    "orderStateType",
   ],
   data() {
     return {
@@ -139,7 +150,7 @@ export default {
       formItem: {},
       smallDataList: [],
       showMore: false,
-      vipUnitUserCode: '', // type  为空  待保留 旧订间为空，可不传
+      vipUnitUserCode: "", // type  为空  待保留 旧订间为空，可不传
     };
   },
   created() {
@@ -149,44 +160,93 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
-      console.log('--------------------跳转账单中心详情----------------------')
-    
+    console.log("--------------------跳转账单中心详情----------------------");
   },
   computed: {
     amountTotal() {
-      let amount = 0
-      this.dataList.forEach(item => {
-        amount += item.billNum
+      let amount = 0;
+      this.dataList.forEach((item) => {
+        amount += item.billNum;
       });
-      return amount
+      return amount;
     },
     isChangeOrder() {
-    //修改订单
-      return (this.pageType == "waitDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 17)) && this.billType == 11
+      //修改订单
+      return (
+        (this.pageType == "waitDelivery" ||
+          (this.pageType == "allOrder" &&
+            this.params.orderStateType == "200017" &&
+            this.params.state == 17)) &&
+        this.billType == 11
+      );
     },
     isEvalute() {
       //评价
-      return this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9) && this.billType == 11;
+      return (
+        this.pageType == "finish" ||
+        (this.pageType == "allOrder" &&
+          this.params.orderStateType == "200017" &&
+          this.params.state == 9 &&
+          this.billType == 11)
+      );
     },
     isBuyAgain() {
       //再次购买
-      return ((this.pageType == "waitDelivery" || this.pageType == "waitTakeDelivery" || this.pageType == "cancel" || this.pageType == "finish") || (this.pageType == "allOrder" && ((this.params.orderStateType == '200017' && this.params.state == 17) || (this.params.orderStateType == '200017' && this.params.state == 4) || (this.params.orderStateType == '200017' && this.params.state == 9) || (this.params.orderStateType == '200017' && this.params.state == 7)))) && this.billType == 11
+      return (
+        (this.pageType == "waitDelivery" ||
+          this.pageType == "waitTakeDelivery" ||
+          this.pageType == "cancel" ||
+          this.pageType == "finish" ||
+          (this.pageType == "allOrder" &&
+            ((this.params.orderStateType == "200017" &&
+              this.params.state == 17) ||
+              (this.params.orderStateType == "200017" &&
+                this.params.state == 4) ||
+              (this.params.orderStateType == "200017" &&
+                this.params.state == 9) ||
+              (this.params.orderStateType == "200017" &&
+                this.params.state == 7)))) &&
+        this.billType == 11
+      );
     },
     isFinish() {
       //已完成
-      return (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 9)) && this.billType != 11;
+      return (
+        (this.pageType == "finish" ||
+          (this.pageType == "allOrder" &&
+            this.params.orderStateType == "200017" &&
+            this.params.state == 9)) &&
+        this.billType != 11
+      );
     },
     isViewLogistics() {
       //查看物流
-      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
+      return (
+        (this.pageType == "waitTakeDelivery" ||
+          (this.pageType == "allOrder" &&
+            this.params.orderStateType == "200017" &&
+            this.params.state == 4)) &&
+        this.billType == 11
+      );
     },
     isWaitTakeDelivery() {
       //确认收货
-      return (this.pageType == "waitTakeDelivery" || (this.pageType == "allOrder" && this.params.orderStateType == '200017' && this.params.state == 4)) && this.billType == 11;
+      return (
+        (this.pageType == "waitTakeDelivery" ||
+          (this.pageType == "allOrder" &&
+            this.params.orderStateType == "200017" &&
+            this.params.state == 4)) &&
+        this.billType == 11
+      );
     },
     isPayAtOnce() {
       //立即付款
-      return this.pageType == "waitPay" || (this.pageType == "allOrder" && this.params.orderStateType == '200015' && this.params.state == 1)
+      return (
+        this.pageType == "waitPay" ||
+        (this.pageType == "allOrder" &&
+          this.params.orderStateType == "200015" &&
+          this.params.state == 1)
+      );
     },
     isWaitPay() {
       //支付页
@@ -275,54 +335,58 @@ export default {
     //立即支付
     payAtOnce(payInfo) {
       let callbackUrl = "";
-      if (this.orderType !== '200001') {
-        //团购订单
-        this.$http
-          .post("/app/json/app_fight_group_order/queryAll", {
-            groupBuyType: 1,
-            deliveryType: 2,
-            pickupId: this.$store.state.mall2.zitiAddress.id,
-          })
-          .then((res) => {
-            if (res.data.status == 0) {
-              let mktGroupBuyId = "";
-              let goodsItem = res.data.data.orderList.filter((e) => {
-                return (
-                  this.dataList[0].itemId == e.leaderUserAward[0].sku.skuId
+        if (this.orderType !== "200001" && this.billType == 11) {
+          //团购订单
+          this.$http
+            .post("/app/json/app_fight_group_order/queryAll", {
+              groupBuyType: 1,
+              deliveryType: 2,
+              pickupId: this.$store.state.mall2.zitiAddress.id,
+            })
+            .then((res) => {
+              if (res.data.status == 0) {
+                let mktGroupBuyId = "";
+                let goodsItem = res.data.data.orderList.filter((e) => {
+                  return (
+                    this.dataList[0].itemId == e.leaderUserAward[0].sku.skuId
+                  );
+                });
+                if (goodsItem.length !== 0) {
+                  mktGroupBuyId = goodsItem[0].mktGroupBuyId;
+                }
+                callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfo.orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
+                console.log(
+                  "------------团购订单-----------------",
+                  callbackUrl
                 );
-              });
-              if (goodsItem.length !== 0) {
-                mktGroupBuyId = goodsItem[0].mktGroupBuyId;
-              }
-              callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfo.orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
-              console.log("------------团购订单-----------------", callbackUrl);
-              console.log("------------payInfo-----------------", payInfo);
+                console.log("------------payInfo-----------------", payInfo);
 
-              this.enginePay(payInfo, callbackUrl);
-            }
-          });
-      } else {
-        let currentOrderDetails = {
-          state: 3,
-          orderId: payInfo.orderId,
-          orderType: payInfo.orderType,
-          tradeNo: payInfo.tradeNo,
-          tag: 1,
-          deliverCheckcode: payInfo.deliverCheckcode,
-          deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
-          storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-          stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
-        };
-        localStorage.setItem(
-          "currentOrderDetails",
-          JSON.stringify(currentOrderDetails)
-        );
-        //vipUnitUserCode type  为空  待保留
-        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
-        console.log("------------普通订单-----------------", callbackUrl);
-        console.log("------------payInfo-----------------", payInfo);
-        this.enginePay(payInfo, callbackUrl);
-      }
+                this.enginePay(payInfo, callbackUrl);
+              }
+            });
+        } else {
+          let currentOrderDetails = {
+            state: 3,
+            orderId: payInfo.orderId,
+            orderType: payInfo.orderType,
+            tradeNo: payInfo.tradeNo,
+            tag: 1,
+            deliverCheckcode: payInfo.deliverCheckcode,
+            deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+            storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+            stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+          };
+          localStorage.setItem(
+            "currentOrderDetails",
+            JSON.stringify(currentOrderDetails)
+          );
+          //vipUnitUserCode type  为空  待保留   增加参数是否为账单中心订单
+          callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${this.billType!=11?true:false}&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+          console.log("------------普通订单-----------------", callbackUrl);
+          console.log("------------payInfo-----------------", payInfo);
+          this.enginePay(payInfo, callbackUrl);
+        }
+  
     },
     enginePay(payInfo, callbackUrl) {
       console.log("唤起邻里邦支付平台", payInfo);
@@ -343,13 +407,18 @@ export default {
       this.showMore = !this.showMore;
     },
     gotoBillDetail() {
-      console.log('billId------------------',this.billId);
+      console.log("billId------------------", this.billId);
       // 跳转订单详情
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
-      if(this.billType == '11') {
-        console.log('orderType--------------',this.orderType)
-        if (this.orderType !== "200001" && (this.orderType != '200015' && this.orderType != '200017' && this.orderType != '200018' )) {
+      if (this.billType == "11") {
+        console.log("orderType--------------", this.orderType);
+        if (
+          this.orderType !== "200001" &&
+          this.orderType != "200015" &&
+          this.orderType != "200017" &&
+          this.orderType != "200018"
+        ) {
           this.$router.push({
             path: "/group_detail",
             query: {
@@ -372,22 +441,30 @@ export default {
               orderPayType: this.billDetailObj.orderPayType,
               orderId: this.billDetailObj.id,
               tag: this.billDetailObj.tag,
-              orderType: this.orderStateType ? this.orderStateType : this.orderType,
+              orderType: this.orderStateType
+                ? this.orderStateType
+                : this.orderType,
               orderIndex: this.billDetailObj.tabIndex,
               awardActivity: JSON.stringify(awardActivity),
             },
           });
         }
       } else {
-        console.log('--------------------跳转账单中心详情----------------------')
-        console.log('--------------------跳转账单中心详情----------------------',this.billId,this.billDetailObj.isRefund)
-        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
-          encodeURIComponent(JSON.stringify({
+        console.log(
+          "--------------------跳转账单中心详情----------------------"
+        );
+        console.log(
+          "--------------------跳转账单中心详情----------------------",
+          this.billId,
+          this.billDetailObj.isRefund
+        );
+        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
+          JSON.stringify({
             billId: this.billId,
-            payType: '0',
-            isRefund: this.billDetailObj.isRefund
-          }))
-        }`
+            payType: "0",
+            isRefund: this.billDetailObj.isRefund,
+          })
+        )}`;
       }
     },
 
@@ -502,17 +579,17 @@ export default {
       );
     },
     async expressType(obj) {
-      let url = '/app/json/app_shopping_order/detail';
+      let url = "/app/json/app_shopping_order/detail";
       let paramsData = {
         token: this.$store.state.login.token,
         orderPayType: this.params.orderPayType,
         orderType: this.orderType,
         orderId: this.params.orderId,
         orderCategory: this.params.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       if (this.$route.query.payUserId) {
-        paramsData.payUserId = this.$route.query.payUserId
+        paramsData.payUserId = this.$route.query.payUserId;
       }
       try {
         let awaitData = await this.$http.post(url, paramsData);
@@ -540,7 +617,7 @@ export default {
           this.showDialog = true; //选择快递单号弹窗
           this.expressNoList = expressArr; //快递单号数组
         }
-      } catch(e) {
+      } catch (e) {
         this.$Toast(e);
       }
     },
@@ -554,89 +631,89 @@ export default {
       // 弹窗确认方法
       this.showExpress(this.formItem);
     },
-    showExpress: function(item) {
-      console.log(item,'item')
+    showExpress: function (item) {
+      console.log(item, "item");
       //京东快递
       if (item.interfaceType == 2 || item.interfaceType == 1) {
         //请求详情
-        this.$Loading.open()
-        let url = '/app/json/app_shopping_order/detail'
+        this.$Loading.open();
+        let url = "/app/json/app_shopping_order/detail";
         let paramsData = {
           token: this.$store.state.login.token,
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: this.params.orderCategory,
-          vipUnitUserCode: this.vipUnitUserCode
-        }
+          vipUnitUserCode: this.vipUnitUserCode,
+        };
         this.$http.post(url, paramsData).then(
-          res => {
-            this.$Loading.close()
-            let data = res.data
+          (res) => {
+            this.$Loading.close();
+            let data = res.data;
             if (data.status == 0) {
               this.$router.push({
-                name: 'expressinfo',
+                name: "expressinfo",
                 params: {
                   expressinfo: encodeURIComponent(
                     JSON.stringify(data.data.tracksList)
-                  )
-                }
-              })
+                  ),
+                },
+              });
             } else {
-              this.$Toast(data.info)
+              this.$Toast(data.info);
             }
           },
-          error => {
-            this.$Loading.close()
-            this.$Toast('请求数据失败！')
+          (error) => {
+            this.$Loading.close();
+            this.$Toast("请求数据失败！");
           }
-        )
+        );
       } else if (
         // EMS快递
         this.$store.state.globalConfig.enableEMS == 1 &&
         item.interfaceType == 0 &&
-        item.expressSendingMode == '1'
+        item.expressSendingMode == "1"
       ) {
         this.$router.push({
-          path: '/mall2/orderlogistics',
+          path: "/mall2/orderlogistics",
           query: {
-            traceNo: item.expressNo
-          }
-        })
+            traceNo: item.expressNo,
+          },
+        });
       } else if (
         // 阿里物流
-        this.$store.state.globalConfig.order_ali_deliver_enable == '1' &&
-        item.interfaceType == '0' &&
-        item.deliverType == '2'
+        this.$store.state.globalConfig.order_ali_deliver_enable == "1" &&
+        item.interfaceType == "0" &&
+        item.deliverType == "2"
       ) {
         this.$router.push({
-          path: '/mall2/aliexpressinfo',
+          path: "/mall2/aliexpressinfo",
           query: {
             orderType: item.orderType,
             orderId: item.id,
             logisticsOrderNo: item.expressNo,
-          }
-        })
+          },
+        });
       } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
         // 快递100API版本
         this.$router.push({
-          path: '/mall2/100expressinfo',
+          path: "/mall2/100expressinfo",
           query: {
             expressNo: item.expressNo,
-            expressName: item.expressName
-          }
-        })
+            expressName: item.expressName,
+          },
+        });
       } else {
         // 快递100web版本
         let url =
-          'https://m.kuaidi100.com/index_all.html?type=' +
+          "https://m.kuaidi100.com/index_all.html?type=" +
           encodeURIComponent(item.expressName) +
-          '&postid=' +
-          encodeURIComponent(item.expressNo)
+          "&postid=" +
+          encodeURIComponent(item.expressNo);
         this.$bridgefunc.customPush({
           path: url,
-          isnativetop: '1',
-          isVuePage: false
-        })
+          isnativetop: "1",
+          isVuePage: false,
+        });
       }
     },
     confirmProduct: function () {
@@ -664,10 +741,13 @@ export default {
           let data = res.data;
           if (data.status == 0) {
             this.$router.push({
-              name: '我的订单',
+              name: "我的订单",
               params: {
                 id: 5
-              }
+              },
+              query:{
+                time: Date.now(),
+              },
             })
           } else {
             this.$Toast(data.info);
@@ -726,7 +806,7 @@ export default {
         },
       });
     },
-  },
+  }
 };
 </script>
 
@@ -734,12 +814,12 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .order-item {
-  width: 359px;
+  box-sizing:border-box;
+  width: 95%;
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 16px;
   padding: 16px;
-  margin-bottom: 12px;
 
   .title {
     display: flex;

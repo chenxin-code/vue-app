@@ -19,7 +19,7 @@
         </van-tab>
       </van-tabs>
     </van-sticky>
-      <component v-bind:is="active" :key="active"></component>
+      <component v-bind:is="active" :key="$route.path + $route.query.time"></component>
   </div>
 </template>
 
