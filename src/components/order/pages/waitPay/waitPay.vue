@@ -87,7 +87,7 @@ export default {
         this.$toast("请选择订单");
       } else if (
         payInfoList.length == 1 &&
-        payInfoList[0].orderType == '200202'
+        payInfoList[0].orderType !== '200001'
       ) {
         billNo = payInfoList[0].payInfo.billNo;
         //团购订单

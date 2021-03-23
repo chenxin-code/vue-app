@@ -274,7 +274,7 @@ export default {
     //立即支付
     payAtOnce(payInfo) {
       let callbackUrl = "";
-      if (this.orderType == '200202') {
+      if (this.orderType !== '200001') {
         //团购订单
         this.$http
           .post("/app/json/app_fight_group_order/queryAll", {
@@ -347,7 +347,7 @@ export default {
       // orderType: 订单状态
       if(this.billType == '11') {
         console.log('orderType--------------',this.orderType)
-        if (this.orderType !== "200001") {
+        if (this.orderType !== "200001" && (this.orderType != '200015' && this.orderType != '200017' && this.orderType != '200018' )) {
           this.$router.push({
             path: "/group_detail",
             query: {
@@ -370,7 +370,7 @@ export default {
               orderPayType: this.billDetailObj.orderPayType,
               orderId: this.billDetailObj.id,
               tag: this.billDetailObj.tag,
-              orderType: this.orderStateType,
+              orderType: this.orderStateType ? this.orderStateType : this.orderType,
               orderIndex: this.billDetailObj.tabIndex,
               awardActivity: JSON.stringify(awardActivity),
             },
