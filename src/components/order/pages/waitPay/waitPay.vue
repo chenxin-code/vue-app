@@ -87,6 +87,7 @@ export default {
         this.$toast("请选择订单");
       } else if (
         payInfoList.length == 1 &&
+        payInfoList[0].billType == 11 &&
         payInfoList[0].orderType !== '200001'
       ) {
         billNo = payInfoList[0].payInfo.billNo;
@@ -120,7 +121,8 @@ export default {
             }
           });
       } else {
-        console.log("唤起邻里邦支付平台", payInfoList);
+        //普通订单
+        console.log("唤起邻里邦支付平台payInfoList", payInfoList);
         let currentOrderDetails = {
           state: 3,
           orderId: payInfoList[0].orderId,
@@ -140,7 +142,7 @@ export default {
           billNo += e.payInfo.billNo + ",";
         });
         //vipUnitUserCode type  为空  待保留
-        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${payInfoList[0].billType != 11?true:false}&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
         console.log(
           "------------payInfo-----------------",
           payInfoList[0].payInfo
@@ -149,7 +151,7 @@ export default {
       }
     },
     enginePay(payInfo, billNo, callbackUrl) {
-      console.log("唤起邻里邦支付平台", billNo);
+      console.log("唤起邻里邦支付平台billNo", billNo);
       window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
         JSON.stringify({
           businessCstNo: payInfo.businessCstNo,
