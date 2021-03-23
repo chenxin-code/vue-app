@@ -337,19 +337,19 @@ export default {
           this.checkData.clear(); //清空checkData
           refs.forEach((item) => {
             item.isChecked = false; // 设置每个checkbox为没选中状态
-            this.$refs.payDiv.isShow = false; //隐藏全选按钮
           });
+          this.$refs.payDiv.isShow = false; //隐藏全选按钮
         }
         return;
       }
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        return item.billType !== data.billType;
+        return item.billType != data.billType;
       });
       refs.forEach((item) => {
         // 并设置不能选择属性
-        if (item.billType !== data.billType) {
+        if (item.billType != data.billType) {
           item.isDisabled = true;
         }
       });
