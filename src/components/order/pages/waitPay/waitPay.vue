@@ -368,7 +368,7 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if (item.orderId == data.orderId) {
+          if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }
@@ -381,6 +381,7 @@ export default {
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
+      console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
       let num = mergeList.reduce((total,e)=>{
         return BigNumber(total).plus(e.totalPrice)
