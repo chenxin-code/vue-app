@@ -52,14 +52,14 @@
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>实付款：</i>￥{{ amount }}</p>
+        <p class="pr"><i>应付款：</i>￥{{ amount }}</p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>实付款：</i>￥{{ amount }}</span>
+        <span class="pr"><i>应付款：</i>￥{{ amount }}</span>
       </div>
       <div class="btn-box">
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
@@ -160,7 +160,6 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
-    console.log("--------------------跳转账单中心详情----------------------");
   },
   computed: {
     amountTotal() {
@@ -183,11 +182,7 @@ export default {
     isEvalute() {
       //评价
       return (
-        this.pageType == "finish" ||
-        (this.pageType == "allOrder" &&
-          this.params.orderStateType == "200017" &&
-          this.params.state == 9 &&
-          this.billType == 11)
+        (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9)) && this.billType == 11
       );
     },
     isBuyAgain() {
@@ -818,8 +813,8 @@ export default {
   width: 95%;
   background: #FFFFFF;
   margin: 0 auto;
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 14px;
 
   .title {
     display: flex;
@@ -948,7 +943,7 @@ export default {
   }
 
   .total {
-    padding-top: 16px;
+    padding-top: 14px;
     text-align: right;
 
     .to {
@@ -979,7 +974,7 @@ export default {
   }
 
   .need-pay {
-    padding: 10px 0;
+    padding-top: 10px;
     display: flex;
     justify-content: space-between;
 
@@ -1007,13 +1002,13 @@ export default {
 
   .btn-box {
     display: flex;
-    padding-top: 16px;
+    padding-top: 14px;
     justify-content: flex-end;
 
     .btn {
       width: 108px;
       height: 32px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       color: #e8374a;
       text-align: center;
