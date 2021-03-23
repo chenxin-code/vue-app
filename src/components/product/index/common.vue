@@ -997,6 +997,7 @@ export default {
   },
   activated() {
     // 爱心积分特殊处理
+    appUi && appUi.showTabbar(); 
     let dStr = sessionStorage.getItem("SAVE_AXJF_Enterprise");
     if (dStr) {
       let d = JSON.parse(dStr);
@@ -1068,7 +1069,6 @@ export default {
     next();
   },
   created() {
-    console.log('再次进入首页yyyyyyyyyyyyyy', appUi)
     appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
