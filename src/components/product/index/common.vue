@@ -1068,7 +1068,8 @@ export default {
     next();
   },
   created() {
-    appUi.showTabbar && appUi.showTabbar(); 
+    console.log('再次进入首页yyyyyyyyyyyyyy', appUi)
+    appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType

@@ -92,34 +92,36 @@ export default {
       ) {
         billNo = payInfoList[0].payInfo.billNo;
         //团购订单
-        this.$http
-          .post("/app/json/app_fight_group_order/queryAll", {
-            groupBuyType: 1,
-            deliveryType: 2,
-            pickupId: this.$store.state.mall2.zitiAddress.id,
-          })
-          .then((res) => {
-            if (res.data.status == 0) {
-              let mktGroupBuyId = "";
-              let goodsItem = res.data.data.orderList.filter((e) => {
-                return (
-                  payInfoList[0].dataList.itemId ==
-                  e.leaderUserAward[0].sku.skuId
-                );
-              });
-              if (goodsItem.length !== 0) {
-                mktGroupBuyId = goodsItem[0].mktGroupBuyId;
-              }
-              callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
-              console.log("------------团购订单-----------------", callbackUrl);
-              console.log(
-                "------------payInfo-----------------",
-                payInfoList[0]
-              );
+        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
+        this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        // this.$http
+        //   .post("/app/json/app_fight_group_order/queryAll", {
+        //     groupBuyType: 1,
+        //     deliveryType: 2,
+        //     pickupId: this.$store.state.mall2.zitiAddress.id,
+        //   })
+        //   .then((res) => {
+        //     if (res.data.status == 0) {
+        //       let mktGroupBuyId = "";
+        //       let goodsItem = res.data.data.orderList.filter((e) => {
+        //         return (
+        //           payInfoList[0].dataList.itemId ==
+        //           e.leaderUserAward[0].sku.skuId
+        //         );
+        //       });
+        //       if (goodsItem.length !== 0) {
+        //         mktGroupBuyId = goodsItem[0].mktGroupBuyId;
+        //       }
+        //       callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
+        //       console.log("------------团购订单-----------------", callbackUrl);
+        //       console.log(
+        //         "------------payInfo-----------------",
+        //         payInfoList[0]
+        //       );
 
-              this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-            }
-          });
+        //       this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        //     }
+        //   });
       } else {
         //普通订单
         console.log("唤起邻里邦支付平台payInfoList", payInfoList);
