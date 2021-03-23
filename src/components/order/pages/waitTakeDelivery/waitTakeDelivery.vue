@@ -138,6 +138,7 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
       this.loading = false; //将下拉刷新状态改为true开始刷新
+      this.currentPage = 0;
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
