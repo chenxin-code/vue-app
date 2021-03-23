@@ -125,7 +125,8 @@ export default {
     "billDetailObj",
     "orderItem",
     "type",
-    "billId"
+    "billId",
+    "orderStateType"
   ],
   data() {
     return {
@@ -148,7 +149,8 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
-
+      console.log('--------------------跳转账单中心详情----------------------')
+    
   },
   computed: {
     amountTotal() {
@@ -273,7 +275,7 @@ export default {
     //立即支付
     payAtOnce(payInfo) {
       let callbackUrl = "";
-      if (this.orderType == 200201) {
+      if (this.orderType !== '200001') {
         //团购订单
         this.$http
           .post("/app/json/app_fight_group_order/queryAll", {
@@ -341,12 +343,13 @@ export default {
       this.showMore = !this.showMore;
     },
     gotoBillDetail() {
+      console.log('billId------------------',this.billId);
       // 跳转订单详情
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
       if(this.billType == '11') {
-        console.log(',,,,,,,,,,,,,,,,,,,,', this.orderType)
-        if (this.orderType == "200201") {
+        console.log('orderType--------------',this.orderType)
+        if (this.orderType !== "200001" && (this.orderType != '200015' && this.orderType != '200017' && this.orderType != '200018' )) {
           this.$router.push({
             path: "/group_detail",
             query: {
@@ -369,13 +372,15 @@ export default {
               orderPayType: this.billDetailObj.orderPayType,
               orderId: this.billDetailObj.id,
               tag: this.billDetailObj.tag,
-              orderType: this.orderType,
+              orderType: this.orderStateType ? this.orderStateType : this.orderType,
               orderIndex: this.billDetailObj.tabIndex,
               awardActivity: JSON.stringify(awardActivity),
             },
           });
         }
       } else {
+        console.log('--------------------跳转账单中心详情----------------------')
+        console.log('--------------------跳转账单中心详情----------------------',this.billId,this.billDetailObj.isRefund)
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
           encodeURIComponent(JSON.stringify({
             billId: this.billId,

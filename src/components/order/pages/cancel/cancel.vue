@@ -97,6 +97,8 @@ export default {
                   });
                 });
                 this.initData();
+                this.showEmpty = false;
+
               } else {
                 this.showEmpty = true;
               }
@@ -142,6 +144,8 @@ export default {
                 });
               });
               this.initData();
+                this.showEmpty = false;
+
             } else {
               this.showEmpty = true;
             }

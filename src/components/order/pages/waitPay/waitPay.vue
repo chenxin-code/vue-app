@@ -26,6 +26,7 @@
             :orderItem="item"
             :billId="item.billId"
             :billDetailObj="item.billDetailObj"
+            :orderStateType="item.orderStateType"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -86,7 +87,7 @@ export default {
         this.$toast("请选择订单");
       } else if (
         payInfoList.length == 1 &&
-        payInfoList[0].orderType == 200201
+        payInfoList[0].orderType !== '200001'
       ) {
         billNo = payInfoList[0].payInfo.billNo;
         //团购订单
@@ -191,6 +192,7 @@ export default {
               if (this.orderList.length == 0) {
                 this.showEmpty = true;
               } else {
+                this.showEmpty = false;
                 this.initData();
               }
               // 加载状态结束
@@ -232,6 +234,7 @@ export default {
             if (this.orderList.length == 0) {
               this.showEmpty = true;
             } else {
+                this.showEmpty = false;
               this.initData();
             }
             this.$toast("刷新成功");
@@ -253,6 +256,8 @@ export default {
           orderId: item.shoppingOrderId,
           state: item.state,
           totalPrice: item.totalPrice,
+          orderStateType:item.orderStateType,
+          billId:item.billId,
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -285,6 +290,7 @@ export default {
             tag: "1",
             tabIndex: 2,
             awardActivityList: item.awardActivityList,
+            isRefund: item.isRefund,
           },
           dataList: item.orderFormItemList.map((sub) => {
             return {
@@ -295,6 +301,7 @@ export default {
               billNum: sub.quantity,
               skuId: sub.itemId,
               storeOuCode: sub.storeOuCode,
+              info:sub.info,
             };
           }),
         };
