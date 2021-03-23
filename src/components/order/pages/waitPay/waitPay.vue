@@ -340,7 +340,6 @@ export default {
         }
         return;
       }
-
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
@@ -363,6 +362,8 @@ export default {
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
           this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
+        } else {
+          this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
         }
       } else {
         // 取消
