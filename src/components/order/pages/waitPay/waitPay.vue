@@ -177,7 +177,8 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId,
+        // airDefenseNo:this.$store.state.userRoomId,
+        airDefenseNo:'FE752BD744734211B4D031BA5CE802A0|FA3B923112FD4818956EA045131C1821|48496131eaf74373b2d49442923a04d1'
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -368,7 +369,7 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if (item.orderId == data.orderId) {
+          if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }
@@ -381,6 +382,7 @@ export default {
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
+      // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
       let num = mergeList.reduce((total,e)=>{
         return BigNumber(total).plus(e.totalPrice)
@@ -397,6 +399,6 @@ export default {
   padding-bottom: 52px;
 }
 .scroll {
-  padding-top: 12px;
+  padding-top: 10px;
 }
 </style>
