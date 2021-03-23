@@ -11,11 +11,11 @@
     <div class="content">
       <div class="img">
         <img
-          :src="
-            productItem.billType == 11 ? productItem.billImg : billCenterImg
-          "
+          :src="productItem.billImg"
+          v-if="productItem.billType == 11"
           @click.stop="gotoProductDetail(productItem)"
         />
+        <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
         <p class="text" v-if="productItem.billType == 11">
           {{ productItem.billName }}
         </p>
@@ -154,7 +154,7 @@ export default {
 
 .product-item {
   .content {
-    padding-top: 16px;
+    padding-top: 14px;
     display: flex;
     justify-content: space-between;
 
@@ -166,9 +166,13 @@ export default {
         width: 90px;
         height: 90px;
       }
+      .billImg{
+        width: 90px;
+        height: 90px;
+      }
 
       .text {
-        padding-left: 8px;
+        padding-left: 14px;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
         font-weight: 400;
@@ -192,7 +196,7 @@ export default {
           font-family: SourceHanSansCN-Regular, SourceHanSansCN;
           font-weight: 400;
           line-height: 21px;
-          color: #D8D8D8;
+          color: #8D8D8D;
         }
       }
     }
