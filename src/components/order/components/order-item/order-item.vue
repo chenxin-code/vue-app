@@ -52,14 +52,14 @@
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>实付款：</i>￥{{ amount }}</p>
+        <p class="pr"><i>应付款：</i>￥{{ amount }}</p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>实付款：</i>￥{{ amount }}</span>
+        <span class="pr"><i>应付款：</i>￥{{ amount }}</span>
       </div>
       <div class="btn-box">
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
