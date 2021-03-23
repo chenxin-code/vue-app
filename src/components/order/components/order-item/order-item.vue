@@ -722,7 +722,7 @@ export default {
         },
       });
     },
-  },
+  }
 };
 </script>
 
@@ -730,12 +730,12 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .order-item {
-  width: 359px;
+  box-sizing:border-box;
+  width: 95%;
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 16px;
   padding: 16px;
-  margin-bottom: 12px;
 
   .title {
     display: flex;
