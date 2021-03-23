@@ -316,7 +316,7 @@ export default {
           return item.billType == data.billType;
         });
         let checkData = this.currentOrderList.filter((item) => {
-          return (item.billType = data.billType);
+          return (item.billType == data.billType);
         });
         if (data.checked) {
           //全部选中
