@@ -304,6 +304,8 @@ export default {
               skuId: sub.itemId,
               storeOuCode: sub.storeOuCode,
               info:sub.info,
+              itemTypeName:sub.itemTypeName,
+              snapshotTime:sub.snapshotTime,
             };
           }),
         };

@@ -194,7 +194,10 @@ export default {
               expressNo: item.expressNo,
               expressName: item.expressName,
               interfaceType: item.interfaceType,
-              deliverType: item.deliverType
+              deliverType: item.deliverType,
+              itemTypeName:sub.itemTypeName,
+              snapshotTime:sub.snapshotTime,
+              info:sub.info,
             };
           }),
         };
