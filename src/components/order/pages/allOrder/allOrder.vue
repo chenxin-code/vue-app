@@ -26,6 +26,7 @@
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
             :payInfo="item.payInfo"
+            :orderStateType="item.orderStateType"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -145,6 +146,7 @@ export default {
           amount: item.totalPrice,
           submitTime: item.submitTime,
           orderType: item.orderStateType,
+          orderStateType:item.orderStateType,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -204,6 +206,7 @@ export default {
               townName: item.townName,
               receiver: item.receiver,
               mobile: item.mobile,
+              info:sub.info,
             };
           }),
         };
