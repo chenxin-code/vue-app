@@ -398,6 +398,6 @@ export default {
   padding-bottom: 52px;
 }
 .scroll {
-  padding-top: 12px;
+  padding-top: 10px;
 }
 </style>

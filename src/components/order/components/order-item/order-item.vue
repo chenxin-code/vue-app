@@ -813,8 +813,8 @@ export default {
   width: 95%;
   background: #FFFFFF;
   margin: 0 auto;
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 14px;
 
   .title {
     display: flex;
@@ -943,7 +943,7 @@ export default {
   }
 
   .total {
-    padding-top: 16px;
+    padding-top: 14px;
     text-align: right;
 
     .to {
@@ -974,7 +974,7 @@ export default {
   }
 
   .need-pay {
-    padding: 10px 0;
+    padding-top: 10px;
     display: flex;
     justify-content: space-between;
 
@@ -1002,13 +1002,13 @@ export default {
 
   .btn-box {
     display: flex;
-    padding-top: 16px;
+    padding-top: 14px;
     justify-content: flex-end;
 
     .btn {
       width: 108px;
       height: 32px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       color: #e8374a;
       text-align: center;
