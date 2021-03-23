@@ -1,5 +1,8 @@
 <template>
   <div class="pay-div">
+    <p class="pr" :class="[isShow ? 'pos' : '']">
+      合计<span>￥{{ mergeAmount }}</span>
+    </p>
     <div>
       <div class="pay-box" v-show="isShow">
         <van-checkbox
@@ -15,9 +18,6 @@
       </div>
     </div>
     <div class="pay">
-      <p class="pr">
-        合计<span>￥{{ mergeAmount }}</span>
-      </p>
       <div class="btn" @click="mergePay"><p>去结算</p></div>
     </div>
   </div>
@@ -148,6 +148,30 @@ export default {
   left: 0;
   z-index: 2;
   padding: 0 14px 0 8px;
+  .pr {
+    display: flex;
+    font-size: 16px;
+    font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+    font-weight: 400;
+    line-height: 52px;
+    white-space: nowrap;
+
+    &.pos {
+      position: absolute;
+      left: 70px;
+      top: -10px;
+      font-size: 14px;
+
+    }
+
+    p {
+      color: #2C2C2C;
+    }
+
+    span {
+      color: #FD3A3A;
+    }
+  }
 
   .pay-box {
     display: flex;
