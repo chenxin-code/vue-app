@@ -257,6 +257,7 @@ export default {
           state: item.state,
           totalPrice: item.totalPrice,
           orderStateType:item.orderStateType,
+          billId:item.billId,
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -289,6 +290,7 @@ export default {
             tag: "1",
             tabIndex: 2,
             awardActivityList: item.awardActivityList,
+            isRefund: item.isRefund,
           },
           dataList: item.orderFormItemList.map((sub) => {
             return {

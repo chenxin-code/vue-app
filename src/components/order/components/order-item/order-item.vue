@@ -149,7 +149,8 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
-
+      console.log('--------------------跳转账单中心详情----------------------')
+    
   },
   computed: {
     amountTotal() {
@@ -342,6 +343,7 @@ export default {
       this.showMore = !this.showMore;
     },
     gotoBillDetail() {
+      console.log('billId------------------',this.billId);
       // 跳转订单详情
       // billType: 判断物业或是商城类型
       // orderType: 订单状态
@@ -377,6 +379,8 @@ export default {
           });
         }
       } else {
+        console.log('--------------------跳转账单中心详情----------------------')
+        console.log('--------------------跳转账单中心详情----------------------',this.billId,this.billDetailObj.isRefund)
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${
           encodeURIComponent(JSON.stringify({
             billId: this.billId,
