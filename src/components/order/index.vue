@@ -36,7 +36,7 @@ export default {
     return {
       active: "AllPages",
       orderStatusList: [
-        { title: "全部", components: "AllPages", id: 1 },
+        // { title: "全部", components: "AllPages", id: 1 },
         { title: "待支付", components: "WaitPay", id: 2 },
         { title: "待发货", components: "WaitDelivery", id: 3 },
         { title: "待收货", components: "WaitTakeDelivery", id: 4 },

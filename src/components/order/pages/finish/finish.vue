@@ -45,6 +45,7 @@ export default {
       totalPage: 0,
       queryBadge: {},
       page: 0,
+      index:0,
       showEmpty: false,
       currentOrderList: [],
       tabs: {
@@ -71,7 +72,11 @@ export default {
       this.currentPage = page;
       this.refreshing = false;
       let obj = {
+        orderType: this.tabs.type[0],
+        orderTypeList:this.tabs.type,
+        state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -88,6 +93,7 @@ export default {
               if (this.orderList.length == 0) {
                 this.showEmpty = true;
               } else {
+                this.showEmpty = false;
                 this.initData();
               }
               // 加载状态结束
@@ -117,6 +123,7 @@ export default {
         orderTypeList:this.tabs.type,
         state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
+        airDefenseNo:this.$store.state.userRoomId
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -125,8 +132,9 @@ export default {
             this.orderList = res.data.data.records;
             this.totalPage = res.data.data.pages; //将总页数赋值上去
             if (this.orderList.length == 0) {
-              this.showEmpty = true;
+            this.showEmpty = true; 
             } else {
+              this.showEmpty = false;
               this.initData();
             }
             this.$toast("刷新成功");
