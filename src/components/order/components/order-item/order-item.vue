@@ -182,11 +182,7 @@ export default {
     isEvalute() {
       //评价
       return (
-        this.pageType == "finish" ||
-        (this.pageType == "allOrder" &&
-          this.params.orderStateType == "200017" &&
-          this.params.state == 9 &&
-          this.billType == 11)
+        (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9)) && this.billType == 11
       );
     },
     isBuyAgain() {
