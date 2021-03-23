@@ -20,10 +20,10 @@
           {{ productItem.billName }}
         </p>
         <div class="desc" v-if="productItem.billType != 11">
-          <strong>{{billTypeName}}</strong>
+          <strong>{{productItem.itemTypeName}}</strong>
           <p>{{ productItem.billName }}</p>
           <p>{{productItem.info}}</p>
-          <p>{{ productItem.submitTime }}</p>
+          <p>{{ productItem.snapshotTime }}</p>
         </div>
       </div>
       <div class="price" v-if="productItem.billType == 11">

@@ -207,6 +207,8 @@ export default {
               receiver: item.receiver,
               mobile: item.mobile,
               info:sub.info,
+              itemTypeName:sub.itemTypeName,
+              snapshotTime:sub.snapshotTime,
             };
           }),
         };
