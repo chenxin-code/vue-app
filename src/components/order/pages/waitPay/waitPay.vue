@@ -92,34 +92,36 @@ export default {
       ) {
         billNo = payInfoList[0].payInfo.billNo;
         //团购订单
-        this.$http
-          .post("/app/json/app_fight_group_order/queryAll", {
-            groupBuyType: 1,
-            deliveryType: 2,
-            pickupId: this.$store.state.mall2.zitiAddress.id,
-          })
-          .then((res) => {
-            if (res.data.status == 0) {
-              let mktGroupBuyId = "";
-              let goodsItem = res.data.data.orderList.filter((e) => {
-                return (
-                  payInfoList[0].dataList.itemId ==
-                  e.leaderUserAward[0].sku.skuId
-                );
-              });
-              if (goodsItem.length !== 0) {
-                mktGroupBuyId = goodsItem[0].mktGroupBuyId;
-              }
-              callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
-              console.log("------------团购订单-----------------", callbackUrl);
-              console.log(
-                "------------payInfo-----------------",
-                payInfoList[0]
-              );
+        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
+        this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        // this.$http
+        //   .post("/app/json/app_fight_group_order/queryAll", {
+        //     groupBuyType: 1,
+        //     deliveryType: 2,
+        //     pickupId: this.$store.state.mall2.zitiAddress.id,
+        //   })
+        //   .then((res) => {
+        //     if (res.data.status == 0) {
+        //       let mktGroupBuyId = "";
+        //       let goodsItem = res.data.data.orderList.filter((e) => {
+        //         return (
+        //           payInfoList[0].dataList.itemId ==
+        //           e.leaderUserAward[0].sku.skuId
+        //         );
+        //       });
+        //       if (goodsItem.length !== 0) {
+        //         mktGroupBuyId = goodsItem[0].mktGroupBuyId;
+        //       }
+        //       callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
+        //       console.log("------------团购订单-----------------", callbackUrl);
+        //       console.log(
+        //         "------------payInfo-----------------",
+        //         payInfoList[0]
+        //       );
 
-              this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-            }
-          });
+        //       this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        //     }
+        //   });
       } else {
         //普通订单
         console.log("唤起邻里邦支付平台payInfoList", payInfoList);
@@ -219,6 +221,7 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
       this.loading = false; //将下拉刷新状态改为true开始刷新
+      this.currentPage = 0;
       let obj = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -335,19 +338,19 @@ export default {
           this.checkData.clear(); //清空checkData
           refs.forEach((item) => {
             item.isChecked = false; // 设置每个checkbox为没选中状态
-            this.$refs.payDiv.isShow = false; //隐藏全选按钮
           });
+          this.$refs.payDiv.isShow = false; //隐藏全选按钮
         }
         return;
       }
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        return item.billType !== data.billType;
+        return item.billType != data.billType;
       });
       refs.forEach((item) => {
         // 并设置不能选择属性
-        if (item.billType !== data.billType) {
+        if (item.billType != data.billType) {
           item.isDisabled = true;
         }
       });
