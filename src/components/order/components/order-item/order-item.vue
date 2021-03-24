@@ -336,13 +336,14 @@ export default {
           callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
           this.enginePay(payInfo, callbackUrl);
         } else if(this.billType == 11) {
-          this.initPayInfo('mall')
+          this.initPayInfo(payInfo, 'mall')
         } else {
-          this.initPayInfo('bill')
+          this.initPayInfo(payInfo, 'bill')
         }
   
     },
-    initPayInfo (type) {
+    initPayInfo (payInfo, type) {
+      let callbackUrl = '';
       let currentOrderDetails = {
         state: 3,
         orderId: payInfo.orderId,
