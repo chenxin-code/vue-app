@@ -166,7 +166,7 @@ export default {
       let moneyText = ''
       switch (this.pageType) {
         case 'waitPay':
-          moneyText = '应付款'
+          moneyText = '需付款'
           break;
         default:
           moneyText = '实付款'
