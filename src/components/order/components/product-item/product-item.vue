@@ -15,7 +15,7 @@
           v-if="productItem.billType == 11"
           @click.stop="gotoProductDetail(productItem)"
         />
-        <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
+        <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'width':'2.4rem','height':'2.4rem','background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
         <p class="text" v-if="productItem.billType == 11">
           {{ productItem.billName }}
         </p>
@@ -161,18 +161,21 @@ export default {
     .img {
       display: flex;
       // width: 240px;
+      justify-content: flex-start;
 
       img {
         width: 90px;
         height: 90px;
+        margin-right: 14px;
       }
       .billImg{
         width: 90px;
         height: 90px;
+        margin-right: 8px;
       }
 
       .text {
-        padding-left: 14px;
+        // padding-left: 14px;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
         font-weight: 400;
@@ -181,8 +184,8 @@ export default {
       }
 
       .desc {
-        padding-left: 8px;
-
+        // padding-left: 8px;
+        flex: 1;
         strong {
           font-size: 17px;
           font-family: SourceHanSansCN-Regular, SourceHanSansCN;
