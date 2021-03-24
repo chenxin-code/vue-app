@@ -261,6 +261,7 @@ export default {
             state: item.state,
           },
           billDetailObj: {
+            businessCstNo:item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
             payMode: item.payMode,
@@ -376,7 +377,8 @@ export default {
 .waitPay {
   padding-bottom: 52px;
 }
-.scroll {
-  padding-top: 10px;
-}
+// .scroll {
+//   margin-top: 12px;
+// }
+
 </style>

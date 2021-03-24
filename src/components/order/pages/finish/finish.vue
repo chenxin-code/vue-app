@@ -170,6 +170,7 @@ export default {
             state: item.state,
           },
           billDetailObj: {
+            businessCstNo:item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
             payMode: item.payMode,
@@ -210,7 +211,7 @@ export default {
 
 
 <style lang="stylus" scoped type="text/stylus">
-.scroll {
-  padding-top: 10px;
-}
+// .scroll {
+//   padding-top: 10px;
+// }
 </style>

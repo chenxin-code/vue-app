@@ -19,7 +19,10 @@
         </van-tab>
       </van-tabs>
     </van-sticky>
-      <component v-bind:is="active" :key="$route.path + $route.query.time"></component>
+    <component
+      v-bind:is="active"
+      :key="$route.path + $route.query.time"
+    ></component>
   </div>
 </template>
 
@@ -92,6 +95,10 @@ export default {
 
 .order {
   font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+
+  /deep/.van-tabs {
+    box-shadow: 0px 5px 10px 0px #F1F1F1;
+  }
 
   /deep/.van-tab {
     font-size: 14px;

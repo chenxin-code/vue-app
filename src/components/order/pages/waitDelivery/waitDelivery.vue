@@ -226,7 +226,7 @@ export default {
 
 
 <style lang="stylus" scoped type="text/stylus">
-.scroll {
-  padding-top: 10px;
-}
+// .scroll {
+//   padding-top: 10px;
+// }
 </style>

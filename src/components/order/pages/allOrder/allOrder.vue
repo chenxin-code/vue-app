@@ -160,6 +160,7 @@ export default {
             tradeNo: item.tradeNo,
           },
           billDetailObj: {
+            businessCstNo:item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
             payMode: item.payMode,
