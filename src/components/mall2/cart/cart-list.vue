@@ -284,7 +284,9 @@ export default {
       //     delivertype: this.deliverType,
       //   },
       // });
-      this.$router.push('/common')
+      this.$router.push({
+        name: '新首页'
+      })
     },
     coupon: function (storeitem) {
       Coupon.open({

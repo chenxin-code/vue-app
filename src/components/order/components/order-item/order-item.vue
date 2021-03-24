@@ -52,14 +52,14 @@
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>{{moneyText}}：</i>￥{{ amount }}</p>
+        <p class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>{{moneyText}}：</i>￥{{ amount }}</span>
+        <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
       </div>
       <div class="btn-box">
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
@@ -447,13 +447,15 @@ export default {
         console.log(
           "--------------------跳转账单中心详情----------------------",
           this.billId,
-          this.billDetailObj.isRefund
+          this.billDetailObj.isRefund,
+          this.billDetailObj. businessCstNo,
         );
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
           JSON.stringify({
             billId: this.billId,
             payType: "0",
             isRefund: this.billDetailObj.isRefund,
+            businessCstNo: this.billDetailObj. businessCstNo,
           })
         )}`;
       }
@@ -810,8 +812,15 @@ export default {
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 14px;
-  padding: 14px;
+  padding: 10px 14px 18px 14px;
+  box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
+  margin-top: 12px;
 
+  .smallRMB{
+    font-weight: 500;
+    font-size: 13px;
+  }
+  
   .title {
     display: flex;
     height: 30px;
@@ -998,7 +1007,7 @@ export default {
 
   .btn-box {
     display: flex;
-    padding-top: 14px;
+    padding-top: 18px;
     justify-content: flex-end;
 
     .btn {
@@ -1008,7 +1017,7 @@ export default {
       font-weight: bold;
       color: #e8374a;
       text-align: center;
-      line-height: 32px;
+      line-height: 33px;
       border: 1px solid #e8374a;
       border-radius: 20px;
       margin-left: 4px;

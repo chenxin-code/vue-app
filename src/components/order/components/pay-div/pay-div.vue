@@ -1,25 +1,28 @@
 <template>
-  <div class="pay-div">
-    <p class="pr" :class="[isShow ? 'pos' : '']">
-      合计<span>￥{{ mergeAmount }}</span>
-    </p>
-    <div>
-      <div class="pay-box" v-show="isShow">
-        <van-checkbox
-          v-model="isChecked"
-          checked-color="#f80f16"
-          @click="checkEvent($event)"
-          icon-size="18px"
-        ></van-checkbox>
-        <div class="text">
-          <p class="p1">全选</p>
-          <p class="p2">(仅可全选{{ billTypeName }}类订单)</p>
+  <div class="pay-box">
+    <div class="pay-div">
+      <p class="pr" :class="[isShow ? 'pos' : '']">
+        合计<span>￥{{ mergeAmount }}</span>
+      </p>
+      <div>
+        <div class="pay-box" v-show="isShow">
+          <van-checkbox
+            v-model="isChecked"
+            checked-color="#f80f16"
+            @click="checkEvent($event)"
+            icon-size="18px"
+          ></van-checkbox>
+          <div class="text">
+            <p class="p1">全选</p>
+            <p class="p2">(仅可全选{{ billTypeName }}类订单)</p>
+          </div>
         </div>
       </div>
+      <div class="pay">
+        <div class="btn" @click="mergePay"><p>去结算</p></div>
+      </div>
     </div>
-    <div class="pay">
-      <div class="btn" @click="mergePay"><p>去结算</p></div>
-    </div>
+    <div class="adapter-iphoneX" v-if="isX"></div>
   </div>
 </template>
 
@@ -32,6 +35,17 @@ export default {
       isShow: false,
       billType: "",
     };
+  },
+  created(){
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
   },
   computed: {
     billTypeName() {
@@ -135,6 +149,18 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
+.pay-box{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  .adapter-iphoneX{
+    width: 100%;
+    height: 34px;
+    background-color: #fff;
+  }
+}
 .pay-div {
   display: flex;
   justify-content: space-between;
@@ -143,10 +169,6 @@ export default {
   height: 52px;
   line-height: 52px;
   background: #fff;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
   padding: 0 14px 0 8px;
   .pr {
     display: flex;
@@ -161,7 +183,6 @@ export default {
       left: 70px;
       top: -10px;
       font-size: 14px;
-
     }
 
     p {
