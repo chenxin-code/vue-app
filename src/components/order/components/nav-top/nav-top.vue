@@ -14,13 +14,9 @@ export default {
   },
   methods: {
     goBack: function () {
-      if (this.$route.query.backApp) {
-        appNav.navigatorBack({ url: "0" }).then((res) => {
-          console.log(res);
-        });
-      } else {
-        this.$router.go(-1);
-      }
+      appNav.navigatorBack({ url: "0" }).then((res) => {
+        console.log(res);
+      });
     },
   },
 };

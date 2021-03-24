@@ -94,63 +94,39 @@ export default {
         //团购订单
         callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
         this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-        // this.$http
-        //   .post("/app/json/app_fight_group_order/queryAll", {
-        //     groupBuyType: 1,
-        //     deliveryType: 2,
-        //     pickupId: this.$store.state.mall2.zitiAddress.id,
-        //   })
-        //   .then((res) => {
-        //     if (res.data.status == 0) {
-        //       let mktGroupBuyId = "";
-        //       let goodsItem = res.data.data.orderList.filter((e) => {
-        //         return (
-        //           payInfoList[0].dataList.itemId ==
-        //           e.leaderUserAward[0].sku.skuId
-        //         );
-        //       });
-        //       if (goodsItem.length !== 0) {
-        //         mktGroupBuyId = goodsItem[0].mktGroupBuyId;
-        //       }
-        //       callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].orderId}&mktGroupBuyId=${mktGroupBuyId}&formPaySuccess='1'&ret={ret}`;
-        //       console.log("------------团购订单-----------------", callbackUrl);
-        //       console.log(
-        //         "------------payInfo-----------------",
-        //         payInfoList[0]
-        //       );
-
-        //       this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-        //     }
-        //   });
-      } else {
+      } else if (payInfoList[0].billType == 11) {
         //普通订单
-        console.log("唤起邻里邦支付平台payInfoList", payInfoList);
-        let currentOrderDetails = {
-          state: 3,
-          orderId: payInfoList[0].orderId,
-          orderType: payInfoList[0].orderType,
-          tradeNo: payInfoList[0].payInfo.tradeNo,
-          tag: 1,
-          deliverCheckcode: payInfoList[0].payInfo.deliverCheckcode,
-          deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
-          storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-          stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
-        };
-        localStorage.setItem(
-          "currentOrderDetails",
-          JSON.stringify(currentOrderDetails)
-        );
-        payInfoList.forEach((e) => {
-          billNo += e.payInfo.billNo + ",";
-        });
-        //vipUnitUserCode type  为空  待保留
-        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${payInfoList[0].billType != 11?true:false}&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
-        console.log(
-          "------------payInfo-----------------",
-          payInfoList[0].payInfo
-        );
-        this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        this.initPayinfo('mall')
+      } else {
+        this.initPayinfo('bill')
       }
+    },
+    initPayinfo (type) {
+      let currentOrderDetails = {
+        state: 3,
+        orderId: payInfoList[0].orderId,
+        orderType: payInfoList[0].orderType,
+        tradeNo: payInfoList[0].payInfo.tradeNo,
+        tag: 1,
+        deliverCheckcode: payInfoList[0].payInfo.deliverCheckcode,
+        deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
+        storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+      };
+      localStorage.setItem(
+        "currentOrderDetails",
+        JSON.stringify(currentOrderDetails)
+      );
+      payInfoList.forEach((e) => {
+        billNo += e.payInfo.billNo + ",";
+      });
+      //vipUnitUserCode type  为空  待保留
+      if (type == 'mall') {
+        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${payInfoList[0].billType != 11?true:false}&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+      } else {
+        callbackUrl = `/app-vue/app/index.html#/order/2`
+      }
+      this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
     },
     enginePay(payInfo, billNo, callbackUrl) {
       console.log("唤起邻里邦支付平台billNo", billNo);
