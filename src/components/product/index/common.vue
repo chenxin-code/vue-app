@@ -1,6 +1,6 @@
 // common路由页
 <template>
-  <div>
+  <div class="common-box">
     <div class="top_bg" v-if="notch"></div>
     <div class="mobile-preview" v-if="pageShow">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
@@ -1169,6 +1169,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.common-box {
+  padding-bottom: 50px;
+}
 
 .top_bg {
   height: 0.933333rem;
