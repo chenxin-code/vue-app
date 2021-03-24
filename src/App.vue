@@ -65,7 +65,7 @@ import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
 import appUi from "@zkty-team/x-engine-module-ui";
 import appNav from "@zkty-team/x-engine-module-nav";
-import localstorage from "@zkty-team/x-engine-module-localstorage";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "App",
   data() {
@@ -125,11 +125,11 @@ export default {
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.ythToken = initObj.ythToken;
     } else {
-      localstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
+      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
       });
     }
-    localstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
+    appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
       this.$store.state.userRoomId = res.result;
       console.log('---------------this.$store.state.userRoomId----------',res)
     });

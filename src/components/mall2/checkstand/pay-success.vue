@@ -47,6 +47,8 @@
   import wxfunc from '@/utils/wxfunc'
   import Config from '@/api/config'
   import SubPage from '@/components/product/index/subpage/subpage'
+  import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
+  import appNav from '@zkty-team/x-engine-module-nav'
 
   export default {
     name: 'paysuccess',
@@ -161,9 +163,27 @@
         }
       },
       turnback: function () {//返回
-        this.$router.replace({
-          path: '/common'
+        appLocalstorage
+        .get({
+          key: "LLBIsHomeView",
+          isPublic: true,
         })
+        .then((res) => {
+          let _result = res.result
+          if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+            return;
+          }
+          if (_result == '1') {
+            this.$router.replace({
+              path: '/common'
+            })
+          } else {
+            appNav.navigatorBack({ url: '0' }).then( res => {
+              console.log(res)
+            })
+          }
+        });
+        
         // if (this.$util.isICBCApp()) {
         //   // 工银e生活，需要跳到首页
         //   this.$router.replace({
