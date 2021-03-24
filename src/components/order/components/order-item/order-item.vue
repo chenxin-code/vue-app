@@ -52,14 +52,14 @@
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>应付款：</i>￥{{ amount }}</p>
+        <p class="pr"><i>{{moneyText}}：</i>￥{{ amount }}</p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>应付款：</i>￥{{ amount }}</span>
+        <span class="pr"><i>{{moneyText}}：</i>￥{{ amount }}</span>
       </div>
       <div class="btn-box">
         <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
@@ -162,6 +162,18 @@ export default {
     }
   },
   computed: {
+    moneyText() {
+      let moneyText = ''
+      switch (this.pageType) {
+        case 'waitPay':
+          moneyText = '应付款'
+          break;
+        default:
+          moneyText = '实付款'
+          break;
+      }
+      return moneyText
+    },
     amountTotal() {
       let amount = 0;
       this.dataList.forEach((item) => {
