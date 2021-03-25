@@ -86,7 +86,7 @@ export default {
 
 #app .router_class.order {
   background: #F9F9F9;
-  overflow: auto;
+  // overflow: auto;
 }
 
 .van-tab__pane, .van-tab__pane-wrapper {

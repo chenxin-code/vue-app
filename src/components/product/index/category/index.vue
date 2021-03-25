@@ -19,7 +19,7 @@
         </div>
         <img
           :src="
-            $route.name == '首页'
+            $route.name == '新首页'
               ? require('./images/selectIcon.png')
               : $route.name == '商品列表'
               ? require('./images/selectIconRed.png')
@@ -93,7 +93,7 @@ export default {
       if (item.id == 0) {
         this.$router.push("/common");
       } else {
-        if (this.$route.name == "首页") {
+        if (this.$route.name == "新首页") {
           let path = "/mall2/list/" + this.$util.getDataString();
           this.$router.push({
             path,
