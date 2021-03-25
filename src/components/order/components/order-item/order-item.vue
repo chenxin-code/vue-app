@@ -308,6 +308,12 @@ export default {
         case 11:
           sClass = "icon1";
           break;
+        case 12:
+          sClass = "icon1";
+          break;
+        case 5:
+          sClass = "icon1";
+          break;
         case 1:
           sClass = "icon7";
           break;
