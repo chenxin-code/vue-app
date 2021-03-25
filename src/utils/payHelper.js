@@ -25,7 +25,7 @@ var payHelper = {
       token: store.state.login.token,
       orderType: orderType,
       occurOuCode: occurOuCode,
-      payScene: payScene,
+      payScene: 4,
       channel: store.state.channel,
       partnerChannel: store.state.channel,
     };
@@ -362,15 +362,16 @@ var payHelper = {
         // 临时使用 为了微信小程序测试流程
         router.push('/mall2/paysuccess')
       } else if (payway.payModeSub == '260003') {
-        //团购微信小程序支付
+        //时代微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
+        let wxPayInfo = JSON.parse(info.payData)
         let params = {
-          package: info.package,
-          noncestr: info.noncestr,
-          timestamp: info.timestamp,
-          sign: info.sign
+          package: wxPayInfo.package,
+          noncestr: wxPayInfo.noncestr,
+          timestamp: wxPayInfo.timestamp,
+          sign: wxPayInfo.sign,
+          signType: wxPayInfo.signType,
         }
-        console.log('-----------------------------------------------', info)
         if (redirectUrl) {
           params.redirectUrl = redirectUrl
         }
