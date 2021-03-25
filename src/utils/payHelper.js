@@ -377,7 +377,7 @@ var payHelper = {
           params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
-          url: `pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
 
       } else {
