@@ -154,7 +154,7 @@ export default {
 
 .product-item {
   .content {
-    padding-top: 10px;
+    padding-top: 12px;
     display: flex;
     justify-content: space-between;
 
@@ -166,12 +166,14 @@ export default {
       img {
         width: 90px;
         height: 90px;
-        margin-right: 14px;
+        margin-right: 12px;
+        border-radius :12px;
+        overflow: hidden;
       }
       .billImg{
         width: 90px;
         height: 90px;
-        margin-right: 16px;
+        margin-right: 12px;
       }
 
       .text {

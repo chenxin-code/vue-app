@@ -127,7 +127,7 @@ export default {
   width: 100%;
   height: 52px;
   background: #fff;
-  padding: 0 14px;
+  padding: 0 23.375px 0 14px;
   .pr {
     display: flex;
     font-size: 16px;
@@ -138,9 +138,9 @@ export default {
 
     &.pos {
       position: absolute;
-      left: 80px;
+      left: 70px;
       top: -10px;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     p {
@@ -161,7 +161,7 @@ export default {
       }
 
       .p1 {
-        font-size: 16px;
+        font-size: 14px;
         font-family: SourceHanSansCN-Normal, SourceHanSansCN;
         font-weight: 400;
         color: #121212;
