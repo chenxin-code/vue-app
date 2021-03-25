@@ -1,9 +1,7 @@
 <template>
   <div class="pay-content">
     <div class="pay-div">
-      <p class="pr" :class="[isShow ? 'pos' : '']">
-        合计<span>￥{{ mergeAmount }}</span>
-      </p>
+
       <div>
         <div class="pay-box" v-show="isShow">
           <van-checkbox
@@ -14,12 +12,20 @@
           ></van-checkbox>
           <div class="text">
             <p class="p1">全选</p>
-            <p class="p2">(仅可全选{{ billTypeName }}类订单)</p>
+            <div class="checkAll">
+              <div class="all">
+                合计<span>￥{{ mergeAmount }}</span>
+              </div>
+              <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="pay">
-        <div class="btn" @click="mergePay"><p>去结算</p></div>
+        <div class="btn" @click="mergePay">
+          <div class="text">去结算</div>
+          <div class="total">({{total}})</div>
+        </div>
       </div>
     </div>
     <div class="adapter-iphoneX" v-if="isX"></div>
@@ -28,7 +34,7 @@
 
 <script>
 export default {
-  props: ["checkData", "mergeAmount"],
+  props: ["checkData", "mergeAmount","total"],
   data() {
     return {
       isChecked: false,
@@ -127,7 +133,9 @@ export default {
   width: 100%;
   height: 52px;
   background: #fff;
-  padding: 0 23.375px 0 14px;
+  padding: 0 23.375px ;
+  box-shadow: 0px -3px 10px 0px #F1F1F1;
+
   .pr {
     display: flex;
     font-size: 16px;
@@ -156,6 +164,8 @@ export default {
     display: flex;
 
     .text {
+      display: flex;
+      align-items :center;
       p {
         padding-left: 4px;
       }
@@ -165,7 +175,7 @@ export default {
         font-family: SourceHanSansCN-Normal, SourceHanSansCN;
         font-weight: 400;
         color: #121212;
-        line-height: 16px;
+        // line-height: 16px;
       }
 
       .p2 {
@@ -175,6 +185,33 @@ export default {
         color: #666666;
         line-height: 16px;
         white-space: nowrap;
+      }
+
+      .checkAll{
+        margin-left: 5px;
+
+        .all{
+          font-size: 14px;
+          font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+          font-weight: 400;
+          color: #121212;
+
+          span {
+            font-size: 16px;
+            font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+            font-weight: 500;
+            color: #FD3A3A;
+            line-height: 16px;
+          }
+        }
+
+        .onlyCheck{
+          font-size: 10px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #8D8D8D;
+          line-height: 16px;
+        }
       }
     }
   }
@@ -202,20 +239,26 @@ export default {
     }
 
     .btn {
-      width: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 104px;
       height: 40px;
       text-align: center;
-      line-height: 40px;
+      line-height: 45px;
       background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
       border-radius: 20px;
       margin-left: 6px;
 
-      p {
+      div{
         font-weight: 500;
         color: #FFFFFF;
-        font-size: 14px;
+        font-size: 15px;
         position: relative;
-        top: -1px;
+        top: 0px;
+      }
+      .total{
+        top :-1px;
       }
     }
   }

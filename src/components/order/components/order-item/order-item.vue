@@ -63,15 +63,15 @@
         <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
       </div>
       <div class="btn-box">
-        <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
-          <p>再次购买</p>
-        </div>
         <div
           class="btn default"
           v-if="isChangeOrder"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
+        </div>
+        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+          <p>再次购买</p>
         </div>
         <div
           class="btn default"
@@ -275,11 +275,14 @@ export default {
         case 3:
           billName = "临停缴费";
           break;
-        case 6:
-          billName = "预缴费";
-          break;
         case 4:
           billName = "临时缴费";
+          break;
+        case 5:
+          billName = "零售";
+          break;
+        case 6:
+          billName = "预缴费";
           break;
         case 7:
           billName = "旅游";
@@ -303,6 +306,12 @@ export default {
       let sClass = "";
       switch (this.billType) {
         case 11:
+          sClass = "icon1";
+          break;
+        case 12:
+          sClass = "icon1";
+          break;
+        case 5:
           sClass = "icon1";
           break;
         case 1:
@@ -813,7 +822,7 @@ export default {
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 14px;
-  padding: 6px 14px 18px 14px;
+  padding: 12px 14px 18px 14px;
   box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
   margin-top: 12px;
 

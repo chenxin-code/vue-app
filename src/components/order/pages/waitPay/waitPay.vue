@@ -38,6 +38,7 @@
       @checkEvent="checkEvent"
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
+      :total="total"
     ></pay-div>
   </div>
 </template>
@@ -67,6 +68,7 @@ export default {
       currentOrderList: [],
       params: [],
       mergeAmount: 0,
+      total:0
     };
   },
   components: {
@@ -216,7 +218,8 @@ export default {
             if (this.orderList.length == 0) {
               this.showEmpty = true;
             } else {
-                this.showEmpty = false;
+              this.showEmpty = false;
+              this.currentOrderList = [];
               this.initData();
             }
             this.$toast("刷新成功");
@@ -368,6 +371,7 @@ export default {
         return BigNumber(total).plus(e.totalPrice)
       },0)
       this.mergeAmount = num;
+      this.total = mergeList.length;
     },
   },
 };

@@ -18,7 +18,7 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 .empty {
   width: 100%;
-  height: 539px;
+  height: 677px;
   background-color: #fff;
 
   /deep/.van-empty__image {
