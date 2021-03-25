@@ -17,8 +17,7 @@
         />
         <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'width':'2.4rem','height':'2.4rem','background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
         <p class="text" v-if="productItem.billType == 11">
-          <!-- {{ productItem.billName }} -->
-          卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽
+          {{ productItem.billName }}
         </p>
         <div class="desc" v-if="productItem.billType != 11">
           <strong>{{productItem.itemTypeName}}</strong>

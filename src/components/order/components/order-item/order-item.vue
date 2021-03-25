@@ -63,15 +63,15 @@
         <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
       </div>
       <div class="btn-box">
-        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
-          <p>再次购买</p>
-        </div>
         <div
           class="btn default"
           v-if="isChangeOrder"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
+        </div>
+        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+          <p>再次购买</p>
         </div>
         <div
           class="btn default"

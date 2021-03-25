@@ -136,6 +136,7 @@ export default {
             this.showEmpty = true; 
             } else {
               this.showEmpty = false;
+              this.currentOrderList = [];
               this.initData();
             }
             this.$toast("刷新成功");
