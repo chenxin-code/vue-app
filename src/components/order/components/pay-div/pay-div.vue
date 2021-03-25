@@ -1,5 +1,5 @@
 <template>
-  <div class="pay-box">
+  <div class="pay-content">
     <div class="pay-div">
       <p class="pr" :class="[isShow ? 'pos' : '']">
         合计<span>￥{{ mergeAmount }}</span>
@@ -101,55 +101,14 @@ export default {
     mergePay() {
       this.$emit("mergePay");
     },
-  },
-  watch: {
-    // billType () {
-    //   let billTypeName = "";
-    //   switch (this.billType) {
-    //     case 11:
-    //       billTypeName = "邻里星选";
-    //       break;
-    //     case 1:
-    //       billTypeName = "物业缴费";
-    //       break;
-    //     case 2:
-    //       billTypeName = "月保续费";
-    //       break;
-    //     case 3:
-    //       billTypeName = "临停缴费";
-    //       break;
-    //     case 6:
-    //       billTypeName = "预缴费";
-    //       break;
-    //     case 4:
-    //       billName = "临时缴费";
-    //       break;
-    //     case 7:
-    //       billTypeName = "旅游";
-    //       break;
-    //     case 8:
-    //       billTypeName = "家政";
-    //       break;
-    //     case 9:
-    //       billTypeName = "拎包";
-    //       break;
-    //     case 10:
-    //       billTypeName = "押金";
-    //       break;
-    //     case 12:
-    //       billTypeName = "美居";
-    //       break;
-    //   }
-    //   this.billTypeName = billTypeName;
-    // }
-  },
+  }
 };
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
-.pay-box{
+.pay-content{
   position: fixed;
   bottom: 0;
   left: 0;
@@ -167,9 +126,8 @@ export default {
   align-items: center;
   width: 100%;
   height: 52px;
-  line-height: 52px;
   background: #fff;
-  padding: 0 14px 0 8px;
+  padding: 0 14px;
   .pr {
     display: flex;
     font-size: 16px;
@@ -180,7 +138,7 @@ export default {
 
     &.pos {
       position: absolute;
-      left: 70px;
+      left: 80px;
       top: -10px;
       font-size: 14px;
     }

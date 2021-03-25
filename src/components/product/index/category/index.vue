@@ -116,7 +116,7 @@ export default {
         switch (this.$route.name) {
           case "商品列表":
             return "#ffffff";
-          case "首页":
+          case "新首页":
             this.currentSelect = 0;
             this.setShowCategory(true);
             return "rgb(249 57 58)";

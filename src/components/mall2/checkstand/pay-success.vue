@@ -178,8 +178,11 @@
               path: '/common'
             })
           } else {
-            appNav.navigatorBack({ url: '0' }).then( res => {
-              console.log(res)
+            // appNav.navigatorBack({ url: '0' }).then( res => {
+            //   console.log(res)
+            // })
+            this.$router.replace({
+              path: '/order/2'
             })
           }
         });
