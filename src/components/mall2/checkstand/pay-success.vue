@@ -49,7 +49,6 @@
   import SubPage from '@/components/product/index/subpage/subpage'
   import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
   import appNav from '@zkty-team/x-engine-module-nav'
-
   export default {
     name: 'paysuccess',
     components: {
@@ -154,12 +153,30 @@
 
           }
         }else if (type == 2){//继续购物
-          if (this.$store.state.webtype == 3) {
-            wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
-            // this.$util.wxmpBackHome()
-          } else {
-            this.turnback()
-          }
+          // if (this.$store.state.webtype == 3) {
+          //   wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
+          //   // this.$util.wxmpBackHome()
+          // } else {
+          //   this.turnback()
+          // }
+          appLocalstorage
+          .get({
+            key: "LLBIsHomeView",
+            isPublic: true,
+          })
+          .then((res) => {
+            let _result = res.result
+            if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+              return;
+            }
+            if (_result == '1') {
+              this.$router.replace({
+                path: '/common'
+              })
+            } else {
+              appNav.changeBottomIndexToMall();
+            }
+          });
         }
       },
       turnback: function () {//返回

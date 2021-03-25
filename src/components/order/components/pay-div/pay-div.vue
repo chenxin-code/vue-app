@@ -1,9 +1,7 @@
 <template>
   <div class="pay-content">
     <div class="pay-div">
-      <p class="pr" :class="[isShow ? 'pos' : 'none']" v-show="isShow">
-        合计<span>￥{{ mergeAmount }}</span>
-      </p>
+
       <div>
         <div class="pay-box" v-show="isShow">
           <van-checkbox
@@ -14,7 +12,12 @@
           ></van-checkbox>
           <div class="text">
             <p class="p1">全选</p>
-            <p class="p2">(仅可全选{{ billTypeName }}类订单)</p>
+            <div class="checkAll">
+              <div class="all">
+                合计<span>￥{{ mergeAmount }}</span>
+              </div>
+              <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div>
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +133,8 @@ export default {
   width: 100%;
   height: 52px;
   background: #fff;
-  padding: 0 23.375px 0 14px;
-  box-shadow: 0px -5px 10px 0px #F1F1F1;
+  padding: 0 23.375px ;
+  box-shadow: 0px -3px 10px 0px #F1F1F1;
 
   .pr {
     display: flex;
@@ -161,6 +164,8 @@ export default {
     display: flex;
 
     .text {
+      display: flex;
+      align-items :center;
       p {
         padding-left: 4px;
       }
@@ -170,7 +175,7 @@ export default {
         font-family: SourceHanSansCN-Normal, SourceHanSansCN;
         font-weight: 400;
         color: #121212;
-        line-height: 16px;
+        // line-height: 16px;
       }
 
       .p2 {
@@ -180,6 +185,33 @@ export default {
         color: #666666;
         line-height: 16px;
         white-space: nowrap;
+      }
+
+      .checkAll{
+        margin-left: 5px;
+
+        .all{
+          font-size: 14px;
+          font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+          font-weight: 400;
+          color: #121212;
+
+          span {
+            font-size: 16px;
+            font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+            font-weight: 500;
+            color: #FD3A3A;
+            line-height: 16px;
+          }
+        }
+
+        .onlyCheck{
+          font-size: 10px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #8D8D8D;
+          line-height: 16px;
+        }
       }
     }
   }
@@ -223,10 +255,10 @@ export default {
         color: #FFFFFF;
         font-size: 15px;
         position: relative;
-        top: -1px;
+        top: 0px;
       }
       .total{
-        top :-2px;
+        top :-1px;
       }
     }
   }

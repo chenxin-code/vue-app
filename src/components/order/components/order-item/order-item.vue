@@ -63,15 +63,15 @@
         <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
       </div>
       <div class="btn-box">
-        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
-          <p>再次购买</p>
-        </div>
         <div
           class="btn default"
           v-if="isChangeOrder"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
+        </div>
+        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+          <p>再次购买</p>
         </div>
         <div
           class="btn default"
@@ -275,11 +275,14 @@ export default {
         case 3:
           billName = "临停缴费";
           break;
-        case 6:
-          billName = "预缴费";
-          break;
         case 4:
           billName = "临时缴费";
+          break;
+        case 5:
+          billName = "零售";
+          break;
+        case 6:
+          billName = "预缴费";
           break;
         case 7:
           billName = "旅游";

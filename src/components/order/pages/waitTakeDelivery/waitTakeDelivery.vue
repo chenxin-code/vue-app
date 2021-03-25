@@ -163,6 +163,7 @@ export default {
                   tab["billType"] = 11;
                 });
               });
+              this.currentOrderList = [];
               this.initData();
                 this.showEmpty = false;
 

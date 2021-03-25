@@ -128,6 +128,7 @@ export default {
             if (this.orderList.length == 0) {
               this.showEmpty = true;
             } else {
+              this.currentOrderList = [];
               this.initData();
             }
             this.$toast("刷新成功");
