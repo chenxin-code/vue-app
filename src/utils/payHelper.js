@@ -363,6 +363,7 @@ var payHelper = {
         router.push('/mall2/paysuccess')
       } else if (payway.payModeSub == '260003') {
         //时代微信小程序支付
+        console.log('wwwwwwwwwwwww', wx)
         let info = JSON.parse(JSON.parse(payInfo))
         let wxPayInfo = JSON.parse(info.payData)
         let params = {
@@ -376,7 +377,7 @@ var payHelper = {
           params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
-          url: `/pages/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
 
       } else {

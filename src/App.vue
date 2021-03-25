@@ -116,6 +116,7 @@ export default {
     this.$store.state.microSho.groupbuyingCarts = [];
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       let initObj = {};
+      console.log('localtion href', location.href)
       location.href
         .split("?")[1]
         .split("&")

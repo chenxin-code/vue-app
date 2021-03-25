@@ -418,6 +418,7 @@ export default {
         this.$STLoading.close();
         if (data.status == 0) {
           this.pageLoaded = true;
+          console.log('首页获取布局', data.data.pageData)
           let fdata = data.data.pageData;
           if (!fdata.pageDataJson) {
             this.$toast("首页布局获取失败11");
