@@ -275,11 +275,14 @@ export default {
         case 3:
           billName = "临停缴费";
           break;
-        case 6:
-          billName = "预缴费";
-          break;
         case 4:
           billName = "临时缴费";
+          break;
+        case 5:
+          billName = "零售";
+          break;
+        case 6:
+          billName = "预缴费";
           break;
         case 7:
           billName = "旅游";
