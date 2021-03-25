@@ -38,6 +38,7 @@
       @checkEvent="checkEvent"
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
+      :total="total"
     ></pay-div>
   </div>
 </template>
@@ -67,6 +68,7 @@ export default {
       currentOrderList: [],
       params: [],
       mergeAmount: 0,
+      total:0
     };
   },
   components: {
@@ -156,8 +158,7 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: page, pageSize: 10 },
-        // airDefenseNo:this.$store.state.userRoomId,
-        airDefenseNo:'FE752BD744734211B4D031BA5CE802A0|FA3B923112FD4818956EA045131C1821|48496131eaf74373b2d49442923a04d1'
+        airDefenseNo:this.$store.state.userRoomId,
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -369,6 +370,7 @@ export default {
         return BigNumber(total).plus(e.totalPrice)
       },0)
       this.mergeAmount = num;
+      this.total = mergeList.length;
     },
   },
 };

@@ -17,7 +17,8 @@
         />
         <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'width':'2.4rem','height':'2.4rem','background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
         <p class="text" v-if="productItem.billType == 11">
-          {{ productItem.billName }}
+          <!-- {{ productItem.billName }} -->
+          卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽卧槽
         </p>
         <div class="desc" v-if="productItem.billType != 11">
           <strong>{{productItem.itemTypeName}}</strong>
@@ -178,6 +179,7 @@ export default {
 
       .text {
         // padding-left: 14px;
+        flex :1;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
         font-weight: 400;
