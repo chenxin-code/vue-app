@@ -38,6 +38,7 @@
       @checkEvent="checkEvent"
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
+      :total="total"
     ></pay-div>
   </div>
 </template>
@@ -67,6 +68,7 @@ export default {
       currentOrderList: [],
       params: [],
       mergeAmount: 0,
+      total:0
     };
   },
   components: {
@@ -368,6 +370,7 @@ export default {
         return BigNumber(total).plus(e.totalPrice)
       },0)
       this.mergeAmount = num;
+      this.total = mergeList.length;
     },
   },
 };

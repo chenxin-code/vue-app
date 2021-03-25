@@ -63,7 +63,7 @@
         <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
       </div>
       <div class="btn-box">
-        <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
+        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
         <div
@@ -813,7 +813,7 @@ export default {
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 14px;
-  padding: 6px 14px 18px 14px;
+  padding: 12px 14px 18px 14px;
   box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
   margin-top: 12px;
 
