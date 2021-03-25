@@ -124,7 +124,8 @@ export default {
         orderTypeList:this.tabs.type,
         state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId
+        // airDefenseNo:this.$store.state.userRoomId
+        airDefenseNo:'FE752BD744734211B4D031BA5CE802A0|FA3B923112FD4818956EA045131C1821|48496131eaf74373b2d49442923a04d1'
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)

@@ -48,7 +48,8 @@
       >
         <p v-show="!isShow">显示剩余{{ dataList.length - 2 }}件商品</p>
         <p v-show="isShow">收起商品</p>
-        <i class="ico" :class="[isShow ? 'up' : '']"></i>
+        <i class="downIco" v-show="!isShow"></i>
+        <i class="upIco" v-show="isShow"></i>
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
@@ -812,7 +813,7 @@ export default {
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 14px;
-  padding: 10px 14px 18px 14px;
+  padding: 6px 14px 18px 14px;
   box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
   margin-top: 12px;
 
@@ -825,6 +826,8 @@ export default {
     display: flex;
     height: 30px;
     line-height: 30px;
+    // justify-content: center;
+    // // align-items: center;
 
     .van-checkbox {
       position: relative;
@@ -878,7 +881,7 @@ export default {
       font-size: 16px;
       padding-left: 6px;
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
     }
   }
@@ -967,7 +970,7 @@ export default {
     .pr {
       font-size: 16px;
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
       line-height: 24px;
 
@@ -988,11 +991,12 @@ export default {
       font-family: SourceHanSansCN-Regular, SourceHanSansCN;
       font-weight: 400;
       color: #999999;
+      margin-left: 2px;
     }
 
     .pr {
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
       font-size: 16px;
 
@@ -1011,6 +1015,9 @@ export default {
     justify-content: flex-end;
 
     .btn {
+      // display: flex;
+      // justify-content center;
+      // align-items: center;
       width: 108px;
       height: 32px;
       font-size: 15px;
@@ -1021,6 +1028,9 @@ export default {
       border: 1px solid #e8374a;
       border-radius: 20px;
       margin-left: 4px;
+
+
+
 
       &.default {
         color: #8d8d8d;
@@ -1059,16 +1069,21 @@ export default {
       line-height: 14px;
     }
 
-    .ico {
+    .downIco {
       width: 12px;
       height: 12px;
       display: block;
       background: url('../../img/down.png') no-repeat;
       background-size: 12px auto;
-
-      &.up {
-        background-image: url('../../img/up.png');
-      }
+      margin-right: 5px;
+    }
+    .upIco{
+      width: 12px;
+      height: 12px;
+      display: block;
+      background: url('../../img/up.png') no-repeat;
+      background-size: 12px auto;
+      margin-right: 55px;
     }
   }
 }
