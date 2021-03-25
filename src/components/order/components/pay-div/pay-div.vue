@@ -14,7 +14,7 @@
             <p class="p1">全选</p>
             <div class="checkAll">
               <div class="all">
-                合计<span>￥{{ mergeAmount }}</span>
+                合计<span>￥<span>{{amount.integer}}</span>.<span class="decimal">{{amount.decimal}}</span></span>
               </div>
               <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div>
             </div>
@@ -40,6 +40,10 @@ export default {
       isChecked: false,
       isShow: false,
       billType: "",
+      amount:{
+        integer:'0',
+        decimal:'00',
+      }
     };
   },
   created(){
@@ -68,6 +72,9 @@ export default {
           break;
         case 3:
           billName = "临停缴费";
+          break;
+        case 5:
+          billName = "零售";
           break;
         case 6:
           billName = "预缴费";
@@ -107,6 +114,14 @@ export default {
     mergePay() {
       this.$emit("mergePay");
     },
+  },
+  watch:{
+    mergeAmount:function(newVal,oldVal){
+      let totalPrice = this.$util.toDecimal2(newVal);
+      let totalArr = totalPrice.toString().split(".")
+      this.amount.integer = totalArr[0];
+      this.amount.decimal = totalArr[1];
+    }
   }
 };
 </script>
@@ -188,7 +203,7 @@ export default {
       }
 
       .checkAll{
-        margin-left: 5px;
+        margin-left: 10px;
 
         .all{
           font-size: 14px;
@@ -202,6 +217,9 @@ export default {
             font-weight: 500;
             color: #FD3A3A;
             line-height: 16px;
+          }
+          .decimal{
+            font-size: 12px;
           }
         }
 

@@ -53,14 +53,14 @@
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</p>
+        <p class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ goodsAmount.integer }}<span class="decimal">.{{ goodsAmount.decimal }}</span></p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
+        <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ goodsAmount.integer }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span>
       </div>
       <div class="btn-box">
         <div
@@ -152,6 +152,11 @@ export default {
       smallDataList: [],
       showMore: false,
       vipUnitUserCode: "", // type  为空  待保留 旧订间为空，可不传
+      itemAmount:"0",
+      goodsAmount:{
+        integer:"0",
+        decimal:"00",
+      },
     };
   },
   created() {
@@ -160,7 +165,8 @@ export default {
       this.smallDataList.push(this.dataList[1]);
     } else {
       this.smallDataList = this.dataList;
-    }
+    };
+    this.itemAmount = this.amount;
   },
   computed: {
     moneyText() {
@@ -344,6 +350,15 @@ export default {
       }
       return sClass;
     },
+  },
+  watch:{
+    itemAmount:function(newVal,oldVal){
+      let amountArr = this.$util.toDecimal2(newVal).toString().split('.');
+      if(amountArr.length !== 0){
+        this.goodsAmount.integer = amountArr[0];
+        this.goodsAmount.decimal = amountArr[1];
+      }
+    }
   },
   components: {
     productItem,
@@ -830,6 +845,11 @@ export default {
     font-weight: 500;
     font-size: 13px;
   }
+
+  .decimal{
+    font-size:12px;
+    font-weight:550; 
+  }
   
   .title {
     display: flex;
@@ -986,12 +1006,14 @@ export default {
       i {
         color: #8D8D8D;
         font-size: 14px;
+        font-weight: 400;
       }
     }
   }
 
   .need-pay {
-    padding-top: 10px;
+    padding-top: 14px;
+    padding-bottom: 4px;
     display: flex;
     justify-content: space-between;
 
@@ -1020,7 +1042,7 @@ export default {
 
   .btn-box {
     display: flex;
-    padding-top: 18px;
+    padding-top: 14px;
     justify-content: flex-end;
 
     .btn {

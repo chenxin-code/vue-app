@@ -71,7 +71,9 @@
       backEvent(){
         if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3 ){
           if(this.$route.query.isBill){
-            this.$router.push('/order/2')
+            this.$router.push({
+              path:"/order/2",
+            })
           }else{
             this.$router.push('/common')
           }
@@ -82,9 +84,6 @@
       eventClick: function (type) {
         if (type == 1){//我的订单
           if (this.payResult == 'icbcFailed') { //支付失败
-            if(this.$route.query.isBill){
-              this.$router.push('/order/2')
-            }else{
               let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
               let awardActivity =
               currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
@@ -100,7 +99,6 @@
                 awardActivity: JSON.stringify(awardActivity)
               }
             })
-            }
             return
           }
           if (this.$route.query.name == 'phone') { //话费充值
@@ -118,9 +116,6 @@
                 path: '/mall2/purchaseorderlist',
               });
             }else{
-              if(this.$store.state.webtype !=2 || this.$store.state.webtype != 3){
-                this.$router.push('/ordre/2')
-              }else{
                 this.$router.replace({
                 path: '/mall2/orderlist',
                 query: {
@@ -129,7 +124,6 @@
                   vipUnitUserCode: this.$route.query.vipUnitUserCode
                 }
               });
-              }
             }
 
           } else {
@@ -138,17 +132,13 @@
                 path: '/mall2/purchaseorderlist',
               });
             } else{
-              if(this.$store.state.webtype !=2 || this.$store.state.webtype != 3){
-                this.$router.push('/ordre/2')
-              }else{
-                this.$router.replace({
+              this.$router.replace({
                 path: '/mall2/orderlist?selectedIndex=1',
                 query: {
                   orderCategory: this.$route.query.orderCategory,
                   vipUnitUserCode: this.$route.query.vipUnitUserCode
                 }
               });
-              }
             }
 
           }
@@ -174,7 +164,9 @@
                 path: '/common'
               })
             } else {
-              appNav.changeBottomIndexToMall();
+              appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                console.log('跳转',res)
+              });
             }
           });
         }
