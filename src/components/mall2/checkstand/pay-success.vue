@@ -49,7 +49,6 @@
   import SubPage from '@/components/product/index/subpage/subpage'
   import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
   import appNav from '@zkty-team/x-engine-module-nav'
-
   export default {
     name: 'paysuccess',
     components: {
@@ -72,7 +71,9 @@
       backEvent(){
         if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3 ){
           if(this.$route.query.isBill){
-            this.$router.push('/order/2')
+            this.$router.push({
+              path:"/order/2",
+            })
           }else{
             this.$router.push('/common')
           }
@@ -83,9 +84,6 @@
       eventClick: function (type) {
         if (type == 1){//我的订单
           if (this.payResult == 'icbcFailed') { //支付失败
-            if(this.$route.query.isBill){
-              this.$router.push('/order/2')
-            }else{
               let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
               let awardActivity =
               currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
@@ -101,7 +99,6 @@
                 awardActivity: JSON.stringify(awardActivity)
               }
             })
-            }
             return
           }
           if (this.$route.query.name == 'phone') { //话费充值
@@ -119,9 +116,6 @@
                 path: '/mall2/purchaseorderlist',
               });
             }else{
-              if(this.$store.state.webtype !=2 || this.$store.state.webtype != 3){
-                this.$router.push('/ordre/2')
-              }else{
                 this.$router.replace({
                 path: '/mall2/orderlist',
                 query: {
@@ -130,7 +124,6 @@
                   vipUnitUserCode: this.$route.query.vipUnitUserCode
                 }
               });
-              }
             }
 
           } else {
@@ -139,27 +132,43 @@
                 path: '/mall2/purchaseorderlist',
               });
             } else{
-              if(this.$store.state.webtype !=2 || this.$store.state.webtype != 3){
-                this.$router.push('/ordre/2')
-              }else{
-                this.$router.replace({
+              this.$router.replace({
                 path: '/mall2/orderlist?selectedIndex=1',
                 query: {
                   orderCategory: this.$route.query.orderCategory,
                   vipUnitUserCode: this.$route.query.vipUnitUserCode
                 }
               });
-              }
             }
 
           }
         }else if (type == 2){//继续购物
-          if (this.$store.state.webtype == 3) {
-            wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
-            // this.$util.wxmpBackHome()
-          } else {
-            this.turnback()
-          }
+          // if (this.$store.state.webtype == 3) {
+          //   wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
+          //   // this.$util.wxmpBackHome()
+          // } else {
+          //   this.turnback()
+          // }
+          appLocalstorage
+          .get({
+            key: "LLBIsHomeView",
+            isPublic: true,
+          })
+          .then((res) => {
+            let _result = res.result
+            if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+              return;
+            }
+            if (_result == '1') {
+              this.$router.replace({
+                path: '/common'
+              })
+            } else {
+              appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                console.log('跳转',res)
+              });
+            }
+          });
         }
       },
       turnback: function () {//返回

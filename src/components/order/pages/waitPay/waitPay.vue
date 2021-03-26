@@ -38,6 +38,7 @@
       @checkEvent="checkEvent"
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
+      :total="total"
     ></pay-div>
   </div>
 </template>
@@ -67,6 +68,7 @@ export default {
       currentOrderList: [],
       params: [],
       mergeAmount: 0,
+      total:0
     };
   },
   components: {
@@ -76,6 +78,15 @@ export default {
   },
   created() {
     this.onLoad();
+  },
+  watch:{
+    currentOrderList:function(newVal,oldVal){
+      if(newVal.length !== 0){
+        this.showEmpty = false;
+      }else{
+        this.showEmpty = true;
+      }
+    }
   },
   methods: {
     //合并支付
@@ -157,13 +168,18 @@ export default {
         state: "1",
         page: { index: page, pageSize: 10 },
         airDefenseNo:this.$store.state.userRoomId,
-        // airDefenseNo:'FE752BD744734211B4D031BA5CE802A0|FA3B923112FD4818956EA045131C1821|48496131eaf74373b2d49442923a04d1'
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.data.pages || page == res.data.data.pages) {
+          let dataPages = 0;
+          if (res.data.data.pages == 0){
+            dataPages = 1;
+          }else{
+            dataPages = res.data.data.pages;
+          }
+          if (page < dataPages || page == dataPages) {
             if (res.data.data.pages == page) {
               this.finished = true;
             }
@@ -171,11 +187,10 @@ export default {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
               this.page = res.data.data.pages; //将总页数赋值给this
-              if (this.orderList.length == 0) {
-                this.showEmpty = true;
-              } else {
-                this.showEmpty = false;
+              if (this.orderList.length !== 0) {
                 this.initData();
+              }else{
+                this.currentOrderList = [];
               }
               // 加载状态结束
               this.loading = false;
@@ -198,8 +213,8 @@ export default {
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
-      this.loading = false; //将下拉刷新状态改为true开始刷新
-      this.currentPage = 0;
+      this.loading = true; //将下拉刷新状态改为true开始刷新
+      this.currentPage = 1;
       let obj = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -207,17 +222,13 @@ export default {
         page: { index: page, pageSize: 10 },
         airDefenseNo:this.$store.state.userRoomId,
       };
-      console.log('---------------this.$store.state.userRoomId----------',this.$store.state.userRoomId)
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
           if (res.data.status == 0) {
             this.orderList = res.data.data.records;
             this.totalPage = res.data.data.pages; //将总页数赋值上去
-            if (this.orderList.length == 0) {
-              this.showEmpty = true;
-            } else {
-                this.showEmpty = false;
+            if (this.orderList.length !== 0) {
               this.initData();
             }
             this.$toast("刷新成功");
@@ -369,6 +380,7 @@ export default {
         return BigNumber(total).plus(e.totalPrice)
       },0)
       this.mergeAmount = num;
+      this.total = mergeList.length;
     },
   },
 };
@@ -377,7 +389,9 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 .waitPay {
-  padding-bottom: 52px;
+  height 100%;
+  overflow-y auto;
+  padding-bottom: 182px;
 }
 // .scroll {
 //   margin-top: 12px;

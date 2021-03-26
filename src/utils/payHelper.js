@@ -269,7 +269,7 @@ var payHelper = {
           params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
-          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `/pages/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
       } else if (payway.payModeSub == '210004') {
         // 微信H5支付

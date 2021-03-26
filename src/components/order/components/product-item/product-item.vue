@@ -27,8 +27,11 @@
         </div>
       </div>
       <div class="price" v-if="productItem.billType == 11 || productItem.billType == 7 || productItem.billType == 8">
-        <p class="pr">￥{{ productItem.billAmount }}</p>
-        <p class="am">x {{ productItem.billNum }}</p>
+        <p class="pr">￥{{amount.integer}}.<span class="decimal">{{amount.decimal}}</span></p>
+        <div class="billNum">
+          <p class="am"><img :src="xImg" alt="" class="xImg"></p>
+          <span class="num">{{ productItem.billNum }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +41,17 @@
 export default {
   props: ["productItem", "billId", "billType"],
   data() {
-    return {};
+    return {
+      xImg:require('../../img/icon_x.png'),
+      goodsAmount:"0.00",
+      amount:{
+        integer:"0",
+        decimal:"00",
+      }
+    };
+  },
+  created(){
+    this.goodsAmount = this.productItem.billAmount;
   },
   methods: {
     gotoProductDetail: function (product) {
@@ -74,6 +87,14 @@ export default {
         )}`;
       }
     },
+  },
+  watch:{
+    goodsAmount:function(newVal,oldVal){
+      let totalPrice = this.$util.toDecimal2(newVal);
+      let totalArr = totalPrice.toString().split(".")
+      this.amount.integer = totalArr[0];
+      this.amount.decimal = totalArr[1];
+    }
   },
   computed: {
     billCenterImg: {
@@ -153,8 +174,15 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .product-item {
+
+
+  .decimal{
+    font-size :12px;
+  }
+
+
   .content {
-    padding-top: 10px;
+    padding-top: 12px;
     display: flex;
     justify-content: space-between;
 
@@ -166,21 +194,31 @@ export default {
       img {
         width: 90px;
         height: 90px;
-        margin-right: 14px;
+        margin-right: 12px;
+        border-radius :12px;
+        overflow: hidden;
       }
       .billImg{
         width: 90px;
         height: 90px;
-        margin-right: 16px;
+        margin-right: 12px;
       }
 
       .text {
         // padding-left: 14px;
+        // flex :1;
+        width : 140px;
+        height: 45px;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
         font-weight: 400;
         color: #121212;
         line-height: 21px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-all;
       }
 
       .desc {
@@ -213,6 +251,11 @@ export default {
         line-height: 24px;
       }
 
+      .billNum{
+        display flex;
+        justify-content center
+        align-items center
+      }
       .am {
         font-size: 13px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -220,6 +263,18 @@ export default {
         color: #8D8D8D;
         line-height: 20px;
         text-align: right;
+
+      }
+
+      .num{
+        display: inline-block;
+        margin-bottom 1px;
+        margin-left 2px;
+      }
+
+      .xImg{
+        width: 10px;
+        height: 10px;
       }
     }
   }

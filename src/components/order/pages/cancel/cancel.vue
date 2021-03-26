@@ -60,6 +60,15 @@ export default {
   created() {
     this.onLoad();
   },
+  watch:{
+    currentOrderList:function(newVal,oldVal){
+      if(newVal.length !== 0){
+        this.showEmpty = false;
+      }else{
+        this.showEmpty = true;
+      }
+    }
+  },
   methods: {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
@@ -97,10 +106,8 @@ export default {
                   });
                 });
                 this.initData();
-                this.showEmpty = false;
-
-              } else {
-                this.showEmpty = true;
+              } else{
+                this.currentOrderList = [];
               }
               this.page = res.data.data.page.totalPages; //将总页数赋值给this
               // 加载状态结束
@@ -124,8 +131,8 @@ export default {
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
-      this.loading = false; //将下拉刷新状态改为true开始刷新
-      this.currentPage = 0;
+      this.loading = true; //将下拉刷新状态改为true开始刷新
+      this.currentPage = 1;
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList:this.tabs.type,
@@ -145,10 +152,6 @@ export default {
                 });
               });
               this.initData();
-                this.showEmpty = false;
-
-            } else {
-              this.showEmpty = true;
             }
             this.totalPage = res.data.totalPages; //将总页数赋值上去
             this.$toast("刷新成功");
@@ -219,4 +222,9 @@ export default {
 // .scroll {
 //   padding-top: 10px;
 // }
+.cancel{
+  height 100%;
+  overflow-y auto; 
+  padding-bottom: 130px; 
+}
 </style>

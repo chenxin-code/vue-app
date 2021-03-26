@@ -48,29 +48,30 @@
       >
         <p v-show="!isShow">显示剩余{{ dataList.length - 2 }}件商品</p>
         <p v-show="isShow">收起商品</p>
-        <i class="ico" :class="[isShow ? 'up' : '']"></i>
+        <i class="downIco" v-show="!isShow"></i>
+        <i class="upIco" v-show="isShow"></i>
       </div>
       <div class="need-pay" v-if="billType != 11">
         <p class="time">{{ submitTime }}</p>
-        <p class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</p>
+        <p class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ goodsAmount.integer }}<span class="decimal">.{{ goodsAmount.decimal }}</span></p>
       </div>
       <div class="total" v-if="billType == 11">
         <span class="to"
           >共<i>{{ amountTotal }}</i
           >件商品</span
         >
-        <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ amount }}</span>
+        <span class="pr"><i>{{moneyText}}:</i><span class="smallRMB">￥</span>{{ goodsAmount.integer }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span>
       </div>
       <div class="btn-box">
-        <div class="btn default" v-if="isBuyAgain" @click.stop="buyAgain">
-          <p>再次购买</p>
-        </div>
         <div
           class="btn default"
           v-if="isChangeOrder"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
+        </div>
+        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+          <p>再次购买</p>
         </div>
         <div
           class="btn default"
@@ -151,6 +152,11 @@ export default {
       smallDataList: [],
       showMore: false,
       vipUnitUserCode: "", // type  为空  待保留 旧订间为空，可不传
+      itemAmount:"0",
+      goodsAmount:{
+        integer:"0",
+        decimal:"00",
+      },
     };
   },
   created() {
@@ -159,7 +165,8 @@ export default {
       this.smallDataList.push(this.dataList[1]);
     } else {
       this.smallDataList = this.dataList;
-    }
+    };
+    this.itemAmount = this.amount;
   },
   computed: {
     moneyText() {
@@ -274,11 +281,14 @@ export default {
         case 3:
           billName = "临停缴费";
           break;
-        case 6:
-          billName = "预缴费";
-          break;
         case 4:
           billName = "临时缴费";
+          break;
+        case 5:
+          billName = "零售";
+          break;
+        case 6:
+          billName = "预缴费";
           break;
         case 7:
           billName = "旅游";
@@ -302,6 +312,12 @@ export default {
       let sClass = "";
       switch (this.billType) {
         case 11:
+          sClass = "icon1";
+          break;
+        case 12:
+          sClass = "icon1";
+          break;
+        case 5:
           sClass = "icon1";
           break;
         case 1:
@@ -334,6 +350,15 @@ export default {
       }
       return sClass;
     },
+  },
+  watch:{
+    itemAmount:function(newVal,oldVal){
+      let amountArr = this.$util.toDecimal2(newVal).toString().split('.');
+      if(amountArr.length !== 0){
+        this.goodsAmount.integer = amountArr[0];
+        this.goodsAmount.decimal = amountArr[1];
+      }
+    }
   },
   components: {
     productItem,
@@ -812,7 +837,7 @@ export default {
   background: #FFFFFF;
   margin: 0 auto;
   border-radius: 14px;
-  padding: 10px 14px 18px 14px;
+  padding: 12px 14px 18px 14px;
   box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
   margin-top: 12px;
 
@@ -820,11 +845,18 @@ export default {
     font-weight: 500;
     font-size: 13px;
   }
+
+  .decimal{
+    font-size:12px;
+    font-weight:550; 
+  }
   
   .title {
     display: flex;
     height: 30px;
     line-height: 30px;
+    // justify-content: center;
+    // // align-items: center;
 
     .van-checkbox {
       position: relative;
@@ -878,7 +910,7 @@ export default {
       font-size: 16px;
       padding-left: 6px;
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
     }
   }
@@ -967,19 +999,21 @@ export default {
     .pr {
       font-size: 16px;
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
       line-height: 24px;
 
       i {
         color: #8D8D8D;
         font-size: 14px;
+        font-weight: 400;
       }
     }
   }
 
   .need-pay {
-    padding-top: 10px;
+    padding-top: 14px;
+    padding-bottom: 4px;
     display: flex;
     justify-content: space-between;
 
@@ -988,11 +1022,12 @@ export default {
       font-family: SourceHanSansCN-Regular, SourceHanSansCN;
       font-weight: 400;
       color: #999999;
+      margin-left: 2px;
     }
 
     .pr {
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
-      font-weight: 500;
+      font-weight: 550;
       color: #121212;
       font-size: 16px;
 
@@ -1007,10 +1042,13 @@ export default {
 
   .btn-box {
     display: flex;
-    padding-top: 18px;
+    padding-top: 14px;
     justify-content: flex-end;
 
     .btn {
+      // display: flex;
+      // justify-content center;
+      // align-items: center;
       width: 108px;
       height: 32px;
       font-size: 15px;
@@ -1021,6 +1059,9 @@ export default {
       border: 1px solid #e8374a;
       border-radius: 20px;
       margin-left: 4px;
+
+
+
 
       &.default {
         color: #8d8d8d;
@@ -1059,16 +1100,21 @@ export default {
       line-height: 14px;
     }
 
-    .ico {
+    .downIco {
       width: 12px;
       height: 12px;
       display: block;
       background: url('../../img/down.png') no-repeat;
       background-size: 12px auto;
-
-      &.up {
-        background-image: url('../../img/up.png');
-      }
+      margin-right: 5px;
+    }
+    .upIco{
+      width: 12px;
+      height: 12px;
+      display: block;
+      background: url('../../img/up.png') no-repeat;
+      background-size: 12px auto;
+      margin-right: 55px;
     }
   }
 }
