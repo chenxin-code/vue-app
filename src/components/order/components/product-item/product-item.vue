@@ -26,7 +26,7 @@
           <p>{{ productItem.snapshotTime }}</p>
         </div>
       </div>
-      <div class="price" v-if="productItem.billType == 11">
+      <div class="price" v-if="productItem.billType == 11 || productItem.billType == 7 || productItem.billType == 8">
         <p class="pr">￥{{ productItem.billAmount }}</p>
         <p class="am">x {{ productItem.billNum }}</p>
       </div>
