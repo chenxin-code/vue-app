@@ -323,6 +323,7 @@ export default {
     },
     shareForOpenWXMiniProgramsharegoods: function () {
       //分享
+      console.log('触发分享------------')
       if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
         this.shareView = true;
         return;
@@ -341,7 +342,7 @@ export default {
       shareData.detailurl += "&mktGroupBuyId=" + this.groupDetail.mktGroupBuyId;
       shareData.detailurl += "&spuId=" + this.groupDetail.spuId;
 
-
+      console.log('分享appShare-------------------',appShare)
       appShare
         .shareForOpenWXMiniProgram({
           userName: "gh_2a45a4d38d81",
@@ -359,7 +360,7 @@ export default {
           // document.getElementById("debug_text").innerText = res;
           console.log("shareThenRes----------", JSON.stringify(res));
         });
-
+      console.log('执行完毕-------------------')
       // this.$bridgefunc.wechatShare(shareData);
     },
     toPay: function () {
