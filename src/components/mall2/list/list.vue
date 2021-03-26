@@ -309,7 +309,8 @@
         </div>
       </div>
     </nav-content>
-    <div class="guide-div" v-if="showGuide">
+    <!-- 去除遮罩层   showGuide -->
+    <div class="guide-div" v-if="false">
       <img
         class="guide-img-1"
         @click="showGuide = false"
