@@ -1,6 +1,6 @@
 // common路由页
 <template>
-  <div class="common-box">
+  <div class="common-box" :class="[$store.state.webtype == '1' ? 'bottom-space' : '']">
     <div class="top_bg" v-if="notch"></div>
     <div class="mobile-preview" v-if="pageShow">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
@@ -1170,11 +1170,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-
-.common-box {
-  padding-bottom: 50px;
+.bottom-space {
+  padding-bottom: 100px;
 }
-
 .top_bg {
   height: 0.933333rem;
   background-color: rgb(249 57 58);
@@ -1185,6 +1183,9 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  &.paddingBottom {
+    padding-bottom: 100px;
+  }
 
   .test {
     position: relative;
