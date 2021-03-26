@@ -27,6 +27,7 @@
         ></van-checkbox>
         <i class="icon" :class="iconClass"></i>
         <span>{{ billTypeName }}</span>
+        <div class="stateText">{{stateText}}</div>
       </div>
       <div
         class="product-box"
@@ -139,6 +140,7 @@ export default {
     "type",
     "billId",
     "orderStateType",
+    "state"
   ],
   data() {
     return {
@@ -169,6 +171,23 @@ export default {
     this.itemAmount = this.amount;
   },
   computed: {
+    stateText(){
+      if(this.pageType == 'finish'){
+        if(this.billType != '11'){
+          return "支付已完成"
+        }else{
+          if(this.state == '17'){
+            return "支付已完成 · 待发货"
+          }else if(this.state == '4'){
+            return "支付已完成 · 待收货"
+          }else if(this.state == '9'){
+            return '订单已完成'
+          }
+        }
+      }else{
+        return ""
+      }
+    },
     moneyText() {
       let moneyText = ''
       switch (this.pageType) {
@@ -912,6 +931,18 @@ export default {
       font-family: SourceHanSansCN-Medium, SourceHanSansCN;
       font-weight: 550;
       color: #121212;
+    }
+
+
+    .stateText{
+      flex: 1;
+      font-size: 15px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #E8374A;
+      line-height: 30px;
+      display: flex;
+      justify-content flex-end;
     }
   }
 

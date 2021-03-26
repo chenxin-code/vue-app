@@ -21,6 +21,7 @@
             :orderType="item.orderType"
             :billId="item.billId"
             pageType="finish"
+            :state="item.state"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -83,7 +84,7 @@ export default {
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList:this.tabs.type,
-        state: this.tabs.tag,
+        // state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
         airDefenseNo:this.$store.state.userRoomId
       };
@@ -171,6 +172,7 @@ export default {
           orderType: item.orderStateType,
           orderCategory: item.orderCategory,
           orderCanEvaluate: item.orderCanEvaluate,
+          state:item.state,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
