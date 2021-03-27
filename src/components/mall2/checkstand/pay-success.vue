@@ -169,6 +169,10 @@
                   path: '/common'
                 })
               } else {
+                appNav.setstatusBarHidden({
+                  isHidden: false,
+                  isAnimation: false
+                })
                 appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
                   console.log('跳转',res)
                 });
