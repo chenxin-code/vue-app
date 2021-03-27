@@ -64,7 +64,7 @@
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack"
+          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
           @click="
             hotEvent('backNav');
             $market.backNav();
@@ -240,7 +240,7 @@
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack"
+          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
           @click="
             hotEvent('backNav');
             $market.backNav();

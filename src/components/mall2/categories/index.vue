@@ -2,7 +2,7 @@
 
 <template>
   <div class="category">
-    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="$router.go(-1)">
+    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="$router.go(-1)" :showBackBtn="$store.state.webtype ==2 ||$store.state.webtype == 3?false:true">
       <div class="search-div theme_bg_white_f5"
            style="left: 50px; right: 50px; height: 30px; top: 7px; padding: 0 15px; border-radius: 15px;" @click="toSearchEvent">
         <i class="iconfont mall-sousuo theme_font_tint" style="font-size: 20px;font-size: 16px;"></i>
