@@ -320,7 +320,7 @@ var userCenter = {
           });
         }, 20)
       } else if (store.state.webtype == 3) {
-        wx.miniProgram.reLaunch({url: `/pages/index/main`})
+        wx.miniProgram.reLaunch({url: `/pages/common/home/index`})
       } else {
         setTimeout(() => {
           let path = window.location.href.split('#')[0];

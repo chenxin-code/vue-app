@@ -153,7 +153,7 @@
             if (res.status === 0) {
               const shortCode = res.data.substr(res.data.indexOf('/s/'))
               this.$request.post('/app/json/we_chat/getwxacodeunlimit', {
-                path: `pages/index/main`,
+                path: `pages/common/home/index`,
                 scene: shortCode,
                 width: 430
               }).then(res => {
