@@ -207,11 +207,7 @@ var payHelper = {
     return this.payRequest(payway, orderType, orderId, url, redirectUrl, restArg, 1)
   },
   doPay: function (payway, payInfo, redirectUrl, tradeNo = '', orderType = '', orderId = '', isScan = 0) {
-    let info = JSON.parse(JSON.parse(payInfo))
-    let wxPayInfo = JSON.parse(info.payData)
-    console.log('ppppppppppppp', info)
-    console.log('llllllllllll', wxPayInfo)
-    console.log('/pages/common/repayment/index?package='+wxPayInfo.package+'&noncestr='+wxPayInfo.nonceStr+'&timestamp='+wxPayInfo.timeStamp+'&sign='+wxPayInfo.paySign+'&signType='+wxPayInfo.signType)
+    console.log('ppppppppppppp', payway)
     // isScan 扫码加油支付
     return new Promise((resolve, reject) => {
       if (payway.payModeSub == '210001') {
@@ -368,7 +364,6 @@ var payHelper = {
         router.push('/mall2/paysuccess')
       } else if (payway.payModeSub == 260003) {
         //时代微信小程序支付
-        console.log('wwwwwwwwwwwww', wx)
         let info = JSON.parse(JSON.parse(payInfo))
         let wxPayInfo = JSON.parse(info.payData)
         let params = {
@@ -378,9 +373,6 @@ var payHelper = {
           sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
         }
-        console.log('260000000000000000000003redirectTo', params)
-        console.log('260000000000000000000003redirectTo', wxPayInfo)
-        console.log(`/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`)
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
