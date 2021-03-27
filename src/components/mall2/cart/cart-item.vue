@@ -43,7 +43,7 @@
                              <!--:minValue="cartitem.saleNumBegin" :stepNum="cartitem.saleNumStep"-->
                              <!--:maxValue="cartitem.saleNumMax"-->
                              <!--@numChange="numChange"></Counter>-->
-                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="cartitem.saleNumMax" @blur="numBlur" @change="numChange" integer/>
+                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="cartitem.saleNumMax" @blur="numBlur" @change="numChange" integer disable-input/>
                     <span v-if="cartitem.isGift != 0" class="gift-num theme_font_gray">x{{cartitem.number}}</span>
                   </div>
                 </div>
