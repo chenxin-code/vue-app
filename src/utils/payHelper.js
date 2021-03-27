@@ -207,7 +207,6 @@ var payHelper = {
     return this.payRequest(payway, orderType, orderId, url, redirectUrl, restArg, 1)
   },
   doPay: function (payway, payInfo, redirectUrl, tradeNo = '', orderType = '', orderId = '', isScan = 0) {
-    console.log('ppppppppppppp', payway)
     // isScan 扫码加油支付
     return new Promise((resolve, reject) => {
       if (payway.payModeSub == '210001') {
