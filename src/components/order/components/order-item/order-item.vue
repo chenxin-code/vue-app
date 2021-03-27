@@ -176,12 +176,15 @@ export default {
         if(this.billType != '11'){
           return "支付已完成"
         }else{
-          if(this.state == '17'){
-            return "支付已完成 · 待发货"
-          }else if(this.state == '4'){
-            return "支付已完成 · 待收货"
-          }else if(this.state == '9'){
-            return '订单已完成'
+          switch (this.state) {
+            case 17:
+              return "支付已完成 · 待发货";
+            case 4:
+              return "支付已完成 · 待收货";
+            case 9:
+              return "订单已完成";
+            case 12:
+              return "订单已取消";
           }
         }
       }else{
@@ -220,7 +223,7 @@ export default {
     isEvalute() {
       //评价
       return (
-        (this.pageType == "finish" || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9)) && this.billType == 11
+        (this.pageType == "finish" && this.state !='12' && this.state !='17' && this.state !='4' || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9 )) && this.billType == 11
       );
     },
     isBuyAgain() {

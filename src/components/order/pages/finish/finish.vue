@@ -182,6 +182,14 @@ export default {
             orderStateType: item.orderStateType,
             state: item.state,
           },
+            // case 17:
+            //   return "支付已完成 · 待发货";
+            // case 4:
+            //   return "支付已完成 · 待收货";
+            // case 9:
+            //   return "订单已完成";
+            // case 12:
+            //   return "订单已取消";
           billDetailObj: {
             businessCstNo:item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
@@ -191,7 +199,7 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: "9",
+            tag: item.state == 17?'16':item.state == 4?'4':item.state == 9?'9':item.state == 12?'7':'9',
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
             isRefund: item.isRefund,
