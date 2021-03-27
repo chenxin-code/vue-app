@@ -29,7 +29,7 @@
       <div class="price" v-if="productItem.billType == 11 || productItem.billType == 7 || productItem.billType == 8">
         <p class="pr">￥{{amount.integer}}.<span class="decimal">{{amount.decimal}}</span></p>
         <div class="billNum">
-          <p class="am"><img :src="xImg" alt="" class="xImg"></p>
+          <p class="am"><img :src="xImg" alt="" class="xImg" v-show="productItem.billNum !==''" ></p>
           <span class="num">{{ productItem.billNum }}</span>
         </div>
       </div>
