@@ -25,7 +25,7 @@ var payHelper = {
       token: store.state.login.token,
       orderType: orderType,
       occurOuCode: occurOuCode,
-      payScene: payScene,
+      payScene: 4,
       channel: store.state.channel,
       partnerChannel: store.state.channel,
     };
@@ -207,7 +207,11 @@ var payHelper = {
     return this.payRequest(payway, orderType, orderId, url, redirectUrl, restArg, 1)
   },
   doPay: function (payway, payInfo, redirectUrl, tradeNo = '', orderType = '', orderId = '', isScan = 0) {
-    debugger
+    let info = JSON.parse(JSON.parse(payInfo))
+    let wxPayInfo = JSON.parse(info.payData)
+    console.log('ppppppppppppp', info)
+    console.log('llllllllllll', wxPayInfo)
+    console.log('/pages/common/repayment/index?package='+wxPayInfo.package+'&noncestr='+wxPayInfo.nonceStr+'&timestamp='+wxPayInfo.timeStamp+'&sign='+wxPayInfo.paySign+'&signType='+wxPayInfo.signType)
     // isScan 扫码加油支付
     return new Promise((resolve, reject) => {
       if (payway.payModeSub == '210001') {
@@ -369,21 +373,16 @@ var payHelper = {
         let wxPayInfo = JSON.parse(info.payData)
         let params = {
           package: wxPayInfo.package,
-          noncestr: wxPayInfo.noncestr,
-          timestamp: wxPayInfo.timestamp,
-          sign: wxPayInfo.sign,
+          noncestr: wxPayInfo.nonceStr,
+          timestamp: wxPayInfo.timeStamp,
+          sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
         }
         console.log('260000000000000000000003redirectTo', params)
         console.log('260000000000000000000003redirectTo', wxPayInfo)
         console.log(`/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`)
         wx.miniProgram.navigateTo({
-          url: `/pages/common/repayment/index?
-            package=${encodeURIComponent(wxpayInfo.package)}&
-            noncestr=${encodeURIComponent(wxpayInfo.noncestr)}&
-            timestamp=${encodeURIComponent(wxpayInfo.timestamp)}&
-            sign=${encodeURIComponent(wxpayInfo.sign)}&
-            signType=${encodeURIComponent(wxpayInfo.signType)}`
+          url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
 
       } else {
