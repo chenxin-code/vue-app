@@ -25,7 +25,7 @@ var payHelper = {
       token: store.state.login.token,
       orderType: orderType,
       occurOuCode: occurOuCode,
-      payScene: 4,
+      payScene: payScene,
       channel: store.state.channel,
       partnerChannel: store.state.channel,
     };
