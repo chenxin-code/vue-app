@@ -31,7 +31,7 @@
         </div>
         <!--<scroll ref="preview_scroll" :data="fakeData" :pullDownRefresh="true" @scroll="pageSite" @pullingDown="topRefresh" :listenScroll="true" :hasMore="hasMore" :pullUpLoad="hasPullUpLoad()" @pullingUp="moduleLoadMore" v-else>-->
         <!---->
-        <div ref="preview_scroll" class="scroll-div" @scroll="pageSite" v-else>
+        <div ref="preview_scroll" class="scroll-div" @scroll="pageSite" v-else :style="{'padding-bottom':scrollPadding}">
           <van-pull-refresh v-model="refreshing" @refresh="topRefresh">
             <van-list
               v-model="loading"
@@ -159,7 +159,15 @@ export default {
       hasMore: false,
       refreshing: false,
       loading: true,
+      scrollPadding:"1.333333rem"
     };
+  },
+  created(){
+    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ){
+      this.scrollPadding = "1.333333rem"
+    }else{
+      this.scrollPadding = "4rem"
+    }
   },
   methods: {
     componentEvent: function (d) {
@@ -427,7 +435,7 @@ export default {
       .scroll-div {
         height: 100%;
         overflow-y: auto;
-        padding-bottom: 150px;
+        padding-bottom: 50px;
         -webkit-overflow-scrolling: touch;
       }
 
