@@ -591,6 +591,7 @@
         this.modifyHeadImg(picUrl);
       },
       changeHeaderImg: function () {
+        return
         if (this.usePorpData == true) {
           Photo.open({
             linkFunc: this.linkFunc,

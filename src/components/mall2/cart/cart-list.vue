@@ -285,7 +285,7 @@ export default {
       //   },
       // });
       this.$router.push({
-        name: '新首页'
+        path: '/common'
       })
     },
     coupon: function (storeitem) {
