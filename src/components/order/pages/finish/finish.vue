@@ -182,6 +182,7 @@ export default {
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
             state: item.state,
+            shoppingOrderId:item.shoppingOrderId,
           },
             // case 17:
             //   return "支付已完成 · 待发货";
@@ -232,6 +233,7 @@ export default {
               townName: item.townName,
               receiver: item.receiver,
               mobile: item.mobile,
+              setItemOrderId:sub.setItemOrderId,
             };
           }),
         };

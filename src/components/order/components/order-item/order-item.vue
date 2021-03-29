@@ -811,7 +811,7 @@ export default {
             path: "/mall2/comment",
             query: {
               skuId: this.dataList[0].skuId,
-              orderId: this.dataList[0].id,
+              orderId: this.dataList[0].setItemOrderId,
               phPictureUrl: this.dataList[0].billImg,
               skuName: this.dataList[0].billName,
             },
