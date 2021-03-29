@@ -310,11 +310,7 @@
         </div>
       </div>
     </nav-content>
-<<<<<<< HEAD
-    <!-- 去除遮罩层   showGuide -->
-=======
     <!-- showGuide  去除遮罩层 -->
->>>>>>> uat
     <div class="guide-div" v-if="false">
       <img
         class="guide-img-1"
