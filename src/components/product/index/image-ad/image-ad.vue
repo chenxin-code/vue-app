@@ -549,6 +549,7 @@ export default {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
       if (
         nav.link.url && 
+        nav.link.url != '' &&
         nav.link.url.indexOf("/applyDistribution") !== -1 ||
         nav.link.url.indexOf("/wxApplyDistribution") !== -1
       ) {
