@@ -731,6 +731,7 @@
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
   import ShareImage from '../detail/shareImage'
+  import appShare from "@zkty-team/x-engine-module-share";
 
   export default {
     name: "detail",
@@ -2237,11 +2238,31 @@
         shareData.title = this.detailData.skuName;
         shareData.sharetext = this.groupData.groupBuyName;
         shareData.imageurl = this.groupData.leaderUserAward[0].gameAwardPic;
-        shareData.detailurl = this.$store.state.globalConfig.wxBaseUrl + Config.shareUrl + '/group_detail?orderId=' + orderId;
-        shareData.detailurl += '&mktGroupBuyId=' + this.groupData.mktGroupBuyId
-        shareData.detailurl += '&spuId=' + this.groupData.spuId
-
-        this.$bridgefunc.wechatShare(shareData);
+        // shareData.detailurl = this.$store.state.globalConfig.wxBaseUrl + Config.shareUrl + '/group_detail?orderId=' + orderId;
+        // shareData.detailurl += '&mktGroupBuyId=' + this.groupData.mktGroupBuyId
+        // shareData.detailurl += '&spuId=' + this.groupData.spuId
+        // console.log(shareData.imageurl)
+        // console.log(orderId)
+        // console.log(appShare)
+        // console.log(appShare.shareForOpenWXMiniProgram)
+        // this.$bridgefunc.wechatShare(shareData);
+        appShare.shareForOpenWXMiniProgram({
+          userName: "gh_2a45a4d38d81",
+          path: `pages/weView/weView?redirect=${encodeURIComponent(
+            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&spuId=${this.$route.query.spuId}&orderId=${orderId}`
+          )}`,
+          title: shareData.title,
+          desc: shareData.sharetext,
+          link: "https://www.baidu.com",
+          imageurl: shareData.imageurl,
+          miniProgramType: 2,
+          __event__: (res) => {},
+        }).then((res) => {
+          // document.getElementById("debug_text").innerText = res;
+          console.log("shareThenRes----------", JSON.stringify(res));
+        }).catch(err => {
+          consloe.log(err)
+        })
       },
       getDatas: function () {
         this._getProductDetail();

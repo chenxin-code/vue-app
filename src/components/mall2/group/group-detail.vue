@@ -321,8 +321,9 @@ export default {
         wx.miniProgram.postMessage({ data: JSON.stringify(shareData) });
       }
     },
-    sharegoods: function () {
+    shareForOpenWXMiniProgramsharegoods: function () {
       //分享
+      console.log('触发分享------------')
       if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
         this.shareView = true;
         return;
@@ -341,15 +342,16 @@ export default {
       shareData.detailurl += "&mktGroupBuyId=" + this.groupDetail.mktGroupBuyId;
       shareData.detailurl += "&spuId=" + this.groupDetail.spuId;
 
+      console.log('分享appShare-------------------',appShare)
       appShare
         .shareForOpenWXMiniProgram({
-          userName: "wxc76cd2c3987620af",
+          userName: "gh_2a45a4d38d81",
           path: `pages/weView/weView?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}`
+            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}&orderId=${this.$route.query.orderId}`
           )}`,
           title: shareData.title,
           desc: shareData.sharetext,
-          link: "http://www.baidu.com",
+          link: "https://www.baidu.com",
           imageurl:shareData.imageurl,
           miniProgramType: 2,
           __event__: (res) => {},
@@ -358,7 +360,7 @@ export default {
           // document.getElementById("debug_text").innerText = res;
           console.log("shareThenRes----------", JSON.stringify(res));
         });
-
+      console.log('执行完毕-------------------')
       // this.$bridgefunc.wechatShare(shareData);
     },
     toPay: function () {

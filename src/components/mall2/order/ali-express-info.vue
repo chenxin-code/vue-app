@@ -78,6 +78,7 @@ export default {
       expressDetails: [],
       indexPrev: "0",
       // inputVal: ''
+      logisticsOrderNo:"",
 
       expressinfoList: [],
     };
@@ -130,15 +131,20 @@ export default {
       let paramsData = {
         orderType: this.orderType,
         orderNo: this.orderId,
+        logisticsOrderNo:this.logisticsOrderNo,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
           this.$Loading.close();
           if (res.data.status == 0) {
-            this.expressinfoList = res.data.data.logisticsDetailList;
+            if (res.data.data) {
+              this.expressinfoList = res.data.data.logisticsDetailList;
+            } else {
+              this.$Toast(res.info);
+            }
             console.log('-----------------------------------------',this.expressinfoList)
           } else {
-            this.$Toast(res.data.data.info);
+            this.$Toast(res.data.info);
           }
         },
         (error) => {
@@ -151,6 +157,7 @@ export default {
   created() {
     this.orderType = this.$route.query.orderType;
     this.orderId = this.$route.query.orderId;
+    this.logisticsOrderNo = this.$route.query.logisticsOrderNo;
     this.getExpressInfoList();
   },
 };

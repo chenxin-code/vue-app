@@ -21,6 +21,11 @@ import bulk from './modules/bulk'
 
 routerArr = routerArr.concat(bulk);
 
+// 新order
+import order from './modules/order'
+
+routerArr = routerArr.concat(order);
+
 
 //商城
 // import  mallItems from './mall'
@@ -306,5 +311,7 @@ routerArr = routerArr.concat(selfMall);
 import yearBill from './modules/year-bill'
 
 routerArr = routerArr.concat(yearBill);
+
+
 
 export default routerArr

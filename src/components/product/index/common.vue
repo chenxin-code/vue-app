@@ -1,6 +1,6 @@
 // common路由页
 <template>
-  <div>
+  <div class="common-box" :class="[$store.state.webtype == '1' ? 'bottom-space' : '']">
     <div class="top_bg" v-if="notch"></div>
     <div class="mobile-preview" v-if="pageShow">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
@@ -144,6 +144,7 @@ import Cookie from "js-cookie";
 import staticDataRequest from "../../../utils/staticData/staticDataRequest";
 import createGuide from "@/components/commonui/exchange-guide/guide-event";
 import { mapMutations, mapGetters } from "vuex";
+import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "index",
@@ -417,6 +418,7 @@ export default {
         this.$STLoading.close();
         if (data.status == 0) {
           this.pageLoaded = true;
+          console.log('首页获取布局', data.data.pageData)
           let fdata = data.data.pageData;
           if (!fdata.pageDataJson) {
             this.$toast("首页布局获取失败11");
@@ -996,6 +998,8 @@ export default {
   },
   activated() {
     // 爱心积分特殊处理
+    console.log('再次进入首页hhhhhhh  activated')
+    appUi && appUi.showTabbar(); 
     let dStr = sessionStorage.getItem("SAVE_AXJF_Enterprise");
     if (dStr) {
       let d = JSON.parse(dStr);
@@ -1067,6 +1071,8 @@ export default {
     next();
   },
   created() {
+    console.log('再次进入首页hhhhhhh  created')
+    appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType
@@ -1164,7 +1170,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-
+.bottom-space {
+  padding-bottom: 100px;
+}
 .top_bg {
   height: 0.933333rem;
   background-color: rgb(249 57 58);
@@ -1175,6 +1183,9 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  &.paddingBottom {
+    padding-bottom: 100px;
+  }
 
   .test {
     position: relative;

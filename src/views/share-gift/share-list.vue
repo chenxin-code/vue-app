@@ -195,7 +195,7 @@
       },
       backEvent: function () {
         if (this.$store.state.webtype == 3 && window.history.length === 1) {
-          wx.miniProgram.reLaunch({url: `/pages/index/main`})
+          wx.miniProgram.reLaunch({url: `/pages/common/home/index`})
         } else {
           this.$router.go(-1);
         }

@@ -269,7 +269,7 @@ var payHelper = {
           params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
-          url: `/pages/payment/main?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `/pages/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
       } else if (payway.payModeSub == '210004') {
         // 微信H5支付
@@ -355,24 +355,25 @@ var payHelper = {
         document.body.appendChild(textNode)
         document.forms[0].submit()
         // resolve()
-      } else if (payway.payModeSub == '260001' || payway.payModeSub == '260002') {
+      } else if (payway.payModeSub == '260001') {
         // 邻里邦支付平台
         resolve();
-      } else if (payway.payModeSub == '260003') {
-        //团购微信小程序支付
+      } else if (payway.payModeSub == '260002') {
+        // 临时使用 为了微信小程序测试流程
+        router.push('/mall2/paysuccess')
+      } else if (payway.payModeSub == 260003) {
+        //时代微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
+        let wxPayInfo = JSON.parse(info.payData)
         let params = {
-          package: info.package,
-          noncestr: info.noncestr,
-          timestamp: info.timestamp,
-          sign: info.sign
-        }
-        console.log('-----------------------------------------------', info)
-        if (redirectUrl) {
-          params.redirectUrl = redirectUrl
+          package: wxPayInfo.package,
+          noncestr: wxPayInfo.nonceStr,
+          timestamp: wxPayInfo.timeStamp,
+          sign: wxPayInfo.paySign,
+          signType: wxPayInfo.signType,
         }
         wx.miniProgram.navigateTo({
-          url: `/pages/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+          url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
 
       } else {

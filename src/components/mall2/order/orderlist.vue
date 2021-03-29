@@ -305,11 +305,11 @@
                   v-if="$store.state.deployType == 4"
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
-                <div
+                <!-- <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   @click.stop="showInvoice"
                   v-if="$store.state.globalConfig.invoice_shopping_enable != 'false'"
-                >查看发票</div>
+                >查看发票</div> -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   v-if="item.orderCanEvaluate"
@@ -369,11 +369,11 @@
                   v-if="$store.state.deployType == 4"
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
-                <div
+                <!-- <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   @click.stop="showInvoice"
                   v-if="$store.state.globalConfig.invoice_shopping_enable != 'false'"
-                >查看发票</div>
+                >查看发票</div> -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
                   v-if="item.orderCanEvaluate"
@@ -859,7 +859,8 @@ export default {
           path: '/mall2/aliexpressinfo',
           query: {
             orderType: item.orderType,
-            orderId: item.id
+            orderId: item.id,
+            logisticsOrderNo: item.expressNo,
           }
         })
       } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
@@ -969,8 +970,6 @@ export default {
     },
     tabEvent: function(item, idx) {
       this.tabIndex = idx
-
-      console.log('----------------------------------------------------',this.tabIndex,idx)
       if (this.$store.state.globalConfig.order_list_tabs_type == '2') {
         if (idx == 3) {
           this.deliveryType = 1
@@ -1110,6 +1109,8 @@ export default {
       this._getTabOrders(this.tabSelectedItem, loaded)
     },
     _getTabOrders: function(item, loaded) {
+    console.log('this.$store.state.globalConfig.delivertype_default',this.tabs)
+
       this.$Loading.open()
       let url = '/app/json/app_shopping_order/queryOrder'
       let paramsData = {
@@ -1126,7 +1127,7 @@ export default {
         url = '/app/json/app_shopping_order/queryOrderItem'
         paramsData.productType = 512
       }
-      if (item.tag == 4) {
+      if (item.tag == 4) {  
         paramsData.deliverType = this.deliveryType
         // // queryOrder接口屏蔽扫码购订单
         // if (this.deliveryType == 1) {

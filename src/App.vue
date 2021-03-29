@@ -64,7 +64,8 @@ import http from "@/utils/http";
 import bridgefunc from "@/utils/bridgefunc";
 import MessageBox from "./components/Vendor/messagebox";
 import appUi from "@zkty-team/x-engine-module-ui";
-
+import appNav from "@zkty-team/x-engine-module-nav";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "App",
   data() {
@@ -104,9 +105,35 @@ export default {
   },
   created() {
     // this.viewPortSet();
+    appNav
+      .setNavBarHidden({
+        isHidden: true,
+        isAnimation: false,
+      })
+      .then((res) => {});
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      let initObj = {};
+      console.log('localtion href', location.href)
+      location.href
+        .split("?")[1]
+        .split("&")
+        .forEach((item) => {
+          initObj[item.split("=")[0]] = item.split("=")[1];
+        });
+      this.$store.state.projectId = initObj.projectId;
+      this.$store.state.ythToken = initObj.ythToken;
+    } else {
+      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
+        this.$store.state.ythToken = res.result;
+      });
+    }
+    appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
+      this.$store.state.userRoomId = res.result;
+      console.log('---------------this.$store.state.userRoomId----------',res)
+    });
   },
   computed: {
     appBackHomeImg() {
@@ -332,7 +359,7 @@ export default {
       // 返回首页时清除 微店code（河北）
       this.$util.removeStoreCode();
       if (this.$store.state.webtype == 3) {
-        wx.miniProgram.reLaunch({ url: `/pages/index/main` });
+        wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
         return;
       }
       let num = this.$router.customRouterData.routerPaths.length - 1;
@@ -431,32 +458,34 @@ export default {
   },
   watch: {
     "$route.path": function (newVal, oldVal) {
+      //app环境
       if (/^\/common$/.test(newVal)) {
-        appUi.showTabbar();
+        appUi.showTabbar && appUi.showTabbar();
       } else {
-        appUi.hideTabbar();
+        appUi.hideTabbar && appUi.hideTabbar();
       }
     },
     "$route.matched"(value) {
-      if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
-        // 判断是否是刘海屏
-        const rate = window.screen.height / window.screen.width;
-        let limit =
-          window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-        // window.screen.height为屏幕高度
-        //  window.screen.availHeight 为浏览器 可用高度
-        if (rate > limit) {
-          if (
-            this.$store.state.webtype !== "3" &&
-            this.$store.state.webtype !== "2"
-          ) {
-            document.getElementsByTagName("body")[0].style.paddingTop =
-              "0.933333rem";
+      if (value.length !== 0) {
+        if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
+          // 判断是否是刘海屏
+          const rate = window.screen.height / window.screen.width;
+          let limit =
+            window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+          // window.screen.height为屏幕高度
+          //  window.screen.availHeight 为浏览器 可用高度
+          if (rate > limit) {
+            if (
+              this.$store.state.webtype !== "3" &&
+              this.$store.state.webtype !== "2"
+            ) {
+              document.getElementsByTagName("body")[0].style.paddingTop =
+                "0.933333rem";
+            }
           }
+        } else {
+          document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
-      } else {
-        document.getElementsByTagName("body")[0].style.paddingTop =
-          "0rem";
       }
     },
     // '$route'(to, from) {

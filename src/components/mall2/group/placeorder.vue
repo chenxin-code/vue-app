@@ -128,8 +128,8 @@
               </div>
             </div>
           </div>
-
-          <div class="block-div" v-if="$store.state.globalConfig.invoice_shopping_enable != false">
+          <!-- 发票系统临时屏蔽 -->
+          <!-- <div class="block-div" v-if="$store.state.globalConfig.invoice_shopping_enable != false">
             <div class="flex-row">
               <div class="title full theme_font_common">发票</div>
               <div class="swith" @click="useInvoiceEvent">
@@ -147,7 +147,7 @@
                 <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="block-div">
             <div class="flex-row">
@@ -175,7 +175,7 @@
             <!--</div>-->
           </div>
 
-          <div class="block-div" v-if="recommendDisabled">
+          <!-- 临时屏蔽<div class="block-div" v-if="recommendDisabled">
             <div class="flex-row">
               <div class="passwords-input">
                 <div class="label-middle full theme_font_common">推荐人</div>
@@ -187,7 +187,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="bottom-btns">
           <div class="tip theme_bg_yl theme_standard_font theme_light_bg" v-if="deliveryType == 2">

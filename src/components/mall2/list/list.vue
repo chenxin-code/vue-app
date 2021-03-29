@@ -54,10 +54,11 @@
       <!-- 优化新增类目 -->
       <NewCategory
         @toggle="toggle"
-        :current="current"
+        :NoCategory="NoCategory"
         v-show="showNewCategory"
         :domIndex="domIndex"
         v-if="isProgram"
+        :category="category"
       ></NewCategory>
       <div class="all-content">
         <div
@@ -309,7 +310,11 @@
         </div>
       </div>
     </nav-content>
+<<<<<<< HEAD
     <!-- 去除遮罩层   showGuide -->
+=======
+    <!-- showGuide  去除遮罩层 -->
+>>>>>>> uat
     <div class="guide-div" v-if="false">
       <img
         class="guide-img-1"
@@ -376,6 +381,7 @@ import InitialLoadPickupAny from "@/utils/initialLoadPickupAny.js";
 import AdPage from "@/components/product/index/subpage/adpage";
 import NewCategory from "@/components/product/index/category/index";
 import { mapMutations } from "vuex";
+import appNav from '@zkty-team/x-engine-module-nav';
 
 export default {
   name: "list",
@@ -469,8 +475,8 @@ export default {
       channels: [],
       selectedChannel: {},
       nowCouponAmount: 0,
-      //新类目传值
-      current: 0,
+      //是否有类目id
+      NoCategory: false,
       // 新类目显示隐藏
       showNewCategory: true,
       //新类目dom下标
@@ -601,7 +607,13 @@ export default {
       );
     },
     backEvent: function () {
-      this.$router.go(-1);
+      if (this.$route.query.backApp) {
+        appNav.navigatorBack({ url: '0' }).then( res => {
+          console.log(res)
+        })
+      } else {
+        this.$router.go(-1)
+      }
     },
     toSearchEvent: function () {
       Search.open({
@@ -708,7 +720,6 @@ export default {
     },
     // 获取普通商品列表
     _loadProList: function (loaded) {
-      console.log(3333333333333333333333);
       if (this.selectedType == "1") {
         InitialLoadPickupAny.checkIsInitialLoad((address) => {
           if (address) {
@@ -1158,9 +1169,15 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.domIndex) {
-      this.domIndex = this.$route.query.domIndex;
+    this.domIndex = this.$route.query.domIndex ? this.$route.query.domIndex : 1;
+    if (this.$route.query.category) {
+      this.category = this.$route.query.category;
+    } else {
+      this.NoCategory = true;
     }
+    this.cateLevel = this.$route.query.cateLevel
+      ? this.$route.query.cateLevel
+      : 1;
     //小程序不需要类目
     if (
       this.$store.state.webtype !== "3" &&
@@ -1238,10 +1255,6 @@ export default {
       }
     }
 
-    if (this.$route.query.category) {
-      this.current = this.$route.query.category;
-    }
-
     if (
       this.$store.state.list_guide_show == true &&
       (this.$store.state.webtype == "0" ||
@@ -1264,12 +1277,7 @@ export default {
         ? this.$route.query.question
         : "";
     }
-    this.category = this.$route.query.category
-      ? this.$route.query.category
-      : "";
-    this.cateLevel = this.$route.query.cateLevel
-      ? this.$route.query.cateLevel
-      : "";
+
     this.pageType = this.$route.query.pageType
       ? this.$route.query.pageType
       : "";

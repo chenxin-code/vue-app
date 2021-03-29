@@ -342,7 +342,6 @@
           let jsonString = _result;
           let jsonData = JSON.parse(decodeURIComponent(jsonString))
           this.browsingHistory = jsonData
-          console.log(this.browsingHistory)
           this._loadProList();
         });
       }

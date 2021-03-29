@@ -84,9 +84,9 @@
           :propData="pageData"
           @floterEdit="floterEdit"
         ></Floater>
-        <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
+        <!-- <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
           <img src="static/images/toTop.png" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -427,7 +427,7 @@ export default {
       .scroll-div {
         height: 100%;
         overflow-y: auto;
-        padding-bottom: 50px;
+        padding-bottom: 150px;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -461,7 +461,7 @@ export default {
     .to-top {
       position: absolute;
       right: 10px;
-      bottom: 15px;
+      bottom: 150px;
       overflow: hidden;
       border-radius: 20px;
       z-index: 10;

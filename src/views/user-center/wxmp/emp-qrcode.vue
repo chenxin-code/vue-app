@@ -42,7 +42,7 @@
       getCode: function () {
         this.$request.post('/app/json/user/getUserRfrCode').then(res => {
           this.$request.post('/app/json/we_chat/getwxacodeunlimit', {
-            path: `pages/index/main`,
+            path: `pages/common/home/index`,
             scene: `rfrCode=${res.data.qrCode}`,
             width: 430
           }).then(res => {

@@ -284,7 +284,9 @@ export default {
       //     delivertype: this.deliverType,
       //   },
       // });
-      this.$router.push('/common')
+      this.$router.push({
+        path: '/common'
+      })
     },
     coupon: function (storeitem) {
       Coupon.open({

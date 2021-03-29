@@ -19,7 +19,7 @@
         </div>
         <img
           :src="
-            $route.name == '首页'
+            $route.name == '新首页'
               ? require('./images/selectIcon.png')
               : $route.name == '商品列表'
               ? require('./images/selectIconRed.png')
@@ -37,7 +37,7 @@
 import { mapMutations } from "vuex";
 export default {
   name: "category",
-  props: ["current", "domIndex"],
+  props: ["category", "NoCategory", "domIndex"],
   data() {
     return {
       categoryList: [],
@@ -64,11 +64,23 @@ export default {
             0
           );
         });
+      } else if (this.NoCategory && this.$route.name == "商品列表") {
+        this.$nextTick(() => {
+          this.$refs.categoryList.scrollTo(
+            this.$refs["category" + "1"][0].offsetLeft - 20,
+            0
+          );
+        });
+      }
+
+      if (this.NoCategory && this.$route.name == "商品列表" && !this.$route.query.searchKey) {
+        this.$emit("toggle", this.categoryList[1].id);
+        this.currentSelect = this.categoryList[1].id;
+      }
+      if (this.category) {
+        this.currentSelect = this.category;
       }
     });
-    if (this.current) {
-      this.currentSelect = this.current;
-    }
 
     console.log(this.$route);
   },
@@ -81,7 +93,7 @@ export default {
       if (item.id == 0) {
         this.$router.push("/common");
       } else {
-        if (this.$route.name == "首页") {
+        if (this.$route.name == "新首页") {
           let path = "/mall2/list/" + this.$util.getDataString();
           this.$router.push({
             path,
@@ -104,7 +116,7 @@ export default {
         switch (this.$route.name) {
           case "商品列表":
             return "#ffffff";
-          case "首页":
+          case "新首页":
             this.currentSelect = 0;
             this.setShowCategory(true);
             return "rgb(249 57 58)";

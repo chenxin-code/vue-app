@@ -1,15 +1,17 @@
 <template>
   <div class="paysuccess">
-    <nav-top :no-back="true" :title="payResult == 'icbcFailed' ? '支付失败' : '支付成功'">
+    <nav-top :no-back="true" :title="payResult == 'icbcFailed' ? '支付失败' : '支付成功'" @backEvent="backEvent">
       <div class="right-btn theme_font_gray" v-if="$store.state.webtype != 3" style="right: 0px; height: 44px; top: 0px; padding-right: 12px;font-size: 16px;" @click="turnback">完成</div>
-      <!--<div class="right-btn">完成</div>-->
+      <!--<div class="right-btn">完成</div>-->backEvent
     </nav-top>
     <nav-content>
       <div class="scroll-div">
         <div class="padding-con shadow-cell">
           <div class="top-image">
             <div class="title-con">
-              <img src="static/image/mall2/finish.png"/>
+              <img src="static/image/mall2/fail.png" v-if="payResult == 'icbcFailed'" />
+              <img src="static/image/mall2/succ.png" v-else />
+              <!-- <img src="static/image/mall2/finish.png"/> -->
               <p class="theme_font_red" v-if="payResult == 'icbcFailed'">支付失败！</p>
               <p class="theme_font_red" v-else>支付成功！</p>
             </div>
@@ -45,7 +47,8 @@
   import wxfunc from '@/utils/wxfunc'
   import Config from '@/api/config'
   import SubPage from '@/components/product/index/subpage/subpage'
-
+  import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
+  import appNav from '@zkty-team/x-engine-module-nav'
   export default {
     name: 'paysuccess',
     components: {
@@ -65,15 +68,28 @@
       }
     },
     methods: {
+      backEvent(){
+        if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3 ){
+          if(this.$route.query.isBill){
+            this.$router.push({
+              path:"/order/2",
+            })
+          }else{
+            this.$router.push('/common')
+          }
+        }else{
+          this.$router.push('/common')
+        }
+      },
       eventClick: function (type) {
         if (type == 1){//我的订单
           if (this.payResult == 'icbcFailed') { //支付失败
-            let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
-            let awardActivity =
-            currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
+              let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
+              let awardActivity =
+              currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
               ? currentOrderDetails.awardActivityList[0]
               : {}
-            this.$router.push({
+              this.$router.push({
               path: '/mall2/orderdetail',
               query: {
                 orderId: currentOrderDetails.orderId,
@@ -100,7 +116,7 @@
                 path: '/mall2/purchaseorderlist',
               });
             }else{
-              this.$router.replace({
+                this.$router.replace({
                 path: '/mall2/orderlist',
                 query: {
                   selectedIndex: '2',
@@ -127,18 +143,69 @@
 
           }
         }else if (type == 2){//继续购物
-          if (this.$store.state.webtype == 3) {
-            wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
-            // this.$util.wxmpBackHome()
-          } else {
-            this.turnback()
+          // if (this.$store.state.webtype == 3) {
+          //   wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
+          //   // this.$util.wxmpBackHome()
+          // } else {
+          //   this.turnback()
+          // }
+          if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+            this.$router.replace({
+              path: '/common'
+            })
+          }else{
+            appLocalstorage
+            .get({
+              key: "LLBIsHomeView",
+              isPublic: true,
+            })
+            .then((res) => {
+              let _result = res.result
+              if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+                return;
+              }
+              if (_result == '1') {
+                this.$router.replace({
+                  path: '/common'
+                })
+              } else {
+                appNav.setstatusBarHidden({
+                  isHidden: false,
+                  isAnimation: false
+                })
+                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                  console.log('跳转',res)
+                });
+              }
+            });
           }
         }
       },
       turnback: function () {//返回
-        this.$router.replace({
-          path: '/common'
+        appLocalstorage
+        .get({
+          key: "LLBIsHomeView",
+          isPublic: true,
         })
+        .then((res) => {
+          let _result = res.result
+          if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+            return;
+          }
+          if (_result == '1') {
+            this.$router.replace({
+              path: '/common'
+            })
+          } else {
+            // appNav.navigatorBack({ url: '0' }).then( res => {
+            //   console.log(res)
+            // })
+            this.$router.replace({
+              path: '/order/2'
+            })
+          }
+        });
+        
         // if (this.$util.isICBCApp()) {
         //   // 工银e生活，需要跳到首页
         //   this.$router.replace({
@@ -214,7 +281,7 @@
         display flex
         align-items center
         img {
-          width 41px
+          width 45px
           height 45px
         }
         p{
