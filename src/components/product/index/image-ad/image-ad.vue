@@ -546,23 +546,27 @@ export default {
     },
     // this.$store.state.ythToken
     enterNav: function (nav) {
-      if (
-        nav.link.url.indexOf("/applyDistribution") !== -1 ||
-        nav.link.url.indexOf("/wxApplyDistribution") !== -1
-      ) {
-        if (this.$store.state.ythToken) {
-          if (nav.link.url.indexOf("token") == -1) {
-            nav.link.url =
-              nav.link.url + "?token=" + this.$store.state.ythToken;
+      console.log('nnnnnnnnnnnnnnnnnnn', nav)
+      if(nav.link.url) {
+        if (
+          nav.link.url.indexOf("/applyDistribution") !== -1 ||
+          nav.link.url.indexOf("/wxApplyDistribution") !== -1
+        ) {
+          if (this.$store.state.ythToken) {
+            if (nav.link.url.indexOf("token") == -1) {
+              nav.link.url =
+                nav.link.url + "?token=" + this.$store.state.ythToken;
+            }
           }
+        }
+      } else {
+        if (this.canEnterNav) {
+          this.$market.enterNav(nav, this.pageData.pgCode);
+        } else {
+          this.canEnterNav = true;
         }
       }
 
-      if (this.canEnterNav) {
-        this.$market.enterNav(nav, this.pageData.pgCode);
-      } else {
-        this.canEnterNav = true;
-      }
     },
     resetGndhPageArr: function (codeArr) {
       let arr = JSON.parse(JSON.stringify(this.moduleData.rows));

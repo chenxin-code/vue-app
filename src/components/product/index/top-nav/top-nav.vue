@@ -64,7 +64,7 @@
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack"
+          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
           @click="
             hotEvent('backNav');
             $market.backNav();
@@ -123,7 +123,7 @@
           <i>{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
-        <van-icon
+        <!-- <van-icon
           name="photograph"
           size="30"
           class="home-shoppingCart"
@@ -132,7 +132,7 @@
             ($store.state.webtype == '2' || $store.state.webtype == '3')
           "
           @click="getWechatSignature"
-        />
+        /> -->
 
         <!-- 退出登录 -->
         <!-- <div class="img-btn-pading space-margin" :class="{'img-btn-bg': myData.isFloat == true && scrollSite < 60, ...hotareaClass({idCode: myData.idCode + 'loginOut'}, true)}" v-if="myData.isShowLoginOut" @click="hotEvent('loginOut');confirmLoginOut()">
@@ -240,7 +240,7 @@
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack"
+          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
           @click="
             hotEvent('backNav');
             $market.backNav();

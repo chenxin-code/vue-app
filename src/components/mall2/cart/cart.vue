@@ -2,7 +2,7 @@
 
 <template>
   <div class="cart">
-    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent">
+    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent" :showBackBtn="($store.state.webtype == 2 || $store.state.webtype == 3)?false:true ">
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">

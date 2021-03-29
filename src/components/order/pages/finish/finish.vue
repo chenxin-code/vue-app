@@ -22,6 +22,7 @@
             :billId="item.billId"
             pageType="finish"
             :state="item.state"
+            :orderCanEvaluate="item.orderCanEvaluate"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -221,6 +222,16 @@ export default {
               itemTypeName:sub.itemTypeName,
               snapshotTime:sub.snapshotTime,
               info:sub.info,
+              address: item.address,
+              cityId: item.cityId,
+              countryId: item.countryId,
+              countryName: item.countryName,
+              provinceId: item.provinceId,
+              provinceName: item.provinceName,
+              townId: item.townId,
+              townName: item.townName,
+              receiver: item.receiver,
+              mobile: item.mobile,
             };
           }),
         };

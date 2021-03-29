@@ -2449,6 +2449,7 @@ export default {
       }
     },
     activityProducts: function (activity) {
+      this.$store.state.showCategory = false;
       this.showActivity = false;
       let path = "/mall2/list/" + this.$util.getDataString();
       this.$router.push({

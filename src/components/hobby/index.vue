@@ -1,48 +1,5 @@
 <template>
   <div class="box">
-<!--    <van-popup v-model="showView">-->
-<!--      <div>-->
-<!--        <div class="div1">-->
-<!--          <span>我的偏好</span>-->
-<!--          <i class="icon iconfont mall-guanbi" @click="closeBtn"></i>-->
-<!--        </div>-->
-<!--        <div v-for="(item,index) in answerList" :key="index">-->
-<!--          <div class="div2" v-if="item.topicType  == 1">-->
-<!--            <p>{{index+1}}、{{item.title}}（单选）</p>-->
-<!--            <van-radio-group v-model="item.answer">-->
-<!--              <van-radio-->
-<!--                v-for="(optionItem, index) in item.options"-->
-<!--                :key="index"-->
-<!--                :name="optionItem.id"-->
-<!--              >{{optionsObj[index]}} 、{{optionItem.optionContent}}</van-radio>-->
-<!--            </van-radio-group>-->
-<!--          </div>-->
-<!--          <div class="div3" v-if="item.topicType  == 2">-->
-<!--            <p>{{index+1}}、{{item.title}}（多选）</p>-->
-<!--            <van-checkbox-group v-model="item.answer">-->
-<!--              <van-checkbox-->
-<!--                v-for="(optionItem, index) in item.options"-->
-<!--                :key="index"-->
-<!--                :name="optionItem.id"-->
-<!--              >{{optionsObj[index]}} 、{{optionItem.optionContent}}</van-checkbox>-->
-<!--            </van-checkbox-group>-->
-<!--          </div>-->
-<!--          <div class="div3" v-if="item.topicType  == 3" style="display: flex">-->
-<!--            <p>{{index+1}}、{{item.title}}（下拉）</p>-->
-<!--            <div class="xiala" style="margin-left: 20px" @click="select1(item)">-->
-<!--              <span>{{item.name || '请选择'}}</span>-->
-<!--              <span class="icon iconfont mall-xiala"></span>-->
-<!--            </div>-->
-<!--            <van-action-sheet-->
-<!--              v-model="item.show"-->
-<!--              :actions="item.options"-->
-<!--              @select="onSelect($event,item)"-->
-<!--            />-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="btn" @click="commit">确认提交</div>-->
-<!--      </div>-->
-<!--    </van-popup>-->
     <van-popup v-model="showView" @click-overlay="closeBtn">
       <div class="boxModal" ref="elementboxModal">
         <div class="top" ref="top">
