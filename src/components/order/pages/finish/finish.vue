@@ -21,6 +21,8 @@
             :orderType="item.orderType"
             :billId="item.billId"
             pageType="finish"
+            :state="item.state"
+            :orderCanEvaluate="item.orderCanEvaluate"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -83,7 +85,7 @@ export default {
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList:this.tabs.type,
-        state: this.tabs.tag,
+        // state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
         airDefenseNo:this.$store.state.userRoomId
       };
@@ -136,7 +138,7 @@ export default {
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList:this.tabs.type,
-        state: this.tabs.tag,
+        // state: this.tabs.tag,
         page: { index: page, pageSize: 10 },
         airDefenseNo:this.$store.state.userRoomId
       };
@@ -171,6 +173,7 @@ export default {
           orderType: item.orderStateType,
           orderCategory: item.orderCategory,
           orderCanEvaluate: item.orderCanEvaluate,
+          state:item.state,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -180,6 +183,14 @@ export default {
             orderStateType: item.orderStateType,
             state: item.state,
           },
+            // case 17:
+            //   return "支付已完成 · 待发货";
+            // case 4:
+            //   return "支付已完成 · 待收货";
+            // case 9:
+            //   return "订单已完成";
+            // case 12:
+            //   return "订单已取消";
           billDetailObj: {
             businessCstNo:item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
@@ -189,7 +200,7 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: "9",
+            tag: item.state == 17?'16':item.state == 4?'4':item.state == 9?'9':item.state == 12?'7':'9',
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
             isRefund: item.isRefund,
@@ -211,6 +222,16 @@ export default {
               itemTypeName:sub.itemTypeName,
               snapshotTime:sub.snapshotTime,
               info:sub.info,
+              address: item.address,
+              cityId: item.cityId,
+              countryId: item.countryId,
+              countryName: item.countryName,
+              provinceId: item.provinceId,
+              provinceName: item.provinceName,
+              townId: item.townId,
+              townName: item.townName,
+              receiver: item.receiver,
+              mobile: item.mobile,
             };
           }),
         };

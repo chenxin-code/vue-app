@@ -822,7 +822,7 @@ var utils = {
     let redirectUrl = encodeURIComponent(Config.shareUrl + router.history.current.fullPath)
     // 兼容未升级小程序的情况
     if (store.state.globalConfig.wxmnp_update == 1) {
-      redirectUrl = encodeURIComponent(`/pages/index/main?path=${redirectUrl}`)
+      redirectUrl = encodeURIComponent(`/pages/common/home/index?path=${redirectUrl}`)
     }
     // wxMnpLoginType微信小程登录类型，默认不传是走微信原生授权手机号登录， 1 是走vue项目自带的绑定登录
     if (store.state.webtype == 2 || store.state.login.wxMnpLoginType == 1) {

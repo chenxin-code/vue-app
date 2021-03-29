@@ -149,26 +149,36 @@
           // } else {
           //   this.turnback()
           // }
-          appLocalstorage
-          .get({
-            key: "LLBIsHomeView",
-            isPublic: true,
-          })
-          .then((res) => {
-            let _result = res.result
-            if (!_result || _result == '' || _result == 'null' || _result == undefined) {
-              return;
-            }
-            if (_result == '1') {
-              this.$router.replace({
-                path: '/common'
-              })
-            } else {
-              appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
-                console.log('跳转',res)
-              });
-            }
-          });
+          if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+            this.$router.replace({
+              path: '/common'
+            })
+          }else{
+            appLocalstorage
+            .get({
+              key: "LLBIsHomeView",
+              isPublic: true,
+            })
+            .then((res) => {
+              let _result = res.result
+              if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+                return;
+              }
+              if (_result == '1') {
+                this.$router.replace({
+                  path: '/common'
+                })
+              } else {
+                appNav.setstatusBarHidden({
+                  isHidden: false,
+                  isAnimation: false
+                })
+                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                  console.log('跳转',res)
+                });
+              }
+            });
+          }
         }
       },
       turnback: function () {//返回

@@ -25,9 +25,9 @@
           </div>
         </scroll>
         <Floater ref="Floater_Module" v-if="pageData.floater && pageData.floater.data.type != 'none'" :usePorpData="true" :propData="pageData" @floterEdit="floterEdit"></Floater>
-        <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
+        <!-- <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
           <img src="static/images/toTop.png">
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -327,7 +327,7 @@
       .to-top {
         position absolute;
         right 10px;
-        bottom 15px;
+        bottom 150px;
         overflow hidden;
         border-radius 20px;
         z-index 10;

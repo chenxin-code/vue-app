@@ -361,20 +361,16 @@ var payHelper = {
       } else if (payway.payModeSub == '260002') {
         // 临时使用 为了微信小程序测试流程
         router.push('/mall2/paysuccess')
-      } else if (payway.payModeSub == '260003') {
+      } else if (payway.payModeSub == 260003) {
         //时代微信小程序支付
-        console.log('wwwwwwwwwwwww', wx)
         let info = JSON.parse(JSON.parse(payInfo))
         let wxPayInfo = JSON.parse(info.payData)
         let params = {
           package: wxPayInfo.package,
-          noncestr: wxPayInfo.noncestr,
-          timestamp: wxPayInfo.timestamp,
-          sign: wxPayInfo.sign,
+          noncestr: wxPayInfo.nonceStr,
+          timestamp: wxPayInfo.timeStamp,
+          sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
-        }
-        if (redirectUrl) {
-          params.redirectUrl = redirectUrl
         }
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`

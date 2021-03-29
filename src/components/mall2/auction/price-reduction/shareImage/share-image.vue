@@ -137,7 +137,7 @@
           }).then(res => {
             if (res.status === 0) {
               this.$request.post('/app/json/we_chat/getwxacode', {
-                path: `/pages/index/main?path=${encodeURIComponent(res.data)}&userId=${rfrCode}`,
+                path: `/pages/common/home/index?path=${encodeURIComponent(res.data)}&userId=${rfrCode}`,
                 width: 430
               }).then(res => {
                 if (res.status === 0) {

@@ -31,7 +31,7 @@
         </div>
         <!--<scroll ref="preview_scroll" :data="fakeData" :pullDownRefresh="true" @scroll="pageSite" @pullingDown="topRefresh" :listenScroll="true" :hasMore="hasMore" :pullUpLoad="hasPullUpLoad()" @pullingUp="moduleLoadMore" v-else>-->
         <!---->
-        <div ref="preview_scroll" class="scroll-div" @scroll="pageSite" v-else>
+        <div ref="preview_scroll" class="scroll-div" @scroll="pageSite" v-else :style="{'padding-bottom':scrollPadding}">
           <van-pull-refresh v-model="refreshing" @refresh="topRefresh">
             <van-list
               v-model="loading"
@@ -84,9 +84,9 @@
           :propData="pageData"
           @floterEdit="floterEdit"
         ></Floater>
-        <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
+        <!-- <div class="to-top" v-show="showToTop" @click.stop="toTopEvent">
           <img src="static/images/toTop.png" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -159,7 +159,15 @@ export default {
       hasMore: false,
       refreshing: false,
       loading: true,
+      scrollPadding:"1.333333rem"
     };
+  },
+  created(){
+    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ){
+      this.scrollPadding = "1.333333rem"
+    }else{
+      this.scrollPadding = "4rem"
+    }
   },
   methods: {
     componentEvent: function (d) {
@@ -461,7 +469,7 @@ export default {
     .to-top {
       position: absolute;
       right: 10px;
-      bottom: 15px;
+      bottom: 150px;
       overflow: hidden;
       border-radius: 20px;
       z-index: 10;

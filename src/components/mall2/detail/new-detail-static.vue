@@ -2433,7 +2433,7 @@ export default {
     },
     backEvent: function () {
       // if (this.$store.state.webtype == 3 && window.history.length === 1) {
-      //   wx.miniProgram.reLaunch({ url: `/pages/index/main` });
+      //   wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
       // }
       if (this.proView == 2) {
         this.proView = 1;
@@ -2449,6 +2449,7 @@ export default {
       }
     },
     activityProducts: function (activity) {
+      this.$store.state.showCategory = false;
       this.showActivity = false;
       let path = "/mall2/list/" + this.$util.getDataString();
       this.$router.push({

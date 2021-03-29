@@ -390,7 +390,7 @@
       // 返回首页，这里很low但是没bug，切最简单，需要找机会处理
       backIndex: function () {
         if (this.$store.state.webtype == 3) {
-          wx.miniProgram.reLaunch({url: `/pages/index/main`})
+          wx.miniProgram.reLaunch({url: `/pages/common/home/index`})
           return
         }
         let num = this.$router.customRouterData.routerPaths.length - 1

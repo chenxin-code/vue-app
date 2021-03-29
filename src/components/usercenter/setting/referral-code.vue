@@ -239,7 +239,7 @@
         // 返回首页时清除 微店code（河北）
         this.$util.removeStoreCode()
         if (this.$store.state.webtype == 3) {
-          wx.miniProgram.reLaunch({ url: `/pages/index/main` });
+          wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
           return;
         }
       },
