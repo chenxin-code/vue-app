@@ -233,7 +233,7 @@ export default {
               townName: item.townName,
               receiver: item.receiver,
               mobile: item.mobile,
-              setItemOrderId:sub.setItemOrderId,
+              setItemOrderId:sub.itemOrderId,
             };
           }),
         };
