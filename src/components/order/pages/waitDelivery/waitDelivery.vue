@@ -183,6 +183,7 @@ export default {
             orderCategory: item.orderCategory,
             orderStateType: item.orderStateType,
             state: item.state,
+            tradeNo:item.tradeNo,
           },
           billDetailObj: {
             groupBuyActivityId: item.groupBuyActivityId,

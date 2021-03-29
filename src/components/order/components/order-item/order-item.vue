@@ -65,17 +65,20 @@
       </div>
       <div class="btn-box">
         <div
-          class="btn default"
+          class="btn"
           v-if="isChangeOrder"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
         </div>
+        <div class="btn" v-if="isEvalute" @click.stop="toComment">
+          <p>立即评价</p>
+        </div>
         <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
         <div
-          class="btn default"
+          class="btn"
           v-if="isViewLogistics"
           @click.stop="expressType(dataList[0])"
         >
@@ -87,9 +90,6 @@
           @click.stop="confirmProduct()"
         >
           <p>确认收货</p>
-        </div>
-        <div class="btn" v-if="isEvalute" @click.stop="toComment">
-          <p>立即评价</p>
         </div>
         <div class="btn" v-if="isFinish"><p>已完成</p></div>
         <div class="btn" v-if="isPayAtOnce" @click="payAtOnce(payInfo)">
@@ -140,7 +140,8 @@ export default {
     "type",
     "billId",
     "orderStateType",
-    "state"
+    "state",
+    "orderCanEvaluate",
   ],
   data() {
     return {
@@ -213,17 +214,13 @@ export default {
     isChangeOrder() {
       //修改订单
       return (
-        (this.pageType == "waitDelivery" ||
-          (this.pageType == "allOrder" &&
-            this.params.orderStateType == "200017" &&
-            this.params.state == 17)) &&
-        this.billType == 11
+        (this.pageType == "waitDelivery" || (this.pageType == "allOrder" || this.pageType == "finish" && this.params.orderStateType == "200017" && this.params.state == 17)) && this.billType == 11
       );
     },
     isEvalute() {
       //评价
       return (
-        (this.pageType == "finish" && this.state !='12' && this.state !='17' && this.state !='4' || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9 )) && this.billType == 11
+        (this.pageType == "finish" && this.orderCanEvaluate && this.state !='12' && this.state !='17' && this.state !='4' || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9 )) && this.billType == 11
       );
     },
     isBuyAgain() {
@@ -259,7 +256,7 @@ export default {
       //查看物流
       return (
         (this.pageType == "waitTakeDelivery" ||
-          (this.pageType == "allOrder" &&
+          (this.pageType == "allOrder" || this.pageType == "finish" &&
             this.params.orderStateType == "200017" &&
             this.params.state == 4)) &&
         this.billType == 11
@@ -269,7 +266,7 @@ export default {
       //确认收货
       return (
         (this.pageType == "waitTakeDelivery" ||
-          (this.pageType == "allOrder" &&
+          (this.pageType == "allOrder" || this.pageType == "finish" &&
             this.params.orderStateType == "200017" &&
             this.params.state == 4)) &&
         this.billType == 11
@@ -823,6 +820,7 @@ export default {
       }
     },
     modifyAddress: function (item) {
+      console.log('params',this.params)
       this.$router.push({
         path: "/mall2/modifyorderaddress",
         query: {
@@ -1087,10 +1085,10 @@ export default {
       height: 32px;
       font-size: 15px;
       font-weight: bold;
-      color: #e8374a;
+      color: #8d8d8d;
       text-align: center;
       line-height: 33px;
-      border: 1px solid #e8374a;
+      border: 1px solid #8d8d8d;
       border-radius: 20px;
       margin-left: 4px;
 
@@ -1098,14 +1096,18 @@ export default {
 
 
       &.default {
-        color: #8d8d8d;
-        border-color: #8d8d8d;
+        color: #e8374a;
+        border-color: #e8374a;
       }
 
       p {
         position: relative;
         top: -1px;
       }
+    }
+    .btn:last-child{
+      color: #e8374a;
+      border-color: #e8374a;
     }
   }
 
