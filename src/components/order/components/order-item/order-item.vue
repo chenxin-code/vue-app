@@ -178,12 +178,20 @@ export default {
           return "支付已完成"
         }else{
           switch (this.state) {
+            case 16:
+              return "支付已完成 · 待发货";
             case 17:
+              return "支付已完成 · 待发货";
+            case 18:
+              return "支付已完成 · 待发货";
+            case 19:
               return "支付已完成 · 待发货";
             case 4:
               return "支付已完成 · 待收货";
             case 9:
               return "订单已完成";
+            case 7:
+              return "订单已取消";
             case 12:
               return "订单已取消";
           }

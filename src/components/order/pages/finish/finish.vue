@@ -201,7 +201,7 @@ export default {
             shoppingOrderId: item.shoppingOrderId,
             orderPayType: item.orderPayType,
             id: item.id,
-            tag: item.state == 17?'16':item.state == 4?'4':item.state == 9?'9':item.state == 12?'7':'9',
+            tag: item.state == 17?'16':item.state == 16?'16':item.state == 4?'4':item.state == 9?'9':item.state == 12?'7':item.state,
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
             isRefund: item.isRefund,
