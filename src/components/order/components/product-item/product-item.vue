@@ -253,7 +253,7 @@ export default {
 
       .billNum{
         display flex;
-        justify-content center
+        justify-content: flex-end;
         align-items center
       }
       .am {
@@ -263,13 +263,16 @@ export default {
         color: #8D8D8D;
         line-height: 20px;
         text-align: right;
-
       }
 
       .num{
         display: inline-block;
         margin-bottom 1px;
         margin-left 2px;
+        font-size: 14px;
+        font-size: 13px;
+        font-weight: 400;
+        color: #8D8D8D;
       }
 
       .xImg{
