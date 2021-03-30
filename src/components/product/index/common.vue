@@ -999,7 +999,7 @@ export default {
   activated() {
     // 爱心积分特殊处理
     console.log('再次进入首页hhhhhhh  activated')
-    appUi && appUi.showTabbar(); 
+    // appUi && appUi.showTabbar(); 
     let dStr = sessionStorage.getItem("SAVE_AXJF_Enterprise");
     if (dStr) {
       let d = JSON.parse(dStr);
@@ -1072,7 +1072,7 @@ export default {
   },
   created() {
     console.log('再次进入首页hhhhhhh  created')
-    appUi && appUi.showTabbar(); 
+    // appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType
