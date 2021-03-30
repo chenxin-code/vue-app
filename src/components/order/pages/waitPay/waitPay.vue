@@ -177,7 +177,7 @@ export default {
           if (res.data.data.pages == 0){
             dataPages = 1;
           }else{
-            dataPages = res.data.data.current;
+            dataPages = res.data.data.pages;
           }
           if (page < dataPages || page == dataPages) {
             if (res.data.data.pages == page) {
@@ -186,7 +186,6 @@ export default {
             if (res.data.status == 0) {
               var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
               this.orderList = this.orderList.concat(indexList);
-              console.log('orderList', orderList)
               this.page = res.data.data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
