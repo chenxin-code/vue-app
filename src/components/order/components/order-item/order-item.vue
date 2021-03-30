@@ -228,7 +228,7 @@ export default {
     isEvalute() {
       //评价
       return (
-        (this.pageType == "finish" && this.orderCanEvaluate && this.state !='12' && this.state !='17' && this.state !='4' || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9 )) && this.billType == 11
+        (this.pageType == "finish" && this.orderCanEvaluate && this.state !='12' && this.state !='16' && this.state !='17' && this.state !='18' && this.state !='19' && this.state !='4' || (this.pageType == "allOrder" && this.params.orderStateType == "200017" && this.params.state == 9 )) && this.billType == 11
       );
     },
     isBuyAgain() {
