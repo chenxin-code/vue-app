@@ -77,6 +77,7 @@ export default {
 .min-top {
   padding:10px 20px 0;
   background: red;
+  border-radius: 0 0 20px 20px;
   .user {
     display: flex;
     justify-content: space-between
