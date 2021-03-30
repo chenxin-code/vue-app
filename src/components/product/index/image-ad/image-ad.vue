@@ -547,6 +547,7 @@ export default {
     // this.$store.state.ythToken
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
+<<<<<<< HEAD
       if (
         nav.link.url && 
         nav.link.url != '' &&
@@ -557,6 +558,18 @@ export default {
           if (nav.link.url.indexOf("token") == -1) {
             nav.link.url =
               nav.link.url + "?token=" + this.$store.state.ythToken;
+=======
+      if (nav.link.url && nav.link.url != '') {
+        if (
+          nav.link.url.indexOf("/applyDistribution") !== -1 ||
+          nav.link.url.indexOf("/wxApplyDistribution") !== -1
+        ) {
+          if (this.$store.state.ythToken) {
+            if (nav.link.url.indexOf("token") == -1) {
+              nav.link.url =
+                nav.link.url + "?token=" + this.$store.state.ythToken;
+            }
+>>>>>>> uat
           }
         }
       }
