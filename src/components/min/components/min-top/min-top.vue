@@ -25,15 +25,13 @@
         </li>
       </ul>
     </div>
-    <div class="user-detail">
+    <div class="user-detail" :class="`rank${rankNum}`">
       <div class="grade">
         <div class="us-gr">
-          <img src="./img/user.png">
-          <p>13662257881</p>
+          <img class="img1" :src="require(`./img/ico0${rankNum}.png`)">
+          <img class="img2" src="./img/dou.png">
         </div>
-        <div class="img-gr">
-          <img src="./img/user.png">
-        </div>
+        <div class="tip tip2"><p>100邦豆待领取</p></div>
       </div>
       <div class="growth-value">
         <div class="gr">
@@ -46,19 +44,19 @@
       <div class="detail-nav">
         <ul>
           <li>
-            <img src="./img/user.png">
+            <img :src="require(`./img/bangdou0${rankNum}.png`)">
             <p>邦豆兑换</p>
           </li>
           <li>
-            <img src="./img/user.png">
+            <img :src="require(`./img/task0${rankNum}.png`)">
             <p>成长任务</p>
           </li>
           <li>
-            <img src="./img/user.png">
+            <img :src="require(`./img/strategy0${rankNum}.png`)">
             <p>会员攻略</p>
           </li>
         </ul>
-        <div class="sign-in"><p>每日签到</p></div>
+        <div class="tip"><p>每日签到</p></div>
       </div>
     </div>
   </div>
@@ -68,15 +66,64 @@
 export default {
   data() {
     return {
+      rank: 5,
+      url: ''
     };
+  },
+  computed: {
+    rankNum () {
+      let rankNum = '1';
+      switch(this.rank){
+        case 1:
+          rankNum = '1'
+        break
+        case 2:
+          rankNum = '2'
+        break;
+        case 3:
+          rankNum = '3'
+        break;
+        case 4:
+          rankNum = '4'
+        break;
+        case 5:
+          rankNum = '5'
+        break;
+      }
+      return rankNum;
+    }
   }
 };
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 .min-top {
+  .tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 17px;
+    font-size:10px;
+    font-weight: 300;
+    text-align: center;
+    position: absolute;
+    top: -6px; 
+    left: 176px;
+    background: url('./img/tips01.png') no-repeat;
+    background-size: 100% 100%;
+    color: #FFFFED;
+    &.tip2 {
+      width: 85px;
+      height: 17px;
+      background-image: url('./img/tips02.png')
+      left: 120px;
+    }
+  }
   padding:10px 20px 0;
+  overflow:hidden;
   background: red;
+  box-sizing: border-box;
   border-radius: 0 0 20px 20px;
   .user {
     display: flex;
@@ -87,15 +134,21 @@ export default {
       heigh: 50px;
       display: flex;
       align-items: center;
+
       img {
         width: 50px;
         height: 50px;
+      }
+      p {
         font-size: 16px;
+        color: #fff;
+        text-indent: 10px;
+        fong-weight: 400;
       }
     }
     .cu {
       img {
-        width:30px;
+        width:26px;
       }
     }
   }
@@ -106,17 +159,23 @@ export default {
       justify-content: space-around;
       li {
         img {
-          width: 30px;
+          width: 24px;
           display: block;
           margin: 0 auto 10px;
+        }
+        p {
+          font-size: 12px;
+          font-weight: 300;
+          color: #fff;
         }
       }
     }
   }
   .user-detail {
-    width:100%;
-    height: 200px;
-    background #ccc;
+    width:343px;
+    height: 172px;
+    background: url('./img/bg01.png') no-repeat;
+    background-size: 100% 100%;
     border-radius: 20px 20px 0 0; 
     box-sizing: border-box;
     padding: 10px;
@@ -125,38 +184,40 @@ export default {
       justify-content: space-between
       align-items: center;
       margin-bottom: 10px;
+      position: relative;
       .us-gr {
         heigh: 30px;
         display: flex;
         align-items: center;
-        img {
-          width: 30px;
-          height: 30px;
-          font-size: 16px;
+        .img1 {
+          width: 86px;
         }
-      }
-      .img-gr {
-        img {
-          height:30px;
+        .img2 {
+          margin-left: 6px;
+          width: 27px;
         }
       }
     }
     .growth-value {
       margin-bottom: 20px;
       .gr {
-        font-size:14px;
-        padding-bottom: 6px;
+        font-size:13px;
+        color: #7F86AA;
+        font-weight: 300;
+        margin-bottom: 20px;
       }
       .ra {
         width: 100%;
-        height: 6px;
+        height: 5px;
+        background: url('./img/bar01.png') no-repeat;
+        background-size: 100% 100%;
         border-radius: 6px;
-        background : red;
         .ra-con {
           width: 70%;
-          height: 6px;
+          height: 5px;
           border-radius: 6px;
-          background: blue;
+          background: url('./img/bar-con01.png') no-repeat;
+          background-size: 100% 100%;
         }
       }
     }
@@ -171,21 +232,88 @@ export default {
             display: block;
             margin: 0 auto 10px;
           }
+          p {
+            font-size: 12px;
+            font-weight: 300;
+            color: #70779F;
+          }
         }
       }
-      .sign-in {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 25px;
-        font-size:12px;
-        text-align: center;
-        position: absolute;
-        top: -6px; 
-        left: 180px;
-        background: red;
-        color: #fff;
+    }
+    &.rank2 {
+      background-image: url('./img/bg02.png')
+
+      .gr {    
+        color: #B5561A;
+      }
+      .ra {
+        background-image: url('./img/bar02.png');
+
+        .ra-con {
+          background-image: url('./img/bar-con02.png');
+        }
+      }
+      .detail-nav {
+        p {
+          color: #fff;
+        }
+      }
+    }
+    &.rank3 {
+      background-image: url('./img/bg03.png')
+
+      .gr {    
+        color: #434342;
+      }
+      .ra {
+        background-image: url('./img/bar03.png');
+
+        .ra-con {
+          background-image: url('./img/bar-con03.png');
+        }
+      }
+      .detail-nav {
+        p {
+          color: #434342;
+        }
+      }
+    }
+    &.rank4 {
+      background-image: url('./img/bg04.png')
+
+      .gr {    
+        color: #FFFFED;
+      }
+      .ra {
+        background-image: url('./img/bar04.png');
+
+        .ra-con {
+          background-image: url('./img/bar-con04.png');
+        }
+      }
+      .detail-nav {
+        p {
+          color: #FFFFED;
+        }
+      }
+    }
+    &.rank5 {
+      background-image: url('./img/bg05.png')
+
+      .gr {    
+        color: #F1D8B0;
+      }
+      .ra {
+        background-image: url('./img/bar05.png');
+
+        .ra-con {
+          background-image: url('./img/bar-con05.png');
+        }
+      }
+      .detail-nav {
+        p {
+          color: #F1D8B0;
+        }
       }
     }
   }
