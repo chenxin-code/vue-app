@@ -101,15 +101,15 @@
             })
             return
           }
-          if (this.$route.query.name == 'phone') { //话费充值
-            this.$router.push({
-              path: '/recharge-bill',
-              query: {
-                name: this.$route.query.name
-              }
-            })
-            return
-          }
+          // if (this.$route.query.name == 'phone') { //话费充值
+          //   this.$router.push({
+          //     path: '/recharge-bill',
+          //     query: {
+          //       name: this.$route.query.name
+          //     }
+          //   })
+          //   return
+          // }
           if (this.$store.state.mall2.staticDeliverType == 1) {
             if(this.$route.query.type=='app_purchase_order'){
               this.$router.replace({
@@ -117,12 +117,13 @@
               });
             }else{
                 this.$router.replace({
-                path: '/mall2/orderlist',
-                query: {
-                  selectedIndex: '2',
-                  orderCategory: this.$route.query.orderCategory,
-                  vipUnitUserCode: this.$route.query.vipUnitUserCode
-                }
+                path: '/order/1',
+                // path: '/mall2/orderlist',
+                // query: {
+                //   selectedIndex: '2',
+                //   orderCategory: this.$route.query.orderCategory,
+                //   vipUnitUserCode: this.$route.query.vipUnitUserCode
+                // }
               });
             }
 
@@ -133,11 +134,12 @@
               });
             } else{
               this.$router.replace({
-                path: '/mall2/orderlist?selectedIndex=1',
-                query: {
-                  orderCategory: this.$route.query.orderCategory,
-                  vipUnitUserCode: this.$route.query.vipUnitUserCode
-                }
+                path: '/order/1',
+                // path: '/mall2/orderlist?selectedIndex=1',
+                // query: {
+                //   orderCategory: this.$route.query.orderCategory,
+                //   vipUnitUserCode: this.$route.query.vipUnitUserCode
+                // }
               });
             }
 
