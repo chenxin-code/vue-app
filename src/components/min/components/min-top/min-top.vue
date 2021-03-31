@@ -5,9 +5,9 @@
         <img :src="userImage">
         <p>{{userName}}</p>
       </div>
-      <div class="cu" @click="toCustomerService">
+      <!-- <div class="cu" @click="toCustomerService">
         <img src="./img/customer-service.png">
-      </div>
+      </div> -->
     </div>
     <div class="nav">
       <ul>
