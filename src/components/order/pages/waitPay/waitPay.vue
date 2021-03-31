@@ -260,7 +260,7 @@ export default {
             billNo: item.billNo,
             orderId: item.id,
             orderCategory: item.orderCategory,
-            orderType: item.orderType,
+            orderType: item.orderStateType,
             tradeNo: item.tradeNo,
             deliverCheckcode: item.deliverCheckcode,
             isRefund: item.isRefund
