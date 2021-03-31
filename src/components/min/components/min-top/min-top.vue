@@ -2,24 +2,24 @@
   <div class="min-top">
     <div class="user">
       <div class="ph">
-        <img src="./img/user.png">
-        <p>13662257881</p>
+        <img :src="userImage">
+        <p>{{userName}}</p>
       </div>
-      <div class="cu">
+      <div class="cu" @click="toCustomerService">
         <img src="./img/customer-service.png">
       </div>
     </div>
     <div class="nav">
       <ul>
-        <li>
+        <li @click="toCollection">
           <img src="./img/collect.png">
           <p>我的收藏</p>
         </li>
-        <li>
+        <li @click="toBrowsinglist">
           <img src="./img/record.png">
           <p>我的足迹</p>
         </li>
-        <li>
+        <li @click="toStore">
           <img src="./img/shop.png">
           <p>订阅店铺</p>
         </li>
@@ -65,13 +65,26 @@
 <script>
 export default {
   props: [
-    'memberInfo'
+    'memberInfo',
+    'userInfo'
   ],
   data() {
     return {
     }
   },
   computed: {
+    userImage () {
+      if (this.userInfo.userImage) {
+        return this.userInfo.userImage
+      } else {
+        return require('./img/dou.png')
+      }
+    },
+    userName () {
+      if (this.userInfo.userName) {
+        return this.userInfo.userName
+      }
+    },
     barStyle(){ 
       let barStyle =  {
         width: this.rateBegin / this.rateEnd * 100 + '%'
@@ -113,6 +126,30 @@ export default {
     }
   },
   methods: {
+    toCollection() {
+      this.$router.push({
+        path: '/mall2/collection',
+        query: {
+          active: 0
+        }
+      })
+    },
+    toStore() {
+      this.$router.push({
+        path: '/mall2/collection',
+        query: {
+          active: 1
+        }
+      })
+    },
+    toBrowsinglist() {
+      this.$router.push({
+        path: '/mall2/browsinglist'
+      })
+    },
+    toCustomerService() {
+      window.open('https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id=%phonenumber%&client_id=linli')
+    },
     exchange() {
       this.$toast('敬请期待…')
     },
@@ -142,7 +179,9 @@ export default {
     left: 170px;
     background: url('./img/tips-little01.png') no-repeat;
     background-size: 100% 100%;
-    color: #FFFFED;
+    p {
+      color: #FFFFED;
+    }
     &.tip2 {
       width: 85px;
       height: 17px;
@@ -247,7 +286,7 @@ export default {
         background-size: 100% 100%;
         border-radius: 6px;
         .ra-con {
-          width: 70%;
+          width: 0%;
           height: 5px;
           border-radius: 6px;
           background: url('./img/bar-con01.png') no-repeat;
@@ -294,8 +333,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #fff;
+        li {
+          p {
+            color: #fff;
+          }
         }
       }
     }
@@ -319,8 +360,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #434342;
+        li {
+          p {
+            color: #434342;
+          }
         }
       }
     }
@@ -344,8 +387,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #FFFFED;
+        li {
+          p {
+            color: #FFFFED;
+          }
         }
       }
     }
@@ -353,7 +398,7 @@ export default {
       .tip {
         background-image: url('./img/tips-little05.png');
         &.tip2 {
-          background-image: url('./img/tips-big04.png')
+          background-image: url('./img/tips-big05.png')
         }
       }
       background-image: url('./img/bg05.png')
@@ -369,8 +414,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #F1D8B0;
+        li {
+          p {
+            color: #F1D8B0;
+          }
         }
       }
     }
