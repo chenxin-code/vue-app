@@ -5,9 +5,9 @@
         <img :src="userImage">
         <p>{{userName}}</p>
       </div>
-      <div class="cu" @click="toCustomerService">
+      <!-- <div class="cu" @click="toCustomerService">
         <img src="./img/customer-service.png">
-      </div>
+      </div> -->
     </div>
     <div class="nav">
       <ul>
@@ -145,7 +145,7 @@ export default {
       })
     },
     toCustomerService() {
-      window.open('https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id=%phonenumber%&client_id=linli')
+      window.open('https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id='+ this.$store.state.login.phone +'&client_id=linli')
     },
     exchange() {
       this.$toast('敬请期待…')

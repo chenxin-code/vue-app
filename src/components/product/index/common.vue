@@ -149,6 +149,7 @@ import appUi from "@zkty-team/x-engine-module-ui";
 export default {
   name: "index",
   components: {
+    NewMinPage:()=>import("@/components/min/index"),
     IndustryGroup: () => import("@/components/industryGroup/index"),
     Mallshoppingcart: () => import("@/components/mall2/cart/cart"),
     Mallcategories: () => import("@/components/mall2/categories/index"),
