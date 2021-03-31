@@ -14,11 +14,17 @@ import BottomCell from "./components/bottomCell/bottomCell";
 export default {
   data() {
     return {
+      wallet: 0,
       walletData: {
         gridList: [
-          { title: "邦豆", value: "0", url: "grid" },
-          { title: "优惠券", value: "10", url: "grid" },
-          { title: "零钱（元）", value: "0.00", url: "grid" },
+          { title: "邦豆", value: "0", url: "grid", id: "bean" },
+          { title: "优惠券", value: "10", url: "grid", id: "coupons" },
+          {
+            title: "零钱（元）",
+            value: "0.00",
+            url: "grid",
+            id: "wallet",
+          },
         ],
         endData: {
           title: "我的钱包",
@@ -87,7 +93,7 @@ export default {
     GridList,
     BottomCell,
   },
-  created(){
+  created() {
     this.getWallet();
   },
   methods: {
@@ -115,9 +121,18 @@ export default {
       //获取零钱
       this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
         if (res.data.status == 0) {
-          console.log("res-----------asdadasssssssssssssssssssssss",res);
+          this.setValue(this.walletData.gridList,"wallet",res.data.data.availBalance)
+          console.log(this.walletData.gridList)
         }
       });
+    },
+    setValue(arr, id, value) {
+      let newArr = arr.filter((e) => {
+        return e.id == id;
+      });
+      if (newArr.length !== 0) {
+        newArr.value = value;
+      }
     },
   },
   created() {

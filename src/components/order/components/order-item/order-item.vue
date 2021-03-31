@@ -427,7 +427,7 @@ export default {
       if (type == 'mall') {
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${this.billType!=11?true:false}&orderCategory=${payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
       } else {
-        callbackUrl = `/app-vue/app/index.html#/order/2`
+        callbackUrl = `/app-vue/app/index.html#/order/2?time=${Date.now()}`
       }
       this.enginePay(payInfo, callbackUrl);
     },
