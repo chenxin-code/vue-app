@@ -185,9 +185,12 @@
                   isHidden: false,
                   isAnimation: false
                 })
-                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
-                  console.log('跳转',res)
-                });
+                appNav.navigatorBack({ url: '0' }).then( res => {
+                  console.log(res)
+                })
+                // appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                //   console.log('跳转',res)
+                // });
               }
             });
           }
