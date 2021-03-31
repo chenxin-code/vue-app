@@ -35,10 +35,10 @@
       </div>
       <div class="growth-value">
         <div class="gr">
-          成长值：{{rateBegin}}/{{rateEnd}}
+          成长值：{{rangeBegin}}/{{rangeEnd}}
         </div>
         <div class="ra">
-          <div class="ra-con" :style="barStyle"></div>
+          <div class="ra-con" :style="{width: barWidth}"></div>
         </div>
       </div>
       <div class="detail-nav">
@@ -85,18 +85,15 @@ export default {
         return this.userInfo.userName
       }
     },
-    barStyle(){ 
-      let barStyle =  {
-        width: this.rateBegin / this.rateEnd * 100 + '%'
-      }
-      return barStyle
+    barWidth(){ 
+      return (this.rangeBegin / this.rangeEnd) * 100 + '%'
     },
-    rateBegin() {
+    rangeBegin() {
       if (this.memberInfo.memberCardRelats) {
         return this.memberInfo.memberCardRelats[0].rangeBegin
       }
     },
-    rateEnd() {
+    rangeEnd() {
       if (this.memberInfo.memberCardRelats) {
         return this.memberInfo.memberCardRelats[0].rangeEnd
       }
