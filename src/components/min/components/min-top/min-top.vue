@@ -2,8 +2,8 @@
   <div class="min-top">
     <div class="user">
       <div class="ph">
-        <img :src="userInfo.userImage">
-        <p>{{userInfo.userName}}</p>
+        <img :src="userImage">
+        <p>{{userName}}</p>
       </div>
       <div class="cu">
         <img src="./img/customer-service.png">
@@ -73,6 +73,16 @@ export default {
     }
   },
   computed: {
+    userImage () {
+      if (this.userInfo.userImage) {
+        return this.userInfo.userImage
+      }
+    },
+    userName () {
+      if (this.userInfo.userName) {
+        return this.userInfo.userName
+      }
+    },
     barStyle(){ 
       let barStyle =  {
         width: this.rateBegin / this.rateEnd * 100 + '%'
