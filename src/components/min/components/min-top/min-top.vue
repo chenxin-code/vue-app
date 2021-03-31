@@ -66,7 +66,7 @@
 export default {
   data() {
     return {
-      rank: 5,
+      rank: 1,
       url: ''
     };
   },
