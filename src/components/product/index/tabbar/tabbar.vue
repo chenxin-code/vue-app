@@ -272,7 +272,7 @@
   }
   .corner-mark {
     position absolute;
-    right 6px;
+    right 20px;
     top 3px;
     font-size 10px;
     padding 2px 4px;
