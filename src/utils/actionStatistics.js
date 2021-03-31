@@ -2624,7 +2624,6 @@ let actionStatistics = {
     }
   },
   routeAction: function (t, toPath, args, pgcode='') {
-    console.log('ppppppppppppppp', t, toPath)
     if (this.appTSTimer) {
       clearTimeout(this.appTSTimer)
     }

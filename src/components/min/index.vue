@@ -14,11 +14,17 @@ import BottomCell from "./components/bottomCell/bottomCell";
 export default {
   data() {
     return {
+      wallet: 0,
       walletData: {
         gridList: [
-          { title: "邦豆", value: "0", url: "grid" },
-          { title: "优惠券", value: "10", url: "grid" },
-          { title: "零钱（元）", value: "0.00", url: "grid" },
+          { title: "邦豆", value: "0", url: "grid", id: "bean" },
+          { title: "优惠券", value: "10", url: "grid", id: "coupons" },
+          {
+            title: "零钱（元）",
+            value: "0.00",
+            url: "grid",
+            id: "wallet",
+          },
         ],
         endData: {
           title: "我的钱包",
@@ -79,6 +85,7 @@ export default {
           phone: "400-111-9928",
         },
       ],
+      memberInfo: {}
     };
   },
   components: {
@@ -86,22 +93,51 @@ export default {
     GridList,
     BottomCell,
   },
-  created(){
+  created() {
     this.getWallet();
   },
   methods: {
     navTo(url) {
       console.log(url);
     },
+    async getMemberInformation() {
+      let url = '/app/json/app_member_center/getDetailByMemberId'
+      let params = {
+        memberId: this.$store.state.login.phone
+      }
+      try {
+        let data = await this.$http.post(url, params);
+        if (data && data.data.status == 0) {
+          this.memberInfo = data.data.data;
+          console.log(this.memberInfo)
+        } else {
+          this.$toast("请求失败，请重新尝试");
+        }
+      } catch(err) {
+        console.log(err)
+      }
+    },
     getWallet() {
       //获取零钱
       this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
         if (res.data.status == 0) {
-          console.log("res-----------asdadasssssssssssssssssssssss",res);
+          this.setValue(this.walletData.gridList,"wallet",res.data.data.availBalance)
+          console.log(this.walletData.gridList)
         }
       });
     },
+    setValue(arr, id, value) {
+      let newArr = arr.filter((e) => {
+        return e.id == id;
+      });
+      if (newArr.length !== 0) {
+        newArr.value = value;
+      }
+    },
   },
+  created() {
+    this.getMemberInformation()
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
