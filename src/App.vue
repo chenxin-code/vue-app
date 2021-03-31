@@ -124,6 +124,7 @@ export default {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
       this.$store.state.projectId = initObj.projectId;
+      this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem('ythToken', initObj.ythToken)
     } else {
