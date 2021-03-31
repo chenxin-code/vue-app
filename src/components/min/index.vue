@@ -86,7 +86,10 @@ export default {
         },
       ],
       memberInfo: {},
-      userInfo: {},
+      userInfo: {
+        userImage: '',
+        userName: ''
+      },
       orderCount:0
     };
   },
