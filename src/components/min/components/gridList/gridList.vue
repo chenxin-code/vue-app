@@ -1,20 +1,23 @@
 <template>
   <div class="gridList">
     <div class="grid_box">
-      <div class="number" v-if="gridData.isShowNumber">{{orderCount}}</div>
       <ul>
         <li
           v-for="(item, index) in gridData.gridList"
           :key="index"
           @click="navTo(item.url)"
         >
+          <div class="number" v-if="item.isShowTip">{{ orderCount }}</div>
           <img
             :src="item.icon"
             alt=""
             v-if="item.icon"
             :style="{ width: item.imgWidth, height: item.imgHeight }"
           />
-          <span class="item_value" v-else>{{ item.value }}</span>
+          <div v-else>
+            <span class="unit" v-if="item.isShowUnit">￥</span>
+            <span class="item_value">{{ item.value }}</span>
+          </div>
           <span class="item_title">{{ item.title }}</span>
         </li>
       </ul>
@@ -39,7 +42,7 @@
 <script>
 export default {
   name: "gridList",
-  props: ["gridData",'orderCount'],
+  props: ["gridData", "orderCount"],
   data() {
     return {};
   },
@@ -67,24 +70,6 @@ export default {
     justify-content: space-between;
     padding: 0 19.5px 16px 0;
     box-sizing: border-box;
-    position: relative;
-
-    .number {
-      width: 22px;
-      height: 22px;
-      background: #F34248;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 11px;
-      font-family: Arial;
-      font-weight: 400;
-      color: #FFFFFF;
-      position: absolute;
-      top: 10px;
-      left: 35px;
-    }
 
     ul {
       flex: 1;
@@ -96,10 +81,18 @@ export default {
         flex-direction: column;
         justify-content: flex-end;
         align-items: center;
+        position: relative;
 
         img {
           // width: 30px;
           // height: 30px;
+        }
+
+        .unit {
+          font-size: 13px;
+          font-family: Arial;
+          font-weight: 400;
+          color: #121212;
         }
 
         .item_value {
@@ -114,6 +107,23 @@ export default {
           font-weight: 500;
           color: #121212;
           margin-top: 11px;
+        }
+
+        .number {
+          width: 22px;
+          height: 22px;
+          background: #F34248;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 11px;
+          font-family: Arial;
+          font-weight: 400;
+          color: #FFFFFF;
+          position: absolute;
+          top: 10px;
+          left: 20px;
         }
       }
     }
