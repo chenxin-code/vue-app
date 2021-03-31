@@ -101,7 +101,6 @@ export default {
       }
       try {
         let data = await this.$http.post(url, params);
-        debugger
         if (data && data.data.status == 0) {
           this.memberInfo = data.data.data;
           console.log(this.memberInfo)
