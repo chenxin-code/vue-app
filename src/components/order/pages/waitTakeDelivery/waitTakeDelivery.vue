@@ -65,8 +65,6 @@ export default {
     this.deliveryType = this.$store.state.mall2.staticDeliverType
       ? this.$store.state.mall2.staticDeliverType
       : "2";
-    this.orderList = [];
-    this.currentOrderList = [];
     this.onLoad();
   },
   watch:{
@@ -143,8 +141,6 @@ export default {
     },
     // 下拉刷新时触发
     onRefresh() {
-      this.orderList = [];
-      this.currentOrderList = [];
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
