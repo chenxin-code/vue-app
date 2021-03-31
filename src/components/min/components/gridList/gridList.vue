@@ -54,7 +54,7 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 .gridList {
   width: 100%;
-  margin-bottom: 30px;
+  margin-top: 10px;
   background: #F7F7F7;
 
   .grid_box {

@@ -3,12 +3,14 @@
     <min-top></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
     <GridList :gridData="orderData" @navTo="navTo"></GridList>
+    <BottomCell :cellData="cellData"></BottomCell>
   </div>
 </template>
 
 <script>
 import MinTop from "./components/min-top/min-top";
 import GridList from "./components/gridList/gridList";
+import BottomCell from "./components/bottomCell/bottomCell";
 export default {
   data() {
     return {
@@ -25,7 +27,7 @@ export default {
           imgWidth: "0.88rem",
           imgHeight: "0.706667rem",
         },
-        isShowNumber:false,
+        isShowNumber: false,
       },
       orderData: {
         gridList: [
@@ -65,13 +67,20 @@ export default {
           imgWidth: "0.773333rem",
           imgHeight: "0.826667rem",
         },
-        isShowNumber:true,
+        isShowNumber: true,
       },
+      cellData: [
+        { title: "个人信息", icon: require("./images/user.png") },
+        { title: "分享有礼", icon: require("./images/user.png") },
+        { title: "收货地址", icon: require("./images/user.png") },
+        { title: "客服热线", icon: require("./images/user.png"),phone:"" },
+      ],
     };
   },
   components: {
     MinTop,
     GridList,
+    BottomCell,
   },
   methods: {
     navTo(url) {
@@ -85,5 +94,8 @@ export default {
 
 .router_class {
   background: #F7F7F7 !important;
+}
+.min{
+  overflow-y: auto;
 }
 </style>
