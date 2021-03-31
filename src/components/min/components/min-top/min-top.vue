@@ -6,21 +6,21 @@
         <p>13662257881</p>
       </div>
       <div class="cu">
-        <img src="./img/user.png">
+        <img src="./img/customer-service.png">
       </div>
     </div>
     <div class="nav">
       <ul>
         <li>
-          <img src="./img/user.png">
+          <img src="./img/collect.png">
           <p>我的收藏</p>
         </li>
         <li>
-          <img src="./img/user.png">
+          <img src="./img/record.png">
           <p>我的足迹</p>
         </li>
         <li>
-          <img src="./img/user.png">
+          <img src="./img/shop.png">
           <p>订阅店铺</p>
         </li>
       </ul>
@@ -110,21 +110,22 @@ export default {
     position: absolute;
     top: -6px; 
     left: 176px;
-    background: url('./img/tips01.png') no-repeat;
+    background: url('./img/tips-little01.png') no-repeat;
     background-size: 100% 100%;
     color: #FFFFED;
     &.tip2 {
       width: 85px;
       height: 17px;
-      background-image: url('./img/tips02.png')
+      background-image: url('./img/tips-big01.png')
       left: 120px;
     }
   }
   padding:10px 20px 0;
   overflow:hidden;
-  background: red;
+  background: url('./img/top-bg.png') no-repeat;
+  background-size: 100% 100%;
   box-sizing: border-box;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 26px 26px;
   .user {
     display: flex;
     justify-content: space-between
@@ -153,13 +154,13 @@ export default {
     }
   }
   .nav {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     ul {
       display: flex;
       justify-content: space-around;
       li {
         img {
-          width: 24px;
+          height: 27px;
           display: block;
           margin: 0 auto 10px;
         }
@@ -178,6 +179,7 @@ export default {
     background-size: 100% 100%;
     border-radius: 20px 20px 0 0; 
     box-sizing: border-box;
+    margin: 0 auto;
     padding: 10px;
     .grade {
       display: flex;
@@ -241,6 +243,12 @@ export default {
       }
     }
     &.rank2 {
+      .tip {
+        background-image: url('./img/tips-little02.png');
+        &.tip2 {
+          background-image: url('./img/tips-big02.png')
+        }
+      }
       background-image: url('./img/bg02.png')
 
       .gr {    
@@ -260,6 +268,12 @@ export default {
       }
     }
     &.rank3 {
+      .tip {
+        background-image: url('./img/tips-little03.png');
+        &.tip2 {
+          background-image: url('./img/tips-big03.png')
+        }
+      }
       background-image: url('./img/bg03.png')
 
       .gr {    
@@ -279,6 +293,12 @@ export default {
       }
     }
     &.rank4 {
+      .tip {
+        background-image: url('./img/tips-little04.png');
+        &.tip2 {
+          background-image: url('./img/tips-big04.png')
+        }
+      }
       background-image: url('./img/bg04.png')
 
       .gr {    
@@ -298,6 +318,12 @@ export default {
       }
     }
     &.rank5 {
+      .tip {
+        background-image: url('./img/tips-little05.png');
+        &.tip2 {
+          background-image: url('./img/tips-big04.png')
+        }
+      }
       background-image: url('./img/bg05.png')
 
       .gr {    
