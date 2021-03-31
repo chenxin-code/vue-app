@@ -1,6 +1,6 @@
 <template>
   <div class="min">
-    <min-top></min-top>
+    <min-top :memberInfo="memberInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
     <GridList :gridData="orderData" @navTo="navTo"></GridList>
     <BottomCell :cellData="cellData"></BottomCell>
@@ -103,7 +103,7 @@ export default {
         let data = await this.$http.post(url, params);
         if (data && data.data.status == 0) {
           this.memberInfo = data.data.data;
-          console.log(this.memberInfo)
+          // console.log(this.memberInfo)
         } else {
           this.$toast("请求失败，请重新尝试");
         }

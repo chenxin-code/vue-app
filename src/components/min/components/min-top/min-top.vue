@@ -35,23 +35,23 @@
       </div>
       <div class="growth-value">
         <div class="gr">
-          成长值：500/1000
+          成长值：{{rateBegin}}/{{rateEnd}}
         </div>
         <div class="ra">
-          <div class="ra-con"></div>
+          <div class="ra-con" :style="barStyle"></div>
         </div>
       </div>
       <div class="detail-nav">
         <ul>
-          <li>
+          <li @click="exchange">
             <img :src="require(`./img/bangdou0${rankNum}.png`)">
             <p>邦豆兑换</p>
           </li>
-          <li>
+          <li @click="task">
             <img :src="require(`./img/task0${rankNum}.png`)">
             <p>成长任务</p>
           </li>
-          <li>
+          <li @click="strategy">
             <img :src="require(`./img/strategy0${rankNum}.png`)">
             <p>会员攻略</p>
           </li>
@@ -64,35 +64,65 @@
 
 <script>
 export default {
+  props: [
+    'memberInfo'
+  ],
   data() {
     return {
-      rank: 1,
-      url: ''
-    };
+    }
   },
   computed: {
-    rankNum () {
+    barStyle(){ 
+      let barStyle =  {
+        width: this.rateBegin / this.rateEnd * 100 + '%'
+      }
+      return barStyle
+    },
+    rateBegin() {
+      if (this.memberInfo.memberCardRelats) {
+        return this.memberInfo.memberCardRelats[0].rangeBegin
+      }
+    },
+    rateEnd() {
+      if (this.memberInfo.memberCardRelats) {
+        return this.memberInfo.memberCardRelats[0].rangeEnd
+      }
+    },
+    rankNum() {
       let rankNum = '1';
-      switch(this.rank){
-        case 1:
-          rankNum = '1'
-        break
-        case 2:
-          rankNum = '2'
-        break;
-        case 3:
-          rankNum = '3'
-        break;
-        case 4:
-          rankNum = '4'
-        break;
-        case 5:
-          rankNum = '5'
-        break;
+      if (this.memberInfo.memberCardRelats) {
+        switch(this.memberInfo.memberCardRelats[0].levelId){
+          case 1:
+            rankNum = '1'
+          break
+          case 2:
+            rankNum = '2'
+          break;
+          case 3:
+            rankNum = '3'
+          break;
+          case 4:
+            rankNum = '4'
+          break;
+          case 5:
+            rankNum = '5'
+          break;
+        }
       }
       return rankNum;
     }
-  }
+  },
+  methods: {
+    exchange() {
+      this.$toast('敬请期待…')
+    },
+    task() {
+      this.$toast('敬请期待…')
+    },
+    strategy() {
+      this.$toast('敬请期待…')
+    }
+  },
 };
 </script>
 
