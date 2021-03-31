@@ -71,9 +71,13 @@ export default {
       },
       cellData: [
         { title: "个人信息", icon: require("./images/user.png") },
-        { title: "分享有礼", icon: require("./images/user.png") },
-        { title: "收货地址", icon: require("./images/user.png") },
-        { title: "客服热线", icon: require("./images/user.png"),phone:"" },
+        { title: "分享有礼", icon: require("./images/share.png") },
+        { title: "收货地址", icon: require("./images/address.png") },
+        {
+          title: "客服热线",
+          icon: require("./images/message.png"),
+          phone: "400-111-9928",
+        },
       ],
     };
   },
@@ -82,9 +86,20 @@ export default {
     GridList,
     BottomCell,
   },
+  created(){
+    this.getWallet();
+  },
   methods: {
     navTo(url) {
       console.log(url);
+    },
+    getWallet() {
+      //获取零钱
+      this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
+        if (res.data.status == 0) {
+          console.log("res-----------asdadasssssssssssssssssssssss",res);
+        }
+      });
     },
   },
 };
@@ -95,7 +110,9 @@ export default {
 .router_class {
   background: #F7F7F7 !important;
 }
-.min{
+
+.min {
   overflow-y: auto;
+  padding-bottom: 28.5px;
 }
 </style>
