@@ -1,7 +1,11 @@
 <template>
   <div class="bottomCell">
     <ul>
-      <li v-for="(item, index) in cellData" :key="index">
+      <li
+        v-for="(item, index) in cellData"
+        :key="index"
+        @click="bottomNavTo(item)"
+      >
         <div class="cell_title">
           <img :src="item.icon" alt="" />
           <span>{{ item.title }}</span>
@@ -26,7 +30,11 @@ export default {
     return {};
   },
   created() {},
-  methods: {},
+  methods: {
+    bottomNavTo(item) {
+      this.$emit("bottomNavTo", item);
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
