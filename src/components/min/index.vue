@@ -75,6 +75,7 @@ export default {
         { title: "收货地址", icon: require("./images/user.png") },
         { title: "客服热线", icon: require("./images/user.png"),phone:"" },
       ],
+      memberInfo: {}
     };
   },
   components: {
@@ -86,7 +87,28 @@ export default {
     navTo(url) {
       console.log(url);
     },
+    async getMemberInformation() {
+      let url = '/app/json/app_member_center/getDetailByMemberId'
+      let params = {
+        memberId: this.$store.state.login.phone
+      }
+      try {
+        let data = await this.$http.post(url, params);
+        console.log(data.data)
+        if (data && data.data.status == 0) {
+          this.memberInfo = data.data.data;
+          // console.log(this.memberInfo)
+        } else {
+          this.$toast("请求失败，请重新尝试");
+        }
+      } catch(err) {
+        console.log(err)
+      }
+    }
   },
+  created() {
+    this.getMemberInformation()
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
