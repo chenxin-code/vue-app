@@ -125,6 +125,7 @@ export default {
         });
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.ythToken = initObj.ythToken;
+      localStorage.setItem('ythToken', initObj.ythToken)
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;

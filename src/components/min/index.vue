@@ -163,8 +163,9 @@ export default {
     async getUserInfo() {
       let url = '/app/json/login/getYthUser'
       console.log('一体化token打印：：：：：：：：', this.$store.state.ythToken)
+      console.log('localstorage  ythtoken LLLL', localStorage.getItem('ythToken'))
       let params = {
-        token: this.$store.state.ythToken
+        token: localStorage.getItem('ythToken')
       }
       try {
         let data = await this.$http.post(url, params);
