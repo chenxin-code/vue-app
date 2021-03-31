@@ -473,6 +473,7 @@ export default {
             "stationName": this.$route.query.stationName,
 
         }
+        console.log(currentOrderDetails)
         localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
         // 唤起邻里邦支付平台
         var payInfo = JSON.parse(JSON.parse(res.payInfo));

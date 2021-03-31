@@ -26,6 +26,11 @@ import order from './modules/order'
 
 routerArr = routerArr.concat(order);
 
+// 新我的
+import min from './modules/min'
+
+routerArr = routerArr.concat(min);
+
 
 //商城
 // import  mallItems from './mall'
