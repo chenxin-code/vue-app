@@ -19,10 +19,10 @@ export default [
   },
   {
     path: '/grouplist',
-    name: '拼团',
+    // name: '拼团',
     component: () => import('@/components/mall2/group/list'),
     meta: {
-      title: '拼团',
+      // title: '拼团',
       keepAlive: false
     }
   },

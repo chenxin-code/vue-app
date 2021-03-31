@@ -1,10 +1,10 @@
 export default [
     {
       path: '/bargain/home',
-      name: '砍价',
+      // name: '砍价',
       component: () => import('@/views/bargain'),
       meta: {
-        title: '砍价',
+        // title: '砍价',
         keepAlive: false
       }
     },
