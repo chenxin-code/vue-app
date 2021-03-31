@@ -1,7 +1,7 @@
 <template>
   <div class="gridList">
     <div class="grid_box">
-      <div class="number" v-if="gridData.isShowNumber">99+</div>
+      <div class="number" v-if="gridData.isShowNumber">{{orderCount}}</div>
       <ul>
         <li
           v-for="(item, index) in gridData.gridList"
@@ -39,7 +39,7 @@
 <script>
 export default {
   name: "gridList",
-  props: ["gridData"],
+  props: ["gridData",'orderCount'],
   data() {
     return {};
   },
