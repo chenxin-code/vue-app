@@ -3,7 +3,7 @@
     <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
     <GridList :gridData="orderData" @navTo="navTo" :orderCount="orderCount"></GridList>
-    <BottomCell :cellData="cellData"></BottomCell>
+    <BottomCell :cellData="cellData" @bottomNavTo="bottomNavTo"></BottomCell>
   </div>
 </template>
 
@@ -11,57 +11,56 @@
 import MinTop from "./components/min-top/min-top";
 import GridList from "./components/gridList/gridList";
 import BottomCell from "./components/bottomCell/bottomCell";
-import { getUserInfo } from '../../utils/login';
 export default {
   data() {
     return {
       walletData: {
         gridList: [
-          { title: "邦豆", value: "0", url: "grid", id: "bean" },
-          { title: "优惠券", value: "10", url: "grid", id: "coupons" },
+          { title: "邦豆", value: "0", url: "", id: "bean" },
+          { title: "优惠券", value: "10", url: "", id: "coupons" },
           {
             title: "零钱（元）",
             value: "0.00",
-            url: "grid",
+            url: "",
             id: "wallet",
+            isShowUnit:true,
           },
         ],
         endData: {
           title: "我的钱包",
           icon: require("./images/wallet.png"),
-          url: "grid",
+          url: "wallet",
           imgWidth: "0.88rem",
           imgHeight: "0.706667rem",
         },
-        isShowNumber: false,
       },
       orderData: {
         gridList: [
           {
             title: "待支付",
             icon: require("./images/pay.png"),
-            url: "grid",
+            url: "/mall2/orderlist?selectedIndex=0",
             imgWidth: "0.6rem",
             imgHeight: "0.48rem",
           },
           {
             title: "待发货",
             icon: require("./images/delivery.png"),
-            url: "grid",
+            url: "/mall2/orderlist?selectedIndex=1",
             imgWidth: "0.68rem",
             imgHeight: "0.546667rem",
           },
           {
             title: "待收货",
             icon: require("./images/gif.png"),
-            url: "grid",
+            url: "/mall2/orderlist?selectedIndex=2",
             imgWidth: "0.546667rem",
             imgHeight: "0.546667rem",
           },
           {
             title: "退换/售后",
             icon: require("./images/afterSales.png"),
-            url: "grid",
+            url: "/mall2/serviceindex",
             imgWidth: "0.626667rem",
             imgHeight: "0.546667rem",
           },
@@ -69,20 +68,21 @@ export default {
         endData: {
           title: "我的订单",
           icon: require("./images/order.png"),
-          url: "grid",
+          url: "/mall2/orderlist?selectedIndex=0",
           imgWidth: "0.773333rem",
           imgHeight: "0.826667rem",
         },
         isShowNumber: true,
       },
       cellData: [
-        { title: "个人信息", icon: require("./images/user.png") },
-        { title: "分享有礼", icon: require("./images/share.png") },
-        { title: "收货地址", icon: require("./images/address.png") },
+        { title: "个人信息", icon: require("./images/user.png"),url:"" },
+        { title: "分享有礼", icon: require("./images/share.png") ,url:"https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",externalLinks:true },
+        { title: "收货地址", icon: require("./images/address.png") ,url:"/mall2/addresslist?pageType=1"},
         {
           title: "客服热线",
           icon: require("./images/message.png"),
           phone: "400-111-9928",
+          url:"noNav"
         },
       ],
       memberInfo: {},
@@ -101,6 +101,35 @@ export default {
   methods: {
     navTo(url) {
       console.log(url);
+      if( url == "" ){
+        return;
+      }else{
+        if(url == 'wallet'){
+          this.$toast('敬请期待')
+        }else{
+          this.$router.push(url)
+        }
+      }
+    },
+    bottomNavTo(item){
+      console.log(item)
+      if(item.url == ""){
+        this.$toast("敬请期待");
+      }else{
+        if(item.externalLinks){
+          if(item.title == '分享有礼'){
+            process.env.NODE_ENV == 'development' ?item.url = 'http://8.129.64.205:8087/wxApplyDistribution?token=':item.url = 'https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token='
+            item.url = item.url + this.$store.state.ythToken
+          }
+          window.location.href = item.url;
+        }else{
+          if(item.url == "noNav"){
+            return;
+          }else {
+            this.$router.push(item.url)
+          }
+        }
+      }
     },
     async getMemberInformation() {
       let url = '/app/json/app_member_center/getDetailByMemberId'
