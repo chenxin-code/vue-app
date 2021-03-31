@@ -1,8 +1,8 @@
 <template>
   <div class="min">
-    <min-top></min-top>
+    <min-top :memberInfo="memberInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
-    <GridList :gridData="orderData" @navTo="navTo"></GridList>
+    <GridList :gridData="orderData" @navTo="navTo" :orderCount="orderCount"></GridList>
     <BottomCell :cellData="cellData"></BottomCell>
   </div>
 </template>
@@ -16,9 +16,14 @@ export default {
     return {
       walletData: {
         gridList: [
-          { title: "邦豆", value: "0", url: "grid" },
-          { title: "优惠券", value: "10", url: "grid" },
-          { title: "零钱（元）", value: "0.00", url: "grid" },
+          { title: "邦豆", value: "0", url: "grid", id: "bean" },
+          { title: "优惠券", value: "10", url: "grid", id: "coupons" },
+          {
+            title: "零钱（元）",
+            value: "0.00",
+            url: "grid",
+            id: "wallet",
+          },
         ],
         endData: {
           title: "我的钱包",
@@ -79,6 +84,8 @@ export default {
           phone: "400-111-9928",
         },
       ],
+      orderCount:0,
+      memberInfo: {}
     };
   },
   components: {
@@ -86,22 +93,68 @@ export default {
     GridList,
     BottomCell,
   },
-  created(){
-    this.getWallet();
-  },
   methods: {
     navTo(url) {
       console.log(url);
+    },
+    async getMemberInformation() {
+      let url = '/app/json/app_member_center/getDetailByMemberId'
+      let params = {
+        memberId: this.$store.state.login.phone
+      }
+      try {
+        let data = await this.$http.post(url, params);
+        if (data && data.data.status == 0) {
+          this.memberInfo = data.data.data;
+          console.log("this.memberInfo",this.memberInfo);
+          this.setValue(this.walletData.gridList,"bean",this.memberInfo.integral,false);
+          this.setValue(this.walletData.gridList,"coupons",this.memberInfo.couponNum,false);
+        } else {
+          this.$toast("请求失败，请重新尝试");
+        }
+      } catch(err) {
+        console.log(err)
+      }
     },
     getWallet() {
       //获取零钱
       this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
         if (res.data.status == 0) {
-          console.log("res-----------asdadasssssssssssssssssssssss",res);
+          this.setValue(this.walletData.gridList,"wallet",res.data.data.availBalance,true)
         }
       });
     },
+    getOrderCount(){
+      //获取待支付订单数目
+      this.$http.post('/app/json/app_shopping_order/queryBadge').then(res=>{
+        if (res.data.status == 0) {
+          if(res.data.data[0].count<=99){
+            this.orderCount = res.data.data[0].count
+          }else{
+            this.orderCount = '99+'
+          }
+        }
+      })
+    },
+    setValue(arr, id, value,isToDecimal) {
+      let newArr = arr.filter((e) => {
+        return e.id == id;
+      });
+      if (newArr.length !== 0) {
+        let index = arr.indexOf(newArr[0]);
+        if(isToDecimal){
+          arr[index].value = this.$util.toDecimal2(value)
+        }else{
+          arr[index].value = value;
+        }
+      }
+    },
   },
+  created() {
+    this.getMemberInformation()
+    this.getWallet();
+    this.getOrderCount();
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
