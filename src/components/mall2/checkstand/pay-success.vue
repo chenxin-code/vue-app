@@ -181,16 +181,9 @@
                   path: '/common'
                 })
               } else {
-                appNav.setstatusBarHidden({
-                  isHidden: false,
-                  isAnimation: false
-                })
-                appNav.navigatorBack({ url: '0' }).then( res => {
-                  console.log(res)
-                })
-                // appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
-                //   console.log('跳转',res)
-                // });
+                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
+                  console.log('跳转',res)
+                });
               }
             });
           }
