@@ -76,6 +76,8 @@ export default {
     userImage () {
       if (this.userInfo.userImage) {
         return this.userInfo.userImage
+      } else {
+        return require('./img/dou.png')
       }
     },
     userName () {
@@ -177,7 +179,9 @@ export default {
     left: 170px;
     background: url('./img/tips-little01.png') no-repeat;
     background-size: 100% 100%;
-    color: #FFFFED;
+    p {
+      color: #FFFFED;
+    }
     &.tip2 {
       width: 85px;
       height: 17px;
@@ -329,8 +333,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #fff;
+        li {
+          p {
+            color: #fff;
+          }
         }
       }
     }
@@ -354,8 +360,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #434342;
+        li {
+          p {
+            color: #434342;
+          }
         }
       }
     }
@@ -379,8 +387,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #FFFFED;
+        li {
+          p {
+            color: #FFFFED;
+          }
         }
       }
     }
@@ -404,8 +414,10 @@ export default {
         }
       }
       .detail-nav {
-        p {
-          color: #F1D8B0;
+        li {
+          p {
+            color: #F1D8B0;
+          }
         }
       }
     }
