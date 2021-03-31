@@ -118,7 +118,7 @@
             }else{
                 if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
                   this.$router.replace({
-                    path: '/order/1',
+                    path: '/mall2/orderlist',
                     query: {
                       selectedIndex: '2',
                       orderCategory: this.$route.query.orderCategory,
@@ -127,7 +127,7 @@
                   })
                 } else {
                   this.$router.replace({
-                    path: '/mall2/orderlist',
+                    path: '/order/1',
                   });
                 }
             }
@@ -212,9 +212,19 @@
             // appNav.navigatorBack({ url: '0' }).then( res => {
             //   console.log(res)
             // })
-            this.$router.replace({
-              path: '/order/2'
-            })
+            if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+              this.$router.replace({
+                path: '/mall2/orderlist?selectedIndex=1',
+                query: {
+                  orderCategory: this.$route.query.orderCategory,
+                  vipUnitUserCode: this.$route.query.vipUnitUserCode
+                }
+              })
+            } else {
+              this.$router.replace({
+                path: '/order/2'
+              })
+            }
           }
         });
         
