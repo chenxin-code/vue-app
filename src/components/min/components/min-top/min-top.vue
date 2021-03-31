@@ -5,21 +5,21 @@
         <img :src="userImage">
         <p>{{userName}}</p>
       </div>
-      <div class="cu">
+      <div class="cu" @click="toCustomerService">
         <img src="./img/customer-service.png">
       </div>
     </div>
     <div class="nav">
       <ul>
-        <li>
+        <li @click="toCollection">
           <img src="./img/collect.png">
           <p>我的收藏</p>
         </li>
-        <li>
+        <li @click="toBrowsinglist">
           <img src="./img/record.png">
           <p>我的足迹</p>
         </li>
-        <li>
+        <li @click="toStore">
           <img src="./img/shop.png">
           <p>订阅店铺</p>
         </li>
@@ -124,6 +124,30 @@ export default {
     }
   },
   methods: {
+    toCollection() {
+      this.$router.push({
+        path: '/mall2/collection',
+        query: {
+          active: 0
+        }
+      })
+    },
+    toStore() {
+      this.$router.push({
+        path: '/mall2/collection',
+        query: {
+          active: 1
+        }
+      })
+    },
+    toBrowsinglist() {
+      this.$router.push({
+        path: '/mall2/browsinglist'
+      })
+    },
+    toCustomerService() {
+      window.open('https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id=%phonenumber%&client_id=linli')
+    },
     exchange() {
       this.$toast('敬请期待…')
     },
@@ -364,7 +388,7 @@ export default {
       .tip {
         background-image: url('./img/tips-little05.png');
         &.tip2 {
-          background-image: url('./img/tips-big04.png')
+          background-image: url('./img/tips-big05.png')
         }
       }
       background-image: url('./img/bg05.png')
