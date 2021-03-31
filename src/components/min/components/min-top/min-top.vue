@@ -248,7 +248,7 @@ export default {
         background-size: 100% 100%;
         border-radius: 6px;
         .ra-con {
-          width: 70%;
+          width: 0%;
           height: 5px;
           border-radius: 6px;
           background: url('./img/bar-con01.png') no-repeat;
