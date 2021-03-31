@@ -85,6 +85,7 @@ export default {
           phone: "400-111-9928",
         },
       ],
+      memberInfo: {}
     };
   },
   components: {
@@ -98,6 +99,23 @@ export default {
   methods: {
     navTo(url) {
       console.log(url);
+    },
+    async getMemberInformation() {
+      let url = '/app/json/app_member_center/getDetailByMemberId'
+      let params = {
+        memberId: this.$store.state.login.phone
+      }
+      try {
+        let data = await this.$http.post(url, params);
+        if (data && data.data.status == 0) {
+          this.memberInfo = data.data.data;
+          console.log(this.memberInfo)
+        } else {
+          this.$toast("请求失败，请重新尝试");
+        }
+      } catch(err) {
+        console.log(err)
+      }
     },
     getWallet() {
       //获取零钱
@@ -117,6 +135,9 @@ export default {
       }
     },
   },
+  created() {
+    this.getMemberInformation()
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
