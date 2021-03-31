@@ -2,7 +2,7 @@
   <div class="min">
     <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
-    <GridList :gridData="orderData" @navTo="navTo" :orderCount="orderCount"></GridList>
+    <GridList :gridData="orderData" @navTo="navTo"></GridList>
     <BottomCell :cellData="cellData" @bottomNavTo="bottomNavTo"></BottomCell>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
       walletData: {
         gridList: [
           { title: "邦豆", value: "0", url: "", id: "bean" },
-          { title: "优惠券", value: "10", url: "", id: "coupons" },
+          { title: "优惠券", value: "0", url: "", id: "coupons" },
           {
             title: "零钱（元）",
             value: "0.00",
@@ -42,6 +42,9 @@ export default {
             url: "/mall2/orderlist?selectedIndex=0",
             imgWidth: "0.6rem",
             imgHeight: "0.48rem",
+            isShowTip:true,
+            id:"waitPay",
+            tipValue:"",
           },
           {
             title: "待发货",
@@ -49,6 +52,8 @@ export default {
             url: "/mall2/orderlist?selectedIndex=1",
             imgWidth: "0.68rem",
             imgHeight: "0.546667rem",
+            id:"waitDelivery",
+            tipValue:"",
           },
           {
             title: "待收货",
@@ -56,6 +61,8 @@ export default {
             url: "/mall2/orderlist?selectedIndex=2",
             imgWidth: "0.546667rem",
             imgHeight: "0.546667rem",
+            id:"waitTakeDelivery",
+            tipValue:"",
           },
           {
             title: "退换/售后",
@@ -63,6 +70,8 @@ export default {
             url: "/mall2/serviceindex",
             imgWidth: "0.626667rem",
             imgHeight: "0.546667rem",
+            id:"afterSales",
+            tipValue:"",
           },
         ],
         endData: {
@@ -90,7 +99,6 @@ export default {
         userImage: '',
         userName: ''
       },
-      orderCount:0
     };
   },
   components: {
@@ -143,8 +151,8 @@ export default {
           // this.memberInfo.memberCardRelats[0].rateBegin = 3
           // this.memberInfo.memberCardRelats[0].rangeBegin = 4000
           console.log("this.memberInfo",this.memberInfo);
-          this.setValue(this.walletData.gridList,"bean",this.memberInfo.integral,false);
-          this.setValue(this.walletData.gridList,"coupons",this.memberInfo.couponNum,false);
+          this.setValue(this.walletData.gridList,"bean",'value',this.memberInfo.integral,false);
+          this.setValue(this.walletData.gridList,"coupons",'value',this.memberInfo.couponNum,false);
         } else {
           this.$toast("请求失败，请重新尝试");
         }
@@ -181,23 +189,23 @@ export default {
       this.$http.post('/app/json/app_shopping_order/queryBadge').then(res=>{
         if (res.data.status == 0) {
           if(res.data.data[0].count<=99){
-            this.orderCount = res.data.data[0].count
+            this.setValue(this.orderData.gridList,"waitPay",'tipValue',res.data.data[0].count,false)
           }else{
-            this.orderCount = '99+'
+            this.setValue(this.orderData.gridList,"waitPay",'tipValue','99+',false)
           }
         }
       })
     },
-    setValue(arr, id, value,isToDecimal) {
+    setValue(arr, id, valName,value,isToDecimal) {
       let newArr = arr.filter((e) => {
         return e.id == id;
       });
       if (newArr.length !== 0) {
         let index = arr.indexOf(newArr[0]);
         if(isToDecimal){
-          arr[index].value = this.$util.toDecimal2(value)
+          arr[index][valName] = this.$util.toDecimal2(value)
         }else{
-          arr[index].value = value;
+          arr[index][valName] = value;
         }
       }
     },
