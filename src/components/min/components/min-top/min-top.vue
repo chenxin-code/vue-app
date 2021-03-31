@@ -29,9 +29,9 @@
       <div class="grade">
         <div class="us-gr">
           <img class="img1" :src="require(`./img/ico0${rankNum}.png`)">
-          <img class="img2" src="./img/dou.png">
+          <!-- <img class="img2" src="./img/dou.png"> -->
         </div>
-        <div class="tip tip2"><p>100邦豆待领取</p></div>
+        <!-- <div class="tip tip2"><p>100邦豆待领取</p></div> -->
       </div>
       <div class="growth-value">
         <div class="gr">
@@ -108,8 +108,8 @@ export default {
     font-weight: 300;
     text-align: center;
     position: absolute;
-    top: -6px; 
-    left: 176px;
+    top: -4px; 
+    left: 170px;
     background: url('./img/tips-little01.png') no-repeat;
     background-size: 100% 100%;
     color: #FFFFED;
@@ -118,6 +118,7 @@ export default {
       height: 17px;
       background-image: url('./img/tips-big01.png')
       left: 120px;
+      top: -12px;
     }
   }
   padding:10px 20px 0;
@@ -181,7 +182,7 @@ export default {
     border-radius: 20px 20px 0 0; 
     box-sizing: border-box;
     margin: 0 auto;
-    padding: 10px;
+    padding: 16px;
     .grade {
       display: flex;
       justify-content: space-between
@@ -202,7 +203,7 @@ export default {
       }
     }
     .growth-value {
-      margin-bottom: 20px;
+      margin-bottom: 13px;
       .gr {
         font-size:13px;
         color: #7F86AA;
