@@ -162,6 +162,7 @@ export default {
     },
     async getUserInfo() {
       let url = '/app/json/login/getYthUser'
+      console.log('一体化token打印：：：：：：：：', this.$store.state.ythToken)
       let params = {
         token: this.$store.state.ythToken
       }
