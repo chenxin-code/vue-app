@@ -2,7 +2,7 @@
   <div class="min">
     <min-top :memberInfo="memberInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
-    <GridList :gridData="orderData" @navTo="navTo"></GridList>
+    <GridList :gridData="orderData" @navTo="navTo" :orderCount="orderCount"></GridList>
     <BottomCell :cellData="cellData"></BottomCell>
   </div>
 </template>
@@ -14,7 +14,6 @@ import BottomCell from "./components/bottomCell/bottomCell";
 export default {
   data() {
     return {
-      wallet: 0,
       walletData: {
         gridList: [
           { title: "邦豆", value: "0", url: "grid", id: "bean" },
@@ -85,6 +84,7 @@ export default {
           phone: "400-111-9928",
         },
       ],
+      orderCount:0,
       memberInfo: {}
     };
   },
@@ -92,9 +92,6 @@ export default {
     MinTop,
     GridList,
     BottomCell,
-  },
-  created() {
-    this.getWallet();
   },
   methods: {
     navTo(url) {
@@ -109,7 +106,9 @@ export default {
         let data = await this.$http.post(url, params);
         if (data && data.data.status == 0) {
           this.memberInfo = data.data.data;
-          // console.log(this.memberInfo)
+          console.log("this.memberInfo",this.memberInfo);
+          this.setValue(this.walletData.gridList,"bean",this.memberInfo.integral,false);
+          this.setValue(this.walletData.gridList,"coupons",this.memberInfo.couponNum,false);
         } else {
           this.$toast("请求失败，请重新尝试");
         }
@@ -121,22 +120,40 @@ export default {
       //获取零钱
       this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
         if (res.data.status == 0) {
-          this.setValue(this.walletData.gridList,"wallet",res.data.data.availBalance)
-          console.log(this.walletData.gridList)
+          this.setValue(this.walletData.gridList,"wallet",res.data.data.availBalance,true)
         }
       });
     },
-    setValue(arr, id, value) {
+    getOrderCount(){
+      //获取待支付订单数目
+      this.$http.post('/app/json/app_shopping_order/queryBadge').then(res=>{
+        if (res.data.status == 0) {
+          if(res.data.data[0].count<=99){
+            this.orderCount = res.data.data[0].count
+          }else{
+            this.orderCount = '99+'
+          }
+        }
+      })
+    },
+    setValue(arr, id, value,isToDecimal) {
       let newArr = arr.filter((e) => {
         return e.id == id;
       });
       if (newArr.length !== 0) {
-        newArr.value = value;
+        let index = arr.indexOf(newArr[0]);
+        if(isToDecimal){
+          arr[index].value = this.$util.toDecimal2(value)
+        }else{
+          arr[index].value = value;
+        }
       }
     },
   },
   created() {
     this.getMemberInformation()
+    this.getWallet();
+    this.getOrderCount();
   }
 };
 </script>

@@ -101,29 +101,35 @@
             })
             return
           }
-          if (this.$route.query.name == 'phone') { //话费充值
-            this.$router.push({
-              path: '/recharge-bill',
-              query: {
-                name: this.$route.query.name
-              }
-            })
-            return
-          }
+          // if (this.$route.query.name == 'phone') { //话费充值
+          //   this.$router.push({
+          //     path: '/recharge-bill',
+          //     query: {
+          //       name: this.$route.query.name
+          //     }
+          //   })
+          //   return
+          // }
           if (this.$store.state.mall2.staticDeliverType == 1) {
             if(this.$route.query.type=='app_purchase_order'){
               this.$router.replace({
                 path: '/mall2/purchaseorderlist',
               });
             }else{
-                this.$router.replace({
-                path: '/mall2/orderlist',
-                query: {
-                  selectedIndex: '2',
-                  orderCategory: this.$route.query.orderCategory,
-                  vipUnitUserCode: this.$route.query.vipUnitUserCode
+                if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+                  this.$router.replace({
+                    path: '/mall2/orderlist',
+                    query: {
+                      selectedIndex: '2',
+                      orderCategory: this.$route.query.orderCategory,
+                      vipUnitUserCode: this.$route.ququeryObjery.vipUnitUserCode
+                    }
+                  })
+                } else {
+                  this.$router.replace({
+                    path: '/order/1',
+                  });
                 }
-              });
             }
 
           } else {
@@ -132,13 +138,19 @@
                 path: '/mall2/purchaseorderlist',
               });
             } else{
-              this.$router.replace({
-                path: '/mall2/orderlist?selectedIndex=1',
-                query: {
-                  orderCategory: this.$route.query.orderCategory,
-                  vipUnitUserCode: this.$route.query.vipUnitUserCode
-                }
-              });
+              if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+                this.$router.replace({
+                  path: '/mall2/orderlist?selectedIndex=1',
+                  query: {
+                    orderCategory: this.$route.query.orderCategory,
+                    vipUnitUserCode: this.$route.query.vipUnitUserCode
+                  }
+                });
+              } else {
+                this.$router.replace({
+                  path: '/order/1',
+                });
+              }
             }
 
           }
@@ -169,11 +181,7 @@
                   path: '/common'
                 })
               } else {
-                appNav.setstatusBarHidden({
-                  isHidden: false,
-                  isAnimation: false
-                })
-                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
                   console.log('跳转',res)
                 });
               }
@@ -200,9 +208,19 @@
             // appNav.navigatorBack({ url: '0' }).then( res => {
             //   console.log(res)
             // })
-            this.$router.replace({
-              path: '/order/2'
-            })
+            if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+              this.$router.replace({
+                path: '/mall2/orderlist?selectedIndex=1',
+                query: {
+                  orderCategory: this.$route.query.orderCategory,
+                  vipUnitUserCode: this.$route.query.vipUnitUserCode
+                }
+              })
+            } else {
+              this.$router.replace({
+                path: '/order/2'
+              })
+            }
           }
         });
         
