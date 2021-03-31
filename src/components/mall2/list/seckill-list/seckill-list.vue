@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-top @backEvent="$router.go(-1)" title="秒杀商城" :bg-img="bgImg"></nav-top>
+    <nav-top @backEvent="$router.go(-1)" title="" :bg-img="bgImg"></nav-top>
     <nav-content>
       <div class="seckill-container" v-if="secKillList.length">
         <ul class="seckill-menu">
