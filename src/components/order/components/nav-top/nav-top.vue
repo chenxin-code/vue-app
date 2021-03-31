@@ -7,6 +7,7 @@
 
 <script>
 import appNav from "@zkty-team/x-engine-module-nav";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 
 export default {
   data() {
@@ -28,8 +29,25 @@ export default {
   },
   methods: {
     goBack: function () {
-      appNav.navigatorBack({ url: "0" }).then((res) => {
-        console.log(res);
+      appLocalstorage
+      .get({
+        key: "LLBIsHomeView",
+        isPublic: true,
+      })
+      .then((res) => {
+        let _result = res.result
+        if (!_result || _result == '' || _result == 'null' || _result == undefined) {
+          return;
+        }
+        if (_result == '1') {
+          this.$router.replace({
+            path: '/common'
+          })
+        } else {
+          appNav.navigatorBack({ url: "0" }).then((res) => {
+            console.log(res);
+          });
+        }
       });
     },
   },

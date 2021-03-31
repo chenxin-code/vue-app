@@ -78,6 +78,7 @@ export default {
   },
   created() {
     this.onLoad();
+    console.log('执行了created--------------------------')
   },
   watch:{
     currentOrderList:function(newVal,oldVal){
@@ -136,7 +137,7 @@ export default {
       if (type == 'mall') {
         callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${payInfoList[0].billType != 11?true:false}&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
       } else {
-        callbackUrl = `/app-vue/app/index.html#/order/2`
+        callbackUrl = `/app-vue/app/index.html#/order/2?time=${Date.now()}`
       }
       this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
     },

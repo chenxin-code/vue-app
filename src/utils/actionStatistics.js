@@ -2624,7 +2624,6 @@ let actionStatistics = {
     }
   },
   routeAction: function (t, toPath, args, pgcode='') {
-    console.log('ppppppppppppppp', t, toPath)
     if (this.appTSTimer) {
       clearTimeout(this.appTSTimer)
     }
@@ -2680,8 +2679,6 @@ let actionStatistics = {
       pgCode: pgCode, //页面code
       area: area, // 地区
     }
-    console.log('commomommomomomomomomomomomom', JSON.stringify(d))
-    console.log('commomommomomomomomomomomomom', d)
     this.storePush(d)
   },
   saveAction: function () {

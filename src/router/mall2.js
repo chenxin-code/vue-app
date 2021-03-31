@@ -325,7 +325,7 @@ module.exports = [
     }
   }, {
     path: '/mall2/seckilllist',
-    name: '秒杀商城',
+    // name: '秒杀商城',
     component: () => import('@/components/mall2/list/seckill-list/seckill-list'),
     meta: {
       keepAlive: true
