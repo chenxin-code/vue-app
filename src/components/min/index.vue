@@ -1,9 +1,9 @@
 <template>
   <div class="min">
     <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
-    <GridList :gridData="walletData" @navTo="navTo"></GridList>
-    <GridList :gridData="orderData" @navTo="navTo"></GridList>
-    <BottomCell :cellData="cellData" @bottomNavTo="bottomNavTo"></BottomCell>
+    <grid-list :gridData="walletData" @navTo="navTo"></grid-list>
+    <grid-list :gridData="orderData" @navTo="navTo"></grid-list>
+    <bottom-cell :cellData="cellData" @bottomNavTo="bottomNavTo"></bottom-cell>
   </div>
 </template>
 
@@ -12,6 +12,7 @@ import MinTop from "./components/min-top/min-top";
 import GridList from "./components/gridList/gridList";
 import BottomCell from "./components/bottomCell/bottomCell";
 export default {
+  name:"NewMinPage",
   data() {
     return {
       walletData: {
@@ -230,5 +231,7 @@ export default {
 .min {
   overflow-y: auto;
   padding-bottom: 28.5px;
+  background: #F7F7F7;
+  height calc(100vh - 50px)
 }
 </style>
