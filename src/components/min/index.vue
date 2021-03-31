@@ -71,9 +71,13 @@ export default {
       },
       cellData: [
         { title: "个人信息", icon: require("./images/user.png") },
-        { title: "分享有礼", icon: require("./images/user.png") },
-        { title: "收货地址", icon: require("./images/user.png") },
-        { title: "客服热线", icon: require("./images/user.png"),phone:"" },
+        { title: "分享有礼", icon: require("./images/share.png") },
+        { title: "收货地址", icon: require("./images/address.png") },
+        {
+          title: "客服热线",
+          icon: require("./images/message.png"),
+          phone: "400-111-9928",
+        },
       ],
       memberInfo: {}
     };
@@ -82,6 +86,9 @@ export default {
     MinTop,
     GridList,
     BottomCell,
+  },
+  created(){
+    this.getWallet();
   },
   methods: {
     navTo(url) {
@@ -94,17 +101,25 @@ export default {
       }
       try {
         let data = await this.$http.post(url, params);
-        console.log(data.data)
+        debugger
         if (data && data.data.status == 0) {
           this.memberInfo = data.data.data;
-          // console.log(this.memberInfo)
+          console.log(this.memberInfo)
         } else {
           this.$toast("请求失败，请重新尝试");
         }
       } catch(err) {
         console.log(err)
       }
-    }
+    },
+    getWallet() {
+      //获取零钱
+      this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
+        if (res.data.status == 0) {
+          console.log("res-----------asdadasssssssssssssssssssssss",res);
+        }
+      });
+    },
   },
   created() {
     this.getMemberInformation()
@@ -117,7 +132,9 @@ export default {
 .router_class {
   background: #F7F7F7 !important;
 }
-.min{
+
+.min {
   overflow-y: auto;
+  padding-bottom: 28.5px;
 }
 </style>

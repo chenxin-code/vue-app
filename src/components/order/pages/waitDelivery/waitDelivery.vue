@@ -59,6 +59,8 @@ export default {
     Empty,
   },
   created() {
+    this.orderList = [];
+    this.currentOrderList = [];
     this.onLoad();
   },
   watch:{
@@ -130,6 +132,8 @@ export default {
     },
     // 下拉刷新时触发
     onRefresh() {
+      this.orderList = [];
+      this.currentOrderList = [];
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
