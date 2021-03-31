@@ -208,7 +208,7 @@ export default {
         // padding-left: 14px;
         // flex :1;
         width : 140px;
-        height: 45px;
+        height: 40px;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
         font-weight: 400;
