@@ -77,7 +77,7 @@ export default {
       if (this.userInfo.userImage) {
         return this.userInfo.userImage
       } else {
-        return require('./img/dou.png')
+        return require('./img/header-default.png')
       }
     },
     userName () {
