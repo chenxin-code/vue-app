@@ -2,8 +2,8 @@
   <div class="min-top">
     <div class="user">
       <div class="ph">
-        <img src="./img/user.png">
-        <p>13662257881</p>
+        <img :src="userInfo.userImage">
+        <p>{{userInfo.userName}}</p>
       </div>
       <div class="cu">
         <img src="./img/customer-service.png">
@@ -65,7 +65,8 @@
 <script>
 export default {
   props: [
-    'memberInfo'
+    'memberInfo',
+    'userInfo'
   ],
   data() {
     return {

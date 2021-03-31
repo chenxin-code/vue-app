@@ -1,6 +1,6 @@
 <template>
   <div class="min">
-    <min-top :memberInfo="memberInfo"></min-top>
+    <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
     <GridList :gridData="walletData" @navTo="navTo"></GridList>
     <GridList :gridData="orderData" @navTo="navTo"></GridList>
     <BottomCell :cellData="cellData"></BottomCell>
@@ -11,6 +11,7 @@
 import MinTop from "./components/min-top/min-top";
 import GridList from "./components/gridList/gridList";
 import BottomCell from "./components/bottomCell/bottomCell";
+import { getUserInfo } from '../../utils/login';
 export default {
   data() {
     return {
@@ -85,7 +86,8 @@ export default {
           phone: "400-111-9928",
         },
       ],
-      memberInfo: {}
+      memberInfo: {},
+      userInfo: {}
     };
   },
   components: {
@@ -103,13 +105,29 @@ export default {
     async getMemberInformation() {
       let url = '/app/json/app_member_center/getDetailByMemberId'
       let params = {
-        memberId: this.$store.state.login.phone
+        // memberId: this.$store.state.login.phone
       }
       try {
         let data = await this.$http.post(url, params);
         if (data && data.data.status == 0) {
           this.memberInfo = data.data.data;
           // console.log(this.memberInfo)
+        } else {
+          this.$toast("请求失败，请重新尝试");
+        }
+      } catch(err) {
+        console.log(err)
+      }
+    },
+    async getUserInfo() {
+      let url = '/app/json/login/getYthUser'
+      let params = {
+        token: this.$store.state.ythToken
+      }
+      try {
+        let data = await this.$http.post(url, params);
+        if (data && data.data.status == 0) {
+          this.userInfo = data.data.data;
         } else {
           this.$toast("请求失败，请重新尝试");
         }
@@ -137,6 +155,7 @@ export default {
   },
   created() {
     this.getMemberInformation()
+    this.getUserInfo()
   }
 };
 </script>
