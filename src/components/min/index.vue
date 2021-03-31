@@ -230,5 +230,7 @@ export default {
 .min {
   overflow-y: auto;
   padding-bottom: 28.5px;
+  background: #F7F7F7;
+  height calc(100vh - 50px)
 }
 </style>
