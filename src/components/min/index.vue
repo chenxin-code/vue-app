@@ -128,7 +128,11 @@ export default {
         if(item.externalLinks){
           if(item.title == '分享有礼'){
             process.env.NODE_ENV == 'development' ?item.url = 'http://8.129.64.205:8087/wxApplyDistribution?token=':item.url = 'https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token='
-            item.url = item.url + this.$store.state.ythToken
+            if(this.$store.state.webtype ==2 || this.$store.state.webtype == 3){
+              item.url = item.url + localStorage.getItem('ythToken')
+            }else{
+              item.url = item.url + this.$store.state.ythToken
+            }
           }
           window.location.href = item.url;
         }else{
