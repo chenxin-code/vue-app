@@ -1004,28 +1004,28 @@ export default {
           text: "在线支付",
           tag: "1",
         },
-        {
-          text: "货到付款",
-          tag: "0",
-        },
-        {
-          text: "提货付款",
-          tag: "0",
-        },
+        // {
+        //   text: "货到付款",
+        //   tag: "0",
+        // },
+        // {
+        //   text: "提货付款",
+        //   tag: "0",
+        // },
       ],
       payWays1: [
         {
           text: "在线支付",
           tag: "1",
         },
-        {
-          text: "货到付款",
-          tag: "0",
-        },
-        {
-          text: "提货付款",
-          tag: "1",
-        },
+        // {
+        //   text: "货到付款",
+        //   tag: "0",
+        // },
+        // {
+        //   text: "提货付款",
+        //   tag: "1",
+        // },
       ],
       contratWayText: "选择联系方式",
       payWaySelected: 1,
@@ -2613,7 +2613,7 @@ export default {
       };
       store.storeProData = storeProData;
 
-      this.count += store.storeProData.proNum;
+      this.count = store.storeProData.proNum;
     },
     initData: function () {
       this.pointsGain = this.lastRes.pointsGain;
