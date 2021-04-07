@@ -10,7 +10,10 @@
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
-        <p class="cart-edit theme_font_gray" @click="setEdit">
+        <p class="cart-edit theme_font_gray" 
+          v-if="goodsCount > 0"
+          @click="setEdit"
+        >
           {{ isEditing ? "完成" : "编辑" }}
         </p>
       </div>

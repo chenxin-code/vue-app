@@ -287,7 +287,13 @@ export default {
       // this.$router.replace({
       //   path: '/common',
       // })
-      location.reload()
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+        location.reload()
+      } else {
+        this.$router.replace({
+          path: '/common',
+        })
+      }
     },
     coupon: function (storeitem) {
       Coupon.open({
