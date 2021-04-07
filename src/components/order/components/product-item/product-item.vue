@@ -22,7 +22,7 @@
         <div class="desc" v-if="productItem.billType != 11">
           <strong>{{productItem.itemTypeName}}</strong>
           <p>{{ productItem.billName }}</p>
-          <p>{{productItem.info}}</p>
+          <p class="info">{{productItem.info}}</p>
           <p>{{ productItem.snapshotTime }}</p>
         </div>
       </div>
@@ -238,6 +238,18 @@ export default {
           font-weight: 400;
           line-height: 21px;
           color: #8D8D8D;
+        }
+        
+        .info{
+          width : 140px;
+          height: 42px;
+          font-size: 13px;
+          line-height: 21px;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          word-break: break-all;
         }
       }
     }
