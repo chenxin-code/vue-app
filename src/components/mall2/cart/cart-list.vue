@@ -954,7 +954,6 @@ $mar-top = 10px;
 
         .activity-content {
           margin-left: 20px;
-          box-shadow: 0px 2px 2px #efefef;
         }
       }
     }
