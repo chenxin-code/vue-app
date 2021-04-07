@@ -759,14 +759,15 @@
                       >
                         <div class="label-middle theme_font_gray">送至</div>
                         <div
-                          class="theme_font_black full address-div"
-                          v-if="$store.state.mall2.selectAddress.id == ''"
+                          class="theme_font_black full address-div defaultStyle"
+                          v-if="$store.state.mall2.selectAddress.id == -1"
                         >
                           {{ regionText }}
                         </div>
+                        <!-- <div>{{$store.state.mall2.selectAddress}}</div> -->
                         <div
                           class="theme_font_black full address-div"
-                          v-if="$store.state.mall2.selectAddress.id != ''"
+                          v-if="$store.state.mall2.selectAddress.id != -1"
                         >
                           {{ $store.state.mall2.selectAddress.addressFull }}
                         </div>
@@ -2795,6 +2796,7 @@ export default {
       );
     },
     getRegionText: function () {
+      debugger
       let str = "";
       let address = {
         provinceId: "",
@@ -3998,6 +4000,16 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .detail {
+  .block-div {
+    .flex-row {
+      .address-div {
+        &.defaultStyle {
+          color: #ccc;
+          line-height: inherit;
+        }
+      }
+    }
+  }
   position: relative;
   width: 100%;
   height: 100%;
