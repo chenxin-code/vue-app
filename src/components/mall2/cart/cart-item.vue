@@ -349,8 +349,9 @@
     align-items center
     background none
     overflow hidden;
-    padding-bottom: 4px;
+    padding-bottom: 22px;
     padding-right: 2px;
+    margin-bottom: 10px;
 
     .cart-item-sel {
       width 30px
