@@ -269,8 +269,8 @@ export default {
         }
 
         .info {
-          // width : 140px;
-          flex: 1;
+          width : 100%;
+          // flex: 1;
           height: 42px;
           font-size: 13px;
           line-height: 21px;
