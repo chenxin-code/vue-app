@@ -2586,8 +2586,9 @@ export default {
     },
     subFeatureEvent: function (subFeature, fidx) {
       let skuId = this.getCanSelectWith(fidx, subFeature);
+      console.log(skuId)
       if (skuId == false) {
-        this.$Toast("当前规格组合没有商品!");
+        // this.$Toast("当前规格组合没有商品!");
         return;
       }
       if (subFeature.selected) {
