@@ -865,6 +865,9 @@
   @import "~@/common/stylus/variable.styl"
 
   .list {
+    /deep/ .theme_font_white {
+      color: #1a1a1a;
+    }
     position relative;
     width 100%
     height 100%
