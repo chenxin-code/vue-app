@@ -15,21 +15,50 @@
           v-if="productItem.billType == 11"
           @click.stop="gotoProductDetail(productItem)"
         />
-        <div class="billImg" v-if="productItem.billType != 11" @click.stop="gotoProductDetail(productItem)" :style="{'width':'2.4rem','height':'2.4rem','background-image':'url('+billCenterImg+')','background-size':'2.4rem 2.4rem','background-repeat':'no-repeat'}"></div>
+        <div
+          class="billImg"
+          v-if="productItem.billType != 11"
+          @click.stop="gotoProductDetail(productItem)"
+          :style="{
+            width: '2.4rem',
+            height: '2.4rem',
+            'background-image': 'url(' + billCenterImg + ')',
+            'background-size': '2.4rem 2.4rem',
+            'background-repeat': 'no-repeat',
+          }"
+        ></div>
         <p class="text" v-if="productItem.billType == 11">
           {{ productItem.billName }}
         </p>
         <div class="desc" v-if="productItem.billType != 11">
-          <strong>{{productItem.itemTypeName}}</strong>
+          <strong>{{ productItem.itemTypeName }}</strong>
           <p>{{ productItem.billName }}</p>
-          <p class="info">{{productItem.info}}</p>
+          <p class="info">{{ productItem.info }}</p>
           <p>{{ productItem.snapshotTime }}</p>
         </div>
       </div>
-      <div class="price" v-if="productItem.billType == 11 || productItem.billType == 7 || productItem.billType == 8">
-        <p class="pr">￥{{amount.integer}}.<span class="decimal">{{amount.decimal}}</span></p>
+      <div
+        class="price"
+        v-if="
+          productItem.billType == 11 ||
+          productItem.billType == 7 ||
+          productItem.billType == 8
+        "
+      >
+        <p class="pr">
+          ￥{{ amount.integer }}.<span class="decimal">{{
+            amount.decimal
+          }}</span>
+        </p>
         <div class="billNum">
-          <p class="am"><img :src="xImg" alt="" class="xImg" v-show="productItem.billNum !==''" ></p>
+          <p class="am">
+            <img
+              :src="xImg"
+              alt=""
+              class="xImg"
+              v-show="productItem.billNum !== ''"
+            />
+          </p>
           <span class="num">{{ productItem.billNum }}</span>
         </div>
       </div>
@@ -42,15 +71,15 @@ export default {
   props: ["productItem", "billId", "billType"],
   data() {
     return {
-      xImg:require('../../img/icon_x.png'),
-      goodsAmount:"0.00",
-      amount:{
-        integer:"0",
-        decimal:"00",
-      }
+      xImg: require("../../img/icon_x.png"),
+      goodsAmount: "0.00",
+      amount: {
+        integer: "0",
+        decimal: "00",
+      },
     };
   },
-  created(){
+  created() {
     this.goodsAmount = this.productItem.billAmount;
   },
   methods: {
@@ -88,13 +117,13 @@ export default {
       }
     },
   },
-  watch:{
-    goodsAmount:function(newVal,oldVal){
+  watch: {
+    goodsAmount: function (newVal, oldVal) {
       let totalPrice = this.$util.toDecimal2(newVal);
-      let totalArr = totalPrice.toString().split(".")
+      let totalArr = totalPrice.toString().split(".");
       this.amount.integer = totalArr[0];
       this.amount.decimal = totalArr[1];
-    }
+    },
   },
   computed: {
     billCenterImg: {
@@ -174,12 +203,9 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .product-item {
-
-
-  .decimal{
-    font-size :12px;
+  .decimal {
+    font-size: 12px;
   }
-
 
   .content {
     padding-top: 12px;
@@ -195,10 +221,11 @@ export default {
         width: 90px;
         height: 90px;
         margin-right: 12px;
-        border-radius :12px;
+        border-radius: 12px;
         overflow: hidden;
       }
-      .billImg{
+
+      .billImg {
         width: 90px;
         height: 90px;
         margin-right: 12px;
@@ -207,7 +234,7 @@ export default {
       .text {
         // padding-left: 14px;
         // flex :1;
-        width : 140px;
+        width: 140px;
         height: 42px;
         font-size: 14px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -224,6 +251,7 @@ export default {
       .desc {
         // padding-left: 8px;
         flex: 1;
+
         strong {
           font-size: 17px;
           font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -239,9 +267,10 @@ export default {
           line-height: 21px;
           color: #8D8D8D;
         }
-        
-        .info{
-          width : 140px;
+
+        .info {
+          width : 100%;
+          // flex: 1;
           height: 42px;
           font-size: 13px;
           line-height: 21px;
@@ -263,11 +292,12 @@ export default {
         line-height: 24px;
       }
 
-      .billNum{
-        display flex;
+      .billNum {
+        display: flex;
         justify-content: flex-end;
-        align-items center
+        align-items: center;
       }
+
       .am {
         font-size: 13px;
         font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -277,17 +307,17 @@ export default {
         text-align: right;
       }
 
-      .num{
+      .num {
         display: inline-block;
-        margin-bottom 1px;
-        margin-left 2px;
+        margin-bottom: 1px;
+        margin-left: 2px;
         font-size: 14px;
         font-size: 13px;
         font-weight: 400;
         color: #8D8D8D;
       }
 
-      .xImg{
+      .xImg {
         width: 10px;
         height: 10px;
       }
