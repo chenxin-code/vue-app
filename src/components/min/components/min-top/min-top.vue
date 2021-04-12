@@ -154,7 +154,8 @@ export default {
       this.$toast('敬请期待…')
     },
     strategy() {
-      this.$toast('敬请期待…')
+      // this.$toast('敬请期待…')
+      this.$router.push('/gradeDescription')
     }
   },
 };

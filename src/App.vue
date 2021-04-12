@@ -135,6 +135,18 @@ export default {
       this.$store.state.userRoomId = res.result;
       console.log('---------------this.$store.state.userRoomId----------',res)
     });
+
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.$store.state.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.$store.state.isX = false;
+      console.log('this.$store.state.isX',this.$store.state.isX)
+    }
   },
   computed: {
     appBackHomeImg() {

@@ -1246,134 +1246,136 @@
         <p class="title">立即购买</p>
       </div>
     </div>
-    <div
-      class="bottom-btns bottom_btns_padding"
-      v-else-if="!easyCardId && detailShow && !recommendCommodity"
-    >
-      <div class="btn full" ref="gouwuche" @click="toCart">
-        <template
+    <div class="bottom-box" v-else-if="!easyCardId && detailShow && !recommendCommodity">
+      <div
+        class="bottom-box-btns bottom_btns_padding"
+      >
+        <div class="btn full" ref="gouwuche" @click="toCart">
+          <template
+            v-if="
+              detailData.supportPreSale == 1 &&
+              $store.state.globalConfig.presaleType == 2
+            "
+          >
+            <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">
+              {{ cartNum }}
+            </p>
+          </template>
+          <template v-else>
+            <p
+              class="cart-num theme_bg_red theme_font_white"
+              v-if="$store.state.mall2.cartNum > 0"
+            >
+              {{ $store.state.mall2.cartNum }}
+            </p>
+          </template>
+          <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i>
+          <p class="text">购物车</p>
+        </div>
+        <div
+          class="btn full"
+          @click="toShop"
+          v-if="$store.state.globalConfig.proDetailStoreDisabled != 1"
+        >
+          <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
+          <p class="text">店铺</p>
+        </div>
+        <div class="btn full" @click="collectEvent">
+          <i
+            class="iconfont mall-shoucang btn-icon theme_font_gray"
+            v-if="isCollect == false"
+          ></i>
+          <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
+          <transition :name="collectName">
+            <img
+              class="btn-img"
+              src="static/image/mall2/collect.png"
+              v-if="isCollect == true"
+            />
+          </transition>
+          <p class="text">收藏</p>
+        </div>
+        <div
+          class="btn full"
+          @click="songliEvent"
           v-if="
-            detailData.supportPreSale == 1 &&
-            $store.state.globalConfig.presaleType == 2
+            $store.state.globalConfig.send_gift_enable == '1' &&
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime()
           "
         >
-          <p class="cart-num theme_bg_red theme_font_white" v-if="cartNum > 0">
-            {{ cartNum }}
-          </p>
-        </template>
-        <template v-else>
-          <p
-            class="cart-num theme_bg_red theme_font_white"
-            v-if="$store.state.mall2.cartNum > 0"
-          >
-            {{ $store.state.mall2.cartNum }}
-          </p>
-        </template>
-        <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i>
-        <p class="text">购物车</p>
+          <img class="btn-sl-img" src="./img/sl.png" />
+          <p class="text">送礼</p>
+        </div>
+        <div
+          class="btn theme_standard_bg theme_font_white radius"
+          @click="addToCart"
+          v-if="
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            productType != 511 &&
+            (detailData.supportPreSale != '1' ||
+              $store.state.globalConfig.presaleType == 2)
+          "
+        >
+          <p class="title">加入购物车</p>
+        </div>
+        <div
+          class="btn theme_bg_y theme_font_white radius"
+          @click="buyNowEvent"
+          v-if="
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime() &&
+            detailData.supportPreSale != '1'
+          "
+        >
+          <p class="title">立即购买</p>
+        </div>
+        <div
+          class="btn theme_bg_y theme_font_white radius"
+          :class="{ 'big-btn': $store.state.globalConfig.presaleType != 2 }"
+          @click="preSaleEvent"
+          v-if="
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime() &&
+            detailData.supportPreSale == '1'
+          "
+        >
+          <p class="title">预购下单</p>
+        </div>
+        <!--<div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent" v-if="detailData.status">-->
+        <!--<p class="title">'商品已下架'</p>-->
+        <!--</div>-->
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius"
+          @click="noStockEvent"
+          v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
+        >
+          <p class="title">商品缺货</p>
+        </div>
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius"
+          @click="canNotSaleEvent"
+          v-if="canSale == true && detailData.status == '0'"
+        >
+          <p class="title">商品已下架</p>
+        </div>
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius"
+          @click="canNotSaleEvent"
+          v-if="canSale == false"
+        >
+          <p class="title">不在可售区域</p>
+        </div>
       </div>
-      <div
-        class="btn full"
-        @click="toShop"
-        v-if="$store.state.globalConfig.proDetailStoreDisabled != 1"
-      >
-        <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
-        <p class="text">店铺</p>
-      </div>
-      <div class="btn full" @click="collectEvent">
-        <i
-          class="iconfont mall-shoucang btn-icon theme_font_gray"
-          v-if="isCollect == false"
-        ></i>
-        <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
-        <transition :name="collectName">
-          <img
-            class="btn-img"
-            src="static/image/mall2/collect.png"
-            v-if="isCollect == true"
-          />
-        </transition>
-        <p class="text">收藏</p>
-      </div>
-      <div
-        class="btn full"
-        @click="songliEvent"
-        v-if="
-          $store.state.globalConfig.send_gift_enable == '1' &&
-          stockNum != 0 &&
-          canSale == true &&
-          detailData.status != '0' &&
-          isPayTime()
-        "
-      >
-        <img class="btn-sl-img" src="./img/sl.png" />
-        <p class="text">送礼</p>
-      </div>
-      <div
-        class="btn theme_standard_bg theme_font_white radius"
-        @click="addToCart"
-        v-if="
-          stockNum != 0 &&
-          canSale == true &&
-          detailData.status != '0' &&
-          productType != 511 &&
-          (detailData.supportPreSale != '1' ||
-            $store.state.globalConfig.presaleType == 2)
-        "
-      >
-        <p class="title">加入购物车</p>
-      </div>
-      <div
-        class="btn theme_bg_y theme_font_white radius"
-        @click="buyNowEvent"
-        v-if="
-          stockNum != 0 &&
-          canSale == true &&
-          detailData.status != '0' &&
-          isPayTime() &&
-          detailData.supportPreSale != '1'
-        "
-      >
-        <p class="title">立即购买</p>
-      </div>
-      <div
-        class="btn theme_bg_y theme_font_white radius"
-        :class="{ 'big-btn': $store.state.globalConfig.presaleType != 2 }"
-        @click="preSaleEvent"
-        v-if="
-          stockNum != 0 &&
-          canSale == true &&
-          detailData.status != '0' &&
-          isPayTime() &&
-          detailData.supportPreSale == '1'
-        "
-      >
-        <p class="title">预购下单</p>
-      </div>
-      <!--<div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent" v-if="detailData.status">-->
-      <!--<p class="title">'商品已下架'</p>-->
-      <!--</div>-->
-      <div
-        class="btn big-btn theme_bg_y theme_font_white radius"
-        @click="noStockEvent"
-        v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
-      >
-        <p class="title">商品缺货</p>
-      </div>
-      <div
-        class="btn big-btn theme_bg_y theme_font_white radius"
-        @click="canNotSaleEvent"
-        v-if="canSale == true && detailData.status == '0'"
-      >
-        <p class="title">商品已下架</p>
-      </div>
-      <div
-        class="btn big-btn theme_bg_y theme_font_white radius"
-        @click="canNotSaleEvent"
-        v-if="canSale == false"
-      >
-        <p class="title">不在可售区域</p>
-      </div>
+      <div class="adapter-iphoneX" v-if="isX"></div>
     </div>
     <pop-view v-if="showPop" @closeEvent="popClose">
       <div class="pop-body">
@@ -1487,6 +1489,7 @@
         >
           预购下单
         </div>
+        <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
     </pop-view>
     <pop-view v-if="showActivity" @closeEvent="showActivity = false">
@@ -1814,6 +1817,7 @@ export default {
       lastRequestId: "",
       jdSilmilarSkus: [],
       cartNum: 0,
+      isX:false,
     };
   },
   computed: {
@@ -3949,6 +3953,18 @@ export default {
     } else {
       this.getDatas();
     }
+
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
+    
   },
   activated() {
     if (
@@ -3999,6 +4015,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.adapter-iphoneX{
+  width: 100%;
+  height: 34px;
+  background-color: #fff;
+}
 
 .detail {
   .block-div {
@@ -4597,6 +4619,114 @@ export default {
       margin-top: 7.5px;
       line-height: 0px;
       margin-right: 8px;
+    }
+  }
+
+  .bottom-box{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // height: 84px;
+    background-color: white;
+    box-shadow: 0 -2px 2px #efefef;
+    z-index: 9;
+    .adapter-iphoneX{
+      width: 100%;
+      height: 34px;
+      background-color: #fff;
+    }
+
+    .bottom-box-btns{
+          // position: absolute;
+          // left: 0px;
+          // right: 0px;
+          // bottom: 0px;
+          height: 50px;
+          background-color: white;
+          box-shadow: 0 -2px 2px #efefef;
+          z-index: 9;
+          display: flex;
+
+          .recommend {
+            width: 100%;
+            height: 100%;
+            display: flex;
+
+            .recommendBtn {
+              font-size: 18px;
+              font-weight: 500;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+
+          .btn {
+            position: relative;
+            text-align: center;
+            padding: 6px;
+
+            .cart-num {
+              position: absolute;
+              right: 6px;
+              top: 5px;
+              border-radius: 12px;
+              padding: 2px 4px;
+              font-size: 12px;
+              z-index: 5;
+            }
+
+            .btn-icon {
+              font-size: 26px;
+              position: absolute;
+              top: 6px;
+              left: 0px;
+              right: 0px;
+              text-align: center;
+            }
+
+            .btn-img {
+              position: absolute;
+              top: 6px;
+              left: 50%;
+              margin-left: -13px;
+              width: 26px;
+              height: 26px;
+            }
+
+            .btn-sl-img {
+              position: absolute;
+              top: 6px;
+              left: 50%;
+              margin-left: -11px;
+              width: 22px;
+              height: 22px;
+            }
+
+            .text {
+              position: absolute;
+              left: 0px;
+              right: 0px;
+              bottom: 6px;
+              text-align: center;
+              // margin-top 3px;
+            }
+
+            .title {
+              padding: 11px 5px;
+              font-size: 16px;
+              font-weight: 500;
+            }
+          }
+
+          .big-btn {
+            width: 170px;
+          }
+
+          .full {
+            flex: 1;
+          }
     }
   }
 

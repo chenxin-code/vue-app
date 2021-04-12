@@ -43,7 +43,8 @@ export default {
       amount:{
         integer:'0',
         decimal:'00',
-      }
+      },
+      isX:false,
     };
   },
   created(){

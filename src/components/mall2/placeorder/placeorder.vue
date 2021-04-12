@@ -739,6 +739,7 @@
               </div>
             </div>
           </div>
+          <div class="adapter-iphoneX" v-if="isX"></div>
         </div>
         <!--          易捷卡弹框（充值卡）-->
         <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
@@ -1095,6 +1096,7 @@ export default {
       proSkuDistributionId: "",
       pickupStartTime: new Date(),
       count: 0,
+      isX:false,
     };
   },
   computed: {
@@ -1287,6 +1289,17 @@ export default {
     // 从心愿单购买进入
     if (this.$route.query.entryType == "wish") {
       this.getWishMsg(1);
+    }
+
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
     }
   },
   mounted() {
@@ -2747,6 +2760,12 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+.adapter-iphoneX{
+  width: 100%;
+  height: 34px;
+  background-color: #fff;
+}
 
 .cancel-tip {
   font-size: 12px;
