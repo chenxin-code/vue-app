@@ -85,7 +85,7 @@ export default {
         isShowNumber: true,
       },
       cellData: [
-        { title: "个人信息", icon: require("./images/user.png"),url:"" },
+        { title: "个人信息", icon: require("./images/user.png"),url:"/minUserInfo" },
         { title: "分享有礼", icon: require("./images/share.png") ,url:"https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",externalLinks:true },
         { title: "收货地址", icon: require("./images/address.png") ,url:"/mall2/addresslist?pageType=1"},
         {

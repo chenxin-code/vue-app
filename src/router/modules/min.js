@@ -18,4 +18,12 @@ export default [
       keepAlive: false
     },
   },
+  {
+    path: '/minUserInfo',
+    name: '个人资料',
+    component: () => import('@/components/min/pages/userInfo/userInfo.vue'),
+    meta: {
+      keepAlive: false
+    },
+  },
 ]
