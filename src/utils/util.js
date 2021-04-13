@@ -833,8 +833,11 @@ var utils = {
       } else {
         this.wechatBind();
       }
-    } else if (store.state.webtype == 3) {
-      wx.miniProgram.redirectTo({url: `/pages/register/main?redirectUrl=${redirectUrl}&updateToken=1`})
+    } else if (store.state.webtype == 3 || store.state.webtype == 2) {
+      router.push({
+        path: '/usercenter/login',
+      });
+      // wx.miniProgram.redirectTo({url: `/pages/register/main?redirectUrl=${redirectUrl}&updateToken=1`})
     } else if (store.state.webtype == 6) {
       my.redirectTo({url: `/pages/register/main?redirectUrl=${redirectUrl}`})
     } else if (store.state.deployType == '4') {
