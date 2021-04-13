@@ -1,7 +1,7 @@
 <template>
   <div class="min-top">
     <div class="user">
-      <div class="ph">
+      <div class="ph" @click="navToUserInfo">
         <img :src="userImage">
         <p>{{userName}}</p>
       </div>
@@ -123,6 +123,11 @@ export default {
     }
   },
   methods: {
+    navToUserInfo(){
+      this.$router.push({
+        path: '/minUserInfo',
+      })
+    },
     toCollection() {
       this.$router.push({
         path: '/mall2/collection',

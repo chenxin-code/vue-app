@@ -26,4 +26,12 @@ export default [
       keepAlive: false
     },
   },
+  {
+    path: '/record',
+    name: '邦豆记录',
+    component: () => import('@/components/min/pages/record/record.vue'),
+    meta: {
+      keepAlive: false
+    },
+  },
 ]

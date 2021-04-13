@@ -5,7 +5,7 @@
         <li
           v-for="(item, index) in gridData.gridList"
           :key="index"
-          @click="navTo(item.url)"
+          @click="navTo(item.url,item.value)"
         >
           <div class="number" v-if="item.isShowTip">{{ item.tipValue }}</div>
           <img
@@ -48,8 +48,8 @@ export default {
   },
   created() {},
   methods: {
-    navTo(url) {
-      this.$emit("navTo", url);
+    navTo(url,value) {
+      this.$emit("navTo", url,value);
     },
   },
 };

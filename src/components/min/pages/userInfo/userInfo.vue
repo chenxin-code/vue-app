@@ -5,19 +5,29 @@
     </van-sticky>
     <div class="info info_height">
       <div class="title">个人资料</div>
-      <img src="" alt="" class="avatar" />
+      <img
+        :src="userInfo.userImage != '' ? userInfo.userImage : userAvatar"
+        alt=""
+        class="avatar"
+      />
     </div>
     <div class="info">
       <div class="title">昵称</div>
-      <div class="value">爸爸</div>
+      <div class="value">
+        {{ userInfo.userName != "" ? userInfo.userName : "未知" }}
+      </div>
     </div>
     <div class="info">
       <div class="title">性别</div>
-      <div class="value">男</div>
+      <div class="value">
+        {{ userInfo.sex == 1 ? "男" : userInfo.sex == 2 ? "女" : "未知" }}
+      </div>
     </div>
     <div class="info">
       <div class="title">生日</div>
-      <div class="value">1994/08/12</div>
+      <div class="value">
+        {{ userInfo.newBirthday != "" ? userInfo.newBirthday : "未知" }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +39,8 @@ export default {
   data() {
     return {
       offsetTop: "0rem",
+      userInfo: {},
+      userAvatar: require("../../images/userAvatar.png"),
     };
   },
   components: {
@@ -40,10 +52,22 @@ export default {
     if (padding !== "") {
       this.offsetTop = padding;
     }
+    this.getUserInfo();
   },
   methods: {
     backEvent() {
       this.$router.go(-1);
+    },
+    getUserInfo() {
+      this.$http
+        .post("/app/json/login/getYthUser", {
+          token: localStorage.getItem("ythToken"),
+        })
+        .then((res) => {
+          if (res.data.status == 0) {
+            this.userInfo = res.data.data;
+          }
+        });
     },
   },
 };
