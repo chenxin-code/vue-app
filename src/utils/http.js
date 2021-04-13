@@ -208,12 +208,14 @@ Axios.interceptors.response.use(
     let data = res.data;
     //token  过期重新登录
     console.log('http res', res)
+    console.log('http拦截器：', store.state.webtype)
     if (data.errorCode == 1000 && res.config.url.indexOf('/app/json/login/updateToken?') == -1) {
       res.data.info = '';
       if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {
         return userCenter.expireUpdateToken(res);
       } else {
-        store.state.login.token = '';
+        store.state.login.token = ''
+        console.log('http拦截器22222222222：', store.state.webtype);
         bridgefunc.vuexStorage(function () {
           util.toLogin();
           return res;
