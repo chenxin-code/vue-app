@@ -85,26 +85,29 @@
         </div>
       </div> -->
 
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        @click="payEvent"
-        v-if="substitutePayActive === -1 && isBulk == false"
-      >
-        支付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
-      </div>
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        @click="payEvent"
-        v-else-if="isBulk"
-      >
-        支付￥{{ $util.toDecimal2(bulkData.payAmount) }}元
-      </div>
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        v-else
-        @click="substitutePayEvent"
-      >
-        找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+      <div class="bottom-box">
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          @click="payEvent"
+          v-if="substitutePayActive === -1 && isBulk == false"
+        >
+          支付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          @click="payEvent"
+          v-else-if="isBulk"
+        >
+          支付￥{{ $util.toDecimal2(bulkData.payAmount) }}元
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          v-else
+          @click="substitutePayEvent"
+        >
+          找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+        </div>
+        <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
     </nav-content>
     <div class="copy-div" v-show="showCopyBtn">
@@ -164,6 +167,7 @@ export default {
       lsProductName: "",
       isBulk: false,
       bulkData: {},
+      isX:false,
     };
   },
   methods: {
@@ -631,6 +635,16 @@ export default {
     this.setPayWays();
     // this.payment = this.$route.query.payment
     // this.tradeNo = this.$route.query.tradeNo
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
   },
   mounted() {
     //从后台进前台的协议
@@ -762,15 +776,24 @@ export default {
     }
   }
 
-  .bottom-btn {
+  .bottom-box{
     position: absolute;
     bottom: 0px;
     left: 0px;
     right: 0px;
+  }
+
+  .bottom-btn {
     text-align: center;
     padding: 16px;
     font-size: 18px;
     font-weight: 500;
+  }
+  
+  .adapter-iphoneX{
+    width: 100%;
+    height: 34px;
+    background-color: #fff;
   }
 }
 </style>
