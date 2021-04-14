@@ -4,7 +4,7 @@
       <img :src="iconBack" alt="" />
     </div>
     <div class="title">邦豆记录</div>
-    <div class="value">{{totalRecord}}</div>
+    <div class="value">{{ totalRecord }}</div>
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         v-model="loading"
@@ -66,8 +66,6 @@ export default {
       this.refreshing = false;
       this.currentPage += 1;
       let params = {
-        token: this.$store.state.login.token,
-        // memberId: "13560543838",
         pageIndex: this.currentPage,
         pageSize: 10,
       };
@@ -99,14 +97,10 @@ export default {
     },
     // 下拉刷新时触发
     onRefresh() {
-      //   let page = 1; //从第一页开始
-      //   this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
       this.loading = true; //将下拉刷新状态改为true开始刷新
       this.currentPage = 1;
       let params = {
-        token: this.$store.state.login.token,
-        // memberId: "13560543838",
         pageIndex: this.currentPage,
         pageSize: 10,
       };
@@ -119,6 +113,11 @@ export default {
             this.$toast("刷新成功");
             this.loading = false;
             this.refreshing = false; //刷新成功后将状态关掉
+          } else {
+            // this.finished = true
+            this.loading = false;
+            this.error = true;
+            this.refreshing = false;
           }
         })
         .catch((res) => {
@@ -177,6 +176,7 @@ export default {
     width: 100%;
     height: 61.6191904047976%;
     overflow-y: auto;
+    padding-bottom: 10px;
 
     .record_item {
       width: 343px;
