@@ -1,18 +1,22 @@
 <template>
-  <div class="nav-top" :style="{'padding-top':adapterTop}">
-    <i class="icon" @click="goBack"></i>
-    <span class="title">我的订单</span>
+  <div class="nav-top" :style="{ 'padding-top': adapterTop }">
+    <div>
+      <i class="icon" @click="goBack"></i>
+      <span class="title">我的订单</span>
+    </div>
+    <span class="history" @click="navToHistory">历史缴费记录</span>
   </div>
 </template>
 
 <script>
 import appNav from "@zkty-team/x-engine-module-nav";
 import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
+import navToMicroApplication from "@zkty-team/x-engine-module-router";
 
 export default {
   data() {
     return {
-      adapterTop:'0.426667rem'
+      adapterTop: "0.426667rem",
     };
   },
   created() {
@@ -23,31 +27,44 @@ export default {
     //  window.screen.availHeight 为浏览器 可用高度
     if (rate < limit) {
       this.adapterTop = "1.173333rem";
-    }else{
+    } else {
       this.adapterTop = "0.426667rem";
     }
   },
   methods: {
     goBack: function () {
       appLocalstorage
-      .get({
-        key: "LLBIsHomeView",
-        isPublic: true,
-      })
-      .then((res) => {
-        let _result = res.result
-        if (!_result || _result == '' || _result == 'null' || _result == undefined) {
-          return;
-        }
-        if (_result == '1') {
-          this.$router.replace({
-            path: '/common'
-          })
-        } else {
-          appNav.navigatorBack({ url: "0" }).then((res) => {
-            console.log(res);
-          });
-        }
+        .get({
+          key: "LLBIsHomeView",
+          isPublic: true,
+        })
+        .then((res) => {
+          let _result = res.result;
+          if (
+            !_result ||
+            _result == "" ||
+            _result == "null" ||
+            _result == undefined
+          ) {
+            return;
+          }
+          if (_result == "1") {
+            this.$router.replace({
+              path: "/common",
+            });
+          } else {
+            appNav.navigatorBack({ url: "0" }).then((res) => {
+              console.log(res);
+            });
+          }
+        });
+    },
+    navToHistory() {
+      //跳转微应用
+      navToMicroApplication.openTargetRouter({
+        type: "microapp",
+        uri: "com.times.microapp.AppcPrepay", // 微应用包名
+        path: "/bill/index", // 微应用具体路由
       });
     },
   },
@@ -60,6 +77,9 @@ export default {
 .nav-top {
   padding: 16px;
   background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   // padding-top: 44px;
   .icon {
@@ -77,6 +97,13 @@ export default {
     color: #121212;
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
+  }
+
+  .history {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 24px;
   }
 }
 </style>
