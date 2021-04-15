@@ -21,8 +21,8 @@
           :key="index"
         >
           <div class="item_info">
-            <div class="item_title">{{ item.describe }}</div>
-            <div class="item_date">{{ item.invalidTime }}</div>
+            <div class="item_title">{{ item.behaviourName }}</div>
+            <div class="item_date">{{ item.createTime }}</div>
           </div>
           <div class="item_value">
             {{ item.changeType == 1 ? "+" : "-" }}{{ item.integralChange }}
