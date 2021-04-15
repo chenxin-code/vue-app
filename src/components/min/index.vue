@@ -192,14 +192,14 @@ export default {
             this.walletData.gridList,
             "bean",
             "value",
-            this.memberInfo.integral,
+            this.memberInfo.integral?this.memberInfo.integral:0,
             false
           );
           this.setValue(
             this.walletData.gridList,
             "coupons",
             "value",
-            this.memberInfo.couponNum,
+            this.memberInfo.couponNum?this.memberInfo.couponNum:0,
             false
           );
         } else {
