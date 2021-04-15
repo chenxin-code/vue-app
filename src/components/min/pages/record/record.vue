@@ -15,21 +15,19 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <ul class="record_list">
-          <li
-            class="record_item"
-            v-for="(item, index) in recordList"
-            :key="index"
-          >
-            <div class="item_info">
-              <div class="item_title">{{ item.describe }}</div>
-              <div class="item_date">{{ item.invalidTime }}</div>
-            </div>
-            <div class="item_value">
-              {{ item.changeType == 1 ? "+" : "-" }}{{ item.integralChange }}
-            </div>
-          </li>
-        </ul>
+        <div
+          class="record_item"
+          v-for="(item, index) in recordList"
+          :key="index"
+        >
+          <div class="item_info">
+            <div class="item_title">{{ item.describe }}</div>
+            <div class="item_date">{{ item.invalidTime }}</div>
+          </div>
+          <div class="item_value">
+            {{ item.changeType == 1 ? "+" : "-" }}{{ item.integralChange }}
+          </div>
+        </div>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -171,10 +169,18 @@ export default {
     margin-top: 16px;
   }
 
-  .record_list {
-    margin-top: 113px;
-    width: 100%;
+  .van-pull-refresh {
     height: 61.6191904047976%;
+    margin-top: 113px;
+  }
+
+  .van-pull-refresh__track {
+    height: 100%;
+  }
+
+  .van-list {
+    width: 100%;
+    height: 100%;
     overflow-y: auto;
     padding-bottom: 10px;
 
