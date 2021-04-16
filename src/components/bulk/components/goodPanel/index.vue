@@ -12,7 +12,7 @@
     <dl class="good-ms">
       <dd>
         <img
-          :src="resouce.groupbuySkuPicurl"
+          :src="resouce.groupbuySkuPicurl[0]"
           alt=""
         />
       </dd>
@@ -66,16 +66,16 @@ export default {
   },
   data() {
     return {
-      
+
     };
   },
   methods: {
     getTimeTitle: function () {
         let nowT = this.$store.state.severTime.currentTime;
-        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        if (nowT < startT) {
-          return '距离开始还剩:'
-        }
+        // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        // if (nowT < startT) {
+        //   return '距离开始还剩:'
+        // }
         let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
         if (nowT < endT) {
           return '距离结束还剩:'
@@ -84,10 +84,10 @@ export default {
     },
      getCountdownTime: function () {
         let nowT = this.$store.state.severTime.currentTime;
-        let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        if (nowT < startT) {
-          return startT
-        }
+        // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+        // if (nowT < startT) {
+        //   return startT
+        // }
         let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
         if (nowT < endT) {
           return endT
@@ -186,6 +186,7 @@ export default {
   height: 100%;
   border-radius: 8px;
   overflow: hidden;
+  object-fit: cover;
 }
 .good-ms dt {
   margin-left: 20px;

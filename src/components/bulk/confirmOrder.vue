@@ -7,15 +7,12 @@
     ></nav-top>
     <div class="user_info">
       <div class="info">
-        <span>提货人：</span>
-        <input placeholder="姓名" v-model="consigneeName" />
-        <input placeholder="请输入手机号" v-model="consigneePhoneNumber" />
+        <span>提货人姓名：</span>
+        <input placeholder="请输入姓名" v-model="consigneeName" />
       </div>
-      <div class="pick_up_way">
-        <span> 提货方式：</span>
-        <van-dropdown-menu active-color="#b52232">
-          <van-dropdown-item v-model="takeWay" :options="takeWays" disabled />
-        </van-dropdown-menu>
+      <div class="info" style="margin-top: 12px;">
+        <span>联系人电话：</span>
+        <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" />
       </div>
     </div>
     <div class="pick_up_address">
@@ -27,12 +24,15 @@
       </div>
       <div class="line"></div>
       <div class="addres_info" v-if="placelist.length">
-        <img :src="placelist[0].teamLeaderAvatar" alt="" />
+        <!-- <img :src="placelist[0].teamLeaderAvatar" alt="" /> -->
         <div class="addres_info_detail">
-          <div class="colonel_name">{{ placelist[0].teamLeaderName }}</div>
           <div class="addres">
-            提货地址：{{ placelist[0].cucName }}{{ placelist[0].cudName
-            }}{{ placelist[0].cuName }}
+            <div class="adders-key">提货联系人：</div>
+            <div class="adders-val">{{ placelist[0].teamLeaderName }} {{ placelist[0].teamLeaderPhoneNumber }}</div>
+          </div>
+          <div class="addres" style="margin-top: 10px;">
+            <div class="adders-key">提货地址：</div>
+            <div class="adders-val">{{ placelist[0].cucName }}{{ placelist[0].cudName}}{{ placelist[0].cuName }}</div>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
               <div class="bulk_price">
                 团购价格：¥{{ resouce.groupbuyBuyerPrice }}
               </div>
-              <div class="count">共一件</div>
+              <!-- <div class="count">共一件</div> -->
             </div>
           </div>
         </div>
@@ -81,11 +81,12 @@
       </div> -->
     </div>
     <div class="remark">
-      <span>订单备注</span>
+      <span>订单备注：</span>
       <textarea
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
+        placeholder="请输入备注"
       ></textarea>
     </div>
     <div class="pay_now">
@@ -125,15 +126,30 @@ export default {
         { text: "送货上门", value: 2 },
       ],
       takeWay: 1,
+      pageAvtive: false
     };
   },
-  created() {
-    this.getPlaceList();
-    this.resouce = this.$store.state.CharseInfo;
-    console.log(this.$store.state.CharseInfo.masterPlace);
-    this.total = BigNumber(this.buyNumber)
-      .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
-      .toFixed(2);
+  activated() {
+    if(this.pageAvtive){
+      console.log("sss")
+      this.placelist = [this.$store.state.CharseInfo.masterPlace];
+    }else{
+      console.log("xxx")
+      this.getPlaceList();
+      this.resouce = this.$store.state.CharseInfo;
+      this.total = BigNumber(this.buyNumber)
+        .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
+        .toFixed(2);
+    }
+  },
+  beforeRouteLeave(to,form,next){
+    if(to.path == '/mall2/checkstand'){
+      console.log("aaa")
+      this.pageAvtive = true;
+    }else{
+      this.pageAvtive = false;
+    }
+    next();
   },
   methods: {
     //实现文本域自适应大小
@@ -258,7 +274,6 @@ export default {
 
   .user_info {
     width: 100%;
-    height: 70px;
     background: #FFFFFF;
     box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
@@ -266,7 +281,7 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     margin: 70px auto 0;
-    padding: 10px 20px;
+    padding: 12px 20px;
 
     .info {
       display: flex;
@@ -275,23 +290,21 @@ export default {
       align-items: center;
 
       span {
-        width: 61.5px;
-        height: 20px;
         font-size: 14px;
-        font-weight: 500;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 600;
         color: #424242;
-        line-height: 20px;
       }
 
       input {
-        width: 125.5px;
+        width: 220px;
         border-right: 1px solid #D8D7D7;
-        text-align: center;
         font-size: 14px;
         font-weight: 400;
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
+        margin-left 10px;
       }
 
       input:last-child {
@@ -349,11 +362,10 @@ export default {
 
   .pick_up_address {
     width: 100%;
-    height: 165px;
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 10px 10px 10px 20px;
+    padding: 14px 16px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
@@ -366,7 +378,7 @@ export default {
         flex: 1;
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         color: #424242;
         line-height: 20px;
       }
@@ -381,7 +393,6 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding-top: 9.5px;
 
       textarea {
         font-size: 14px;
@@ -417,10 +428,18 @@ export default {
 
         .addres {
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 500;
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
+          display flex;
+          .adders-key{
+            width: 90px;
+            font-weight: bolder;
+          }
+          .adders-val{
+            width: 230px;
+          }
         }
       }
     }
@@ -561,6 +580,7 @@ export default {
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
+    margin-bottom 50px;
     padding: 14.5px 20px 14.5px 20px;
 
     span {
@@ -622,4 +642,3 @@ export default {
   }
 }
 </style>
-

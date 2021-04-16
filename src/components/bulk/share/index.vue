@@ -171,10 +171,9 @@
       <div
         class="navigation_hidden"
         v-show="!isShowNavigation"
-        @click.stop="isShowNavigation = true"
-      >
-        <div>快捷</div>
-        <div>导航</div>
+        @click.stop="$router.push({path:'/'})">
+        <div>返回</div>
+        <div>主页</div>
       </div>
     </transition>
     <transition name="van-slide-left">
@@ -287,7 +286,7 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = JSON.parse(this.$route.query.activityName);
+    this.activityName = this.$route.query.activityName;
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
@@ -300,6 +299,7 @@ export default {
         userId: this.userId,
       })
       .then((res) => {
+        console.log("分享页面信息~~~~~~~",res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
@@ -325,9 +325,7 @@ export default {
 
           this.str = this.descData.replace(/<img.*?>/g, "");
 
-          let imgStrs = this.shareData.groupDescriptionRichTxt.match(
-            /<img.*?>/g
-          );
+          let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
           this.imgUrls = imgStrs.map((url) => {
@@ -768,6 +766,7 @@ img {
           width: 85px;
           height: 85px;
           margin-right: 10px;
+          object-fit: cover;
         }
 
         .item_detail_deatil {
@@ -1118,4 +1117,3 @@ img {
   }
 }
 </style>
-

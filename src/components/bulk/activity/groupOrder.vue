@@ -28,17 +28,13 @@
         >
           <div
             class="goods_item"
-            v-for="(item, index) in currentTab == 0
-              ? allList
-              : currentTab == 1
-              ? waitPayList
-              : currentTab == 2
+            v-for="(item, index) in currentTab == 1
               ? deliveryList
-              : currentTab == 3
+              : currentTab == 2
               ? distributionList
-              : currentTab == 4
+              : currentTab == 3
               ? pickUpList
-              : currentTab == 5
+              : currentTab == 4
               ? finishedList
               : allList"
             :key="index"
@@ -48,9 +44,7 @@
               <div class="goods_ID">#{{ item.activityOrderItemNo }}</div>
               <div class="goods_type">
                 {{
-                  item.activityOrderItemState == 0
-                    ? "待支付"
-                    : item.activityOrderItemState == 1
+                    item.activityOrderItemState == 1
                     ? "待发货"
                     : item.activityOrderItemState == 2
                     ? "待配送"
@@ -164,7 +158,7 @@ export default {
     return {
       tab: [
         { name: "全部" },
-        { name: "待支付" },
+        // { name: "待支付" },
         { name: "待发货" },
         { name: "待配送" },
         { name: "待提货" },
@@ -220,19 +214,16 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        groupBuyingOrderNo: this.activityOrderNo,
+        activityNo: this.activityOrderNo,
+        // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
+            this.currentTab == 1
             ? 1
-            : this.currentTab == 3
+            : this.currentTab == 2
             ? 2
-            : this.currentTab == 4
+            : this.currentTab == 3
             ? 3
-            : this.currentTab == 5
+            : this.currentTab == 4
             ? 4
             : undefined,
       };
@@ -306,7 +297,8 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        groupBuyingOrderNo: this.activityOrderNo,
+        activityNo: this.activityOrderNo,
+        // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
           this.currentTab == 0
             ? undefined
@@ -656,4 +648,3 @@ export default {
   }
 }
 </style>
-
