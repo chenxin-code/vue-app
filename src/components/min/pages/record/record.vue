@@ -5,31 +5,33 @@
     </div>
     <div class="title">邦豆记录</div>
     <div class="value">{{ totalRecord }}</div>
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        :finished-text="'没有更多了'"
-        @load="onLoad"
-        :error.sync="error"
-        error-text="请求失败，点击重新加载"
-        :immediate-check="false"
-      >
-        <div
-          class="record_item"
-          v-for="(item, index) in recordList"
-          :key="index"
+    <div class="list">
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          :finished-text="'没有更多了'"
+          @load="onLoad"
+          :error.sync="error"
+          error-text="请求失败，点击重新加载"
+          :immediate-check="false"
         >
-          <div class="item_info">
-            <div class="item_title">{{ item.behaviourName }}</div>
-            <div class="item_date">{{ item.createTime }}</div>
+          <div
+            class="record_item"
+            v-for="(item, index) in recordList"
+            :key="index"
+          >
+            <div class="item_info">
+              <div class="item_title">{{ item.behaviourName }}</div>
+              <div class="item_date">{{ item.createTime }}</div>
+            </div>
+            <div class="item_value">
+              {{ item.changeType == 1 ? "+" : "-" }}{{ item.integralChange }}
+            </div>
           </div>
-          <div class="item_value">
-            {{ item.changeType == 1 ? "+" : "-" }}{{ item.integralChange }}
-          </div>
-        </div>
-      </van-list>
-    </van-pull-refresh>
+        </van-list>
+      </van-pull-refresh>
+    </div>
   </div>
 </template>
 
@@ -169,60 +171,50 @@ export default {
     margin-top: 16px;
   }
 
-  .van-pull-refresh {
+  .list {
     height: 61.6191904047976%;
     margin-top: 113px;
-  }
-
-  .van-pull-refresh__track {
-    height: 100%;
-  }
-
-  .van-list {
-    width: 100%;
-    height: 100%;
     overflow-y: auto;
-    padding-bottom: 10px;
+  }
 
-    .record_item {
-      width: 343px;
-      height: 70px;
-      background: #FFFFFF;
-      box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.06);
-      border-radius: 12px;
-      margin: 16px auto 0;
-      padding: 16px;
+  .record_item {
+    width: 343px;
+    height: 70px;
+    background: #FFFFFF;
+    box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.06);
+    border-radius: 12px;
+    margin: 16px auto 0;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .item_info {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
 
-      .item_info {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .item_title {
-          font-size: 16px;
-          font-weight: 400;
-          color: #121212;
-          line-height: 15px;
-        }
-
-        .item_date {
-          font-size: 12px;
-          font-weight: 400;
-          color: #8D8D8D;
-          line-height: 12px;
-          margin-top: 10px;
-        }
+      .item_title {
+        font-size: 16px;
+        font-weight: 400;
+        color: #121212;
+        line-height: 15px;
       }
 
-      .item_value {
-        font-size: 20px;
-        font-weight: 500;
-        color: #E8374A;
-        line-height: 20px;
+      .item_date {
+        font-size: 12px;
+        font-weight: 400;
+        color: #8D8D8D;
+        line-height: 12px;
+        margin-top: 10px;
       }
+    }
+
+    .item_value {
+      font-size: 20px;
+      font-weight: 500;
+      color: #E8374A;
+      line-height: 20px;
     }
   }
 }
