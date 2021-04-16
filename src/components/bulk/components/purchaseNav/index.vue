@@ -85,6 +85,7 @@ export default {
 .key-dom img {
   width: 60px;
   height: 60px;
+  object-fit: cover;
   border-radius: 50%;
   border: 1px solid #f6f6f6;
 }

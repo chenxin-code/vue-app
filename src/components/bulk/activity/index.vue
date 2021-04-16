@@ -408,6 +408,7 @@ export default {
       img {
         width: 80px;
         height: 80px;
+        object-fit: cover;
         border-radius: 6px;
         margin-right: 15px;
       }
