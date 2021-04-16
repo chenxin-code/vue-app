@@ -10,7 +10,7 @@
           :top-load-method="topRefresh"
           :is-top-bounce="true"
         >
-          <div>
+          <div :class="isX?'scroll-box':''">
             <div class="top-div">
               <!--待支付-->
               <div class="order-info" v-if="tag == '1'">
@@ -888,58 +888,62 @@
           </div>
         </pull-to>
       </div>
-      <div class="bottom-btns" v-if="getIsShowBottomBtns()">
-        <div class="tip" v-if="detailData.orderMode == 8 && isShowCancelOrder">申请退款剩余时间：{{timeString}}</div>
-        <div class="full"></div>
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          v-if="$store.state.deployType == 4"
-          @click.stop="consultingService(detailData)"
-        >咨询客服</div>
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="modifyAddress(detailData)"
-          v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500"
-        >修改订单</div>
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="cancelOrder"
-          v-if="tag == '1' && detailData.orderPayType != 1"
-        >取消订单</div>
-        <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="applyOrder"
-          v-if="isShowCancelOrder">申请退款</div>
-        <div
-          class="row-btn line_circle row-btn-big-space theme_font_common theme_border_gray"
-          @click="payEvent"
-          v-if="tag == '1' && detailData.orderPayType != 1"
-        >付款</div>
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="expressType"
-          v-if="pivotalProductType != 8 && tag == '4' && detailData.deliverType == 2 && isShowExpress"
-        >查看物流</div>
-        <!--  如果选择“用提货码确认订单”把确认收货按钮前台隐藏掉
-                   配送订单时, 如果  deliveryConfirmType 为null 或者为0 展示确认收货按钮, 如果为 1 隐藏确认收货按钮-->
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="confirmProduct"
-          v-if="tag == '4' && (detailData.deliverType == 2) && (detailData.interfaceType == '0' || (detailData.interfaceType == '1' && detailData.interfaceOrderType == '5')) && detailData.deliveryConfirmType != 1"
-        >确认收货</div>
-        <div
-          class="row-btn line_circle theme_font_common theme_border_gray"
-          @click="toComment"
-          v-if="tag == '9' && detailData.state != 6 && detailData.orderPayType != 1"
-        >晒单评价</div>
-        <!-- <div class="row-btn line_circle theme_font_common theme_border_gray" @click v-if="tag == '9' && $store.state.globalConfig.invoice_shopping_enable != 'false' && detailData.orderPayType != 1">查看发票</div> -->
-        <div
-          class="row-btn line_circle theme_standard_font theme_standard_bdr"
-          @click="reBuy"
-          v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
-        >再次购买</div>
+      <div class="bottom-btns-box">
+        <div class="bottom-btns" v-if="getIsShowBottomBtns()">
+          <div class="tip" v-if="detailData.orderMode == 8 && isShowCancelOrder">申请退款剩余时间：{{timeString}}</div>
+          <div class="full"></div>
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            v-if="$store.state.deployType == 4"
+            @click.stop="consultingService(detailData)"
+          >咨询客服</div>
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="modifyAddress(detailData)"
+            v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500"
+          >修改订单</div>
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="cancelOrder"
+            v-if="tag == '1' && detailData.orderPayType != 1"
+          >取消订单</div>
+          <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="applyOrder"
+            v-if="isShowCancelOrder">申请退款</div>
+          <div
+            class="row-btn line_circle row-btn-big-space theme_font_common theme_border_gray"
+            @click="payEvent"
+            v-if="tag == '1' && detailData.orderPayType != 1"
+          >付款</div>
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="expressType"
+            v-if="pivotalProductType != 8 && tag == '4' && detailData.deliverType == 2 && isShowExpress"
+          >查看物流</div>
+          <!--  如果选择“用提货码确认订单”把确认收货按钮前台隐藏掉
+                    配送订单时, 如果  deliveryConfirmType 为null 或者为0 展示确认收货按钮, 如果为 1 隐藏确认收货按钮-->
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="confirmProduct"
+            v-if="tag == '4' && (detailData.deliverType == 2) && (detailData.interfaceType == '0' || (detailData.interfaceType == '1' && detailData.interfaceOrderType == '5')) && detailData.deliveryConfirmType != 1"
+          >确认收货</div>
+          <div
+            class="row-btn line_circle theme_font_common theme_border_gray"
+            @click="toComment"
+            v-if="tag == '9' && detailData.state != 6 && detailData.orderPayType != 1"
+          >晒单评价</div>
+          <!-- <div class="row-btn line_circle theme_font_common theme_border_gray" @click v-if="tag == '9' && $store.state.globalConfig.invoice_shopping_enable != 'false' && detailData.orderPayType != 1">查看发票</div> -->
+          <div
+            class="row-btn line_circle theme_standard_font theme_standard_bdr"
+            @click="reBuy"
+            v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
+          >再次购买</div>
+        </div>
+        <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
+
       <van-popup v-model="vityFlag" >
       <div class="vity-title">请输入短信验证码</div>
 <!--        <div class="vity-con">-->
@@ -1035,6 +1039,7 @@ export default {
       pivotalProductType: '',
       errorInfo: '',
       showKeyboard: true,
+      isX:false,
     }
   },
   mounted(){
@@ -2026,6 +2031,16 @@ export default {
     // 代付相关end
 
     this._getOrderDetail()
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.$keepaliveHelper.deleteCache(this)
@@ -2130,6 +2145,9 @@ export default {
       >>>.theme_font_red {
         color #000000;
       }
+    }
+    .scroll-box{
+      padding-bottom 34px;
     }
 
     .top-div {
@@ -2301,13 +2319,23 @@ export default {
     padding: 0px 0px;
   }
 
-  .bottom-btns {
+  .bottom-btns-box{
     position: absolute;
     bottom: 0px;
-    height: 48px;
+    // height: 48px;
     z-index: 1;
     left: 0px;
     right: 0px;
+    background:#fff;
+
+    .adapter-iphoneX{
+      width: 100%;
+      height: 34px;
+      background-color: #fff;
+    }
+  }
+
+  .bottom-btns {
     box-shadow: 0 -1px 4px #efefef;
     padding: 12px 12px;
     display: flex;

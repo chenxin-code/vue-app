@@ -290,6 +290,7 @@
         return title
       },
       dealData: function () {//处理数据
+        //目前只有补货退款
         for (let index in this.orderinfos) {
           let item = this.orderinfos[index];
           if (item.tag == 0) {
@@ -307,7 +308,12 @@
             }
             this.orderinfos[index].value = str;
           } else if (item.tag == 2) {
-            this.orderinfos[index].value = this.orderInfo.price * this.orderInfo.number;
+            //修复bug  补货类型不需要显示退款金额
+            if(this.orderInfo.type == 3){
+              this.orderinfos[index].value ='';
+            }else{
+              this.orderinfos[index].value = this.orderInfo.price * this.orderInfo.number;
+            }
           } else if (item.tag == 3) {
             this.orderinfos[index].value = this.orderInfo.createTimeStr;
           } else if (item.tag == 4) {

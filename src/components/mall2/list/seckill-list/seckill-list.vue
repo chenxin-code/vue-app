@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-top @backEvent="$router.go(-1)" title="" :bg-img="bgImg"></nav-top>
+    <nav-top @backEvent="$router.go(-1)" title="秒杀" :bg-img="bgImg"></nav-top>
     <nav-content>
       <div class="seckill-container" v-if="secKillList.length">
         <ul class="seckill-menu">
@@ -384,7 +384,7 @@
     // },
     computed: {
       bgImg() {
-        return require('../../../../assets/sekill/seckill_list_bg_up.png')
+        return require('../../../../assets/sekill/seckillBgUp.png')
       }
     },
     components: {Countdown},
@@ -408,13 +408,14 @@
     height 100%
 
     .seckill-menu {
-      background-image url('../../../../../static/image/mall2/seckill/seckill_list_bg_down.png')
+      background-image url('../../../../../static/image/mall2/seckill/seckillBgDown.png')
       background-size 100% 100%
       background-repeat no-repeat
+      height 129px
       padding 10px 0;
       overflow: hidden
       display: flex
-      align-items center
+      align-items flex-end
 
       .seckill-menu-item {
         width 25%;

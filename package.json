@@ -16,6 +16,7 @@
   "dependencies": {
     "@zkty-team/x-engine-module-localstorage": "^0.1.13",
     "@zkty-team/x-engine-module-nav": "^0.1.20",
+    "@zkty-team/x-engine-module-router": "^0.1.20",
     "@zkty-team/x-engine-module-share": "^0.1.13",
     "@zkty-team/x-engine-module-ui": "^0.1.13",
     "axios": "^0.21.1",

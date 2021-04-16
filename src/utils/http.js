@@ -36,7 +36,7 @@ let Axios = axios.create({
   headers
 })
 
-let bulkApi = ['/app/json/app_pay/getWalletBalance','/app/json/app_shopping_order/findOrderFormList','/app/json/logistics_system/queryLogisticsInfo','/app/json/app_group_buying_share_home/generateShareLink','/app/json/groupbuying_activity_app/list','/app/json/group_buying_head_info/findHeadInfoByList','/app/json/group_buying_head_info/findSelfInfo','/app/json/group_buying_my_earnings/getMyEarnings','/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/app_member_center/findIntegralRecordList','/app/json/login/getYthUser','/app/json/app_pay/getWalletBalance','/app/json/app_shopping_order/findOrderFormList','/app/json/logistics_system/queryLogisticsInfo','/app/json/app_group_buying_share_home/generateShareLink','/app/json/groupbuying_activity_app/list','/app/json/group_buying_head_info/findHeadInfoByList','/app/json/group_buying_head_info/findSelfInfo','/app/json/group_buying_my_earnings/getMyEarnings','/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
@@ -213,7 +213,7 @@ Axios.interceptors.response.use(
       if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {
         return userCenter.expireUpdateToken(res);
       } else {
-        store.state.login.token = '';
+        store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           util.toLogin();
           return res;

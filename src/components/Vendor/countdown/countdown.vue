@@ -18,7 +18,7 @@
   export default {
     name: "countdown",
     // 这里都传时间戳，方便计算
-    props: ['endTime', 'type', 'hiddenDay'], // 默认红色 type: className 秒杀倒计时样式
+    props: ['endTime', 'type', 'hiddenDay','callback'], // 默认红色 type: className 秒杀倒计时样式
     components: {},
     data() {
       return {
