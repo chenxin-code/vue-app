@@ -28,17 +28,13 @@
         >
           <div
             class="goods_item"
-            v-for="(item, index) in currentTab == 0
-              ? allList
-              : currentTab == 1
-              ? waitPayList
-              : currentTab == 2
+            v-for="(item, index) in currentTab == 1
               ? deliveryList
-              : currentTab == 3
+              : currentTab == 2
               ? distributionList
-              : currentTab == 4
+              : currentTab == 3
               ? pickUpList
-              : currentTab == 5
+              : currentTab == 4
               ? finishedList
               : allList"
             :key="index"
@@ -48,9 +44,7 @@
               <div class="goods_ID">#{{ item.activityOrderItemNo }}</div>
               <div class="goods_type">
                 {{
-                  item.activityOrderItemState == 0
-                    ? "待支付"
-                    : item.activityOrderItemState == 1
+                    item.activityOrderItemState == 1
                     ? "待发货"
                     : item.activityOrderItemState == 2
                     ? "待配送"
@@ -164,7 +158,7 @@ export default {
     return {
       tab: [
         { name: "全部" },
-        { name: "待支付" },
+        // { name: "待支付" },
         { name: "待发货" },
         { name: "待配送" },
         { name: "待提货" },
@@ -656,4 +650,3 @@ export default {
   }
 }
 </style>
-

@@ -2,7 +2,7 @@
   <!-- 团购首页 -->
   <div id="page-purchase">
     <div class="header-x">
-      <channelSearch></channelSearch>
+      <channelSearch @searchFun="getList(1,$event,'search')"></channelSearch>
     </div>
     <div class="section-x">
       <purchaseNav @navToMsg="navToMsg"></purchaseNav>
@@ -33,6 +33,9 @@
         </van-pull-refresh>
       </div>
     </div>
+
+    <!-- 团长入口 -->
+    <div v-if="entrance" class="entrance-tuanzhang" @click="$router.push({path:'/bulk_index'})" ><img src="../activity/images/pintuan.png" /></div>
   </div>
 </template>
 <script>
@@ -52,7 +55,7 @@ export default {
   },
   data() {
     return {
-      communityId: 0,
+      communityId: "",
       categoryId: "",
       page: 0,
       pageSize: 10,
@@ -62,13 +65,22 @@ export default {
       loading: false,
       finished: false,
       offset: 15,
+      entrance: false
     };
   },
   created() {
+    this.$http
+    .get("/app/json/group_buying_head_info/findSelfInfo")
+    .then((res) => {
+      if (res.data.result == "success") {
+        this.entrance = true;
+      }
+    });
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       this.communityId = this.$store.state.projectId;
       console.log("res-------------------", this.communityId);
     } else {
+      // this.communityId = "2248412888374968908";
       appLocalstorage
         .get({
           key: "LLBProjectId",
@@ -86,7 +98,9 @@ export default {
         "goodlist-wraper"
       )[0].offsetHeight;
     });
-    this.getList(1);
+    setTimeout(()=>{
+      this.getList(1);
+    },100)
   },
   methods: {
     navToMsg(data) {
@@ -111,13 +125,17 @@ export default {
       this.loading = false;
       this.isLoading = false;
     },
+    // 是否搜索
+    searchVal(val) {
+      return val?'&skuName='+val+'':'';
+    },
     /**
      *  请求数据方法
      */
-    getList(page) {
+    getList(page,val,isSearch) {
       if (!page) this.page++;
       if (page) this.page = page;
-      let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}`+this.searchVal(val)+`&pageIndex=${this.page}&pageSize=${this.pageSize}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -131,7 +149,7 @@ export default {
             if (item.avatarList.length > 3)
               item.avatarList = item.avatarList.slice(0, 3);
           });
-          this.saleDataList = this.saleDataList.concat(res.data.data);
+          this.saleDataList = isSearch == 'search' ? res.data.data : this.saleDataList.concat(res.data.data);
         })
         .catch((e) => {
           console.log(e);
@@ -140,7 +158,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="stylus" scoped>
 #page-purchase {
   width: 100%;
   height: 100vh;
@@ -187,5 +205,16 @@ export default {
 .footer {
   width: 100%;
   height: 55px;
+}
+.entrance-tuanzhang{
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  left: -4px;
+  bottom: 15%;
+  img{
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

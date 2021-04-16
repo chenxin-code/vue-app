@@ -13,7 +13,7 @@
           :key="index"
         >
           <div class="leftBox">
-            <img :src="item.skuPictureUrl" alt="" />
+            <img :src="item.skuPictureUrl.split(',')[0]" alt="" />
           </div>
           <div class="rightBox">
             <p class="title">{{ item.skuName }}</p>
@@ -221,6 +221,7 @@ export default {
       img {
         width: 110px;
         height: 110px;
+        object-fit: cover;
       }
     }
 

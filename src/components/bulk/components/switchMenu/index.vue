@@ -85,8 +85,8 @@ export default {
   display: flex;
   justify-content: space-between;
   background: #fff;
-  padding: 7.5px 28.5px 2.5px 36px;
-  height: 49px;
+  padding: 10px 28.5px 10px 36px;
+  /* height: 49px; */
   box-sizing: border-box;
 }
 .menu-item-x {
