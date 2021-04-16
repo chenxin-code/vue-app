@@ -175,6 +175,7 @@ export default {
     height: 61.6191904047976%;
     margin-top: 113px;
     overflow-y: auto;
+    padding-bottom: 34px;
   }
 
   .record_item {
