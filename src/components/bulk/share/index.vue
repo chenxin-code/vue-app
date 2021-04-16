@@ -290,9 +290,10 @@ export default {
     this.activityName = JSON.parse(this.$route.query.activityName);
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
-    this.checkList.forEach((e) => {
-      this.result.push(e.id);
-    });
+    // this.checkList.forEach((e) => {
+    //   this.result.push(e.id);
+    // });
+    console.log("测试~~~~~~~~~~~",this.purchaseId,this.chiefId,this.userId,this.activityName,this.totalPrice);
     this.$http
       .post("/app/json/app_group_buying_share_home/queryShareHomePageInfo", {
         purchaseId: this.purchaseId,
@@ -300,6 +301,7 @@ export default {
         userId: this.userId,
       })
       .then((res) => {
+        console.log("分享页面信息~~~~~~~",res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;

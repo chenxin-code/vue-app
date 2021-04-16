@@ -234,7 +234,7 @@ export default {
               // userName: "gh_2a45a4d38d81",
               userName: "gh_28d617271c97",
               path: `pages/weView/weView?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
               )}`,
               title: "微信分享商品",
               desc: "test",
