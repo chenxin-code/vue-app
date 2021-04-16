@@ -338,13 +338,21 @@ export default {
               )
             }else{
               isGroup = false;
-              // /app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
               this.setWxOrderInfo(
                 {
+                  state: 3,
+                  orderId: this.payInfo.orderId,
+                  orderType: this.payInfo.orderType,
+                  tradeNo: this.payInfo.tradeNo,
+                  tag: 1,
+                  deliverCheckcode: this.payInfo.deliverCheckcode,
+                  deviceCode: this.$route.query.deviceCode,
+                  storeOuCode: this.$route.query.storeOuCode,
+                  stationName: this.$route.query.stationName,
                   selectedIndex: "1",
                   orderCategory: this.$route.query.orderCategory,
                   vipUnitUserCode: this.$route.query.vipUnitUserCode,
-                  type: this.$route.query.type
+                  type: this.$route.query.type || "",
                 },
                 redirectUrl,
                 isGroup,
