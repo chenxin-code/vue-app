@@ -320,12 +320,72 @@ export default {
             return;
           }
 
+          if(this.$store.state.webtype == 0 || this.$store.state.webtype == 1){
+            let isGroup = false;
+            if (this.$route.query.isGroup == "1") {
+              isGroup = true;
+              this.setWxOrderInfo(
+                {
+                  skuId: this.$route.query.skuId,
+                  productType: this.$route.query.productType,
+                  groupId: this.$route.query.groupId,
+                  orderId: this.$route.query.orderId,
+                  mktGroupBuyId: this.$route.query.mktGroupBuyId,
+                  formPaySuccess: "1"
+                },
+                redirectUrl,
+                isGroup,
+              )
+            }else{
+              isGroup = false;
+              // /app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+              this.setWxOrderInfo(
+                {
+                  selectedIndex: "1",
+                  orderCategory: this.$route.query.orderCategory,
+                  vipUnitUserCode: this.$route.query.vipUnitUserCode,
+                  type: this.$route.query.type
+                },
+                redirectUrl,
+                isGroup,
+              )
+            }
+          }else{
+            payHelper
+              .payEvent(
+                this.selectedPayWay,
+                this.payInfo.orderType,
+                this.payInfo.orderId,
+                redirectUrl
+              )
+              .then((res1) => {
+                if (this.$route.query.payInfo.style == "travel") {
+                  this.enterSuccess();
+                } else {
+                  this.enterSuccess(res1);
+                }
+              })
+              .catch(() => {
+                this.hasToPay = false;
+              });
+          }
+        }
+      }
+    },
+    //微信小程序存储订单信息
+    setWxOrderInfo(obj,redirectUrl,isGroup){
+      this.$http.post('/app/json/home/vueAppTempData',{tempData:obj}).then(res=>{
+        if(res.data.status == 0){
+          let wxOrderInfoKey = "";
+          wxOrderInfoKey = res.data.data;
           payHelper
             .payEvent(
               this.selectedPayWay,
               this.payInfo.orderType,
               this.payInfo.orderId,
-              redirectUrl
+              redirectUrl,
+              wxOrderInfoKey,
+              isGroup
             )
             .then((res1) => {
               if (this.$route.query.payInfo.style == "travel") {
@@ -338,7 +398,7 @@ export default {
               this.hasToPay = false;
             });
         }
-      }
+      })
     },
     // 找人代付支付点击
     substitutePayEvent() {
