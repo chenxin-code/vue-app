@@ -292,7 +292,13 @@ export default {
       //   path: '/common',
       // })
       if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        location.reload()
+        if(this.$route.path == "/common"){
+          location.reload()
+        }else{
+          this.$router.replace({
+            path: '/common',
+          })
+        }
       } else {
         this.$router.replace({
           path: '/common',
