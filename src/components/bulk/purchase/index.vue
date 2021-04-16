@@ -2,7 +2,7 @@
   <!-- 团购首页 -->
   <div id="page-purchase">
     <div class="header-x">
-      <channelSearch @searchFun="getList(1,$event,'search')"></channelSearch>
+      <channelSearch @searchFun="funSearch"></channelSearch>
     </div>
     <div class="section-x">
       <purchaseNav @navToMsg="navToMsg"></purchaseNav>
@@ -65,7 +65,8 @@ export default {
       loading: false,
       finished: false,
       offset: 15,
-      entrance: false
+      entrance: false,
+      searchText: ""
     };
   },
   created() {
@@ -125,17 +126,17 @@ export default {
       this.loading = false;
       this.isLoading = false;
     },
-    // 是否搜索
-    searchVal(val) {
-      return val?'&skuName='+val+'':'';
+    funSearch(val){
+      this.searchText = val;
+      this.getList(1,"search");
     },
     /**
      *  请求数据方法
      */
-    getList(page,val,isSearch) {
+    getList(page,isSearch) {
       if (!page) this.page++;
       if (page) this.page = page;
-      let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}`+this.searchVal(val)+`&pageIndex=${this.page}&pageSize=${this.pageSize}`;
+      let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}&skuName=${this.searchText}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -167,7 +168,7 @@ export default {
   flex-direction: column;
 }
 .header-x {
-  height: 50px;
+  height: 56px;
   background: #b52232;
 }
 .section-x {

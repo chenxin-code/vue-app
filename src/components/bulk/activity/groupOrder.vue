@@ -214,19 +214,16 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        groupBuyingOrderNo: this.activityOrderNo,
+        activityNo: this.activityOrderNo,
+        // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
+            this.currentTab == 1
             ? 1
-            : this.currentTab == 3
+            : this.currentTab == 2
             ? 2
-            : this.currentTab == 4
+            : this.currentTab == 3
             ? 3
-            : this.currentTab == 5
+            : this.currentTab == 4
             ? 4
             : undefined,
       };
@@ -300,7 +297,8 @@ export default {
         pageNum: page,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        groupBuyingOrderNo: this.activityOrderNo,
+        activityNo: this.activityOrderNo,
+        // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
           this.currentTab == 0
             ? undefined

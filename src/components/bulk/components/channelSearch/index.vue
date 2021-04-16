@@ -40,6 +40,7 @@ export default {
   height: 50px;
   display: flex;
   align-items: center;
+  padding-top: 14px;
 }
 .back-icon-area {
   width: 42px;

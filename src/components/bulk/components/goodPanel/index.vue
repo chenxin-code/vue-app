@@ -186,6 +186,7 @@ export default {
   height: 100%;
   border-radius: 8px;
   overflow: hidden;
+  object-fit: cover;
 }
 .good-ms dt {
   margin-left: 20px;

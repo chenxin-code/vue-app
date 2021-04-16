@@ -126,18 +126,30 @@ export default {
         { text: "送货上门", value: 2 },
       ],
       takeWay: 1,
+      pageAvtive: false
     };
   },
-  created() {
-    this.getPlaceList();
-    this.resouce = this.$store.state.CharseInfo;
-    console.log(this.$store.state.CharseInfo.masterPlace);
-    this.total = BigNumber(this.buyNumber)
-      .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
-      .toFixed(2);
-  },
   activated() {
-    this.placelist = [this.$store.state.CharseInfo.masterPlace];
+    if(this.pageAvtive){
+      console.log("sss")
+      this.placelist = [this.$store.state.CharseInfo.masterPlace];
+    }else{
+      console.log("xxx")
+      this.getPlaceList();
+      this.resouce = this.$store.state.CharseInfo;
+      this.total = BigNumber(this.buyNumber)
+        .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
+        .toFixed(2);
+    }
+  },
+  beforeRouteLeave(to,form,next){
+    if(to.path == '/mall2/checkstand'){
+      console.log("aaa")
+      this.pageAvtive = true;
+    }else{
+      this.pageAvtive = false;
+    }
+    next();
   },
   methods: {
     //实现文本域自适应大小
