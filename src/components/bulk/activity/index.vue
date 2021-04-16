@@ -113,7 +113,7 @@ export default {
       showShare: false,
       options: [
         { name: "微信", icon: "wechat" },
-        { name: "复制链接", icon: "link" },
+        // { name: "复制链接", icon: "link" },
       ],
       copybtn: null,
       tabTitle: [
