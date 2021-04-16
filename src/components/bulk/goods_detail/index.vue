@@ -13,8 +13,8 @@
       />
       <!-- </van-sticky> -->
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
-        <van-swipe-item v-for="item in 1" :key="item">
-          <img class="goods_img" :src="resouce.groupbuySkuPicurl" alt="" />
+        <van-swipe-item v-for="item in resouce.groupbuySkuPicurl" :key="item">
+          <img class="goods_img" :src="item" alt="" />
         </van-swipe-item>
       </van-swipe>
       <div class="goods_info_box">
@@ -67,7 +67,8 @@
     </div>
     <div class="goods_item_detail_info">
       <div class="goods_item_detail_info_title">商品详情</div>
-      {{ resouce.groupbuySkuDetail }}
+      <!-- <div v-html="resouce.groupbuySkuDetail"></div> -->
+      <span v-html="resouce.groupbuySkuDetail"></span>
     </div>
   </div>
 </template>
@@ -88,16 +89,17 @@ export default {
   },
   created() {
     this.resouce = this.$store.state.CharseInfo;
+    console.log([this.resouce.groupbuySkuPicurl])
   },
   methods: {
     getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;
-      let startT = this.$util.getDateFromString(
-        this.resouce.groupbuyEndDatetime
-      );
-      if (nowT < startT) {
-        return "距离开始还剩:";
-      }
+      // let startT = this.$util.getDateFromString(
+      //   this.resouce.groupbuyEndDatetime
+      // );
+      // if (nowT < startT) {
+      //   return "距离开始还剩:";
+      // }
       let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
       if (nowT < endT) {
         return "距离结束还剩:";
@@ -106,12 +108,12 @@ export default {
     },
     getCountdownTime: function () {
       let nowT = this.$store.state.severTime.currentTime;
-      let startT = this.$util.getDateFromString(
-        this.resouce.groupbuyEndDatetime
-      );
-      if (nowT < startT) {
-        return startT;
-      }
+      // let startT = this.$util.getDateFromString(
+      //   this.resouce.groupbuyEndDatetime
+      // );
+      // if (nowT < startT) {
+      //   return startT;
+      // }
       let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
       if (nowT < endT) {
         return endT;
@@ -393,4 +395,3 @@ export default {
   }
 }
 </style>
-
