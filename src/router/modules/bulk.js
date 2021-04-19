@@ -113,6 +113,15 @@ export default [{
     }
   },
   {
+    path: '/orderInfo',
+    name: '社区团购确认订单',
+    component: () => import('@/components/bulk/orderInfo'),
+    meta: {
+      title: '社区团购确认订单',
+      keepAlive: false
+    }
+  },
+  {
     path: '/selectAddress',
     name: '选择收货地址',
     component: () => import('@/components/bulk/selectAddress'),
