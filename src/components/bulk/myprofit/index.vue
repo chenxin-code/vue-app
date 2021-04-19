@@ -5,10 +5,7 @@
       <div class="lur-header">
         <dl class="profit-box-x">
           <dd class="profit-advantor-x">
-            <img
-              :src="earningsData.avtUrl"
-              alt=""
-            />
+            <van-image class="user-image" :src="earningsData.avtUrl" :error-icon="defaultAvatar" />
           </dd>
           <dt class="profit-msg-x">
             <div class="profit-name-x">{{ earningsData.headName }}</div>
@@ -59,12 +56,14 @@
   </div>
 </template>
 <script>
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "myprofit",
   components: {},
   data() {
     return {
       earningsData: {},
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
     };
   },
   created() {
@@ -259,5 +258,11 @@ em {
 }
 .profit-amount-item em {
   min-width: 60px;
+}
+.user-image{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
 }
 </style>

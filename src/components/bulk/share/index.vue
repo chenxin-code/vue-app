@@ -6,7 +6,7 @@
         <div class="bulk_time_share">
           <div class="bulk_time">
             拼团结束时间剩余
-            <van-count-down :time="shareData.remainingTime">
+            <van-count-down :time="shareData.remainingTime*1000">
               <template #default="timeData">
                 <span class="block">{{ timeData.hours }}</span>
                 <span class="colon">:</span>
@@ -18,15 +18,15 @@
           </div>
           <div class="bulk_share">
             <div class="bulk_title">拼团中</div>
-            <img
+            <!-- <img
               :src="require('./images/share.png')"
               alt=""
               class="share_icon"
-            />
+            /> -->
           </div>
         </div>
         <div class="user_detail">
-          <img :src="shareData.headAvtUrl" alt="" class="avatar" />
+          <van-image class="avatar" :src="shareData.headAvtUrl" :error-icon="defaultAvatar" />
           <div class="user_detail_detail">
             <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
             <div class="take_address">提货地址：{{ shareData.place }}</div>
@@ -91,14 +91,8 @@
               已抢{{ item.purchasedItem }}件/剩余{{ item.remainingItem }}件
             </div>
             <div class="item_other_user">
-              <img
-                v-for="(element, index) in item.buyerMap"
-                :key="index"
-                :src="element.buyerAvtUrl"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              等{{ item.buyerCount }}人购买了此商品
+              <van-image class="user-image" v-for="(element, index) in item.buyerMap" :key="index" :src="element.buyerAvtUrl" :error-icon="defaultAvatar" />
+              <div style="margin-left: 4px;">等{{ item.buyerCount }}人购买了此商品</div>
             </div>
           </div>
           <van-stepper
@@ -121,7 +115,8 @@
         :key="index"
       >
         <div class="other_user_item_user">
-          <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" />
+          <van-image class="other_user_avatar" :src="item.buyerAvtUrl" :error-icon="defaultAvatar" />
+          <!-- <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" /> -->
           <div class="other_user_info">
             <div class="other_user_name">{{ item.buyerName }}</div>
             <div class="detail_btn">
@@ -256,11 +251,13 @@
 <script>
 import Qs from "qs";
 import { mapMutations } from "vuex";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "share",
   props: {},
   data() {
     return {
+			defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       isShowNavigation: false,
       isShowOther: false,
       isShowCar: false,
@@ -638,6 +635,8 @@ img {
           width: 52.5px;
           height: 52.5px;
           margin-right: 10px;
+          border-radius: 50%;
+          overflow: hidden;
         }
 
         .user_detail_detail {
@@ -826,12 +825,22 @@ img {
             font-size: 11px;
             font-weight: 400;
             color: #999999;
-
-            .item_other_user_avatar {
-              width: 24px;
-              height: 24px;
-              margin-right: 5px;
-            }
+            margin-top: 4px;
+          }
+          .user-image{
+            width: 22px;
+          }
+          /deep/.user-image img{
+            width: 22px;
+            height: 22px;
+            margin: 2px 8px 0 4px;
+            border-radius: 50%;
+          }
+          /deep/.van-image__error{
+            background-color: transparent;
+          }
+          /deep/.van-icon{
+            font: initial;
           }
         }
       }
@@ -873,7 +882,9 @@ img {
         .other_user_avatar {
           width: 46px;
           height: 46px;
+          border-radius: 50%;
           margin-right: 10px;
+          overflow: hidden;
         }
 
         .other_user_info {

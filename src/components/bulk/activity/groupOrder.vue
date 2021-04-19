@@ -30,8 +30,6 @@
             class="goods_item"
             v-for="(item, index) in currentTab == 1
               ? deliveryList
-              : currentTab == 2
-              ? distributionList
               : currentTab == 3
               ? pickUpList
               : currentTab == 4
@@ -46,8 +44,6 @@
                 {{
                     item.activityOrderItemState == 1
                     ? "待发货"
-                    : item.activityOrderItemState == 2
-                    ? "待配送"
                     : item.activityOrderItemState == 3
                     ? "待提货"
                     : item.activityOrderItemState == 4
@@ -58,7 +54,7 @@
             </div>
             <div class="good_user">
               <div class="user">
-                <img :src="item.contactAvatar" alt="" />
+                <van-image class="user-image" :src="item.contactAvatar" :error-icon="defaultAvatar"/>
                 <div class="user_name">{{ item.contactName }}</div>
                 <div class="user_phone">{{ item.contactPhone }}</div>
               </div>
@@ -148,6 +144,7 @@
 <script>
 import Qs from "qs";
 import navbar from "@/components/bulk/components/navbar";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "orderList",
   props: {},
@@ -156,11 +153,12 @@ export default {
   },
   data() {
     return {
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       tab: [
         { name: "全部" },
         // { name: "待支付" },
         { name: "待发货" },
-        { name: "待配送" },
+        // { name: "待配送" },
         { name: "待提货" },
         { name: "已完成" },
       ],
@@ -210,6 +208,7 @@ export default {
       page = page + 1;
       this.currentPage = page;
       this.refreshing = false;
+      console.log(this.currentTab)
       let obj = {
         pageNum: page,
         pageSize: 10,
@@ -220,10 +219,8 @@ export default {
             this.currentTab == 1
             ? 1
             : this.currentTab == 2
-            ? 2
-            : this.currentTab == 3
             ? 3
-            : this.currentTab == 4
+            : this.currentTab == 3
             ? 4
             : undefined,
       };
@@ -300,19 +297,13 @@ export default {
         activityNo: this.activityOrderNo,
         // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
-            ? 1
-            : this.currentTab == 3
-            ? 2
-            : this.currentTab == 4
-            ? 3
-            : this.currentTab == 5
-            ? 4
-            : undefined,
+          this.currentTab == 1
+          ? 1
+          : this.currentTab == 2
+          ? 3
+          : this.currentTab == 3
+          ? 4
+          : undefined,
       };
       this.$http
         .post(
@@ -442,14 +433,15 @@ export default {
       border-bottom: 1px solid #C61606;
     }
   }
-
+  .user_name{
+    margin-left: 20px;
+  }
   .goods_list {
     padding: 10px 10px 0;
     background: #F6F6F6;
 
     .goods_item {
       width: 100%;
-      height: 192px;
       background: #FFFFFF;
       box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
       border-radius: 10px;
@@ -537,6 +529,7 @@ export default {
         img {
           width: 45px;
           height: 45px;
+          object-fit: cover;
           margin-right: 10px;
         }
       }
@@ -646,5 +639,18 @@ export default {
       }
     }
   }
+
 }
+/deep/.user-image img{
+    width: 22px;
+    height: 22px;
+    margin: 2px 0px 0 12px;
+    border-radius: 50%;
+  }
+  /deep/.van-image__error{
+    background-color: transparent;
+  }
+  /deep/.user-image .van-icon{
+    font: initial;
+  }
 </style>

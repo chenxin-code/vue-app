@@ -30,18 +30,18 @@ export default {
           url: "/bulk_order_list",
         },
 
-        {
-          name: "售后",
-          src: require("./saleafter.png"),
-          nosrc: require("./saleafterno.png"),
-          url: "/bulk_after_sales",
-        },
-        {
-          name: "营收状态",
-          src: require("./profit.png"),
-          nosrc: require("./profitno.png"),
-          url: "/myprofit",
-        },
+        // {
+        //   name: "售后",
+        //   src: require("./saleafter.png"),
+        //   nosrc: require("./saleafterno.png"),
+        //   url: "/bulk_after_sales",
+        // },
+        // {
+        //   name: "营收状态",
+        //   src: require("./profit.png"),
+        //   nosrc: require("./profitno.png"),
+        //   url: "/myprofit",
+        // },
       ],
     };
   },
@@ -83,7 +83,8 @@ export default {
 <style>
 .component-switchMenu {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  justify-content: space-around;
   background: #fff;
   padding: 10px 28.5px 10px 36px;
   /* height: 49px; */

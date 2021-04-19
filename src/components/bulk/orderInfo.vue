@@ -1,131 +1,158 @@
 <template>
-  <!-- // created by hjc 分享确认订单 -->
-  <div class="confirm_order" ref="confirmOrder">
+  <div class="body">
+    <nav-top
+      bstyle="transparent"
+      @backEvent="$router.go(-1)"
+      title="社区团购确认订单"
+    ></nav-top>
     <div class="user_info">
-
       <div class="info">
         <span>提货人姓名：</span>
-        <input placeholder="请输入姓名" v-model="userName" />
+        <input v-model="consigneeName" disabled />
       </div>
       <div class="info" style="margin-top: 12px;">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model.number="userPhone" />
+        <input v-model="consigneePhoneNumber" disabled />
       </div>
-      <!-- <div class="pick_up_way">
-        <span> 提货方式：</span>
-        <span>自提</span>
-      </div> -->
     </div>
     <div class="pick_up_address">
       <div class="addres_title">
         <div class="addres_title_text">团购提货地点</div>
-        <div class="line"></div>
+        <!-- <div class="change" @click="$router.push('/selectAddress')">
+          切换提货地址
+        </div> -->
       </div>
+      <div class="line"></div>
       <div class="addres_info">
+        <!-- <img :src="placelist[0].teamLeaderAvatar" alt="" /> -->
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ shareData.headUser }}</div>
+            <div class="adders-val">{{  }} {{  }}</div>
           </div>
           <div class="addres" style="margin-top: 10px;">
             <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{ shareData.place }}</div>
+            <div class="adders-val">{{  }}{{ }}{{  }}</div>
           </div>
         </div>
       </div>
     </div>
+    <!-- <div class="pick_up_address" v-show="false">
+      <div class="addres_title">
+        <div class="addres_title_text">团购提货地点</div>
+      </div>
+      <div class="line"></div>
+      <div class="addres_info">
+        <textarea placeholder="" />
+      </div>
+    </div> -->
     <div class="goods_info">
       <div class="goods_title">
         <div class="goods_title_text">商品信息</div>
         <div class="line"></div>
       </div>
-      <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
+      <div class="goods_item">
         <div class="goods_info_item">
-          <img :src="item.skuPicUrl" alt="" />
+          <img :src="resouce.groupbuySkuPicurl" alt="" />
           <div class="goods_info_detail">
-            <div class="goods_name">{{ item.skuName }}</div>
-            <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>
+            <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
+            <div class="sell_price">
+              销售价格：¥{{ resouce.groupbuyLinePrice }}
+            </div>
             <div class="count_price">
-              <div class="bulk_price">团购价格：¥{{ item.groupPrice }}</div>
-              <div class="count">共{{ item.count }}件</div>
+              <div class="bulk_price">
+                团购价格：¥{{ resouce.groupbuyBuyerPrice }}
+              </div>
+              <!-- <div class="count">共一件</div> -->
             </div>
           </div>
         </div>
-        <div class="line" v-show="index !== goodsList.length <= 3"></div>
+        <div class="stepper">
+          <van-stepper
+            v-model.number="buyNumber"
+            @change="buyChange($event, resouce.groupbuyBuyerPrice)"
+            disabled
+          />
+        </div>
+        <div class="line"></div>
       </div>
-      <img
-        :src="require('./images/more_icon.png')"
-        alt=""
-        class="more"
-        v-if="isShowMore"
-        @click="showMore"
-      />
-      <div class="goods_detail" v-else>
-        <div class="sell_price_statistics">¥{{ crossedPrice }}</div>
-        <div class="bulk_price_statistics">团购价格：¥{{ totalPrice }}</div>
-      </div>
+      <!-- <div class="goods_detail">
+        <div class="sell_price_statistics">¥{{ resouce.groupbuyLinePrice }}</div>
+        <div class="bulk_price_statistics">团购价格：¥{{ resouce.groupbuyBuyerPrice }}</div>
+      </div> -->
     </div>
     <div class="remark">
-      <span>订单备注</span>
+      <span>订单备注：</span>
       <textarea
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
-        placeholder="请输入订单备注"
+        placeholder="请输入备注"
       ></textarea>
     </div>
-    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
-    <div ref="nullBox"></div>
     <div class="pay_now">
-      <div class="pay_price">¥{{ totalPrice }}</div>
-      <div class="pay" @click="pay">立即支付</div>
+      <div class="pay_price">¥{{ total }}</div>
+      <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
   </div>
 </template>
 
 <script>
-import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
+import calcTextareaHeight from "./utils/calcTextareaHeight.js"; //element 文本域自适应大小
+import { DropdownMenu, DropdownItem } from "vant";
+import Vue from "vue";
+import { Stepper } from "vant";
+import { BigNumber } from "bignumber.js";
+Vue.use(Stepper);
 import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
+  components: {
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem,
+  },
   props: {},
   data() {
     return {
-      goodsList: [],
-      isShowMore: true,
+      placelist: [],
+      resouce: {},
+      buyNumber: 1,
       textareaHeight: "20px",
       textareaValue: "",
-      userPhone: "",
-      userName: "",
-      shareData: {},
-      purchaseId: "",
-      chiefId: "",
-      userId: "",
-      activityName: "",
+      consigneeName: "",
+      consigneePhoneNumber: "",
+      total: 0,
+      takeWays: [
+        { text: "自提", value: 1 },
+        { text: "送货上门", value: 2 },
+      ],
+      takeWay: 1,
+      pageAvtive: false
     };
   },
-  created() {
-    this.shareData = JSON.parse(this.$route.query.shareData);
-    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
-    this.chiefId = JSON.parse(this.$route.query.chiefId);
-    this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = JSON.parse(this.$route.query.activityName);
-    if (this.checkList.length > 3) {
-      this.goodsList.push(this.checkList[0]);
-      this.goodsList.push(this.checkList[1]);
-      this.goodsList.push(this.checkList[2]);
-      this.isShowMore = true;
-    } else {
-      this.goodsList = this.checkList;
-      this.isShowMore = false;
+  activated() {
+    if(this.pageAvtive){
+      console.log("sss")
+      this.placelist = [this.$store.state.CharseInfo.masterPlace];
+    }else{
+      console.log("xxx")
+      this.getPlaceList();
+      this.resouce = this.$store.state.CharseInfo;
+      this.total = BigNumber(this.buyNumber)
+        .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
+        .toFixed(2);
     }
-    console.log(this.checkList);
+  },
+  beforeRouteLeave(to,form,next){
+    if(to.path == '/mall2/checkstand'){
+      console.log("aaa")
+      this.pageAvtive = true;
+    }else{
+      this.pageAvtive = false;
+    }
+    next();
   },
   methods: {
-    showMore() {
-      this.goodsList = this.checkList;
-      this.isShowMore = false;
-    },
     //实现文本域自适应大小
     getHeight() {
       this.textareaHeight = calcTextareaHeight(
@@ -136,25 +163,23 @@ export default {
       //浏览器随着内容大小滚动
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
-    pay() {
-      if (this.userName !== "") {
-        if (util.checkMobile(this.userPhone)) {
-          let preProductSkuInfoList = [];
-          this.checkList.forEach((e) => {
-            preProductSkuInfoList.push({
-              skuId: e.skuId,
-              buyNumber: e.count,
-            });
-          });
-          console.log(this.checkList);
+    confirmOrder() {
+      if (this.consigneeName !== "") {
+        if (util.checkMobile(this.consigneePhoneNumber)) {
           this.$http
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
-              activityNo: this.purchaseId,
-              teamLeaderNo: this.chiefId,
+              activityNo: this.$store.state.CharseInfo.activityId,
+              teamLeaderNo: this.$store.state.CharseInfo.masterPlace
+                .teamLeaderNo,
               deliveryMode: 0, //0自提1送货上门
-              consigneeName: this.userName,
-              consigneePhoneNumber: this.userPhone,
-              preProductSkuInfoList,
+              consigneeName: this.consigneeName,
+              consigneePhoneNumber: this.consigneePhoneNumber,
+              preProductSkuInfoList: [
+                {
+                  skuId: this.$store.state.CharseInfo.skuid,
+                  buyNumber: this.buyNumber,
+                },
+              ],
               remark: this.textareaValue,
             })
             .then((res) => {
@@ -173,6 +198,8 @@ export default {
                     }),
                   },
                 });
+              } else {
+                this.$toast(res.data.info);
               }
             });
         } else {
@@ -181,6 +208,30 @@ export default {
       } else {
         this.$toast("请输入提货人姓名");
       }
+    },
+    getPlaceList() {
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+      this.$http
+        .get(url)
+        .then((res) => {
+          if (res.data.status == 0) {
+            if (this.$store.state.CharseInfo.masterPlace) {
+              this.placelist = [this.$store.state.CharseInfo.masterPlace];
+            } else {
+              this.placelist = res.data.data.records;
+              this.$store.commit("setCharseInfo", {
+                masterPlace: this.placelist[0],
+              });
+              console.log(this.placelist);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    buyChange(num, val) {
+      this.total = BigNumber(val).multipliedBy(num).toFixed(2);
     },
   },
   watch: {
@@ -193,26 +244,6 @@ export default {
       }
     },
   },
-  computed: {
-    crossedPrice() {
-      let price = this.checkList.reduce((pre, item) => {
-        return item.count * item.groupPrice + pre;
-      }, 0);
-      return this.$util.toDecimal2(price);
-    },
-    totalPrice: {
-      get() {
-        return this.$store.state.bulkTotalPrice;
-      },
-      set() {},
-    },
-    checkList: {
-      get() {
-        return this.$store.state.bulkCheckList;
-      },
-      set() {},
-    },
-  },
 };
 </script>
 
@@ -220,21 +251,21 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
-.router_class {
-  background-color: #F6F6F6;
-}
-
-.confirm_order {
+.body {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  padding: 10px 10px 61px;
   background-color: #F6F6F6;
-  font-family: PingFangSC-Medium, PingFang SC;
-  background-image: url('./images/background.png');
-  background-position: 0 -60px;
-  background-size: 100% 135.5px;
+  background-image: url('./activity/images/bg.png');
   background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top;
+  padding: 10px;
+  // overflow: auto;
+  overflow-y: auto;
+  bottom: 49px !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
 
   .line {
     width: 315px;
@@ -245,12 +276,13 @@ export default {
   .user_info {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
+    box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 10px 20px;
+    margin: 70px auto 0;
+    padding: 12px 20px;
 
     .info {
       display: flex;
@@ -294,6 +326,25 @@ export default {
       justify-content: flex-start;
       align-items: center;
 
+      /deep/ .van-dropdown-menu {
+        // margin-left 20px
+        // font-size: 14px;
+        color: #424242;
+        // width: 180px;
+        border: none;
+        resize: none;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+
+      /deep/ .van-dropdown-menu__bar {
+        height: auto;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+
       span {
         font-size: 14px;
         font-weight: 500;
@@ -313,21 +364,29 @@ export default {
   .pick_up_address {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 12px 10px 12px 20px;
+    padding: 14px 16px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 
     .addres_title {
+      display: flex;
+
       .addres_title_text {
+        flex: 1;
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: bolder;
+        font-weight: 600;
         color: #424242;
         line-height: 20px;
+      }
+
+      .change {
+        line-height: 20px;
+        color: #a9a9a9;
       }
     }
 
@@ -385,13 +444,12 @@ export default {
         }
       }
     }
-
   }
 
   .goods_info {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
     padding: 10px 7px 10px 20px;
     margin-top: 10px;
@@ -403,7 +461,7 @@ export default {
       .goods_title_text {
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: bolder;
+        font-weight: 700;
         color: #424242;
         line-height: 20px;
       }
@@ -411,6 +469,13 @@ export default {
 
     .goods_item {
       padding-top: 9.5px;
+
+      .stepper {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
 
       .goods_info_item {
         display: flex;
@@ -420,7 +485,6 @@ export default {
         img {
           width: 105px;
           height: 105px;
-          object-fit: cover;
           margin-right: 10px;
         }
 
@@ -487,7 +551,6 @@ export default {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 10px 0 0;
 
       .sell_price_statistics {
         font-size: 12px;
