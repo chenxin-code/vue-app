@@ -14,7 +14,7 @@
           class="arrow_left"
           color="#000000"
           size="0.471467rem"
-          @click="$router.push('/common')"
+          @click="$router.push('/purchase')"
         />
         <div class="tab_item_box">
           <div

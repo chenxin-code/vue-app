@@ -319,7 +319,6 @@ export default {
               });
             return;
           }
-
           if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
             let isGroup = false;
             if (this.$route.query.isGroup == "1") {

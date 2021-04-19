@@ -139,7 +139,7 @@
       :successType="successType"
       @shareGroup="sharegoods"
       @toOrderList="toOrderList"
-      v-if="formPaySuccess != '0' && isGroupSuccess"
+      v-if="formPaySuccess != '0' && isGroupSuccess && $store.state.webtype != '2' && $store.state.webtype != '3'"
     ></groupsuccess>
     <van-popup v-model="shareView" class="stateBox">
       <img src="static/image/microShop/jiantou@2x.png" alt="" />
