@@ -1,5 +1,5 @@
 <template>
-  <div :class="isX?'min adapter':'min'">
+  <div class="adapter">
     <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
     <grid-list :gridData="walletData" @navTo="navTo"></grid-list>
     <grid-list :gridData="orderData" @navTo="navTo"></grid-list>
@@ -290,15 +290,6 @@ export default {
     this.getWallet();
     this.getOrderCount();
     
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
 };
 </script>
@@ -308,14 +299,10 @@ export default {
 .router_class {
   background: #F7F7F7 !important;
 }
-
-.min {
+.adapter{
+  height: 100%;
   overflow-y: auto;
   padding-bottom: 28.5px;
   background: #F7F7F7;
-  height: calc(100vh - 50px);
-}
-.adapter{
-  height: calc(100vh - 84px);
 }
 </style>
