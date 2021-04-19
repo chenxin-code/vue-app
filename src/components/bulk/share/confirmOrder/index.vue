@@ -71,6 +71,7 @@
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
+        placeholder="请输入订单备注"
       ></textarea>
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
@@ -94,8 +95,8 @@ export default {
       isShowMore: true,
       textareaHeight: "20px",
       textareaValue: "",
-      userPhone: "13611111111",
-      userName: "hj",
+      userPhone: "",
+      userName: "",
       shareData: {},
       purchaseId: "",
       chiefId: "",

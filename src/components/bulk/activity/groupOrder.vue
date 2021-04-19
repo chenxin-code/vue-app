@@ -297,19 +297,13 @@ export default {
         activityNo: this.activityOrderNo,
         // groupBuyingOrderNo: this.activityOrderNo,
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
-            ? 1
-            : this.currentTab == 3
-            ? 2
-            : this.currentTab == 4
-            ? 3
-            : this.currentTab == 5
-            ? 4
-            : undefined,
+          this.currentTab == 1
+          ? 1
+          : this.currentTab == 2
+          ? 3
+          : this.currentTab == 3
+          ? 4
+          : undefined,
       };
       this.$http
         .post(
@@ -656,7 +650,7 @@ export default {
   /deep/.van-image__error{
     background-color: transparent;
   }
-  /deep/.van-icon{
+  /deep/.user-image .van-icon{
     font: initial;
   }
 </style>

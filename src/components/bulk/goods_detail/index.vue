@@ -67,8 +67,7 @@
     </div>
     <div class="goods_item_detail_info">
       <div class="goods_item_detail_info_title">商品详情</div>
-      <!-- <div v-html="resouce.groupbuySkuDetail"></div> -->
-      <span v-html="resouce.groupbuySkuDetail"></span>
+      <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
   </div>
 </template>
@@ -389,6 +388,11 @@ export default {
       margin-bottom: 12.5px;
     }
 
+    /deep/.contnt-style{
+      img{
+        width: 100%;
+      }
+    }
     img {
       width: 100%;
     }
