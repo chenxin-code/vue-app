@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="body" ref="confirmOrder">
     <nav-top
       bstyle="transparent"
       @backEvent="$router.go(-1)"
@@ -89,6 +89,8 @@
         placeholder="请输入备注"
       ></textarea>
     </div>
+    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
+    <div ref="nullBox"></div>
     <div class="pay_now">
       <div class="pay_price">¥{{ total }}</div>
       <div class="pay" @click="confirmOrder">立即支付</div>

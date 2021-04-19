@@ -460,7 +460,8 @@ export default {
           this.orderType !== "200001" &&
           this.orderType != "200015" &&
           this.orderType != "200017" &&
-          this.orderType != "200018"
+          this.orderType != "200018" &&
+          this.orderType != "200501"
         ) {
           this.$router.push({
             path: "/group_detail",
@@ -469,6 +470,19 @@ export default {
               mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
             },
           });
+        } else if(this.orderType == "200501" && this.pageType == "waitPay"){
+          this.$router.push({
+            path:"/orderInfo",
+            query:{
+              info:JSON.stringify({
+                shoppingOrderId:this.params.orderId,
+                businessCstNo:this.payInfo.businessCstNo,
+                platMerCstNo:this.payInfo.platMerCstNo,
+                tradeMerCstNo:this.payInfo.tradeMerCstNo,
+                billNo:this.payInfo.billNo,
+              })
+            }
+          })
         } else {
           let awardActivity =
             this.billDetailObj.awardActivityList &&

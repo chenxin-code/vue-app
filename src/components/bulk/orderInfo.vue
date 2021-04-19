@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="body" ref="confirmOrder">
     <nav-top
       bstyle="transparent"
       @backEvent="$router.go(-1)"
@@ -10,7 +10,7 @@
         <span>提货人姓名：</span>
         <input v-model="consigneeName" disabled />
       </div>
-      <div class="info" style="margin-top: 12px;">
+      <div class="info" style="margin-top: 12px">
         <span>联系人电话：</span>
         <input v-model="consigneePhoneNumber" disabled />
       </div>
@@ -28,11 +28,11 @@
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{  }} {{  }}</div>
+            <div class="adders-val">{{ orderInfo.headName }}</div>
           </div>
-          <div class="addres" style="margin-top: 10px;">
+          <div class="addres" style="margin-top: 10px">
             <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{  }}{{ }}{{  }}</div>
+            <div class="adders-val">{{ orderInfo.pickupAddress }}</div>
           </div>
         </div>
       </div>
@@ -51,17 +51,21 @@
         <div class="goods_title_text">商品信息</div>
         <div class="line"></div>
       </div>
-      <div class="goods_item">
+      <div
+        class="goods_item"
+        v-for="(item, index) in orderInfo.skuModelList"
+        :key="index"
+      >
         <div class="goods_info_item">
-          <img :src="resouce.groupbuySkuPicurl" alt="" />
+          <img :src="item.groupbuySkuPicurl" alt="" />
           <div class="goods_info_detail">
-            <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
+            <div class="goods_name">{{ item.groupbuySkuName }}</div>
             <div class="sell_price">
-              销售价格：¥{{ resouce.groupbuyLinePrice }}
+              销售价格：¥{{ item.groupbuyLinePrice }}
             </div>
             <div class="count_price">
               <div class="bulk_price">
-                团购价格：¥{{ resouce.groupbuyBuyerPrice }}
+                团购价格：¥{{ item.groupbuyBuyerPrice }}
               </div>
               <!-- <div class="count">共一件</div> -->
             </div>
@@ -69,7 +73,7 @@
         </div>
         <div class="stepper">
           <van-stepper
-            v-model.number="buyNumber"
+            v-model.number="item.buyNumber"
             @change="buyChange($event, resouce.groupbuyBuyerPrice)"
             disabled
           />
@@ -87,9 +91,11 @@
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
-        placeholder="请输入备注"
+        disabled
       ></textarea>
     </div>
+    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
+    <div ref="nullBox"></div>
     <div class="pay_now">
       <div class="pay_price">¥{{ total }}</div>
       <div class="pay" @click="confirmOrder">立即支付</div>
@@ -127,31 +133,36 @@ export default {
         { text: "送货上门", value: 2 },
       ],
       takeWay: 1,
-      pageAvtive: false
+      pageAvtive: false,
+      info: {},
     };
   },
-  activated() {
-    if(this.pageAvtive){
-      console.log("sss")
-      this.placelist = [this.$store.state.CharseInfo.masterPlace];
-    }else{
-      console.log("xxx")
-      this.getPlaceList();
-      this.resouce = this.$store.state.CharseInfo;
-      this.total = BigNumber(this.buyNumber)
-        .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
-        .toFixed(2);
-    }
+  created() {
+    this.info = JSON.parse(this.$route.query.info);
+    this.initInfo();
   },
-  beforeRouteLeave(to,form,next){
-    if(to.path == '/mall2/checkstand'){
-      console.log("aaa")
-      this.pageAvtive = true;
-    }else{
-      this.pageAvtive = false;
-    }
-    next();
-  },
+//   activated() {
+//     if (this.pageAvtive) {
+//       console.log("sss");
+//       this.placelist = [this.$store.state.CharseInfo.masterPlace];
+//     } else {
+//       console.log("xxx");
+//       this.getPlaceList();
+//       this.resouce = this.$store.state.CharseInfo;
+//       this.total = BigNumber(this.buyNumber)
+//         .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
+//         .toFixed(2);
+//     }
+//   },
+//   beforeRouteLeave(to, form, next) {
+//     if (to.path == "/mall2/checkstand") {
+//       console.log("aaa");
+//       this.pageAvtive = true;
+//     } else {
+//       this.pageAvtive = false;
+//     }
+//     next();
+//   },
   methods: {
     //实现文本域自适应大小
     getHeight() {
@@ -163,73 +174,94 @@ export default {
       //浏览器随着内容大小滚动
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
-    confirmOrder() {
-      if (this.consigneeName !== "") {
-        if (util.checkMobile(this.consigneePhoneNumber)) {
-          this.$http
-            .post("/app/json/group_buying_order/createGroupBuyingOrder", {
-              activityNo: this.$store.state.CharseInfo.activityId,
-              teamLeaderNo: this.$store.state.CharseInfo.masterPlace
-                .teamLeaderNo,
-              deliveryMode: 0, //0自提1送货上门
-              consigneeName: this.consigneeName,
-              consigneePhoneNumber: this.consigneePhoneNumber,
-              preProductSkuInfoList: [
-                {
-                  skuId: this.$store.state.CharseInfo.skuid,
-                  buyNumber: this.buyNumber,
-                },
-              ],
-              remark: this.textareaValue,
-            })
-            .then((res) => {
-              if (res.data.result == "success") {
-                this.$router.push({
-                  path: "/mall2/checkstand",
-                  query: {
-                    isBulk: JSON.stringify(true),
-                    bulkData: JSON.stringify({
-                      tradeNo: res.data.data.tradeNo,
-                      orderType: res.data.data.orderType,
-                      occurOuCode: res.data.data.occurOuCode,
-                      orderId: res.data.data.orderId,
-                      shoppingOrderId: res.data.data.shoppingOrderId,
-                      payAmount: res.data.data.payAmount,
-                    }),
-                  },
-                });
-              } else {
-                this.$toast(res.data.info);
-              }
-            });
-        } else {
-          this.$toast("请输入正确的手机号码");
-        }
-      } else {
-        this.$toast("请输入提货人姓名");
-      }
-    },
-    getPlaceList() {
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+    initInfo() {
       this.$http
-        .get(url)
+        .post("/app/json/app_community_group_order/queryByShoppingOrderId", {
+          groupbuyOrderId: this.info.shoppingOrderId,
+        })
         .then((res) => {
           if (res.data.status == 0) {
-            if (this.$store.state.CharseInfo.masterPlace) {
-              this.placelist = [this.$store.state.CharseInfo.masterPlace];
-            } else {
-              this.placelist = res.data.data.records;
-              this.$store.commit("setCharseInfo", {
-                masterPlace: this.placelist[0],
-              });
-              console.log(this.placelist);
-            }
+            this.orderInfo = res.data.data;
+            this.consigneeName = this.orderInfo.receiptName;
+            this.consigneePhoneNumber = this.orderInfo.receiptTel;
+            this.textareaValue = this.orderInfo.orderRemark;
+            this.total = this.orderInfo.totalPrice;
           }
-        })
-        .catch((e) => {
-          console.log(e);
         });
     },
+    confirmOrder() {
+      let preProductSkuInfoList = [];
+      this.orderInfo.skuModelList.forEach((e) => {
+        preProductSkuInfoList.push({
+          skuId: e.groupbuySkuId,
+          buyNumber: e.buyNumber,
+        });
+      });
+      this.$http
+        .post("/app/json/group_buying_order/createGroupBuyingOrder", {
+          //   activityNo: this.$store.state.CharseInfo.activityId,
+          //   teamLeaderNo: this.$store.state.CharseInfo.masterPlace
+          //     .teamLeaderNo,
+          //   deliveryMode: 0, //0自提1送货上门
+          //   consigneeName: this.consigneeName,
+          //   consigneePhoneNumber: this.consigneePhoneNumber,
+          //   preProductSkuInfoList: [
+          //     {
+          //       skuId: this.$store.state.CharseInfo.skuid,
+          //       buyNumber: this.buyNumber,
+          //     },
+          //   ],
+          //   remark: this.textareaValue,
+          activityNo: this.orderInfo.groupbuyActivityId,
+          teamLeaderNo: this.orderInfo.headId,
+          deliveryMode: 0, //0自提1送货上门
+          consigneeName: this.orderInfo.consigneeName,
+          consigneePhoneNumber: this.orderInfo.consigneePhoneNumber,
+          preProductSkuInfoList: preProductSkuInfoList,
+          remark: this.orderInfo.orderRemark,
+        })
+        .then((res) => {
+          if (res.data.result == "success") {
+            this.$router.push({
+              path: "/mall2/checkstand",
+              query: {
+                isBulk: JSON.stringify(true),
+                bulkData: JSON.stringify({
+                  tradeNo: res.data.data.tradeNo,
+                  orderType: res.data.data.orderType,
+                  occurOuCode: res.data.data.occurOuCode,
+                  orderId: res.data.data.orderId,
+                  shoppingOrderId: res.data.data.shoppingOrderId,
+                  payAmount: res.data.data.payAmount,
+                }),
+              },
+            });
+          } else {
+            this.$toast(res.data.info);
+          }
+        });
+    },
+    // getPlaceList() {
+    //   let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+    //   this.$http
+    //     .get(url)
+    //     .then((res) => {
+    //       if (res.data.status == 0) {
+    //         if (this.$store.state.CharseInfo.masterPlace) {
+    //           this.placelist = [this.$store.state.CharseInfo.masterPlace];
+    //         } else {
+    //           this.placelist = res.data.data.records;
+    //           this.$store.commit("setCharseInfo", {
+    //             masterPlace: this.placelist[0],
+    //           });
+    //           console.log(this.placelist);
+    //         }
+    //       }
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // },
     buyChange(num, val) {
       this.total = BigNumber(val).multipliedBy(num).toFixed(2);
     },
@@ -305,7 +337,8 @@ export default {
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
-        margin-left 10px;
+        margin-left: 10px;
+        background: #fff;
       }
 
       input:last-child {
@@ -433,12 +466,14 @@ export default {
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          display flex;
-          .adders-key{
+          display: flex;
+
+          .adders-key {
             width: 90px;
             font-weight: bolder;
           }
-          .adders-val{
+
+          .adders-val {
             width: 230px;
           }
         }
@@ -581,7 +616,7 @@ export default {
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom 50px;
+    margin-bottom: 50px;
     padding: 14.5px 20px 14.5px 20px;
 
     span {
@@ -604,6 +639,7 @@ export default {
       resize: none;
       // height: 143px;
       border: none;
+      background: #fff;
     }
   }
 
