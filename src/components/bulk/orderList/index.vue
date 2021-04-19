@@ -63,7 +63,7 @@
             </div>
             <div class="good_user">
               <div class="user">
-                <img :src="item.contactAvatar" alt="" />
+                <van-image class="user-image" :src="item.contactAvatar" :error-icon="defaultAvatar" />
                 <div class="user_name">{{ item.contactName }}</div>
                 <div class="user_phone">{{ item.contactPhone }}</div>
               </div>
@@ -152,11 +152,13 @@
 
 <script>
 import Qs from "qs";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "orderList",
   props: {},
   data() {
     return {
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       tab: [
         { name: "全部" },
         { name: "待支付" },
@@ -647,6 +649,21 @@ export default {
       }
     }
   }
+  .user-image{
+    width: 24px;
+    margin-left: 2px;
+  }
+  /deep/.user-image img{
+    width: 22px;
+    height: 22px;
+    margin: 2px 2px 0 -4px;
+    border-radius: 50%;
+  }
+  /deep/.van-image__error{
+    background-color: transparent;
+  }
+  /deep/.van-icon{
+    font: initial;
+  }
 }
 </style>
-

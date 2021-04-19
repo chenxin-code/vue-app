@@ -11,10 +11,7 @@
     </div>
     <dl class="good-ms">
       <dd>
-        <img
-          :src="resouce.groupbuySkuPicurl[0]"
-          alt=""
-        />
+        <van-image :src="resouce.groupbuySkuPicurl[0]"/>
       </dd>
       <dt>
         <div class="good-name">{{ resouce.groupbuySkuName }}</div>
@@ -35,16 +32,11 @@
         resouce.groupbuyStockNumber
       }}件
     </div>
-    <div class="use-buy-x">
+    <div class="use-buy-x" v-if="resouce.avatarList.length">
       <div class="advantor-x">
-        <img
-          v-for="(item, index) in resouce.avatarList"
-          :key="index"
-          :src="item"
-          alt=""
-        />
+        <van-image class="user-image" v-for="(item, index) in resouce.avatarList" :key="index" :src="item" :error-icon="defaultAvatar" />
       </div>
-      <span>等{{resouce.purchasedQuantity >999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
+      <span>等{{resouce.purchasedQuantity > 999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
     </div>
     <button class="buy-button-x" @click.stop="goConfirm()">
       立即购买
@@ -54,6 +46,7 @@
 </template>
 <script>
 import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "goodPanel",
   components:{
@@ -66,7 +59,7 @@ export default {
   },
   data() {
     return {
-
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
     };
   },
   methods: {
@@ -236,19 +229,18 @@ i {
 }
 .use-buy-x {
   box-sizing: border-box;
-  padding: 0 10px;
   color: #999999;
   font-size: 12px;
   display: flex;
   align-items: center;
-  line-height: 50px;
-  margin-top: 7.5px;
+  margin-top: 10px;
+  padding-left: 6px;
 }
 .advantor-x {
   display: flex;
 }
 .use-buy-x span {
-  margin-left: 5px;
+  margin-left: 10px;
   font-size: 11px;
   font-weight: 400;
   color: #999999;
@@ -281,5 +273,21 @@ i {
   color: #ffffff;
   line-height: 18.5px;
   letter-spacing: 1px;
+}
+.user-image{
+  width: 22px;
+  margin-left: 2px;
+}
+/deep/.user-image img{
+  width: 22px;
+  height: 22px;
+  margin-left: 2px;
+  border-radius: 50%;
+}
+/deep/.van-image__error{
+  background-color: transparent;
+}
+/deep/.van-icon{
+  font: initial;
 }
 </style>
