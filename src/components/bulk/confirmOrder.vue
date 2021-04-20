@@ -53,7 +53,7 @@
       </div>
       <div class="goods_item">
         <div class="goods_info_item">
-          <img :src="resouce.groupbuySkuPicurl" alt="" />
+          <img :src="resouce.groupbuySkuPicurl[0]" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
             <div class="sell_price">
@@ -487,6 +487,7 @@ export default {
           width: 105px;
           height: 105px;
           margin-right: 10px;
+          object-fit: cover;
         }
 
         .goods_info_detail {

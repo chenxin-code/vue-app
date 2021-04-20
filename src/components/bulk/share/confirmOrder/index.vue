@@ -41,7 +41,7 @@
       </div>
       <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
         <div class="goods_info_item">
-          <img :src="item.skuPicUrl" alt="" />
+          <img :src="item.skuPicUrl.split(',')[0]" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">{{ item.skuName }}</div>
             <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>

@@ -27,11 +27,11 @@
         >
           <div
             class="goods_item"
-            v-for="(item, index) in currentTab == 1
+            v-for="(item, index) in currentTab == 0
               ? deliveryList
-              : currentTab == 2
+              : currentTab == 1
               ? pickUpList
-              : currentTab == 3
+              : currentTab == 2
               ? finishedList
               : allList"
             :key="index"
@@ -154,7 +154,7 @@ export default {
     return {
       defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       tab: [
-        { name: "全部" },
+        // { name: "全部" },
         // { name: "待支付" },
         { name: "待发货" },
         // { name: "待配送" },
@@ -210,11 +210,11 @@ export default {
         pageSize: 10,
         sortBy: "create_time_DESC",
         orderItemState:
-            this.currentTab == 1
+            this.currentTab == 0
             ? 1
-            : this.currentTab == 2
+            : this.currentTab == 1
             ? 3
-            : this.currentTab == 3
+            : this.currentTab == 2
             ? 4
             : undefined,
       };
@@ -290,11 +290,11 @@ export default {
         pageSize: 10,
         sortBy: "create_time_DESC",
         orderItemState:
-          this.currentTab == 1
+          this.currentTab == 0
           ? 1
-          : this.currentTab == 2
+          : this.currentTab == 1
           ? 3
-          : this.currentTab == 3
+          : this.currentTab == 2
           ? 4
           : undefined,
       };
