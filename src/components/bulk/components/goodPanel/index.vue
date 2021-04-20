@@ -11,7 +11,7 @@
     </div>
     <dl class="good-ms">
       <dd>
-        <van-image :src="resouce.groupbuySkuPicurl[0]"/>
+        <van-image class="image-comm" :src="resouce.groupbuySkuPicurl[0]"/>
       </dd>
       <dt>
         <div class="good-name">{{ resouce.groupbuySkuName }}</div>
@@ -173,6 +173,14 @@ export default {
 .good-ms dd {
   width: 85px;
   height: 85px;
+}
+.image-comm{
+  width: 85px;
+  height: 85px;
+
+}
+/deep/.image-comm img{
+  object-fit: cover;
 }
 .good-ms dd img {
   width: 100%;

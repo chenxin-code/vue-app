@@ -27,17 +27,11 @@
         >
           <div
             class="goods_item"
-            v-for="(item, index) in currentTab == 0
-              ? allList
-              : currentTab == 1
-              ? waitPayList
-              : currentTab == 2
+            v-for="(item, index) in currentTab == 1
               ? deliveryList
-              : currentTab == 3
-              ? distributionList
-              : currentTab == 4
+              : currentTab == 2
               ? pickUpList
-              : currentTab == 5
+              : currentTab == 3
               ? finishedList
               : allList"
             :key="index"
@@ -161,9 +155,9 @@ export default {
       defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       tab: [
         { name: "全部" },
-        { name: "待支付" },
+        // { name: "待支付" },
         { name: "待发货" },
-        { name: "待配送" },
+        // { name: "待配送" },
         { name: "待提货" },
         { name: "已完成" },
       ],
@@ -216,17 +210,11 @@ export default {
         pageSize: 10,
         sortBy: "create_time_DESC",
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
+            this.currentTab == 1
             ? 1
-            : this.currentTab == 3
-            ? 2
-            : this.currentTab == 4
+            : this.currentTab == 2
             ? 3
-            : this.currentTab == 5
+            : this.currentTab == 3
             ? 4
             : undefined,
       };
@@ -302,19 +290,13 @@ export default {
         pageSize: 10,
         sortBy: "create_time_DESC",
         orderItemState:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 0
-            : this.currentTab == 2
-            ? 1
-            : this.currentTab == 3
-            ? 2
-            : this.currentTab == 4
-            ? 3
-            : this.currentTab == 5
-            ? 4
-            : undefined,
+          this.currentTab == 1
+          ? 1
+          : this.currentTab == 2
+          ? 3
+          : this.currentTab == 3
+          ? 4
+          : undefined,
       };
       this.$http
         .post(
@@ -353,7 +335,7 @@ export default {
               this.$toast("刷新成功");
               this.loading = false;
               this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
+            }, 800); 
           }
         })
         .catch((res) => {
@@ -540,6 +522,7 @@ export default {
         img {
           width: 45px;
           height: 45px;
+          object-fit: cover;
           margin-right: 10px;
         }
       }
@@ -662,7 +645,7 @@ export default {
   /deep/.van-image__error{
     background-color: transparent;
   }
-  /deep/.van-icon{
+  /deep/.user-image .van-icon{
     font: initial;
   }
 }
