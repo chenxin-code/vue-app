@@ -175,7 +175,7 @@
         let url = '/app/json/user_pro_collect/addOrCancelUserProCollect';
         let paramsData = {
           token: this.$store.state.login.token,
-          id: this.id,
+          id: item.id,
           skuId: item.skuId,
           deliveryType: item.deliveryType,
           storeOuCode: item.storeOuCode
@@ -379,11 +379,13 @@
         })
       },
       cancelCollection(item) {
+        debugger
+        console.log(item)
         this.$http.post('/app/json/user_pro_collect/addOrCancelUserProCollect', {
           collectType: 3,
           brandId: item.brandId,
           brandName: item.brandName,
-          logoUrl: item.logoUrl
+          logoUrl: item.logoUrl,
         }).then(
           res => {
             let data = res.data;
