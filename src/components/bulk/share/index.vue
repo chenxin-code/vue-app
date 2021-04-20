@@ -8,6 +8,8 @@
             拼团结束时间剩余
             <van-count-down :time="shareData.remainingTime*1000">
               <template #default="timeData">
+                <span class="block"> {{ timeData.days }} 天 </span>
+                <span class="colon">:</span>
                 <span class="block">{{ timeData.hours }}</span>
                 <span class="colon">:</span>
                 <span class="block">{{ timeData.minutes }}</span>
@@ -580,25 +582,25 @@ img {
           font-size: 12px;
           font-weight: 400;
           color: #D0021B;
-          letter-spacing: 2px;
 
           .van-count-down {
             display: inline-block;
 
             .colon {
               display: inline-block;
-              margin: 0 4px;
+              margin: 0 2px;
               color: #ee0a24;
             }
 
             .block {
+              min-width: 22px;
               display: inline-block;
-              width: 22px;
               color: #fff;
-              font-size: 11px;
-              text-align: center;
+              font-size: 10px;
               background-color: #ee0a24;
               border-radius: 5px;
+              padding: 0 1px;
+              text-align center
             }
           }
         }

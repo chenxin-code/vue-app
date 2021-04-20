@@ -190,55 +190,70 @@ export default {
         });
     },
     confirmOrder() {
-      let preProductSkuInfoList = [];
-      this.orderInfo.skuModelList.forEach((e) => {
-        preProductSkuInfoList.push({
-          skuId: e.groupbuySkuId,
-          buyNumber: e.buyNumber,
-        });
-      });
-      this.$http
-        .post("/app/json/group_buying_order/createGroupBuyingOrder", {
-          //   activityNo: this.$store.state.CharseInfo.activityId,
-          //   teamLeaderNo: this.$store.state.CharseInfo.masterPlace
-          //     .teamLeaderNo,
-          //   deliveryMode: 0, //0自提1送货上门
-          //   consigneeName: this.consigneeName,
-          //   consigneePhoneNumber: this.consigneePhoneNumber,
-          //   preProductSkuInfoList: [
-          //     {
-          //       skuId: this.$store.state.CharseInfo.skuid,
-          //       buyNumber: this.buyNumber,
-          //     },
-          //   ],
-          //   remark: this.textareaValue,
-          activityNo: this.orderInfo.groupbuyActivityId,
-          teamLeaderNo: this.orderInfo.headId,
-          deliveryMode: 0, //0自提1送货上门
-          consigneeName: this.orderInfo.receiptName,
-          consigneePhoneNumber: this.orderInfo.receiptTel,
-          preProductSkuInfoList: preProductSkuInfoList,
-          remark: this.orderInfo.orderRemark,
-        })
-        .then((res) => {
-          if (res.data.result == "success") {
-            this.$router.push({
-              path: "/mall2/checkstand",
-              query: {
-                isBulk: JSON.stringify(true),
-                bulkData: JSON.stringify({
-                  tradeNo: res.data.data.tradeNo,
-                  orderType: res.data.data.orderType,
-                  occurOuCode: res.data.data.occurOuCode,
-                  orderId: res.data.data.orderId,
-                  shoppingOrderId: res.data.data.shoppingOrderId,
-                  payAmount: res.data.data.payAmount,
-                }),
-              },
-            });
-          } else {
-            this.$toast(res.data.info);
-          }
+    //   let preProductSkuInfoList = [];
+    //   this.orderInfo.skuModelList.forEach((e) => {
+    //     preProductSkuInfoList.push({
+    //       skuId: e.groupbuySkuId,
+    //       buyNumber: e.buyNumber,
+    //     });
+    //   });
+    //   this.$http
+    //     .post("/app/json/group_buying_order/createGroupBuyingOrder", {
+    //       //   activityNo: this.$store.state.CharseInfo.activityId,
+    //       //   teamLeaderNo: this.$store.state.CharseInfo.masterPlace
+    //       //     .teamLeaderNo,
+    //       //   deliveryMode: 0, //0自提1送货上门
+    //       //   consigneeName: this.consigneeName,
+    //       //   consigneePhoneNumber: this.consigneePhoneNumber,
+    //       //   preProductSkuInfoList: [
+    //       //     {
+    //       //       skuId: this.$store.state.CharseInfo.skuid,
+    //       //       buyNumber: this.buyNumber,
+    //       //     },
+    //       //   ],
+    //       //   remark: this.textareaValue,
+    //       activityNo: this.orderInfo.groupbuyActivityId,
+    //       teamLeaderNo: this.orderInfo.headId,
+    //       deliveryMode: 0, //0自提1送货上门
+    //       consigneeName: this.orderInfo.receiptName,
+    //       consigneePhoneNumber: this.orderInfo.receiptTel,
+    //       preProductSkuInfoList: preProductSkuInfoList,
+    //       remark: this.orderInfo.orderRemark,
+    //     })
+    //     .then((res) => {
+    //       if (res.data.result == "success") {
+    //         this.$router.push({
+    //           path: "/mall2/checkstand",
+    //           query: {
+    //             isBulk: JSON.stringify(true),
+    //             bulkData: JSON.stringify({
+    //               tradeNo: res.data.data.tradeNo,
+    //               orderType: res.data.data.orderType,
+    //               occurOuCode: res.data.data.occurOuCode,
+    //               orderId: res.data.data.orderId,
+    //               shoppingOrderId: res.data.data.shoppingOrderId,
+    //               payAmount: res.data.data.payAmount,
+    //             }),
+    //           },
+    //         });
+    //       } else {
+    //         this.$toast(res.data.info);
+    //       }
+    //     });
+
+        this.$router.push({
+            path: "/mall2/checkstand",
+            query: {
+            isBulk: JSON.stringify(true),
+            bulkData: JSON.stringify({
+                tradeNo: this.orderInfo.tradeNo,
+                orderType: '200502',
+                occurOuCode: res.data.data.occurOuCode,
+                orderId: this.orderInfo.id,
+                shoppingOrderId: this.orderInfo.id,
+                payAmount: this.orderInfo.totalPrice,
+            }),
+            },
         });
     },
     // getPlaceList() {

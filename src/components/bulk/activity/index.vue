@@ -229,6 +229,7 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
+          console.log(this.shareItemData.groupbuyActivityPicurl)
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
@@ -239,8 +240,7 @@ export default {
               title: "微信分享商品",
               desc: "test",
               link: "https://www.baidu.com",
-              imageurl:
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+              imageurl: this.shareItemData.groupbuyActivityPicurl,
               miniProgramType: 2,
               __event__: (res) => {},
             })
