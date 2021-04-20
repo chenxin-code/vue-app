@@ -35,7 +35,7 @@
     </div>
 
     <!-- 团长入口 -->
-    <div v-if="entrance" class="entrance-tuanzhang" @click="$router.push({path:'/bulk_index'})" ><img src="../activity/images/pintuan.png" /></div>
+    <div v-if="entrance" class="entrance-tuanzhang" @click="$router.push({name: '活动首页'})" ><img src="../activity/images/pintuan.png" /></div>
   </div>
 </template>
 <script>
@@ -82,6 +82,7 @@ export default {
       console.log("res-------------------", this.communityId);
     } else {
       // this.communityId = "2248412888374968908";
+      // this.communityId = "2252994639227258048";
       appLocalstorage
         .get({
           key: "LLBProjectId",
@@ -208,11 +209,11 @@ export default {
   height: 55px;
 }
 .entrance-tuanzhang{
-  width: 80px;
-  height: 80px;
+  width: 48px;
+  height: 48px;
   position: fixed;
-  left: -4px;
-  bottom: 15%;
+  left: 8px;
+  bottom: 16%;
   img{
     width: 100%;
     height: 100%;

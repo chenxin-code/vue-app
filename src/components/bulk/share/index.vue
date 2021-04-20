@@ -122,12 +122,12 @@
             <div class="detail_btn">
               <div class="other_user_date">{{ item.buyTime }}</div>
               <img
+                v-if="item.orderItemList.length>1"
                 :src="
                   item.isShowOther
                     ? require('./images/show_icon.png')
                     : require('./images/hidden_icon.png')
                 "
-                alt=""
                 class="detail_icon"
                 @click="showOtherBuy(index)"
               />
@@ -732,10 +732,11 @@ img {
 
       .current_select {
         font-weight: 600;
-        color: #000000;
-        background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #f04052;
+        // IOS兼容有问题
+        // background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
       }
     }
   }
