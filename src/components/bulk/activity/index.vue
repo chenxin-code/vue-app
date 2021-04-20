@@ -4,7 +4,7 @@
     <!-- <nav-content> -->
     <!-- <van-tabs @click="changes" v-model="title">
       <van-tab :title="item.title" v-for="(item, index) in tabList" :key="index">
-        
+
       </van-tab>
     </van-tabs> -->
     <van-sticky>
@@ -14,7 +14,7 @@
           class="arrow_left"
           color="#000000"
           size="0.471467rem"
-          @click="$router.push('/common')"
+          @click="$router.go(-1)"
         />
         <div class="tab_item_box">
           <div
@@ -30,7 +30,7 @@
       </div>
     </van-sticky>
 
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+    <van-pull-refresh v-model="refreshing" @refresh="onRefresh" style="min-height: 400px;">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -42,15 +42,7 @@
         <div
           class="box"
           @click="goToDeatil(item.id)"
-          v-for="(item, index) in currentTab == 0
-            ? allList
-            : currentTab == 1
-            ? goingList
-            : currentTab == 2
-            ? notList
-            : currentTab == 3
-            ? finishList
-            : allList"
+          v-for="(item, index) in allList"
           :key="index"
         >
           <div class="div1">
@@ -86,6 +78,7 @@
           </div>
         </div>
       </van-list>
+      <!-- <div v-if="allList.length == 0 && getDataOk" class="not-data">暂无数据</div> -->
     </van-pull-refresh>
 
     <van-share-sheet
@@ -120,7 +113,7 @@ export default {
       showShare: false,
       options: [
         { name: "微信", icon: "wechat" },
-        { name: "复制链接", icon: "link" },
+        // { name: "复制链接", icon: "link" },
       ],
       copybtn: null,
       tabTitle: [
@@ -131,9 +124,6 @@ export default {
       ],
       currentTab: 0,
       allList: [],
-      goingList: [],
-      notList: [],
-      finishList: [],
       loading: false, //是否处于加载状态，加载过程中不触发load事件
       finished: false, //是否已加载完成，加载完成后不再触发load事件
       refreshing: false, //是否处于加载中状态
@@ -143,10 +133,11 @@ export default {
       userData: {},
       shareItemData: {},
       link: "",
+      getDataOk: false,
+      page: 1
     };
   },
   created() {
-    // this.onLoad();
     this.allList = [];
     this.$http
       .get("/app/json/group_buying_head_info/findSelfInfo")
@@ -155,30 +146,28 @@ export default {
           this.userData = res.data.data;
         }
       });
+      this.getlist();
   },
   methods: {
+    // 切换tab
     changesTab(index) {
       this.currentTab = index;
       this.currentPage = 0;
       this.allList = [];
-      this.goingList = [];
-      this.notList = [];
-      this.finishList = [];
       this.finished = false;
       this.loading = true;
-      this.onLoad();
+      this.getDataOk = false;
+      this.getlist();
     },
-
-    //滚动条与底部距离小于 offset 时触发
-    onLoad() {
+    // 请求列表
+    getlist(){
       let page = this.currentPage;
       page = page + 1;
       this.currentPage = page;
       this.refreshing = false;
 
       let obj = {
-        pageIndex: page,
-        // sortBy: "create_time_DESC",
+        pageIndex: this.page,
         groupbuyActivityStatus:
           this.currentTab == 0
             ? undefined
@@ -193,36 +182,15 @@ export default {
       this.$http
         .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
         .then((res) => {
-          // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.totalPages || page == res.data.totalPages) {
-            if (res.data.data.pages == page) {
-              this.finished = true;
-            }
-            if (res.data.result == "success") {
-              var indexList = res.data.data; //将请求到的内容赋值给一个变量
-
-              switch (this.currentTab) {
-                case 0:
-                  this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
-                  console.log(this.allList);
-                case 1:
-                  this.goingList = this.goingList.concat(indexList);
-                case 2:
-                  this.notList = this.notList.concat(indexList);
-                case 3:
-                  this.finishList = this.finishList.concat(indexList);
-              }
-              this.page = res.data.data.pages; //将总页数赋值给this
-              setTimeout(() => {
-                // 加载状态结束
-                this.loading = false;
-              }, 1000);
-            } else {
-              this.loading = false; //将加载状态关掉
-              this.error = true; //大家错误状态
-            }
+          if (res.data.result == "success") {
+            this.allList = this.allList.concat(res.data.data);
+            this.page = res.data.page; //将总页数赋值给this
+            this.totalPage = res.data.totalPages;
+            this.loading = false;
+            this.getDataOk = true;
           } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
+            this.loading = false; //将加载状态关掉
+            this.error = true; //大家错误状态
           }
         })
         .catch((err) => {
@@ -231,61 +199,26 @@ export default {
           this.error = true;
         });
     },
+    //上拉加载
+    onLoad() {
+      if(this.getDataOk){
+        if(this.page < this.totalPage){
+          this.getlist();
+        } else {
+          this.finished = true;
+        }
+      }
+    },
     // 下拉刷新时触发
     onRefresh() {
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
-      this.finished = false; //将没有更多的状态改成false
-      this.loading = false; //将下拉刷新状态改为true开始刷新
-      let obj = {
-        pageIndex: page,
-        // sortBy: "create_time_DESC",
-        groupbuyActivityStatus:
-          this.currentTab == 0
-            ? undefined
-            : this.currentTab == 1
-            ? 1
-            : this.currentTab == 2
-            ? 0
-            : this.currentTab == 3
-            ? 2
-            : undefined,
-      };
-      this.$http
-        .post(
-          "/app/json/group_buying_order/findGroupBuyingActivityOrderByList",
-          Qs.stringify(obj)
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            switch (this.currentTab) {
-              case 0:
-                this.allList = res.data.data;
-              case 1:
-                this.goingList = res.data.data;
-              case 2:
-                this.notList = res.data.data;
-              case 3:
-                this.finishList = res.data.data;
-              default:
-                this.allList = res.data.data;
-            }
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
-            setTimeout(() => {
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
-          }
-        })
-        .catch((res) => {
-          this.$toast("网络繁忙,请稍后再试~");
-        });
+      this.allList = [];
+      this.finished = false;
+      this.page = 1;
+      this.getlist();
     },
     share(item) {
       this.shareItemData = item;
       this.showShare = true;
-      console.log(this.shareItemData);
     },
     onShare: function (option) {
       if (option.icon == "wechat") {
@@ -296,17 +229,18 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
+          console.log(this.shareItemData.groupbuyActivityPicurl)
           appShare
             .shareForOpenWXMiniProgram({
-              userName: "gh_2a45a4d38d81",
+              // userName: "gh_2a45a4d38d81",
+              userName: "gh_28d617271c97",
               path: `pages/weView/weView?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
               )}`,
               title: "微信分享商品",
               desc: "test",
               link: "https://www.baidu.com",
-              imageurl:
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F11%2F20201111212304_5706f.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615221459&t=c602d8447792fa22cbcb25a38b16031b",
+              imageurl: this.shareItemData.groupbuyActivityPicurl,
               miniProgramType: 2,
               __event__: (res) => {},
             })
@@ -378,11 +312,22 @@ export default {
   overflow-y: scroll;
   width: 100%;
   height: 100%;
-
+  .not-data{
+    width 100%;
+    font-size: 15px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    text-align: center;
+    margin-top: 240px
+    img{
+      width 100%;
+    }
+  }
   .tab {
     width: 100%;
-    height: 36.5px;
-    padding: 8px 20px 8px 11.5px;
+    // height: 36.5px;
+    padding: 14px 20px 8px 11.5px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -463,6 +408,7 @@ export default {
       img {
         width: 80px;
         height: 80px;
+        object-fit: cover;
         border-radius: 6px;
         margin-right: 15px;
       }
@@ -522,6 +468,9 @@ export default {
         }
       }
     }
+  }
+  /deep/.van-pull-refresh__track{
+    min-height: 400px;
   }
 }
 

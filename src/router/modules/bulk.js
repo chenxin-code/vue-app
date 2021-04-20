@@ -109,6 +109,15 @@ export default [{
     component: () => import('@/components/bulk/confirmOrder'),
     meta: {
       title: '确认订单',
+      keepAlive: true
+    }
+  },
+  {
+    path: '/orderInfo',
+    name: '社区团购确认订单',
+    component: () => import('@/components/bulk/orderInfo'),
+    meta: {
+      title: '社区团购确认订单',
       keepAlive: false
     }
   },
@@ -152,7 +161,7 @@ export default [{
 
       }, {
         path: '/bulkDetails',
-        name: '活动首页',
+        name: '活动详情',
         component: () =>
           import('@/components/bulk/activity/details.vue'),
         meta: {

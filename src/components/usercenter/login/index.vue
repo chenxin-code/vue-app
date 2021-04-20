@@ -11,7 +11,7 @@
     <nav-content v-if="!$store.state.login.gestureID || !$store.state.login.gestureNumbers || isNeedAccountLogin">
       <div class="app-info">
         <div class="logo">
-          <img :src="$store.state.globalConfig.logoUrl"/>
+          <img :src="require('../../../../static/image/mall2/logo_xingxuan.jpg')"/>
         </div>
         <div class="title">{{loginTitle}}</div>
       </div>
@@ -107,7 +107,7 @@
         </div>
       </div>
       <!--为了审核暂时去掉-->
-      <div class="third-login"
+      <!-- <div class="third-login"
            v-if="$store.state.globalConfig.isShowWXLoginBtn == '1' || $store.state.globalConfig.isShowAliLoginBtn == '1'">
         <div class="title-row">
           <div class="line theme_bg_white_ef"></div>
@@ -115,14 +115,12 @@
           <div class="line theme_bg_white_ef"></div>
         </div>
         <div class="third-items">
-          <!--微信-->
           <div class="item" @click="thirdLogin(1)" v-if="$store.state.globalConfig.isShowWXLoginBtn == '1'">
             <div class="icon">
               <img src="static/image/login2/weixin.png"/>
             </div>
             <div class="title theme_font_gray">微信(建议使用)</div>
           </div>
-          <!--支付宝-->
           <div class="item" @click="thirdLogin(2)" v-if="$store.state.globalConfig.isShowAliLoginBtn == '1'">
             <div class="icon">
               <img src="static/image/login2/zhifubao.png"/>
@@ -130,25 +128,16 @@
             <div class="title theme_font_gray">支付宝</div>
           </div>
         </div>
-      </div>
-      <!-- <van-popup v-model="cancellation" class="popupCard" :close-on-click-overlay="false">
-        <div class="popupCardText">
-          <span>{{cancellationText}}</span>
-        </div>
-        <div class="popupCardBtn">
-          <span @click="cancellation=false">关闭</span>
-          <span @click="cancellation=false">确定</span>
-        </div>
-      </van-popup> -->
+      </div>-->
     </nav-content>
-    <nav-content v-else>
+    <!-- <nav-content v-else>
       <div class="gesturelogin">
         <div class="gesturediv">
           <gcanvas ref="gcanvas" @getGesture="getGesture"></gcanvas>
         </div>
         <p class="accountlogin" @click="isNeedAccountLogin = true"> 密码登录</p>
       </div>
-    </nav-content>
+    </nav-content> -->
     <Mark v-if="isShow"></Mark>
   </div>
 </template>
@@ -771,6 +760,7 @@
       }
     },
     created() {
+      console.log('pppppppppppllllll', this.$store.state.globalConfig)
       let uPhone = this.$store.state.login.phone
       if (this.$util.checkMobile(uPhone)) {
         this.phone = uPhone;

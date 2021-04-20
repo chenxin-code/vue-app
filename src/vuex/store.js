@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    isX:false,//是否是iPhoneX全面屏
     projectId: '', //社区id （微信小程序时使用)
     ythToken: '', // 一体化原token,
     userRoomId:"",

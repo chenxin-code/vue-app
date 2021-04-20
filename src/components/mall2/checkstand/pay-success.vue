@@ -65,6 +65,8 @@
           // detailurl: `${this.$store.state.globalConfig.wxBaseUrl}${Config.shareUrl}/share-gift/share-list?awardActivity=${this.$route.query.awardActivity}`
         },
         payResult: '',
+        wxOrderInfoKey:"",
+        wxOrderInfo:{},
       }
     },
     methods: {
@@ -84,21 +86,25 @@
       eventClick: function (type) {
         if (type == 1){//我的订单
           if (this.payResult == 'icbcFailed') { //支付失败
-              let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
-              let awardActivity =
-              currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
-              ? currentOrderDetails.awardActivityList[0]
-              : {}
-              this.$router.push({
-              path: '/mall2/orderdetail',
-              query: {
-                orderId: currentOrderDetails.orderId,
-                orderType: currentOrderDetails.orderType,
-                tradeNo: currentOrderDetails.tradeNo,
-                tag: currentOrderDetails.tag,
-                awardActivity: JSON.stringify(awardActivity)
-              }
-            })
+            if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+              this.getOrderInfo();
+            }else{
+                let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
+                let awardActivity =
+                currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
+                ? currentOrderDetails.awardActivityList[0]
+                : {}
+                this.$router.push({
+                path: '/mall2/orderdetail',
+                query: {
+                  orderId: currentOrderDetails.orderId,
+                  orderType: currentOrderDetails.orderType,
+                  tradeNo: currentOrderDetails.tradeNo,
+                  tag: currentOrderDetails.tag,
+                  awardActivity: JSON.stringify(awardActivity)
+                }
+              })
+            }
             return
           }
           // if (this.$route.query.name == 'phone') { //话费充值
@@ -189,6 +195,23 @@
           }
         }
       },
+      getOrderInfo(){
+        this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
+          if(res.data.status==0){
+            this.wxOrderInfo = JSON.parse(res.data.data);
+            this.$router.push({
+            path: '/mall2/orderdetail',
+            query: {
+              orderId: this.wxOrderInfo.orderId,
+              orderType: this.wxOrderInfo.orderType,
+              tradeNo: this.wxOrderInfo.tradeNo,
+              tag: this.wxOrderInfo.tag,
+              awardActivity: JSON.stringify({})
+            }
+          })
+          }
+        })
+      },
       turnback: function () {//返回
         appLocalstorage
         .get({
@@ -258,6 +281,7 @@
         }
       })
       this.$store.state.microSho.carts = cartsNew
+      this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey || '';
     }
   }
 </script>

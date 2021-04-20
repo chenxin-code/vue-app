@@ -1,5 +1,6 @@
 import Axios from "../http";
 import Toast from "../../components/Vendor/toast";
+import Store from '../../vuex/store'
 
 const dataMergeInterceptor = {
   /**
@@ -182,7 +183,9 @@ const dataMergeInterceptor = {
       return ;
     }
     this.dataLoading = true
-    this.getUserSummary()
+    if (Store.state.login.token) {
+      this.getUserSummary()
+    }
   },
   /**
    * 请求合并后的用户数据

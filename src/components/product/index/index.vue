@@ -269,11 +269,12 @@ export default {
       if (
         this.$store.state.webtype !== "3" &&
         this.$store.state.webtype !== "2" &&
-        this.$route.name == "首页"
+        this.$route.matched[0].path !== "/common2/:id"
       ) {
         this.notch = true;
       }
     }
+    console.log(this.$route)
   },
   activated() {
     // lastPath

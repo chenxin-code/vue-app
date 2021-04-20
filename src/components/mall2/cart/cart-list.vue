@@ -176,18 +176,21 @@
         >
       </div>
       <!--固定在底部的div-->
-      <PayDiv
-        v-for="(occuritem, index) in occurArr"
-        :occuritem="occuritem"
-        class="pay-div occur-bt-fixed theme_bg_white"
-        :isEditing="isEditing"
-        @setOccSel="setOccSel"
-        @toPay="toPay"
-        @toDelete="toDelete"
-        v-show="fixedIndex == index"
-        :key="index"
-      >
-      </PayDiv>
+      <div class="occur-bt-fixed">
+        <PayDiv
+          v-for="(occuritem, index) in occurArr"
+          :occuritem="occuritem"
+          class="pay-div theme_bg_white"
+          :isEditing="isEditing"
+          @setOccSel="setOccSel"
+          @toPay="toPay"
+          @toDelete="toDelete"
+          v-show="fixedIndex == index"
+          :key="index"
+        >
+        </PayDiv>
+        <div class="adapter-iphoneX" v-if="isX"></div>
+      </div>
     </div>
     <div
       class="nodata-content"
@@ -255,6 +258,7 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
+      isX:false,
     };
   },
   methods: {
@@ -287,7 +291,19 @@ export default {
       // this.$router.replace({
       //   path: '/common',
       // })
-      location.reload()
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+        if(this.$route.path == "/common"){
+          location.reload()
+        }else{
+          this.$router.replace({
+            path: '/common',
+          })
+        }
+      } else {
+        this.$router.replace({
+          path: '/common',
+        })
+      }
     },
     coupon: function (storeitem) {
       Coupon.open({
@@ -796,6 +812,15 @@ export default {
   },
   created() {
     console.log(this.$store.state.mall2.selectAddress);
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
   },
 };
 </script>
@@ -859,6 +884,12 @@ $mar-top = 10px;
       position: absolute;
       bottom: 0;
       width: 100%;
+
+      .adapter-iphoneX{
+        width: 100%;
+        height: 34px;
+        background-color: #fff;
+      }
     }
   }
 
@@ -948,7 +979,6 @@ $mar-top = 10px;
 
         .activity-content {
           margin-left: 20px;
-          box-shadow: 0px 2px 2px #efefef;
         }
       }
     }

@@ -2,19 +2,19 @@
   <!-- // created by hjc 分享确认订单 -->
   <div class="confirm_order" ref="confirmOrder">
     <div class="user_info">
+
       <div class="info">
-        <span>提货人：</span>
-        <input type="text" placeholder="姓名" v-model="userName" />
-        <input
-          type="number"
-          placeholder="请输入手机号"
-          v-model.number="userPhone"
-        />
+        <span>提货人姓名：</span>
+        <input placeholder="请输入姓名" v-model="userName" />
       </div>
-      <div class="pick_up_way">
+      <div class="info" style="margin-top: 12px;">
+        <span>联系人电话：</span>
+        <input placeholder="请输入联系人电话" v-model.number="userPhone" />
+      </div>
+      <!-- <div class="pick_up_way">
         <span> 提货方式：</span>
         <span>自提</span>
-      </div>
+      </div> -->
     </div>
     <div class="pick_up_address">
       <div class="addres_title">
@@ -22,10 +22,15 @@
         <div class="line"></div>
       </div>
       <div class="addres_info">
-        <img :src="shareData.headAvtUrl" alt="" />
         <div class="addres_info_detail">
-          <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
-          <div class="addres">提货地址：{{ shareData.place }}</div>
+          <div class="addres">
+            <div class="adders-key">提货联系人：</div>
+            <div class="adders-val">{{ shareData.headUser }}</div>
+          </div>
+          <div class="addres" style="margin-top: 10px;">
+            <div class="adders-key">提货地址：</div>
+            <div class="adders-val">{{ shareData.place }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -36,7 +41,7 @@
       </div>
       <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
         <div class="goods_info_item">
-          <img :src="item.skuPicUrl" alt="" />
+          <img :src="item.skuPicUrl.split(',')[0]" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">{{ item.skuName }}</div>
             <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>
@@ -66,6 +71,7 @@
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
+        placeholder="请输入订单备注"
       ></textarea>
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
@@ -89,8 +95,8 @@ export default {
       isShowMore: true,
       textareaHeight: "20px",
       textareaValue: "",
-      userPhone: "13611111111",
-      userName: "hj",
+      userPhone: "",
+      userName: "",
       shareData: {},
       purchaseId: "",
       chiefId: "",
@@ -238,7 +244,6 @@ export default {
 
   .user_info {
     width: 100%;
-    height: 70px;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
@@ -254,23 +259,21 @@ export default {
       align-items: center;
 
       span {
-        width: 61.5px;
-        height: 20px;
         font-size: 14px;
-        font-weight: 500;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 600;
         color: #424242;
-        line-height: 20px;
       }
 
       input {
-        width: 125.5px;
+        width: 220px;
         border-right: 1px solid #D8D7D7;
-        text-align: center;
         font-size: 14px;
         font-weight: 400;
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
+        margin-left 10px;
       }
 
       input:last-child {
@@ -309,11 +312,10 @@ export default {
 
   .pick_up_address {
     width: 100%;
-    height: 165px;
     background: #FFFFFF;
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 10px 10px 10px 20px;
+    padding: 12px 10px 12px 20px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
@@ -323,7 +325,7 @@ export default {
       .addres_title_text {
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: bolder;
         color: #424242;
         line-height: 20px;
       }
@@ -332,12 +334,23 @@ export default {
     .addres_info {
       display: flex;
       justify-content: flex-start;
-      padding-top: 9.5px;
+      align-items: center;
+
+      textarea {
+        font-size: 14px;
+        color: #424242;
+        width: 100%;
+        height: 100px;
+        border: none;
+        resize: none;
+        outline: none;
+      }
 
       img {
-        width: 105px;
-        height: 105px;
+        width: 65px;
+        height: 65px;
         margin-right: 10px;
+        border-radius: 50%;
       }
 
       .addres_info_detail {
@@ -352,18 +365,27 @@ export default {
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          margin-bottom: 19.5px;
+          margin-bottom: 10px;
         }
 
         .addres {
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 500;
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
+          display flex;
+          .adders-key{
+            width: 90px;
+            font-weight: bolder;
+          }
+          .adders-val{
+            width: 230px;
+          }
         }
       }
     }
+
   }
 
   .goods_info {
@@ -381,7 +403,7 @@ export default {
       .goods_title_text {
         padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: bolder;
         color: #424242;
         line-height: 20px;
       }
@@ -398,6 +420,7 @@ export default {
         img {
           width: 105px;
           height: 105px;
+          object-fit: cover;
           margin-right: 10px;
         }
 
@@ -495,6 +518,7 @@ export default {
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
+    margin-bottom 50px;
     padding: 14.5px 20px 14.5px 20px;
 
     span {
@@ -556,4 +580,3 @@ export default {
   }
 }
 </style>
-

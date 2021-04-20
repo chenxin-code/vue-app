@@ -109,7 +109,7 @@ var payHelper = {
       }
     })
   },
-  payRequest: function (payway, orderType, orderId, url, redirectUrl, restArg = null, isScan = 0) {
+  payRequest: function (payway, orderType, orderId, url, redirectUrl, wxOrderInfoKey, isGroup, restArg = null, isScan = 0) {
     if (payway.payModeSub == '300002') {
       // 银联支付，需要跳转页面走h5 支付
       this.ylH5Pay(payway, orderType, orderId, url)
@@ -143,7 +143,7 @@ var payHelper = {
           let data = res.data;
           if (data.status == 0) {
 
-            payHelper.doPay(payway, data.data.payInfo, redirectUrl, data.data.tradeNo, orderType, orderId, isScan).then(() => {
+            payHelper.doPay(payway, data.data.payInfo, redirectUrl, wxOrderInfoKey, isGroup, data.data.tradeNo, orderType, orderId, isScan).then(() => {
               console.log('payHelper.doPay', data)
               resolve(data.data);
             }).catch(() => {
@@ -163,9 +163,9 @@ var payHelper = {
       );
     })
   },
-  payEvent: function (payway, orderType, orderId, redirectUrl) {
+  payEvent: function (payway, orderType, orderId, redirectUrl, wxOrderInfoKey = '', isGroup = false ) {
     let url = '/app/json/app_shopping_order/pay';
-    return this.payRequest(payway, orderType, orderId, url, redirectUrl)
+    return this.payRequest(payway, orderType, orderId, url, redirectUrl, wxOrderInfoKey, isGroup)
   },
   payPurchaseEvent: function (payway, orderType, orderId, redirectUrl) {
     let url = '/app/json/app_purchase_order/pay';
@@ -206,7 +206,7 @@ var payHelper = {
     let redirectUrl = `/firmScanDetail?orderType=${orderType}&orderId=${orderId}&fromPage=1` // 支付成功后的页面，小程序需要跳转路径-扫码加油支付凭证
     return this.payRequest(payway, orderType, orderId, url, redirectUrl, restArg, 1)
   },
-  doPay: function (payway, payInfo, redirectUrl, tradeNo = '', orderType = '', orderId = '', isScan = 0) {
+  doPay: function (payway, payInfo, redirectUrl, wxOrderInfoKey, isGroup, tradeNo = '', orderType = '', orderId = '', isScan = 0) {
     // isScan 扫码加油支付
     return new Promise((resolve, reject) => {
       if (payway.payModeSub == '210001') {
@@ -371,6 +371,8 @@ var payHelper = {
           timestamp: wxPayInfo.timeStamp,
           sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
+          wxOrderInfoKey: wxOrderInfoKey,
+          isGroup: isGroup
         }
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`

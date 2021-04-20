@@ -2,7 +2,7 @@
 
 <template>
   <div class="cart">
-    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent" :showBackBtn="($store.state.webtype == 2 || $store.state.webtype == 3)?false:true ">
+    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent" :showBackBtn="showBackBtn">
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
@@ -10,7 +10,10 @@
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
-        <p class="cart-edit theme_font_gray" @click="setEdit">
+        <p class="cart-edit theme_font_gray" 
+          v-if="goodsCount > 0"
+          @click="setEdit"
+        >
           {{ isEditing ? "完成" : "编辑" }}
         </p>
       </div>
@@ -111,6 +114,7 @@ export default {
       vipUnitUserCode: undefined,
       lastPath: "",
       cartNum: 0,
+      showBackBtn:true,
     };
   },
   methods: {
@@ -349,6 +353,12 @@ export default {
     this.cartAddress = this.$store.state.mall2.selectAddress;
     this.orderCategory = this.$route.query.orderCategory;
     this.vipUnitUserCode = this.$route.query.vipUnitUserCode;
+    console.log('this.$store.state.webtype',this.$store.state.webtype)
+    if((this.$store.state.webtype == 2 || this.$store.state.webtype == 3) && this.$route.path =="/common"){
+      this.showBackBtn = false
+    }else{
+      this.showBackBtn = true
+    }
   },
   watch: {
     "$store.state.mall2.cartNum": function (val, oldVal) {

@@ -139,7 +139,7 @@
       :successType="successType"
       @shareGroup="sharegoods"
       @toOrderList="toOrderList"
-      v-if="formPaySuccess != '0' && isGroupSuccess"
+      v-if="formPaySuccess != '0' && isGroupSuccess && $store.state.webtype != '2' && $store.state.webtype != '3'"
     ></groupsuccess>
     <van-popup v-model="shareView" class="stateBox">
       <img src="static/image/microShop/jiantou@2x.png" alt="" />
@@ -177,6 +177,8 @@ export default {
       loadTimes: 0,
       formPaySuccess: "0",
       shareView: false,
+      wxOrderInfoKey:"",
+      wxOrderInfo:{},
     };
   },
   components: {
@@ -206,12 +208,17 @@ export default {
     },
   },
   mounted() {
-    this.orderId = this.$route.query.orderId;
-    this.mktGroupBuyId = this.$route.query.mktGroupBuyId;
-    this.formPaySuccess = this.$route.query.formPaySuccess
-      ? this.$route.query.formPaySuccess
-      : "0";
-    this.queryGroupDetail();
+    if(this.$route.query.wxOrderInfoKey){
+      this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey;
+      this.getOrderInfo()
+    }else{
+      this.orderId = this.$route.query.orderId;
+      this.mktGroupBuyId = this.$route.query.mktGroupBuyId;
+      this.formPaySuccess = this.$route.query.formPaySuccess
+        ? this.$route.query.formPaySuccess
+        : "0";
+      this.queryGroupDetail();
+    }
     // this.queryAll() // 暂时用来获取id的
   },
   destroyed() {
@@ -221,6 +228,17 @@ export default {
     }
   },
   methods: {
+    getOrderInfo(){
+      this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
+        if(res.data.status==0){
+          this.wxOrderInfo = JSON.parse(res.data.data);
+          this.orderId = this.wxOrderInfo.orderId;
+          this.mktGroupBuyId = this.wxOrderInfo.mktGroupBuyId;
+          this.formPaySuccess = this.wxOrderInfo.formPaySuccess;
+          this.queryGroupDetail();
+        }
+      })
+    },
     toAddGroup: function () {
       this.$router.push({
         path: "/groupproduct",
@@ -451,6 +469,7 @@ export default {
     //   })
     // },
     queryGroupDetail() {
+      console.log('this.formPaySuccessthis.formPaySuccessthis.formPaySuccessthis.formPaySuccess',this.formPaySuccess)
       // 详情
       if (this.loaded == false) {
         this.$Loading.open();

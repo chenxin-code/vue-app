@@ -2,7 +2,7 @@
 
 <template>
   <div class="list">
-    <nav-top @backEvent="$router.go(-1)" title="" :bgImg="require('./image/banner1.png')"></nav-top>
+    <nav-top @backEvent="$router.go(-1)" title="拼团" :bgImg="require('./image/banner1.png')"></nav-top>
     <nav-content>
       <div class="scroll-div">
         <div class="group-top">

@@ -3,24 +3,44 @@
     <div class="back-icon-area" @click="$router.go(-1)">
       <img src="./back-icon.png" alt="" />
     </div>
-    <div class="channel-name">频道名字</div>
+    <!-- <div class="channel-name">频道名字</div> -->
     <div class="channel-searchio">
-      <img src="./search-icon.png" alt="" />
-      <input type="text" placeholder="商品名称" />
+      <van-search
+        v-model="searchValue"
+        placeholder="搜索商品名称"
+        @search="onSearch"
+        shape="round"
+        background="transparent"
+      >
+      </van-search>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "channelSearch",
+  data(){
+    return{
+      searchValue: ""
+    }
+  },
+  methods:{
+    onSearch(val) {
+      this.$emit('searchFun',val)
+    }
+  }
 };
 </script>
 <style scoped>
+  .van-search{
+    width: 100%;
+  }
 .component-channelsearch {
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
+  padding-top: 14px;
 }
 .back-icon-area {
   width: 42px;

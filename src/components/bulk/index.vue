@@ -36,7 +36,6 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 49px;
+  // height: 49px;
 }
 </style>
-

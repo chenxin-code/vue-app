@@ -58,13 +58,14 @@
         >
           {{ myData.title }}
         </div>
+          <!-- v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3" 修复app配置专题页有返回，小程序无返回 -->
         <div
           class="img-btn-pading space-margin"
           :class="{
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
+          v-if="myData.isShowBack"
           @click="
             hotEvent('backNav');
             $market.backNav();

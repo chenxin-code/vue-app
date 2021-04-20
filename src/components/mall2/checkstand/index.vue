@@ -85,26 +85,29 @@
         </div>
       </div> -->
 
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        @click="payEvent"
-        v-if="substitutePayActive === -1 && isBulk == false"
-      >
-        支付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
-      </div>
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        @click="payEvent"
-        v-else-if="isBulk"
-      >
-        支付￥{{ $util.toDecimal2(bulkData.payAmount) }}元
-      </div>
-      <div
-        class="bottom-btn theme_font_white theme_standard_bg"
-        v-else
-        @click="substitutePayEvent"
-      >
-        找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+      <div class="bottom-box">
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          @click="payEvent"
+          v-if="substitutePayActive === -1 && isBulk == false"
+        >
+          支付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          @click="payEvent"
+          v-else-if="isBulk"
+        >
+          支付￥{{ $util.toDecimal2(bulkData.payAmount) }}元
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_standard_bg"
+          v-else
+          @click="substitutePayEvent"
+        >
+          找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
+        </div>
+        <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
     </nav-content>
     <div class="copy-div" v-show="showCopyBtn">
@@ -164,6 +167,7 @@ export default {
       lsProductName: "",
       isBulk: false,
       bulkData: {},
+      isX:false,
     };
   },
   methods: {
@@ -315,13 +319,80 @@ export default {
               });
             return;
           }
-
+          if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+            let isGroup = false;
+            if (this.$route.query.isGroup == "1") {
+              isGroup = true;
+              this.setWxOrderInfo(
+                {
+                  skuId: this.$route.query.skuId,
+                  productType: this.$route.query.productType,
+                  groupId: this.$route.query.groupId,
+                  orderId: this.$route.query.orderId,
+                  mktGroupBuyId: this.$route.query.mktGroupBuyId,
+                  formPaySuccess: "1"
+                },
+                redirectUrl,
+                isGroup,
+              )
+            }else{
+              isGroup = false;
+              this.setWxOrderInfo(
+                {
+                  state: 3,
+                  orderId: this.payInfo.orderId,
+                  orderType: this.payInfo.orderType,
+                  tradeNo: this.payInfo.tradeNo,
+                  tag: 1,
+                  deliverCheckcode: this.payInfo.deliverCheckcode,
+                  deviceCode: this.$route.query.deviceCode,
+                  storeOuCode: this.$route.query.storeOuCode,
+                  stationName: this.$route.query.stationName,
+                  selectedIndex: "1",
+                  orderCategory: this.$route.query.orderCategory,
+                  vipUnitUserCode: this.$route.query.vipUnitUserCode,
+                  type: this.$route.query.type || "",
+                },
+                redirectUrl,
+                isGroup,
+              )
+            }
+          }else{
+            payHelper
+              .payEvent(
+                this.selectedPayWay,
+                this.payInfo.orderType,
+                this.payInfo.orderId,
+                redirectUrl
+              )
+              .then((res1) => {
+                if (this.$route.query.payInfo.style == "travel") {
+                  this.enterSuccess();
+                } else {
+                  this.enterSuccess(res1);
+                }
+              })
+              .catch(() => {
+                this.hasToPay = false;
+              });
+          }
+        }
+      }
+    },
+    //微信小程序存储订单信息
+    setWxOrderInfo(obj,redirectUrl,isGroup){
+      this.$http.post('/app/json/home/vueAppTempData',{tempData:obj}).then(res=>{
+        if(res.data.status == 0){
+          let wxOrderInfoKey = "";
+          wxOrderInfoKey = res.data.data;
           payHelper
             .payEvent(
               this.selectedPayWay,
               this.payInfo.orderType,
               this.payInfo.orderId,
-              redirectUrl
+              redirectUrl,
+              wxOrderInfoKey,
+              isGroup
             )
             .then((res1) => {
               if (this.$route.query.payInfo.style == "travel") {
@@ -334,7 +405,7 @@ export default {
               this.hasToPay = false;
             });
         }
-      }
+      })
     },
     // 找人代付支付点击
     substitutePayEvent() {
@@ -631,6 +702,16 @@ export default {
     this.setPayWays();
     // this.payment = this.$route.query.payment
     // this.tradeNo = this.$route.query.tradeNo
+
+    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
+      //是iphoneX
+      console.log('是iphonex')
+      this.isX = true;
+    } else {
+      //不是iphoneX
+      console.log('不是iphonex')
+      this.isX = false;
+    }
   },
   mounted() {
     //从后台进前台的协议
@@ -762,15 +843,24 @@ export default {
     }
   }
 
-  .bottom-btn {
+  .bottom-box{
     position: absolute;
     bottom: 0px;
     left: 0px;
     right: 0px;
+  }
+
+  .bottom-btn {
     text-align: center;
     padding: 16px;
     font-size: 18px;
     font-weight: 500;
+  }
+  
+  .adapter-iphoneX{
+    width: 100%;
+    height: 34px;
+    background-color: #fff;
   }
 }
 </style>

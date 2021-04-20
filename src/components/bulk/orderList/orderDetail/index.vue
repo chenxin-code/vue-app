@@ -4,7 +4,7 @@
     <navbar :title="'订单详情'"></navbar>
     <div class="orderDetail">
       <div class="user_info">
-        <img :src="detailData.createUserAvtUrl" alt="" />
+        <van-image class="user-image" :src="detailData.createUserAvtUrl" :error-icon="defaultAvatar" />
         <div class="info">
           <div class="user">
             <div>{{ detailData.receiveTypeStr }}</div>
@@ -34,7 +34,7 @@
           v-for="(item, index) in detailData.groupbuySkuInfoList"
           :key="index"
         >
-          <img :src="item.skuPicUrl" alt="" />
+          <img :src="item.skuPicUrl.split(',')[0]" alt="" />
           <div class="goods_detail">
             <div class="goods_name">{{ item.skuName }}</div>
             <div class="goods_price_count">
@@ -59,13 +59,14 @@
           <div class="order_value">{{ detailData.payTime }}</div>
         </div>
       </div>
-      <div class="after_sales" @click="navToAfterSales">受理售后问题</div>
+      <!-- <div class="after_sales" @click="navToAfterSales">受理售后问题</div> -->
     </div>
   </div>
 </template>
 
 <script>
 import navbar from "@/components/bulk/components/navbar/index.vue";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "orderDetail",
   components: {
@@ -74,6 +75,7 @@ export default {
   props: {},
   data() {
     return {
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       detailData: {},
     };
   },
@@ -135,10 +137,12 @@ export default {
     box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
 
-    img {
+    .user-image{
       width: 42px;
       height: 42px;
       margin-right: 10px;
+      border-radius: 50%;
+      overflow: hidden;
     }
 
     .info {
@@ -155,10 +159,6 @@ export default {
         font-weight: 400;
         color: #666666;
         line-height: 16.5px;
-
-        div:last-child {
-          margin-left: 5px;
-        }
       }
 
       .address {
@@ -250,6 +250,7 @@ export default {
       img {
         width: 105px;
         height: 105px;
+        object-fit: cover;
         margin-right: 10px;
       }
 
@@ -346,4 +347,3 @@ export default {
   }
 }
 </style>
-

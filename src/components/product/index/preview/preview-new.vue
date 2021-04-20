@@ -159,14 +159,16 @@ export default {
       hasMore: false,
       refreshing: false,
       loading: true,
-      scrollPadding:"1.333333rem"
+      scrollPadding:"0rem"
     };
   },
   created(){
-    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ){
-      this.scrollPadding = "1.333333rem"
-    }else{
-      this.scrollPadding = "4rem"
+    if(this.$route.path == "/common"){
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ){
+        this.scrollPadding = "1.333333rem"
+      }else{
+        this.scrollPadding = "4rem"
+      }
     }
   },
   methods: {
@@ -435,7 +437,7 @@ export default {
       .scroll-div {
         height: 100%;
         overflow-y: auto;
-        padding-bottom: 50px;
+        // padding-bottom: 50px;
         -webkit-overflow-scrolling: touch;
       }
 

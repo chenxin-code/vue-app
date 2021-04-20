@@ -349,9 +349,12 @@
     align-items center
     background none
     overflow hidden;
+    margin-bottom: 18px;
+    padding-bottom: 4px; 
+    padding-right: 2px;
 
     .cart-item-sel {
-      width 15px
+      width 30px
 
       i {
         margin-left -10px;
@@ -363,6 +366,7 @@
       flex 1;
       padding 10px 10px 10px 15px;
       overflow hidden;
+      box-shadow: 0px 2px 2px #efefef;
 
       .good-content {
         display flex

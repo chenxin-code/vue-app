@@ -6,8 +6,10 @@
         <div class="bulk_time_share">
           <div class="bulk_time">
             拼团结束时间剩余
-            <van-count-down :time="shareData.remainingTime">
+            <van-count-down :time="shareData.remainingTime*1000">
               <template #default="timeData">
+                <span class="block"> {{ timeData.days }} 天 </span>
+                <span class="colon">:</span>
                 <span class="block">{{ timeData.hours }}</span>
                 <span class="colon">:</span>
                 <span class="block">{{ timeData.minutes }}</span>
@@ -18,15 +20,15 @@
           </div>
           <div class="bulk_share">
             <div class="bulk_title">拼团中</div>
-            <img
+            <!-- <img
               :src="require('./images/share.png')"
               alt=""
               class="share_icon"
-            />
+            /> -->
           </div>
         </div>
         <div class="user_detail">
-          <img :src="shareData.headAvtUrl" alt="" class="avatar" />
+          <van-image class="avatar" :src="shareData.headAvtUrl" :error-icon="defaultAvatar" />
           <div class="user_detail_detail">
             <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
             <div class="take_address">提货地址：{{ shareData.place }}</div>
@@ -91,14 +93,8 @@
               已抢{{ item.purchasedItem }}件/剩余{{ item.remainingItem }}件
             </div>
             <div class="item_other_user">
-              <img
-                v-for="(element, index) in item.buyerMap"
-                :key="index"
-                :src="element.buyerAvtUrl"
-                alt=""
-                class="item_other_user_avatar"
-              />
-              等{{ item.buyerCount }}人购买了此商品
+              <van-image class="user-image" v-for="(element, index) in item.buyerMap" :key="index" :src="element.buyerAvtUrl" :error-icon="defaultAvatar" />
+              <div style="margin-left: 4px;">等{{ item.buyerCount }}人购买了此商品</div>
             </div>
           </div>
           <van-stepper
@@ -121,18 +117,19 @@
         :key="index"
       >
         <div class="other_user_item_user">
-          <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" />
+          <van-image class="other_user_avatar" :src="item.buyerAvtUrl" :error-icon="defaultAvatar" />
+          <!-- <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" /> -->
           <div class="other_user_info">
             <div class="other_user_name">{{ item.buyerName }}</div>
             <div class="detail_btn">
               <div class="other_user_date">{{ item.buyTime }}</div>
               <img
+                v-if="item.orderItemList.length>1"
                 :src="
                   item.isShowOther
                     ? require('./images/show_icon.png')
                     : require('./images/hidden_icon.png')
                 "
-                alt=""
                 class="detail_icon"
                 @click="showOtherBuy(index)"
               />
@@ -171,10 +168,9 @@
       <div
         class="navigation_hidden"
         v-show="!isShowNavigation"
-        @click.stop="isShowNavigation = true"
-      >
-        <div>快捷</div>
-        <div>导航</div>
+        @click.stop="$router.push({path:'/'})">
+        <div>返回</div>
+        <div>主页</div>
       </div>
     </transition>
     <transition name="van-slide-left">
@@ -257,11 +253,13 @@
 <script>
 import Qs from "qs";
 import { mapMutations } from "vuex";
+import vantImage from "@/components/bulk/components/vantImage.js"
 export default {
   name: "share",
   props: {},
   data() {
     return {
+			defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       isShowNavigation: false,
       isShowOther: false,
       isShowCar: false,
@@ -287,7 +285,7 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = JSON.parse(this.$route.query.activityName);
+    this.activityName = this.$route.query.activityName;
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
@@ -300,6 +298,7 @@ export default {
         userId: this.userId,
       })
       .then((res) => {
+        console.log("分享页面信息~~~~~~~",res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
@@ -325,9 +324,7 @@ export default {
 
           this.str = this.descData.replace(/<img.*?>/g, "");
 
-          let imgStrs = this.shareData.groupDescriptionRichTxt.match(
-            /<img.*?>/g
-          );
+          let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
           this.imgUrls = imgStrs.map((url) => {
@@ -585,25 +582,25 @@ img {
           font-size: 12px;
           font-weight: 400;
           color: #D0021B;
-          letter-spacing: 2px;
 
           .van-count-down {
             display: inline-block;
 
             .colon {
               display: inline-block;
-              margin: 0 4px;
+              margin: 0 2px;
               color: #ee0a24;
             }
 
             .block {
+              min-width: 22px;
               display: inline-block;
-              width: 22px;
               color: #fff;
-              font-size: 11px;
-              text-align: center;
+              font-size: 10px;
               background-color: #ee0a24;
               border-radius: 5px;
+              padding: 0 1px;
+              text-align center
             }
           }
         }
@@ -640,6 +637,8 @@ img {
           width: 52.5px;
           height: 52.5px;
           margin-right: 10px;
+          border-radius: 50%;
+          overflow: hidden;
         }
 
         .user_detail_detail {
@@ -735,10 +734,11 @@ img {
 
       .current_select {
         font-weight: 600;
-        color: #000000;
-        background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #f04052;
+        // IOS兼容有问题
+        // background: linear-gradient(180deg, #F7A1AA 0%, #B52232 100%);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
       }
     }
   }
@@ -768,6 +768,7 @@ img {
           width: 85px;
           height: 85px;
           margin-right: 10px;
+          object-fit: cover;
         }
 
         .item_detail_deatil {
@@ -827,12 +828,22 @@ img {
             font-size: 11px;
             font-weight: 400;
             color: #999999;
-
-            .item_other_user_avatar {
-              width: 24px;
-              height: 24px;
-              margin-right: 5px;
-            }
+            margin-top: 4px;
+          }
+          .user-image{
+            width: 22px;
+          }
+          /deep/.user-image img{
+            width: 22px;
+            height: 22px;
+            margin: 2px 8px 0 4px;
+            border-radius: 50%;
+          }
+          /deep/.van-image__error{
+            background-color: transparent;
+          }
+          /deep/.van-icon{
+            font: initial;
           }
         }
       }
@@ -874,7 +885,9 @@ img {
         .other_user_avatar {
           width: 46px;
           height: 46px;
+          border-radius: 50%;
           margin-right: 10px;
+          overflow: hidden;
         }
 
         .other_user_info {
@@ -1118,4 +1131,3 @@ img {
   }
 }
 </style>
-

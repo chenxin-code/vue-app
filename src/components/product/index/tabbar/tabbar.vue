@@ -228,6 +228,7 @@
 
   .tabbar {
     position absolute;
+    background: #fff;
     left 0px;
     right 0px;
     bottom 0px;

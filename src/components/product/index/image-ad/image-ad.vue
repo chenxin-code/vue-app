@@ -552,10 +552,17 @@ export default {
           nav.link.url.indexOf("/applyDistribution") !== -1 ||
           nav.link.url.indexOf("/wxApplyDistribution") !== -1
         ) {
-          if (this.$store.state.ythToken) {
+          if(this.$store.state.webtype ==2 || this.$store.state.webtype == 3){
             if (nav.link.url.indexOf("token") == -1) {
               nav.link.url =
-                nav.link.url + "?token=" + this.$store.state.ythToken;
+              nav.link.url + "?token=" + localStorage.getItem('ythToken');
+            }
+          }else{
+            if (this.$store.state.ythToken) {
+              if (nav.link.url.indexOf("token") == -1) {
+                nav.link.url =
+                  nav.link.url + "?token=" + this.$store.state.ythToken;
+              }
             }
           }
         }

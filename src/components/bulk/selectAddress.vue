@@ -57,6 +57,7 @@ export default {
         masterPlace:item
       });
       this.defaultID = item.userNo;
+      this.$router.go(-1);
     },
     getList(){
       let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;

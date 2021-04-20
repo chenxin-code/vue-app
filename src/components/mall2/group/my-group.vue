@@ -14,7 +14,7 @@
           <div class="media-content">
             <div class="name ellipsis-2">{{item.skuName}}</div>
             <div class="count-down" v-if="item.state == 2 || item.state == 4">
-              <countdown class="count-down-con" :hiddenDay="true" :endTime="$util.getDateFromString(item.endTime)"
+              <countdown class="count-down-con" :hiddenDay="true" :endTime="$util.getDateFromString(item.endTime)" @timeOut="queryGroupList"
                          type="theme_bg_red"></countdown>
               <span class="text">后结束</span>
             </div>
