@@ -215,8 +215,8 @@ export default {
           activityNo: this.orderInfo.groupbuyActivityId,
           teamLeaderNo: this.orderInfo.headId,
           deliveryMode: 0, //0自提1送货上门
-          consigneeName: this.orderInfo.consigneeName,
-          consigneePhoneNumber: this.orderInfo.consigneePhoneNumber,
+          consigneeName: this.orderInfo.receiptName,
+          consigneePhoneNumber: this.orderInfo.receiptTel,
           preProductSkuInfoList: preProductSkuInfoList,
           remark: this.orderInfo.orderRemark,
         })
