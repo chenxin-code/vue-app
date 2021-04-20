@@ -27,6 +27,10 @@
             :billId="item.billId"
             :billDetailObj="item.billDetailObj"
             :orderStateType="item.orderStateType"
+            :shoppingOrderId="item.shoppingOrderId"
+            :bulkOrderType="item.bulkOrderType"
+            :id="item.id"
+            :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -253,6 +257,10 @@ export default {
           totalPrice: item.totalPrice,
           orderStateType:item.orderStateType,
           billId:item.billId,
+          shoppingOrderId:item.shoppingOrderId,
+          bulkOrderType:item.orderType,
+          id:item.id,
+          tradeNo:item.tradeNo,
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
