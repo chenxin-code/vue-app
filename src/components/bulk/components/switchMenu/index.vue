@@ -50,7 +50,7 @@ export default {
       if (this.$route.path == item.url) {
         return;
       } else {
-        this.$router.push(item.url);
+        this.$router.replace(item.url);
       }
     },
   },

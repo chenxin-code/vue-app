@@ -14,7 +14,7 @@
           class="arrow_left"
           color="#000000"
           size="0.471467rem"
-          @click="$router.go(-1)"
+          @click="goBack()"
         />
         <div class="tab_item_box">
           <div
@@ -61,9 +61,9 @@
                     : item.groupbuyActivityStatus == 1
                     ? "进行中"
                     : "已结束"
-                }}</span
-                ><span>已团{{ item.orderCount }}单</span
-                ><span>共{{ item.productCount }}件商品</span>
+                }}</span>
+                <!-- <span>已团{{ item.orderCount }}单</span> -->
+                <span>共{{ item.productCount }}件商品</span>
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
@@ -158,6 +158,12 @@ export default {
       this.loading = true;
       this.getDataOk = false;
       this.getlist();
+    },
+    goBack(){
+      // this.$router.push({})
+      // if(){
+        this.$router.go(-1);
+      // }
     },
     // 请求列表
     getlist(){
