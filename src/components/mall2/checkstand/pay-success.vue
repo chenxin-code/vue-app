@@ -83,7 +83,7 @@
           this.$router.push('/common')
         }
       },
-            eventClick: function (type) {
+      eventClick: function (type) {
         if (type == 1){//我的订单
           //无论支付失败成功都是跳订单列表
           if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
