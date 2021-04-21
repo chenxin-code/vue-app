@@ -19,10 +19,10 @@
             <p class="title">{{ item.skuName }}</p>
             <p class="price">￥{{ item.headPrice }}</p>
             <p class="salePrice">销售价：￥{{ item.sellPrice }}</p>
-            <p class="quantity">
+            <!-- <p class="quantity">
               <span>剩余数量：{{ item.surplusNumber }}</span>
               <span>开团最低销量：{{ item.minGroupNumber }}</span>
-            </p>
+            </p> -->
           </div>
         </div>
         <div class="show_more" v-show="isShowMore" @click="showMore">

@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="item_other">
-          <div class="item_other_box">
+          <!-- <div class="item_other_box">
             <div class="item_units">
               已抢{{ item.purchasedItem }}件/剩余{{ item.remainingItem }}件
             </div>
@@ -96,7 +96,7 @@
               <van-image class="user-image" v-for="(element, index) in item.buyerMap" :key="index" :src="element.buyerAvtUrl" :error-icon="defaultAvatar" />
               <div style="margin-left: 4px;">等{{ item.buyerCount }}人购买了此商品</div>
             </div>
-          </div>
+          </div> -->
           <van-stepper
             v-model="item.count"
             min="0"
