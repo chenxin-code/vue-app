@@ -107,6 +107,7 @@
           //   }
           //   return
           // }
+<<<<<<< HEAD
           // // if (this.$route.query.name == 'phone') { //话费充值
           // //   this.$router.push({
           // //     path: '/recharge-bill',
@@ -137,6 +138,29 @@
           //         });
           //       }
           //   }
+=======
+          if (this.$store.state.mall2.staticDeliverType == 1) {
+            if(this.$route.query.type=='app_purchase_order'){
+              this.$router.replace({
+                path: '/mall2/purchaseorderlist',
+              });
+            }else{
+                if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
+                  this.$router.replace({
+                    path: '/order/1',
+                    query: {
+                      selectedIndex: '2',
+                      orderCategory: this.$route.query.orderCategory,
+                      vipUnitUserCode: this.$route.ququeryObjery.vipUnitUserCode
+                    }
+                  })
+                } else {
+                  this.$router.replace({
+                    path: '/mall2/orderlist',
+                  });
+                }
+            }
+>>>>>>> master
 
           // } else {
           //   if(this.$route.query.type=='app_purchase_order'){
@@ -203,7 +227,7 @@
                   path: '/common'
                 })
               } else {
-                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
+                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
                   console.log('跳转',res)
                 });
               }
@@ -247,19 +271,9 @@
             // appNav.navigatorBack({ url: '0' }).then( res => {
             //   console.log(res)
             // })
-            if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-              this.$router.replace({
-                path: '/mall2/orderlist?selectedIndex=1',
-                query: {
-                  orderCategory: this.$route.query.orderCategory,
-                  vipUnitUserCode: this.$route.query.vipUnitUserCode
-                }
-              })
-            } else {
-              this.$router.replace({
-                path: '/order/2'
-              })
-            }
+            this.$router.replace({
+              path: '/order/2'
+            })
           }
         });
         
