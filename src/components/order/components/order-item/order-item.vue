@@ -142,6 +142,11 @@ export default {
     "orderStateType",
     "state",
     "orderCanEvaluate",
+    "orderMode",
+    "shoppingOrderId",
+    "bulkOrderType",
+    "id",
+    "tradeNo"
   ],
   data() {
     return {
@@ -395,7 +400,7 @@ export default {
     payAtOnce(payInfo) {
       let callbackUrl = "";
       // this.billDetailObj.groupBuyActivityId
-        if (this.orderType !== "200001" && this.billType == 11) {
+        if (this.orderType !== "200001" && this.orderType !== "200501" && this.billType == 11) {
           //团购订单
           callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
           this.enginePay(payInfo, callbackUrl);
@@ -470,17 +475,17 @@ export default {
               mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
             },
           });
-        } else if(this.orderType == "200501" && this.pageType == "waitPay"){
+        } else if(this.bulkOrderType == "200501" || this.orderMode == "12"){
           this.$router.push({
             path:"/orderInfo",
             query:{
               info:JSON.stringify({
-                shoppingOrderId:this.params.orderId,
-                businessCstNo:this.payInfo.businessCstNo,
-                platMerCstNo:this.payInfo.platMerCstNo,
-                tradeMerCstNo:this.payInfo.tradeMerCstNo,
-                billNo:this.payInfo.billNo,
-              })
+                shoppingOrderId:this.shoppingOrderId,
+                id:this.id,
+                tradeNo:this.tradeNo,
+              }),
+              pageType:this.pageType,
+              state:this.state?this.state:"",
             }
           })
         } else {
