@@ -296,6 +296,7 @@ export default {
         purchaseId: this.purchaseId,
         chiefId: this.chiefId,
         userId: this.userId,
+        status: "1-5"
       })
       .then((res) => {
         console.log("分享页面信息~~~~~~~",res);

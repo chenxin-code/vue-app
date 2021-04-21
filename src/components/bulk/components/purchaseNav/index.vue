@@ -39,7 +39,8 @@ export default {
               categoryDescribe: "0",
               categoryName: "全部",
               categoryPicurl:
-                "http://39.105.84.126:28801/download?guid=a2b482ea307a449bb4d003c974b6084f",
+                require("@/components/bulk/activity/images/all-ify-icon.png"),
+                // "http://39.105.84.126:28801/download?guid=a2b482ea307a449bb4d003c974b6084f",
               categoryWeight: 1,
               id: "",
             });
