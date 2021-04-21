@@ -164,7 +164,7 @@
           //无论支付失败成功都是跳订单列表
           if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
             this.$router.push({
-              path: '/mall2/orderlist?selectedIndex=1',
+              path: '/mall2/orderlist?selectedIndex=0',
               query: {
                 orderCategory: this.$route.query.orderCategory,
                 vipUnitUserCode: this.$route.query.vipUnitUserCode
@@ -172,7 +172,7 @@
             });
           }else{
             this.$router.push({
-              path: `order/2?time=${Date.now()}`,
+              path: `/order/2?time=${Date.now()}`,
             });
           }
 
