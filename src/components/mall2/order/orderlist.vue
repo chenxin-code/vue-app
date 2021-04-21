@@ -985,7 +985,41 @@ export default {
       this._getTabOrders(item, null)
     },
     orderDetailEvent: function(item, orderState) {
-      console.log(item)
+      // tobePay  tobeShip  completed  canceled
+      if(item.orderMode == 12){
+        //社区团购订单
+        let pageType = "";
+        switch (orderState) {
+          case undefined:
+            pageType = "waitTakeDelivery"
+            break;
+          case 'tobePay':
+            pageType = "waitPay"
+            break;
+          case 'tobeShip':
+            pageType = "waitDelivery"
+            break;
+          case 'completed':
+            pageType = "finish"
+            break;
+          case 'canceled':
+            pageType = "cancel"
+            break;
+        }
+        this.$router.push({
+          path:"/orderInfo",
+          query:{
+            info:JSON.stringify({
+              shoppingOrderId:item.shoppingOrderId,
+              id:item.id,
+              tradeNo:item.tradeNo,
+            }),
+            pageType:pageType,
+            state:item.state,
+          }
+        })
+        return
+      }
       if (item.orderType == '200202') {
         this.$router.push({
           path: '/group_detail',
