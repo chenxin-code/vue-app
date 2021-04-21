@@ -400,7 +400,7 @@ export default {
     payAtOnce(payInfo) {
       let callbackUrl = "";
       // this.billDetailObj.groupBuyActivityId
-        if (this.orderType !== "200001" && this.billType == 11) {
+        if (this.orderType !== "200001" && this.orderType !== "200501" && this.billType == 11) {
           //团购订单
           callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
           this.enginePay(payInfo, callbackUrl);
