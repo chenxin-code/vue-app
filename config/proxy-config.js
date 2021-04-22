@@ -18,7 +18,7 @@ module.exports = {
             // target: 'https://mall-prod-app-linli.timesgroup.cn',
             // target: 'http://192.168.31.118:18807',
             target: 'http://39.105.84.126:28807',
-            // target: 'http://mall-uat-app-linli.timesgroup.cn/',
+            // target: 'http://mall-uat-app-linli.timesgroup.cn/',/
             // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
             // target:'http://henansydemo.deepermobile.com',
             // target: 'http://jlapp.95504.net:81',
