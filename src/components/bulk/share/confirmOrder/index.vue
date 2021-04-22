@@ -173,6 +173,8 @@ export default {
                     }),
                   },
                 });
+              } else {
+                this.$toast(res.data.info);
               }
             });
         } else {
@@ -266,7 +268,7 @@ export default {
       }
 
       input {
-        width: 220px;
+        width: 190px;
         border-right: 1px solid #D8D7D7;
         font-size: 14px;
         font-weight: 400;

@@ -32,12 +32,12 @@
         resouce.groupbuyStockNumber
       }}件
     </div>
-    <div class="use-buy-x" v-if="resouce.avatarList.length">
+    <!-- <div class="use-buy-x" v-if="resouce.avatarList.length">
       <div class="advantor-x">
         <van-image class="user-image" v-for="(item, index) in resouce.avatarList" :key="index" :src="item" :error-icon="defaultAvatar" />
       </div>
       <span>等{{resouce.purchasedQuantity > 999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
-    </div>
+    </div> -->
     <button class="buy-button-x" @click.stop="goConfirm()">
       立即购买
     </button>
@@ -117,6 +117,9 @@ export default {
   height: 1px;
   background-color: #eeeded;
   margin: 9.5px auto 0;
+}
+.component-goodPanel:nth-last-child(1) > .line{
+  background: transparent;
 }
 .component-goodPanel {
   width: 100%;
