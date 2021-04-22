@@ -806,7 +806,7 @@ img {
 
       .item_other {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding-top: 8px;
 
