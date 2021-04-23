@@ -229,13 +229,14 @@ export default {
     onShare: function (option) {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3) {
+          console.log("当前是小程序~~~")
           //判断小程序
           this.options = [{ name: "复制链接", icon: "link" }];
         } else if (
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log(this.shareItemData.groupbuyActivityPicurl)
+          console.log("当前不是小程序~~~")
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",

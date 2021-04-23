@@ -436,11 +436,11 @@ export default {
           letter-spacing: 1px;
           display flex;
           .adders-key{
-            width: 90px;
+            width: 96px;
             font-weight: bolder;
           }
           .adders-val{
-            width: 230px;
+            width: 220px;
           }
         }
       }
