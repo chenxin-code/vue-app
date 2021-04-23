@@ -28,7 +28,7 @@
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ orderInfo.headName }}</div>
+            <div class="adders-val">{{ orderInfo.headName }} {{ orderInfo.headContactTel }}</div>
           </div>
           <div class="addres" style="margin-top: 10px">
             <div class="adders-key">提货地址：</div>
@@ -57,7 +57,7 @@
         :key="index"
       >
         <div class="goods_info_item">
-          <img :src="item.groupbuySkuPicurl" alt="" />
+          <img :src="item.groupbuySkuPicurl.split(',')[0]" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">{{ item.groupbuySkuName }}</div>
             <div class="sell_price">
