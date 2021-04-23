@@ -129,10 +129,11 @@
                 >催促发货</div>
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
-                  v-if="item.deliverType == '2' && item.interfaceType == 0 && item.orderType == '200017' && item.payMode != 500"
+                  v-if="item.deliverType == '2' && item.interfaceType == 0 && item.orderType == '200017' && item.payMode != 500 && item.orderMode != 12"
                   @click.stop="modifyAddress(item)"
                 >修改订单</div>
                 <div
+                  v-if="item.orderMode != 12"
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="reBuy(item)"
                 >再次购买</div>
@@ -214,11 +215,12 @@
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
                 <div
+                  v-if="item.orderMode != 12"
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="reBuy(item)"
                 >再次购买</div>
                 <div
-                  v-if="isShowExpress(item) && getPivotalProductType(item.itemAbstractList) != 8"
+                  v-if="isShowExpress(item) && getPivotalProductType(item.itemAbstractList) != 8 && item.orderMode != 12"
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="expressType(item)"
                 >查看物流</div>
@@ -227,7 +229,7 @@
                 <div
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="confirmProduct(item)"
-                  v-if="(item.interfaceType == '0' || (item.interfaceType == '1' && item.interfaceOrderType == '5')) && item.deliveryConfirmType != 1 && item.deliverType != 3"
+                  v-if="(item.interfaceType == '0' || (item.interfaceType == '1' && item.interfaceOrderType == '5')) && item.deliveryConfirmType != 1 && item.deliverType != 3 && item.orderMode != 12"
                 >确认收货</div>
               </div>
             </div>
@@ -312,13 +314,13 @@
                 >查看发票</div> -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
-                  v-if="item.orderCanEvaluate"
+                  v-if="item.orderCanEvaluate && item.orderMode != 12"
                   @click.stop="toComment(item)"
                 >评价晒单</div>
                 <div
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="reBuy(item)"
-                  v-if="getProductType(item) != 2 && getPivotalProductType(item.itemAbstractList) != 550"
+                  v-if="getProductType(item) != 2 && getPivotalProductType(item.itemAbstractList) != 550 && item.orderMode != 12"
                 >再次购买</div>
               </div>
             </div>
@@ -425,6 +427,7 @@
                   @click.stop="consultingService(item)"
                 >咨询客服</div>
                 <div
+                  v-if="item.orderMode != 12"
                   class="row-btn line_circle theme_standard_font theme_standard_bdr"
                   @click.stop="reBuy(item)"
                 >再次购买</div>
