@@ -132,7 +132,7 @@ export default {
           if (data.status == 0) {
             this.$store.state.mall2.cartNum = data.data;
 
-            this.$Toast("添加购物车成功！");
+            this.$toast("添加购物车成功！");
             // if (this.pageType == "") {
             //   // 孙哥牛逼，加入购物车，直接返回了 count
             //   this.$store.state.mall2.cartNum = data.data;
