@@ -2246,19 +2246,10 @@
         // console.log(appShare)
         // console.log(appShare.shareForOpenWXMiniProgram)
         // this.$bridgefunc.wechatShare(shareData);
-        console.log({
-          skuid:this.$route.query.skuId,
-          productType:this.$route.query.productType,
-          groupId:this.$route.query.groupId,
-          mktGroupBuyId:this.$route.query.mktGroupBuyId,
-          spuId:this.$route.query.spuId,
-          orderId:orderId,
-        })
-        return
         appShare.shareForOpenWXMiniProgram({
           userName: "gh_28d617271c97",
           path: `pages/weView/weView?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&spuId=${this.$route.query.spuId}&orderId=${orderId}`
+            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&spuId=${this.$route.query.spuId}`
           )}`,
           title: shareData.title,
           desc: shareData.sharetext,
