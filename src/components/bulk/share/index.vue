@@ -308,13 +308,15 @@ export default {
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
           });
-          this.otherBuyList = this.shareData.currentActOrderList;
-          this.otherBuyList.forEach((e) => {
-            e["isShowOther"] = false;
-            if (e.orderItemList.length > 1) {
-              e["otherOrderItemList"] = e.orderItemList.slice(1);
-            }
-          });
+          if(this.shareData.currentActOrderList){
+            this.otherBuyList = this.shareData.currentActOrderList;
+            this.otherBuyList.forEach((e) => {
+              e["isShowOther"] = false;
+              if (e.orderItemList.length > 1) {
+                e["otherOrderItemList"] = e.orderItemList.slice(1);
+              }
+            });
+          }
           for (let i in this.shareData.categoryMap) {
             this.categoryMap.push({
               key: i,
@@ -328,9 +330,11 @@ export default {
           let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
-          this.imgUrls = imgStrs.map((url) => {
-            return url.match(/\ssrc=['"](.*?)['"]/)[1];
-          });
+          if(imgStrs){
+            this.imgUrls = imgStrs.map((url) => {
+              return url.match(/\ssrc=['"](.*?)['"]/)[1];
+            });
+          }
         }
       });
   },
