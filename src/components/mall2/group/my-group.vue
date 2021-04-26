@@ -115,7 +115,10 @@
           path: '/group_detail',
           query: {
             orderId: item.id,
-            mktGroupBuyId: item.mktGroupBuyId
+            mktGroupBuyId: item.mktGroupBuyId,
+            skuId:item.skuId,
+            spuId:item.spuId,
+            groupId:item.id,
           }
         })
       }

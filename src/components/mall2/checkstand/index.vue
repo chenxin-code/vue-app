@@ -473,8 +473,9 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`
+            `/app-vue/app/index.html#/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`
         )}`;
+        // `/app-vue/app/index.html#/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`
         // this.$router.replace({
         //   path: "/group_detail",
         //   query: {

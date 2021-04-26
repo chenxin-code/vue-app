@@ -1343,8 +1343,16 @@
           this.proView = 1;
           return;
         }
-        this.$router.go(-1);
-        this.$keepaliveHelper.deleteCache(this)
+        if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
+          if(window.history.length === 1){
+            this.$router.push('/common')
+          } else {
+            this.$router.go(-1);
+          }
+        } else {
+          this.$router.go(-1);
+          this.$keepaliveHelper.deleteCache(this);
+        }
       },
       activityProducts: function (activity) {
         this.showActivity = false;
@@ -2248,7 +2256,7 @@
         // this.$bridgefunc.wechatShare(shareData);
         appShare.shareForOpenWXMiniProgram({
           userName: "gh_28d617271c97",
-          path: `pages/weView/weView?redirect=${encodeURIComponent(
+          path: `pages/common/home/index?redirect=${encodeURIComponent(
             `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&spuId=${this.$route.query.spuId}`
           )}`,
           title: shareData.title,
@@ -2403,6 +2411,9 @@
           orderId: this.orderId ? this.orderId : ''
           // state: 1
         };
+        console.log('this.spuId--this.spuId',this.spuId);
+        console.log('this.$route.query.spuId',this.$route.query.spuId);
+        console.log("paramsData--paramsData--paramsData",paramsData);
         this.$http.post(url, paramsData).then(
           res => {
             this.$Loading.close();

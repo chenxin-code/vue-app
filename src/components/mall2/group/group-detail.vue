@@ -361,10 +361,17 @@ export default {
       shareData.detailurl += "&spuId=" + this.groupDetail.spuId;
 
       console.log('分享appShare-------------------',appShare)
+      console.log({
+        skuId:this.$route.query.skuId,
+        productType:this.$route.query.productType,
+        groupId:this.$route.query.groupId,
+        mktGroupBuyId:this.groupDetail.mktGroupBuyId,
+        spuId:this.groupDetail.spuId,
+      })
       appShare
         .shareForOpenWXMiniProgram({
           userName: "gh_28d617271c97",
-          path: `pages/weView/weView?redirect=${encodeURIComponent(
+          path: `pages/common/home/index?redirect=${encodeURIComponent(
             `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}`
           )}`,
           title: shareData.title,
