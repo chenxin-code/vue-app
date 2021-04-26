@@ -2403,6 +2403,8 @@
           orderId: this.orderId ? this.orderId : ''
           // state: 1
         };
+        console.log('this.spuId--this.spuId',this.spuId);
+        console.log('this.$route.query.spuId',this.$route.query.spuId);
         console.log("paramsData--paramsData--paramsData",paramsData);
         this.$http.post(url, paramsData).then(
           res => {
