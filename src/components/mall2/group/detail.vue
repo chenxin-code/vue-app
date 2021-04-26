@@ -2403,6 +2403,7 @@
           orderId: this.orderId ? this.orderId : ''
           // state: 1
         };
+        console.log("paramsData--paramsData--paramsData",paramsData);
         this.$http.post(url, paramsData).then(
           res => {
             this.$Loading.close();
