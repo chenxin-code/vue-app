@@ -34,6 +34,8 @@
               ? pickUpList
               : currentTab == 2
               ? finishedList
+              : currentTab == 3
+              ? cancelList
               : allList"
             :key="index"
             @click="navToDetail(item)"
@@ -48,6 +50,8 @@
                     ? "待提货"
                     : item.activityOrderItemState == 4
                     ? "已完成"
+                    : item.activityOrderItemState == 5
+                    ? "已取消"
                     : ""
                 }}
               </div>
@@ -161,6 +165,7 @@ export default {
         // { name: "待配送" },
         { name: "待提货" },
         { name: "已完成" },
+        { name: "已取消" },
       ],
       allList: [],
       waitPayList: [],
@@ -168,6 +173,7 @@ export default {
       distributionList: [],
       pickUpList: [],
       finishedList: [],
+      cancelList: [],
       currentTab: 0,
       refreshing: false,
       loading: false,
@@ -196,6 +202,7 @@ export default {
       this.distributionList = [];
       this.pickUpList = [];
       this.finishedList = [];
+      this.cancelList = [];
       this.finished = false;
       this.loading = true;
       this.onLoad();
@@ -222,6 +229,8 @@ export default {
             ? 3
             : this.currentTab == 2
             ? 4
+            : this.currentTab == 3
+            ? 5
             : undefined,
       };
       this.$http
@@ -245,23 +254,18 @@ export default {
               });
               switch (this.currentTab) {
                 case 0:
-                  this.allList = this.allList.concat(indexList); //将请求的数据追加到后面
+                  this.deliveryList = this.deliveryList.concat(indexList); //将请求的数据追加到后面
 
                 case 1:
-                  this.waitPayList = this.waitPayList.concat(indexList);
-
-                case 2:
-                  this.deliveryList = this.deliveryList.concat(indexList);
-
-                case 3:
-                  this.distributionList = this.distributionList.concat(
-                    indexList
-                  );
-                case 4:
                   this.pickUpList = this.pickUpList.concat(indexList);
 
-                case 5:
+                case 2:
                   this.finishedList = this.finishedList.concat(indexList);
+
+                case 3:
+                  this.cancelList = this.cancelList.concat(
+                    indexList
+                  );
               }
 
               this.page = res.data.data.pages; //将总页数赋值给this
@@ -303,6 +307,8 @@ export default {
           ? 3
           : this.currentTab == 2
           ? 4
+          : this.currentTab == 3
+          ? 5
           : undefined,
       };
       this.$http
@@ -324,17 +330,18 @@ export default {
             });
             switch (this.currentTab) {
               case 0:
-                this.allList = indexList; //将请求的数据追加到后面
+                this.deliveryList = this.deliveryList.concat(indexList); //将请求的数据追加到后面
+
               case 1:
-                this.waitPayList = indexList;
+                this.pickUpList = this.pickUpList.concat(indexList);
+
               case 2:
-                this.deliveryList = indexList;
+                this.finishedList = this.finishedList.concat(indexList);
+
               case 3:
-                this.distributionList = indexList;
-              case 4:
-                this.pickUpList = indexList;
-              case 5:
-                this.finishedList = indexList;
+                this.cancelList = this.cancelList.concat(
+                  indexList
+                );
             }
 
             this.totalPage = res.data.pages; //将总页数赋值上去
@@ -379,10 +386,15 @@ export default {
           confirmType,
         })
         .then((res) => {
+          console.log(res.data)
           if (res.data.data.isTrue) {
             this.showPopup = false;
             this.$toast("操作成功");
             this.changesTab(this.currentTab);
+          }
+          if(res.data.result == "error"){
+            this.showPopup = false;
+            this.$toast(res.data.info);
           }
         })
         .catch((err) => {
