@@ -7,7 +7,7 @@
         <van-image class="user-image" :src="detailData.createUserAvtUrl" :error-icon="defaultAvatar" />
         <div class="info">
           <div class="user">
-            <div>{{ detailData.receiveTypeStr }}</div>
+            <div style="margin-right: 8px;">{{ detailData.receiptName }}</div>
             <div>{{ detailData.receiptTel }}</div>
           </div>
           <div class="address">

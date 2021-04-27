@@ -102,7 +102,8 @@
                 class="confirm"
                 v-show="
                   item.activityOrderItemState !== 0 &&
-                  item.activityOrderItemState !== 4
+                  item.activityOrderItemState !== 4 &&
+                  item.activityOrderItemState !== 5
                 "
                 @click.stop="confirm(item)"
               >
@@ -330,18 +331,16 @@ export default {
             });
             switch (this.currentTab) {
               case 0:
-                this.deliveryList = this.deliveryList.concat(indexList); //将请求的数据追加到后面
+                this.deliveryList = indexList; 
 
               case 1:
-                this.pickUpList = this.pickUpList.concat(indexList);
+                this.pickUpList = indexList;
 
               case 2:
-                this.finishedList = this.finishedList.concat(indexList);
+                this.finishedList = indexList;
 
               case 3:
-                this.cancelList = this.cancelList.concat(
-                  indexList
-                );
+                this.cancelList = indexList;
             }
 
             this.totalPage = res.data.pages; //将总页数赋值上去
@@ -349,7 +348,7 @@ export default {
               this.$toast("刷新成功");
               this.loading = false;
               this.refreshing = false; //刷新成功后将状态关掉
-            }, 1000); //1秒后关闭
+            }, 800); 
           }
         })
         .catch((res) => {

@@ -300,6 +300,8 @@ export default {
           ? 3
           : this.currentTab == 2
           ? 4
+          : this.currentTab == 3
+          ? 5
           : undefined,
       };
       this.$http
@@ -321,18 +323,16 @@ export default {
             });
             switch (this.currentTab) {
                 case 0:
-                  this.deliveryList = this.deliveryList.concat(indexList); //将请求的数据追加到后面
+                  this.deliveryList = indexList; //将请求的数据追加到后面
 
                 case 1:
-                  this.pickUpList = this.pickUpList.concat(indexList);
+                  this.pickUpList = indexList;
 
                 case 2:
-                  this.finishedList = this.finishedList.concat(indexList);
+                  this.finishedList = indexList;
 
                 case 3:
-                  this.cancelList = this.cancelList.concat(
-                    indexList
-                  );
+                  this.cancelList = indexList;
               }
 
             this.totalPage = res.data.pages; //将总页数赋值上去
