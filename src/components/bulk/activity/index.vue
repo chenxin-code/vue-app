@@ -248,7 +248,7 @@ export default {
               desc: "test",
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
-              miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0,
+              miniProgramType: 2,
               __event__: (res) => {},
             })
             .then((res) => {
