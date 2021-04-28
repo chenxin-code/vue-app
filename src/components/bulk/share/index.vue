@@ -254,6 +254,8 @@
 import Qs from "qs";
 import { mapMutations } from "vuex";
 import vantImage from "@/components/bulk/components/vantImage.js"
+import { Toast } from 'vant';
+
 export default {
   name: "share",
   props: {},
@@ -419,6 +421,9 @@ export default {
       this.totalPrice = this.$util.toDecimal2(price);
     },
     selectCategory(item, index) {
+      // this.totalPrice = 0;
+      // this.setBulkTotalPrice(0);
+      // this.setBulkCheckList([]);
       this.currentSelectCategory = index;
       this.$http
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
@@ -436,11 +441,17 @@ export default {
         });
     },
     confirmOrder() {
-      this.setBulkTotalPrice(this.totalPrice);
-      this.setBulkCheckList(this.checkList);
+      
       if (this.checkList.length == 0) {
         this.$toast("请先选购商品");
       } else {
+        Toast.loading({
+          message: '加载中...',
+          duration: 'toast',
+          forbidClick: true,
+        });
+        this.setBulkTotalPrice(this.totalPrice);
+        this.setBulkCheckList(this.checkList);
         this.$router.push({
           path: "/bulk_share_confirm_order",
           query: {

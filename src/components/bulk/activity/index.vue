@@ -236,8 +236,6 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log(process.env.NODE_ENV);
-          console.log(this.shareItemData);
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
