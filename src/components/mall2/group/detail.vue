@@ -1345,8 +1345,10 @@
         }
         if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
           if(window.history.length === 1){
-            this.$router.push('/common')
+            console.log('push  common')
+            this.$router.replace('/common')
           } else {
+            console.log("go-1")
             this.$router.go(-1);
           }
         } else {
@@ -2263,7 +2265,7 @@
           desc: shareData.sharetext,
           link: "https://www.baidu.com",
           imageurl: shareData.imageurl,
-          miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0 ,
+          miniProgramType:2,
           __event__: (res) => {},
         }).then((res) => {
           // document.getElementById("debug_text").innerText = res;
