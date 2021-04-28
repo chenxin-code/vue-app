@@ -248,12 +248,13 @@ export default {
               desc: "test",
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
-              miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0,
+              // miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0,
+              miniProgramType: 0,
               __event__: (res) => {},
             })
             .then((res) => {
               // document.getElementById("debug_text").innerText = res;
-              alert("shareThenRes----------", JSON.stringify(res));
+              // alert("shareThenRes----------", JSON.stringify(res));
             });
           // this.$router.push({
           //   path: "/bulk_share",
