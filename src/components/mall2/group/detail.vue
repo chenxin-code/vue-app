@@ -1346,7 +1346,7 @@
         if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
           if(window.history.length === 1){
             console.log('push  common')
-            this.$router.push('/common')
+            this.$router.replace('/common')
           } else {
             console.log("go-1")
             this.$router.go(-1);
