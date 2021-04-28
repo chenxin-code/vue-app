@@ -14,7 +14,7 @@
           class="arrow_left"
           color="#000000"
           size="0.471467rem"
-          @click="$router.go(-1)"
+          @click="goBack()"
         />
         <div class="tab_item_box">
           <div
@@ -61,9 +61,9 @@
                     : item.groupbuyActivityStatus == 1
                     ? "进行中"
                     : "已结束"
-                }}</span
-                ><span>已团{{ item.orderCount }}单</span
-                ><span>共{{ item.productCount }}件商品</span>
+                }}</span>
+                <!-- <span>已团{{ item.orderCount }}单</span> -->
+                <span>共{{ item.productCount }}件商品</span>
                 <span><van-icon name="arrow" /></span>
               </p>
               <p>
@@ -159,6 +159,12 @@ export default {
       this.getDataOk = false;
       this.getlist();
     },
+    goBack(){
+      // this.$router.push({})
+      // if(){
+        this.$router.go(-1);
+      // }
+    },
     // 请求列表
     getlist(){
       let page = this.currentPage;
@@ -223,30 +229,33 @@ export default {
     onShare: function (option) {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3) {
+          console.log("当前是小程序~~~")
           //判断小程序
           this.options = [{ name: "复制链接", icon: "link" }];
         } else if (
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log(this.shareItemData.groupbuyActivityPicurl)
+          console.log(process.env.NODE_ENV);
+          console.log(this.shareItemData);
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
               userName: "gh_28d617271c97",
-              path: `pages/weView/weView?redirect=${encodeURIComponent(
+              path: `pages/common/home/index?redirect=${encodeURIComponent(
                 `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
               )}`,
               title: "微信分享商品",
               desc: "test",
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
+              // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType: 2,
               __event__: (res) => {},
             })
             .then((res) => {
               // document.getElementById("debug_text").innerText = res;
-              alert("shareThenRes----------", JSON.stringify(res));
+              // alert("shareThenRes----------", JSON.stringify(res));
             });
           // this.$router.push({
           //   path: "/bulk_share",

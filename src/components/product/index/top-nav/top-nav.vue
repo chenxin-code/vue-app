@@ -491,11 +491,17 @@ export default {
       },
       set() {},
     },
+    shoppingCartCount:{
+      get() {
+        return this.$store.state.mall2.cartNum
+      },
+      set() {},
+    }
   },
   mixins: [hee],
   data() {
     return {
-      shoppingCartCount: null,
+      // shoppingCartCount: null,
       currentValue: "",
       imgStyle: {
         display: "block",

@@ -92,7 +92,7 @@
             <div
               class="btn"
               v-else-if="myGroupDetail.state == 2"
-              @click="sharegoods"
+              @click="shareForOpenWXMiniProgramsharegoods"
             >
               邀请好友
             </div>
@@ -361,17 +361,24 @@ export default {
       shareData.detailurl += "&spuId=" + this.groupDetail.spuId;
 
       console.log('分享appShare-------------------',appShare)
+      console.log({
+        skuId:this.$route.query.skuId,
+        productType:this.$route.query.productType,
+        groupId:this.$route.query.groupId,
+        mktGroupBuyId:this.groupDetail.mktGroupBuyId,
+        spuId:this.groupDetail.spuId,
+      })
       appShare
         .shareForOpenWXMiniProgram({
-          userName: "gh_2a45a4d38d81",
-          path: `pages/weView/weView?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}&orderId=${this.$route.query.orderId}`
+          userName: "gh_28d617271c97",
+          path: `pages/common/home/index?redirect=${encodeURIComponent(
+            `/app-vue/app/index.html#/groupproduct?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&mktGroupBuyId=${this.groupDetail.mktGroupBuyId}&spuId=${this.groupDetail.spuId}`
           )}`,
           title: shareData.title,
           desc: shareData.sharetext,
           link: "https://www.baidu.com",
           imageurl:shareData.imageurl,
-          miniProgramType: 2,
+          miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0 ,
           __event__: (res) => {},
         })
         .then((res) => {

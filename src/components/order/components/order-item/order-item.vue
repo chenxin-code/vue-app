@@ -66,27 +66,27 @@
       <div class="btn-box">
         <div
           class="btn"
-          v-if="isChangeOrder"
+          v-if="isChangeOrder && !isBulk"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
         </div>
-        <div class="btn" v-if="isEvalute" @click.stop="toComment">
+        <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
           <p>立即评价</p>
         </div>
-        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+        <div class="btn" v-if="isBuyAgain && !isBulk" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
         <div
           class="btn"
-          v-if="isViewLogistics"
+          v-if="isViewLogistics && !isBulk"
           @click.stop="expressType(dataList[0])"
         >
           <p>查看物流</p>
         </div>
         <div
           class="btn"
-          v-if="isWaitTakeDelivery"
+          v-if="isWaitTakeDelivery && !isBulk"
           @click.stop="confirmProduct()"
         >
           <p>确认收货</p>
@@ -142,6 +142,11 @@ export default {
     "orderStateType",
     "state",
     "orderCanEvaluate",
+    "orderMode",
+    "shoppingOrderId",
+    "bulkOrderType",
+    "id",
+    "tradeNo"
   ],
   data() {
     return {
@@ -160,6 +165,7 @@ export default {
         integer:"0",
         decimal:"00",
       },
+      isBulk:false,
     };
   },
   created() {
@@ -170,6 +176,11 @@ export default {
       this.smallDataList = this.dataList;
     };
     this.itemAmount = this.amount;
+    if(this.orderMode == '12' || this.bulkOrderType == '200501'){
+      this.isBulk = true;
+    }else{
+      this.isBulk = false;
+    }
   },
   computed: {
     stateText(){
@@ -385,7 +396,7 @@ export default {
         this.goodsAmount.integer = amountArr[0];
         this.goodsAmount.decimal = amountArr[1];
       }
-    }
+    },
   },
   components: {
     productItem,
@@ -395,7 +406,7 @@ export default {
     payAtOnce(payInfo) {
       let callbackUrl = "";
       // this.billDetailObj.groupBuyActivityId
-        if (this.orderType !== "200001" && this.billType == 11) {
+        if (this.orderType !== "200001" && this.orderType !== "200501" && this.billType == 11) {
           //团购订单
           callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
           this.enginePay(payInfo, callbackUrl);
@@ -470,17 +481,17 @@ export default {
               mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
             },
           });
-        } else if(this.orderType == "200501" && this.pageType == "waitPay"){
+        } else if(this.bulkOrderType == "200501" || this.orderMode == "12"){
           this.$router.push({
             path:"/orderInfo",
             query:{
               info:JSON.stringify({
-                shoppingOrderId:this.params.orderId,
-                businessCstNo:this.payInfo.businessCstNo,
-                platMerCstNo:this.payInfo.platMerCstNo,
-                tradeMerCstNo:this.payInfo.tradeMerCstNo,
-                billNo:this.payInfo.billNo,
-              })
+                shoppingOrderId:this.shoppingOrderId,
+                id:this.id,
+                tradeNo:this.tradeNo,
+              }),
+              pageType:this.pageType,
+              state:this.state?this.state:"",
             }
           })
         } else {

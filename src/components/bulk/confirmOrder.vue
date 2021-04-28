@@ -299,7 +299,7 @@ export default {
       }
 
       input {
-        width: 220px;
+        width: 190px;
         border-right: 1px solid #D8D7D7;
         font-size: 14px;
         font-weight: 400;
@@ -436,11 +436,11 @@ export default {
           letter-spacing: 1px;
           display flex;
           .adders-key{
-            width: 90px;
+            width: 96px;
             font-weight: bolder;
           }
           .adders-val{
-            width: 230px;
+            width: 220px;
           }
         }
       }

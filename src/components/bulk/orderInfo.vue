@@ -3,7 +3,7 @@
     <nav-top
       bstyle="transparent"
       @backEvent="$router.go(-1)"
-      title="社区团购确认订单"
+      :title="navTopTitle"
     ></nav-top>
     <div class="user_info">
       <div class="info">
@@ -28,7 +28,7 @@
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ orderInfo.headName }}</div>
+            <div class="adders-val">{{ orderInfo.headName }} {{ orderInfo.headContactTel }}</div>
           </div>
           <div class="addres" style="margin-top: 10px">
             <div class="adders-key">提货地址：</div>
@@ -57,7 +57,7 @@
         :key="index"
       >
         <div class="goods_info_item">
-          <img :src="item.groupbuySkuPicurl" alt="" />
+          <img :src="item.groupbuySkuPicurl.split(',')[0]" alt="" />
           <div class="goods_info_detail">
             <div class="goods_name">{{ item.groupbuySkuName }}</div>
             <div class="sell_price">
@@ -96,7 +96,7 @@
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now">
+    <div class="pay_now" v-show="this.pageType == 'waitPay'">
       <div class="pay_price">¥{{ total }}</div>
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
@@ -111,6 +111,22 @@ import { Stepper } from "vant";
 import { BigNumber } from "bignumber.js";
 Vue.use(Stepper);
 import util from "@/utils/util.js";
+const titleData = {
+    cancel: "社区团购·拼团失败",
+    waitDelivery: "社区团购·待发货",
+    waitPay: "社区团购·确认订单",
+    waitTakeDelivery: "社区团购·待收货",
+    finish: {
+        '16':"社区团购·待发货",
+        '17':"社区团购·待发货",
+        '18':"社区团购·待发货",
+        '19':"社区团购·待发货",
+        '4':"社区团购·待收货",
+        '9':"社区团购·已完成",
+        '7':"社区团购·拼团失败",
+        '12':"社区团购·拼团失败",
+    },
+};
 export default {
   name: "confirmOrder",
   components: {
@@ -135,11 +151,22 @@ export default {
       takeWay: 1,
       pageAvtive: false,
       info: {},
+      pageType:"",
+      navTopTitle:"",
+      state:"",
+      orderInfo:{},
     };
   },
   created() {
     this.info = JSON.parse(this.$route.query.info);
+    this.pageType = this.$route.query.pageType;
+    this.state = this.$route.query.state;
     this.initInfo();
+    if(this.pageType == "finish"){
+        this.navTopTitle = titleData[this.pageType][this.state];
+    }else{
+        this.navTopTitle = titleData[this.pageType];
+    }
   },
 //   activated() {
 //     if (this.pageAvtive) {
@@ -244,15 +271,15 @@ export default {
         this.$router.push({
             path: "/mall2/checkstand",
             query: {
-            isBulk: JSON.stringify(true),
-            bulkData: JSON.stringify({
-                tradeNo: this.orderInfo.tradeNo,
-                orderType: '200502',
-                occurOuCode: res.data.data.occurOuCode,
-                orderId: this.orderInfo.id,
-                shoppingOrderId: this.orderInfo.id,
-                payAmount: this.orderInfo.totalPrice,
-            }),
+                isBulk: JSON.stringify(true),
+                bulkData: JSON.stringify({
+                    tradeNo: this.info.tradeNo,
+                    orderType: '200502',
+                    occurOuCode: this.orderInfo.skuModelList[0].storeOuCode,
+                    orderId: this.info.id,
+                    shoppingOrderId: this.info.id,
+                    payAmount: this.orderInfo.totalPrice,
+                }),
             },
         });
     },

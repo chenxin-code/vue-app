@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="item_other">
-          <div class="item_other_box">
+          <!-- <div class="item_other_box">
             <div class="item_units">
               已抢{{ item.purchasedItem }}件/剩余{{ item.remainingItem }}件
             </div>
@@ -96,7 +96,7 @@
               <van-image class="user-image" v-for="(element, index) in item.buyerMap" :key="index" :src="element.buyerAvtUrl" :error-icon="defaultAvatar" />
               <div style="margin-left: 4px;">等{{ item.buyerCount }}人购买了此商品</div>
             </div>
-          </div>
+          </div> -->
           <van-stepper
             v-model="item.count"
             min="0"
@@ -296,6 +296,7 @@ export default {
         purchaseId: this.purchaseId,
         chiefId: this.chiefId,
         userId: this.userId,
+        status: "1,2,3,4,5"
       })
       .then((res) => {
         console.log("分享页面信息~~~~~~~",res);
@@ -307,13 +308,15 @@ export default {
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
           });
-          this.otherBuyList = this.shareData.currentActOrderList;
-          this.otherBuyList.forEach((e) => {
-            e["isShowOther"] = false;
-            if (e.orderItemList.length > 1) {
-              e["otherOrderItemList"] = e.orderItemList.slice(1);
-            }
-          });
+          if(this.shareData.currentActOrderList){
+            this.otherBuyList = this.shareData.currentActOrderList;
+            this.otherBuyList.forEach((e) => {
+              e["isShowOther"] = false;
+              if (e.orderItemList.length > 1) {
+                e["otherOrderItemList"] = e.orderItemList.slice(1);
+              }
+            });
+          }
           for (let i in this.shareData.categoryMap) {
             this.categoryMap.push({
               key: i,
@@ -327,9 +330,11 @@ export default {
           let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
-          this.imgUrls = imgStrs.map((url) => {
-            return url.match(/\ssrc=['"](.*?)['"]/)[1];
-          });
+          if(imgStrs){
+            this.imgUrls = imgStrs.map((url) => {
+              return url.match(/\ssrc=['"](.*?)['"]/)[1];
+            });
+          }
         }
       });
   },
@@ -805,7 +810,7 @@ img {
 
       .item_other {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding-top: 8px;
 

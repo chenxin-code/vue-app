@@ -85,81 +85,21 @@
       },
       eventClick: function (type) {
         if (type == 1){//我的订单
-          if (this.payResult == 'icbcFailed') { //支付失败
-            if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
-              this.getOrderInfo();
-            }else{
-                let currentOrderDetails = JSON.parse(localStorage.getItem('currentOrderDetails'))
-                let awardActivity =
-                currentOrderDetails.awardActivityList && currentOrderDetails.awardActivityList.length
-                ? currentOrderDetails.awardActivityList[0]
-                : {}
-                this.$router.push({
-                path: '/mall2/orderdetail',
-                query: {
-                  orderId: currentOrderDetails.orderId,
-                  orderType: currentOrderDetails.orderType,
-                  tradeNo: currentOrderDetails.tradeNo,
-                  tag: currentOrderDetails.tag,
-                  awardActivity: JSON.stringify(awardActivity)
-                }
-              })
-            }
-            return
-          }
-          // if (this.$route.query.name == 'phone') { //话费充值
-          //   this.$router.push({
-          //     path: '/recharge-bill',
-          //     query: {
-          //       name: this.$route.query.name
-          //     }
-          //   })
-          //   return
-          // }
-          if (this.$store.state.mall2.staticDeliverType == 1) {
-            if(this.$route.query.type=='app_purchase_order'){
-              this.$router.replace({
-                path: '/mall2/purchaseorderlist',
-              });
-            }else{
-                if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-                  this.$router.replace({
-                    path: '/order/1',
-                    query: {
-                      selectedIndex: '2',
-                      orderCategory: this.$route.query.orderCategory,
-                      vipUnitUserCode: this.$route.ququeryObjery.vipUnitUserCode
-                    }
-                  })
-                } else {
-                  this.$router.replace({
-                    path: '/mall2/orderlist',
-                  });
-                }
-            }
-
-          } else {
-            if(this.$route.query.type=='app_purchase_order'){
-              this.$router.replace({
-                path: '/mall2/purchaseorderlist',
-              });
-            } else{
-              if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
-                this.$router.replace({
-                  path: '/mall2/orderlist?selectedIndex=1',
-                  query: {
-                    orderCategory: this.$route.query.orderCategory,
-                    vipUnitUserCode: this.$route.query.vipUnitUserCode
-                  }
-                });
-              } else {
-                this.$router.replace({
-                  path: '/order/1',
-                });
+          //无论支付失败成功都是跳订单列表
+          if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+            this.$router.push({
+              path: '/mall2/orderlist?selectedIndex=0',
+              query: {
+                orderCategory: this.$route.query.orderCategory,
+                vipUnitUserCode: this.$route.query.vipUnitUserCode
               }
-            }
-
+            });
+          }else{
+            this.$router.push({
+              path: `/order/2?time=${Date.now()}`,
+            });
           }
+
         }else if (type == 2){//继续购物
           // if (this.$store.state.webtype == 3) {
           //   wx.miniProgram.reLaunch({url: `/pages/weView/weView`})
@@ -187,7 +127,7 @@
                   path: '/common'
                 })
               } else {
-                appNav.changeBottomIndexToMall({selectIndex: 0,}).then(res=>{
+                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
                   console.log('跳转',res)
                 });
               }
@@ -195,23 +135,23 @@
           }
         }
       },
-      getOrderInfo(){
-        this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
-          if(res.data.status==0){
-            this.wxOrderInfo = JSON.parse(res.data.data);
-            this.$router.push({
-            path: '/mall2/orderdetail',
-            query: {
-              orderId: this.wxOrderInfo.orderId,
-              orderType: this.wxOrderInfo.orderType,
-              tradeNo: this.wxOrderInfo.tradeNo,
-              tag: this.wxOrderInfo.tag,
-              awardActivity: JSON.stringify({})
-            }
-          })
-          }
-        })
-      },
+      // getOrderInfo(){
+      //   this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
+      //     if(res.data.status==0){
+      //       this.wxOrderInfo = JSON.parse(res.data.data);
+      //       this.$router.push({
+      //       path: '/mall2/orderdetail',
+      //       query: {
+      //         orderId: this.wxOrderInfo.orderId,
+      //         orderType: this.wxOrderInfo.orderType,
+      //         tradeNo: this.wxOrderInfo.tradeNo,
+      //         tag: this.wxOrderInfo.tag,
+      //         awardActivity: JSON.stringify({})
+      //       }
+      //     })
+      //     }
+      //   })
+      // },
       turnback: function () {//返回
         appLocalstorage
         .get({

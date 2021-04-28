@@ -20,6 +20,11 @@
             :billDetailObj="item.billDetailObj"
             :orderType="item.orderType"
             pageType="cancel"
+            :orderMode="item.orderMode"
+            :shoppingOrderId="item.shoppingOrderId"
+            :bulkOrderType="item.bulkOrderType"
+            :id="item.id"
+            :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -174,6 +179,11 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
+          orderMode:item.orderMode,
+          shoppingOrderId:item.shoppingOrderId,
+          bulkOrderType:item.orderType,
+          id:item.id,
+          tradeNo:item.tradeNo,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,

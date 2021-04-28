@@ -23,6 +23,10 @@
             pageType="finish"
             :state="item.state"
             :orderCanEvaluate="item.orderCanEvaluate"
+            :shoppingOrderId="item.shoppingOrderId"
+            :bulkOrderType="item.bulkOrderType"
+            :id="item.id"
+            :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -174,6 +178,10 @@ export default {
           orderCategory: item.orderCategory,
           orderCanEvaluate: item.orderCanEvaluate,
           state:item.state,
+          bulkOrderType:item.orderType,
+          shoppingOrderId:item.shoppingOrderId,
+          id:item.id,
+          tradeNo:item.tradeNo,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,

@@ -114,7 +114,7 @@ export default [{
   },
   {
     path: '/orderInfo',
-    name: '社区团购确认订单',
+    name: '',
     component: () => import('@/components/bulk/orderInfo'),
     meta: {
       title: '社区团购确认订单',

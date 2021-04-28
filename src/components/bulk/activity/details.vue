@@ -19,10 +19,10 @@
             <p class="title">{{ item.skuName }}</p>
             <p class="price">￥{{ item.headPrice }}</p>
             <p class="salePrice">销售价：￥{{ item.sellPrice }}</p>
-            <p class="quantity">
+            <!-- <p class="quantity">
               <span>剩余数量：{{ item.surplusNumber }}</span>
               <span>开团最低销量：{{ item.minGroupNumber }}</span>
-            </p>
+            </p> -->
           </div>
         </div>
         <div class="show_more" v-show="isShowMore" @click="showMore">
@@ -46,6 +46,31 @@
                 <div class="rule_detail_item">
                   <div class="rule_detail_item_box">
                     <div>最低参团人数</div>
+                    <div>{{ groupData.allMinTotalPeopleNumber  }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低订单数量</div>
+                    <div>{{ groupData.allMinTotalOrderNumber }}</div>
+                  </div>
+                </div>
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低销售金额</div>
+                    <div>{{ groupData.allMinTotalSaleAmount }}</div>
+                  </div>
+                  <div class="rule_detail_item_box">
+                    <div>最低商品销售数量</div>
+                    <div>{{ groupData.allMinTotalSkuNumber }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rule_item">
+              <div class="rule_title">本团最低成团限制</div>
+              <div class="rule_detail">
+                <div class="rule_detail_item">
+                  <div class="rule_detail_item_box">
+                    <div>最低参团人数</div>
                     <div>{{ groupData.minTotalPeopleNumber }}</div>
                   </div>
                   <div class="rule_detail_item_box">
@@ -61,31 +86,6 @@
                   <div class="rule_detail_item_box">
                     <div>最低商品销售数量</div>
                     <div>{{ groupData.minTotalSkuNumber }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="rule_item">
-              <div class="rule_title">本团最低成团限制</div>
-              <div class="rule_detail">
-                <div class="rule_detail_item">
-                  <div class="rule_detail_item_box">
-                    <div>最低参团人数</div>
-                    <div>{{ groupData.allMinTotalPeopleNumber }}</div>
-                  </div>
-                  <div class="rule_detail_item_box">
-                    <div>最低订单数量</div>
-                    <div>{{ groupData.allMinTotalOrderNumber }}</div>
-                  </div>
-                </div>
-                <div class="rule_detail_item">
-                  <div class="rule_detail_item_box">
-                    <div>最低销售金额</div>
-                    <div>{{ groupData.allMinTotalSaleAmount }}</div>
-                  </div>
-                  <div class="rule_detail_item_box">
-                    <div>最低商品销售数量</div>
-                    <div>{{ groupData.allMinTotalSkuNumber }}</div>
                   </div>
                 </div>
               </div>
