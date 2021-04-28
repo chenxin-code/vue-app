@@ -236,7 +236,8 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log("当前不是小程序~~~")
+          console.log(process.env.NODE_ENV);
+          console.log(this.shareItemData);
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
@@ -248,12 +249,13 @@ export default {
               desc: "test",
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
+              // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType: 2,
               __event__: (res) => {},
             })
             .then((res) => {
               // document.getElementById("debug_text").innerText = res;
-              alert("shareThenRes----------", JSON.stringify(res));
+              // alert("shareThenRes----------", JSON.stringify(res));
             });
           // this.$router.push({
           //   path: "/bulk_share",
