@@ -35,7 +35,7 @@ export default [{
     component: () => import('@/components/bulk/share/confirmOrder/index.vue'),
     meta: {
       title: '分享确认订单',
-      keepAlive: true
+      keepAlive: false
     }
   },
 
