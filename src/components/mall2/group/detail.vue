@@ -2265,7 +2265,7 @@
           desc: shareData.sharetext,
           link: "https://www.baidu.com",
           imageurl: shareData.imageurl,
-          miniProgramType:0,
+          miniProgramType:2,
           __event__: (res) => {},
         }).then((res) => {
           // document.getElementById("debug_text").innerText = res;
