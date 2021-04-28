@@ -2446,7 +2446,7 @@ export default {
       }
       if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
         if(window.history.length === 1){
-          this.$router.push('/common')
+          this.$router.replace('/common')
         } else {
           this.$router.go(-1);
         }
