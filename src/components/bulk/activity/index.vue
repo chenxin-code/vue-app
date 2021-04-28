@@ -236,7 +236,7 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log("当前不是小程序~~~")
+          console.log(process.env.NODE_ENV);
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
@@ -249,7 +249,7 @@ export default {
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
               // miniProgramType: process.env.NODE_ENV == "development" ? 2 : 0,
-              miniProgramType: 0,
+              miniProgramType: 2,
               __event__: (res) => {},
             })
             .then((res) => {
