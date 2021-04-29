@@ -254,6 +254,8 @@
 import Qs from "qs";
 import { mapMutations } from "vuex";
 import vantImage from "@/components/bulk/components/vantImage.js"
+import { Toast } from 'vant';
+
 export default {
   name: "share",
   props: {},
@@ -308,13 +310,15 @@ export default {
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
           });
-          this.otherBuyList = this.shareData.currentActOrderList;
-          this.otherBuyList.forEach((e) => {
-            e["isShowOther"] = false;
-            if (e.orderItemList.length > 1) {
-              e["otherOrderItemList"] = e.orderItemList.slice(1);
-            }
-          });
+          if(this.shareData.currentActOrderList){
+            this.otherBuyList = this.shareData.currentActOrderList;
+            this.otherBuyList.forEach((e) => {
+              e["isShowOther"] = false;
+              if (e.orderItemList.length > 1) {
+                e["otherOrderItemList"] = e.orderItemList.slice(1);
+              }
+            });
+          }
           for (let i in this.shareData.categoryMap) {
             this.categoryMap.push({
               key: i,
@@ -328,9 +332,11 @@ export default {
           let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
-          this.imgUrls = imgStrs.map((url) => {
-            return url.match(/\ssrc=['"](.*?)['"]/)[1];
-          });
+          if(imgStrs){
+            this.imgUrls = imgStrs.map((url) => {
+              return url.match(/\ssrc=['"](.*?)['"]/)[1];
+            });
+          }
         }
       });
   },
@@ -415,6 +421,9 @@ export default {
       this.totalPrice = this.$util.toDecimal2(price);
     },
     selectCategory(item, index) {
+      // this.totalPrice = 0;
+      // this.setBulkTotalPrice(0);
+      // this.setBulkCheckList([]);
       this.currentSelectCategory = index;
       this.$http
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
@@ -432,11 +441,17 @@ export default {
         });
     },
     confirmOrder() {
-      this.setBulkTotalPrice(this.totalPrice);
-      this.setBulkCheckList(this.checkList);
+      
       if (this.checkList.length == 0) {
         this.$toast("请先选购商品");
       } else {
+        Toast.loading({
+          message: '加载中...',
+          duration: 'toast',
+          forbidClick: true,
+        });
+        this.setBulkTotalPrice(this.totalPrice);
+        this.setBulkCheckList(this.checkList);
         this.$router.push({
           path: "/bulk_share_confirm_order",
           query: {
@@ -806,7 +821,7 @@ img {
 
       .item_other {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding-top: 8px;
 

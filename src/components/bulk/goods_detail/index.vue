@@ -41,7 +41,7 @@
     <div class="goods_detail_info">
       <div class="goods_item_detail">
         <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
-        <div class="goods_other">
+        <!-- <div class="goods_other">
           <img
             :src="item"
             alt=""
@@ -55,7 +55,7 @@
                 : resouce.purchasedQuantity
             }}人购买了此商品
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="buy_btn" @click="goConfirm()">立即购买</div>
     </div>

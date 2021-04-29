@@ -105,6 +105,7 @@ export default {
   },
   created() {
     // this.viewPortSet();
+    console.log("环境变量",process.env.NODE_ENV)
     appNav
       .setNavBarHidden({
         isHidden: true,

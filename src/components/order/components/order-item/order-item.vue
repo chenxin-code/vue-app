@@ -66,27 +66,27 @@
       <div class="btn-box">
         <div
           class="btn"
-          v-if="isChangeOrder"
+          v-if="isChangeOrder && !isBulk"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
         </div>
-        <div class="btn" v-if="isEvalute" @click.stop="toComment">
+        <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
           <p>立即评价</p>
         </div>
-        <div class="btn" v-if="isBuyAgain" @click.stop="buyAgain">
+        <div class="btn" v-if="isBuyAgain && !isBulk" @click.stop="buyAgain">
           <p>再次购买</p>
         </div>
         <div
           class="btn"
-          v-if="isViewLogistics"
+          v-if="isViewLogistics && !isBulk"
           @click.stop="expressType(dataList[0])"
         >
           <p>查看物流</p>
         </div>
         <div
           class="btn"
-          v-if="isWaitTakeDelivery"
+          v-if="isWaitTakeDelivery && !isBulk"
           @click.stop="confirmProduct()"
         >
           <p>确认收货</p>
@@ -165,6 +165,7 @@ export default {
         integer:"0",
         decimal:"00",
       },
+      isBulk:false,
     };
   },
   created() {
@@ -175,6 +176,11 @@ export default {
       this.smallDataList = this.dataList;
     };
     this.itemAmount = this.amount;
+    if(this.orderMode == '12' || this.bulkOrderType == '200501'){
+      this.isBulk = true;
+    }else{
+      this.isBulk = false;
+    }
   },
   computed: {
     stateText(){
@@ -390,7 +396,7 @@ export default {
         this.goodsAmount.integer = amountArr[0];
         this.goodsAmount.decimal = amountArr[1];
       }
-    }
+    },
   },
   components: {
     productItem,

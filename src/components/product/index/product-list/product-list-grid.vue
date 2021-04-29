@@ -27,7 +27,7 @@
               <!--</div>-->
               <div v-if="moduleData.layout.btnType == '1'" class="icon">
                 <img src="static/images/product-list/icon_gods_car01.png" v-if="item.productType != 2 && $store.state.webtype == -1">
-                <i class="iconfont mall-gouwuche theme_font_red car-size" :class="{'theme_font_gray_i': item.stockNum == '0'}" v-else-if="item.productType != 2"></i>
+                <i class="iconfont mall-gouwuche theme_font_red car-size" :class="{'theme_font_gray_i': item.stockNum == '0'}" v-else-if="item.productType != 2" @click.stop="addToCart(item)"></i>
               </div>
               <div v-if="moduleData.layout.btnType == '2'" class="icon">
                 <img src="static/images/product-list/icon_gods_car02.png">
@@ -105,6 +105,55 @@ export default {
     },
     enterNav:function(product){
       this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
+    },
+    addToCart: function (item) {
+      this.$Loading.open();
+      let url = "/app/json/app_cart/addCart";
+      let paramsData = {
+        token: this.$store.state.login.token,
+        carts: [
+          {
+            skuId: item.skuId,
+            storeOuCode: item.storeOuCode,
+            activityId: '',
+            selfActivityId: item.activityId,
+            deliveryType: this.$store.state.mall2.staticDeliverType,
+            number: 1,
+          },
+        ],
+        orderCategory: undefined,
+        vipUnitUserCode: undefined,
+        deliveryType: item.deliverType,
+      };
+      this.$http.post(url, paramsData).then(
+        (res) => {
+          this.$Loading.close();
+          let data = res.data;
+          if (data.status == 0) {
+            this.$store.state.mall2.cartNum = data.data;
+
+            this.$toast("添加购物车成功！");
+            // if (this.pageType == "") {
+            //   // 孙哥牛逼，加入购物车，直接返回了 count
+            //   this.$store.state.mall2.cartNum = data.data;
+            //   // this._getCartCount();
+            // } else {
+            //   this.deductionCart();
+            // }
+            //记录添加购物车的项
+            // this.addToCartItem = item;
+            // this.$nextTick(() => {
+            //   this.showProductImg = true;
+            // });
+          } else {
+            this.$Toast(data.info);
+          }
+        },
+        (error) => {
+          this.$Loading.close();
+          this.$Toast("请求数据失败！");
+        }
+      );
     },
   },
 };

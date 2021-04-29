@@ -85,6 +85,7 @@
 
 <script>
 import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
+import { Toast } from 'vant';
 import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
@@ -105,6 +106,7 @@ export default {
     };
   },
   created() {
+    Toast.clear();
     this.shareData = JSON.parse(this.$route.query.shareData);
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
@@ -173,6 +175,8 @@ export default {
                     }),
                   },
                 });
+              } else {
+                this.$toast(res.data.info);
               }
             });
         } else {
@@ -266,7 +270,7 @@ export default {
       }
 
       input {
-        width: 220px;
+        width: 190px;
         border-right: 1px solid #D8D7D7;
         font-size: 14px;
         font-weight: 400;
