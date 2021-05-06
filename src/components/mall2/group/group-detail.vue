@@ -378,7 +378,7 @@ export default {
           desc: shareData.sharetext,
           link: "https://www.baidu.com",
           imageurl:shareData.imageurl,
-          miniProgramType:2,
+          miniProgramType:this.$store.state.environment=='production'?0:2,
           __event__: (res) => {},
         })
         .then((res) => {

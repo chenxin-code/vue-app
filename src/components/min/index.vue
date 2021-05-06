@@ -86,6 +86,18 @@ export default {
       },
       cellData: [
         {
+          title: "服务商城订单",
+          icon: require("./images/serviceOrder.png"),
+          url: "/minUserInfo",
+          externalLinks: true,
+        },
+        {
+          title: "服务商城售后",
+          icon: require("./images/serviceAfterSales.png"),
+          url: "/minUserInfo",
+          externalLinks: true,
+        },
+        {
           title: "个人信息",
           icon: require("./images/user.png"),
           url: "/minUserInfo",
@@ -152,7 +164,7 @@ export default {
       } else {
         if (item.externalLinks) {
           if (item.title == "分享有礼") {
-            process.env.NODE_ENV == "development"
+            this.$store.state.environment=='development'
               ? (item.url =
                   "http://8.129.64.205:8087/wxApplyDistribution?token=")
               : (item.url =
@@ -165,6 +177,8 @@ export default {
             } else {
               item.url = item.url + this.$store.state.ythToken;
             }
+          }else{
+            return
           }
           window.location.href = item.url;
         } else {
