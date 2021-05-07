@@ -342,6 +342,11 @@ export default {
     // }
   },
   created() {
+
+    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+      this.getYthUserInfo()
+    }
+
     if (this.usePorpData == true) {
       if (
         this.moduleData.type == "lbt" ||
@@ -442,6 +447,19 @@ export default {
     });
   },
   methods: {
+
+    //获取一体化信息
+    getYthUserInfo(){
+      this.$http.post("/app/json/login/getYthUser",{token: localStorage.getItem("ythToken")}).then(res=>{
+        if(res.data.status == 0){
+          this.$store.state.ythUserInfo = res.data.data;
+          console.log("一体化信息",this.$store.state.ythUserInfo)
+        }
+      })
+    },
+
+
+
     /**
      * @description 热力统计事件
      */
@@ -545,28 +563,39 @@ export default {
       return styleStr;
     },
     // this.$store.state.ythToken
+    getCookie(name){
+        var strcookie = document.cookie;//获取cookie字符串
+        var arrcookie = strcookie.split("; ");//分割
+        //遍历匹配
+        for ( var i = 0; i < arrcookie.length; i++) {
+            var arr = arrcookie[i].split("=");
+            if (arr[0] == name){
+                return arr[1];
+            }
+        }
+        return "";
+    },
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
-      if (nav.link.url && nav.link.url != '') {
-        if (
-          nav.link.url.indexOf("/applyDistribution") !== -1 ||
-          nav.link.url.indexOf("/wxApplyDistribution") !== -1
-        ) {
-          if(this.$store.state.webtype ==2 || this.$store.state.webtype == 3){
-            if (nav.link.url.indexOf("token") == -1) {
-              nav.link.url =
-              nav.link.url + "?token=" + localStorage.getItem('ythToken');
-            }
-          }else{
-            if (this.$store.state.ythToken) {
-              if (nav.link.url.indexOf("token") == -1) {
-                nav.link.url =
-                  nav.link.url + "?token=" + this.$store.state.ythToken;
-              }
-            }
-          }
-        }
+
+
+      if(/token=/.test(nav.link.url)){
+        let ythToken = "";
+
+        (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) ? ythToken = localStorage.getItem('ythToken') : ythToken = this.$store.state.ythToken;
+
+        nav.link.url = nav.link.url.replace(/token=/,`token=${ythToken}`)
+
       }
+
+      if(/phone=/.test(nav.link.url)){
+        let phone = "";
+        let isEmpty = Object.keys(this.$store.state.ythUserInfo);
+        isEmpty.length == 0 ? phone = this.getCookie('userPhone') : phone = this.$store.state.ythUserInfo.phone;
+        nav.link.url = nav.link.url.replace(/phone=/,`phone=${phone}`)
+      }
+
+
       if (this.canEnterNav) {
         this.$market.enterNav(nav, this.pageData.pgCode);
       } else {
