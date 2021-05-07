@@ -143,6 +143,10 @@ export default {
       this.$store.state.userRoomId = res.result;
       console.log('---------------this.$store.state.userRoomId----------',res)
     });
+    
+    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+      this.getYthUserInfo()
+    }
   },
   computed: {
     appBackHomeImg() {
@@ -222,6 +226,18 @@ export default {
     // }
   },
   methods: {
+    
+    //获取一体化信息
+    getYthUserInfo(){
+      this.$http.post("/app/json/login/getYthUser",{token: localStorage.getItem("ythToken")}).then(res=>{
+        if(res.data.status == 0){
+          this.$store.state.ythUserInfo = res.data.data;
+          console.log("一体化信息",this.$store.state.ythUserInfo)
+        }
+      })
+    },
+
+
     oilIsOpen() {
       http
         .post("/app/json/app_youdi/getAcctInfoList", {

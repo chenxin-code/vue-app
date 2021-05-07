@@ -342,11 +342,6 @@ export default {
     // }
   },
   created() {
-
-    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
-      this.getYthUserInfo()
-    }
-
     if (this.usePorpData == true) {
       if (
         this.moduleData.type == "lbt" ||
@@ -447,19 +442,6 @@ export default {
     });
   },
   methods: {
-
-    //获取一体化信息
-    getYthUserInfo(){
-      this.$http.post("/app/json/login/getYthUser",{token: localStorage.getItem("ythToken")}).then(res=>{
-        if(res.data.status == 0){
-          this.$store.state.ythUserInfo = res.data.data;
-          console.log("一体化信息",this.$store.state.ythUserInfo)
-        }
-      })
-    },
-
-
-
     /**
      * @description 热力统计事件
      */
