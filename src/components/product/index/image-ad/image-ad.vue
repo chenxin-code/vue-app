@@ -545,30 +545,42 @@ export default {
       return styleStr;
     },
     // this.$store.state.ythToken
+    getCookie(name){
+        var strcookie = document.cookie;//获取cookie字符串
+        var arrcookie = strcookie.split("; ");//分割
+        //遍历匹配
+        for ( var i = 0; i < arrcookie.length; i++) {
+            var arr = arrcookie[i].split("=");
+            if (arr[0] == name){
+                return arr[1];
+            }
+        }
+        return "";
+    },
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
-      if (nav.link.url && nav.link.url != '') {
-        if (
-          nav.link.url.indexOf("/applyDistribution") !== -1 ||
-          nav.link.url.indexOf("/wxApplyDistribution") !== -1
-        ) {
-          if(this.$store.state.webtype ==2 || this.$store.state.webtype == 3){
-            if (nav.link.url.indexOf("token") == -1) {
-              nav.link.url =
-              nav.link.url + "?token=" + localStorage.getItem('ythToken');
-            }
-          }else{
-            if (this.$store.state.ythToken) {
-              if (nav.link.url.indexOf("token") == -1) {
-                nav.link.url =
-                  nav.link.url + "?token=" + this.$store.state.ythToken;
-              }
-            }
-          }
-        }
+
+      let newNav = nav;
+
+      if(/token=/.test(newNav.link.url)){
+        let ythToken = "";
+
+        (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) ? ythToken = localStorage.getItem('ythToken') : ythToken = this.$store.state.ythToken;
+
+        newNav.link.url = newNav.link.url.replace(/token=/,`token=${ythToken}`)
+
       }
+
+      if(/phone=/.test(newNav.link.url)){
+        let phone = "";
+        let isEmpty = Object.keys(this.$store.state.ythUserInfo);
+        isEmpty.length == 0 ? phone = this.getCookie('userPhone') : phone = this.$store.state.ythUserInfo.phone;
+        newNav.link.url = newNav.link.url.replace(/phone=/,`phone=${phone}`)
+      }
+
+
       if (this.canEnterNav) {
-        this.$market.enterNav(nav, this.pageData.pgCode);
+        this.$market.enterNav(newNav, this.pageData.pgCode);
       } else {
         this.canEnterNav = true;
       }

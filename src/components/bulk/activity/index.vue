@@ -228,7 +228,7 @@ export default {
     },
     onShare: function (option) {
       if (option.icon == "wechat") {
-        if (this.$store.state.webtype == 3) {
+        if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
           console.log("当前是小程序~~~")
           //判断小程序
           this.options = [{ name: "复制链接", icon: "link" }];
@@ -248,7 +248,7 @@ export default {
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
-              miniProgramType: 2,
+              miniProgramType: this.$store.state.environment=='production'?0:2,
               __event__: (res) => {},
             })
             .then((res) => {

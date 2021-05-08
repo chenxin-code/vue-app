@@ -4,7 +4,20 @@
       <i class="icon" @click="goBack"></i>
       <span class="title">我的订单</span>
     </div>
-    <span class="history" @click="navToHistory">历史缴费记录</span>
+    <!-- <span class="history" @click="navToHistory">历史缴费记录</span> -->
+    <van-popover
+      v-model="showPopover"
+      trigger="click"
+      :actions="actions"
+      @select="onSelect"
+      placement="bottom-end"
+    >
+      <template #reference>
+        <div class="more" @click="showPopover = true">
+          <img :src="moreIcon" alt="" />
+        </div>
+      </template>
+    </van-popover>
   </div>
 </template>
 
@@ -17,6 +30,12 @@ export default {
   data() {
     return {
       adapterTop: "0.426667rem",
+      showPopover: false,
+      actions: [
+        { text: "历史缴费记录", className: "history" },
+        { text: "发票查询", className: "invoice" },
+      ],
+      moreIcon: require("../../img/more.png"),
     };
   },
   created() {
@@ -32,6 +51,10 @@ export default {
     }
   },
   methods: {
+    onSelect(action) {
+      action.className == "history" && this.navToMicroapp("com.times.microapp.AppcPrepay","/bill/index")
+      action.className == "invoice" && this.navToMicroapp("com.times.microapp.AppcInvoice","/")
+    },
     goBack: function () {
       appLocalstorage
         .get({
@@ -59,13 +82,23 @@ export default {
           }
         });
     },
-    navToHistory() {
+    navToMicroapp(microappUri,microappPath) {
       //跳转微应用
       navToMicroApplication.openTargetRouter({
         type: "microapp",
-        uri: "com.times.microapp.AppcPrepay", // 微应用包名
-        path: "/bill/index", // 微应用具体路由
+        uri: microappUri, // 微应用包名
+        path: microappPath, // 微应用具体路由
       });
+
+      // 发票
+      // router.openTargetRouter({
+      //   type: "microapp",
+      //   uri: "com.times.microapp.AppcInvoice",
+      //   path: "/",
+      // });
+      //历史记录
+      // uri: "com.times.microapp.AppcPrepay", // 微应用包名
+      // path: "/bill/index", // 微应用具体路由
     },
   },
 };
@@ -104,6 +137,22 @@ export default {
     font-weight: 500;
     color: #333333;
     line-height: 24px;
+  }
+
+  .more {
+    width: 102px;
+    height: 32px;
+    background: linear-gradient(90deg, #FFFFFF 0%, #FFE3E5 100%);
+    border-radius: 32px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    img {
+      width: 22px;
+      height: 20px;
+    }
   }
 }
 </style>
