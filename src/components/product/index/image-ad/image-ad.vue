@@ -560,26 +560,27 @@ export default {
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
 
+      let newNav = nav;
 
-      if(/token=/.test(nav.link.url)){
+      if(/token=/.test(newNav.link.url)){
         let ythToken = "";
 
         (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) ? ythToken = localStorage.getItem('ythToken') : ythToken = this.$store.state.ythToken;
 
-        nav.link.url = nav.link.url.replace(/token=/,`token=${ythToken}`)
+        newNav.link.url = newNav.link.url.replace(/token=/,`token=${ythToken}`)
 
       }
 
-      if(/phone=/.test(nav.link.url)){
+      if(/phone=/.test(newNav.link.url)){
         let phone = "";
         let isEmpty = Object.keys(this.$store.state.ythUserInfo);
         isEmpty.length == 0 ? phone = this.getCookie('userPhone') : phone = this.$store.state.ythUserInfo.phone;
-        nav.link.url = nav.link.url.replace(/phone=/,`phone=${phone}`)
+        newNav.link.url = newNav.link.url.replace(/phone=/,`phone=${phone}`)
       }
 
 
       if (this.canEnterNav) {
-        this.$market.enterNav(nav, this.pageData.pgCode);
+        this.$market.enterNav(newNav, this.pageData.pgCode);
       } else {
         this.canEnterNav = true;
       }
