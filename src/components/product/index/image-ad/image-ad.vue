@@ -559,7 +559,7 @@ export default {
     },
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
-
+      
       let newNav = nav;
 
       if(/token=/.test(newNav.link.url)){
@@ -576,6 +576,10 @@ export default {
         let isEmpty = Object.keys(this.$store.state.ythUserInfo);
         isEmpty.length == 0 ? phone = this.getCookie('userPhone') : phone = this.$store.state.ythUserInfo.phone;
         newNav.link.url = newNav.link.url.replace(/phone=/,`phone=${phone}`)
+      }
+
+      if(/scToken=/.test(newNav.link.url)){
+        newNav.link.url = newNav.link.url.replace(/scToken=/,`scToken=${this.$store.state.login.token}`)
       }
 
 
