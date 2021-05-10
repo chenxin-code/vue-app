@@ -489,6 +489,8 @@ export default {
       } else {
         appUi.hideTabbar && appUi.hideTabbar();
       }
+      document.title = "时代星选"
+      console.log("document.title",document.title)
     },
     "$route.matched"(value) {
       if (value.length !== 0) {
