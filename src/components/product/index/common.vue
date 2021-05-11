@@ -1073,6 +1073,7 @@ export default {
   },
   created() {
     console.log('再次进入首页hhhhhhh  created')
+    this.$route.query.isPreview ? this.$store.state.isPreview = true : this.$store.state.isPreview = false;
     appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";

@@ -1,7 +1,7 @@
 <template>
   <!-- // created by hjc  -->
   <!-- 首页顶部新增类目 -->
-  <div class="category" :style="{ backgroundColor: bgColor }">
+  <div class="category" :style="{ backgroundColor: bgColor }" v-if="!$store.state.isPreview">
     <div class="categoryList" ref="categoryList">
       <div
         class="categoryItem"
