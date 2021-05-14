@@ -202,6 +202,7 @@ export default {
           window.location.href = url;
         } else {
           if (item.pageUrl == "noNav") {
+            window.location.href = 'tel:400-111-9928'
             return;
           } else {
             this.$router.push(item.pageUrl);

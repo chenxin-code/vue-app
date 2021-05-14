@@ -375,7 +375,7 @@ var payHelper = {
         //   redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
         // }
 
-        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = "/app-vue/app/index.html#/paysuccess";
+        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = "/app-vue/app/index.html#/mall2/paysuccess";
 
         let params = {
           package: wxPayInfo.package,

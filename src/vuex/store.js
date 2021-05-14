@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    commonPage:1,
     isPreview:false,//是否是后管配置页面预览
     ythUserInfo:{},
     isX:false,//是否是iPhoneX全面屏

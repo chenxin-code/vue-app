@@ -15,6 +15,12 @@ let routerArr = [
   },
 ];
 
+// error
+
+import error from './modules/error'
+
+routerArr = routerArr.concat(error);
+
 // create by hjc 团购模块
 
 import bulk from './modules/bulk'

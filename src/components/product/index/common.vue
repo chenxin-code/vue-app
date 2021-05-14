@@ -264,6 +264,8 @@ export default {
       return "com" + index;
     },
     tabbarEvent: function (index) {
+      this.$store.state.commonPage = index;
+      console.log("this.$store.state.commonPage",this.$store.state.commonPage)
       if (index == -1) {
         return;
       }
@@ -475,7 +477,10 @@ export default {
               this.tabbarSubDatas[tabbarIndex].data = pdata;
               this.pageShow = true;
               this.$nextTick(() => {
-                this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                console.log("22222222222222")
+                // this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                console.log("this.$store.state.commonPage",this.$store.state.commonPage)
+                this.$refs.tabbar.tabbarEvent(this.$store.state.commonPage);
               });
             });
           }
@@ -560,6 +565,8 @@ export default {
       //     this.getPageData(item.pgCode, i)
       //   }
       // }
+      console.log("444444444444444444444",this.$store.state.commonPage)
+      defaultIndex = this.$store.state.commonPage
 
       if (this.$store.state.indexData.useSaveIndex == true) {
         this.$store.state.indexData.useSaveIndex = false;
