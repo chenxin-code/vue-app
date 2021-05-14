@@ -369,9 +369,9 @@ var payHelper = {
         
         let redirectUrl = "";
         if(isGroup){
-          redirectUrl = `/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
+          redirectUrl = `/app-vue/app/index.html#/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
         }else{
-          redirectUrl = `/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
+          redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
         }
 
         let params = {
