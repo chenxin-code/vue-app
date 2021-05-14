@@ -368,11 +368,14 @@ var payHelper = {
 
         
         let redirectUrl = "";
-        if(isGroup){
-          redirectUrl = `/app-vue/app/index.html#/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
-        }else{
-          redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
-        }
+
+        // if(isGroup){
+        //   redirectUrl = `/app-vue/app/index.html#/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }else{
+        //   redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }
+
+        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = "/app-vue/app/index.html#/paysuccess";
 
         let params = {
           package: wxPayInfo.package,
@@ -381,6 +384,9 @@ var payHelper = {
           sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
           redirectUrl:redirectUrl,
+          params:{
+            wxOrderInfoKey:wxOrderInfoKey
+          }
           // wxOrderInfoKey: wxOrderInfoKey,
           // isGroup: isGroup
         }
