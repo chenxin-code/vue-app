@@ -371,7 +371,7 @@ var payHelper = {
         if(isGroup){
           redirectUrl = `/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
         }else{
-          redirectUrl = `/paysuccess`
+          redirectUrl = `/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
         }
 
         let params = {
