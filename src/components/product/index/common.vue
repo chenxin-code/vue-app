@@ -480,7 +480,11 @@ export default {
                 console.log("22222222222222")
                 // this.$refs.tabbar.tabbarEvent(this.selectedIndex);
                 console.log("this.$store.state.commonPage",this.$store.state.commonPage)
-                this.$refs.tabbar.tabbarEvent(this.$store.state.commonPage);
+                if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+                  this.$refs.tabbar.tabbarEvent(this.$store.state.commonPage);
+                }else{
+                  this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                }
               });
             });
           }
@@ -566,7 +570,9 @@ export default {
       //   }
       // }
       console.log("444444444444444444444",this.$store.state.commonPage)
-      defaultIndex = this.$store.state.commonPage
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        defaultIndex = this.$store.state.commonPage
+      }
 
       if (this.$store.state.indexData.useSaveIndex == true) {
         this.$store.state.indexData.useSaveIndex = false;
