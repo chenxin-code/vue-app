@@ -1,7 +1,7 @@
 // common路由页
 <template>
   <div class="common-box" :class="[$store.state.webtype == '1' ? 'bottom-space' : '']">
-    <div class="top_bg" v-if="notch"></div>
+    <div class="top_bg" v-if="notch" v-show="!$store.state.isPreview"></div>
     <div class="mobile-preview" v-if="pageShow">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
         <div class="back-div" @click="$router.go(-1)">

@@ -1,6 +1,6 @@
 <template>
   <div class="mobile-preview">
-    <div class="top_bg" v-if="notch"></div>
+    <div class="top_bg" v-if="notch" v-show="!$store.state.isPreview"></div>
     <div class="full-div" v-if="pageData.type == '0' && pageShow">
       <component
         ref="Ref_Com_One"

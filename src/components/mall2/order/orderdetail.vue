@@ -904,7 +904,7 @@
           >修改订单</div>
           <div
             class="row-btn line_circle theme_font_common theme_border_gray"
-            @click="cancelOrder"
+            @click="cancelOrder('clickCancel')"
             v-if="tag == '1' && detailData.orderPayType != 1"
           >取消订单</div>
           <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
@@ -1693,6 +1693,10 @@ export default {
         if (this.timeValue <= 0) {
           if (this.myTimer) {
             window.clearInterval(this.myTimer)
+            //待支付订单倒计时完成请求取消订单接口  
+            if(this.tag == '1'){
+              this.cancelOrder("autoCancel");
+            }
           }
           return;
         }
@@ -1789,7 +1793,7 @@ export default {
       );
     },
     // 取消订单
-    cancelOrder: function () {
+    cancelOrder: function (cancelType) {
       this.$Loading.open()
       let url = '/app/json/app_shopping_order/cancelOrder'
       let paramsData = {
@@ -1805,9 +1809,17 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$Toast('取消成功');
-            this.$store.state.mall2.order.backIndex = this.orderIndex;
-            this.backEvent()
+            // autoCancel
+            // clickCancel
+            if(cancelType == 'clickCancel'){
+              this.$Toast('取消成功');
+              this.$store.state.mall2.order.backIndex = this.orderIndex;
+              this.backEvent()
+            }else{
+              this._getOrderDetail();
+              console.log("this.tag",cancelType);
+              this.tag = '7';
+            }
           } else {
             this.$Toast(data.info);
           }
@@ -1936,6 +1948,7 @@ export default {
             }
             if (this.tag == '1') {
               this.timeValue = myData.cancelRemainTime
+              console.log("myData.cancelRemainTime",myData.cancelRemainTime)
               this.timerCreated();
             } else if (this.tag == 4 && this.detailData.deliverType == 3) {
               this.queryStoreDeliverlyOrder()

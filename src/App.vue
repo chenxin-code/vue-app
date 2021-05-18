@@ -484,7 +484,7 @@ export default {
   watch: {
     "$route.path": function (newVal, oldVal) {
       //app环境
-      if (/^\/common$/.test(newVal)) {
+      if (/^\/common$/.test(newVal) || /^\/error$/.test(newVal)) {
         appUi.showTabbar && appUi.showTabbar();
       } else {
         appUi.hideTabbar && appUi.hideTabbar();
