@@ -172,7 +172,7 @@
         ></i>
         <span class="theme_font_black">
           <i class="iconfont mall-shoukuanfang"></i>
-          {{ occuritem.ouName }}</span
+          {{ occuritem.store[0].storeName }}</span
         >
       </div>
       <!--固定在底部的div-->
