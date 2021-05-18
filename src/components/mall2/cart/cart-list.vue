@@ -29,7 +29,7 @@
             ></i>
             <span class="theme_font_black">
               <i class="iconfont mall-shoukuanfang"></i>
-              {{ occuritem.ouName }}</span
+              {{ occuritem.store[0].storeName }}</span
             >
           </div>
           <div class="store-div" v-for="(storeitem, index) in occuritem.store">

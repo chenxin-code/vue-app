@@ -365,14 +365,30 @@ var payHelper = {
         //时代微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
         let wxPayInfo = JSON.parse(info.payData)
+
+        
+        let redirectUrl = "";
+
+        // if(isGroup){
+        //   redirectUrl = `/app-vue/app/index.html#/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }else{
+        //   redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }
+
+        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = "/app-vue/app/index.html#/mall2/paysuccess";
+
         let params = {
           package: wxPayInfo.package,
           noncestr: wxPayInfo.nonceStr,
           timestamp: wxPayInfo.timeStamp,
           sign: wxPayInfo.paySign,
           signType: wxPayInfo.signType,
-          wxOrderInfoKey: wxOrderInfoKey,
-          isGroup: isGroup
+          redirectUrl:redirectUrl,
+          params:{
+            wxOrderInfoKey:wxOrderInfoKey
+          }
+          // wxOrderInfoKey: wxOrderInfoKey,
+          // isGroup: isGroup
         }
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`

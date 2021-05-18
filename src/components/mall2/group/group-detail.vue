@@ -208,8 +208,14 @@ export default {
     },
   },
   mounted() {
-    if(this.$route.query.wxOrderInfoKey){
-      this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey;
+    if(this.$route.query.params){
+
+      let params = JSON.parse(this.$route.query.params);
+      this.wxOrderInfoKey = params.wxOrderInfoKey;
+
+      console.log("this.$route.query.params",this.$route.query.params)
+      console.log("this.$route.query.params",params)
+
       this.getOrderInfo()
     }else{
       this.orderId = this.$route.query.orderId;
@@ -378,7 +384,7 @@ export default {
           desc: shareData.sharetext,
           link: "https://www.baidu.com",
           imageurl:shareData.imageurl,
-          miniProgramType:0,
+          miniProgramType:this.$store.state.environment=='production'?0:2,
           __event__: (res) => {},
         })
         .then((res) => {

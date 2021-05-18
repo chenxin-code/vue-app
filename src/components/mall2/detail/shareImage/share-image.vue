@@ -152,10 +152,15 @@
           }).then(res => {
             if (res.status === 0) {
               const shortCode = res.data.substr(res.data.indexOf('/s/'))
-              this.$request.post('/app/json/we_chat/getwxacodeunlimit', {
-                path: `pages/common/home/index`,
+              // /app/json/we_chat/getwxacodeunlimit
+              this.$request.post('/app/json/wechat_mini_program/createQrCode', {
+                // path: `pages/common/home/index`,
+                // scene: shortCode,
+                // width: 430
+                page: `pages/common/home/index`,
                 scene: shortCode,
-                width: 430
+                width: 430,
+                type: "0",
               }).then(res => {
                 if (res.status === 0) {
                   this.qrcode = 'data:image/png;base64,' + res.data

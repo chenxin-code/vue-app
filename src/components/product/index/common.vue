@@ -1,7 +1,7 @@
 // common路由页
 <template>
   <div class="common-box" :class="[$store.state.webtype == '1' ? 'bottom-space' : '']">
-    <div class="top_bg" v-if="notch"></div>
+    <div class="top_bg" v-if="notch" v-show="!$store.state.isPreview"></div>
     <div class="mobile-preview" v-if="pageShow">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
         <div class="back-div" @click="$router.go(-1)">
@@ -264,6 +264,8 @@ export default {
       return "com" + index;
     },
     tabbarEvent: function (index) {
+      this.$store.state.commonPage = index;
+      console.log("this.$store.state.commonPage",this.$store.state.commonPage)
       if (index == -1) {
         return;
       }
@@ -475,7 +477,14 @@ export default {
               this.tabbarSubDatas[tabbarIndex].data = pdata;
               this.pageShow = true;
               this.$nextTick(() => {
-                this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                console.log("22222222222222")
+                // this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                console.log("this.$store.state.commonPage",this.$store.state.commonPage)
+                if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+                  this.$refs.tabbar.tabbarEvent(this.$store.state.commonPage);
+                }else{
+                  this.$refs.tabbar.tabbarEvent(this.selectedIndex);
+                }
               });
             });
           }
@@ -560,6 +569,10 @@ export default {
       //     this.getPageData(item.pgCode, i)
       //   }
       // }
+      console.log("444444444444444444444",this.$store.state.commonPage)
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        defaultIndex = this.$store.state.commonPage
+      }
 
       if (this.$store.state.indexData.useSaveIndex == true) {
         this.$store.state.indexData.useSaveIndex = false;
@@ -1073,6 +1086,7 @@ export default {
   },
   created() {
     console.log('再次进入首页hhhhhhh  created')
+    this.$route.query.isPreview ? this.$store.state.isPreview = true : this.$store.state.isPreview = false;
     appUi && appUi.showTabbar(); 
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";

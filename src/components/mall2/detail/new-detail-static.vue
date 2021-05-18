@@ -3014,7 +3014,10 @@ export default {
             !this.$store.state.mall2.selectAddress.cityId ||
             !this.$store.state.mall2.selectAddress.countryId
           ) {
-            this.$Toast("请选择配送区域");
+            // this.$Toast("请选择配送区域");
+            this.getJdSilmilarSku();
+            this.popFlag = "buyNow";
+            this.showPop = true;
             return;
           }
         }

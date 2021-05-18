@@ -86,17 +86,24 @@
       eventClick: function (type) {
         if (type == 1){//我的订单
           //无论支付失败成功都是跳订单列表
+          let path = "";
           if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+
+            this.payResult == "success" ? path = '/mall2/orderlist?selectedIndex=1' : path = '/mall2/orderlist?selectedIndex=0';
+
             this.$router.push({
-              path: '/mall2/orderlist?selectedIndex=0',
+              path:path,
               query: {
                 orderCategory: this.$route.query.orderCategory,
                 vipUnitUserCode: this.$route.query.vipUnitUserCode
               }
             });
           }else{
+
+            this.payResult == "success" ? path = `/order/3?time=${Date.now()}` : path = `/order/2?time=${Date.now()}`;
+            
             this.$router.push({
-              path: `/order/2?time=${Date.now()}`,
+              path: path,
             });
           }
 

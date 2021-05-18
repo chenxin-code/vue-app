@@ -86,27 +86,47 @@ export default {
       },
       cellData: [
         {
+          title: "服务商城订单",
+          icon: require("./images/serviceOrder.png"),
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:1443/order/listPage?token=",
+          prodUrl:
+            "https://mall-prod-app-linli.timesgroup.cn:9001/order/listPage?token=",
+          externalLinks: true,
+        },
+        {
+          title: "服务商城售后",
+          icon: require("./images/serviceAfterSales.png"),
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleList?token=",
+          prodUrl:
+            "https://mall-prod-app-linli.timesgroup.cn:9001/order/afterSaleList?token=",
+          externalLinks: true,
+        },
+        {
           title: "个人信息",
           icon: require("./images/user.png"),
-          url: "/minUserInfo",
+          pageUrl: "/minUserInfo",
         },
         {
           title: "分享有礼",
           icon: require("./images/share.png"),
-          url:
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:8001/applyDistribution?token=",
+          prodUrl:
             "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
           externalLinks: true,
         },
         {
           title: "收货地址",
           icon: require("./images/address.png"),
-          url: "/mall2/addresslist?pageType=1",
+          pageUrl: "/mall2/addresslist?pageType=1",
         },
         {
           title: "客服热线",
           icon: require("./images/message.png"),
           phone: "400-111-9928",
-          url: "noNav",
+          pageUrl: "noNav",
         },
       ],
       memberInfo: {},
@@ -114,7 +134,7 @@ export default {
         userImage: "",
         userName: "",
       },
-      isX:false,
+      isX: false,
     };
   },
   components: {
@@ -123,15 +143,15 @@ export default {
     BottomCell,
   },
   methods: {
-    navTo(url,value) {
+    navTo(url, value) {
       console.log(url);
       let params = {};
-      if(url == '/record'){
+      if (url == "/record") {
         params = {
-          totalRecord:value
-        }
+          totalRecord: value,
+        };
       }
-      console.log(params)
+      console.log(params);
       if (url == "") {
         return;
       } else {
@@ -147,31 +167,45 @@ export default {
     },
     bottomNavTo(item) {
       console.log(item);
-      if (item.url == "") {
+      if (item.pageUrl == "") {
         this.$toast("敬请期待");
       } else {
         if (item.externalLinks) {
-          if (item.title == "分享有礼") {
-            process.env.NODE_ENV == "development"
-              ? (item.url =
-                  "http://8.129.64.205:8087/wxApplyDistribution?token=")
-              : (item.url =
-                  "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=");
-            if (
-              this.$store.state.webtype == 2 ||
-              this.$store.state.webtype == 3
-            ) {
-              item.url = item.url + localStorage.getItem("ythToken");
-            } else {
-              item.url = item.url + this.$store.state.ythToken;
-            }
+          // if (item.title == "分享有礼") {
+          //   this.$store.state.environment == "development"
+          //     ? (item.url =
+          //         "http://8.129.64.205:8087/wxApplyDistribution?token=")
+          //     : (item.url =
+          //         "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=");
+          //   if (
+          //     this.$store.state.webtype == 2 ||
+          //     this.$store.state.webtype == 3
+          //   ) {
+          //     item.url = item.url + localStorage.getItem("ythToken");
+          //   } else {
+          //     item.url = item.url + this.$store.state.ythToken;
+          //   }
+          // } else {
+          //   return;
+          // }
+          let url = "";
+          this.$store.state.environment == "development"? url = item.devUrl : url = item.prodUrl;
+          if(/token=/.test(url)){
+            let ythToken = "";
+
+            (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) ? ythToken = localStorage.getItem('ythToken') : ythToken = this.$store.state.ythToken;
+
+            url = url.replace(/token=/,`token=${ythToken}`)
+
           }
-          window.location.href = item.url;
+          console.log(url)
+          window.location.href = url;
         } else {
-          if (item.url == "noNav") {
+          if (item.pageUrl == "noNav") {
+            window.location.href = 'tel:400-111-9928'
             return;
           } else {
-            this.$router.push(item.url);
+            this.$router.push(item.pageUrl);
           }
         }
       }
@@ -192,14 +226,14 @@ export default {
             this.walletData.gridList,
             "bean",
             "value",
-            this.memberInfo.integral?this.memberInfo.integral:0,
+            this.memberInfo.integral ? this.memberInfo.integral : 0,
             false
           );
           this.setValue(
             this.walletData.gridList,
             "coupons",
             "value",
-            this.memberInfo.couponNum?this.memberInfo.couponNum:0,
+            this.memberInfo.couponNum ? this.memberInfo.couponNum : 0,
             false
           );
         } else {
@@ -289,7 +323,6 @@ export default {
     this.getUserInfo();
     this.getWallet();
     this.getOrderCount();
-    
   },
 };
 </script>
@@ -299,7 +332,8 @@ export default {
 .router_class {
   background: #F7F7F7 !important;
 }
-.adapter{
+
+.adapter {
   height: 100%;
   overflow-y: auto;
   padding-bottom: 28.5px;
