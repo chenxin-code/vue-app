@@ -88,6 +88,7 @@ export default {
         type: "microapp",
         uri: microappUri, // 微应用包名
         path: microappPath, // 微应用具体路由
+        hideNavbar: true,
       });
 
       // 发票
