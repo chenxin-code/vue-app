@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     onSelect(action) {
-      action.className == "history" && this.navToMicroapp("com.times.microapp.AppcPrepay","/bill/index")
-      action.className == "invoice" && this.navToMicroapp("com.times.microapp.AppcInvoice","/")
+      action.className == "history" && this.navToMicroapp("com.times.microapp.AppcPrepay","/bill/index",false)
+      action.className == "invoice" && this.navToMicroapp("com.times.microapp.AppcInvoice","/",true)
     },
     goBack: function () {
       appLocalstorage
@@ -82,13 +82,13 @@ export default {
           }
         });
     },
-    navToMicroapp(microappUri,microappPath) {
+    navToMicroapp(microappUri,microappPath,isHideNavbar) {
       //跳转微应用
       navToMicroApplication.openTargetRouter({
         type: "microapp",
         uri: microappUri, // 微应用包名
         path: microappPath, // 微应用具体路由
-        hideNavbar: true,
+        hideNavbar:isHideNavbar,
       });
 
       // 发票
