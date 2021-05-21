@@ -131,12 +131,12 @@
               })
             }
           } else {
-            this.$Message.error('请求数据出错，请稍后重试!');
+            this.$Message.error('网络加载较慢，请稍后重试!');
           }
           // _this.$Loading.close();
         }, error => {
           this.$Loading.close()
-          this.$Message.error('请求数据出错，请稍后重试!');
+          this.$Message.error('网络加载较慢，请稍后重试!');
         })
       }
     },

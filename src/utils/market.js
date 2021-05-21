@@ -57,7 +57,7 @@ let market = {
       }
     }).catch(err => {
       Loading.close()
-      Toast('请求数据出错！')
+      Toast('网络加载较慢！')
     })
   },
   toNavTopMore: function (topData) {

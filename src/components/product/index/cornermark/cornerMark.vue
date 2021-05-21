@@ -79,7 +79,7 @@
             }
           },
           error => {
-            this.$Message.error("请求数据出错，请稍后重试!");
+            this.$Message.error("网络加载较慢，请稍后重试!");
           }
         );
       }

@@ -105,7 +105,7 @@
             this.$Toast(data.info)
           }
         }).catch(err => {
-            this.$Toast('请求数据出错，请稍后重试!')
+            this.$Toast('网络加载较慢，请稍后重试!')
             this.$STLoading.close()
           })
       },

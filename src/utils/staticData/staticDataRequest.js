@@ -15,7 +15,7 @@ class DataRequestJsonp {
     this.myTimer = setTimeout(() => {
       this.callCallback({
         status: 1,
-        info: '请求数据出错！'
+        info: '网络加载较慢！'
       })
       this.clearup()
     }, 10*1000)
@@ -32,7 +32,7 @@ class DataRequestJsonp {
     scriptNode.onerror = () => {
       this.callCallback({
         status: 1,
-        info: '请求数据出错！'
+        info: '网络加载较慢！'
       })
       this.clearup()
     }
