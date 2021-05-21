@@ -191,12 +191,12 @@ export default {
               this.tabbarSubDatas[tabbarIndex].data = pdata;
             }
           } else {
-            this.$Toast("请求数据出错，请稍后重试!");
+            this.$Toast("网络加载较慢，请稍后重试!");
           }
         })
         .catch((err) => {
           this.$STLoading.close();
-          this.$Toast("请求数据出错，请稍后重试!");
+          this.$Toast("网络加载较慢，请稍后重试!");
         });
     },
     getSubPageDatas: function () {

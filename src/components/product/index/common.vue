@@ -515,7 +515,7 @@ export default {
             locationinfo.latitude = this.$store.state.globalConfig.latitude;
             this._setNewLocation(locationinfo);
           } else {
-            this.$Toast("请求数据出错，请稍后重试!");
+            this.$Toast("网络加载较慢，请稍后重试!");
           }
         }
       });
@@ -756,7 +756,7 @@ export default {
             // this.$store.state.mall2.myAssets = data.data
             // this.$store.state.userInfo.levelNo = data.data.levelNo
           } else {
-            this.$Toast("请求数据出错，请稍后重试!");
+            this.$Toast("网络加载较慢，请稍后重试!");
           }
         },
         (error) => {}
