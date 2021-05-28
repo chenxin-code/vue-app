@@ -7,7 +7,7 @@
           :key="index"
           @click="navTo(item.url,item.value)"
         >
-          <div class="number" v-if="item.isShowTip">{{ item.tipValue }}</div>
+          <div class="number" v-if="item.isShowTip"  v-show="item.tipValue > 0">{{ item.tipValue }}</div>
           <img
             :src="item.icon"
             alt=""
