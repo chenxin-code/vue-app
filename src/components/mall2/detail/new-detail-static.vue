@@ -1295,7 +1295,7 @@
           </transition>
           <p class="text">收藏</p>
         </div>
-        <div class="btn full">
+        <div class="btn full" @click="handleCustomer">
           <i class="iconfont service btn-icon theme_font_gray">
             <img src="static/images/card-provincial/customer_service_black.png" alt="">
           </i>
@@ -1864,6 +1864,10 @@ export default {
     },
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function () {
+      ysf('open')
+    },
     getJdSilmilarSku: function () {
       return;
       if (this.lastRequestId == this.detailData.id) {

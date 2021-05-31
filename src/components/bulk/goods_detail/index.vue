@@ -69,7 +69,7 @@
       <div class="goods_item_detail_info_title">商品详情</div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
-    <div class="service"></div>
+    <div class="service" @click="handleCustomer"></div>
   </div>
 </template>
 
@@ -92,6 +92,9 @@ export default {
     console.log([this.resouce.groupbuySkuPicurl])
   },
   methods: {
+    hanldeCustomer: function () {
+      ysf('open');
+    },
     getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;
       // let startT = this.$util.getDateFromString(

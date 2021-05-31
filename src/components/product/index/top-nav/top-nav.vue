@@ -116,7 +116,7 @@
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
 
-        <span class="customer_service" @click="navToCar" v-if="isCommon">
+        <span class="customer_service" @click="handleCustomer" v-if="isCommon">
           <img src="static/images/card-provincial/customer_service.png" />
         </span>
 
@@ -554,6 +554,10 @@ export default {
     this._getCartCount();
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('open')
+    },
     //微信扫一扫
     // scanCode() {
     //   // bridgefunc.scanCode();
