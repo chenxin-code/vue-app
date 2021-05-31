@@ -43,7 +43,7 @@ export default {
             url: "/mall2/orderlist?selectedIndex=0",
             imgWidth: "0.6rem",
             imgHeight: "0.48rem",
-            isShowTip: true,
+            isShowTip: false,
             id: "waitPay",
             tipValue: "",
           },
@@ -53,6 +53,7 @@ export default {
             url: "/mall2/orderlist?selectedIndex=1",
             imgWidth: "0.68rem",
             imgHeight: "0.546667rem",
+            isShowTip: false,
             id: "waitDelivery",
             tipValue: "",
           },
@@ -62,6 +63,7 @@ export default {
             url: "/mall2/orderlist?selectedIndex=2",
             imgWidth: "0.546667rem",
             imgHeight: "0.546667rem",
+            isShowTip: false,
             id: "waitTakeDelivery",
             tipValue: "",
           },
@@ -71,6 +73,7 @@ export default {
             url: "/mall2/serviceindex",
             imgWidth: "0.626667rem",
             imgHeight: "0.546667rem",
+            isShowTip: false,
             id: "afterSales",
             tipValue: "",
           },
@@ -189,20 +192,23 @@ export default {
           //   return;
           // }
           let url = "";
-          this.$store.state.environment == "development"? url = item.devUrl : url = item.prodUrl;
-          if(/token=/.test(url)){
+          this.$store.state.environment == "development"
+            ? (url = item.devUrl)
+            : (url = item.prodUrl);
+          if (/token=/.test(url)) {
             let ythToken = "";
 
-            (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) ? ythToken = localStorage.getItem('ythToken') : ythToken = this.$store.state.ythToken;
+            this.$store.state.webtype == 2 || this.$store.state.webtype == 3
+              ? (ythToken = localStorage.getItem("ythToken"))
+              : (ythToken = this.$store.state.ythToken);
 
-            url = url.replace(/token=/,`token=${ythToken}`)
-
+            url = url.replace(/token=/, `token=${ythToken}`);
           }
-          console.log(url)
+          console.log(url);
           window.location.href = url;
         } else {
           if (item.pageUrl == "noNav") {
-            window.location.href = 'tel:400-111-9928'
+            window.location.href = "tel:400-111-9928";
             return;
           } else {
             this.$router.push(item.pageUrl);
@@ -284,23 +290,50 @@ export default {
       //获取待支付订单数目
       this.$http.post("/app/json/app_shopping_order/queryBadge").then((res) => {
         if (res.data.status == 0) {
-          if (res.data.data[0].count <= 99) {
-            this.setValue(
-              this.orderData.gridList,
-              "waitPay",
-              "tipValue",
-              res.data.data[0].count,
-              false
-            );
-          } else {
-            this.setValue(
-              this.orderData.gridList,
-              "waitPay",
-              "tipValue",
-              "99+",
-              false
-            );
-          }
+          // this.setValue(
+          //   this.orderData.gridList,
+          //   "waitPay",
+          //   "tipValue",
+          //   res.data.data[0].count <=99? res.data.data[0].count :'99+',
+          //   false
+          // );
+          // this.setValue(
+          //   this.orderData.gridList,
+          //   "waitDelivery",
+          //   "tipValue",
+          //   res.data.data[1].count <=99? res.data.data[1].count :'99+',
+          //   false
+          // );
+          // this.setValue(
+          //   this.orderData.gridList,
+          //   "waitTakeDelivery",
+          //   "tipValue",
+          //   res.data.data[2].count <=99? res.data.data[2].count :'99+',
+          //   false
+          // );
+          this.orderData.gridList.forEach((item, index) => {
+            if (item.id !== "afterSales") {
+              this.setValue(
+                this.orderData.gridList,
+                item.id,
+                "tipValue",
+                res.data.data[index].count <= 99
+                  ? res.data.data[index].count
+                  : "99+",
+                false
+              );
+              this.setValue(
+                this.orderData.gridList,
+                item.id,
+                "isShowTip",
+                true,
+                false
+              );
+            } else {
+              console.log(this.orderData.gridList);
+              return;
+            }
+          });
         }
       });
     },
