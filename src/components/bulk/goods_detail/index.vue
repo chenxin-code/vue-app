@@ -69,6 +69,7 @@
       <div class="goods_item_detail_info_title">商品详情</div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
+    <div class="service"></div>
   </div>
 </template>
 
@@ -144,12 +145,24 @@ export default {
 }
 
 .goods_detail {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: #F6F6F6;
   overflow-y: auto;
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
+
+  .service{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    background-image: url('./images/service.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    right: 0;
+    bottom: 112px;
+  }
 
   .goods_swiper {
     position: relative;
