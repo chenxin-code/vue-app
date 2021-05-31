@@ -548,6 +548,12 @@
         </transition>
         <p class="text">收藏</p>
       </div>
+      <div class="btn full">
+        <i class="iconfont service btn-icon theme_font_gray">
+          <img src="static/images/card-provincial/customer_service_black.png" alt="">
+        </i>
+        <p class="text">客服</p>
+      </div>
       <div class="btn theme_standard_bg theme_font_white" @click="addToCart"
            v-if="stockNum != 0 && canSale == true && detailData.status != '0' && groupId == ''">
         <p class="title">加入购物车</p>
@@ -2542,6 +2548,13 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
   @import "~@/common/stylus/variable.styl"
+
+.service{
+  img{
+    width:26px;
+    height:26px;
+  }
+}
   .detail {
     position relative;
     width 100%

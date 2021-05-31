@@ -5,9 +5,21 @@
         <li
           v-for="(item, index) in gridData.gridList"
           :key="index"
-          @click="navTo(item.url,item.value)"
+          @click="navTo(item.url, item.value)"
         >
-          <div class="number" v-if="item.isShowTip">{{ item.tipValue }}</div>
+          <div
+            class="number"
+            v-if="item.isShowTip"
+            v-show="
+              typeof item.tipValue == 'string'
+                ? true
+                : item.tipValue > 0
+                ? true
+                : false
+            "
+          >
+            {{ item.tipValue }}
+          </div>
           <img
             :src="item.icon"
             alt=""
@@ -48,8 +60,8 @@ export default {
   },
   created() {},
   methods: {
-    navTo(url,value) {
-      this.$emit("navTo", url,value);
+    navTo(url, value) {
+      this.$emit("navTo", url, value);
     },
   },
 };
