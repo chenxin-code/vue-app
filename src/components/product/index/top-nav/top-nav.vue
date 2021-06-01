@@ -547,7 +547,9 @@ export default {
     this._getCartCount();
     console.log(
       "-------------this.$store.state.webtype--------------",
-      this.$store.state.webtype
+      this.$store.state.webtype,
+      this.$store.state.userInfo.phone,
+      this.$store.state.userInfo.userId
     );
   },
   activated() {
@@ -556,7 +558,18 @@ export default {
   methods: {
     // 唤起客服
     handleCustomer: function() {
-      ysf('open')
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
     },
     //微信扫一扫
     // scanCode() {

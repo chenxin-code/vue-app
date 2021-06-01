@@ -92,8 +92,20 @@ export default {
     console.log([this.resouce.groupbuySkuPicurl])
   },
   methods: {
-    hanldeCustomer: function () {
-      ysf('open');
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
     },
     getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;

@@ -936,8 +936,20 @@
       }
     },
     methods: {
-      handleCustomer: function () {
-        ysf('open');
+      // 唤起客服
+      handleCustomer: function() {
+        ysf('config', {
+          uid: this.$store.state.userInfo.userId,
+          name: this.$store.state.userInfo.nickName,
+          email:'',
+          mobile: this.$store.state.userInfo.phone,
+          success: function(){     // 成功回调
+            ysf('open');
+          },
+          error: function(){       // 错误回调
+            // handle error
+          }
+        })
       },
       getCountdownTime: function () {
         let nowT = this.$store.state.severTime.currentTime
