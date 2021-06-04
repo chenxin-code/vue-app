@@ -172,7 +172,7 @@ export default {
     position: fixed;
     width: 42px;
     height : 42px;
-    background-image: url('./images/service.png');
+    background-image: url('/static/images/service.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     right: 0;

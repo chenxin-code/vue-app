@@ -145,6 +145,8 @@
       <img src="static/image/microShop/jiantou@2x.png" alt="" />
       <p>请点击右上角进行分享</p>
     </van-popup>
+
+    <div class="customerService" @click="handleCustomer"></div>
   </div>
 </template>
 
@@ -234,6 +236,21 @@ export default {
     }
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
     getOrderInfo(){
       this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
         if(res.data.status==0){
@@ -599,6 +616,18 @@ export default {
 <style lang="stylus" scoped rel="stylesheet/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    background-image: url('/static/images/service.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    right: 0;
+    bottom: 112px;
+  }
+
 
 .group-detail-container {
   .group-detail {

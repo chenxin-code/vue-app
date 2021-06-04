@@ -100,6 +100,8 @@
       <div class="pay_price">¥{{ total }}</div>
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
+
+    <div class="customerService" @click="handleCustomer"></div>
   </div>
 </template>
 
@@ -191,6 +193,21 @@ export default {
 //     next();
 //   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
     //实现文本域自适应大小
     getHeight() {
       this.textareaHeight = calcTextareaHeight(
@@ -324,6 +341,17 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    background-image: url('/static/images/service.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    right: 0;
+    bottom: 112px;
+  }
 
 .body {
   width: 100%;

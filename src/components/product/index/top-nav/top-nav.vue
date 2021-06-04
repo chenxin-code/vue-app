@@ -116,9 +116,9 @@
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
 
-        <span class="customer_service" @click="handleCustomer" v-if="isCommon">
+        <!-- <span class="customer_service" @click="handleCustomer" v-if="isCommon">
           <img src="static/images/card-provincial/customer_service.png" />
-        </span>
+        </span> -->
 
         <span
           class="home-shoppingCart"
@@ -564,7 +564,8 @@ export default {
         email:'',
         mobile: this.$store.state.userInfo.phone,
         success: function(){     // 成功回调
-          ysf('open');
+          // ysf('open');
+          window.location.href = ysf('url');
         },
         error: function(){       // 错误回调
           // handle error
