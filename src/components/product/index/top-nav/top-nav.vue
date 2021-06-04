@@ -557,21 +557,21 @@ export default {
   },
   methods: {
     // 唤起客服
-    handleCustomer: function() {
-      ysf('config', {
-        uid: this.$store.state.userInfo.userId,
-        name: this.$store.state.userInfo.nickName,
-        email:'',
-        mobile: this.$store.state.userInfo.phone,
-        success: function(){     // 成功回调
-          // ysf('open');
-          window.location.href = ysf('url');
-        },
-        error: function(){       // 错误回调
-          // handle error
-        }
-      })
-    },
+    // handleCustomer: function() {
+    //   ysf('config', {
+    //     uid: this.$store.state.userInfo.userId,
+    //     name: this.$store.state.userInfo.nickName,
+    //     email:'',
+    //     mobile: this.$store.state.userInfo.phone,
+    //     success: function(){     // 成功回调
+    //       // ysf('open');
+    //       window.location.href = ysf('url');
+    //     },
+    //     error: function(){       // 错误回调
+    //       // handle error
+    //     }
+    //   })
+    // },
     //微信扫一扫
     // scanCode() {
     //   // bridgefunc.scanCode();

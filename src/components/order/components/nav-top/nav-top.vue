@@ -69,6 +69,10 @@ export default {
             _result == "null" ||
             _result == undefined
           ) {
+            console.log('appLocalstorage_result',_result)
+            this.$router.replace({
+              path: "/common",
+            });
             return;
           }
           if (_result == "1") {

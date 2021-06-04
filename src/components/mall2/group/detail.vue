@@ -943,6 +943,7 @@
           name: this.$store.state.userInfo.nickName,
           email:'',
           mobile: this.$store.state.userInfo.phone,
+          data: this.$store.state.userLable,
           success: function(){     // 成功回调
             ysf('open');
           },
