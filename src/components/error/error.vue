@@ -15,9 +15,10 @@ export default {
     return {};
   },
   created() {
+    console.log("wx", wx);
     if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       wx.miniProgram.navigateTo({
-        url: `/pages/common/home/index`,
+        url: "/pages/common/home/index",
       });
     }
   },

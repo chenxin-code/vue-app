@@ -2101,7 +2101,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     right: 0;
-    bottom: 112px;
+    top: 112px;
   }
 
 // 心愿单相关样式
