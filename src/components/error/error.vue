@@ -15,11 +15,14 @@ export default {
     return {};
   },
   created() {
-    console.log("wx", wx);
+    this.$nextTick(() => {
+      console.log("wx", wx);
+        wx.miniProgram.navigateTo({
+          url: "/pages/common/home/index",
+        });
+      })
     if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-      wx.miniProgram.navigateTo({
-        url: "/pages/common/home/index",
-      });
+      
     }
   },
 };
