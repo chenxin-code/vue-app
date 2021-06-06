@@ -14,7 +14,13 @@ export default {
   data() {
     return {};
   },
-  created() {},
+  created() {
+    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      wx.miniProgram.navigateTo({
+        url: `/pages/common/home/index`,
+      });
+    }
+  },
 };
 //
 </script>
