@@ -15,14 +15,13 @@ export default {
     return {};
   },
   created() {
-    this.$nextTick(() => {
-      console.log("wx", wx);
+    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      this.$nextTick(() => {
+        console.log("wx", wx);
         wx.miniProgram.navigateTo({
           url: "/pages/common/home/index",
         });
-      })
-    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-      
+      });
     }
   },
 };
