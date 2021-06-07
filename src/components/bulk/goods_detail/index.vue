@@ -69,7 +69,9 @@
       <div class="goods_item_detail_info_title">商品详情</div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
-    <div class="service" @click="handleCustomer"></div>
+    <div class="customerService" @click="handleCustomer">
+      <img :src="customerService" alt="">
+    </div>
   </div>
 </template>
 
@@ -85,6 +87,7 @@ export default {
     return {
       time: 1614071248931,
       resouce: {},
+      customerService:require('../../../../static/images/service.png'),
     };
   },
   created() {
@@ -169,15 +172,16 @@ export default {
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
 
-  .service{
+  .customerService{
     position: fixed;
     width: 42px;
     height : 42px;
-    background-image: url('/static/images/service.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     right: 0;
     bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
   }
 
   .goods_swiper {

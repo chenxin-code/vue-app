@@ -146,7 +146,9 @@
       <p>请点击右上角进行分享</p>
     </van-popup>
 
-    <div class="customerService" @click="handleCustomer"></div>
+    <div class="customerService" @click="handleCustomer">
+      <img :src="customerService" alt="">
+    </div>
   </div>
 </template>
 
@@ -163,6 +165,7 @@ export default {
   name: "",
   data() {
     return {
+      customerService:require('../../../../static/images/service.png'),
       orderId: "", // id
       mktGroupBuyId: "", // 分享id
       groupDetail: "", // 详情
@@ -622,11 +625,12 @@ export default {
     position: fixed;
     width: 42px;
     height : 42px;
-    background-image: url('/static/images/service.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     right: 0;
     bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
   }
 
 

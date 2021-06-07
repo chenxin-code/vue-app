@@ -101,7 +101,9 @@
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
 
-    <div class="customerService" @click="handleCustomer"></div>
+    <div class="customerService" @click="handleCustomer">
+      <img :src="customerService" alt="">
+    </div>
   </div>
 </template>
 
@@ -138,6 +140,7 @@ export default {
   props: {},
   data() {
     return {
+      customerService:require('../../../static/images/service.png'),
       placelist: [],
       resouce: {},
       buyNumber: 1,
@@ -347,11 +350,12 @@ export default {
     position: fixed;
     width: 42px;
     height : 42px;
-    background-image: url('/static/images/service.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     right: 0;
     bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
   }
 
 .body {

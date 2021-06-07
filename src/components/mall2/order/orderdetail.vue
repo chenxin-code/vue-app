@@ -944,7 +944,9 @@
         <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
 
-      <div class="customerService" @click="handleCustomer"></div>
+      <div class="customerService" @click="handleCustomer">
+        <img :src="customerService" alt="">
+      </div>
 
       <van-popup v-model="vityFlag" >
       <div class="vity-title">请输入短信验证码</div>
@@ -1006,6 +1008,7 @@ export default {
   },
   data() {
     return {
+      customerService:require('../../../../static/images/service.png'),
       keynum:'',
       code:'',
       vityFlag:false,
@@ -2097,11 +2100,12 @@ export default {
     position: fixed;
     width: 42px;
     height : 42px;
-    background-image: url('/static/images/service.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     right: 0;
-    top: 112px;
+    bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
   }
 
 // 心愿单相关样式
