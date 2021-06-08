@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-top @backEvent="$router.go(-1)" :bgImg="bg"></nav-top>
+    <nav-top @backEvent="backEvent" :bgImg="bg"></nav-top>
     <nav-content class="group-detail-container" v-if="loaded">
       <div class="group-detail">
         <div class="info">
@@ -254,6 +254,17 @@ export default {
           // handle error
         }
       })
+    },
+    backEvent(){
+      if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
+        if(window.history.length === 1){
+          this.$router.replace('/common')
+        } else {
+          this.$router.go(-1);
+        }
+      } else {
+        this.$router.go(-1);
+      }
     },
     getOrderInfo(){
       this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
