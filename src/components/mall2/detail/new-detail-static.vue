@@ -187,7 +187,7 @@
                             class="swiper-img-div"
                             @click="showBigImageEvent"
                           >
-                            <img :src="pic" />
+                            <img :src="pic+'?x-oss-process=image/format,jpg'" />
                           </div>
                         </swiper-slide>
                       </swiper>
