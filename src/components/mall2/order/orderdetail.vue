@@ -944,9 +944,9 @@
         <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
 
-      <div class="customerService" @click="handleCustomer">
+      <!-- <div class="customerService" @click="handleCustomer">
         <img :src="customerService" alt="">
-      </div>
+      </div> -->
 
       <van-popup v-model="vityFlag" >
       <div class="vity-title">请输入短信验证码</div>

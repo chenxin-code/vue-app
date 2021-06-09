@@ -101,9 +101,9 @@
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
 
-    <div class="customerService" @click="handleCustomer">
+    <!-- <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
-    </div>
+    </div> -->
   </div>
 </template>
 
