@@ -100,7 +100,7 @@
             });
           }else{
 
-            this.payResult == "success" ? path = `/order/3?time=${Date.now()}` : path = `/order/2?time=${Date.now()}`;
+            this.payResult == "success" ? path = `/order/3?backIndex=${true}&time=${Date.now()}` : path = `/order/2?backIndex=${true}time=${Date.now()}`;
             
             this.$router.push({
               path: path,

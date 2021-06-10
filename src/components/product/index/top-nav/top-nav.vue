@@ -58,7 +58,7 @@
         >
           {{ myData.title }}
         </div>
-          <!-- v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3" 修复app配置专题页有返回，小程序无返回 -->
+        <!-- v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3" 修复app配置专题页有返回，小程序无返回 -->
         <div
           class="img-btn-pading space-margin"
           :class="{
@@ -115,6 +115,10 @@
           </div>
         </div>
         <div class="other-full" v-if="myData.middelControl != 'search'"></div>
+
+        <!-- <span class="customer_service" @click="handleCustomer" v-if="isCommon">
+          <img src="static/images/card-provincial/customer_service.png" />
+        </span> -->
 
         <span
           class="home-shoppingCart"
@@ -241,7 +245,11 @@
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
           }"
-          v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3"
+          v-if="
+            myData.isShowBack &&
+            $store.state.webtype != 2 &&
+            $store.state.webtype != 3
+          "
           @click="
             hotEvent('backNav');
             $market.backNav();
@@ -491,12 +499,12 @@ export default {
       },
       set() {},
     },
-    shoppingCartCount:{
+    shoppingCartCount: {
       get() {
-        return this.$store.state.mall2.cartNum
+        return this.$store.state.mall2.cartNum;
       },
       set() {},
-    }
+    },
   },
   mixins: [hee],
   data() {
@@ -539,14 +547,31 @@ export default {
     this._getCartCount();
     console.log(
       "-------------this.$store.state.webtype--------------",
-      this.$store.state.webtype
+      this.$store.state.webtype,
+      this.$store.state.userInfo.phone,
+      this.$store.state.userInfo.userId
     );
-   
   },
   activated() {
     this._getCartCount();
   },
   methods: {
+    // 唤起客服
+    // handleCustomer: function() {
+    //   ysf('config', {
+    //     uid: this.$store.state.userInfo.userId,
+    //     name: this.$store.state.userInfo.nickName,
+    //     email:'',
+    //     mobile: this.$store.state.userInfo.phone,
+    //     success: function(){     // 成功回调
+    //       // ysf('open');
+    //       window.location.href = ysf('url');
+    //     },
+    //     error: function(){       // 错误回调
+    //       // handle error
+    //     }
+    //   })
+    // },
     //微信扫一扫
     // scanCode() {
     //   // bridgefunc.scanCode();
@@ -822,6 +847,18 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+.customer_service {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
 
 .home-shoppingCart {
   display: inline-block;

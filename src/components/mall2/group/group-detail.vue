@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-top @backEvent="$router.go(-1)" :bgImg="bg"></nav-top>
+    <nav-top @backEvent="backEvent" :bgImg="bg"></nav-top>
     <nav-content class="group-detail-container" v-if="loaded">
       <div class="group-detail">
         <div class="info">
@@ -145,6 +145,10 @@
       <img src="static/image/microShop/jiantou@2x.png" alt="" />
       <p>请点击右上角进行分享</p>
     </van-popup>
+
+    <!-- <div class="customerService" @click="handleCustomer">
+      <img :src="customerService" alt="">
+    </div> -->
   </div>
 </template>
 
@@ -161,6 +165,7 @@ export default {
   name: "",
   data() {
     return {
+      customerService:require('../../../../static/images/service.png'),
       orderId: "", // id
       mktGroupBuyId: "", // 分享id
       groupDetail: "", // 详情
@@ -234,6 +239,33 @@ export default {
     }
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        data: this.$store.state.userLable,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
+    backEvent(){
+      if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
+        if(window.history.length === 1){
+          this.$router.replace('/common')
+        } else {
+          this.$router.go(-1);
+        }
+      } else {
+        this.$router.go(-1);
+      }
+    },
     getOrderInfo(){
       this.$http.post('/app/json/home/getVueAppTempData',{tempKey:this.wxOrderInfoKey}).then(res=>{
         if(res.data.status==0){
@@ -599,6 +631,19 @@ export default {
 <style lang="stylus" scoped rel="stylesheet/stylus">
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    right: 0;
+    bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
+  }
+
 
 .group-detail-container {
   .group-detail {

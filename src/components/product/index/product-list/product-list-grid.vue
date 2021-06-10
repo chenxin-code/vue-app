@@ -5,7 +5,7 @@
         <div class="layout-grid good-list" :style="getSideMargin()">
           <div class="goods" :class="{'no-stock': (item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1', 'row-three-pro': moduleData.rowThreeProduct == true}" v-for="(item, index) in moduleData.rows" @click="enterNav(item);">
             <div class="goods-picture">
-              <img class="full-img" :src="item.phMainUrl || 'static/images/defaultImg_w.png'">
+              <img class="full-img" :src="item.phMainUrl?item.phMainUrl+'?x-oss-process=image/format,jpg':'static/images/defaultImg_w.png'">
               <div class="corner-mark" v-if="item.cornerMark>0">
                 <img :src="item | counerMarkUrl">
               </div>

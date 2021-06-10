@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    userLable:{},//传给客服用户标识
     commonPage:0,
     isPreview:false,//是否是后管配置页面预览
     ythUserInfo:{},

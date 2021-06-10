@@ -200,6 +200,7 @@ const dataMergeInterceptor = {
         let d = data.data
         this.valueData['UserSummary'] = d
         this.responseAllData()
+        this.getUserTable(d.userInfo.phone)
       } else {
         if (!this.valueData['UserSummary']) {
           Toast('请求用户数据失败请稍后尝试！')
@@ -215,6 +216,23 @@ const dataMergeInterceptor = {
       } else {
         this.responseAllData()
       }
+    })
+  },
+  //获取用户标签
+  getUserTable:function(phone){
+    Axios.post('/app/json/customer_service/findHeadInfoByList',{
+      userId:phone,
+      keyType:2,
+    }).then(res=>{
+      let data = JSON.parse(res.data.data);
+      let arr = [];
+      data.longTable.forEach(e=>{
+        if(e.labelName != '证件号码' && e.labelName != '证件类型'){
+          arr.push({label:e.labelName, value:e.labelValue?e.labelValue:'无'})
+        }
+      })
+      Store.state.userLable = JSON.stringify(arr);
+      console.log('Store.state.userLable',Store.state.userLable)
     })
   },
   /**

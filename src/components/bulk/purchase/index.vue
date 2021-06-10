@@ -93,6 +93,7 @@ export default {
           console.log("res-------------------", JSON.stringify(res));
         });
     }
+    this.communityId = "2252994639227258048";
   },
   mounted() {
     this.$nextTick(() => {

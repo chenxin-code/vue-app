@@ -69,6 +69,9 @@
       <div class="goods_item_detail_info_title">商品详情</div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
+    <!-- <div class="customerService" @click="handleCustomer">
+      <img :src="customerService" alt="">
+    </div> -->
   </div>
 </template>
 
@@ -84,6 +87,7 @@ export default {
     return {
       time: 1614071248931,
       resouce: {},
+      customerService:require('../../../../static/images/service.png'),
     };
   },
   created() {
@@ -91,6 +95,22 @@ export default {
     console.log([this.resouce.groupbuySkuPicurl])
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        data: this.$store.state.userLable,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
     getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;
       // let startT = this.$util.getDateFromString(
@@ -144,12 +164,25 @@ export default {
 }
 
 .goods_detail {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: #F6F6F6;
   overflow-y: auto;
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    right: 0;
+    bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
+  }
 
   .goods_swiper {
     position: relative;

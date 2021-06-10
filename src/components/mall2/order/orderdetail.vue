@@ -944,6 +944,10 @@
         <div class="adapter-iphoneX" v-if="isX"></div>
       </div>
 
+      <!-- <div class="customerService" @click="handleCustomer">
+        <img :src="customerService" alt="">
+      </div> -->
+
       <van-popup v-model="vityFlag" >
       <div class="vity-title">请输入短信验证码</div>
 <!--        <div class="vity-con">-->
@@ -1004,6 +1008,7 @@ export default {
   },
   data() {
     return {
+      customerService:require('../../../../static/images/service.png'),
       keynum:'',
       code:'',
       vityFlag:false,
@@ -1173,6 +1178,22 @@ export default {
     },
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        data: this.$store.state.userLable,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
     //获取短信验证码
     getMsgCode:function(imgVerifyCode,uuid){
       this.vityFlag=true
@@ -2074,6 +2095,19 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    right: 0;
+    bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
+  }
+
 // 心愿单相关样式
 .wish-list-info {
   padding 10px;

@@ -548,6 +548,12 @@
         </transition>
         <p class="text">收藏</p>
       </div>
+      <!-- <div class="btn full" @click="handleCustomer">
+        <i class="iconfont service btn-icon theme_font_gray">
+          <img src="static/images/card-provincial/customer_service_black.png" alt="">
+        </i>
+        <p class="text">客服</p>
+      </div> -->
       <div class="btn theme_standard_bg theme_font_white" @click="addToCart"
            v-if="stockNum != 0 && canSale == true && detailData.status != '0' && groupId == ''">
         <p class="title">加入购物车</p>
@@ -930,6 +936,22 @@
       }
     },
     methods: {
+      // 唤起客服
+      handleCustomer: function() {
+        ysf('config', {
+          uid: this.$store.state.userInfo.userId,
+          name: this.$store.state.userInfo.nickName,
+          email:'',
+          mobile: this.$store.state.userInfo.phone,
+          data: this.$store.state.userLable,
+          success: function(){     // 成功回调
+            ysf('open');
+          },
+          error: function(){       // 错误回调
+            // handle error
+          }
+        })
+      },
       getCountdownTime: function () {
         let nowT = this.$store.state.severTime.currentTime
         let startT = this.$util.getDateFromString(this.groupData.startDate)
@@ -2542,6 +2564,13 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
   @import "~@/common/stylus/variable.styl"
+
+.service{
+  img{
+    width:26px;
+    height:26px;
+  }
+}
   .detail {
     position relative;
     width 100%

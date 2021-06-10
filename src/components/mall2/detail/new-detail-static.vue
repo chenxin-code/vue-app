@@ -187,7 +187,7 @@
                             class="swiper-img-div"
                             @click="showBigImageEvent"
                           >
-                            <img :src="pic" />
+                            <img :src="pic+'?x-oss-process=image/format,jpg'" />
                           </div>
                         </swiper-slide>
                       </swiper>
@@ -1295,6 +1295,12 @@
           </transition>
           <p class="text">收藏</p>
         </div>
+        <!-- <div class="btn full" @click="handleCustomer">
+          <i class="iconfont service btn-icon theme_font_gray">
+            <img src="static/images/card-provincial/customer_service_black.png" alt="">
+          </i>
+          <p class="text">客服</p>
+        </div> -->
         <div
           class="btn full"
           @click="songliEvent"
@@ -1858,6 +1864,22 @@ export default {
     },
   },
   methods: {
+    // 唤起客服
+    handleCustomer: function() {
+      ysf('config', {
+        uid: this.$store.state.userInfo.userId,
+        name: this.$store.state.userInfo.nickName,
+        email:'',
+        mobile: this.$store.state.userInfo.phone,
+        data: this.$store.state.userLable,
+        success: function(){     // 成功回调
+          ysf('open');
+        },
+        error: function(){       // 错误回调
+          // handle error
+        }
+      })
+    },
     getJdSilmilarSku: function () {
       return;
       if (this.lastRequestId == this.detailData.id) {
@@ -4023,6 +4045,13 @@ export default {
   width: 100%;
   height: 34px;
   background-color: #fff;
+}
+
+.service{
+  img{
+    width:26px;
+    height:26px;
+  }
 }
 
 .detail {

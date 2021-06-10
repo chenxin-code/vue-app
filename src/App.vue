@@ -147,6 +147,10 @@ export default {
     if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
       this.getYthUserInfo()
     }
+    // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
+    //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
+    //   this.getUserTable(res.data.data.userInfo.phone)
+    // })
   },
   computed: {
     appBackHomeImg() {
@@ -226,6 +230,23 @@ export default {
     // }
   },
   methods: {
+
+    // getUserTable(phone){
+    //   this.$http.post('/app/json/customer_service/findHeadInfoByList',{
+    //     userId:phone,
+    //     keyType:2,
+    //   }).then(res=>{
+    //     let data = JSON.parse(res.data.data);
+    //     let arr = [];
+    //     data.longTable.forEach(e=>{
+    //       if(e.labelName != '证件号码' && e.labelName != '证件类型'){
+    //         arr.push({label:e.labelName, value:e.labelValue?e.labelValue:'无'})
+    //       }
+    //     })
+    //     console.log('this.$store.state.userLable',arr)
+    //     this.$store.state.userLable = JSON.stringify(arr);
+    //   })
+    // },
     
     //获取一体化信息
     getYthUserInfo(){
