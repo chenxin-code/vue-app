@@ -78,6 +78,7 @@ export default {
           })
           .then((res) => {
             let _result = res.result;
+            console.log("appLocalstorage_result", _result);
             if (
               !_result ||
               _result == "" ||
@@ -85,14 +86,17 @@ export default {
               _result == undefined
             ) {
               console.log("appLocalstorage_result", _result);
-
               return;
             }
             if (_result == "1") {
               this.$router.replace({
                 path: "/common",
               });
-            } else {
+            } else if (_result == "0") {
+              appNav.navigatorBack({ url: "0" }).then((res) => {
+                console.log(res);
+              });
+            } else if (_result == "2") {
               appNav.navigatorBack({ url: "0" }).then((res) => {
                 console.log(res);
               });
