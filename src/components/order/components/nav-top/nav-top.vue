@@ -36,6 +36,7 @@ export default {
         { text: "发票查询", className: "invoice" },
       ],
       moreIcon: require("../../img/more.png"),
+      backIndex: false,
     };
   },
   created() {
@@ -49,50 +50,63 @@ export default {
     } else {
       this.adapterTop = "0.426667rem";
     }
+    if (this.$route.query.backIndex) {
+      this.backIndex = true;
+    }
   },
   methods: {
     onSelect(action) {
-      action.className == "history" && this.navToMicroapp("com.times.microapp.AppcPrepay","/bill/index",false)
-      action.className == "invoice" && this.navToMicroapp("com.times.microapp.AppcInvoice","/",true)
+      action.className == "history" &&
+        this.navToMicroapp(
+          "com.times.microapp.AppcPrepay",
+          "/bill/index",
+          false
+        );
+      action.className == "invoice" &&
+        this.navToMicroapp("com.times.microapp.AppcInvoice", "/", true);
     },
     goBack: function () {
-      appLocalstorage
-        .get({
-          key: "LLBIsHomeView",
-          isPublic: true,
-        })
-        .then((res) => {
-          let _result = res.result;
-          if (
-            !_result ||
-            _result == "" ||
-            _result == "null" ||
-            _result == undefined
-          ) {
-            console.log('appLocalstorage_result',_result)
-            this.$router.replace({
-              path: "/common",
-            });
-            return;
-          }
-          if (_result == "1") {
-            this.$router.replace({
-              path: "/common",
-            });
-          } else {
-            appNav.navigatorBack({ url: "0" }).then((res) => {
-              console.log(res);
-            });
-          }
+      if (this.backIndex) {
+        this.$router.replace({
+          path: "/common",
         });
+      } else {
+        appLocalstorage
+          .get({
+            key: "LLBIsHomeView",
+            isPublic: true,
+          })
+          .then((res) => {
+            let _result = res.result;
+            if (
+              !_result ||
+              _result == "" ||
+              _result == "null" ||
+              _result == undefined
+            ) {
+              console.log("appLocalstorage_result", _result);
+
+              return;
+            }
+            if (_result == "1") {
+              this.$router.replace({
+                path: "/common",
+              });
+            } else {
+              appNav.navigatorBack({ url: "0" }).then((res) => {
+                console.log(res);
+              });
+            }
+          });
+      }
     },
-    navToMicroapp(microappUri,microappPath,isHideNavbar) {
+    navToMicroapp(microappUri, microappPath, isHideNavbar) {
       //跳转微应用
       navToMicroApplication.openTargetRouter({
         type: "microapp",
         uri: microappUri, // 微应用包名
         path: microappPath, // 微应用具体路由
-        hideNavbar:isHideNavbar,
+        hideNavbar: isHideNavbar,
       });
 
       // 发票
