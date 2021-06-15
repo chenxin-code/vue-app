@@ -1802,7 +1802,9 @@ export default {
           if (data.status == 0) {
             this.$Toast('申请成功');
             this.$store.state.mall2.order.backIndex = this.orderIndex;
-            this.backEvent()
+            window.setTimeout(()=>{
+              this.backEvent()
+            },500)
           } else {
             this.$Toast(data.info);
           }
