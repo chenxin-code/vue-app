@@ -1045,6 +1045,7 @@ export default {
       errorInfo: '',
       showKeyboard: true,
       isX:false,
+      time:null,
     }
   },
   mounted(){
@@ -1802,7 +1803,7 @@ export default {
           if (data.status == 0) {
             this.$Toast('申请成功');
             this.$store.state.mall2.order.backIndex = this.orderIndex;
-            window.setTimeout(()=>{
+            this.time = window.setTimeout(()=>{
               this.backEvent()
             },500)
           } else {
@@ -2083,6 +2084,10 @@ export default {
     next()
   },
   beforeDestroy() {
+    if(this.time){
+      window.clearInterval(this.time)
+      this.time = null
+    }
     if (this.myTimer) {
       window.clearInterval(this.myTimer)
       this.myTimer = null
