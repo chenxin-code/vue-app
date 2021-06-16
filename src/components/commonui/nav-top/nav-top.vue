@@ -88,7 +88,7 @@
         top 0px
         left 0px;
         bottom 0px;
-        width 50px;
+        width 75px;
         z-index 10;
         //background url("../static/image/mall/nav-back.png")
       }

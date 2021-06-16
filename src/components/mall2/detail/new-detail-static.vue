@@ -19,12 +19,12 @@
       >
         <div
           class="nav-back-btn"
-          style="left: 4px; top: 5px; width: 34px; height: 34px; padding: 5px"
+          style="left: 4px; top: 5px; width: 51px; height: 34px; padding: 5px"
           @click="backEvent"
           v-if="$store.state.webtype != 2"
         >
           <img
-            style="display: block; width: 100%; height: 100%"
+            style="display: block; width: 24px; height: 24px"
             src="static/image/mall2/back.png"
           />
         </div>
