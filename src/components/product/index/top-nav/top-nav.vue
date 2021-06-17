@@ -951,7 +951,7 @@ export default {
 
       .img-btn-pading {
         position: relative;
-        padding: 6px;
+        padding: 12px;
 
         img {
           display: block;

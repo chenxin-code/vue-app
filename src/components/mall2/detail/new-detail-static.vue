@@ -1628,6 +1628,7 @@ import staticDataRequest from "@/utils/staticData/staticDataRequest.js";
 import CouponAndActivity from "./base/couponAndActivity";
 import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
+import appNav from "@zkty-team/x-engine-module-nav";
 
 export default {
   name: "detail",
@@ -1646,6 +1647,7 @@ export default {
   data() {
     let that = this;
     return {
+      backApp:false,
       couFlag: [],
       id: "",
       skuId: "",
@@ -2462,6 +2464,12 @@ export default {
       // if (this.$store.state.webtype == 3 && window.history.length === 1) {
       //   wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
       // }
+      if(this.backApp){
+        appNav.navigatorBack({ url: "0" }).then((res) => {
+          console.log(res);
+        });
+        return;
+      }
       if (this.proView == 2) {
         this.proView = 1;
         return;
@@ -3944,6 +3952,7 @@ export default {
     },
   },
   created() {
+    this.backApp = this.$route.query.backApp ? this.$route.query.backApp : false;
     this.lastPath = this.$route.query.lastPath
       ? this.$route.query.lastPath
       : "";

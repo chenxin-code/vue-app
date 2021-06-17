@@ -9,13 +9,14 @@
     </van-tabs> -->
     <van-sticky>
       <div class="tab">
-        <van-icon
-          name="arrow-left"
-          class="arrow_left"
-          color="#000000"
-          size="0.471467rem"
-          @click="goBack()"
-        />
+        <div class="tab_back" @click="goBack()">
+            <van-icon
+            name="arrow-left"
+            class="arrow_left"
+            color="#000000"
+            size="0.471467rem"
+            />
+        </div>
         <div class="tab_item_box">
           <div
             class="tab_item"
@@ -339,6 +340,10 @@ export default {
     justify-content: flex-start;
     align-items: center;
     background-color: #fff;
+
+    .tab_back{
+      width: 42px;
+    }
 
     .tab_item_box {
       width: 100%;

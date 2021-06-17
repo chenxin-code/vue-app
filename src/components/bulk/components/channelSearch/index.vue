@@ -43,7 +43,7 @@ export default {
   padding-top: 14px;
 }
 .back-icon-area {
-  width: 42px;
+  width: 63px;
   height: 28px;
   border-radius: 0px 23px 23px 0px;
   position: relative;
