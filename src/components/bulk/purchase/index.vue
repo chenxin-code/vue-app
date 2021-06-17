@@ -170,7 +170,7 @@ export default {
   flex-direction: column;
 }
 .header-x {
-  height: 56px;
+  // height: 56px;
   background: #b52232;
 }
 .section-x {
