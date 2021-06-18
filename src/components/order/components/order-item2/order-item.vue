@@ -5,7 +5,7 @@
  * @LastEditTime: 2021-06-18 14:06:42
 -->
 <template>
-  <div>
+  <div class="content-list">
     <div class="title">
         <van-checkbox
           v-model="isChecked"
@@ -130,88 +130,91 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-.title {
-  display: flex;
-  margin-bottom: 16px;
-  // padding: 17px 0;
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('../../img/icon1.png') no-repeat;
-    background-size: 20px 20px;
-    position: relative;
-    margin-left: 10px;
-    &.finish {
-      margin-left: 0;
-    }
-    &.house {
-      background: url('../../img/icon7.png') no-repeat;
+.content-list {
+  padding: 0 14px 0 14px;
+  .title {
+    display: flex;
+    margin-bottom: 16px;
+    // padding: 17px 0;
+    .icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url('../../img/icon1.png') no-repeat;
       background-size: 20px 20px;
+      position: relative;
+      margin-left: 10px;
+      &.finish {
+        margin-left: 0;
+      }
+      &.house {
+        background: url('../../img/icon7.png') no-repeat;
+        background-size: 20px 20px;
+      }
+      &.car {
+        background: url('../../img/icon8.png') no-repeat;
+        background-size: 20px 20px;
+      }
     }
-    &.car {
-      background: url('../../img/icon8.png') no-repeat;
-      background-size: 20px 20px;
+    .title-name {
+      font-size: 16px;
+      font-family: Helvetica;
+      color: #121212;
+      line-height: 19px;
+      margin-left: 10px;
     }
   }
-  .title-name {
-    font-size: 16px;
-    font-family: Helvetica;
-    color: #121212;
-    line-height: 19px;
-    margin-left: 10px;
-  }
-}
-.hd {
-  display: flex;
-  .icon {
-    width: 58px;
-    height: 58px;
-    background: url('../../img/property.png') no-repeat;
-    background-size: 100% 100%;
-    flex: none;
-    &.house {
+  .hd {
+    display: flex;
+    .icon {
+      width: 58px;
+      height: 58px;
       background: url('../../img/property.png') no-repeat;
       background-size: 100% 100%;
-    }
-    &.car {
-      background: url('../../img/car.png') no-repeat;
-      background-size: 100% 100%;
+      flex: none;
+      &.house {
+        background: url('../../img/property.png') no-repeat;
+        background-size: 100% 100%;
+      }
+      &.car {
+        background: url('../../img/car.png') no-repeat;
+        background-size: 100% 100%;
+      }
     }
   }
-}
 
-.detail {
-  margin-left: 12px;
-  width: 100%;
-  .project {
-    font-size: 16px;
-    font-family: PingFangSC-Semibold, PingFang SC;
-    font-weight: 600;
-    color: #121212;
-    line-height: 22px;
-  }
-  .total {
-    margin-top: 5px;
-    span {
+  .detail {
+    margin-left: 12px;
+    width: 100%;
+    .project {
+      font-size: 16px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      color: #121212;
+      line-height: 22px;
+    }
+    .total {
+      margin-top: 5px;
+      span {
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #8D8D8D;
+        line-height: 18px;
+      }
+    }
+    .check {
       font-size: 13px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #8D8D8D;
+      color: #E8374A;
       line-height: 18px;
-    }
-  }
-  .check {
-    font-size: 13px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #E8374A;
-    line-height: 18px;
-    width: 65px;
-    right: 16px;
-    position: absolute;
-    .arrow-icon {
-      top: 1px;
+      width: 65px;
+      right: 16px;
+      position: absolute;
+      .arrow-icon {
+        top: 1px;
+      }
     }
   }
 }
