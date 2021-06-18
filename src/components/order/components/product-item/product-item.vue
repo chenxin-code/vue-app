@@ -149,6 +149,8 @@ export default {
             return require("../../img/bag.png");
           case 10:
             return require("../../img/deposit.png");
+          case 14:
+            return require("../../img/service.png");
 
           default:
             return require("../../img/property.png");

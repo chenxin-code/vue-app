@@ -579,7 +579,7 @@ export default {
         pageNo: ""
       };
 
-      let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      let url = "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList";
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
@@ -598,7 +598,7 @@ export default {
 
     //结算支付时，请求物业系统接口校验账单是否能够支付
     checkedPayStatus() {
-      let url = "/pcs/bill-center/check-bill";
+      let url = "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill";
       let paramsObj = {
         list: ["111", "222"] //测试
       };
