@@ -47,9 +47,14 @@
 <script>
 import _ from "lodash";
 export default {
-  props: ["results", "pageName", "isDisAll", "isDis", "item"],
+  props: [
+    "pageName",
+    "billId",
+    "item"
+  ],
   data() {
     return {
+      billType: 1,
       isShowPropertyBill: false,
       isDisabled: false,
       isDisabledItem: false,
@@ -131,6 +136,8 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 .content-list {
+  margin-bottom: 0.746667rem;
+  border-bottom: 0.026667rem dashed #ccc;
   padding: 0 14px 0 14px;
   .title {
     display: flex;

@@ -13,7 +13,6 @@
         <property-bill
           pageName="waitPay"
           ref="propertyOrder"
-          @checkEvent="checkEvent"
           :isDisAll="isDisAll"
           :isDis="isDis"
           :results="billResults"
@@ -23,6 +22,10 @@
           :key="index"
           class="scroll">
             <OrderItem2
+              @checkEvent="checkEvent"
+              ref="order"
+              pageName="waitPay"
+              :billId="item.billId"
               :item="item">
             </OrderItem2>
           </div>
@@ -575,22 +578,10 @@ export default {
     checkEvent(data) {
       // 从全选checkbox进来
       if (data.checkAll) {
-        let refs = []
-        if(this.$refs.order){
-          refs = this.$refs.order.filter((item) => {
-            // 找出全选的类型并保存起来
-            return item.billType == data.billType;
-          });
-        }
-        let refsPropertyOrder = []
-        if(this.$refs.propertyOrder){
-          refsPropertyOrder = this.$refs.propertyOrder.filter((item) => {
-            // 找出全选的类型并保存起来
-            return item.billType == data.billType;
-          });
-        }
-        refs.concat(refsPropertyOrder)
-        console.log(refs);
+        let refs = this.$refs.order.filter((item) => {
+          // 找出全选的类型并保存起来
+          return item.billType == data.billType;
+        });
         let checkData = this.currentOrderList.filter((item) => {
           return (item.billType == data.billType);
         });
@@ -613,23 +604,11 @@ export default {
         return;
       }
       // 选中或取消当个checkbox
-      let refs = []
-      if(this.$refs.order){
-        console.log(this.$refs.order)
-        refs = this.$refs.order.filter((item) => {
-          // 找到不能选的checkbox
-          return item.billType != data.billType;
-        });
-      }
-      let refsPropertyOrder = []
-      if(this.$refs.propertyOrder){
-        // refsPropertyOrder = this.$refs.propertyOrder.filter((item) => {
-        //   // 找到不能选的checkbox
-        //   return item.billType != data.billType;
-        // });
-      }
-      refs.concat(refsPropertyOrder)
-      console.log(refs);
+      let refs = this.$refs.order.filter((item) => {
+        // 找到不能选的checkbox
+        console.log(item.billType)
+        return item.billType != data.billType;
+      });
       refs.forEach((item) => {
         // 并设置不能选择属性
         if (item.billType != data.billType) {
@@ -669,7 +648,7 @@ export default {
       // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
       let num = mergeList.reduce((total,e)=>{
-        return BigNumber(total).plus(e.totalPrice)
+        return BigNumber(total).plus(e.totalPrice ? e.totalPrice : e.totalPayableAmount)
       },0)
       this.mergeAmount = num;
     },
