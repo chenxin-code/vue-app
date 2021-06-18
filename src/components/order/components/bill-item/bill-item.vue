@@ -10,8 +10,8 @@
     <div class="property-box" :class="{ isactive: isOpen }">
       <van-checkbox
         v-show="pageName === 'waitPay'"
-        v-model="checkAllBill"
-        :disabled="isDisAll"
+        v-model="isChecked"
+        :disabled="isDisabled"
         @click="checkEvent($event)"
         checked-color="#f80f16"
         icon-size="18px"
@@ -35,6 +35,8 @@ export default {
   props: ["results", "pageName", "isDisAll", "isDis", "checkData"],
   data() {
     return {
+      isChecked: false,
+      isDisabled: false,
       isShowPropertyBill: false,
       isDisabled: false,
       isDisabledItem: false,
@@ -80,13 +82,10 @@ export default {
   },
   methods: {
     checkEvent(event) {
-      debugger
-      let arr = Array.from(this.checkData);
-      if (arr.length == 0) return;
       let data = {};
-      data.billType = arr[0].billType;
+      data.billType = 1;
       data.checked = this.isChecked;
-      data.checkAll = true;
+      data.checkAllBillType1 = true;
       this.$emit("checkEvent", data);
     },
     onClickBill(type) {

@@ -16,7 +16,8 @@
           :isDisAll="isDisAll"
           :isDis="isDis"
           :results="billResults"
-          v-show="isLoadPropertyBill">
+          v-show="isLoadPropertyBill"
+          @checkEvent="checkEvent">
           <div
             v-for="(item, index) in billResults"
             :key="index"
@@ -411,7 +412,7 @@ export default {
     },
     checkEvent(data) {
       // 从全选checkbox进来
-      if (data.checkAll) {
+      if (data.checkAll || data.checkAllBillType1) {
         let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
           return item.billType == data.billType;
@@ -438,6 +439,9 @@ export default {
             this.checkData.add(checkData[index]);
             item.isChecked = true;
           });
+          if (refs[0] && refs[0].billType == 1) {
+            this.$refs.propertyOrder.isChecked = true;
+          }
         } else {
           // 全部取消
           this.checkData.clear(); //清空checkData
@@ -459,26 +463,39 @@ export default {
           item.isDisabled = true;
         }
       });
+      if (data.billType != 1) {
+        this.$refs.propertyOrder.isDisabled = true;
+      }
 
       let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
 
       if (data.checked) {
         // 选中
         this.checkData.add(data);
-        this.$refs.payDiv.billType = data.billType || data.billId;
+        this.$refs.payDiv.billType = data.billType;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
           this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
+          if (data.billType == 1) {
+            this.$refs.propertyOrder.isChecked = true;
+          }
         } else {
           this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
+          if (data.billType == 1) {
+            this.$refs.propertyOrder.isChecked = false;
+          }
         }
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if ((item.billId == data.billId) || (item.spaceId == data.spaceId)) {
+          if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = false;
+              this.$refs.propertyOrder.isDisabled = false;
+            }
           }
         });
         if (this.checkData.size == 0) {
@@ -486,6 +503,7 @@ export default {
           this.$refs.order.forEach((item) => {
             item.isDisabled = false; // 所有checkbox变成可选
           });
+          this.$refs.propertyOrder.isDisabled = false;
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }

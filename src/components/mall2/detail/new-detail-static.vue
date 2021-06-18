@@ -2831,7 +2831,6 @@ export default {
       );
     },
     getRegionText: function () {
-      debugger
       let str = "";
       let address = {
         provinceId: "",

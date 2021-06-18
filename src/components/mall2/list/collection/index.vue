@@ -379,7 +379,6 @@
         })
       },
       cancelCollection(item) {
-        debugger
         console.log(item)
         this.$http.post('/app/json/user_pro_collect/addOrCancelUserProCollect', {
           collectType: 3,
