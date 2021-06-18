@@ -598,7 +598,8 @@ export default {
 
     //结算支付时，请求物业系统接口校验账单是否能够支付
     checkedPayStatus() {
-      let url = "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill";
+      let url ="";
+      this.$store.state.environment == 'development' ? url ="http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill":'https://times-pms.linli580.com/pcs/bill-center/check-bill';
       let paramsObj = {
         list: ["111", "222"] //测试
       };
