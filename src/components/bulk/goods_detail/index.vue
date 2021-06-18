@@ -194,6 +194,8 @@ export default {
       top: 14px;
       left: 11.5px;
       z-index: 2;
+      width: 50px;
+      height: 44px;
     }
   }
 

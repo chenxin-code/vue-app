@@ -1,8 +1,9 @@
 <template>
   <div class="component-channelsearch">
-    <div class="back-icon-area" @click="$router.go(-1)">
+    <div class="back-icon-area">
       <img src="./back-icon.png" alt="" />
     </div>
+    <div class="transparent_back_botton" @click="$router.go(-1)"></div>
     <!-- <div class="channel-name">频道名字</div> -->
     <div class="channel-searchio">
       <van-search
@@ -37,11 +38,22 @@ export default {
   }
 .component-channelsearch {
   width: 100%;
-  height: 50px;
+  height: 56px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding-top: 14px;
+  /* padding-top: 14px; */
+  position: relative;
 }
+
+.transparent_back_botton{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+}
+
 .back-icon-area {
   width: 42px;
   height: 28px;
