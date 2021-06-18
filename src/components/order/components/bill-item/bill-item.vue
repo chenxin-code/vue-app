@@ -12,6 +12,7 @@
         v-show="pageName === 'waitPay'"
         v-model="checkAllBill"
         :disabled="isDisAll"
+        @click="checkEvent($event)"
         checked-color="#f80f16"
         icon-size="18px"
       ></van-checkbox>
@@ -23,49 +24,6 @@
     <transition name="isd"
       ><div class="list" v-show="isOpen">
         <div class="content">
-          <!-- <div
-            class="content-list"
-            v-for="(item, index) in results"
-            :key="index"
-          >
-            <div class="title">
-              <van-checkbox
-                v-show="pageName === 'waitPay'"
-                v-model="item.checked"
-                :disabled="isDis"
-                checked-color="#f80f16"
-                icon-size="18px"
-                @change="checkEvent($event, item)"
-              ></van-checkbox>
-              <i
-                class="icon"
-                :class="{
-                  house: item.type == '1' ? true : false,
-                  car: item.type == '2' ? true : false,
-                  finish: pageName !== 'waitPay'
-                }"
-              ></i>
-              <span class="title-name">物业缴费</span>
-            </div>
-            <div class="hd">
-              <div class="icon" :class="titleIcon(item.type)"></div>
-              <div class="detail">
-                <div class="project">{{ item.spaceFullName }}</div>
-                <div class="total">
-                  <span>待缴纳总金额</span>
-                  <span
-                    >￥{{
-                      pageName === "waitPay" ? item.totalPayableAmount : "0.00"
-                    }}</span
-                  >
-                </div>
-                <div class="check" @click="checkDetail(pageName, item)">
-                  查账单 <van-icon name="arrow" class="arrow-icon" />
-                </div>
-              </div>
-            </div>
-            <div class="inline"></div>
-          </div> -->
           <slot></slot>
         </div></div
     ></transition>
@@ -74,7 +32,7 @@
 <script>
 import _ from "lodash";
 export default {
-  props: ["results", "pageName", "isDisAll", "isDis"],
+  props: ["results", "pageName", "isDisAll", "isDis", "checkData"],
   data() {
     return {
       isShowPropertyBill: false,
@@ -121,9 +79,14 @@ export default {
     }
   },
   methods: {
-    checkEvent(event, data) {
-      data.checked = event;
-      data.billType = 1; //物业缴费账单的billType为1
+    checkEvent(event) {
+      debugger
+      let arr = Array.from(this.checkData);
+      if (arr.length == 0) return;
+      let data = {};
+      data.billType = arr[0].billType;
+      data.checked = this.isChecked;
+      data.checkAll = true;
       this.$emit("checkEvent", data);
     },
     onClickBill(type) {

@@ -301,6 +301,11 @@ export default {
           let data = res.data.data;
           if (res.data.code === 200) {
             this.billResults = data.notpay;
+            this.billResults.forEach(item => {
+              item.totalPrice = item.totalPayableAmount
+              item.billId = item.spaceId
+              item.billType = 1
+            })
           } else {
             this.billResults = [];
           }
@@ -413,10 +418,10 @@ export default {
         });
         console.log(refs)
         let currentOrderList = []
-        if(refs[0] && refs[0].billType == 11) {
-          currentOrderList = this.currentOrderList
-        } else {
+        if(refs[0] && refs[0].billType == 1) {
           currentOrderList = this.billResults
+        } else {
+          currentOrderList = this.currentOrderList
         }
         console.log(this.currentOrderList, '++++')
         console.log(this.billResults, '----')
@@ -471,21 +476,10 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if(item.billId) {
-            if (item.billId == data.billId) {
-              this.checkData.delete(item); // 删除数据中取消选中的数据
-              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-            }
-          } else {
-            if (item.spaceId == data.spaceId) {
-              this.checkData.delete(item); // 删除数据中取消选中的数据
-              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-            }
+          if ((item.billId == data.billId) || (item.spaceId == data.spaceId)) {
+            this.checkData.delete(item); // 删除数据中取消选中的数据
+            this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
           }
-          // if ((item.billId == data.billId) || (item.spaceId == data.spaceId)) {
-          //   this.checkData.delete(item); // 删除数据中取消选中的数据
-          //   this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-          // }
         });
         if (this.checkData.size == 0) {
           // 个数为0，全部取消选中
@@ -499,7 +493,7 @@ export default {
       let mergeList = Array.from(this.checkData);
       console.log(mergeList)
       let num = mergeList.reduce((total,e)=>{
-        return BigNumber(total).plus(e.totalPrice ? e.totalPrice : e.totalPayableAmount)
+        return BigNumber(total).plus(e.totalPrice)
       },0)
       this.mergeAmount = num;
     },
@@ -529,6 +523,11 @@ export default {
           let data = res.data.data;
           if (res.data.code === 200) {
             this.billResults = data.notpay;
+            this.billResults.forEach(item => {
+              item.totalPrice = item.totalPayableAmount
+              item.billId = item.spaceId
+              item.billType = 1
+            })
           } else {
             this.billResults = [];
           }
