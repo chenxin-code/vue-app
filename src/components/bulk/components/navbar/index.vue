@@ -33,10 +33,20 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style  lang="stylus" scoped type="text/stylus">
+
 .navbar {
   width: 100%;
+  height: 44px;
 }
+
+/deep/.van-nav-bar__left {
+  padding-right: 41px;
+}
+/deep/.van-nav-bar__content{
+  height: 44px;
+}
+
 .van-nav-bar__title .van-ellipsis {
   font-size: 16px;
   font-weight: 500;

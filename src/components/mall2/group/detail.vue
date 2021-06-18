@@ -6,7 +6,7 @@
          :style="{height: ($store.state.barHeight+$market.getNavHeight(true))+ 'px'}">
       <div class="navcontent"
            :style="{top: $store.state.barHeight+ 'px','height': $market.getNavHeight(true)+'px','line-height': $market.getNavHeight(true)+'px'}">
-        <div class="nav-back-btn" style="left: 10px;top: 5px;width: 51px; height: 34px; padding: 5px;"
+        <div class="nav-back-btn" style="left: 10px;top: 5px;width: 75px; height: 44px; padding: 5px;"
              @click="backEvent" v-if="$store.state.webtype != 2">
           <img style="display: block;width: 24px;height: 24px;" src="static/image/mall2/back.png"/>
         </div>

@@ -19,7 +19,7 @@
       >
         <div
           class="nav-back-btn"
-          style="left: 4px; top: 5px; width: 51px; height: 34px; padding: 5px"
+          style="left: 4px; top: 5px; width: 75px; height: 44px; padding: 5px"
           @click="backEvent"
           v-if="$store.state.webtype != 2"
         >
