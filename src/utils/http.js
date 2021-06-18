@@ -36,7 +36,7 @@ let Axios = axios.create({
   headers
 })
 
-let bulkApi = ['/app/json/app_community_group_order/queryByShoppingOrderId','/app/json/home/getVueAppTempData','/app/json/home/vueAppTempData','/app/json/app_member_center/findIntegralRecordList','/app/json/login/getYthUser','/app/json/app_pay/getWalletBalance','/app/json/app_shopping_order/findOrderFormList','/app/json/logistics_system/queryLogisticsInfo','/app/json/app_group_buying_share_home/generateShareLink','/app/json/groupbuying_activity_app/list','/app/json/group_buying_head_info/findHeadInfoByList','/app/json/group_buying_head_info/findSelfInfo','/app/json/group_buying_my_earnings/getMyEarnings','/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId','/app/json/group_buying_order/findGroupBuyingActivityOrderByList','/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
@@ -55,141 +55,162 @@ Axios.post = function (url, data, config) {
 Axios.interceptors.request.use(
   async config => {
 
-      if (bulkApi.indexOf(config.url) !== -1) {
-        config.headers.token = store.state.login.token;
-        config.headers.Authorization = store.state.login.token;
+    if (bulkApi.indexOf(config.url) !== -1) {
+      config.headers.token = store.state.login.token;
+      config.headers.Authorization = store.state.login.token;
+    }
+
+    //中台接口要带一体化token
+    if (config.url.indexOf("/times/charge-bff") == 0) {
+      if (process.env.NODE_ENV === "development") {
+        config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
+      } else {
+        config.headers.Authorization = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken")
       }
+      console.log(`一体化token`, config.headers.Authorization);
+    }
+    /*物业系统请求处理逻辑
+    Content-Type方式是: application/json;charset=UTF-8
+    */
+    if (config.url.indexOf("/pcs/bill-center/check-bill") == 0) {
+      config.headers["Content-Type"] = "application/json;charset=UTF-8"
+    }
 
-      var time = new Date().getTime();
-      let urlStr = config.url;
+    var time = new Date().getTime();
+    let urlStr = config.url;
 
-      // 是否加密判断
-      let useEncode = false
-      let cToken = ''
-      let appId = ''
-      if (store.state.globalConfig.encyptDisable != 1) {
-        for (let i = 0; i < sunboxEncodeArray.length; i++) {
-          if (urlStr == sunboxEncodeArray[i]) {
-            useEncode = true
-            break;
-          }
+    // 是否加密判断
+    let useEncode = false
+    let cToken = ''
+    let appId = ''
+    if (store.state.globalConfig.encyptDisable != 1) {
+      for (let i = 0; i < sunboxEncodeArray.length; i++) {
+        if (urlStr == sunboxEncodeArray[i]) {
+          useEncode = true
+          break;
         }
       }
+    }
 
-      if (urlStr.indexOf("?") == -1) {
-        config.url = config.url + '?ver=' + time;
-      } else {
-        config.url = config.url + '&ver=' + time;
-      }
+    if (urlStr.indexOf("?") == -1) {
+      config.url = config.url + '?ver=' + time;
+    } else {
+      config.url = config.url + '&ver=' + time;
+    }
 
-      if (store.state.globalConfig.isEnableAntiCheat == 1 && antiSpam.includes(urlStr)) {
-        cToken = await Watchman.getToken().catch(err => console.log(err))
-      }
-      if (config.method == 'post') {
-        let postData = config.data;
-        return new Promise((resolve, reject) => {
-          bridgefunc.getCommonArgs((cmArgs) => {
+    if (store.state.globalConfig.isEnableAntiCheat == 1 && antiSpam.includes(urlStr)) {
+      cToken = await Watchman.getToken().catch(err => console.log(err))
+    }
 
-            let nArgs = JSON.parse(JSON.stringify(cmArgs))
-            if (util.isJsonObj(postData)) {
+    if (config.method == 'post') {
+      let postData = config.data;
+      return new Promise((resolve, reject) => {
+        bridgefunc.getCommonArgs((cmArgs) => {
 
-              nArgs.longitude = store.state.currentLocation.posx
-              nArgs.latitude = store.state.currentLocation.posy;
-              if (cToken) nArgs.cToken = cToken
-              if (store.state.login.token && store.state.login.token != '') {
-                nArgs.token = store.state.login.token
-              } else {
-                // if (store.state.deployType == 2) {
-                // 不得已而为之，跳过所有的没有传token的情况，这样兼容了，没有token的情况
-                nArgs.hbsy_web_tag_type = 1
-                // // 油惠通 某些接口需要跳过拦截器，token相关问题。增加下面参数。 尽量不要单独处理
-                // if (yhtApiSkip.indexOf(config.url) > -1) {
-                //   nArgs.hbsy_web_tag_type = 1
-                // }
-                // }
+          let nArgs = JSON.parse(JSON.stringify(cmArgs))
+          if (util.isJsonObj(postData)) {
+
+            nArgs.longitude = store.state.currentLocation.posx
+            nArgs.latitude = store.state.currentLocation.posy;
+            if (cToken) nArgs.cToken = cToken
+            if (store.state.login.token && store.state.login.token != '') {
+              nArgs.token = store.state.login.token
+            } else {
+              // if (store.state.deployType == 2) {
+              // 不得已而为之，跳过所有的没有传token的情况，这样兼容了，没有token的情况
+              nArgs.hbsy_web_tag_type = 1
+              // // 油惠通 某些接口需要跳过拦截器，token相关问题。增加下面参数。 尽量不要单独处理
+              // if (yhtApiSkip.indexOf(config.url) > -1) {
+              //   nArgs.hbsy_web_tag_type = 1
+              // }
+              // }
+            }
+
+            if (store.state.webtype == '8') {
+              if (store.state.etpAppId) {
+                nArgs.channel = store.state.etpAppId
               }
+            }
 
-              if (store.state.webtype == '8') {
-                if (store.state.etpAppId) {
-                  nArgs.channel = store.state.etpAppId
+            for (let key in postData) {
+              nArgs[key] = postData[key]
+            }
+            let dic = {}
+            if (nArgs.isJsonData) {
+              dic = nArgs
+              let d = Qs.stringify(dic, {
+                arrayFormat: 'repeat'
+              });
+              config.data = d;
+              resolve(config);
+            } else {
+              if (useEncode == true) {
+                let encryptData = JSON.stringify(nArgs)
+                if (store.state.globalConfig.encyptBase64Enable == '1') { // 是否启用base64加密
+                  encryptData = Base64.encode(JSON.stringify(nArgs))
                 }
-              }
-
-              for (let key in postData) {
-                nArgs[key] = postData[key]
-              }
-
-              let dic = {}
-              if (nArgs.isJsonData) {
-                dic = nArgs
-                let d = Qs.stringify(dic, {
-                  arrayFormat: 'repeat'
-                });
-                config.data = d;
-                resolve(config);
-              } else {
-                if (useEncode == true) {
-                  let encryptData = JSON.stringify(nArgs)
-                  if (store.state.globalConfig.encyptBase64Enable == '1') { // 是否启用base64加密
-                    encryptData = Base64.encode(JSON.stringify(nArgs))
-                  }
-                  bridgefunc.sunboxencode(encryptData, 1, (result, resultStr) => {
-                    if (result == 1) {
-                      nArgs.ciphertext = resultStr
-                      dic = {
-                        jsonData: JSON.stringify(nArgs),
-                        hbsy_web_tag_type: nArgs.hbsy_web_tag_type
-                      }
-                      let d = Qs.stringify(dic, {
-                        arrayFormat: 'repeat'
-                      });
-                      config.data = d;
-                      resolve(config);
-                    } else {
-                      dic = {
-                        jsonData: JSON.stringify(nArgs),
-                        hbsy_web_tag_type: nArgs.hbsy_web_tag_type
-                      }
-                      let d = Qs.stringify(dic, {
-                        arrayFormat: 'repeat'
-                      });
-                      config.data = d;
-                      resolve(config);
+                bridgefunc.sunboxencode(encryptData, 1, (result, resultStr) => {
+                  if (result == 1) {
+                    nArgs.ciphertext = resultStr
+                    dic = {
+                      jsonData: JSON.stringify(nArgs),
+                      hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                     }
-                  })
+                    let d = Qs.stringify(dic, {
+                      arrayFormat: 'repeat'
+                    });
+                    config.data = d;
+                    resolve(config);
+                  } else {
+                    dic = {
+                      jsonData: JSON.stringify(nArgs),
+                      hbsy_web_tag_type: nArgs.hbsy_web_tag_type
+                    }
+                    let d = Qs.stringify(dic, {
+                      arrayFormat: 'repeat'
+                    });
+                    config.data = d;
+                    resolve(config);
+                  }
+                })
+              } else {
+                if (config.url.indexOf("/pcs/bill-center/check-bill") == 0) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
+                  dic = config.data
                 } else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
-                  let d = Qs.stringify(dic, {
-                    arrayFormat: 'repeat'
-                  });
-                  config.data = d;
-                  resolve(config);
                 }
-              }
-            } else {
-              resolve(config);
-            }
-          });
-        });
-      } else if (config.method == 'get') {
-        let params = {}
-        if (cToken) {
-          params.cToken = cToken
-        }
-        if (store.state.globalConfig.channel) {
-          params.channel = store.state.globalConfig.channel
-        }
-        config.params = Object.assign(config.params || {}, params)
 
-        return config;
+                let d = Qs.stringify(dic, {
+                  arrayFormat: 'repeat'
+                });
+                config.data = d;
+                resolve(config);
+              }
+            }
+          } else {
+            resolve(config);
+          }
+        });
+      });
+    } else if (config.method == 'get') {
+      let params = {}
+      if (cToken) {
+        params.cToken = cToken
       }
-    },
-    error => {
-      return Promise.reject(error);
+      if (store.state.globalConfig.channel) {
+        params.channel = store.state.globalConfig.channel
+      }
+      config.params = Object.assign(config.params || {}, params)
+
+      return config;
     }
+  },
+  error => {
+    return Promise.reject(error);
+  }
 );
 
 // 返回状态判断(添加响应拦截器)
