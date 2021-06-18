@@ -18,16 +18,17 @@
           :results="billResults"
           v-show="isLoadPropertyBill">
           <div
-          v-for="(item, index) in billResults"
-          :key="index"
-          class="scroll">
-            <OrderItem2
-              @checkEvent="checkEvent"
-              ref="order"
-              pageName="waitPay"
-              :billId="item.billId"
-              :item="item">
-            </OrderItem2>
+            v-for="(item, index) in billResults"
+            :key="index"
+            class="scroll">
+              <OrderItem2
+                @checkEvent="checkEvent"
+                ref="order"
+                pageName="waitPay"
+                :billId="item.billId"
+                :billType="item.billType"
+                :item="item">
+              </OrderItem2>
           </div>
         </property-bill>
         <div
@@ -403,178 +404,6 @@ export default {
         };
       });
     },
-    // checkEvent(data) {
-    //   // 从全选checkbox进来
-    //   // console.log(aaa)
-    //   console.log(`waitpay checkEvent all data`, data);
-    //   if (data.checkAll) {
-    //     console.log(`this.currentOrderList`, this.currentOrderList);
-    //     //if...else sm add
-    //     if (this.$refs.order) {
-    //       let refs = this.$refs.order.filter(item => {
-    //         // 找出全选的类型并保存起来
-    //         return item.billType == data.billType;
-    //       });
-    //       let checkData = this.currentOrderList.filter(item => {
-    //         return item.billType == data.billType;
-    //       });
-
-    //       if (data.checked) {
-    //         //全部选中
-    //         this.checkData.clear(); //清空checkData
-    //         console.log(`支付全选refs`, refs);
-    //         refs.forEach((item, index) => {
-    //           //保存选中数据并设置每个checkbox选中状态
-    //           this.checkData.add(checkData[index]);
-    //           item.isChecked = true;
-    //         });
-    //         //sm add
-    //         if (data.billType == 1) {
-    //           //全部选中物业缴费账单
-    //           let propertyOrders = this.$refs.propertyOrder.$children;
-    //           console.log(`propertyOrders`, this.$refs.propertyOrder);
-    //           console.log(
-    //             `propertyOrders notpay`,
-    //             this.$refs.propertyOrder.data.notpay
-    //           );
-    //           propertyOrders.forEach((item, index) => {
-    //             // this.checkData.add(this.$refs.propertyOrder.data.notpay[index]);
-    //             // if (item.billType != data.billType) {
-    //             item.checked = true;
-    //             // }
-    //           });
-    //           this.checkData = this.$refs.propertyOrder.data.notpay;
-    //         }
-    //         //sm add
-    //       } else {
-    //         // 全部取消
-    //         this.checkData.clear(); //清空checkData
-    //         refs.forEach(item => {
-    //           item.isChecked = false; // 设置每个checkbox为没选中状态
-    //         });
-    //         //sm add
-    //         if (this.$refs.propertyOrder) {
-    //           let propertyOrders = this.$refs.propertyOrder.$children;
-    //           propertyOrders.forEach(item => {
-    //             console.log(`propertyOrders1`, propertyOrders);
-    //             item.checked = false; // 设置每个checkbox为没选中状态
-    //           });
-    //         }
-    //         //sm add
-
-    //         this.$refs.payDiv.isShow = false; //隐藏全选按钮
-    //       }
-    //     } else {
-    //       if (this.$refs.propertyOrder) {
-    //         if (data.checked) {
-    //           //全部选中物业缴费账单
-    //           let propertyOrders = this.$refs.propertyOrder.$children;
-    //           console.log(`propertyOrders`, propertyOrders);
-    //           propertyOrders.forEach((item, index) => {
-    //             // this.checkData.add(propertyOrders[index]);
-    //             if (item.billType != data.billType) {
-    //               item.checked = true;
-    //             }
-    //           });
-    //         } else {
-    //           // 全部取消物业缴费账单
-    //           this.checkData.clear(); //清空checkData
-    //           let propertyOrders = this.$refs.propertyOrder.$children;
-    //           propertyOrders.forEach(item => {
-    //             console.log(`propertyOrders1`, propertyOrders);
-    //             item.checked = false; // 设置每个checkbox为没选中状态
-    //           });
-    //           this.$refs.payDiv.isShow = false; //隐藏全选按钮
-    //         }
-    //       }
-    //     }
-    //     return;
-    //   }
-    //   //if..else判断 sm add
-    //   if (this.$refs.order) {
-    //     // 选中或取消当个checkbox
-    //     let refs = this.$refs.order.filter(item => {
-    //       // 找到不能选的checkbox
-    //       return item.billType != data.billType;
-    //     });
-    //     refs.forEach(item => {
-    //       // 并设置不能选择属性
-    //       if (item.billType != data.billType) {
-    //         item.isDisabled = true;
-    //       }
-    //     });
-    //     //sm add
-    //     //物业缴费账单checkbox disabled 处理逻辑
-    //     if (data.checked && data.billType != 1) {
-    //       this.isDisAll = true;
-    //       this.isDis = true;
-    //     } else {
-    //       this.isDisAll = false;
-    //       this.isDis = false;
-    //     }
-    //     //sm add
-    //     if (data.billType == 1) {
-    //       var checkedTotal = this.$refs.propertyOrder.$children.length - 1;
-    //     } else {
-    //       var checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
-    //     }
-    //   } else {
-    //     //sm add
-    //     var checkedTotal = this.$refs.propertyOrder.$children.length - 1;
-    //   }
-
-    //   if (data.checked) {
-    //     // 选中
-    //     this.checkData.add(data);
-    //     this.$refs.payDiv.billType = data.billType;
-    //     this.$refs.payDiv.isShow = true; // 显示全选按钮
-
-    //     if (this.checkData.size == checkedTotal) {
-    //       //checkData数量跟可选checkbox数量相等 =>全选
-    //       this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
-    //     } else {
-    //       this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
-    //     }
-    //   } else {
-    //     console.log(`商品全选取消`, this.checkData);
-    //     console.log(`商品全选取消data`, data);
-    //     // 取消
-    //     this.checkData.forEach((item, index) => {
-    //       console.log(`item.billId`, item.billId);
-    //       console.log(`data.billId`, data.billId);
-    //       if (item.billId == data.billId) {
-    //         console.log(`商品全选取消item`, item.billId);
-    //         this.checkData.delete(item); // 删除数据中取消选中的数据
-    //         this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-    //       }
-    //     });
-
-    //     if (this.checkData.size == 0) {
-    //       // if sm add
-    //       if (this.$refs.order) {
-    //         // 个数为0，全部取消选中
-    //         this.$refs.order.forEach(item => {
-    //           item.isDisabled = false; // 所有checkbox变成可选
-    //         });
-    //       }
-
-    //       this.$refs.payDiv.isShow = false; //隐藏全选
-    //     }
-    //   }
-
-    //   let mergeList = Array.from(this.checkData);
-    //   let num = mergeList.reduce((total, e) => {
-    //     if (e.billType === 1) {
-    //       //物业缴费账单
-    //       return BigNumber(total).plus(e.totalPayableAmount);
-    //     } else {
-    //       //其他账单
-    //       return BigNumber(total).plus(e.totalPrice);
-    //     }
-    //   }, 0);
-    //   this.mergeAmount = num;
-    //   this.total = mergeList.length;
-    // },
     checkEvent(data) {
       // 从全选checkbox进来
       if (data.checkAll) {
@@ -582,9 +411,20 @@ export default {
           // 找出全选的类型并保存起来
           return item.billType == data.billType;
         });
-        let checkData = this.currentOrderList.filter((item) => {
+        console.log(refs)
+        let currentOrderList = []
+        if(refs[0] && refs[0].billType == 11) {
+          currentOrderList = this.currentOrderList
+        } else {
+          currentOrderList = this.billResults
+        }
+        console.log(this.currentOrderList, '++++')
+        console.log(this.billResults, '----')
+        let checkData = currentOrderList.filter((item) => {
           return (item.billType == data.billType);
-        });
+        })
+        console.log(checkData + '----------')
+        
         if (data.checked) {
           //全部选中
           this.checkData.clear(); //清空checkData
@@ -606,7 +446,6 @@ export default {
       // 选中或取消当个checkbox
       let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
-        console.log(item.billType)
         return item.billType != data.billType;
       });
       refs.forEach((item) => {
@@ -621,7 +460,7 @@ export default {
       if (data.checked) {
         // 选中
         this.checkData.add(data);
-        this.$refs.payDiv.billType = data.billType;
+        this.$refs.payDiv.billType = data.billType || data.billId;
         this.$refs.payDiv.isShow = true; // 显示全选按钮
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
@@ -632,10 +471,21 @@ export default {
       } else {
         // 取消
         this.checkData.forEach((item) => {
-          if (item.billId == data.billId) {
-            this.checkData.delete(item); // 删除数据中取消选中的数据
-            this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+          if(item.billId) {
+            if (item.billId == data.billId) {
+              this.checkData.delete(item); // 删除数据中取消选中的数据
+              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+            }
+          } else {
+            if (item.spaceId == data.spaceId) {
+              this.checkData.delete(item); // 删除数据中取消选中的数据
+              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+            }
           }
+          // if ((item.billId == data.billId) || (item.spaceId == data.spaceId)) {
+          //   this.checkData.delete(item); // 删除数据中取消选中的数据
+          //   this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+          // }
         });
         if (this.checkData.size == 0) {
           // 个数为0，全部取消选中
@@ -647,6 +497,7 @@ export default {
       }
       // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
+      console.log(mergeList)
       let num = mergeList.reduce((total,e)=>{
         return BigNumber(total).plus(e.totalPrice ? e.totalPrice : e.totalPayableAmount)
       },0)

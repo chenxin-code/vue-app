@@ -50,11 +50,11 @@ export default {
   props: [
     "pageName",
     "billId",
-    "item"
+    "item",
+    "billType"
   ],
   data() {
     return {
-      billType: 1,
       isShowPropertyBill: false,
       isDisabled: false,
       isDisabledItem: false,
@@ -101,7 +101,7 @@ export default {
   methods: {
     checkEvent(event, data) {
       data.checked = event;
-      data.billType = 1; //物业缴费账单的billType为1
+      data.billType = data.billType; //物业缴费账单的billType为1
       this.$emit("checkEvent", data);
     },
     onClickBill(type) {
