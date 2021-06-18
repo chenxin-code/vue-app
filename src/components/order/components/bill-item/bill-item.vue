@@ -23,7 +23,7 @@
     <transition name="isd"
       ><div class="list" v-show="isOpen">
         <div class="content">
-          <div
+          <!-- <div
             class="content-list"
             v-for="(item, index) in results"
             :key="index"
@@ -65,7 +65,8 @@
               </div>
             </div>
             <div class="inline"></div>
-          </div>
+          </div> -->
+          <slot></slot>
         </div></div
     ></transition>
   </div>
