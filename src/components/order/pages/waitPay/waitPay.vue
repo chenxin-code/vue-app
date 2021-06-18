@@ -449,6 +449,7 @@ export default {
             item.isChecked = false; // 设置每个checkbox为没选中状态
           });
           this.$refs.payDiv.isShow = false; //隐藏全选按钮
+          this.$refs.propertyOrder.isChecked = false;
         }
         return;
       }
