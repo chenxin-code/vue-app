@@ -628,45 +628,26 @@ export default {
       this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
         if (res.data.code == "0000") {
           console.log(`校验账单是否能够支付`, res);
-          this.enginePay(
-            payInfo,
-            billNo,
-            `/app-vue/app/index.html#/order/2?time=${Date.now()}`
-          );
-          // let arr = [
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 1 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          //   { status: 0 },
-          // ];
-          // for (let index = 0; index < arr.length; index++) {
-          //   if (arr[index].status == 1) {
-          //     check = false;
-          //     return;
-          //   } else {
-          //     check = true;
-          //   }
-          // }
-          // console.log(check);
-          // if (check) {
-          //   this.enginePay(
-          //     payInfo,
-          //     billNo,
-          //     `/app-vue/app/index.html#/order/2?time=${Date.now()}`
-          //   );
-          // } else {
-          //   this.showDialog = true;
-          //   this.tipsText =
-          //     "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
-          // }
+          for (let index = 0; res.data.data < arr.length; index++) {
+            if (res.data.data[index].status == 1) {
+              check = false;
+              break;
+            } else {
+              check = true;
+            }
+          }
+          console.log(check);
+          if (check) {
+            this.enginePay(
+              payInfo,
+              billNo,
+              `/app-vue/app/index.html#/order/2?time=${Date.now()}`
+            );
+          } else {
+            this.showDialog = true;
+            this.tipsText =
+              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+          }
         }
       });
     },
