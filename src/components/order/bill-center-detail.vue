@@ -2,16 +2,12 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 16:30:18
+ * @LastEditTime: 2021-06-19 16:42:09
 -->
 <template>
   <div class="bill-center-detail">
     <van-sticky :offset-top="offsetTop">
-      <nav-top
-        leftTitle="账单详情"
-        @backEvent="backEvent"
-        @navToPage="navToPage"
-      ></nav-top>
+      <nav-top leftTitle="账单详情" @backEvent="backEvent"></nav-top>
     </van-sticky>
     <div class="content">
       <div class="total">
@@ -106,6 +102,7 @@ import moment from "moment";
 export default {
   data() {
     return {
+      offsetTop: "0rem",
       query: this.$route.query || {}
     };
   },
@@ -131,6 +128,11 @@ export default {
     //   titleColor: "#121212",
     //   titleSize: 24
     // });
+  },
+  methods: {
+    backEvent() {
+      this.$router.go(-1);
+    }
   }
 };
 </script>
@@ -140,10 +142,13 @@ export default {
   height: 100%;
   background-color: #F9F9F9 !important;
   overflow: auto;
-  .nav-top {
-    .title-div {
-      text-align: left;
+  /deep/.nav-top {
+    .navcontent{
+      .title-div {
+        text-align: left !important;
+      }
     }
+
   }
   .content {
     padding: 16px 11px 34px 11px;
