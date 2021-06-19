@@ -634,7 +634,7 @@ export default {
       this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
         if (res.data.code == "0000") {
           console.log(`校验账单是否能够支付`, res);
-          for (let index = 0; res.data.data < arr.length; index++) {
+          for (let index = 0; res.data.data < res.data.data.length; index++) {
             if (res.data.data[index].status == 1) {
               check = false;
               break;
