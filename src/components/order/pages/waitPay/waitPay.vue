@@ -69,11 +69,12 @@
       :mergeAmount="mergeAmount"
       :total="Array.from(this.checkData).length"
     ></pay-div>
-    <van-dialog v-model="showDialog">
+    <!-- <van-dialog v-model="showDialog">
       <div class="tipsText">
         {{ tipsText }}
       </div>
-    </van-dialog>
+    </!-->
+    -->
   </div>
 </template>
 
@@ -85,6 +86,7 @@ import OrderItem2 from "@/components/order/components/order-item2/order-item";
 import Empty from "../../components/empty/empty.vue";
 import { BigNumber } from "bignumber.js";
 import yjzdbill from "@zkty-team/x-engine-module-yjzdbill";
+import { Dialog } from "vant";
 export default {
   name: "waitPay",
 
@@ -113,7 +115,7 @@ export default {
       isDis: false,
       isLoad: true,
       billResults: [], //物业缴费数据
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14", //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,14" //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
     };
   },
   components: {
@@ -121,23 +123,23 @@ export default {
     payDiv,
     OrderItem,
     OrderItem2,
-    Empty,
+    Empty
   },
   created() {
-    // this.initPropert();
+    this.initPropert();
     // this.onLoad();
   },
   activated() {
-    this.initPropert();
+    // this.initPropert();
   },
   watch: {
-    currentOrderList: function (newVal, oldVal) {
+    currentOrderList: function(newVal, oldVal) {
       if (newVal.length !== 0) {
         this.showEmpty = false;
       } else {
         this.showEmpty = true;
       }
-    },
+    }
   },
   methods: {
     //合并支付
@@ -148,7 +150,7 @@ export default {
       console.log("payInfoList", payInfoList);
       let payType = "";
       let projectList = [];
-      payInfoList.forEach((e) => {
+      payInfoList.forEach(e => {
         if (e.billType == 1) {
           payType = "property";
           projectList.push(e.projectId.toString());
@@ -161,21 +163,25 @@ export default {
         let billNo = "";
         let billList = [];
         if (projectList.length > 1) {
-          if (!projectList.every((e) => e === projectList[0])) {
-            this.showDialog = true;
+          if (!projectList.every(e => e === projectList[0])) {
+            // this.showDialog = true;
             this.tipsText =
               "尊敬的邻里邦用户，目前仅支持本楼盘的账单支付，其他楼盘账单需切换楼盘进行缴纳，感谢您的理解。";
+            Dialog.alert({
+              message: this.tipsText,
+              theme: "round-button"
+            });
             return;
           } else {
-            payInfoList.forEach((e) => {
-              e.billNos.forEach((i) => {
+            payInfoList.forEach(e => {
+              e.billNos.forEach(i => {
                 billNo += i + ",";
                 billList.push(i.toString());
               });
             });
           }
         } else {
-          payInfoList[0].billNos.forEach((e) => {
+          payInfoList[0].billNos.forEach(e => {
             billNo += e + ",";
             billList.push(e.toString());
           });
@@ -183,7 +189,7 @@ export default {
         let payInfo = {
           businessCstNo: this.$store.state.userInfo.phone,
           platMerCstNo: payInfoList[0].platMerCstNo,
-          tradeMerCstNo: payInfoList[0].tradeMerCstNo,
+          tradeMerCstNo: payInfoList[0].tradeMerCstNo
         };
         this.checkedPayStatus(billList, payInfo, billNo);
       } else {
@@ -223,13 +229,13 @@ export default {
           : "", //shuimei
         deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
         storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName //正常流程支付也为空 待保留
       };
       localStorage.setItem(
         "currentOrderDetails",
         JSON.stringify(currentOrderDetails)
       );
-      payInfoList.forEach((e) => {
+      payInfoList.forEach(e => {
         billNo += e.payInfo.billNo + ",";
       });
       //vipUnitUserCode type  为空  待保留
@@ -255,7 +261,7 @@ export default {
           tradeMerCstNo: payInfo.tradeMerCstNo,
           billNo: billNo,
           appScheme: "x-engine-c",
-          payType: false,
+          payType: false
         })
       )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
@@ -275,11 +281,11 @@ export default {
         airDefenseNo: this.$store.state.userRoomId,
         // airDefenseNo:
         //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
-        billType: this.reqBillType,
+        billType: this.reqBillType
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
-        .then((res) => {
+        .then(res => {
           // 判断当前页数是否超过总页数或者等于总页数
           let dataPages = 0;
           if (res.data.data.pages == 0) {
@@ -321,7 +327,7 @@ export default {
             this.finished = true; //如果超过总页数就显示没有更多内容了
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
@@ -345,23 +351,23 @@ export default {
         memberId: this.$store.state.userInfo.phone,
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
-        pageTimes: "",
+        pageTimes: ""
       };
 
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "https://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
 
       this.$http
         .get(url, { params: propertyObj })
-        .then((res) => {
+        .then(res => {
           let data = res.data.data;
           if (res.data.code === 200) {
             this.billResults = data.notpay;
-            this.billResults.forEach((item) => {
+            this.billResults.forEach(item => {
               item.totalPrice = item.totalPayableAmount;
               item.billId = item.spaceId;
               item.billType = 1;
@@ -380,11 +386,11 @@ export default {
             airDefenseNo: this.$store.state.userRoomId,
             // airDefenseNo:
             //   "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
-            billType: this.reqBillType,
+            billType: this.reqBillType
           };
           this.$http
             .post("/app/json/app_shopping_order/findOrderFormList", obj)
-            .then((res) => {
+            .then(res => {
               if (res.data.status == 0) {
                 this.orderList = res.data.data.records;
                 this.totalPage = res.data.data.pages; //将总页数赋值上去
@@ -396,13 +402,13 @@ export default {
                 this.refreshing = false; //刷新成功后将状态关掉
               }
             })
-            .catch((res) => {
+            .catch(res => {
               this.$toast("网络繁忙,请稍后再试~");
             });
         });
     },
     initData() {
-      this.currentOrderList = this.orderList.map((item) => {
+      this.currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
           amount: item.totalPrice,
@@ -427,7 +433,7 @@ export default {
             orderType: item.orderStateType,
             tradeNo: item.tradeNo,
             deliverCheckcode: item.deliverCheckcode,
-            isRefund: item.isRefund,
+            isRefund: item.isRefund
           },
           params: {
             deliverType: item.deliverType,
@@ -436,7 +442,7 @@ export default {
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
-            state: item.state,
+            state: item.state
           },
           billDetailObj: {
             businessCstNo: item.loginUserPhone,
@@ -450,9 +456,9 @@ export default {
             tag: "1",
             tabIndex: 2,
             awardActivityList: item.awardActivityList,
-            isRefund: item.isRefund,
+            isRefund: item.isRefund
           },
-          dataList: item.orderFormItemList.map((sub) => {
+          dataList: item.orderFormItemList.map(sub => {
             return {
               billType: item.billType,
               billImg: sub.iconUrl,
@@ -463,16 +469,16 @@ export default {
               storeOuCode: sub.storeOuCode,
               info: sub.info,
               itemTypeName: sub.itemTypeName,
-              snapshotTime: sub.snapshotTime,
+              snapshotTime: sub.snapshotTime
             };
-          }),
+          })
         };
       });
     },
     checkEvent(data) {
       // 从全选checkbox进来
       if (data.checkAll || data.checkAllBillType1) {
-        let refs = this.$refs.order.filter((item) => {
+        let refs = this.$refs.order.filter(item => {
           // 找出全选的类型并保存起来
           return item.billType == data.billType;
         });
@@ -485,7 +491,7 @@ export default {
         }
         console.log(this.currentOrderList, "++++");
         console.log(this.billResults, "----");
-        let checkData = currentOrderList.filter((item) => {
+        let checkData = currentOrderList.filter(item => {
           return item.billType == data.billType;
         });
         console.log(checkData + "----------");
@@ -504,7 +510,7 @@ export default {
         } else {
           // 全部取消
           this.checkData.clear(); //清空checkData
-          refs.forEach((item) => {
+          refs.forEach(item => {
             item.isChecked = false; // 设置每个checkbox为没选中状态
           });
           this.$refs.payDiv.isShow = false; //隐藏全选按钮
@@ -513,11 +519,11 @@ export default {
         return;
       }
       // 选中或取消当个checkbox
-      let refs = this.$refs.order.filter((item) => {
+      let refs = this.$refs.order.filter(item => {
         // 找到不能选的checkbox
         return item.billType != data.billType;
       });
-      refs.forEach((item) => {
+      refs.forEach(item => {
         // 并设置不能选择属性
         if (item.billType != data.billType) {
           item.isDisabled = true;
@@ -548,7 +554,7 @@ export default {
         }
       } else {
         // 取消
-        this.checkData.forEach((item) => {
+        this.checkData.forEach(item => {
           if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
@@ -560,7 +566,7 @@ export default {
         });
         if (this.checkData.size == 0) {
           // 个数为0，全部取消选中
-          this.$refs.order.forEach((item) => {
+          this.$refs.order.forEach(item => {
             item.isDisabled = false; // 所有checkbox变成可选
           });
           this.$refs.propertyOrder.isDisabled = false;
@@ -590,22 +596,22 @@ export default {
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
         pageNo: "",
-        pageTimes: "",
+        pageTimes: ""
       };
 
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "https://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
-        .then((res) => {
+        .then(res => {
           let data = res.data.data;
           if (res.data.code === 200) {
             this.billResults = data.notpay;
-            this.billResults.forEach((item) => {
+            this.billResults.forEach(item => {
               item.totalPrice = item.totalPayableAmount;
               item.billId = item.spaceId;
               item.billType = 1;
@@ -629,9 +635,9 @@ export default {
             "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
         : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
       let paramsObj = {
-        list: list,
+        list: list
       };
-      this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
+      this.$http.post(url, JSON.stringify(paramsObj)).then(res => {
         if (res.data.code == "0000") {
           console.log(`校验账单是否能够支付`, res.data.data);
           let arr = res.data.data;
@@ -650,30 +656,54 @@ export default {
             //   billNo,
             //   `/app-vue/app/index.html#/order/2?time=${Date.now()}`
             // );
+            console.log(`提交账单中心参数`, {
+              businessCstNo: payInfo.businessCstNo,
+              platMerCstNo: payInfo.platMerCstNo,
+              tradeMerCstNo: payInfo.tradeMerCstNo,
+              billNo: billNo,
+              appScheme: "x-engine",
+              payType: false
+            });
+
             yjzdbill.YJBillPayment({
-              businessCstNo:payInfo.businessCstNo,
+              businessCstNo: payInfo.businessCstNo,
               platMerCstNo: payInfo.platMerCstNo,
               tradeMerCstNo: payInfo.tradeMerCstNo,
               billNo: billNo,
               appScheme: "x-engine",
               payType: false,
-              __ret__: (res) => {
+              __ret__: res => {
                 console.log(
                   "---------------开始支付提交记录---------------------"
                 );
                 console.log(res);
-                this.$router.push({ path: "/order/2" }); //支付完成返回到待支付页面
-              },
+                if (res.billRetStatus === "-1") {
+                  //支付失败
+                  // this.showDialog = true;
+                  this.tipsText = res.billRetStatusMessage;
+                  Dialog.alert({
+                    message: this.tipsText,
+                    theme: "round-button"
+                  });
+                } else {
+                  //支付成功
+                  this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                }
+              }
             });
           } else {
-            this.showDialog = true;
+            // this.showDialog = true;
             this.tipsText =
               "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+            Dialog.alert({
+              message: this.tipsText,
+              theme: "round-button"
+            });
           }
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
