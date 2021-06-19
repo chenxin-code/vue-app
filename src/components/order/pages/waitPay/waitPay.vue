@@ -271,9 +271,9 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: page, pageSize: 30 },
-        // airDefenseNo: this.$store.state.userRoomId,
-        airDefenseNo:
-          "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
+        airDefenseNo: this.$store.state.userRoomId,
+        // airDefenseNo:
+        //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
         billType: this.reqBillType,
       };
       this.$http
@@ -334,9 +334,9 @@ export default {
       this.loading = true; //将下拉刷新状态改为true开始刷新
       this.currentPage = 1;
 
-      // let airDefenseNoStr = this.$store.state.userRoomId;
-      let airDefenseNoStr =
-        "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -370,9 +370,9 @@ export default {
             orderTypeList: ["200015", "200502"],
             state: "1",
             page: { index: page, pageSize: 30 },
-            // airDefenseNo:this.$store.state.userRoomId,
-            airDefenseNo:
-              "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
+            airDefenseNo:this.$store.state.userRoomId,
+            // airDefenseNo:
+            //   "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
             billType: this.reqBillType,
           };
           this.$http
@@ -573,9 +573,9 @@ export default {
     initPropert() {
       this.loading = true;
 
-      // let airDefenseNoStr = this.$store.state.userRoomId;
-      let airDefenseNoStr =
-        "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
