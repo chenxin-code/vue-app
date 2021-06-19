@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <van-sticky :offset-top="offsetTop">
-      <!-- <nav-top></nav-top> -->
+      <nav-top></nav-top>
       <van-tabs
         v-model="active"
         swipeable
@@ -69,23 +69,23 @@ export default {
     }
   },
   activated() {
-    nav.setNavLeftBtn({
-      title: "消息中心",
-      titleColor: "#000000",
-      titleSize: 24,
-      titleFontName: "PingFangSC-Medium",
-      titleBig: "500"
-    });
-    nav.setNavRightBtn({
-      title: "历史缴费记录",
-      titleColor: "#000000",
-      titleSize: 18,
-      icon: "",
-      iconSize: ["20", "20"],
-      __event__: () => {
-        this.navToHistory();
-      }
-    });
+    // nav.setNavLeftBtn({
+    //   title: "我的订单",
+    //   titleColor: "#000000",
+    //   titleSize: 24,
+    //   titleFontName: "PingFangSC-Medium",
+    //   titleBig: "500"
+    // });
+    // nav.setNavRightBtn({
+    //   title: "历史缴费记录",
+    //   titleColor: "#000000",
+    //   titleSize: 18,
+    //   icon: "",
+    //   iconSize: ["20", "20"],
+    //   __event__: () => {
+    //     this.navToHistory();
+    //   }
+    // });
   },
   methods: {
     //跳到历史欠缴记录页面

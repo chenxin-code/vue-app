@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 14:47:11
+ * @LastEditTime: 2021-06-19 15:33:51
 -->
 <template>
   <div class="bill-detail">
@@ -289,7 +289,7 @@ export default {
                * managementFeeCycle: 1为月度账单，3为季度账单
                */
               this.isMonthPay =
-                this.results.managementFeeCycle == "1" ? true : false;
+                this.results.managementFeeCycle == "3" ? true : false;
             }
 
             // 如果是待支付账单，不做分页，只加载一次。所以要将finished 设置成 true

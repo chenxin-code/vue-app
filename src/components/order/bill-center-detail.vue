@@ -2,17 +2,17 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-06-18 16:02:18
+ * @LastEditTime: 2021-06-19 16:30:18
 -->
 <template>
   <div class="bill-center-detail">
-    <!-- <van-sticky :offset-top="offsetTop">
+    <van-sticky :offset-top="offsetTop">
       <nav-top
         leftTitle="账单详情"
         @backEvent="backEvent"
         @navToPage="navToPage"
       ></nav-top>
-    </van-sticky> -->
+    </van-sticky>
     <div class="content">
       <div class="total">
         <div class="name">物业缴费</div>
@@ -100,7 +100,7 @@
   </div>
 </template>
 <script>
-import appNav from "@zkty-team/x-engine-module-nav";
+// import appNav from "@zkty-team/x-engine-module-nav";
 import _ from "lodash";
 import moment from "moment";
 export default {
@@ -126,11 +126,11 @@ export default {
     }
   },
   mounted() {
-    appNav.setNavTitle({
-      title: "账单详情",
-      titleColor: "#121212",
-      titleSize: 24
-    });
+    // appNav.setNavTitle({
+    //   title: "账单详情",
+    //   titleColor: "#121212",
+    //   titleSize: 24
+    // });
   }
 };
 </script>
@@ -140,14 +140,14 @@ export default {
   height: 100%;
   background-color: #F9F9F9 !important;
   overflow: auto;
-  // .nav-top {
-  //   .title-div {
-  //     text-align: left;
-  //   }
-  // }
+  .nav-top {
+    .title-div {
+      text-align: left;
+    }
+  }
   .content {
     padding: 16px 11px 34px 11px;
-    // margin-top: 65px;
+    margin-top: 65px;
     .total {
       background-color: #FFFFFF;
       box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
