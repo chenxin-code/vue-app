@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-06-18 00:18:59
+ * @LastEditTime: 2021-06-18 16:02:18
 -->
 <template>
   <div class="bill-center-detail">
@@ -46,10 +46,10 @@
           </div>
         </div>
         <div class="item border">
-          <div class="item-hd">
+          <!-- <div class="item-hd">
             <div class="title">实付金额</div>
             <div class="result">{{ query.realAmount }}</div>
-          </div>
+          </div> -->
           <div class="item-hd">
             <div class="title">收费周期</div>
             <div class="result">

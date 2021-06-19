@@ -2,27 +2,27 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-18 14:06:42
+ * @LastEditTime: 2021-06-19 09:56:23
 -->
 <template>
   <div class="content-list">
     <div class="title">
-        <van-checkbox
-          v-model="isChecked"
-          :disabled="isDisabled"
-          checked-color="#f80f16"
-          icon-size="18px"
-          @change="checkEvent($event, item)"
-        ></van-checkbox>
-        <i
-          class="icon"
-          :class="{
-            house: item.type == '1' ? true : false,
-            car: item.type == '2' ? true : false,
-            finish: pageName !== 'waitPay'
-          }"
-        ></i>
-        <span class="title-name">物业缴费</span>
+      <van-checkbox
+        v-model="isChecked"
+        :disabled="isDisabled"
+        checked-color="#f80f16"
+        icon-size="18px"
+        @change="checkEvent($event, item)"
+      ></van-checkbox>
+      <i
+        class="icon"
+        :class="{
+          house: item.type == '1' ? true : false,
+          car: item.type == '2' ? true : false,
+          finish: pageName !== 'waitPay'
+        }"
+      ></i>
+      <span class="title-name">物业缴费</span>
     </div>
     <div class="hd">
       <div class="icon" :class="titleIcon(item.type)"></div>
@@ -47,12 +47,7 @@
 <script>
 import _ from "lodash";
 export default {
-  props: [
-    "pageName",
-    "billId",
-    "item",
-    "billType"
-  ],
+  props: ["pageName", "billId", "item", "billType"],
   data() {
     return {
       isShowPropertyBill: false,
@@ -137,7 +132,7 @@ export default {
 @import '~@/common/stylus/variable.styl';
 .content-list {
   margin-bottom: 0.746667rem;
-  border-bottom: 0.026667rem dashed #ccc;
+  // border-bottom: 0.026667rem dashed #ccc;
   padding: 0 14px 0 14px;
   .title {
     display: flex;
@@ -233,6 +228,4 @@ export default {
   opacity: 0;
   transform: translateY(-360px);
 }
-
-
 </style>
