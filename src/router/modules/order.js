@@ -2,7 +2,7 @@
  * @Description: 这是***页面
  * @Date: 2021-06-08 13:57:03
  * @Author: shuimei
- * @LastEditTime: 2021-06-12 23:37:23
+ * @LastEditTime: 2021-06-19 01:30:54
  */
 //create by hjc 团购模块
 
@@ -21,7 +21,7 @@ export default [
     name: '账单明细',
     component: () => import('@/components/order/bill-detail'),
     meta: {
-      keepAlive: true
+      keepAlive: false
     },
   },
   {

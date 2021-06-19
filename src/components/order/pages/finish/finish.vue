@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import propertyBill from "@/components/order/components/bill-item/bill-item";
+import propertyBill from "@/components/order/components/bill-item2/bill-item";
 import OrderItem from "../../components/order-item/order-item";
 import Empty from "../../components/empty/empty.vue";
 export default {
@@ -175,7 +175,8 @@ export default {
         memberId: this.$store.state.userInfo.phone,
         status: 90, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
-        pageNo: ""
+        pageNo: "",
+        pageTimes: ""
       };
 
       let url = "/times/charge-bff/order-center/api-c/v1/getList";
@@ -325,7 +326,8 @@ export default {
         memberId: this.$store.state.userInfo.phone,
         status: 90, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
-        pageNo: ""
+        pageNo: "",
+        pageTimes: ""
       };
 
       let url = "/times/charge-bff/order-center/api-c/v1/getList";
