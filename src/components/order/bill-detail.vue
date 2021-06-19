@@ -249,7 +249,13 @@ export default {
         pageTimes: this.pageTimes
       };
 
-      let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      // let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {

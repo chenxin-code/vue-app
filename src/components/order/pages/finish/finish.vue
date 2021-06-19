@@ -101,9 +101,9 @@ export default {
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
         page: { index: page, pageSize: 30 },
-        // airDefenseNo: this.$store.state.userRoomId,
-        airDefenseNo:
-          "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
+        airDefenseNo: this.$store.state.userRoomId,
+        // airDefenseNo:
+        //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
         billType: this.reqBillType
       };
       this.$http
@@ -166,9 +166,9 @@ export default {
       this.currentPage = 1;
 
       this.loading = true;
-      // let airDefenseNoStr = this.$store.state.userRoomId;
-      let airDefenseNoStr =
-        "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
       let propertyObj = {
         airDefenseNo: airDefenseNo,
@@ -179,7 +179,13 @@ export default {
         pageTimes: ""
       };
 
-      let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      // let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
@@ -316,9 +322,9 @@ export default {
     //物业缴费列表接口
     initPropert() {
       this.loading = true;
-      // let airDefenseNoStr = this.$store.state.userRoomId;
-      let airDefenseNoStr =
-        "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -330,7 +336,13 @@ export default {
         pageTimes: ""
       };
 
-      let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      // let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
