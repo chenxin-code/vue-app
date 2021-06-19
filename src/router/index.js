@@ -110,7 +110,7 @@ router.afterEach((to, from) => {
   }, 3000)
 });
 
-router.push = function push(location, onComplete, onAbort) {
+router.push = function push (location, onComplete, onAbort) {
 
   router.addRouterPath(location.path);
 
@@ -120,7 +120,7 @@ router.push = function push(location, onComplete, onAbort) {
   this.history.push(location, onComplete, onAbort);
 };
 
-router.replace = function replace(location, onComplete, onAbort) {
+router.replace = function replace (location, onComplete, onAbort) {
 
   router.removeLastRouterPath();
   router.addRouterPath(location.path);
@@ -130,7 +130,7 @@ router.replace = function replace(location, onComplete, onAbort) {
   this.history.replace(location, onComplete, onAbort);
 };
 
-router.go = function go(n) {
+router.go = function go (n) {
   if (n > 0) {
     // 禁止使用
     return;
@@ -146,7 +146,7 @@ router.go = function go(n) {
   this.history.go(n);
 };
 
-router.back = function back(path) {
+router.back = function back (path) {
 
   router.removeLastRouterPath();
 
@@ -164,7 +164,7 @@ router.back = function back(path) {
   }
 };
 
-router.forward = function forward() {
+router.forward = function forward () {
   // 禁止使用
   return;
   router.customRouterData.transitionName = 'slide_left';
@@ -177,7 +177,7 @@ router.forward = function forward() {
  * 前进：微信上的前进按钮，web前进
  * // 前进这里有个坑，待解决，先忽略
  **/
-router.otherEventTransitionName = function otherEventTransitionName(toPath, fromPath) {
+router.otherEventTransitionName = function otherEventTransitionName (toPath, fromPath) {
   // 没有数据意味着从，其他操作方式得到的路由变化
   if (router.customRouterData.transitionName != '') {
     return;
@@ -241,7 +241,7 @@ router.otherEventTransitionName = function otherEventTransitionName(toPath, from
   }
 };
 
-router.addRouterPath = function addRouterPath(path) {
+router.addRouterPath = function addRouterPath (path) {
   if (path == '/common') {
     router.customRouterData.routerPaths = []
   }
@@ -249,7 +249,7 @@ router.addRouterPath = function addRouterPath(path) {
   sessionStorage.setItem("customRouterData_routerPaths", JSON.stringify(router.customRouterData.routerPaths));
 };
 
-router.removeLastRouterPath = function removeLastRouterPath(n = 1) {
+router.removeLastRouterPath = function removeLastRouterPath (n = 1) {
   if (n > 0) {
     for (let i = 0; i < n; i++) {
       router.customRouterData.routerPaths.pop()
@@ -258,7 +258,7 @@ router.removeLastRouterPath = function removeLastRouterPath(n = 1) {
   }
 };
 
-router.initRouterPaths = function initRouterPaths(toPath) {
+router.initRouterPaths = function initRouterPaths (toPath) {
   // 当存储了 router paths 时候，读取并赋值
   let arrStr = sessionStorage.getItem("customRouterData_routerPaths");
   if (arrStr && arrStr != undefined) {
@@ -450,7 +450,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 结束函数 跳转路由
-  function endFunc(next) {
+  function endFunc (next) {
     if (!wxAuthExcludePage.includes(to.path) && to.query.skipPermissions != '1') {
       userCenter.rootEvents();
     }
@@ -463,7 +463,7 @@ router.beforeEach((to, from, next) => {
     }, 100)
   }
 
-  function deleteShareUserInfo() {
+  function deleteShareUserInfo () {
     if (store.state.webtype == '3') {
       // 小程序分享
       wxmpShare()
@@ -473,7 +473,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  function wxShare() {
+  function wxShare () {
     let query = JSON.parse(JSON.stringify(to.query));
     let path = store.state.globalConfig.wxBaseUrl + Config.shareUrl + to.path;
     if (path.indexOf('?') == -1) {
@@ -508,7 +508,7 @@ router.beforeEach((to, from, next) => {
     });
   }
 
-  function wxmpShare() {
+  function wxmpShare () {
     let query = JSON.parse(JSON.stringify(to.query));
     let path = '';
     if (query.hasOwnProperty('userInfo')) { // 分享链接删除用户信息
@@ -532,7 +532,7 @@ router.beforeEach((to, from, next) => {
     });
   }
 
-  function renameTitle() {
+  function renameTitle () {
     if (store.state.webtype == '3' && to.query.webview != 1) {
       document.title = store.state.globalConfig.wxmnp_title || ''; // 小程序置空
       return
@@ -552,7 +552,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 微信公众号登录
-  function wechatLogin() {
+  function wechatLogin () {
     //获取code的url  再获取到code  再自动登录  没有token  去绑定
     if (!wxAuthExcludePage.includes(to.path) && store.state.webtype == '2' && !store.state.login.token) {
       if (to.query.thirdUserId) {
@@ -576,7 +576,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // 小程序登录
-  function wxMnpLogin() {
+  function wxMnpLogin () {
     if (to.query.hasOwnProperty('debug')) {
       eruda.init()
     }
@@ -599,7 +599,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // token 设置
-  function setTokenProcess() {
+  function setTokenProcess () {
     // 集成登录
     let usertoken = Cookie.get('usertoken');
     // let isQueryUserInfo = true
@@ -644,7 +644,7 @@ router.beforeEach((to, from, next) => {
   /**
    * 初始化后续操作
    */
-  function afterInitDone() {
+  function afterInitDone () {
     // 定制化标题名称
     renameTitle();
     // delete share token

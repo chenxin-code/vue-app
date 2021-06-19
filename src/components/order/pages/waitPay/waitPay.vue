@@ -10,7 +10,32 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
+        <property-bill
+          pageName="waitPay"
+          ref="propertyOrder"
+          :isDisAll="isDisAll"
+          :isDis="isDis"
+          :results="billResults"
+          v-show="isLoadPropertyBill"
+          @checkEvent="checkEvent"
+        >
+          <div v-for="(item, index) in billResults" :key="index" class="scroll">
+            <OrderItem2
+              @checkEvent="checkEvent"
+              ref="order"
+              pageName="waitPay"
+              :billId="item.billId"
+              :billType="item.billType"
+              :item="item"
+            >
+            </OrderItem2>
+          </div>
+        </property-bill>
+        <div
+          v-for="(item, index) in currentOrderList"
+          :key="index"
+          class="scroll"
+        >
           <OrderItem
             pageType="waitPay"
             :billType="item.billType"
@@ -33,7 +58,7 @@
             :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
-        <Empty v-show="showEmpty"></Empty>
+        <Empty v-show="showEmpty && billResults.length === 0"></Empty>
       </van-list>
     </van-pull-refresh>
     <pay-div
@@ -44,12 +69,19 @@
       :mergeAmount="mergeAmount"
       :total="total"
     ></pay-div>
+    <van-dialog v-model="showDialog">
+      <div class="tipsText">
+        {{ tipsText }}
+      </div>
+    </van-dialog>
   </div>
 </template>
 
 <script>
+import propertyBill from "@/components/order/components/bill-item/bill-item";
 import payDiv from "@/components/order/components/pay-div/pay-div";
 import OrderItem from "@/components/order/components/order-item/order-item";
+import OrderItem2 from "@/components/order/components/order-item2/order-item";
 import Empty from "../../components/empty/empty.vue";
 import { BigNumber } from "bignumber.js";
 export default {
@@ -57,9 +89,11 @@ export default {
 
   data() {
     return {
+      showDialog: false,
+      tipsText: "",
+      check: false,
       checkData: new Set(),
       show: false,
-
       loading: false,
       finished: false,
       error: false,
@@ -72,26 +106,37 @@ export default {
       currentOrderList: [],
       params: [],
       mergeAmount: 0,
-      total:0
+      total: 0,
+      isLoadPropertyBill: false, //是否加载物业缴费账单组件
+      isDisAll: false,
+      isDis: false,
+      isLoad: true,
+      billResults: [], //物业缴费数据
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,14", //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
     };
   },
   components: {
+    propertyBill,
     payDiv,
     OrderItem,
+    OrderItem2,
     Empty,
   },
   created() {
-    this.onLoad();
-    console.log('执行了created--------------------------')
+    // this.initPropert();
+    // this.onLoad();
   },
-  watch:{
-    currentOrderList:function(newVal,oldVal){
-      if(newVal.length !== 0){
+  activated() {
+    this.initPropert();
+  },
+  watch: {
+    currentOrderList: function (newVal, oldVal) {
+      if (newVal.length !== 0) {
         this.showEmpty = false;
-      }else{
+      } else {
         this.showEmpty = true;
       }
-    }
+    },
   },
   methods: {
     //合并支付
@@ -99,33 +144,82 @@ export default {
       let payInfoList = Array.from(this.checkData);
       let billNo = "";
       let callbackUrl = "";
-      if (payInfoList.length == 0) {
-        this.$toast("请选择订单");
-      } else if (
-        payInfoList.length == 1 &&
-        payInfoList[0].billType == 11 &&
-        payInfoList[0].orderType !== '200001'
-      ) {
-        billNo = payInfoList[0].payInfo.billNo;
-        //团购订单
-        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
-        this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-      } else if (payInfoList[0].billType == 11) {
-        //普通订单
-        this.initPayinfo(payInfoList, billNo, 'mall')
+      console.log("payInfoList", payInfoList);
+      let payType = "";
+      let projectList = [];
+      payInfoList.forEach((e) => {
+        if (e.billType == 1) {
+          payType = "property";
+          projectList.push(e.projectId.toString());
+        } else {
+          payType = "other";
+        }
+      });
+      if (payType == "property") {
+        //处理物业账单支付
+        let billNo = "";
+        let billList = [];
+        if (projectList.length > 1) {
+          if (!projectList.every((e) => e === projectList[0])) {
+            this.showDialog = true;
+            this.tipsText =
+              "尊敬的邻里邦用户，目前仅支持本楼盘的账单支付，其他楼盘账单需切换楼盘进行缴纳，感谢您的理解。";
+            return;
+          } else {
+            payInfoList.forEach((e) => {
+              e.billNos.forEach((i) => {
+                billNo += i + ",";
+                billList.push(i.toString());
+              });
+            });
+          }
+        } else {
+          payInfoList[0].billNos.forEach((e) => {
+            billNo += e + ",";
+            billList.push(e.toString());
+          });
+        }
+        let payInfo = {
+          businessCstNo: this.$store.state.userInfo.phone,
+          platMerCstNo: payInfoList[0].platMerCstNo,
+          tradeMerCstNo: payInfoList[0].tradeMerCstNo,
+        };
+        this.checkedPayStatus(billList, payInfo, billNo);
       } else {
-        this.initPayinfo(payInfoList, billNo, 'bill')
+        // 其他账单支付
+        if (payInfoList.length == 0) {
+          this.$toast("请选择订单");
+        } else if (
+          payInfoList.length == 1 &&
+          payInfoList[0].billType == 11 &&
+          payInfoList[0].orderType !== "200001"
+        ) {
+          billNo = payInfoList[0].payInfo.billNo;
+          //团购订单
+          callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
+          this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
+        } else if (payInfoList[0].billType == 11) {
+          //普通订单
+          this.initPayinfo(payInfoList, billNo, "mall");
+          console.log("payInfoList", payInfoList);
+        } else {
+          this.initPayinfo(payInfoList, billNo, "bill");
+        }
       }
     },
-    initPayinfo (payInfoList, billNo, type) {
-      let callbackUrl = '';
+    initPayinfo(payInfoList, billNo, type) {
+      let callbackUrl = "";
       let currentOrderDetails = {
         state: 3,
         orderId: payInfoList[0].orderId,
         orderType: payInfoList[0].orderType,
-        tradeNo: payInfoList[0].payInfo.tradeNo,
+        // tradeNo: payInfoList[0].payInfo.tradeNo,
+        tradeNo: payInfoList[0].payInfo ? payInfoList[0].payInfo.tradeNo : "", //shuimei
         tag: 1,
-        deliverCheckcode: payInfoList[0].payInfo.deliverCheckcode,
+        // deliverCheckcode: payInfoList[0].payInfo.deliverCheckcode,
+        deliverCheckcode: payInfoList[0].payInfo
+          ? payInfoList[0].payInfo.deliverCheckcode
+          : "", //shuimei
         deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
         storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
         stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
@@ -138,15 +232,21 @@ export default {
         billNo += e.payInfo.billNo + ",";
       });
       //vipUnitUserCode type  为空  待保留
-      if (type == 'mall') {
-        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${payInfoList[0].billType != 11?true:false}&orderCategory=${payInfoList[0].payInfo.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`;
+      if (type == "mall") {
+        callbackUrl = `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&isBill=${
+          payInfoList[0].billType != 11 ? true : false
+        }&orderCategory=${
+          payInfoList[0].payInfo.orderCategory
+        }&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${
+          this.$route.query.type
+        }&ret={ret}`;
       } else {
-        callbackUrl = `/app-vue/app/index.html#/order/2?time=${Date.now()}`
+        callbackUrl = `/app-vue/app/index.html#/order/2?time=${Date.now()}`;
       }
       this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
     },
     enginePay(payInfo, billNo, callbackUrl) {
-      console.log("唤起邻里邦支付平台billNo", billNo);
+      console.log("唤起邻里邦支付平台billNo", payInfo, billNo, callbackUrl);
       window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
         JSON.stringify({
           businessCstNo: payInfo.businessCstNo,
@@ -160,7 +260,6 @@ export default {
     },
 
     //滚动条与底部距离小于 offset 时触发
-    // orderType":"200015","orderTypeList":["200015","200502"],"state":"1"
     onLoad() {
       this.loading = true;
       let page = this.currentPage;
@@ -171,17 +270,20 @@ export default {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
         state: "1",
-        page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId,
+        page: { index: page, pageSize: 30 },
+        airDefenseNo: this.$store.state.userRoomId,
+        // airDefenseNo:
+        //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad",
+        billType: this.reqBillType,
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
           let dataPages = 0;
-          if (res.data.data.pages == 0){
+          if (res.data.data.pages == 0) {
             dataPages = 1;
-          }else{
+          } else {
             dataPages = res.data.data.pages;
           }
           if (page < dataPages || page == dataPages) {
@@ -194,13 +296,24 @@ export default {
               this.page = res.data.data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
-              }else{
+              } else {
                 this.currentOrderList = [];
               }
               // 加载状态结束
               this.loading = false;
+              if (this.billResults.length) {
+                this.isLoadPropertyBill = true;
+              } else {
+                this.isLoadPropertyBill = false;
+              }
             } else {
+              // 加载状态结束
               this.loading = false; //将加载状态关掉
+              if (this.billResults.length) {
+                this.isLoadPropertyBill = true;
+              } else {
+                this.isLoadPropertyBill = false;
+              }
               this.error = true; //大家错误状态
             }
           } else {
@@ -220,29 +333,65 @@ export default {
       this.finished = false; //将没有更多的状态改成false
       this.loading = true; //将下拉刷新状态改为true开始刷新
       this.currentPage = 1;
-      let obj = {
-        orderType: "200015",
-        orderTypeList: ["200015", "200502"],
-        state: "1",
-        page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId,
+
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
+
+      let propertyObj = {
+        airDefenseNo: airDefenseNo,
+        memberId: this.$store.state.userInfo.phone,
+        status: 10, //账单状态 10-待支付 90-成功
+        type: 1, //type 1、列表 2、详情
+        pageTimes: "",
       };
+
+      let url = "/times/charge-bff/order-center/api-c/v1/getList";
       this.$http
-        .post("/app/json/app_shopping_order/findOrderFormList", obj)
+        .get(url, { params: propertyObj })
         .then((res) => {
-          if (res.data.status == 0) {
-            this.orderList = res.data.data.records;
-            this.totalPage = res.data.data.pages; //将总页数赋值上去
-            if (this.orderList.length !== 0) {
-              this.initData();
-            }
-            this.$toast("刷新成功");
-            this.loading = false;
-            this.refreshing = false; //刷新成功后将状态关掉
+          let data = res.data.data;
+          if (res.data.code === 200) {
+            this.billResults = data.notpay;
+            this.billResults.forEach((item) => {
+              item.totalPrice = item.totalPayableAmount;
+              item.billId = item.spaceId;
+              item.billType = 1;
+            });
+          } else {
+            this.billResults = [];
           }
+          this.loading = false;
         })
-        .catch((res) => {
-          this.$toast("网络繁忙,请稍后再试~");
+        .finally(() => {
+          let obj = {
+            orderType: "200015",
+            orderTypeList: ["200015", "200502"],
+            state: "1",
+            page: { index: page, pageSize: 30 },
+            airDefenseNo:this.$store.state.userRoomId,
+            // airDefenseNo:
+            //   "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
+            billType: this.reqBillType,
+          };
+          this.$http
+            .post("/app/json/app_shopping_order/findOrderFormList", obj)
+            .then((res) => {
+              if (res.data.status == 0) {
+                this.orderList = res.data.data.records;
+                this.totalPage = res.data.data.pages; //将总页数赋值上去
+                if (this.orderList.length !== 0) {
+                  this.initData();
+                }
+                this.$toast("刷新成功");
+                this.loading = false;
+                this.refreshing = false; //刷新成功后将状态关掉
+              }
+            })
+            .catch((res) => {
+              this.$toast("网络繁忙,请稍后再试~");
+            });
         });
     },
     initData() {
@@ -255,12 +404,12 @@ export default {
           orderId: item.shoppingOrderId,
           state: item.state,
           totalPrice: item.totalPrice,
-          orderStateType:item.orderStateType,
-          billId:item.billId,
-          shoppingOrderId:item.shoppingOrderId,
-          bulkOrderType:item.orderType,
-          id:item.id,
-          tradeNo:item.tradeNo,
+          orderStateType: item.orderStateType,
+          billId: item.billId,
+          shoppingOrderId: item.shoppingOrderId,
+          bulkOrderType: item.orderType,
+          id: item.id,
+          tradeNo: item.tradeNo,
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -271,7 +420,7 @@ export default {
             orderType: item.orderStateType,
             tradeNo: item.tradeNo,
             deliverCheckcode: item.deliverCheckcode,
-            isRefund: item.isRefund
+            isRefund: item.isRefund,
           },
           params: {
             deliverType: item.deliverType,
@@ -283,7 +432,7 @@ export default {
             state: item.state,
           },
           billDetailObj: {
-            businessCstNo:item.loginUserPhone,
+            businessCstNo: item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
             payMode: item.payMode,
@@ -305,25 +454,35 @@ export default {
               billNum: sub.quantity,
               skuId: sub.itemId,
               storeOuCode: sub.storeOuCode,
-              info:sub.info,
-              itemTypeName:sub.itemTypeName,
-              snapshotTime:sub.snapshotTime,
+              info: sub.info,
+              itemTypeName: sub.itemTypeName,
+              snapshotTime: sub.snapshotTime,
             };
           }),
         };
       });
     },
-
     checkEvent(data) {
       // 从全选checkbox进来
-      if (data.checkAll) {
+      if (data.checkAll || data.checkAllBillType1) {
         let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
           return item.billType == data.billType;
         });
-        let checkData = this.currentOrderList.filter((item) => {
-          return (item.billType == data.billType);
+        console.log(refs);
+        let currentOrderList = [];
+        if (refs[0] && refs[0].billType == 1) {
+          currentOrderList = this.billResults;
+        } else {
+          currentOrderList = this.currentOrderList;
+        }
+        console.log(this.currentOrderList, "++++");
+        console.log(this.billResults, "----");
+        let checkData = currentOrderList.filter((item) => {
+          return item.billType == data.billType;
         });
+        console.log(checkData + "----------");
+
         if (data.checked) {
           //全部选中
           this.checkData.clear(); //清空checkData
@@ -332,6 +491,9 @@ export default {
             this.checkData.add(checkData[index]);
             item.isChecked = true;
           });
+          if (refs[0] && refs[0].billType == 1) {
+            this.$refs.propertyOrder.isChecked = true;
+          }
         } else {
           // 全部取消
           this.checkData.clear(); //清空checkData
@@ -339,6 +501,7 @@ export default {
             item.isChecked = false; // 设置每个checkbox为没选中状态
           });
           this.$refs.payDiv.isShow = false; //隐藏全选按钮
+          this.$refs.propertyOrder.isChecked = false;
         }
         return;
       }
@@ -353,6 +516,9 @@ export default {
           item.isDisabled = true;
         }
       });
+      if (data.billType != 1) {
+        this.$refs.propertyOrder.isDisabled = true;
+      }
 
       let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
 
@@ -364,8 +530,14 @@ export default {
         if (this.checkData.size == checkedTotal) {
           //checkData数量跟可选checkbox数量相等 =>全选
           this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
+          if (data.billType == 1) {
+            this.$refs.propertyOrder.isChecked = true;
+          }
         } else {
           this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
+          if (data.billType == 1) {
+            this.$refs.propertyOrder.isChecked = false;
+          }
         }
       } else {
         // 取消
@@ -373,6 +545,10 @@ export default {
           if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = false;
+              this.$refs.propertyOrder.isDisabled = false;
+            }
           }
         });
         if (this.checkData.size == 0) {
@@ -380,30 +556,116 @@ export default {
           this.$refs.order.forEach((item) => {
             item.isDisabled = false; // 所有checkbox变成可选
           });
+          this.$refs.propertyOrder.isDisabled = false;
           this.$refs.payDiv.isShow = false; //隐藏全选
         }
       }
       // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
-      let num = mergeList.reduce((total,e)=>{
-        return BigNumber(total).plus(e.totalPrice)
-      },0)
+      console.log(mergeList);
+      let num = mergeList.reduce((total, e) => {
+        return BigNumber(total).plus(e.totalPrice);
+      }, 0);
       this.mergeAmount = num;
-      this.total = mergeList.length;
+    },
+
+    //物业缴费列表接口
+    initPropert() {
+      this.loading = true;
+
+      let airDefenseNoStr = this.$store.state.userRoomId;
+      // let airDefenseNoStr =
+      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
+
+      let propertyObj = {
+        airDefenseNo: airDefenseNo,
+        memberId: this.$store.state.userInfo.phone,
+        status: 10, //账单状态 10-待支付 90-成功
+        type: 1, //type 1、列表 2、详情
+        pageNo: "",
+        pageTimes: "",
+      };
+
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+      this.$http
+        .get(url, { params: propertyObj })
+        .then((res) => {
+          let data = res.data.data;
+          if (res.data.code === 200) {
+            this.billResults = data.notpay;
+            this.billResults.forEach((item) => {
+              item.totalPrice = item.totalPayableAmount;
+              item.billId = item.spaceId;
+              item.billType = 1;
+            });
+          } else {
+            this.billResults = [];
+          }
+          this.loading = false;
+        })
+        .finally(() => {
+          this.onLoad();
+        });
+    },
+
+    //结算支付时，请求物业系统接口校验账单是否能够支付
+    checkedPayStatus(list, payInfo, billNo) {
+      let url = "";
+      let check = false;
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+        : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+      let paramsObj = {
+        list: list,
+      };
+      this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
+        if (res.data.code == "0000") {
+          console.log(`校验账单是否能够支付`, res);
+          for (let index = 0; res.data.data < arr.length; index++) {
+            if (res.data.data[index].status == 1) {
+              check = false;
+              break;
+            } else {
+              check = true;
+            }
+          }
+          console.log(check);
+          if (check) {
+            this.enginePay(
+              payInfo,
+              billNo,
+              `/app-vue/app/index.html#/order/2?time=${Date.now()}`
+            );
+          } else {
+            this.showDialog = true;
+            this.tipsText =
+              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+          }
+        }
+      });
     },
   },
 };
 </script>
 
-
 <style lang="stylus" scoped type="text/stylus">
 .waitPay {
-  height 100%;
-  overflow-y auto;
+  height: 100%;
+  overflow-y: auto;
   padding-bottom: 182px;
 }
-// .scroll {
-//   margin-top: 12px;
-// }
 
+.tipsText {
+  padding: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  // text-align: center;
+}
 </style>

@@ -24,7 +24,7 @@
             height: '2.4rem',
             'background-image': 'url(' + billCenterImg + ')',
             'background-size': '2.4rem 2.4rem',
-            'background-repeat': 'no-repeat',
+            'background-repeat': 'no-repeat'
           }"
         ></div>
         <p class="text" v-if="productItem.billType == 11">
@@ -41,8 +41,8 @@
         class="price"
         v-if="
           productItem.billType == 11 ||
-          productItem.billType == 7 ||
-          productItem.billType == 8
+            productItem.billType == 7 ||
+            productItem.billType == 8
         "
       >
         <p class="pr">
@@ -75,15 +75,15 @@ export default {
       goodsAmount: "0.00",
       amount: {
         integer: "0",
-        decimal: "00",
-      },
+        decimal: "00"
+      }
     };
   },
   created() {
     this.goodsAmount = this.productItem.billAmount;
   },
   methods: {
-    gotoProductDetail: function (product) {
+    gotoProductDetail: function(product) {
       // 砍价订单禁止进入详情
       if (this.$store.state.globalConfig.cut_price_strict == 1) {
         return;
@@ -103,27 +103,27 @@ export default {
             storeOuCode: product.storeOuCode,
             skuId: product.skuId,
             lastPath: "/order/3",
-            productType: product.productType,
-          },
+            productType: product.productType
+          }
         });
       } else {
         window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
           JSON.stringify({
             billId: this.billId,
             payType: "no",
-            isRefund: "no",
+            isRefund: "no"
           })
         )}`;
       }
-    },
+    }
   },
   watch: {
-    goodsAmount: function (newVal, oldVal) {
+    goodsAmount: function(newVal, oldVal) {
       let totalPrice = this.$util.toDecimal2(newVal);
       let totalArr = totalPrice.toString().split(".");
       this.amount.integer = totalArr[0];
       this.amount.decimal = totalArr[1];
-    },
+    }
   },
   computed: {
     billCenterImg: {
@@ -149,12 +149,14 @@ export default {
             return require("../../img/bag.png");
           case 10:
             return require("../../img/deposit.png");
+          case 14:
+            return require("../../img/service.png");
 
           default:
             return require("../../img/property.png");
         }
       },
-      set() {},
+      set() {}
     },
     billTypeName() {
       let billName = "";
@@ -192,10 +194,13 @@ export default {
         case 12:
           billName = "美居";
           break;
+        case 14:
+          billName = "维修物业费";
+          break;
       }
       return billName;
-    },
-  },
+    }
+  }
 };
 </script>
 

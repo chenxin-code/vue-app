@@ -52,21 +52,21 @@ export default {
       totalPage: 0,
       page: 0,
       showEmpty: false,
-      currentOrderList: [],
+      currentOrderList: []
     };
   },
   components: {
     OrderItem,
-    Empty,
+    Empty
   },
   created() {
     this.onLoad();
   },
-  watch:{
-    currentOrderList:function(newVal,oldVal){
-      if(newVal.length !== 0){
+  watch: {
+    currentOrderList: function(newVal, oldVal) {
+      if (newVal.length !== 0) {
         this.showEmpty = false;
-      }else{
+      } else {
         this.showEmpty = true;
       }
     }
@@ -81,17 +81,20 @@ export default {
       this.refreshing = false;
       let obj = {
         page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId,
+        airDefenseNo: this.$store.state.userRoomId
       };
-      console.log('---------------this.$store.state.userRoomId----------',this.$store.state.userRoomId)
+      console.log(
+        "---------------this.$store.state.userRoomId----------",
+        this.$store.state.userRoomId
+      );
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
-        .then((res) => {
+        .then(res => {
           // 判断当前页数是否超过总页数或者等于总页数
           let dataPages = 0;
-          if (res.data.data.pages == 0){
+          if (res.data.data.pages == 0) {
             dataPages = 1;
-          }else{
+          } else {
             dataPages = res.data.data.pages;
           }
           if (page < dataPages || page == dataPages) {
@@ -104,7 +107,7 @@ export default {
               this.page = res.data.data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
-              } else{
+              } else {
                 this.currentOrderList = [];
               }
               // 加载状态结束
@@ -117,7 +120,7 @@ export default {
             this.finished = true; //如果超过总页数就显示没有更多内容了
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
@@ -132,35 +135,35 @@ export default {
       this.currentPage = 1;
       let obj = {
         page: { index: page, pageSize: 10 },
-        airDefenseNo:this.$store.state.userRoomId,
+        airDefenseNo: this.$store.state.userRoomId
       };
       this.$http
         .post("/app/json/app_shopping_order/findOrderFormList", obj)
-        .then((res) => {
+        .then(res => {
           if (res.data.status == 0) {
             this.orderList = res.data.data.records;
             this.totalPage = res.data.data.pages; //将总页数赋值上去
             if (this.orderList.length !== 0) {
               this.initData();
-            } 
+            }
             this.$toast("刷新成功");
             this.loading = false;
             this.refreshing = false; //刷新成功后将状态关掉
           }
         })
-        .catch((res) => {
+        .catch(res => {
           this.$toast("网络繁忙,请稍后再试~");
         });
     },
     initData() {
-      this.currentOrderList = this.orderList.map((item) => {
+      this.currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
           billId: item.billId,
           amount: item.totalPrice,
           submitTime: item.submitTime,
           orderType: item.orderStateType,
-          orderStateType:item.orderStateType,
+          orderStateType: item.orderStateType,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -170,10 +173,10 @@ export default {
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
             state: item.state,
-            tradeNo: item.tradeNo,
+            tradeNo: item.tradeNo
           },
           billDetailObj: {
-            businessCstNo:item.loginUserPhone,
+            businessCstNo: item.loginUserPhone,
             groupBuyActivityId: item.groupBuyActivityId,
             groupBuyId: item.groupBuyId,
             payMode: item.payMode,
@@ -184,7 +187,7 @@ export default {
             tag: this.getTag(item.state, item.orderStateType),
             tabIndex: 0,
             awardActivityList: item.awardActivityList,
-            isRefund: item.isRefund,
+            isRefund: item.isRefund
           },
           payInfo: {
             businessCstNo: item.loginUserPhone,
@@ -195,9 +198,9 @@ export default {
             orderCategory: item.orderCategory,
             orderType: item.orderType,
             tradeNo: item.tradeNo,
-            deliverCheckcode: item.deliverCheckcode,
+            deliverCheckcode: item.deliverCheckcode
           },
-          dataList: item.orderFormItemList.map((sub) => {
+          dataList: item.orderFormItemList.map(sub => {
             return {
               billType: item.billType,
               billImg: sub.iconUrl,
@@ -221,15 +224,15 @@ export default {
               townName: item.townName,
               receiver: item.receiver,
               mobile: item.mobile,
-              info:sub.info,
-              itemTypeName:sub.itemTypeName,
-              snapshotTime:sub.snapshotTime,
+              info: sub.info,
+              itemTypeName: sub.itemTypeName,
+              snapshotTime: sub.snapshotTime
             };
-          }),
+          })
         };
       });
       // console.log(this.currentOrderList[0].dataList)
-      console.log(this.currentOrderList)
+      console.log(this.currentOrderList);
     },
     getTag(state, type) {
       if (state == 1 && type == "200015") {
@@ -248,11 +251,10 @@ export default {
         // 已取消
         return "7";
       }
-    },
-  },
+    }
+  }
 };
 </script>
-
 
 <style lang="stylus" scoped type="text/stylus">
 .scroll {
@@ -260,7 +262,7 @@ export default {
 }
 .allOrder{
   height 100%;
-  overflow-y auto; 
-  padding-bottom: 130px; 
+  overflow-y auto;
+  padding-bottom: 130px;
 }
 </style>
