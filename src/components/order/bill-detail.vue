@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 15:33:51
+ * @LastEditTime: 2021-06-19 19:25:00
 -->
 <template>
   <div class="bill-detail">
@@ -289,7 +289,7 @@ export default {
                * managementFeeCycle: 1为月度账单，3为季度账单
                */
               this.isMonthPay =
-                this.results.managementFeeCycle == "3" ? true : false;
+                this.results.managementFeeCycle == "1" ? true : false; ////
             }
 
             // 如果是待支付账单，不做分页，只加载一次。所以要将finished 设置成 true
@@ -324,8 +324,8 @@ export default {
     },
     //点击单个商品
     checkSingle(item, itemIn) {
-      console.log(`checkSingle item`, item);
-      console.log(`checkSingle itemIn`, itemIn);
+      // console.log(`checkSingle item`, item);
+      // console.log(`checkSingle itemIn`, itemIn);
       itemIn.checked
         ? this.checkTrue(item, itemIn)
         : this.checkFalse(item, itemIn);
@@ -365,14 +365,17 @@ export default {
         }
       } else {
         //为季度账单时的操作
+        console.log(`item`, item);
+        console.log(`季度账单`, _this.checkData);
+
         _this.checkData.add(item);
-        item.checked = true;
+        // item.checked = true;/////////
         _this.$refs.payDiv.isShow = true; //隐藏全选按钮
         _this.payTotal = _this.checkData.size;
 
         let mergeList = Array.from(_this.checkData);
-        console.log(`item`, item);
-        console.log(`mergeList checkTrue`, mergeList);
+
+        // console.log(`mergeList checkTrue`, mergeList);
         //计算所有选中账单的总金额
         let num = mergeList.reduce((total, e) => {
           return BigNumber(total).plus(e.monthPayableAmount);
@@ -419,6 +422,7 @@ export default {
       let _this = this;
       item.quarterList.forEach((itemIn, index) => {
         _this.checkTrue(itemIn, index);
+        console.log(`kanka`, index);
       });
     },
     //单个季度账单反选
@@ -562,7 +566,7 @@ export default {
           "YYYY-MM-DD"
         );
         let path = `/advancePaymentDetails?type=1&amount=${item.realAmount}&objectName=${this.results.spaceFullName}&customerName=${item.proprietorName}&tollDate=${tollDate}
-        &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${this.results.spaceFullName}`;
+        &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}`;
 
         navToMicroApplication.openTargetRouter({
           type: "microapp",
