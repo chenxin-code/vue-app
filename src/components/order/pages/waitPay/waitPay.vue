@@ -67,7 +67,7 @@
       @checkEvent="checkEvent"
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
-      :total="total"
+      :total="Array.from(this.checkData).length"
     ></pay-div>
     <van-dialog v-model="showDialog">
       <div class="tipsText">
@@ -568,7 +568,6 @@ export default {
       }
       // console.log(this.checkData)
       let mergeList = Array.from(this.checkData);
-      console.log(mergeList);
       let num = mergeList.reduce((total, e) => {
         return BigNumber(total).plus(e.totalPrice);
       }, 0);
@@ -633,9 +632,10 @@ export default {
       };
       this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
         if (res.data.code == "0000") {
-          console.log(`校验账单是否能够支付`, res);
-          for (let index = 0; res.data.data < res.data.data.length; index++) {
-            if (res.data.data[index].status == 1) {
+          console.log(`校验账单是否能够支付`, res.data.data);
+          let arr = res.data.data;
+          for (let index = 0; index < arr.length; index++) {
+            if (arr[index].status == 1) {
               check = false;
               break;
             } else {
