@@ -84,6 +84,7 @@ import OrderItem from "@/components/order/components/order-item/order-item";
 import OrderItem2 from "@/components/order/components/order-item2/order-item";
 import Empty from "../../components/empty/empty.vue";
 import { BigNumber } from "bignumber.js";
+import yjzdbill from "@zkty-team/x-engine-module-yjzdbill";
 export default {
   name: "waitPay",
 
@@ -644,11 +645,26 @@ export default {
           }
           console.log(check);
           if (check) {
-            this.enginePay(
-              payInfo,
-              billNo,
-              `/app-vue/app/index.html#/order/2?time=${Date.now()}`
-            );
+            // this.enginePay(
+            //   payInfo,
+            //   billNo,
+            //   `/app-vue/app/index.html#/order/2?time=${Date.now()}`
+            // );
+            yjzdbill.YJBillPayment({
+              businessCstNo:payInfo.businessCstNo,
+              platMerCstNo: payInfo.platMerCstNo,
+              tradeMerCstNo: payInfo.tradeMerCstNo,
+              billNo: billNo,
+              appScheme: "x-engine",
+              payType: false,
+              __ret__: (res) => {
+                console.log(
+                  "---------------开始支付提交记录---------------------"
+                );
+                console.log(res);
+                this.$router.push({ path: "/order/2" }); //支付完成返回到待支付页面
+              },
+            });
           } else {
             this.showDialog = true;
             this.tipsText =
