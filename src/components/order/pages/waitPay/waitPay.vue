@@ -347,7 +347,13 @@ export default {
         pageTimes: "",
       };
 
-      let url = "/times/charge-bff/order-center/api-c/v1/getList";
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+
       this.$http
         .get(url, { params: propertyObj })
         .then((res) => {
@@ -370,7 +376,7 @@ export default {
             orderTypeList: ["200015", "200502"],
             state: "1",
             page: { index: page, pageSize: 30 },
-            airDefenseNo:this.$store.state.userRoomId,
+            airDefenseNo: this.$store.state.userRoomId,
             // airDefenseNo:
             //   "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
             billType: this.reqBillType,
