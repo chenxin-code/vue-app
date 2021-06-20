@@ -361,7 +361,7 @@ export default {
         ? (url =
             "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
 
       this.$http
         .get(url, { params: propertyObj })
@@ -607,7 +607,7 @@ export default {
         ? (url =
             "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
@@ -680,19 +680,6 @@ export default {
                   "---------------开始支付提交记录---------------------"
                 );
                 console.log(res);
-                // if (res.billRetStatus === "-1") {
-                //   //支付失败
-                //   // this.showDialog = true;
-                //   this.tipsText = res.billRetStatusMessage;
-                //   Dialog.alert({
-                //     message: this.tipsText,
-                //     theme: "round-button"
-                //   });
-                // } else {
-                //   //支付成功
-                //   this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
-                // }
-
                 if (res.billRetStatus != "1") {
                   Dialog.alert({
                     message: res.billRetStatusMessage

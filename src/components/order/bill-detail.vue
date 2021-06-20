@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 21:41:17
+ * @LastEditTime: 2021-06-20 22:26:30
 -->
 <template>
   <div class="bill-detail">
@@ -256,7 +256,7 @@ export default {
         ? (url =
             "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
@@ -314,7 +314,6 @@ export default {
           } else {
             this.results = [];
             // this.showEmpty = true;
-
             Toast({ duration: 500, message: res.data.message }); //提示错误信息
           }
           this.$forceUpdate();
@@ -337,6 +336,8 @@ export default {
     },
     // 点击为true
     checkTrue(item, itemIn) {
+      console.log(`checkTrue item`, item);
+      console.log(`checkTrue itemIn`, itemIn);
       let _this = this;
       //判断当前是否为月份账单
       if (_this.isMonthPay) {
@@ -370,7 +371,6 @@ export default {
       } else {
         //为季度账单时的操作
         _this.checkData.add(item);
-        // item.checked = true;/////////
         _this.$refs.payDiv.isShow = true; //显示全选按钮
         _this.payTotal = _this.checkData.size;
 
@@ -378,10 +378,9 @@ export default {
 
         console.log(`mergeList checkTrue`, mergeList);
         //计算所有选中账单的总金额
-        // let testSub = 0;
+        let testSub = 0;
         let num = mergeList.reduce((total, e) => {
           return BigNumber(total).plus(e.monthPayableAmount);
-          // console.log(`testSub`,testSub + e.monthPayableAmount);
         }, 0);
         _this.mergeAmount = num;
 
@@ -437,6 +436,7 @@ export default {
     //底部支付组件全选事件
     checkPayDiv(data) {
       if (data.checked) {
+        // this.checkData = new Set();
         //如果勾选上底部全选按钮，则所有账单都要勾选
         if (this.$refs.checkShop) {
           this.$refs.checkShop.filter((item, index) => {
@@ -448,7 +448,6 @@ export default {
             item.checked = true;
           });
         }
-
         //直接拿全部账单号
         this.billNosList = this.results.billNos;
 

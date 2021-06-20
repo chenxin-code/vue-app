@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 21:39:13
+ * @LastEditTime: 2021-06-21 00:23:24
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -25,7 +25,7 @@
       <!-- @click="onClickBill(isOpen)" -->
       <div class="down-up-icon"></div>
     </div>
-    <transition name="isd">
+    <transition name="sub-comments">
       <div class="list" v-show="isOpen">
         <div class="content">
           <div
@@ -328,6 +328,17 @@ export default {
   .isd-enter,.isd-leave-to{
     opacity: 0;
     transform: translateY(-360px);
+  }
+
+  .sub-comments-leave-active,.sub-comments-enter-active {
+      transition: max-height 0.5s ;
+  }
+  .sub-comments-enter,.sub-comments-leave-to {
+      max-height:0 ;
+      opacity: 0;
+  }
+  .sub-comments-enter-to,.sub-comments-leave {
+      max-height: 500px ;
   }
 
 }

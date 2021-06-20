@@ -67,7 +67,6 @@ export default {
     checkEvent(event) {
       let arr = Array.from(this.checkData);
       console.log(`paydiv`, arr);
-
       if (arr.length == 0) return;
       let data = {};
       data.checked = this.isChecked;

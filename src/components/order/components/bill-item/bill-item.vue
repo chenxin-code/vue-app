@@ -2,10 +2,9 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 21:38:56
+ * @LastEditTime: 2021-06-21 00:17:27
 -->
 <template>
-  <!-- v-if="isShowPropertyBill" -->
   <div class="property-bill" v-if="results">
     <div class="property-box" :class="{ isactive: isOpen }">
       <van-checkbox
@@ -23,10 +22,9 @@
       >
         您的物业缴费账单
       </div>
-      <!--  @click="onClickBill(isOpen)" -->
       <div class="down-up-icon"></div>
     </div>
-    <transition name="isd"
+    <transition name="sub-comments"
       ><div class="list" v-show="isOpen">
         <div class="content">
           <slot></slot>
@@ -147,7 +145,7 @@ export default {
       color: #E8374A;
       line-height: 40px;
       margin-left: 25px;
-      width: 100%;
+      width: 80%;
       &.finish {
         margin-left: 45px;
       }
@@ -288,6 +286,18 @@ export default {
   .isd-enter,.isd-leave-to{
     opacity: 0;
     transform: translateY(-360px);
+  }
+
+
+  .sub-comments-leave-active,.sub-comments-enter-active {
+      transition: max-height 0.5s ;
+  }
+  .sub-comments-enter,.sub-comments-leave-to {
+      max-height:0 ;
+      opacity: 0;
+  }
+  .sub-comments-enter-to,.sub-comments-leave {
+      max-height: 500px ;
   }
 
 }
