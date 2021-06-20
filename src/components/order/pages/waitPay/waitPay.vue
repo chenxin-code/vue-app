@@ -74,7 +74,6 @@
         {{ tipsText }}
       </div>
     </!-->
-    -->
   </div>
 </template>
 
