@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 11:18:43
+ * @LastEditTime: 2021-06-20 16:49:32
 -->
 <template>
   <div class="bill-detail">
@@ -53,90 +53,92 @@
             @load="getBillDetail"
             style="height:100%;width:100%;overflow-y:auto;"
           >
-            <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
-            <div
-              class="list"
-              v-for="(item, index) in results.records"
-              :key="index"
-            >
-              <div v-show="!isFinishBill">
-                <!--  @click="checkShop(item, index, isMonthPay)" -->
-                <van-checkbox
-                  v-if="!isMonthPay"
-                  :name="index"
-                  v-model="item.shopCheck"
-                  @click="checkShop(item, index, isMonthPay)"
-                  checked-color="#ee0a24"
-                  ref="checkShop"
-                  >{{ item.quarterTitle }}</van-checkbox
-                >
-                <div class="title-hd" v-else>
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+              <div
+                class="list"
+                v-for="(item, index) in results.records"
+                :key="index"
+              >
+                <div v-show="!isFinishBill">
+                  <van-checkbox
+                    v-if="!isMonthPay"
+                    :name="index"
+                    v-model="item.shopCheck"
+                    @click="checkShop(item, index, isMonthPay)"
+                    checked-color="#ee0a24"
+                    ref="checkShop"
+                    >{{ item.quarterTitle }}</van-checkbox
+                  >
+                  <div class="title-hd" v-else>
+                    {{ item.quarterTitle }}
+                  </div>
+                </div>
+                <div class="title-hd" v-show="isFinishBill">
                   {{ item.quarterTitle }}
                 </div>
-              </div>
-              <div class="title-hd" v-show="isFinishBill">
-                {{ item.quarterTitle }}
-              </div>
-              <div
-                class="item"
-                v-for="(detail, i) in item.quarterList"
-                :key="i"
-                ref="billItem"
-              >
-                <div class="check-operation" v-show="!isFinishBill">
-                  <!-- @click="checkSingle(item, detail, i)" -->
-                  <van-checkbox
-                    v-model="detail.checked"
-                    v-show="isMonthPay"
-                    @change="checkSingle(item, detail, i)"
-                    ref="checkboxGroup"
-                    checked-color="#ee0a24"
-                  ></van-checkbox>
-                </div>
-                <div class="item-box" :class="{ 'finish-item': isFinishBill }">
-                  <div class="detail-title">
-                    <div class="month-text">
-                      <span class="num">{{ detail.month }}</span>
-                      <span>{{ detail.monthTitle }}</span>
-                    </div>
-                    <div class="status">
-                      <span
-                        class="pay-status"
-                        :class="detail.isPay == 1 ? 'paying' : 'need'"
-                        v-show="!isFinishBill"
-                        >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
-                      >
-                      <span class="pay-status finish" v-show="isFinishBill"
-                        >已完成</span
-                      >
-                      <span class="pay-money" v-show="!isFinishBill"
-                        >￥{{ detail.monthPayableAmount }}</span
-                      >
-                    </div>
+                <div
+                  class="item"
+                  v-for="(detail, i) in item.quarterList"
+                  :key="i"
+                  ref="billItem"
+                >
+                  <div class="check-operation" v-show="!isFinishBill">
+                    <!-- @click="checkSingle(item, detail, i)" -->
+                    <van-checkbox
+                      v-model="detail.checked"
+                      v-show="isMonthPay"
+                      @change="checkSingle(item, detail, i)"
+                      ref="checkboxGroup"
+                      checked-color="#ee0a24"
+                    ></van-checkbox>
                   </div>
                   <div
-                    class="detail-item"
-                    v-for="(monthDetail, k) in detail.monthList"
-                    :key="k"
-                    @click="goToDetail(monthDetail, isFinishBill)"
+                    class="item-box"
+                    :class="{ 'finish-item': isFinishBill }"
                   >
-                    <span class="detail-name"
-                      >{{ monthDetail.showInfo }}<i></i
-                    ></span>
-                    <span class="detail-money"
-                      >￥{{ monthDetail.payableAmount }}</span
+                    <div class="detail-title">
+                      <div class="month-text">
+                        <span class="num">{{ detail.month }}</span>
+                        <span>{{ detail.monthTitle }}</span>
+                      </div>
+                      <div class="status">
+                        <span
+                          class="pay-status"
+                          :class="detail.isPay == 1 ? 'paying' : 'need'"
+                          v-show="!isFinishBill"
+                          >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
+                        >
+                        <span class="pay-status finish" v-show="isFinishBill"
+                          >已完成</span
+                        >
+                        <span class="pay-money" v-show="!isFinishBill"
+                          >￥{{ detail.monthPayableAmount }}</span
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="detail-item"
+                      v-for="(monthDetail, k) in detail.monthList"
+                      :key="k"
+                      @click="goToDetail(monthDetail, isFinishBill)"
                     >
+                      <span class="detail-name"
+                        >{{ monthDetail.showInfo }}<i></i
+                      ></span>
+                      <span class="detail-money"
+                        >￥{{ monthDetail.payableAmount }}</span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <Empty
-              v-show="showEmpty"
-              :description="
-                isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
-              "
-            ></Empty>
-            <!-- </van-pull-refresh> -->
+              <Empty
+                v-show="showEmpty"
+                :description="
+                  isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
+                "
+              ></Empty>
+            </van-pull-refresh>
           </van-list>
         </div>
       </div>
@@ -229,7 +231,6 @@ export default {
     getBillDetail() {
       // this.results = [];
       this.showEmpty = false;
-      // this.toast();
       this.loading = true;
       if (this.isFinishBill) {
         this.showFinishText = false;
@@ -241,7 +242,9 @@ export default {
 
       let propertyObj = {
         airDefenseNo: this.$route.query.airDefenseNo,
-        memberId: this.$store.state.userInfo.phone,
+        memberId: this.$store.state.userInfo.phone
+          ? this.$store.state.userInfo.phone
+          : "",
         status: this.isFinishBill ? 90 : 10, //账单状态 10-待支付 90-成功
         type: 2, //type 1、列表 2、详情
         pageNo: !this.isFinishBill ? 1 : this.currentPage,
@@ -376,6 +379,8 @@ export default {
         let num = mergeList.reduce((total, e) => {
           return BigNumber(total).plus(e.monthPayableAmount);
         }, 0);
+        // console.log(`numnumnum`,num);
+
         _this.mergeAmount = num;
 
         //如果账单列表全部选中，则底部支付的全选按钮也要勾选上
@@ -448,6 +453,7 @@ export default {
 
         //底部支付组件的合计金额等于整个房间或者车位的待缴纳的总金额
         this.mergeAmount = this.results.totalPayableAmount;
+        console.log(`this.mergeAmount`, this.mergeAmount);
       } else {
         if (this.$refs.checkShop) {
           //如果取消勾选上底部全选按钮，则所有账单都要取消勾选
@@ -486,7 +492,10 @@ export default {
     },
     //下拉刷新
     onRefresh() {
-      // this.isLoading = false;
+      this.finished = false;
+      this.showFinishText = false;
+      // 重新加载数据
+      this.getBillDetail();
     },
     //切换账单类型
     onChangeBillType(type) {
@@ -523,13 +532,11 @@ export default {
       if (payInfoList.length == 0) {
         this.$toast("请选择账单");
       } else {
-        payData.forEach(item => {
+        payData.forEach((item, index) => {
           // isPay=1：支付中；isPay=0：待支付
           if (item.isPay == 1) {
             //支付中状态
             this.isPaying = true;
-          } else {
-            this.isPaying = false;
           }
         });
 
@@ -642,6 +649,7 @@ export default {
         color: #FFFFFF;
         line-height: 22px;
         padding: 16px 16px 10px 16px;
+        min-height: 48px;
       }
       .pay-total {
         display: flex;
