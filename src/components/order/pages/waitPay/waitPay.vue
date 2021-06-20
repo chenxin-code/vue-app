@@ -347,7 +347,9 @@ export default {
 
       let propertyObj = {
         airDefenseNo: airDefenseNo,
-        memberId: this.$store.state.userInfo.phone,
+        memberId: this.$store.state.userInfo.phone
+          ? this.$store.state.userInfo.phone
+          : "",
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
         pageTimes: "",
