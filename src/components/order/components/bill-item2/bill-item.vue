@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 10:25:47
+ * @LastEditTime: 2021-06-20 18:20:20
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -20,8 +20,8 @@
       </div>
       <div class="down-up-icon" @click="onClickBill(isOpen)"></div>
     </div>
-    <transition name="isd"
-      ><div class="list" v-show="isOpen">
+    <transition name="isd">
+      <div class="list" v-show="isOpen">
         <div class="content">
           <div
             class="content-list"
@@ -66,8 +66,9 @@
             </div>
             <div class="inline"></div>
           </div>
-        </div></div
-    ></transition>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script>

@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 16:49:32
+ * @LastEditTime: 2021-06-20 17:52:31
 -->
 <template>
   <div class="bill-detail">
@@ -42,18 +42,17 @@
           </div>
         </div>
 
-        <!-- style="height: 100%; position: fixed; width: 100%" -->
         <div class="content" :class="results.length === 0 ? 'empty' : ''">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="showFinishText ? '--没有更多了--' : ''"
-            :immediate-check="false"
-            :offset="10"
-            @load="getBillDetail"
-            style="height:100%;width:100%;overflow-y:auto;"
-          >
-            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
+            <van-list
+              v-model="loading"
+              :finished="finished"
+              :finished-text="showFinishText ? '--没有更多了--' : ''"
+              :immediate-check="false"
+              :offset="10"
+              @load="getBillDetail"
+              style="height:100%;width:100%;overflow-y:auto;"
+            >
               <div
                 class="list"
                 v-for="(item, index) in results.records"
@@ -138,8 +137,8 @@
                   isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
                 "
               ></Empty>
-            </van-pull-refresh>
-          </van-list>
+            </van-list>
+          <!-- </van-pull-refresh> -->
         </div>
       </div>
     </div>
@@ -334,7 +333,6 @@ export default {
     },
     // 点击为true
     checkTrue(item, itemIn) {
-      // console.log(`checkTrue item`, item);
       let _this = this;
       //判断当前是否为月份账单
       if (_this.isMonthPay) {
@@ -369,18 +367,19 @@ export default {
         //为季度账单时的操作
         _this.checkData.add(item);
         // item.checked = true;/////////
-        _this.$refs.payDiv.isShow = true; //隐藏全选按钮
+        _this.$refs.payDiv.isShow = true; //显示全选按钮
         _this.payTotal = _this.checkData.size;
 
         let mergeList = Array.from(_this.checkData);
 
-        // console.log(`mergeList checkTrue`, mergeList);
+        console.log(`mergeList checkTrue`, mergeList);
         //计算所有选中账单的总金额
+        // let testSub = 0;
         let num = mergeList.reduce((total, e) => {
           return BigNumber(total).plus(e.monthPayableAmount);
+          // console.log(`testSub`,testSub + e.monthPayableAmount);
+          
         }, 0);
-        // console.log(`numnumnum`,num);
-
         _this.mergeAmount = num;
 
         //如果账单列表全部选中，则底部支付的全选按钮也要勾选上
@@ -388,7 +387,6 @@ export default {
           _this.$refs.payDiv.isChecked = true;
         }
       }
-
       _this.$forceUpdate();
     },
     // 点击为false
@@ -475,7 +473,6 @@ export default {
         //如果不勾选全选，那么底部支付组件的合计金额就可以等于0
         this.mergeAmount = 0;
       }
-      // console.log(`checkPayDiv billNosList`, this.billNosList);
     },
     //返回上一级
     backEvent() {
@@ -519,7 +516,6 @@ export default {
         return item.monthList;
       });
       console.log(`payData`, payData);
-
       let billNos = [];
       payData.forEach((item, index) => {
         item.billNos.forEach(data => {
@@ -532,15 +528,12 @@ export default {
       if (payInfoList.length == 0) {
         this.$toast("请选择账单");
       } else {
+        let payStr = [];
         payData.forEach((item, index) => {
           // isPay=1：支付中；isPay=0：待支付
-          if (item.isPay == 1) {
-            //支付中状态
-            this.isPaying = true;
-          }
+          payStr.push(item.isPay);
         });
-
-        if (this.isPaying) {
+        if (payStr.includes(1)) {
           //支付中的订单不能提交
           Dialog.alert({
             message:

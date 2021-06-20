@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 09:56:23
+ * @LastEditTime: 2021-06-20 18:18:38
 -->
 <template>
   <div class="content-list">

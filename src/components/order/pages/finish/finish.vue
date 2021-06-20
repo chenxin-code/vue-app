@@ -203,7 +203,8 @@ export default {
             orderTypeList: this.tabs.type,
             // state: this.tabs.tag,
             page: { index: page, pageSize: 30 },
-            airDefenseNo: this.$store.state.userRoomId
+            airDefenseNo: this.$store.state.userRoomId,
+            billType: this.reqBillType
           };
           this.$http
             .post("/app/json/app_shopping_order/findOrderFormList", obj)
