@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-19 22:14:53
+ * @LastEditTime: 2021-06-20 11:18:43
 -->
 <template>
   <div class="bill-detail">
@@ -252,9 +252,9 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "https://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
-            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+            "http://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       this.$http
         .get(url, { params: propertyObj })
         .then(res => {
@@ -511,23 +511,6 @@ export default {
       });
       console.log(`payData`, payData);
 
-      // payData.forEach(item => {
-      //   if (item.isPay == 0) {
-      //     //支付中状态
-      //     this.isPaying = true;
-      //   } else {
-      //     this.isPaying = false;
-      //   }
-      // });
-
-      // if (this.isPaying) {
-      //   Dialog.alert({
-      //     message: res.billRetStatusMessage,
-      //     theme: "round-button"
-      //   });
-      // } else {
-      // }
-
       let billNos = [];
       payData.forEach((item, index) => {
         item.billNos.forEach(data => {
@@ -536,54 +519,62 @@ export default {
       });
 
       let billNosStr = _.join(billNos, ",");
-      console.log(`订单billNos`, billNos);
+
       if (payInfoList.length == 0) {
         this.$toast("请选择账单");
       } else {
-        console.log(`提交账单中心参数`, {
-          businessCstNo: this.$store.state.userInfo.phone,
-          platMerCstNo: payData[0].platMerCstNo,
-          tradeMerCstNo: payData[0].tradeMerCstNo,
-          billNo: billNosStr,
-          appScheme: "x-engine",
-          payType: false
-        });
-        //请求账单中心发起支付
-        yjzdbill.YJBillPayment({
-          businessCstNo: this.$store.state.userInfo.phone,
-          platMerCstNo: payData[0].platMerCstNo,
-          tradeMerCstNo: payData[0].tradeMerCstNo,
-          billNo: billNosStr,
-          appScheme: "x-engine",
-          payType: false,
-          __ret__: res => {
-            console.log("---------------开始支付提交记录---------------------");
-            console.log(res);
-            // this.$toast(res.billRetStatusMessage);
-            if (res.billRetStatus === "-1") {
-              //支付失败
-              Dialog.alert({
-                message: res.billRetStatusMessage,
-                theme: "round-button"
-              });
-            } else {
-              //支付成功
-              this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
-            }
+        payData.forEach(item => {
+          // isPay=1：支付中；isPay=0：待支付
+          if (item.isPay == 1) {
+            //支付中状态
+            this.isPaying = true;
+          } else {
+            this.isPaying = false;
           }
         });
 
-        // let callbackUrl = `/app-vue/app/index.html#/order/2?time=${Date.now()}`; //支付完成要跳回来的页面Url
-        // window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
-        //   JSON.stringify({
-        //     businessCstNo: this.$store.state.userInfo.phone,
-        //     platMerCstNo: payData[0].platMerCstNo,
-        //     tradeMerCstNo: payData[0].tradeMerCstNo,
-        //     billNo: billNosStr,
-        //     appScheme: "x-engine-c",
-        //     payType: false
-        //   })
-        // )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
+        if (this.isPaying) {
+          //支付中的订单不能提交
+          Dialog.alert({
+            message:
+              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。",
+            theme: "round-button"
+          });
+        } else {
+          console.log(`提交账单中心参数`, {
+            businessCstNo: this.$store.state.userInfo.phone,
+            platMerCstNo: payData[0].platMerCstNo,
+            tradeMerCstNo: payData[0].tradeMerCstNo,
+            billNo: billNosStr,
+            appScheme: "x-engine",
+            payType: false
+          });
+          //请求账单中心发起支付
+          yjzdbill.YJBillPayment({
+            businessCstNo: this.$store.state.userInfo.phone,
+            platMerCstNo: payData[0].platMerCstNo,
+            tradeMerCstNo: payData[0].tradeMerCstNo,
+            billNo: billNosStr,
+            appScheme: "x-engine",
+            payType: false,
+            __ret__: res => {
+              console.log(
+                "---------------开始支付提交记录---------------------"
+              );
+              console.log(res);
+              if (res.billRetStatus === "-1") {
+                //支付失败
+                Dialog.alert({
+                  message: res.billRetStatusMessage,
+                  theme: "round-button"
+                });
+              } else {
+                //支付成功
+                this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+              }
+            }
+          });
+        }
       }
     },
     //查看详情
