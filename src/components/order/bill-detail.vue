@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 19:35:20
+ * @LastEditTime: 2021-06-20 21:41:17
 -->
 <template>
   <div class="bill-detail">
@@ -286,6 +286,7 @@ export default {
             this.loading = false; //清除loading
 
             if (this.results.length === 0) {
+              console.log(`空的this.results`, this.results);
               this.showEmpty = true;
             } else {
               /**
@@ -313,7 +314,8 @@ export default {
           } else {
             this.results = [];
             // this.showEmpty = true;
-            Toast({ duration: 800, message: res.data.message }); //提示错误信息
+
+            Toast({ duration: 500, message: res.data.message }); //提示错误信息
           }
           this.$forceUpdate();
         })
@@ -597,9 +599,7 @@ export default {
       console.log(`goToDetail`, item);
       if (isFinishBill) {
         //完成的账单 - 跳到预缴余额的预缴详情页面
-        let tollDate = moment(item.businessParams.chargeYear).format(
-          "YYYY-MM-DD"
-        );
+        let tollDate = moment(item.payTime).format("YYYY-MM-DD");
         let path = `/advancePaymentDetails?type=1&amount=${item.realAmount}&objectName=${this.results.spaceFullName}&customerName=${item.proprietorName}&tollDate=${tollDate}
         &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}`;
 

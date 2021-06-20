@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-18 14:06:42
+ * @LastEditTime: 2021-06-20 21:38:56
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -16,10 +16,15 @@
         checked-color="#f80f16"
         icon-size="18px"
       ></van-checkbox>
-      <div class="property-title" :class="{ finish: pageName !== 'waitPay' }">
+      <div
+        class="property-title"
+        :class="{ finish: pageName !== 'waitPay' }"
+        @click="onClickBill(isOpen)"
+      >
         您的物业缴费账单
       </div>
-      <div class="down-up-icon" @click="onClickBill(isOpen)"></div>
+      <!--  @click="onClickBill(isOpen)" -->
+      <div class="down-up-icon"></div>
     </div>
     <transition name="isd"
       ><div class="list" v-show="isOpen">
@@ -142,6 +147,7 @@ export default {
       color: #E8374A;
       line-height: 40px;
       margin-left: 25px;
+      width: 100%;
       &.finish {
         margin-left: 45px;
       }

@@ -680,17 +680,26 @@ export default {
                   "---------------开始支付提交记录---------------------"
                 );
                 console.log(res);
-                if (res.billRetStatus === "-1") {
-                  //支付失败
-                  // this.showDialog = true;
-                  this.tipsText = res.billRetStatusMessage;
+                // if (res.billRetStatus === "-1") {
+                //   //支付失败
+                //   // this.showDialog = true;
+                //   this.tipsText = res.billRetStatusMessage;
+                //   Dialog.alert({
+                //     message: this.tipsText,
+                //     theme: "round-button"
+                //   });
+                // } else {
+                //   //支付成功
+                //   this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                // }
+
+                if (res.billRetStatus != "1") {
                   Dialog.alert({
-                    message: this.tipsText,
+                    message: res.billRetStatusMessage
+                      ? res.billRetStatusMessage
+                      : "支付失败",
                     theme: "round-button"
                   });
-                } else {
-                  //支付成功
-                  this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
                 }
               }
             });
