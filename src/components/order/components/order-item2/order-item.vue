@@ -2,10 +2,10 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 18:18:38
+ * @LastEditTime: 2021-06-20 21:52:54
 -->
 <template>
-  <div class="content-list">
+  <div class="content-list" @click="checkDetail(pageName, item)">
     <div class="title">
       <van-checkbox
         v-model="isChecked"
@@ -36,7 +36,7 @@
             }}</span
           >
         </div>
-        <div class="check" @click="checkDetail(pageName, item)">
+        <div class="check">
           查账单 <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
