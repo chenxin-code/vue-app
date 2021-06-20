@@ -350,7 +350,8 @@ export default {
         memberId: this.$store.state.userInfo.phone,
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
-        pageTimes: ""
+        pageTimes: "",
+        pageNo: ""
       };
 
       let url = "";
@@ -583,15 +584,16 @@ export default {
     //物业缴费列表接口
     initPropert() {
       this.loading = true;
-
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      //   "F1140319BD594B9C9EAD77D119D681D6,B61955EC92E04AD69869D6F5E70BB42C,132db4ee32114c2c987a1cf2dc2e758e,535366e4998743809637d328690d9802,d960b63d954b410f86230bfa23099737,8ce6b5ddc06646e2b7b0cdabe417f9c4"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
         airDefenseNo: airDefenseNo,
-        memberId: this.$store.state.userInfo.phone,
+        memberId: this.$store.state.userInfo.phone
+          ? this.$store.state.userInfo.phone
+          : "",
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
         pageNo: "",
