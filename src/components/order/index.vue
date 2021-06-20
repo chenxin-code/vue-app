@@ -14,12 +14,11 @@
           v-for="(item, index) in orderStatusList"
           :key="index"
           title-class="tabTitle"
-          :name="item.components"
->
-        <component
-          v-bind:is="item.components"
-          :key="$route.path + $route.query.time"
-        ></component>
+          :name="item.components">
+            <component
+              v-bind:is="item.components"
+              :key="$route.path + $route.query.time"
+            ></component>
         </van-tab>
       </van-tabs>
     </van-sticky>
