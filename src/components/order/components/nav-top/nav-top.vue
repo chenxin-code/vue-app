@@ -86,6 +86,9 @@ export default {
               _result == undefined
             ) {
               console.log("appLocalstorage_result", _result);
+              appNav.navigatorBack({ url: "0" }).then(res => {
+                console.log(res);
+              });
               return;
             }
             if (_result == "1") {
