@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 00:17:27
+ * @LastEditTime: 2021-06-21 00:44:29
 -->
 <template>
   <div class="property-bill" v-if="results">
@@ -113,7 +113,8 @@ export default {
         path: "/bill/detail",
         query: {
           billDetailType: checkDetail === "waitPay" ? 0 : 1, //待支付页面传0，完成页面传1
-          airDefenseNo: customerRoomIdStr
+          airDefenseNo: customerRoomIdStr,
+          houseName: data.spaceFullName
         }
       });
     }

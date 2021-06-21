@@ -2,10 +2,10 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 21:52:54
+ * @LastEditTime: 2021-06-21 02:09:25
 -->
 <template>
-  <div class="content-list" @click="checkDetail(pageName, item)">
+  <div class="content-list">
     <div class="title">
       <van-checkbox
         v-model="isChecked"
@@ -24,7 +24,7 @@
       ></i>
       <span class="title-name">物业缴费</span>
     </div>
-    <div class="hd">
+    <div class="hd" @click="checkDetail(pageName, item)">
       <div class="icon" :class="titleIcon(item.type)"></div>
       <div class="detail">
         <div class="project">{{ item.spaceFullName }}</div>
@@ -121,7 +121,8 @@ export default {
         path: "/bill/detail",
         query: {
           billDetailType: checkDetail === "waitPay" ? 0 : 1, //待支付页面传0，完成页面传1
-          airDefenseNo: customerRoomIdStr
+          airDefenseNo: customerRoomIdStr,
+          houseName: data.spaceFullName
         }
       });
     }

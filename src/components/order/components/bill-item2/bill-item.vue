@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 00:23:24
+ * @LastEditTime: 2021-06-21 02:27:57
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -147,15 +147,14 @@ export default {
       return iconClass;
     },
     checkDetail(checkDetail, data) {
-      console.log(`checkDetail data`, data);
-
       let customerRoomId = data.customerRoomId;
       let customerRoomIdStr = _.join(customerRoomId, ",");
       this.$router.push({
         path: "/bill/detail",
         query: {
           billDetailType: checkDetail === "waitPay" ? 0 : 1, //待支付页面传0，完成页面传1
-          airDefenseNo: customerRoomIdStr
+          airDefenseNo: customerRoomIdStr,
+          houseName: data.spaceFullName
         }
       });
     }

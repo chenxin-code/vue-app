@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ["checkData", "mergeAmount", "total"],
+  props: ["checkData", "mergeAmount", "total", "resultList"],
   data() {
     return {
       isChecked: false,
@@ -67,11 +67,18 @@ export default {
     checkEvent(event) {
       let arr = Array.from(this.checkData);
       console.log(`paydiv`, arr);
+      console.log(`resultList`, this.resultList);
+
       if (arr.length == 0) return;
-      let data = {};
-      data.checked = this.isChecked;
-      data.checkAll = true;
-      this.$emit("checkEvent", data);
+      // let data = {};
+      // data.checked = this.isChecked;
+      // data.checkAll = true;
+
+      // let data = {};
+      this.resultList.checked = this.isChecked;
+      this.resultList.checkAll = true;
+
+      this.$emit("checkEvent", this.resultList);
     },
     mergePay() {
       this.$emit("mergePay");

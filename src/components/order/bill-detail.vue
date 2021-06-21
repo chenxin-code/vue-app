@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-20 22:26:30
+ * @LastEditTime: 2021-06-21 11:21:12
 -->
 <template>
   <div class="bill-detail">
@@ -16,13 +16,14 @@
     </van-sticky>
     <div class="warpper">
       <div class="summary">
-        <div class="house-title">{{ results.spaceFullName }}</div>
+        <div class="house-title">{{ this.$route.query.houseName }}</div>
         <div class="pay-total">
           <div class="text">待缴纳总金额：</div>
-          <div class="money">
+          <div class="money" v-if="results.totalPayableAmount">
             <span class="currency-symbol">￥</span
             >{{ isFinishBill ? "0.00" : results.totalPayableAmount }}
           </div>
+          <div class="money" v-else><van-loading size="20" /></div>
         </div>
       </div>
       <div class="bill-list">
@@ -59,8 +60,9 @@
               :key="index"
             >
               <div v-show="!isFinishBill">
+                <!-- v-if="!isMonthPay" -->
                 <van-checkbox
-                  v-if="!isMonthPay"
+                  v-show="!isMonthPay"
                   :name="index"
                   v-model="item.shopCheck"
                   @click="checkShop(item, index, isMonthPay)"
@@ -68,7 +70,8 @@
                   ref="checkShop"
                   >{{ item.quarterTitle }}</van-checkbox
                 >
-                <div class="title-hd" v-else>
+                <!-- v-else -->
+                <div class="title-hd" v-show="isMonthPay">
                   {{ item.quarterTitle }}
                 </div>
               </div>
@@ -145,6 +148,7 @@
       @mergePay="mergePay"
       :mergeAmount="mergeAmount"
       :total="payTotal"
+      :resultList="results.records"
       v-show="!isFinishBill"
     ></pay-div>
   </div>
@@ -162,6 +166,7 @@ import { BigNumber } from "bignumber.js";
 import moment from "moment";
 import _ from "lodash";
 import { Dialog } from "vant";
+import { Loading } from "vant";
 export default {
   data() {
     return {
@@ -195,7 +200,8 @@ export default {
     payDiv,
     Empty,
     [DropdownMenu.name]: DropdownMenu,
-    [DropdownItem.name]: DropdownItem
+    [DropdownItem.name]: DropdownItem,
+    [Loading.name]: Loading
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === "/billCenter/detail") {
@@ -266,8 +272,6 @@ export default {
               this.results = this.isFinishBill
                 ? data.finish[0]
                 : data.notpay[0];
-              // this.loading = false; //清除loading
-              // console.log(`shuangxin`);
             } else {
               if (this.currentPage === 1) {
                 this.results = this.isFinishBill
@@ -344,12 +348,11 @@ export default {
         //为月度账单时的操作
         _this.checkData.add(itemIn);
         item.checked = true;
-        _this.$refs.payDiv.isShow = true; //隐藏全选按钮
+        _this.$refs.payDiv.isShow = true; //显示全选按钮
         _this.payTotal = _this.checkData.size;
 
         let mergeList = Array.from(_this.checkData);
 
-        console.log(`item.shopCheck`, item.shopCheck);
         //先判断季度账单有没有勾选
         if (!item.shopCheck && item.shopCheck != undefined) {
           //如果勾选的月账单总数等于季度账单的总长度，则季度账单按钮要勾选
@@ -393,10 +396,17 @@ export default {
     },
     // 点击为false
     checkFalse(item, itemIn) {
+      console.log(`checkFalse item`, item);
+      console.log(`checkFalse itemIn`, itemIn);
       let _this = this;
-      _this.checkData.delete(itemIn); // 删除数据中取消选中的数据
 
-      itemIn.checked = false; // 将月份账单选中状态改为false
+      if (this.isMonthPay) {
+        _this.checkData.delete(itemIn); // 删除数据中取消选中的数据
+        itemIn.checked = false; // 将月份账单选中状态改为false
+      } else {
+        console.log(`checkFalse checkData`, item);
+        _this.checkData.delete(itemIn); // 删除数据中取消选中的数据
+      }
       item.shopCheck = false; // 将季度账单选中状态改为false
       _this.payTotal = _this.checkData.size;
 
@@ -427,7 +437,6 @@ export default {
     },
     //单个季度账单反选
     shopFalse(item) {
-      // console.log(`shopFalse`, item);
       let _this = this;
       item.quarterList.forEach(itemIn => {
         _this.checkFalse(item, itemIn);
@@ -436,18 +445,27 @@ export default {
     //底部支付组件全选事件
     checkPayDiv(data) {
       if (data.checked) {
-        // this.checkData = new Set();
-        //如果勾选上底部全选按钮，则所有账单都要勾选
-        if (this.$refs.checkShop) {
-          this.$refs.checkShop.filter((item, index) => {
-            item.checked = true;
+        if (this.isMonthPay) {
+          // 如果勾选上底部全选按钮，则所有账单都要勾选
+          if (this.$refs.checkShop) {
+            this.$refs.checkShop.filter((item, index) => {
+              item.checked = true;
+            });
+          }
+          if (this.$refs.checkboxGroup) {
+            this.$refs.checkboxGroup.filter((item, index) => {
+              item.checked = true;
+            });
+          }
+        } else {
+          data.forEach(item => {
+            item.shopCheck = true;
+            item.quarterList.forEach((items, index) => {
+              this.checkTrue(items, index);
+            });
           });
         }
-        if (this.$refs.checkboxGroup) {
-          this.$refs.checkboxGroup.filter((item, index) => {
-            item.checked = true;
-          });
-        }
+
         //直接拿全部账单号
         this.billNosList = this.results.billNos;
 
@@ -455,25 +473,34 @@ export default {
         this.mergeAmount = this.results.totalPayableAmount;
         console.log(`this.mergeAmount`, this.mergeAmount);
       } else {
-        if (this.$refs.checkShop) {
-          //如果取消勾选上底部全选按钮，则所有账单都要取消勾选
-          this.$refs.checkShop.filter((item, index) => {
-            item.checked = false;
-          });
-        }
-        if (this.$refs.checkboxGroup) {
-          this.$refs.checkboxGroup.filter((item, index) => {
-            item.checked = false;
+        if (this.isMonthPay) {
+          if (this.$refs.checkShop) {
+            //如果取消勾选上底部全选按钮，则所有账单都要取消勾选
+            this.$refs.checkShop.filter((item, index) => {
+              item.checked = false;
+            });
+          }
+          if (this.$refs.checkboxGroup) {
+            this.$refs.checkboxGroup.filter((item, index) => {
+              item.checked = false;
+            });
+          }
+        } else {
+          data.forEach(item => {
+            item.shopCheck = false;
+            item.quarterList.forEach((items, index) => {
+              this.checkFalse(items, index);
+            });
           });
         }
 
         //清空选中的账单号
         this.billNosList = [];
         this.checkData = new Set();
-        console.log(`checkData`, this.checkData);
-
-        //如果不勾选全选，那么底部支付组件的合计金额就可以等于0
+        this.$refs.payDiv.isShow = false; //隐藏全选按钮
+        //如果不勾选全选，那么底部支付组件的合计金额就可以等于0,合计数量为0
         this.mergeAmount = 0;
+        this.payTotal = 0;
       }
     },
     //返回上一级
@@ -486,7 +513,7 @@ export default {
         type: "microapp",
         uri: "com.times.microapp.AppcInvoice", // 微应用包名
         path: "/", // 微应用具体路由
-        hideNavbar: false
+        hideNavbar: true
       });
     },
     //下拉刷新
@@ -564,17 +591,6 @@ export default {
                 "---------------开始支付提交记录---------------------"
               );
               console.log(res);
-              // if (res.billRetStatus === "-1") {
-              //   //支付失败
-              //   Dialog.alert({
-              //     message: res.billRetStatusMessage,
-              //     theme: "round-button"
-              //   });
-              // } else {
-              //   //支付成功
-              //   this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
-              // }
-
               if (res.billRetStatus == "1") {
                 //支付成功
                 this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
