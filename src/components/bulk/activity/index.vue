@@ -10,12 +10,12 @@
     <van-sticky>
       <div class="tab">
         <div class="tab_back" @click="goBack()">
-            <van-icon
+          <van-icon
             name="arrow-left"
             class="arrow_left"
             color="#000000"
             size="0.471467rem"
-            />
+          />
         </div>
         <div class="tab_item_box">
           <div
@@ -31,7 +31,11 @@
       </div>
     </van-sticky>
 
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh" style="min-height: 400px;">
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      style="min-height: 400px"
+    >
       <van-list
         v-model="loading"
         :finished="finished"
@@ -135,7 +139,7 @@ export default {
       shareItemData: {},
       link: "",
       getDataOk: false,
-      page: 1
+      page: 1,
     };
   },
   created() {
@@ -147,7 +151,7 @@ export default {
           this.userData = res.data.data;
         }
       });
-      this.getlist();
+    this.getlist();
   },
   methods: {
     // 切换tab
@@ -160,14 +164,14 @@ export default {
       this.getDataOk = false;
       this.getlist();
     },
-    goBack(){
+    goBack() {
       // this.$router.push({})
       // if(){
-        this.$router.go(-1);
+      this.$router.go(-1);
       // }
     },
     // 请求列表
-    getlist(){
+    getlist() {
       let page = this.currentPage;
       page = page + 1;
       this.currentPage = page;
@@ -208,8 +212,8 @@ export default {
     },
     //上拉加载
     onLoad() {
-      if(this.getDataOk){
-        if(this.page < this.totalPage){
+      if (this.getDataOk) {
+        if (this.page < this.totalPage) {
           this.getlist();
         } else {
           this.finished = true;
@@ -230,7 +234,7 @@ export default {
     onShare: function (option) {
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
-          console.log("当前是小程序~~~")
+          console.log("当前是小程序~~~");
           //判断小程序
           this.options = [{ name: "复制链接", icon: "link" }];
         } else if (
@@ -249,7 +253,8 @@ export default {
               link: "https://www.baidu.com",
               imageurl: this.shareItemData.groupbuyActivityPicurl,
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
-              miniProgramType: this.$store.state.environment=='production'?0:2,
+              miniProgramType:
+                this.$store.state.environment == "production" ? 0 : 2,
               __event__: (res) => {},
             })
             .then((res) => {
@@ -320,45 +325,56 @@ export default {
   overflow-y: scroll;
   width: 100%;
   height: 100%;
-  .not-data{
-    width 100%;
+
+  .not-data {
+    width: 100%;
     font-size: 15px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #999999;
     text-align: center;
-    margin-top: 240px
-    img{
-      width 100%;
+    margin-top: 240px;
+
+    img {
+      width: 100%;
     }
   }
+
   .tab {
     width: 100%;
-    // height: 36.5px;
-    padding: 14px 20px 8px 11.5px;
+    height: 44px;
+    padding: 0px 20px 0px 0px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     background-color: #fff;
 
-    .tab_back{
-      width: 42px;
+    .tab_back {
+      width: 75px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-right: 21px;
     }
 
     .tab_item_box {
-      width: 100%;
+      width: 80%;
       height: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-left: 21px;
+      // margin-left: 21px;
     }
 
     .tab_item {
       font-size: 14px;
       font-weight: 400;
       color: #333333;
-      line-height: 20px;
+      // line-height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding-bottom: 6.5px;
     }
 
@@ -481,7 +497,8 @@ export default {
       }
     }
   }
-  /deep/.van-pull-refresh__track{
+
+  /deep/.van-pull-refresh__track {
     min-height: 400px;
   }
 }

@@ -1,3 +1,9 @@
+/*
+ * @Description: 这是***页面
+ * @Date: 2021-06-08 13:57:01
+ * @Author: shuimei
+ * @LastEditTime: 2021-06-17 11:16:37
+ */
 module.exports = {
     proxy: {
         '/api/mapapi': {
@@ -33,6 +39,14 @@ module.exports = {
             // target: 'http://192.168.31.118:18807',
             // target: 'https://mall-prod-app-linli.timesgroup.cn',
             target: 'http://mall-uat-app-linli.timesgroup.cn/',
+            changeOrigin: true,
+        },
+        '/times': {
+            target: 'http://m-center-uat.linli.timesgroup.cn', //中台系统
+            changeOrigin: true,
+        },
+        '/pcs': {
+            target: 'http://times-pcs.linli580.com.cn:8888', //收费系统
             changeOrigin: true,
         },
     }

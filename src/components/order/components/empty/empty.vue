@@ -1,17 +1,33 @@
+<!--
+ * @Description: 这是***页面
+ * @Date: 2021-06-08 13:57:02
+ * @Author: shuimei
+ * @LastEditTime: 2021-06-17 19:34:40
+-->
 <template>
   <div class="empty">
-    <van-empty class="custom-image" :image="imgUrl" description="暂无订单" />
+    <van-empty
+      class="custom-image"
+      :image="imgUrl"
+      :description="description"
+    />
   </div>
 </template>
 
 <script>
 export default {
   name: "empty",
+  props: {
+    description: {
+      type: String,
+      default: "暂无订单"
+    }
+  },
   data() {
     return {
-      imgUrl: require("../../img/noOrder.png"),
+      imgUrl: require("../../img/noOrder.png")
     };
-  },
+  }
 };
 </script>
 

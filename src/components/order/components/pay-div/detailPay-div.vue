@@ -18,7 +18,6 @@
                   >.<span class="decimal">{{ amount.decimal }}</span></span
                 >
               </div>
-              <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div>
             </div>
           </div>
         </div>
@@ -36,12 +35,11 @@
 
 <script>
 export default {
-  props: ["checkData", "mergeAmount", "total"],
+  props: ["checkData", "mergeAmount", "total", "resultList"],
   data() {
     return {
       isChecked: false,
       isShow: false,
-      billType: "",
       amount: {
         integer: "0",
         decimal: "00"
@@ -64,62 +62,23 @@ export default {
       this.isX = false;
     }
   },
-  computed: {
-    billTypeName() {
-      let billName = "";
-      switch (this.billType) {
-        case 11:
-          billName = "邻里星选";
-          break;
-        case 1:
-          billName = "物业缴费";
-          break;
-        case 2:
-          billName = "月保续费";
-          break;
-        case 3:
-          billName = "临停缴费";
-          break;
-        case 5:
-          billName = "零售";
-          break;
-        case 6:
-          billName = "预缴费";
-          break;
-        case 4:
-          billName = "临时缴费";
-          break;
-        case 7:
-          billName = "旅游";
-          break;
-        case 8:
-          billName = "家政";
-          break;
-        case 9:
-          billName = "拎包";
-          break;
-        case 10:
-          billName = "押金";
-          break;
-        case 12:
-          billName = "美居";
-          break;
-        case 14:
-          billName = "维修服务费";
-          break;
-      }
-      return billName;
-    }
-  },
+
   methods: {
     checkEvent(event) {
       let arr = Array.from(this.checkData);
+      console.log(`paydiv`, arr);
+      console.log(`resultList`, this.resultList);
+
       if (arr.length == 0) return;
-      let data = {};
-      data.billType = arr[0].billType;
-      data.checked = this.isChecked;
-      data.checkAll = true;
-      this.$emit("checkEvent", data);
+      // let data = {};
+      // data.checked = this.isChecked;
+      // data.checkAll = true;
+
+      // let data = {};
+      this.resultList.checked = this.isChecked;
+      this.resultList.checkAll = true;
+
+      this.$emit("checkEvent", this.resultList);
     },
     mergePay() {
       this.$emit("mergePay");

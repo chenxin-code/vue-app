@@ -1,11 +1,11 @@
 <template>
   <div class="nav-top" :style="{ 'padding-top': adapterTop }">
-    <div>
-      <i class="icon" @click="goBack"></i>
+    <div @click="goBack">
+      <i class="icon"></i>
       <span class="title">我的订单</span>
     </div>
-    <!-- <span class="history" @click="navToHistory">历史缴费记录</span> -->
-    <van-popover
+    <span class="history" @click="navToHistory">历史缴费记录</span>
+    <!-- <van-popover
       v-model="showPopover"
       trigger="click"
       :actions="actions"
@@ -17,7 +17,7 @@
           <img :src="moreIcon" alt="" />
         </div>
       </template>
-    </van-popover>
+    </van-popover> -->
   </div>
 </template>
 
@@ -33,10 +33,10 @@ export default {
       showPopover: false,
       actions: [
         { text: "历史缴费记录", className: "history" },
-        { text: "发票查询", className: "invoice" },
+        { text: "发票查询", className: "invoice" }
       ],
       moreIcon: require("../../img/more.png"),
-      backIndex: false,
+      backIndex: false
     };
   },
   created() {
@@ -65,18 +65,18 @@ export default {
       action.className == "invoice" &&
         this.navToMicroapp("com.times.microapp.AppcInvoice", "/", true);
     },
-    goBack: function () {
+    goBack: function() {
       if (this.backIndex) {
         this.$router.replace({
-          path: "/common",
+          path: "/common"
         });
       } else {
         appLocalstorage
           .get({
             key: "LLBIsHomeView",
-            isPublic: true,
+            isPublic: true
           })
-          .then((res) => {
+          .then(res => {
             let _result = res.result;
             console.log("appLocalstorage_result", _result);
             if (
@@ -86,18 +86,21 @@ export default {
               _result == undefined
             ) {
               console.log("appLocalstorage_result", _result);
+              appNav.navigatorBack({ url: "0" }).then(res => {
+                console.log(res);
+              });
               return;
             }
             if (_result == "1") {
               this.$router.replace({
-                path: "/common",
+                path: "/common"
               });
             } else if (_result == "0") {
-              appNav.navigatorBack({ url: "0" }).then((res) => {
+              appNav.navigatorBack({ url: "0" }).then(res => {
                 console.log(res);
               });
             } else if (_result == "2") {
-              appNav.navigatorBack({ url: "0" }).then((res) => {
+              appNav.navigatorBack({ url: "0" }).then(res => {
                 console.log(res);
               });
             }
@@ -110,7 +113,7 @@ export default {
         type: "microapp",
         uri: microappUri, // 微应用包名
         path: microappPath, // 微应用具体路由
-        hideNavbar: isHideNavbar,
+        hideNavbar: isHideNavbar
       });
 
       // 发票
@@ -123,7 +126,11 @@ export default {
       // uri: "com.times.microapp.AppcPrepay", // 微应用包名
       // path: "/bill/index", // 微应用具体路由
     },
-  },
+    navToHistory() {
+      this.navToMicroapp("com.times.microapp.AppcPrepay", "/bill/index", false);
+      console.log(`跳到历史欠缴记录页面`);
+    }
+  }
 };
 </script>
 
@@ -149,7 +156,8 @@ export default {
   }
 
   .title {
-    font-size: 24px;
+    // font-size: 24px;
+    font-size: 18px;
     color: #121212;
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
@@ -158,6 +166,7 @@ export default {
   .history {
     font-size: 14px;
     font-weight: 500;
+    font-family: PingFangSC-Medium, PingFang SC;
     color: #333333;
     line-height: 24px;
   }
