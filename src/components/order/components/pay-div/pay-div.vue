@@ -105,7 +105,7 @@ export default {
           billName = "美居";
           break;
         case 14:
-          billName = "维修物业费";
+          billName = "维修服务费";
           break;
       }
       return billName;

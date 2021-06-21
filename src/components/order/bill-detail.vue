@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 11:21:12
+ * @LastEditTime: 2021-06-21 15:48:33
 -->
 <template>
   <div class="bill-detail">
