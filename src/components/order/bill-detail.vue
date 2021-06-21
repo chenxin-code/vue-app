@@ -614,9 +614,10 @@ export default {
       console.log(`goToDetail`, item);
       if (isFinishBill) {
         //完成的账单 - 跳到预缴余额的预缴详情页面
+        let name = "账单详情"
         let tollDate = moment(item.payTime).format("YYYY-MM-DD");
         let path = `/advancePaymentDetails?type=1&amount=${item.realAmount}&objectName=${this.results.spaceFullName}&customerName=${item.proprietorName}&tollDate=${tollDate}
-        &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}`;
+        &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}&navTitleName=${name}`;
 
         navToMicroApplication.openTargetRouter({
           type: "microapp",
