@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 00:44:29
+ * @LastEditTime: 2021-06-21 17:43:27
 -->
 <template>
   <div class="property-bill" v-if="results">
@@ -21,8 +21,9 @@
         @click="onClickBill(isOpen)"
       >
         您的物业缴费账单
+        <div class="down-up-icon"></div>
       </div>
-      <div class="down-up-icon"></div>
+      <!-- <div class="down-up-icon"></div> -->
     </div>
     <transition name="sub-comments"
       ><div class="list" v-show="isOpen">

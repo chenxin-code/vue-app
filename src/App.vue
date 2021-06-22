@@ -140,8 +140,13 @@ export default {
       });
     }
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
-      this.$store.state.userRoomId = res.result;
-      console.log('---------------this.$store.state.userRoomId----------',res)
+      if (res.hasOwnProperty('result')) {
+        console.log('---------------人房id获取成功----------',res)
+        this.$store.state.userRoomId = res.result;
+      }else{
+        console.log('---------------人房id获取失败----------',res)
+        this.$store.state.userRoomId = '';
+      }
     });
     
     if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){

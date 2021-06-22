@@ -325,7 +325,7 @@ export default {
       this.loading = true;
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      //   "6A0FCB11DF314A35A855F0A6372C6EBE,33cc09d4ecbf4c229006ea1fce3c0443,B2EAAE173C1D46FDE053D40C010ADDB8,3bb9ccb03dab4468920966c0bb639335,234273bba0804b8c8c12635b3d8bfcb0,ce4351406edb4dd2a1dcf46898e17b24"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {

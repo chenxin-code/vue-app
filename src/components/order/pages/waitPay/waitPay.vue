@@ -69,11 +69,6 @@
       :mergeAmount="mergeAmount"
       :total="Array.from(this.checkData).length"
     ></pay-div>
-    <!-- <van-dialog v-model="showDialog">
-      <div class="tipsText">
-        {{ tipsText }}
-      </div>
-    </!-->
   </div>
 </template>
 
@@ -588,7 +583,7 @@ export default {
       this.loading = true;
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-      //   "F1140319BD594B9C9EAD77D119D681D6,B61955EC92E04AD69869D6F5E70BB42C,132db4ee32114c2c987a1cf2dc2e758e,535366e4998743809637d328690d9802,d960b63d954b410f86230bfa23099737,8ce6b5ddc06646e2b7b0cdabe417f9c4"; //测试
+      //   "6A0FCB11DF314A35A855F0A6372C6EBE,33cc09d4ecbf4c229006ea1fce3c0443,5ab4b7b4dc974a0f946fd092091960f8,B2EAAE173C1D46FDE053D40C010ADDB8,3bb9ccb03dab4468920966c0bb639335,234273bba0804b8c8c12635b3d8bfcb0,ce4351406edb4dd2a1dcf46898e17b24"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
