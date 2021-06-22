@@ -1554,7 +1554,7 @@ export default {
         left: 0;
         right: 0;
         bottom: 0;
-        padding-bottom: 34px;
+        // padding-bottom: 34px;
       }
 
       .no-list {
