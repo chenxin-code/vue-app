@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-22 18:59:12
+ * @LastEditTime: 2021-06-22 19:46:55
 -->
 <template>
   <div class="bill-detail">
@@ -262,7 +262,7 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "https://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
 
