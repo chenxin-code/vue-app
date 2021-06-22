@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 15:48:33
+ * @LastEditTime: 2021-06-22 13:43:05
 -->
 <template>
   <div class="bill-detail">
@@ -19,11 +19,12 @@
         <div class="house-title">{{ this.$route.query.houseName }}</div>
         <div class="pay-total">
           <div class="text">待缴纳总金额：</div>
-          <div class="money" v-if="results.totalPayableAmount">
-            <span class="currency-symbol">￥</span
-            >{{ isFinishBill ? "0.00" : results.totalPayableAmount }}
+          <div class="money" v-if="!isShowNumLoading">
+            <span class="currency-symbol">￥</span>{{ totalPayableAmount }}
           </div>
-          <div class="money" v-else><van-loading size="20" /></div>
+          <div class="money" v-if="isShowNumLoading">
+            <van-loading size="20" />
+          </div>
         </div>
       </div>
       <div class="bill-list">
@@ -43,7 +44,7 @@
           </div>
         </div>
 
-        <div class="content" :class="results.length === 0 ? 'empty' : ''">
+        <div class="content" :class="showEmpty ? 'empty' : ''">
           <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
           <van-list
             v-model="loading"
@@ -60,7 +61,6 @@
               :key="index"
             >
               <div v-show="!isFinishBill">
-                <!-- v-if="!isMonthPay" -->
                 <van-checkbox
                   v-show="!isMonthPay"
                   :name="index"
@@ -70,7 +70,6 @@
                   ref="checkShop"
                   >{{ item.quarterTitle }}</van-checkbox
                 >
-                <!-- v-else -->
                 <div class="title-hd" v-show="isMonthPay">
                   {{ item.quarterTitle }}
                 </div>
@@ -149,7 +148,7 @@
       :mergeAmount="mergeAmount"
       :total="payTotal"
       :resultList="results.records"
-      v-show="!isFinishBill"
+      v-show="isShowPayDiv"
     ></pay-div>
   </div>
 </template>
@@ -191,7 +190,9 @@ export default {
       showFinishText: false,
       billNosList: [],
       isPaying: false,
-      payErrorInfo: {}
+      isShowNumLoading: true,
+      isShowPayDiv: false,
+      totalPayableAmount: 0
     };
   },
 
@@ -213,17 +214,18 @@ export default {
   },
   created() {
     if (this.$route.query.billDetailType == "1") {
+      //已完成
       this.isFinishBill = true;
       this.billValue = 1;
     } else {
+      //待支付
       this.isFinishBill = false;
       this.billValue = 0;
+      this.isShowPayDiv = true;
     }
     this.getBillDetail();
   },
-  activated() {
-    console.log(`payErrorInfo`, this.payErrorInfo);
-  },
+  activated() {},
   methods: {
     toast() {
       Toast.loading({
@@ -234,15 +236,12 @@ export default {
       });
     },
     getBillDetail() {
-      // this.results = [];
       this.showEmpty = false;
       this.loading = true;
       if (this.isFinishBill) {
         this.showFinishText = false;
         this.finished = false;
-        let page = this.currentPage;
-        page = page + 1;
-        this.currentPage = page;
+        this.currentPage++;
       }
 
       let propertyObj = {
@@ -253,10 +252,13 @@ export default {
         status: this.isFinishBill ? 90 : 10, //账单状态 10-待支付 90-成功
         type: 2, //type 1、列表 2、详情
         pageNo: !this.isFinishBill ? 1 : this.currentPage,
-        pageTimes: this.pageTimes
+        pageTimes: this.isFinishBill
+          ? this.pageTimes
+            ? this.pageTimes
+            : ""
+          : ""
       };
 
-      // let url = "/times/charge-bff/order-center/api-c/v1/getList";
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
@@ -269,52 +271,56 @@ export default {
           let data = res.data.data;
           if (res.data.code === 200) {
             if (!this.isFinishBill) {
-              this.results = this.isFinishBill
-                ? data.finish[0]
-                : data.notpay[0];
-            } else {
-              if (this.currentPage === 1) {
-                this.results = this.isFinishBill
-                  ? data.finish[0]
-                  : data.notpay[0];
-                this.pageTimes = this.results.pageTimes;
-              } else {
-                let list = this.isFinishBill
-                  ? data.finish[0].records
-                  : data.notpay[0].records;
-                let re = this.results.records.concat(list);
-                this.results.records = re;
-              }
-            }
-
-            this.loading = false; //清除loading
-
-            if (this.results.length === 0) {
-              console.log(`空的this.results`, this.results);
-              this.showEmpty = true;
-            } else {
-              /**
-               * managementFeeCycle: 1为月度账单，3为季度账单
-               */
-              this.isMonthPay =
-                this.results.managementFeeCycle == "1" ? true : false; ////
-            }
-
-            // 如果是待支付账单，不做分页，只加载一次。所以要将finished 设置成 true
-            if (!this.isFinishBill) {
-              this.finished = true;
-              this.showFinishText = true;
-            } else {
-              let pageLength = this.pageTimes
-                ? _.split(this.pageTimes, ",").length
-                : 0;
-              if (pageLength && pageLength === this.currentPage) {
+              //待支付
+              if (data.notpay.length && data.notpay[0].records.length) {
+                this.results = data.notpay[0];
+                this.totalPayableAmount = this.results.totalPayableAmount;
                 this.finished = true;
                 this.showFinishText = true;
+                this.isShowPayDiv = true;
               } else {
-                this.finished = false;
+                this.results = [];
+                this.isShowPayDiv = false; //不显示支付支付组件
+              }
+            } else {
+              this.isShowPayDiv = false;
+              this.totalPayableAmount = "0.00"; //已完成待缴金额为0
+              //已完成
+              if (data.finish.length && data.finish[0].records.length) {
+                if (this.currentPage === 1) {
+                  this.results = data.finish[0];
+                  this.pageTimes = this.results.pageTimes;
+                } else {
+                  let list = data.finish[0].records;
+                  let re = this.results.records.concat(list);
+                  this.results.records = re;
+                  let pageLength = this.pageTimes
+                    ? _.split(this.pageTimes, ",").length
+                    : 0;
+                  if (pageLength && pageLength === this.currentPage) {
+                    this.finished = true;
+                    this.showFinishText = true;
+                  } else {
+                    this.finished = false;
+                  }
+                }
+              } else {
+                this.results = [];
               }
             }
+            console.log(`this.results`, this.results);
+
+            this.loading = false; //清除loading
+            if (this.results.length === 0) {
+              this.showEmpty = true;
+              this.finished = true;
+              this.showFinishText = false;
+            } else {
+              this.isMonthPay =
+                this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
+            }
+
+            this.isShowNumLoading = false;
           } else {
             this.results = [];
             // this.showEmpty = true;
@@ -323,7 +329,7 @@ export default {
           this.$forceUpdate();
         })
         .catch(err => {
-          // Toast({ duration: 800, message: "请求失败，请重新加载" });
+          Toast({ duration: 800, message: "请求失败，请重新加载" });
         });
     },
     //点击选中整个季度账单
@@ -523,7 +529,7 @@ export default {
       // 重新加载数据
       this.getBillDetail();
     },
-    //切换账单类型
+    //切换下拉账单类型
     onChangeBillType(type) {
       this.$refs.payDiv.isShow = false; //隐藏底部支付全选按钮
       this.isFinishBill = type ? true : false;
@@ -532,9 +538,12 @@ export default {
       this.mergeAmount = 0; //合计选中的账单总金额
       this.payTotal = 0;
       this.results = [];
-      this.currentPage = 0;
       this.showFinishText = false;
       this.loading = true;
+      this.finished = false;
+      this.isShowNumLoading = true;
+      this.currentPage = 0;
+      this.isShowPayDiv = false;
 
       this.getBillDetail();
     },
@@ -595,7 +604,6 @@ export default {
                 //支付成功
                 this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
               } else {
-                this.payErrorInfo = res;
                 Dialog.alert({
                   message: res.billRetStatusMessage
                     ? res.billRetStatusMessage
@@ -614,7 +622,7 @@ export default {
       console.log(`goToDetail`, item);
       if (isFinishBill) {
         //完成的账单 - 跳到预缴余额的预缴详情页面
-        let name = "账单详情"
+        let name = "账单详情";
         let tollDate = moment(item.payTime).format("YYYY-MM-DD");
         let path = `/advancePaymentDetails?type=1&amount=${item.realAmount}&objectName=${this.results.spaceFullName}&customerName=${item.proprietorName}&tollDate=${tollDate}
         &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}&navTitleName=${name}`;

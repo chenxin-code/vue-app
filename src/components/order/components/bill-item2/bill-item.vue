@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 02:27:57
+ * @LastEditTime: 2021-06-22 09:19:11
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -21,9 +21,8 @@
         @click="onClickBill(isOpen)"
       >
         您的物业缴费账单
+        <div class="down-up-icon"></div>
       </div>
-      <!-- @click="onClickBill(isOpen)" -->
-      <div class="down-up-icon"></div>
     </div>
     <transition name="sub-comments">
       <div class="list" v-show="isOpen">
@@ -52,7 +51,7 @@
               ></i>
               <span class="title-name">物业缴费</span>
             </div>
-            <div class="hd">
+            <div class="hd" @click="checkDetail(pageName, item)">
               <div class="icon" :class="titleIcon(item.type)"></div>
               <div class="detail">
                 <div class="project">{{ item.spaceFullName }}</div>
@@ -64,7 +63,7 @@
                     }}</span
                   >
                 </div>
-                <div class="check" @click="checkDetail(pageName, item)">
+                <div class="check">
                   查账单 <van-icon name="arrow" class="arrow-icon" />
                 </div>
               </div>
@@ -147,6 +146,8 @@ export default {
       return iconClass;
     },
     checkDetail(checkDetail, data) {
+      console.log(`checkDetail`, checkDetail);
+      console.log(`data`, data);
       let customerRoomId = data.customerRoomId;
       let customerRoomIdStr = _.join(customerRoomId, ",");
       this.$router.push({
@@ -186,7 +187,7 @@ export default {
       color: #E8374A;
       line-height: 40px;
       margin-left: 25px;
-      width: 100%;
+      width: 80%;
       &.finish {
         margin-left: 45px;
       }
