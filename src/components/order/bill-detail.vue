@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-22 19:46:55
+ * @LastEditTime: 2021-06-23 10:50:52
 -->
 <template>
   <div class="bill-detail">
@@ -290,16 +290,19 @@ export default {
                 this.results = data.finish[0];
                 this.pageTimes = this.results.pageTimes;
               } else {
-                let list = data.finish[0].records;
-                let re = this.results.records.concat(list);
-                this.results.records = re;
                 let pageLength = this.pageTimes
                   ? _.split(this.pageTimes, ",").length
                   : 0;
-                if (pageLength && pageLength === this.currentPage) {
+                if (
+                  (pageLength && pageLength === this.currentPage) ||
+                  pageLength === 1
+                ) {
                   this.finished = true;
                   this.showFinishText = true;
                 } else {
+                  let list = data.finish[0].records;
+                  let re = this.results.records.concat(list);
+                  this.results.records = re;
                   this.finished = false;
                 }
               }
