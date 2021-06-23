@@ -76,7 +76,7 @@ export default {
     Empty
   },
   created() {
-    // this.onLoad();
+    this.onLoad();
     this.initPropert();
   },
   watch: {
@@ -133,19 +133,19 @@ export default {
               // 加载状态结束
               this.loading = false;
               // 如果物业账单没有数据，则隐藏组件
-              if (this.billResults.length) {
-                this.isLoadPropertyBill = true;
-              } else {
-                this.isLoadPropertyBill = false;
-              }
+              // if (this.billResults.length) {
+              //   this.isLoadPropertyBill = true;
+              // } else {
+              //   this.isLoadPropertyBill = false;
+              // }
             } else {
               this.loading = false; //将加载状态关掉
               // 如果物业账单没有数据，则隐藏组件
-              if (this.billResults.length) {
-                this.isLoadPropertyBill = true;
-              } else {
-                this.isLoadPropertyBill = false;
-              }
+              // if (this.billResults.length) {
+              //   this.isLoadPropertyBill = true;
+              // } else {
+              //   this.isLoadPropertyBill = false;
+              // }
               this.error = true; //大家错误状态
             }
           } else {
@@ -357,6 +357,11 @@ export default {
             this.billResults = data.finish;
           } else {
             this.billResults = [];
+          }
+          if (this.billResults.length) {
+            this.isLoadPropertyBill = true;
+          } else {
+            this.isLoadPropertyBill = false;
           }
           this.loading = false;
         })
