@@ -8,7 +8,7 @@
         @load="onLoad"
         :error.sync="error"
         error-text="请求失败，点击重新加载"
-        :immediate-check="false"
+        :immediate-check="true"
       >
         <property-bill v-show="isLoadPropertyBill" :results="billResults" />
         <div
@@ -91,6 +91,7 @@ export default {
   methods: {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
+      console.log('执行了onload')
       this.loading = true;
       let page = this.currentPage;
       page = page + 1;
@@ -155,6 +156,10 @@ export default {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
+        })
+        .finally(()=>{
+          this.loading = false 
+          console.log('执行了finally')
         });
     },
     // 下拉刷新时触发
