@@ -123,9 +123,7 @@ export default {
     this.initPropert();
     // this.onLoad();
   },
-  activated() {
-    // this.initPropert();
-  },
+  activated() {},
   watch: {
     currentOrderList: function(newVal, oldVal) {
       if (newVal.length !== 0) {
@@ -337,7 +335,7 @@ export default {
 
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-      //   "5B348999FEC0415CB63A12D7CEEC0A13|97F3477ABD5F42C695E3945A7DDB059C|801d1908ee804d68b439a33a518a2fc0|754e92fd503c4776a721f1dae97382ad"; //测试
+      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -381,8 +379,6 @@ export default {
             state: "1",
             page: { index: page, pageSize: 30 },
             airDefenseNo: this.$store.state.userRoomId,
-            // airDefenseNo:
-            //   "C14B777F4ED34E249BE379C8E3D69DF6|EC5580D6D7714ED4A3AD78B8A5FA3F37|5681ec5fe0584103ad8c3bbf61f1b862",
             billType: this.reqBillType
           };
           this.$http
@@ -583,7 +579,7 @@ export default {
       this.loading = true;
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-      //   "6A0FCB11DF314A35A855F0A6372C6EBE,33cc09d4ecbf4c229006ea1fce3c0443,5ab4b7b4dc974a0f946fd092091960f8,B2EAAE173C1D46FDE053D40C010ADDB8,3bb9ccb03dab4468920966c0bb639335,234273bba0804b8c8c12635b3d8bfcb0,ce4351406edb4dd2a1dcf46898e17b24"; //测试
+      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -620,7 +616,7 @@ export default {
           this.loading = false;
         })
         .finally(() => {
-          this.onLoad();
+          // this.onLoad();
         });
     },
 
@@ -713,5 +709,14 @@ export default {
   font-size: 14px;
   line-height: 20px;
   // text-align: center;
+}
+
+.content {
+  .scroll:not(:last-child)  {
+    .content-list {
+      margin-bottom: 28px;
+      border-bottom:1px dashed #cccccc;
+    }
+  }
 }
 </style>

@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-23 10:50:52
+ * @LastEditTime: 2021-06-23 16:35:31
 -->
 <template>
   <div class="bill-detail">
@@ -548,6 +548,7 @@ export default {
     },
     //合并支付
     mergePay() {
+      this.toast(); //开启页面loading
       let payInfoList = Array.from(this.checkData);
       let payData = payInfoList.filter(item => {
         return item.monthList;
@@ -563,6 +564,7 @@ export default {
       let billNosStr = _.join(billNos, ",");
 
       if (payInfoList.length == 0) {
+        Toast.clear(); //关闭页面loading
         this.$toast("请选择账单");
       } else {
         let payStr = [];
@@ -571,6 +573,7 @@ export default {
           payStr.push(item.isPay);
         });
         if (payStr.includes(1)) {
+          Toast.clear(); //关闭页面loading
           //支付中的订单不能提交
           Dialog.alert({
             message:
@@ -603,6 +606,7 @@ export default {
                 //支付成功
                 this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
               } else {
+                Toast.clear(); //关闭页面loading
                 Dialog.alert({
                   message: res.billRetStatusMessage
                     ? res.billRetStatusMessage
