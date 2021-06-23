@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-22 13:43:05
+ * @LastEditTime: 2021-06-23 16:35:31
 -->
 <template>
   <div class="bill-detail">
@@ -265,72 +265,71 @@ export default {
             "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
-      this.$http
-        .get(url, { params: propertyObj })
-        .then(res => {
-          let data = res.data.data;
-          if (res.data.code === 200) {
-            if (!this.isFinishBill) {
-              //待支付
-              if (data.notpay.length && data.notpay[0].records.length) {
-                this.results = data.notpay[0];
-                this.totalPayableAmount = this.results.totalPayableAmount;
-                this.finished = true;
-                this.showFinishText = true;
-                this.isShowPayDiv = true;
-              } else {
-                this.results = [];
-                this.isShowPayDiv = false; //不显示支付支付组件
-              }
+
+      this.$http.get(url, { params: propertyObj }).then(res => {
+        let data = res.data.data;
+        if (res.data.code === 200) {
+          if (!this.isFinishBill) {
+            //待支付
+            if (data.notpay.length && data.notpay[0].records.length) {
+              this.results = data.notpay[0];
+              this.totalPayableAmount = this.results.totalPayableAmount;
+              this.finished = true;
+              this.showFinishText = true;
+              this.isShowPayDiv = true;
             } else {
-              this.isShowPayDiv = false;
-              this.totalPayableAmount = "0.00"; //已完成待缴金额为0
-              //已完成
-              if (data.finish.length && data.finish[0].records.length) {
-                if (this.currentPage === 1) {
-                  this.results = data.finish[0];
-                  this.pageTimes = this.results.pageTimes;
+              this.results = [];
+              this.isShowPayDiv = false; //不显示支付支付组件
+            }
+          } else {
+            this.isShowPayDiv = false;
+            this.totalPayableAmount = "0.00"; //已完成待缴金额为0
+            //已完成
+            if (data.finish.length && data.finish[0].records.length) {
+              if (this.currentPage === 1) {
+                this.results = data.finish[0];
+                this.pageTimes = this.results.pageTimes;
+              } else {
+                let pageLength = this.pageTimes
+                  ? _.split(this.pageTimes, ",").length
+                  : 0;
+                if (
+                  (pageLength && pageLength === this.currentPage) ||
+                  pageLength === 1
+                ) {
+                  this.finished = true;
+                  this.showFinishText = true;
                 } else {
                   let list = data.finish[0].records;
                   let re = this.results.records.concat(list);
                   this.results.records = re;
-                  let pageLength = this.pageTimes
-                    ? _.split(this.pageTimes, ",").length
-                    : 0;
-                  if (pageLength && pageLength === this.currentPage) {
-                    this.finished = true;
-                    this.showFinishText = true;
-                  } else {
-                    this.finished = false;
-                  }
+                  this.finished = false;
                 }
-              } else {
-                this.results = [];
               }
-            }
-            console.log(`this.results`, this.results);
-
-            this.loading = false; //清除loading
-            if (this.results.length === 0) {
-              this.showEmpty = true;
-              this.finished = true;
-              this.showFinishText = false;
             } else {
-              this.isMonthPay =
-                this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
+              this.results = [];
             }
-
-            this.isShowNumLoading = false;
-          } else {
-            this.results = [];
-            // this.showEmpty = true;
-            Toast({ duration: 500, message: res.data.message }); //提示错误信息
           }
-          this.$forceUpdate();
-        })
-        .catch(err => {
-          Toast({ duration: 800, message: "请求失败，请重新加载" });
-        });
+          console.log(`this.results`, this.results);
+
+          this.loading = false; //清除loading
+          if (this.results.length === 0) {
+            this.showEmpty = true;
+            this.finished = true;
+            this.showFinishText = false;
+          } else {
+            this.isMonthPay =
+              this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
+          }
+
+          this.isShowNumLoading = false;
+        } else {
+          this.results = [];
+          // this.showEmpty = true;
+          Toast({ duration: 500, message: res.data.message }); //提示错误信息
+        }
+        this.$forceUpdate();
+      });
     },
     //点击选中整个季度账单
     checkShop(item, index, type) {
@@ -549,6 +548,7 @@ export default {
     },
     //合并支付
     mergePay() {
+      this.toast(); //开启页面loading
       let payInfoList = Array.from(this.checkData);
       let payData = payInfoList.filter(item => {
         return item.monthList;
@@ -564,6 +564,7 @@ export default {
       let billNosStr = _.join(billNos, ",");
 
       if (payInfoList.length == 0) {
+        Toast.clear(); //关闭页面loading
         this.$toast("请选择账单");
       } else {
         let payStr = [];
@@ -572,6 +573,7 @@ export default {
           payStr.push(item.isPay);
         });
         if (payStr.includes(1)) {
+          Toast.clear(); //关闭页面loading
           //支付中的订单不能提交
           Dialog.alert({
             message:
@@ -604,6 +606,7 @@ export default {
                 //支付成功
                 this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
               } else {
+                Toast.clear(); //关闭页面loading
                 Dialog.alert({
                   message: res.billRetStatusMessage
                     ? res.billRetStatusMessage

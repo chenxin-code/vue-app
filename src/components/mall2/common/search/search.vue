@@ -1,5 +1,6 @@
 <template>
   <div class="bottom theme_bg_white" v-if="visible">
+    <div class="top_bg" v-if="notch"></div>
     <div
       class="top-nav"
       :style="{
@@ -118,6 +119,7 @@ export default {
           sort: [],
         },
       ],
+      notch:false,
     };
   },
   methods: {
@@ -180,6 +182,11 @@ export default {
   },
   created() {
     this.getHotSku();
+    if(store.state.commonNotch){
+      this.notch = true;
+    }else{
+      this.notch = false
+    }
   },
   mounted() {
     let item = this.sorts[0];
@@ -197,6 +204,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.top_bg {
+  height: 0.933333rem;
+  background-color:  #fff;
+}
 
 .bottom {
   position: fixed;

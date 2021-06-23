@@ -1006,9 +1006,11 @@ export default {
         this.$route.path == "/common"
       ) {
         this.notch = true;
+        this.$store.state.commonNotch = true;
+      }else{
+        this.$store.state.commonNotch = false;
       }
     }
-    console.log('------------------------------',this.notch)
   },
   activated() {
     // 爱心积分特殊处理

@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 02:09:25
+ * @LastEditTime: 2021-06-23 14:51:09
 -->
 <template>
   <div class="content-list">
@@ -132,8 +132,8 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 .content-list {
-  margin-bottom: 0.746667rem;
-  // border-bottom: 0.026667rem dashed #ccc;
+  // margin-bottom: 28px;
+  // border-bottom:1px dashed #cccccc;
   padding: 0 14px 0 14px;
   .title {
     display: flex;
@@ -212,9 +212,12 @@ export default {
       font-weight: 400;
       color: #E8374A;
       line-height: 18px;
-      width: 65px;
-      right: 16px;
-      position: absolute;
+      // width: 65px;
+      // right: 16px;
+      // position: absolute;
+      width: 100%;
+      text-align: right;
+      margin-bottom: 16px;
       .arrow-icon {
         top: 1px;
       }
