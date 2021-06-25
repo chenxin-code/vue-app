@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-23 16:35:31
+ * @LastEditTime: 2021-06-24 17:29:53
 -->
 <template>
   <div class="bill-detail">
@@ -192,7 +192,8 @@ export default {
       isPaying: false,
       isShowNumLoading: true,
       isShowPayDiv: false,
-      totalPayableAmount: 0
+      totalPayableAmount: 0,
+      checkPcs: false
     };
   },
 
@@ -543,6 +544,7 @@ export default {
       this.isShowNumLoading = true;
       this.currentPage = 0;
       this.isShowPayDiv = false;
+      this.checkPcs = false;
 
       this.getBillDetail();
     },
@@ -581,45 +583,115 @@ export default {
             theme: "round-button"
           });
         } else {
-          console.log(`提交账单中心参数`, {
-            businessCstNo: this.$store.state.userInfo.phone,
-            platMerCstNo: payData[0].platMerCstNo,
-            tradeMerCstNo: payData[0].tradeMerCstNo,
-            billNo: billNosStr,
-            appScheme: "x-engine",
-            payType: false
+          let billNoList = [];
+          payData.forEach((payItem, index) => {
+            payItem.billNos.forEach(it => {
+              billNoList.push(it.toString());
+            });
           });
-          //请求账单中心发起支付
-          yjzdbill.YJBillPayment({
-            businessCstNo: this.$store.state.userInfo.phone,
-            platMerCstNo: payData[0].platMerCstNo,
-            tradeMerCstNo: payData[0].tradeMerCstNo,
-            billNo: billNosStr,
-            appScheme: "x-engine",
-            payType: false,
-            __ret__: res => {
-              console.log(
-                "---------------开始支付提交记录---------------------"
-              );
-              console.log(res);
-              if (res.billRetStatus == "1") {
-                //支付成功
-                this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+
+          //请求物业系统接口校验账单是否能够支付
+          let pcsUrl = "";
+          this.$store.state.environment == "development"
+            ? (pcsUrl =
+                "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+            : (pcsUrl =
+                "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+          let pcsObj = {
+            list: billNoList
+          };
+          this.$http
+            .post(pcsUrl, JSON.stringify(pcsObj))
+            .then(res => {
+              if (res.data.code == "0000") {
+                console.log(`校验物业接口账单是否能够支付`, res.data.data);
+                let arr = res.data.data;
+                for (let index = 0; index < arr.length; index++) {
+                  if (arr[index].status == 1) {
+                    this.checkPcs = false;
+                    break;
+                  } else {
+                    this.checkPcs = true;
+                  }
+                }
+              }
+            })
+            .finally(() => {
+              if (this.checkPcs) {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: this.$store.state.userInfo.phone,
+                  platMerCstNo: payData[0].platMerCstNo,
+                  tradeMerCstNo: payData[0].tradeMerCstNo,
+                  billNo: billNosStr,
+                  appScheme: "x-engine",
+                  payType: false
+                });
+                //请求账单中心发起支付
+                yjzdbill.YJBillPayment({
+                  businessCstNo: this.$store.state.userInfo.phone,
+                  platMerCstNo: payData[0].platMerCstNo,
+                  tradeMerCstNo: payData[0].tradeMerCstNo,
+                  billNo: billNosStr,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: res => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus == "1") {
+                      //支付成功
+                      this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                      Dialog.alert({
+                        message: res.billRetStatusMessage
+                          ? res.billRetStatusMessage
+                          : "支付失败",
+                        theme: "round-button"
+                      });
+                    }
+                  }
+                });
               } else {
                 Toast.clear(); //关闭页面loading
                 Dialog.alert({
-                  message: res.billRetStatusMessage
-                    ? res.billRetStatusMessage
-                    : "支付失败",
+                  message:
+                    "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。",
                   theme: "round-button"
                 });
               }
-            }
-          });
+            });
         }
       }
     },
 
+    //结算支付时，请求物业系统接口校验账单是否能够支付
+    checkedPayStatus(list, payInfo, billNo) {
+      let url = "";
+      let check = false;
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+        : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+      let paramsObj = {
+        list: list
+      };
+      this.$http.post(url, JSON.stringify(paramsObj)).then(res => {
+        if (res.data.code == "0000") {
+          console.log(`校验账单是否能够支付`, res.data.data);
+          let arr = res.data.data;
+          for (let index = 0; index < arr.length; index++) {
+            if (arr[index].status == 1) {
+              check = false;
+              break;
+            } else {
+              check = true;
+            }
+          }
+        }
+      });
+    },
     //查看详情
     goToDetail(item, isFinishBill) {
       console.log(`goToDetail`, item);

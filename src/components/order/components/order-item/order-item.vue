@@ -132,6 +132,8 @@
 
 <script>
 import productItem from "@/components/order/components/product-item/product-item";
+import staticDataRequest from "@/utils/staticData/staticDataRequest.js";
+import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 export default {
   props: [
     "pageType",
@@ -447,7 +449,11 @@ export default {
         this.billType == 11
       ) {
         //团购订单
-        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
+        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${
+          this.billDetailObj.groupBuyId
+        }&mktGroupBuyId=${
+          this.billDetailObj.groupBuyActivityId
+        }&formPaySuccess='1'&ret={ret}`;
         this.enginePay(payInfo, callbackUrl);
       } else if (this.billType == 11) {
         this.initPayInfo(payInfo, "mall");
@@ -586,6 +592,14 @@ export default {
       this.$emit("checkEvent", data);
     },
     buyAgain() {
+      // if (this.dataList.length <= 0) return;
+      // const detaisUrl = "/appcontent/js/product/productDetail.js";
+      // let funcName = "productDetail_" + this.skuId;
+      // let args = dataMergeInterceptor.getRequestArgs() || [];
+      // args.push({ skuId: this.skuId });
+
+      // staticDataRequest.request(detaisUrl, funcName, args).then(data => {});
+      // return;
       //再次购买
       if (this.params.deliverType == 3) {
         let arr = [];
@@ -640,6 +654,20 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
+            /*
+             * 如果商品已经下架或者不存在了，需要终止操作 
+            */
+            if (data.data.invalidCart !== "" || data.data.occur.length <= 0) {
+              this.$MessageBox
+                .confirm(
+                  "抱歉，订单中的商品已经下架啦！再看看其他商品吧~",
+                  "提示",
+                  { confirmButtonText: "确定", showCancelButton: false }
+                )
+                .then(action => {})
+                .catch(action => {});
+              return;
+            }
             let params = {
               res: data.data,
               paramsData: paramsData,
@@ -927,7 +955,7 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 .order-item {
-  box-sizing:border-box;
+  box-sizing: border-box;
   width: 95%;
   background: #FFFFFF;
   margin: 0 auto;
@@ -936,23 +964,23 @@ export default {
   box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
   margin-top: 12px;
 
-  .smallRMB{
+  .smallRMB {
     font-weight: 500;
     font-size: 13px;
   }
 
-  .decimal{
-    font-size:12px;
-    font-weight:550;
+  .decimal {
+    font-size: 12px;
+    font-weight: 550;
   }
 
   .title {
     display: flex;
     height: 30px;
     line-height: 30px;
+
     // justify-content: center;
     // // align-items: center;
-
     .van-checkbox {
       position: relative;
       top: 0px;
@@ -1009,8 +1037,7 @@ export default {
       color: #121212;
     }
 
-
-    .stateText{
+    .stateText {
       flex: 1;
       font-size: 15px;
       font-family: PingFangSC-Regular, PingFang SC;
@@ -1018,7 +1045,7 @@ export default {
       color: #E8374A;
       line-height: 30px;
       display: flex;
-      justify-content flex-end;
+      justify-content: flex-end;
     }
   }
 
@@ -1167,9 +1194,6 @@ export default {
       border-radius: 20px;
       margin-left: 4px;
 
-
-
-
       &.default {
         color: #e8374a;
         border-color: #e8374a;
@@ -1180,7 +1204,8 @@ export default {
         top: -1px;
       }
     }
-    .btn:last-child{
+
+    .btn:last-child {
       color: #e8374a;
       border-color: #e8374a;
     }
@@ -1219,7 +1244,8 @@ export default {
       background-size: 12px auto;
       margin-right: 5px;
     }
-    .upIco{
+
+    .upIco {
       width: 12px;
       height: 12px;
       display: block;
