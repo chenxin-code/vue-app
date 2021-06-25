@@ -179,7 +179,7 @@ export default {
       this.currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
-          amount: item.costAmount,
+          amount: item.realAmount,
           submitTime: item.submitTime,
           deliverType: item.deliverType,
           orderId: item.id,
