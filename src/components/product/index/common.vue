@@ -422,6 +422,7 @@ export default {
         if (data.status == 0) {
           this.pageLoaded = true;
           console.log('首页获取布局', data.data.pageData)
+          console.log('首页获取布局的webtype', webType,"----this.$store.state.webtype",this.$store.state.webtype)
           let fdata = data.data.pageData;
           if (!fdata.pageDataJson) {
             this.$toast("首页布局获取失败11");
