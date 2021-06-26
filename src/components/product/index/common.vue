@@ -421,6 +421,7 @@ export default {
         this.$STLoading.close();
         if (data.status == 0) {
           this.pageLoaded = true;
+          console.log('首页获取布局入参', args)
           console.log('首页获取布局', data.data.pageData)
           console.log('首页获取布局的webtype', webType,"----this.$store.state.webtype",this.$store.state.webtype)
           let fdata = data.data.pageData;
