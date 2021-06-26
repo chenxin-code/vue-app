@@ -392,10 +392,10 @@ export default {
 
       let cityName = this.$store.state.indexData.city
         ? this.$store.state.indexData.city
-        : "";
+        : "广州市";
       let provinceName = this.$store.state.indexData.province
         ? this.$store.state.indexData.province
-        : "";
+        : "广东省";
 
       let url = "/appcontent/js/app_vue_page/vuePageData.js";
       let funcName = "vuePageData_";
