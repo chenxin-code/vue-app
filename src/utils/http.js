@@ -239,15 +239,15 @@ Axios.interceptors.response.use(
       } else {
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
-          // if(!store.state.ythToken){//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
-          //   util.toLogin();
-          // }else{
-          //   // 用户token过期重新走一体化转商城token接口
-          //   if(res.data.errorCode == 1000 ){
-          //     window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index/${window.location.hash}`)}`
-          //   }
-          // }
-          util.toLogin();
+          if(!store.state.ythToken){//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
+            util.toLogin();
+          }else{
+            // 用户token过期重新走一体化转商城token接口
+            if(res.data.errorCode == 1000 ){
+              window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${window.location.hash}`)}`
+            }
+          }
+          // util.toLogin();
           return res;
         })
       }
