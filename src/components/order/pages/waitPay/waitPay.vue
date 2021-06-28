@@ -81,6 +81,8 @@ import Empty from "../../components/empty/empty.vue";
 import { BigNumber } from "bignumber.js";
 import yjzdbill from "@zkty-team/x-engine-module-yjzdbill";
 import { Dialog } from "vant";
+import _ from "lodash";
+import { Toast } from "vant";
 export default {
   name: "waitPay",
 
@@ -151,11 +153,13 @@ export default {
         }
       });
       if (payType == "property") {
+        this.toast(); //开启页面loading
         //处理物业账单支付
         let billNo = "";
         let billList = [];
         if (projectList.length > 1) {
           if (!projectList.every(e => e === projectList[0])) {
+            Toast.clear(); //关闭页面loading
             // this.showDialog = true;
             this.tipsText =
               "尊敬的邻里邦用户，目前仅支持本楼盘的账单支付，其他楼盘账单需切换楼盘进行缴纳，感谢您的理解。";
@@ -579,7 +583,7 @@ export default {
       this.loading = true;
       let airDefenseNoStr = this.$store.state.userRoomId;
       // let airDefenseNoStr =
-        // "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
+      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -625,10 +629,20 @@ export default {
         });
     },
 
+    //toast loading
+    toast() {
+      Toast.loading({
+        duration: 0,
+        type: "loading",
+        message: "加载中...",
+        forbidClick: true
+      });
+    },
     //结算支付时，请求物业系统接口校验账单是否能够支付
     checkedPayStatus(list, payInfo, billNo) {
       let url = "";
       let check = false;
+      let checkStatus = [];
       this.$store.state.environment == "development"
         ? (url =
             "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
@@ -638,23 +652,47 @@ export default {
       };
       this.$http.post(url, JSON.stringify(paramsObj)).then(res => {
         if (res.data.code == "0000") {
-          console.log(`校验账单是否能够支付`, res.data.data);
+          // Toast.clear(); //关闭页面loading
           let arr = res.data.data;
           for (let index = 0; index < arr.length; index++) {
-            if (arr[index].status == 1) {
+            if (
+              arr[index].status == 1 ||
+              arr[index].status == 2 ||
+              arr[index].status == 3
+            ) {
               check = false;
-              break;
+              checkStatus.push(arr[index].status);
             } else {
               check = true;
             }
           }
-          console.log(check);
-          if (check) {
-            // this.enginePay(
-            //   payInfo,
-            //   billNo,
-            //   `/app-vue/app/index.html#/order/2?time=${Date.now()}`
-            // );
+          console.log(`checkStatus`, checkStatus);
+
+          if (_.uniq(checkStatus).includes(2)) {
+            Toast.clear(); //关闭页面loading
+            this.tipsText =
+              "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+            Dialog.alert({
+              message: this.tipsText,
+              theme: "round-button"
+            });
+          } else if (_.uniq(checkStatus).includes(1)) {
+            Toast.clear(); //关闭页面loading
+            this.tipsText =
+              "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
+            Dialog.alert({
+              message: this.tipsText,
+              theme: "round-button"
+            });
+          } else if (_.uniq(checkStatus).includes(3)) {
+            Toast.clear(); //关闭页面loading
+            this.tipsText =
+              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+            Dialog.alert({
+              message: this.tipsText,
+              theme: "round-button"
+            });
+          } else {
             console.log(`提交账单中心参数`, {
               businessCstNo: payInfo.businessCstNo,
               platMerCstNo: payInfo.platMerCstNo,
@@ -677,6 +715,7 @@ export default {
                 );
                 console.log(res);
                 if (res.billRetStatus != "1") {
+                  Toast.clear(); //关闭页面loading
                   Dialog.alert({
                     message: res.billRetStatusMessage
                       ? res.billRetStatusMessage
@@ -685,14 +724,6 @@ export default {
                   });
                 }
               }
-            });
-          } else {
-            // this.showDialog = true;
-            this.tipsText =
-              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
-            Dialog.alert({
-              message: this.tipsText,
-              theme: "round-button"
             });
           }
         }
