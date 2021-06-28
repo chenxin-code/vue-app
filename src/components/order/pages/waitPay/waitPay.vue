@@ -69,6 +69,14 @@
       :mergeAmount="mergeAmount"
       :total="Array.from(this.checkData).length"
     ></pay-div>
+    <div class="tanc-message-box" v-if="isShowErrorMsg">
+      <div class="content">
+        <div class="bg-box"></div>
+        <div class="message-box">{{ errorMsg }}</div>
+        <div class="btn-box" @click="closeTanC">确认</div>
+      </div>
+      <div class="close-btn" @click="closeTanC"></div>
+    </div>
   </div>
 </template>
 
@@ -111,7 +119,9 @@ export default {
       isDis: false,
       isLoad: true,
       billResults: [], //物业缴费数据
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14" //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,14", //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
+      isShowErrorMsg: false,
+      errorMsg: ""
     };
   },
   components: {
@@ -160,12 +170,13 @@ export default {
         if (projectList.length > 1) {
           if (!projectList.every(e => e === projectList[0])) {
             Toast.clear(); //关闭页面loading
-            // this.showDialog = true;
-            this.tipsText =
+            this.isShowErrorMsg = true;
+            this.errorMsg =
               "尊敬的邻里邦用户，目前仅支持本楼盘的账单支付，其他楼盘账单需切换楼盘进行缴纳，感谢您的理解。";
-            Dialog.alert({
-              message: this.tipsText,
-              theme: "round-button"
+            //动态修改van-sticky样式，让弹窗铺满整个屏幕
+            this.$nextTick(() => {
+              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
             });
             return;
           } else {
@@ -187,7 +198,7 @@ export default {
           platMerCstNo: payInfoList[0].platMerCstNo,
           tradeMerCstNo: payInfoList[0].tradeMerCstNo
         };
-        this.checkedPayStatus(billList, payInfo, billNo);
+        this.checkedPayStatus(billList, payInfo, billNo, payInfoList);
       } else {
         // 其他账单支付
         if (payInfoList.length == 0) {
@@ -639,7 +650,7 @@ export default {
       });
     },
     //结算支付时，请求物业系统接口校验账单是否能够支付
-    checkedPayStatus(list, payInfo, billNo) {
+    checkedPayStatus(list, payInfo, billNo, payInfoList) {
       let url = "";
       let check = false;
       let checkStatus = [];
@@ -670,63 +681,91 @@ export default {
 
           if (_.uniq(checkStatus).includes(2)) {
             Toast.clear(); //关闭页面loading
-            this.tipsText =
+            this.isShowErrorMsg = true;
+            this.errorMsg =
               "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            Dialog.alert({
-              message: this.tipsText,
-              theme: "round-button"
+            //动态修改van-sticky样式，让弹窗铺满整个屏幕
+            this.$nextTick(() => {
+              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
             });
           } else if (_.uniq(checkStatus).includes(1)) {
             Toast.clear(); //关闭页面loading
-            this.tipsText =
+            this.isShowErrorMsg = true;
+            this.errorMsg =
               "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            Dialog.alert({
-              message: this.tipsText,
-              theme: "round-button"
-            });
-          } else if (_.uniq(checkStatus).includes(3)) {
-            Toast.clear(); //关闭页面loading
-            this.tipsText =
-              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
-            Dialog.alert({
-              message: this.tipsText,
-              theme: "round-button"
+            //动态修改van-sticky样式，让弹窗铺满整个屏幕
+            this.$nextTick(() => {
+              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
             });
           } else {
-            console.log(`提交账单中心参数`, {
-              businessCstNo: payInfo.businessCstNo,
-              platMerCstNo: payInfo.platMerCstNo,
-              tradeMerCstNo: payInfo.tradeMerCstNo,
-              billNo: billNo,
-              appScheme: "x-engine",
-              payType: false
+            let payStr = [];
+            payInfoList.forEach((item, index) => {
+              // isPay=1：支付中；isPay=0：待支付
+              payStr.push(item.isPay);
             });
+            console.log(`待支付-是否有支付中账单`, payStr);
 
-            yjzdbill.YJBillPayment({
-              businessCstNo: payInfo.businessCstNo,
-              platMerCstNo: payInfo.platMerCstNo,
-              tradeMerCstNo: payInfo.tradeMerCstNo,
-              billNo: billNo,
-              appScheme: "x-engine",
-              payType: false,
-              __ret__: res => {
-                console.log(
-                  "---------------开始支付提交记录---------------------"
-                );
-                console.log(res);
-                if (res.billRetStatus != "1") {
-                  Toast.clear(); //关闭页面loading
-                  Dialog.alert({
-                    message: res.billRetStatusMessage
+            if (payStr.includes(1)) {
+              Toast.clear(); //关闭页面loading
+              this.isShowErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+              //动态修改van-sticky样式，让弹窗铺满整个屏幕
+              this.$nextTick(() => {
+                this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+                this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+              });
+            } else {
+              console.log(`提交账单中心参数`, {
+                businessCstNo: payInfo.businessCstNo,
+                platMerCstNo: payInfo.platMerCstNo,
+                tradeMerCstNo: payInfo.tradeMerCstNo,
+                billNo: billNo,
+                appScheme: "x-engine",
+                payType: false
+              });
+
+              yjzdbill.YJBillPayment({
+                businessCstNo: payInfo.businessCstNo,
+                platMerCstNo: payInfo.platMerCstNo,
+                tradeMerCstNo: payInfo.tradeMerCstNo,
+                billNo: billNo,
+                appScheme: "x-engine",
+                payType: false,
+                __ret__: res => {
+                  console.log(
+                    "---------------开始支付提交记录---------------------"
+                  );
+                  console.log(res);
+                  if (res.billRetStatus != "1") {
+                    Toast.clear(); //关闭页面loading
+                    this.isShowErrorMsg = true;
+                    this.errorMsg = res.billRetStatusMessage
                       ? res.billRetStatusMessage
-                      : "支付失败",
-                    theme: "round-button"
-                  });
+                      : "支付失败";
+                    //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                    this.$nextTick(() => {
+                      this.$parent.$refs.stickyIndex.$el.style.position =
+                        "relative";
+                      this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                    });
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
+      });
+    },
+    //关闭弹窗
+    closeTanC() {
+      this.isShowErrorMsg = false;
+      //动态修改van-sticky样式
+      this.$nextTick(() => {
+        this.$parent.$refs.stickyIndex.$el.style.position = "";
+        this.$parent.$refs.stickyIndex.$el.style.zIndex = "";
       });
     }
   }
@@ -755,4 +794,65 @@ export default {
     }
   }
 }
+
+.tanc-message-box {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 51;
+    background-color: rgba(18, 18, 18, 0.8);
+    .content {
+      height: auto;
+      width: calc(100% - 84px);
+      margin-left: 42px;
+      margin-top: 50%;
+      background-color: #ffff;
+      border-radius: 16px;
+      min-height: 215px;
+      padding-bottom: 1px;
+      text-align: center;
+      .bg-box {
+        width: 100%;
+        height: 70px;
+        background-image: url('../../img/tanc-bg.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      .message-box {
+        margin-top: 22px;
+        padding: 0 20px;
+        font-size: 16px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #333333;
+        line-height: 24px;
+      }
+      .btn-box {
+        // width: 100%;
+        height: 38px;
+        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #FFFFFF;
+        line-height: 38px;
+        padding: 0 20px
+        text-align: center;
+        margin: 28px 20px;
+      }
+    }
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      background-image: url('../../img/close-icon.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      margin-top: 30px;
+      margin-left: calc(50% - 17px);
+    }
+  }
 </style>
