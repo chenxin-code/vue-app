@@ -1606,7 +1606,7 @@
       v-if="showPicUrls"
       @closeEvent="closeBigImage"
     ></BigImage>
-    <van-popup v-model="showSharePopup" round position="bottom" :style="{ height: '30%' }" >
+    <van-popup v-model="showSharePopup" round position="bottom" :style="{ height: '35%' }" >
       <div class="share_popup">
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
@@ -2744,6 +2744,7 @@ export default {
       this.selectedText +=
         this.selectedNum +
         (this.detailData.metric ? this.detailData.metric : "件");
+        console.log('this.detailData.',this.detailData)
     },
     dataProcessing: function (item) {
       // 数据，尤其是价格，需要做初始化处理
@@ -4142,9 +4143,6 @@ export default {
   width:100%;
   height:100%;
   padding:35px 26px 36px 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   .share_botton{
     display: flex;
     justify-content: space-between;
@@ -4178,7 +4176,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin:0 auto;
+    margin:27px auto 0;
   }
 }
 

@@ -33,7 +33,8 @@
         </div>
         <div class="qrcode">
           <div class="img">
-            <img :src="qrcode" alt="">
+            <img :src="qrcode" alt="" v-show="$store.state.webtype == 2 || $store.state.webtype == 3">
+            <div ref="qrcodeLink" id="qrcodeLink" v-show="$store.state.webtype != 2 || $store.state.webtype != 3"></div>
           </div>
           <div class="text">
             <div class="top-title">{{$store.state.globalConfig.mpName}}</div>
@@ -60,31 +61,40 @@
         imgUrl: '',
         proImgUrl: '',
         qrcode: '',
-        picWidth: 0
+        picWidth: 0,
+        qr:"",
+        qrBase64 : "",
       }
     },
     props: {},
+    created(){
+      console.log('this.$store.state.webtype',this.$route)
+    },
     mounted() {
       this.$nextTick(() => {
         this.formatImgUrl(this.proData.phMainUrl)
       })
     },
     methods: {
-      creatQrCode() {
-        var qrcode = new QRCode(this.$refs.qrCodeUrl, {
-            text: 'xxxx', // 需要转换为二维码的内容
-            width: 100,
-            height: 100,
-            colorDark: '#000000',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        })
+      crateQrcode() {
+        document.getElementById("qrcodeLink").innerHTML = "";
+        this.qr = new QRCode("qrcodeLink", {
+          width: 100,
+          height: 100, // 高度
+          text: 'https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/mall2/detail/1624952558556?id=&skuId=2109', // 二维码内容
+          render: 'canvas', // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+        });
       },
       formatImgUrl(url) {
         this.$request.post("/app/json/home/getFileBase64",{filePath:url}).then(res => {
           if (res.status == 0) {
             if (res.data) {
               this.proImgUrl =  `data:image/png;base64,${res.data || ''}`
+              if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3){
+                this.crateQrcode();
+              }
             } else {
               this.$Toast('getFileBase64 返回为空');
             }
@@ -94,26 +104,33 @@
         })
       },
       loadImage() {
+        if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+          this.getCode().then(() => {
+            this.canvasPage();
+          })
+        }else{
+          this.canvasPage();
+        }
+      },
+      canvasPage(){
         let that = this
-        this.getCode().then(() => {
-          setTimeout(() => {
-            let _canvas = document.querySelector('.share-content');
-            let w = parseInt(window.getComputedStyle(_canvas).width);
-            let h = parseInt(window.getComputedStyle(_canvas).height);
-            let canvas = document.createElement("canvas");
-            let scale = 1;
-            canvas.width = w * scale;
-            canvas.height = h * scale;
-            canvas.getContext("2d").scale(scale, scale);
-            html2canvas(that.$refs.shareContent, {
-              useCORS: true,
-              // scale: 1,
-              canvas: canvas
-            }).then(canvas => {
-              that.imgUrl = canvas.toDataURL()
-            })
-          }, 20)
-        })
+        setTimeout(() => {
+          let _canvas = document.querySelector('.share-content');
+          let w = parseInt(window.getComputedStyle(_canvas).width);
+          let h = parseInt(window.getComputedStyle(_canvas).height);
+          let canvas = document.createElement("canvas");
+          let scale = 1;
+          canvas.width = w * scale;
+          canvas.height = h * scale;
+          canvas.getContext("2d").scale(scale, scale);
+          html2canvas(that.$refs.shareContent, {
+            useCORS: true,
+            // scale: 1,
+            canvas: canvas
+          }).then(canvas => {
+            that.imgUrl = canvas.toDataURL()
+          })
+        }, 20)
       },
       saveImage() {
         const base64DArr = this.imgUrl.split(',')[1]
