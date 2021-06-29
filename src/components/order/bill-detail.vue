@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-23 16:35:31
+ * @LastEditTime: 2021-06-28 17:43:49
 -->
 <template>
   <div class="bill-detail">
@@ -45,98 +45,101 @@
         </div>
 
         <div class="content" :class="showEmpty ? 'empty' : ''">
-          <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="showFinishText ? '--没有更多了--' : ''"
-            :immediate-check="false"
-            :offset="10"
-            @load="getBillDetail"
-            style="height:100%;width:100%;overflow-y:auto;"
-          >
-            <div
-              class="list"
-              v-for="(item, index) in results.records"
-              :key="index"
+          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <van-list
+              v-model="loading"
+              :finished="finished"
+              :finished-text="showFinishText ? '--没有更多了--' : ''"
+              :immediate-check="false"
+              :offset="10"
+              @load="getBillDetail"
+              style="height:100%;width:100%;overflow-y:auto;"
             >
-              <div v-show="!isFinishBill">
-                <van-checkbox
-                  v-show="!isMonthPay"
-                  :name="index"
-                  v-model="item.shopCheck"
-                  @click="checkShop(item, index, isMonthPay)"
-                  checked-color="#ee0a24"
-                  ref="checkShop"
-                  >{{ item.quarterTitle }}</van-checkbox
-                >
-                <div class="title-hd" v-show="isMonthPay">
+              <div
+                class="list"
+                v-for="(item, index) in results.records"
+                :key="index"
+              >
+                <div v-show="!isFinishBill">
+                  <van-checkbox
+                    v-show="!isMonthPay"
+                    :name="index"
+                    v-model="item.shopCheck"
+                    @click="checkShop(item, index, isMonthPay)"
+                    checked-color="#ee0a24"
+                    ref="checkShop"
+                    >{{ item.quarterTitle }}</van-checkbox
+                  >
+                  <div class="title-hd" v-show="isMonthPay">
+                    {{ item.quarterTitle }}
+                  </div>
+                </div>
+                <div class="title-hd" v-show="isFinishBill">
                   {{ item.quarterTitle }}
                 </div>
-              </div>
-              <div class="title-hd" v-show="isFinishBill">
-                {{ item.quarterTitle }}
-              </div>
-              <div
-                class="item"
-                v-for="(detail, i) in item.quarterList"
-                :key="i"
-                ref="billItem"
-              >
-                <div class="check-operation" v-show="!isFinishBill">
-                  <van-checkbox
-                    v-model="detail.checked"
-                    v-show="isMonthPay"
-                    @change="checkSingle(item, detail, i)"
-                    ref="checkboxGroup"
-                    checked-color="#ee0a24"
-                  ></van-checkbox>
-                </div>
-                <div class="item-box" :class="{ 'finish-item': isFinishBill }">
-                  <div class="detail-title">
-                    <div class="month-text">
-                      <span class="num">{{ detail.month }}</span>
-                      <span>{{ detail.monthTitle }}</span>
-                    </div>
-                    <div class="status">
-                      <span
-                        class="pay-status"
-                        :class="detail.isPay == 1 ? 'paying' : 'need'"
-                        v-show="!isFinishBill"
-                        >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
-                      >
-                      <span class="pay-status finish" v-show="isFinishBill"
-                        >已完成</span
-                      >
-                      <span class="pay-money" v-show="!isFinishBill"
-                        >￥{{ detail.monthPayableAmount }}</span
-                      >
-                    </div>
+                <div
+                  class="item"
+                  v-for="(detail, i) in item.quarterList"
+                  :key="i"
+                  ref="billItem"
+                >
+                  <div class="check-operation" v-show="!isFinishBill">
+                    <van-checkbox
+                      v-model="detail.checked"
+                      v-show="isMonthPay"
+                      @change="checkSingle(item, detail, i)"
+                      ref="checkboxGroup"
+                      checked-color="#ee0a24"
+                    ></van-checkbox>
                   </div>
                   <div
-                    class="detail-item"
-                    v-for="(monthDetail, k) in detail.monthList"
-                    :key="k"
-                    @click="goToDetail(monthDetail, isFinishBill)"
+                    class="item-box"
+                    :class="{ 'finish-item': isFinishBill }"
                   >
-                    <span class="detail-name"
-                      >{{ monthDetail.showInfo }}<i></i
-                    ></span>
-                    <span class="detail-money"
-                      >￥{{ monthDetail.payableAmount }}</span
+                    <div class="detail-title">
+                      <div class="month-text">
+                        <span class="num">{{ detail.month }}</span>
+                        <span>{{ detail.monthTitle }}</span>
+                      </div>
+                      <div class="status">
+                        <span
+                          class="pay-status"
+                          :class="detail.isPay == 1 ? 'paying' : 'need'"
+                          v-show="!isFinishBill"
+                          >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
+                        >
+                        <span class="pay-status finish" v-show="isFinishBill"
+                          >已完成</span
+                        >
+                        <span class="pay-money" v-show="!isFinishBill"
+                          >￥{{ detail.monthPayableAmount }}</span
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="detail-item"
+                      v-for="(monthDetail, k) in detail.monthList"
+                      :key="k"
+                      @click="goToDetail(monthDetail, isFinishBill)"
                     >
+                      <span class="detail-name"
+                        >{{ monthDetail.showInfo }}<i></i
+                      ></span>
+                      <span class="detail-money"
+                        >￥{{ monthDetail.payableAmount }}</span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <Empty
-              v-show="showEmpty"
-              :description="
-                isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
-              "
-            ></Empty>
-          </van-list>
-          <!-- </van-pull-refresh> -->
+              <Empty
+                v-show="showEmpty"
+                :description="
+                  isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
+                "
+              ></Empty>
+            </van-list>
+          </van-pull-refresh>
         </div>
       </div>
     </div>
@@ -150,6 +153,15 @@
       :resultList="results.records"
       v-show="isShowPayDiv"
     ></pay-div>
+
+    <div class="tanc-box" v-if="showErrorMsg">
+      <div class="content">
+        <div class="bg-box"></div>
+        <div class="message-box">{{ errorMsg }}</div>
+        <div class="btn-box" @click="closeTanC">确认</div>
+      </div>
+      <div class="close-btn" @click="closeTanC"></div>
+    </div>
   </div>
 </template>
 
@@ -192,7 +204,10 @@ export default {
       isPaying: false,
       isShowNumLoading: true,
       isShowPayDiv: false,
-      totalPayableAmount: 0
+      totalPayableAmount: 0,
+      checkPcs: false,
+      errorMsg: "",
+      showErrorMsg: false
     };
   },
 
@@ -313,6 +328,7 @@ export default {
           console.log(`this.results`, this.results);
 
           this.loading = false; //清除loading
+          this.isLoading = false;
           if (this.results.length === 0) {
             this.showEmpty = true;
             this.finished = true;
@@ -337,8 +353,6 @@ export default {
     },
     //点击单个商品
     checkSingle(item, itemIn) {
-      // console.log(`checkSingle item`, item);
-      // console.log(`checkSingle itemIn`, itemIn);
       itemIn.checked
         ? this.checkTrue(item, itemIn)
         : this.checkFalse(item, itemIn);
@@ -523,8 +537,19 @@ export default {
     },
     //下拉刷新
     onRefresh() {
-      this.finished = false;
+      this.$refs.payDiv.isShow = false; //隐藏底部支付全选按钮
+      this.checkData = new Set();
+      this.mergeAmount = 0; //合计选中的账单总金额
+      this.payTotal = 0;
+      this.results = [];
       this.showFinishText = false;
+      this.loading = true;
+      this.finished = false;
+      this.isShowNumLoading = true;
+      this.currentPage = 0;
+      this.isShowPayDiv = false;
+      this.pageTimes = "";
+
       // 重新加载数据
       this.getBillDetail();
     },
@@ -543,6 +568,7 @@ export default {
       this.isShowNumLoading = true;
       this.currentPage = 0;
       this.isShowPayDiv = false;
+      this.checkPcs = false;
 
       this.getBillDetail();
     },
@@ -567,59 +593,117 @@ export default {
         Toast.clear(); //关闭页面loading
         this.$toast("请选择账单");
       } else {
-        let payStr = [];
-        payData.forEach((item, index) => {
-          // isPay=1：支付中；isPay=0：待支付
-          payStr.push(item.isPay);
+        let billNoList = [];
+        payData.forEach((payItem, index) => {
+          payItem.billNos.forEach(it => {
+            billNoList.push(it.toString());
+          });
         });
-        if (payStr.includes(1)) {
-          Toast.clear(); //关闭页面loading
-          //支付中的订单不能提交
-          Dialog.alert({
-            message:
-              "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。",
-            theme: "round-button"
-          });
-        } else {
-          console.log(`提交账单中心参数`, {
-            businessCstNo: this.$store.state.userInfo.phone,
-            platMerCstNo: payData[0].platMerCstNo,
-            tradeMerCstNo: payData[0].tradeMerCstNo,
-            billNo: billNosStr,
-            appScheme: "x-engine",
-            payType: false
-          });
-          //请求账单中心发起支付
-          yjzdbill.YJBillPayment({
-            businessCstNo: this.$store.state.userInfo.phone,
-            platMerCstNo: payData[0].platMerCstNo,
-            tradeMerCstNo: payData[0].tradeMerCstNo,
-            billNo: billNosStr,
-            appScheme: "x-engine",
-            payType: false,
-            __ret__: res => {
-              console.log(
-                "---------------开始支付提交记录---------------------"
-              );
-              console.log(res);
-              if (res.billRetStatus == "1") {
-                //支付成功
-                this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
-              } else {
+
+        //请求物业系统接口校验账单是否能够支付
+        let checkStatus = [];
+        let pcsUrl = "";
+        this.$store.state.environment == "development"
+          ? (pcsUrl =
+              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+          : (pcsUrl =
+              "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+        let pcsObj = {
+          list: billNoList
+        };
+        this.$http.post(pcsUrl, JSON.stringify(pcsObj)).then(res => {
+          if (res.data.code == "0000") {
+            let arr = res.data.data;
+            for (let index = 0; index < arr.length; index++) {
+              if (
+                arr[index].status == 1 ||
+                arr[index].status == 2 ||
+                arr[index].status == 3
+              ) {
+                checkStatus.push(arr[index].status);
+              }
+            }
+            console.log(`详情页checkStatus`, checkStatus);
+
+            if (_.uniq(checkStatus).includes(2)) {
+              Toast.clear(); //关闭页面loading
+              // Dialog.alert({
+              //   message:
+              //     "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。",
+              //   theme: "round-button"
+              // });
+              this.showErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+            } else if (_.uniq(checkStatus).includes(1)) {
+              Toast.clear(); //关闭页面loading
+              // Dialog.alert({
+              //   message:
+              //     "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。",
+              //   theme: "round-button"
+              // });
+              this.showErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
+            } else {
+              let payStr = [];
+              payData.forEach((item, index) => {
+                // isPay=1：支付中；isPay=0：待支付
+                payStr.push(item.isPay);
+              });
+              console.log(`是否支付中账单`, payStr);
+              if (payStr.includes(1)) {
                 Toast.clear(); //关闭页面loading
-                Dialog.alert({
-                  message: res.billRetStatusMessage
-                    ? res.billRetStatusMessage
-                    : "支付失败",
-                  theme: "round-button"
+                // Dialog.alert({
+                //   message:
+                //     "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。",
+                //   theme: "round-button"
+                // });
+                this.showErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+              } else {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: this.$store.state.userInfo.phone,
+                  platMerCstNo: payData[0].platMerCstNo,
+                  tradeMerCstNo: payData[0].tradeMerCstNo,
+                  billNo: billNosStr,
+                  appScheme: "x-engine",
+                  payType: false
+                });
+                //请求账单中心发起支付
+                yjzdbill.YJBillPayment({
+                  businessCstNo: this.$store.state.userInfo.phone,
+                  platMerCstNo: payData[0].platMerCstNo,
+                  tradeMerCstNo: payData[0].tradeMerCstNo,
+                  billNo: billNosStr,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: res => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus == "1") {
+                      //支付成功
+                      this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                      Dialog.alert({
+                        message: res.billRetStatusMessage
+                          ? res.billRetStatusMessage
+                          : "支付失败",
+                        theme: "round-button"
+                      });
+                    }
+                  }
                 });
               }
             }
-          });
-        }
+          }
+        });
       }
     },
-
     //查看详情
     goToDetail(item, isFinishBill) {
       console.log(`goToDetail`, item);
@@ -659,6 +743,10 @@ export default {
           }
         });
       }
+    },
+    //关闭弹窗
+    closeTanC() {
+      this.showErrorMsg = false;
     }
   }
 };
@@ -940,6 +1028,66 @@ export default {
           }
         }
       }
+    }
+  }
+  .tanc-box {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 51;
+    background-color: rgba(18, 18, 18, 0.8);
+    .content {
+      height: auto;
+      width: calc(100% - 84px);
+      margin-left: 42px;
+      margin-top: 50%;
+      background-color: #ffff;
+      border-radius: 16px;
+      min-height: 215px;
+      padding-bottom: 1px;
+      text-align: center;
+      .bg-box {
+        width: 100%;
+        height: 70px;
+        background-image: url('./img/tanc-bg.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      .message-box {
+        margin-top: 22px;
+        padding: 0 20px;
+        font-size: 16px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #333333;
+        line-height: 24px;
+      }
+      .btn-box {
+        // width: 100%;
+        height: 38px;
+        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #FFFFFF;
+        line-height: 38px;
+        padding: 0 20px
+        text-align: center;
+        margin: 28px 20px;
+      }
+    }
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      background-image: url('./img/close-icon.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      margin-top: 30px;
+      margin-left: calc(50% - 17px);
     }
   }
 }

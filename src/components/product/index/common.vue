@@ -392,10 +392,10 @@ export default {
 
       let cityName = this.$store.state.indexData.city
         ? this.$store.state.indexData.city
-        : "";
+        : "广州市";
       let provinceName = this.$store.state.indexData.province
         ? this.$store.state.indexData.province
-        : "";
+        : "广东省";
 
       let url = "/appcontent/js/app_vue_page/vuePageData.js";
       let funcName = "vuePageData_";
@@ -421,7 +421,9 @@ export default {
         this.$STLoading.close();
         if (data.status == 0) {
           this.pageLoaded = true;
+          console.log('首页获取布局入参', args)
           console.log('首页获取布局', data.data.pageData)
+          console.log('首页获取布局的webtype', webType,"----this.$store.state.webtype",this.$store.state.webtype)
           let fdata = data.data.pageData;
           if (!fdata.pageDataJson) {
             this.$toast("首页布局获取失败11");

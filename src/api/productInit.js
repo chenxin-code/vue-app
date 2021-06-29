@@ -93,43 +93,45 @@ const ProductInit = {
         })
 
       } else if (state.webtype == '1' || state.webtype == '0') {
-        let isAgree = localStorage.getItem('agreement_tip_user_select')
-        if (isAgree != 'true') {
-          // 这里不能有公共参数
-          let url = Config.baseURL + '/app/json/news/getNewsList'
-          let params = Qs.stringify({values: 38, hbsy_web_tag_type: 1}, {arrayFormat: 'repeat'});
-          axios.post(url, params, {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }).then((res) => {
-            // console.log(res);
-            let data = res.data
-            let integralList = data.data || []
-            if (integralList.length > 0) {
-              let content = integralList[0].content
-              ProductInit.agreementEvent(content, () => {
-                localStorage.setItem('agreement_tip_user_select', 'true')
-                resolve()
-              })
-            } else {
-              resolve()
-              // Toast('请求用户协议出错！')
-            }
-          }).catch((error) => {
-            console.log(error)
-            Toast('请求用户协议出错！')
-          });
-          // http.post('/app/json/news/getNewsList', {values: 38}).then(res => {
-          //   let data = res.data
-          //   if (data.status == 0) {
-          //     // this.integralList = data.data || []
-          //     // Dialog({ message: '提示' });
-          //   } else {
-          //     this.$Toast(res.info)
-          //   }
-          // })
-        } else {
-          resolve()
-        }
+        // /app/json/news/getNewsList接口504，获取的是初次进入商城安全协议内容，无用，直接屏蔽
+        resolve()
+        // let isAgree = localStorage.getItem('agreement_tip_user_select')
+        // if (isAgree != 'true') {
+        //   // 这里不能有公共参数
+        //   let url = Config.baseURL + '/app/json/news/getNewsList'
+        //   let params = Qs.stringify({values: 38, hbsy_web_tag_type: 1}, {arrayFormat: 'repeat'});
+        //   axios.post(url, params, {
+        //     'Content-Type': 'application/x-www-form-urlencoded'
+        //   }).then((res) => {
+        //     // console.log(res);
+        //     let data = res.data
+        //     let integralList = data.data || []
+        //     if (integralList.length > 0) {
+        //       let content = integralList[0].content
+        //       ProductInit.agreementEvent(content, () => {
+        //         localStorage.setItem('agreement_tip_user_select', 'true')
+        //         resolve()
+        //       })
+        //     } else {
+        //       resolve()
+        //       // Toast('请求用户协议出错！')
+        //     }
+        //   }).catch((error) => {
+        //     console.log(error)
+        //     Toast('请求用户协议出错！')
+        //   });
+        //   // http.post('/app/json/news/getNewsList', {values: 38}).then(res => {
+        //   //   let data = res.data
+        //   //   if (data.status == 0) {
+        //   //     // this.integralList = data.data || []
+        //   //     // Dialog({ message: '提示' });
+        //   //   } else {
+        //   //     this.$Toast(res.info)
+        //   //   }
+        //   // })
+        // } else {
+        //   resolve()
+        // }
       } else {
         resolve()
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="order">
-    <van-sticky :offset-top="offsetTop">
+    <van-sticky :offset-top="offsetTop" ref="stickyIndex">
       <nav-top></nav-top>
       <van-tabs
         v-model="active"
