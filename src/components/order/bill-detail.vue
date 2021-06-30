@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-28 17:43:49
+ * @LastEditTime: 2021-06-29 11:41:33
 -->
 <template>
   <div class="bill-detail">
@@ -627,21 +627,11 @@ export default {
 
             if (_.uniq(checkStatus).includes(2)) {
               Toast.clear(); //关闭页面loading
-              // Dialog.alert({
-              //   message:
-              //     "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。",
-              //   theme: "round-button"
-              // });
               this.showErrorMsg = true;
               this.errorMsg =
                 "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
             } else if (_.uniq(checkStatus).includes(1)) {
               Toast.clear(); //关闭页面loading
-              // Dialog.alert({
-              //   message:
-              //     "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。",
-              //   theme: "round-button"
-              // });
               this.showErrorMsg = true;
               this.errorMsg =
                 "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
@@ -654,11 +644,6 @@ export default {
               console.log(`是否支付中账单`, payStr);
               if (payStr.includes(1)) {
                 Toast.clear(); //关闭页面loading
-                // Dialog.alert({
-                //   message:
-                //     "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。",
-                //   theme: "round-button"
-                // });
                 this.showErrorMsg = true;
                 this.errorMsg =
                   "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
@@ -689,12 +674,10 @@ export default {
                       this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
                     } else {
                       Toast.clear(); //关闭页面loading
-                      Dialog.alert({
-                        message: res.billRetStatusMessage
-                          ? res.billRetStatusMessage
-                          : "支付失败",
-                        theme: "round-button"
-                      });
+                      this.showErrorMsg = true;
+                      this.errorMsg = res.billRetStatusMessage
+                        ? res.billRetStatusMessage
+                        : "支付失败";
                     }
                   }
                 });
