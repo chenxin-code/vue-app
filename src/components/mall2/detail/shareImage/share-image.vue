@@ -89,7 +89,7 @@
           this.qr = new QRCode("qrcodeLink", {
           width: 100,
           height: 100, // 高度
-          text: 'https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/mall2/detail/1624952558556?id=&skuId=2109', // 二维码内容
+          text: window.location.href, // 二维码内容
           render: 'canvas', // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
           colorDark : "#000000",
           colorLight : "#ffffff",
