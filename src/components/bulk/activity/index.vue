@@ -8,24 +8,26 @@
       </van-tab>
     </van-tabs> -->
     <van-sticky>
-      <div class="tab">
-        <div class="tab_back" @click="goBack()">
-          <van-icon
-            name="arrow-left"
-            class="arrow_left"
-            color="#000000"
-            size="0.471467rem"
-          />
-        </div>
-        <div class="tab_item_box">
-          <div
-            class="tab_item"
-            v-for="(item, index) in tabTitle"
-            :key="index"
-            @click="changesTab(index)"
-            :class="currentTab == index ? 'current_tab' : ''"
-          >
-            {{ item.title }}
+      <div class="heard">
+        <div class="tab">
+          <div class="tab_back" @click="goBack()">
+            <van-icon
+              name="arrow-left"
+              class="arrow_left"
+              color="#000000"
+              size="0.471467rem"
+            />
+          </div>
+          <div class="tab_item_box">
+            <div
+              class="tab_item"
+              v-for="(item, index) in tabTitle"
+              :key="index"
+              @click="changesTab(index)"
+              :class="currentTab == index ? 'current_tab' : ''"
+            >
+              {{ item.title }}
+            </div>
           </div>
         </div>
       </div>
@@ -165,10 +167,7 @@ export default {
       this.getlist();
     },
     goBack() {
-      // this.$router.push({})
-      // if(){
       this.$router.go(-1);
-      // }
     },
     // 请求列表
     getlist() {
@@ -325,6 +324,11 @@ export default {
   overflow-y: scroll;
   width: 100%;
   height: 100%;
+
+  .heard {
+    background: #fff;
+    padding-top: 10px;
+  }
 
   .not-data {
     width: 100%;

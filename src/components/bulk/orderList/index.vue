@@ -2,16 +2,25 @@
   <!-- // created by hjc 订单列表 -->
   <div class="orderList">
     <van-sticky>
-      <van-search v-model="searchValue" shape="round" background="#fff" />
-      <div class="tab">
-        <div
-          class="tab_item"
-          v-for="(item, index) in tab"
-          :key="index"
-          @click="changesTab(index)"
-          :class="currentTab == index ? 'current_tab' : ''"
-        >
-          {{ item.name }}
+      <div class="heard">
+        <div class="tab">
+          <div class="tab_back" @click="goBack()">
+            <van-icon
+              name="arrow-left"
+              class="arrow_left"
+              color="#000000"
+              size="0.471467rem"
+            />
+          </div>
+          <div
+            class="tab_item"
+            v-for="(item, index) in tab"
+            :key="index"
+            @click="changesTab(index)"
+            :class="currentTab == index ? 'current_tab' : ''"
+          >
+            {{ item.name }}
+          </div>
         </div>
       </div>
     </van-sticky>
@@ -25,17 +34,10 @@
           :error.sync="error"
           error-text="请求失败，点击重新加载"
         >
+          <!-- :immediate-check="false" -->
           <div
             class="goods_item"
-            v-for="(item, index) in currentTab == 0
-              ? deliveryList
-              : currentTab == 1
-              ? pickUpList
-              : currentTab == 2
-              ? finishedList
-              : currentTab == 3
-              ? cancelList
-              : allList"
+            v-for="(item, index) in allList"
             :key="index"
             @click="navToDetail(item)"
           >
@@ -61,7 +63,11 @@
             </div>
             <div class="good_user">
               <div class="user">
-                <van-image class="user-image" :src="item.contactAvatar" :error-icon="defaultAvatar" />
+                <van-image
+                  class="user-image"
+                  :src="item.contactAvatar"
+                  :error-icon="defaultAvatar"
+                />
                 <div class="user_name">{{ item.contactName }}</div>
                 <div class="user_phone">{{ item.contactPhone }}</div>
               </div>
@@ -151,7 +157,7 @@
 
 <script>
 import Qs from "qs";
-import vantImage from "@/components/bulk/components/vantImage.js"
+import vantImage from "@/components/bulk/components/vantImage.js";
 export default {
   name: "orderList",
   props: {},
@@ -159,195 +165,111 @@ export default {
     return {
       defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       tab: [
-        // { name: "全部" },
-        // { name: "待支付" },
-        { name: "待发货" },
-        // { name: "待配送" },
-        { name: "待提货" },
-        { name: "已完成" },
-        { name: "已取消" },
+        { name: "待发货", value: 1 },
+        { name: "待提货", value: 3 },
+        { name: "已完成", value: 4 },
+        { name: "已取消", value: 5 },
       ],
       allList: [],
-      waitPayList: [],
-      deliveryList: [],
-      distributionList: [],
-      pickUpList: [],
-      finishedList: [],
-      cancelList: [],
       currentTab: 0,
       refreshing: false,
       loading: false,
       finished: false,
-      type: 2,
       showPopup: false,
-      searchValue: "",
-      currentPage: 0,
-      totalPage: 0,
+      currentPage: 1,
       error: false,
       skuInfo: {},
     };
   },
   created() {
-    // Qs.stringify({ gbAcId: 11 })
+    this.loading = true;
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
+    /*订单状态tab切换*/
     changesTab(index) {
       this.currentTab = index;
-      this.currentPage = 0;
+      this.currentPage = 1;
       this.allList = [];
-      this.waitPayList = [];
-      this.deliveryList = [];
-      this.distributionList = [];
-      this.pickUpList = [];
-      this.finishedList = [];
-      this.cancelList = [];
-      this.finished = false;
-      this.loading = true;
       this.onLoad();
     },
-
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       this.loading = true;
-      let page = this.currentPage;
-      page = page + 1;
-      this.currentPage = page;
-      this.refreshing = false;
+      this.error = false;
+      this.finished = false;
+      let { currentPage, finished, tab, currentTab } = this;
       let obj = {
-        pageNum: page,
+        pageNum: currentPage,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        orderItemState:
-            this.currentTab == 0
-            ? 1
-            : this.currentTab == 1
-            ? 3
-            : this.currentTab == 2
-            ? 4
-            : this.currentTab == 3
-            ? 5
-            : undefined,
+        orderItemState: tab[currentTab].value ? tab[currentTab].value : "",
       };
+      if (!finished) {
+        this.getListFn(obj);
+      }
+    },
+    // 下拉刷新时触发
+    onRefresh() {
+      this.currentPage = 1; //从第一页开始
+      this.finished = false; //将没有更多的状态改成false
+      this.refreshing = true;
+      this.loading = true; //将下拉刷新状态改为true开始刷新
+      let obj = {
+        pageNum: this.currentPage,
+        pageSize: 10,
+        sortBy: "create_time_DESC",
+        orderItemState: tab[currentTab] ? tab[currentTab].value : "",
+      };
+      this.getListFn(obj);
+    },
+    /*订单列表数据*/
+    getListFn(obj) {
+      let { currentPage } = this;
       this.$http
         .post(
           "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
           Qs.stringify(obj)
         )
         .then((res) => {
-          // 判断当前页数是否超过总页数或者等于总页数
-          if (page < res.data.data.pages || page == res.data.data.pages) {
-            if (res.data.result == "success") {
-              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-              indexList.forEach((e) => {
+          this.loading = false; //将加载状态关掉
+          this.refreshing = false;
+          if (res.data.result == "success") {
+            let { data } = res.data;
+            if (currentPage < data.pages || currentPage == data.pages) {
+              // 判断当前页数是否超过总页数或者等于总页数
+              var indexList = data.records; //将请求到的内容赋值给一个变量
+              indexList.map((e) => {
                 if (e.productSkuInfo !== "") {
-                  e["orderSkuImg"] = JSON.parse(
-                    e.productSkuInfo
-                  )[0].groupbuySkuPicurl.split(",");
+                  let productSkuInfo = JSON.parse(e.productSkuInfo)[0];
+                  e.orderSkuImg = productSkuInfo.groupbuySkuPicurl.split(",");
                 } else {
-                  e["orderSkuImg"] = [];
+                  e.orderSkuImg = [];
                 }
               });
-              switch (this.currentTab) {
-                case 0:
-                  this.deliveryList = this.deliveryList.concat(indexList); //将请求的数据追加到后面
-
-                case 1:
-                  this.pickUpList = this.pickUpList.concat(indexList);
-
-                case 2:
-                  this.finishedList = this.finishedList.concat(indexList);
-
-                case 3:
-                  this.cancelList = this.cancelList.concat(
-                    indexList
-                  );
+              this.allList = this.allList.concat(indexList);
+              this.currentPage++;
+              if (currentPage == data.pages) {
+                this.finished = true;
               }
-
-              this.page = res.data.data.pages; //将总页数赋值给this
-              setTimeout(() => {
-                // 加载状态结束
-                this.loading = false;
-              }, 1000);
             } else {
-              this.loading = false; //将加载状态关掉
-              this.error = true; //大家错误状态
+              this.finished = true; //如果超过总页数就显示没有更多内容了
             }
           } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
+            this.refreshing = false;
+            this.error = true; //加载错误状态
           }
         })
         .catch((err) => {
           this.$toast("请求失败，点击重新加载");
+          this.refreshing = false;
           this.loading = false;
           this.error = true;
-          console.log(err);
         });
     },
-    // 下拉刷新时触发
-    onRefresh() {
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
-      this.finished = false; //将没有更多的状态改成false
-      this.loading = true; //将下拉刷新状态改为true开始刷新
-      let obj = {
-        pageNum: page,
-        pageSize: 10,
-        sortBy: "create_time_DESC",
-        orderItemState:
-          this.currentTab == 0
-          ? 1
-          : this.currentTab == 1
-          ? 3
-          : this.currentTab == 2
-          ? 4
-          : this.currentTab == 3
-          ? 5
-          : undefined,
-      };
-      this.$http
-        .post(
-          "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
-          Qs.stringify(obj)
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            let indexList = res.data.data.records;
-            indexList.forEach((e) => {
-              if (e.productSkuInfo !== "") {
-                e["orderSkuImg"] = JSON.parse(
-                  e.productSkuInfo
-                )[0].groupbuySkuPicurl.split(",");
-              } else {
-                e["orderSkuImg"] = [];
-              }
-            });
-            switch (this.currentTab) {
-                case 0:
-                  this.deliveryList = indexList; //将请求的数据追加到后面
-
-                case 1:
-                  this.pickUpList = indexList;
-
-                case 2:
-                  this.finishedList = indexList;
-
-                case 3:
-                  this.cancelList = indexList;
-              }
-
-            this.totalPage = res.data.pages; //将总页数赋值上去
-            setTimeout(() => {
-              this.$toast("刷新成功");
-              this.loading = false;
-              this.refreshing = false; //刷新成功后将状态关掉
-            }, 800); 
-          }
-        })
-        .catch((res) => {
-          this.$toast("网络繁忙,请稍后再试~");
-        });
-    },
-
+    /*去详情页*/
     navToDetail(item) {
       this.$router.push({
         path: "/bulk_order_detail",
@@ -360,6 +282,7 @@ export default {
       this.showPopup = true;
       this.skuInfo = item;
     },
+    /*订单配送状态*/
     confirmOrder() {
       let confirmType = 0;
       if (
@@ -382,7 +305,7 @@ export default {
             this.$toast("操作成功");
             this.changesTab(this.currentTab);
           }
-          if(res.data.result == "error"){
+          if (res.data.result == "error") {
             this.showPopup = false;
             this.$toast(res.data.info);
           }
@@ -414,9 +337,14 @@ export default {
   background: #F6F6F6;
   padding-bottom: 49px;
 
+  .heard {
+    background: #fff;
+    padding-top: 10px;
+  }
+
   .tab {
     width: 100%;
-    height: 36.5px;
+    height: 45px;
     padding: 8px 20px;
     display: flex;
     justify-content: space-between;
@@ -640,20 +568,24 @@ export default {
       }
     }
   }
-  .user-image{
+
+  .user-image {
     width: 24px;
     margin-left: 2px;
   }
-  /deep/.user-image img{
+
+  /deep/.user-image img {
     width: 22px;
     height: 22px;
     margin: 2px 2px 0 -4px;
     border-radius: 50%;
   }
-  /deep/.van-image__error{
+
+  /deep/.van-image__error {
     background-color: transparent;
   }
-  /deep/.user-image .van-icon{
+
+  /deep/.user-image .van-icon {
     font: initial;
   }
 }
