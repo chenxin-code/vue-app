@@ -44,6 +44,15 @@ module.exports = [
     }
   },
   {
+    path: '/mall2/shareTextLink',
+    name: '链接分享',
+    component: () => import('@/components/mall2/shareTextLink'),
+    // component: () => import('@/components/mall2/detail/detail'),
+    meta: {
+      keepAlive: false
+    }
+  },
+  {
     path: '/mall2/newdetail/:id',
     name: '商品详情',
     component: () => import('@/components/mall2/detail/new-detail'),

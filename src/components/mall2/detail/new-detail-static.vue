@@ -1934,7 +1934,11 @@ export default {
     shareImg(){
       this.showShare();
     },
-    shareLink(){},
+    shareLink(){
+      this.$router.push({
+        path:'/mall2/shareTextLink'
+      })
+    },
     // 唤起客服
     handleCustomer: function() {
       ysf('config', {
