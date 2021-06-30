@@ -125,7 +125,7 @@
           @click="navToCar"
           v-if="isCommon && $store.state.webtype !== '3'"
         >
-          <i>{{ shoppingCartCount }}</i>
+          <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
         <!-- <van-icon
