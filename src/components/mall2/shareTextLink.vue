@@ -7,13 +7,23 @@
     </div>
     <div class="copyText">
       <van-field
-        v-model="message"
+        v-model="copyText"
         :autosize="{ minHeight: 89 }"
         type="textarea"
       />
+      <div class="price">
+        <div class="priceTitle">【售价】：</div>
+        <div class="priceNum">{{ price }}元</div>
+      </div>
+      <div class="link">
+        <div class="linkTitle">【链接】：</div>
+        <div class="linkText">
+          {{ link }}
+        </div>
+      </div>
     </div>
     <div class="footer">
-      <div class="footerBtn">
+      <div class="footerBtn" @click="copy">
         <img src="static/image/mall2/shareLinkBtn.png" alt="" />
         <div>复制文案分享</div>
       </div>
@@ -26,7 +36,30 @@ import ClipboardJS from "clipboard";
 export default {
   name: "shareTextLink",
   data() {
-    return {};
+    return {
+      copyText: "",
+      price: "",
+      link: "",
+    };
+  },
+  created() {
+    this.price = this.$route.query.price;
+    this.link = this.$route.query.link;
+    this.copyText = this.$route.query.goodsTitle;
+  },
+  methods: {
+    copy() {
+      let text =
+        this.copyText +
+        `\n\n【售价】：${this.price}元\n\n【链接】：${this.link}`;
+      console.log(text);
+      new ClipboardJS(".footerBtn", {
+        text: function (trigger) {
+          return text;
+        },
+      });
+      this.$toast("文案已复制到剪切板");
+    },
   },
 };
 </script>
@@ -43,6 +76,7 @@ export default {
 /deep/.van-field__control {
   background-color: #FFF9F9;
   border-radius: 12px;
+  padding: 13px 28px 17px 15px;
 }
 
 .shareTextLink {
@@ -75,11 +109,56 @@ export default {
 
   .copyText {
     width: 93.6%;
-    height: 214px;
+    // height: 214px;
     background: #FFFFFF;
     border-radius: 12px;
     margin: 0 auto;
     padding: 12px;
+
+    .price {
+      margin: 16px 0 17px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .priceTitle {
+        font-size: 14px;
+        font-weight: 500;
+        color: #666666;
+      }
+
+      .priceNum {
+        font-size: 14px;
+        font-weight: 500;
+        color: #121212;
+      }
+    }
+
+    .link {
+      width: 100%;
+      height: auto;
+      margin: 14px 0 0px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      .linkTitle {
+        font-size: 14px;
+        font-weight: 500;
+        color: #666666;
+        white-space: nowrap;
+      }
+
+      .linkText {
+        font-size: 14px;
+        font-weight: 500;
+        color: #121212;
+        height: auto;
+        white-space: normal; // 文本超出换行
+        // word-wrap: normal; // 只在允许的断字点换行
+        word-break: break-all; // 使用浏览器默认的换行规则
+      }
+    }
   }
 
   .footer {

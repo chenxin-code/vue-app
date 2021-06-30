@@ -1897,6 +1897,7 @@ export default {
   },
   methods: {
     onShare(){
+      console.log(this.detailData)
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
         this.showShare();
       }else{
@@ -1936,7 +1937,12 @@ export default {
     },
     shareLink(){
       this.$router.push({
-        path:'/mall2/shareTextLink'
+        path:'/mall2/shareTextLink',
+        query:{
+          price:this.detailData.activityPrice,
+          link:window.location.href,
+          goodsTitle:this.getSkuNameStr(this.detailData),
+        }
       })
     },
     // 唤起客服
