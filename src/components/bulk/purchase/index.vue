@@ -35,7 +35,13 @@
     </div>
 
     <!-- 团长入口 -->
-    <div v-if="entrance" class="entrance-tuanzhang" @click="$router.push({name: '活动首页'})" ><img src="../activity/images/pintuan.png" /></div>
+    <div
+      v-if="entrance"
+      class="entrance-tuanzhang"
+      @click="$router.push({ name: '活动首页' })"
+    >
+      <img src="../activity/images/pintuan.png" />
+    </div>
   </div>
 </template>
 <script>
@@ -57,7 +63,7 @@ export default {
     return {
       communityId: "",
       categoryId: "",
-      page: 0,
+      page: 1,
       pageSize: 10,
       wrapperHeight: 0,
       saleDataList: [],
@@ -66,17 +72,17 @@ export default {
       finished: false,
       offset: 15,
       entrance: false,
-      searchText: ""
+      searchText: "",
     };
   },
   created() {
     this.$http
-    .get("/app/json/group_buying_head_info/findSelfInfo")
-    .then((res) => {
-      if (res.data.result == "success") {
-        this.entrance = true;
-      }
-    });
+      .get("/app/json/group_buying_head_info/findSelfInfo")
+      .then((res) => {
+        if (res.data.result == "success") {
+          this.entrance = true;
+        }
+      });
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       this.communityId = this.$store.state.projectId;
       console.log("res-------------------", this.communityId);
@@ -97,24 +103,32 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.wrapperHeight = document.getElementsByClassName(
-        "goodlist-wraper"
-      )[0].offsetHeight;
+      this.wrapperHeight =
+        document.getElementsByClassName("goodlist-wraper")[0].offsetHeight;
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.getList(1);
-    },100)
+    }, 100);
   },
   methods: {
+    /*tab切换*/
     navToMsg(data) {
       this.saleDataList = [];
       this.categoryId = data.id;
+      this.loading = true;
+      this.finished = false;
+      this.page = 1;
       this.getList(1);
     },
     /**
      *  下拉刷新方法
      */
     onRefresh() {
+      this.saleDataList = [];
+      this.loading = true;
+      this.finished = false;
+      this.isLoading = true;
+      this.page = 1;
       this.saleDataList = [];
       this.getList(1);
     },
@@ -124,38 +138,59 @@ export default {
      */
     onLoad() {
       // 调用请求数据方法
-      this.getList();
-      this.loading = false;
-      this.isLoading = false;
+      this.loading = true;
+      if (!this.finished) {
+        this.getList();
+      }
     },
-    funSearch(val){
+    funSearch(val) {
       this.searchText = val;
-      this.getList(1,"search");
+      this.loading = true;
+      this.finished = false;
+      this.page = 1;
+      this.saleDataList = [];
+      this.getList(1, "search");
     },
     /**
      *  请求数据方法
      */
-    getList(page,isSearch) {
-      if (!page) this.page++;
-      if (page) this.page = page;
+    getList(pages, isSearch) {
+      //   if (!pages) this.page++;
+      //   if (pages) this.page = page;
+      let { page } = this;
       let url = `/app/json/groupbuying_sku_index_app/index?communityId=${this.communityId}&categoryId=${this.categoryId}&skuName=${this.searchText}&pageIndex=${this.page}&pageSize=${this.pageSize}`;
       this.$http
         .get(url)
         .then((res) => {
           this.loading = false;
           this.isLoading = false;
-          if (!res.data.data.length) {
-            this.finished = true;
+          if (res.data.result == "success") {
+            if (page < res.data.totalPages || page == res.data.totalPages) {
+              res.data.data.map((item, index) => {
+                item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
+                if (item.avatarList.length > 3)
+                  item.avatarList = item.avatarList.slice(0, 3);
+              });
+              this.saleDataList =
+                isSearch == "search"
+                  ? res.data.data
+                  : this.saleDataList.concat(res.data.data);
+              this.page++;
+              if (page == res.data.totalPages) {
+                this.finished = true;
+              }
+            } else {
+              this.finished = true; //如果超过总页数就显示没有更多内容了
+            }
+          } else {
+            this.refreshing = false;
+            this.error = true; //加载错误状态
           }
-          res.data.data.map((item, index) => {
-            item.groupbuySkuPicurl = item.groupbuySkuPicurl.split(",");
-            if (item.avatarList.length > 3)
-              item.avatarList = item.avatarList.slice(0, 3);
-          });
-          this.saleDataList = isSearch == 'search' ? res.data.data : this.saleDataList.concat(res.data.data);
         })
         .catch((e) => {
-          console.log(e);
+          this.loading = false;
+          this.refreshing = false;
+          this.error = true; //加载错误状态
         });
     },
   },
@@ -169,10 +204,13 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .header-x {
   // height: 56px;
   background: #b52232;
+  padding-top: 10px;
 }
+
 .section-x {
   flex: 1;
   display: flex;
@@ -180,9 +218,11 @@ export default {
   flex-shrink: 0;
   overflow: auto;
 }
+
 .footer-x {
   height: 70px;
 }
+
 .goodlist-wraper {
   width: 100%;
   flex: 1;
@@ -194,28 +234,34 @@ export default {
   /* padding-bottom: 30px; */
   box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
 }
+
 .lux:nth-last-child(1)::after {
   background: none !important;
 }
+
 .lux:nth-last-child(1) {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
 .lux:first-child {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 .footer {
   width: 100%;
   height: 55px;
 }
-.entrance-tuanzhang{
+
+.entrance-tuanzhang {
   width: 48px;
   height: 48px;
   position: fixed;
   left: 8px;
   bottom: 16%;
-  img{
+
+  img {
     width: 100%;
     height: 100%;
   }
