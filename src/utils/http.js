@@ -35,7 +35,7 @@ let Axios = axios.create({
   withCredentials: false,
   headers
 })
-console.log('Config.baseURL',Config.baseURL)
+console.log('Config.baseURL', Config.baseURL)
 
 let bulkApi = ['/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
@@ -62,19 +62,23 @@ Axios.interceptors.request.use(
     }
 
     //中台接口要带一体化token
-    
+
     if (/times\/charge-bff/.test(config.url)) {
       if (store.state.environment == 'development') {
-        config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
+        config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
       } else {
-        config.headers.Authorization = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken")
+        let tokenStr1;
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          tokenStr1 = "Bearer " + res.result;
+        });
+        config.headers.Authorization = tokenStr1
       }
       console.log(`一体化token`, config.headers.Authorization);
     }
     /*物业系统请求处理逻辑
     Content-Type方式是: application/json;charset=UTF-8
     */
-   
+
     if (/pcs\/bill-center\/check-bill/.test(config.url)) {
       config.headers["Content-Type"] = "application/json;charset=UTF-8"
     }
@@ -239,11 +243,11 @@ Axios.interceptors.response.use(
       } else {
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
-          if(!store.state.ythToken){//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
+          if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
-          }else{
+          } else {
             // 用户token过期重新走一体化转商城token接口
-            if(res.data.errorCode == 1000 ){
+            if (res.data.errorCode == 1000) {
               window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${window.location.hash}`)}`
             }
           }
