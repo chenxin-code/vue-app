@@ -1931,6 +1931,7 @@ export default {
         // document.getElementById("debug_text").innerText = res;
         // alert("shareThenRes----------", JSON.stringify(res));
       });
+      this.showSharePopup = false;
     },
     shareImg(){
       this.showShare();

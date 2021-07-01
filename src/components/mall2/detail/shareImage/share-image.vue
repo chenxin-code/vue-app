@@ -27,14 +27,14 @@
       <!-- <div class="top">{{$store.state.globalConfig.mpName}}</div> -->
       <div class="share-image-content">
         <div class="title">{{proData.showTitle}}</div>
-        <div class="price">￥<span class="num">{{proData.activityPrice}}&nbsp;<span class="sale-price">￥{{proData.salePrice}}<p class="line-t"></p></span></span></div>
+        <div class="price">￥<span class="num">{{proData.activityPrice}}&nbsp;<span class="sale-price" v-if="proData.salePrice > proData.activityPrice">￥{{proData.salePrice}}<p class="line-t"></p></span></span></div>
         <div class="pro-img">
           <img :src="proImgUrl" @load="loadImage" alt="">
         </div>
         <div class="qrcode">
           <div class="img">
-            <img :src="qrcode" alt="" v-show="$store.state.webtype == 2 || $store.state.webtype == 3">
-            <div ref="qrcodeLink" id="qrcodeLink" v-show="$store.state.webtype != 2 || $store.state.webtype != 3"></div>
+            <img :src="qrcode" alt="">
+            <!-- <div ref="qrcodeLink" id="qrcodeLink" v-show="$store.state.webtype != 2 || $store.state.webtype != 3"></div> -->
           </div>
           <div class="text">
             <div class="top-title">{{$store.state.globalConfig.mpName}}</div>
@@ -72,14 +72,14 @@
     },
     props: {},
     created(){
-      console.log('this.$store.state.webtype',this.$route)
     },
     mounted() {
       this.$nextTick(() => {
         this.formatImgUrl(this.proData.phMainUrl)
-        if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3){
-          this.crateQrcode();
-        }
+        // if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3){
+        //   this.crateQrcode();
+        // }
+        console.log('this.proData',this.proData)
       })
     },
     methods: {
@@ -110,13 +110,16 @@
         })
       },
       loadImage() {
-        if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
-          this.getCode().then(() => {
-            this.canvasPage();
-          })
-        }else{
+        // if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        //   this.getCode().then(() => {
+        //     this.canvasPage();
+        //   })
+        // }else{
+        //   this.canvasPage();
+        // }
+        this.getCode().then(() => {
           this.canvasPage();
-        }
+        })
       },
       canvasPage(){
         let that = this
@@ -180,13 +183,15 @@
       },
       getCode: function () {
         return new Promise((resolve, reject) => {
-          let rfrCode = this.$store.state.rfrCode || this.$store.state.userInfo.userId
+          // let rfrCode = this.$store.state.rfrCode || this.$store.state.userInfo.userId
           this.$request.post('/app/json/short_address/makeShortAddress', {
-            longAddress: `${this.delParams()}&rfrCode=${rfrCode}`
+            // longAddress: `${this.delParams()}&rfrCode=${rfrCode}`
+            longAddress: `${encodeURIComponent(`/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.proData.skuId}`)}`
           }).then(res => {
             if (res.status === 0) {
               const shortCode = res.data.substr(res.data.indexOf('/s/'))
               // /app/json/we_chat/getwxacodeunlimit
+              console.log('shortCode',shortCode)
               this.$request.post('/app/json/wechat_mini_program/createQrCode', {
                 // path: `pages/common/home/index`,
                 // scene: shortCode,
