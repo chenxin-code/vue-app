@@ -43,8 +43,9 @@
           class="nav-back-btn"
           style="right: 10px; top: 5px; width: 34px; height: 34px; padding: 5px"
           @click="showShare"
-          v-if="$store.state.webtype == 3"
+          v-if="false"
         >
+        <!-- $store.state.webtype == 3 -->
           <img
             style="display: block; width: 100%; height: 100%"
             src="static/image/mall2/share.png"
@@ -492,10 +493,16 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div
-                          class="title theme_font_black"
-                          v-html="getSkuNameStr(detailData)"
-                        ></div>
+                        <div class="content">
+                          <div
+                            class="title theme_font_black"
+                            v-html="getSkuNameStr(detailData)"
+                          ></div>
+                          <div class="share_button" @click="onShare">
+                            <img src="static/image/mall2/share_icon.png" alt="">
+                            <div>分享</div>
+                          </div>
+                        </div>
                       </div>
                       <div
                         class="row"
@@ -1599,6 +1606,27 @@
       v-if="showPicUrls"
       @closeEvent="closeBigImage"
     ></BigImage>
+    <van-popup v-model="showSharePopup" round position="bottom" :style="{ height: '35%' }" >
+      <div class="share_popup">
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="">
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg">
+            <img src="static/image/mall2/share_img.png" alt="">
+            <div>图片分享</div>
+          </div>
+          <div class="share_botton_item" @click="shareLink">
+            <img src="static/image/mall2/share_link.png" alt="">
+            <div>链接分享</div>
+          </div>
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -1629,6 +1657,7 @@ import CouponAndActivity from "./base/couponAndActivity";
 import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
+import appShare from "@zkty-team/x-engine-module-share";
 
 export default {
   name: "detail",
@@ -1826,6 +1855,7 @@ export default {
       jdSilmilarSkus: [],
       cartNum: 0,
       isX:false,
+      showSharePopup:false,
     };
   },
   computed: {
@@ -1866,6 +1896,55 @@ export default {
     },
   },
   methods: {
+    onShare(){
+      console.log(this.detailData)
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        this.showShare();
+      }else{
+        this.showSharePopup = true;
+      }
+    },
+    shareWechatFriends(){
+      let routeQuery = this.$route.query;
+      let queryStr = "";
+      for(let key in routeQuery){
+        queryStr+=`${key}=${routeQuery[key]}&`
+      }
+      queryStr=queryStr.substr(0,queryStr.length-1);
+      appShare
+      .shareForOpenWXMiniProgram({
+        // userName: "gh_2a45a4d38d81",
+        userName: "gh_28d617271c97",
+        path: `pages/common/home/index?redirect=${encodeURIComponent(
+          `/app-vue/app/index.html#/mall2/detail/1000?${queryStr}`
+        )}`,
+        title: this.getSkuNameStr(this.detailData),
+        desc: this.getSkuNameStr(this.detailData),
+        link: window.location.href,
+        imageurl: this.detailData.picUrls[0],
+        // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
+        miniProgramType:
+          this.$store.state.environment == "production" ? 0 : 2,
+        __event__: (res) => {},
+      })
+      .then((res) => {
+        // document.getElementById("debug_text").innerText = res;
+        // alert("shareThenRes----------", JSON.stringify(res));
+      });
+    },
+    shareImg(){
+      this.showShare();
+    },
+    shareLink(){
+      this.$router.push({
+        path:'/mall2/shareTextLink',
+        query:{
+          price:this.detailData.activityPrice,
+          link:window.location.href,
+          goodsTitle:this.getSkuNameStr(this.detailData),
+        }
+      })
+    },
     // 唤起客服
     handleCustomer: function() {
       ysf('config', {
@@ -2675,6 +2754,7 @@ export default {
       this.selectedText +=
         this.selectedNum +
         (this.detailData.metric ? this.detailData.metric : "件");
+        console.log('this.detailData.',this.detailData)
     },
     dataProcessing: function (item) {
       // 数据，尤其是价格，需要做初始化处理
@@ -4048,6 +4128,67 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .share_button{
+    padding-right:7px;
+    padding-left:25px;
+    img{
+      width:23px;
+      height:23px;
+    }
+    div{
+      font-size: 11px;
+      color: #121212;
+      line-height: 10px;
+      margin-top:4px;
+      white-space:nowrap
+    }
+  }
+}
+.share_popup{
+  width:100%;
+  height:100%;
+  padding:35px 26px 36px 25px;
+  .share_botton{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .share_botton_item{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      img{
+        width:74px;
+        height:74px;
+      }
+      div{
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
+        line-height: 20px;
+      }
+    }
+  }
+  .cancel{
+    width: 86.4%;
+    height: 49px;
+    border-radius: 16px;
+    border: 1px solid #E5E5E5;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:27px auto 0;
+  }
+}
 
 .adapter-iphoneX{
   width: 100%;

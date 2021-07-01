@@ -533,7 +533,7 @@ export default {
               this.$store.state.webtype !== "2"
             ) {
               document.getElementsByTagName("body")[0].style.paddingTop =
-                "0.933333rem";
+                "0.4rem";
             }
           }
         } else {
