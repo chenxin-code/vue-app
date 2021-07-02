@@ -80,7 +80,9 @@ export default {
     Empty
   },
   created() {
-    // this.getRoomId();
+    this.getRoomId();
+  },
+  mounted() {
     this.onLoad();
   },
   methods: {
@@ -100,8 +102,10 @@ export default {
     },
     //获取物业账单列表
     propertyFn() {
-      this.getRoomId();
-      let airDefenseNoStr = this.userRoomId ? this.userRoomId : this.$store.state.userRoomId;
+      // this.getRoomId();
+      let airDefenseNoStr = this.userRoomId
+        ? this.userRoomId
+        : this.$store.state.userRoomId;
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
       let propertyObj = {
         airDefenseNo: airDefenseNo,
@@ -132,13 +136,15 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
-      this.getRoomId();
+      // this.getRoomId();
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
         page: { index: this.currentPage, pageSize: 30 },
-        airDefenseNo: this.userRoomId ? this.userRoomId : this.$store.state.userRoomId,
+        airDefenseNo: this.userRoomId
+          ? this.userRoomId
+          : this.$store.state.userRoomId,
         billType: this.reqBillType
       };
 
@@ -158,9 +164,6 @@ export default {
 
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
-      if (!this.userRoomId) {
-        this.getRoomId();
-      }
       this.loading = true;
       let orderError = false;
       let propertyError = false;

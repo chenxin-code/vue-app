@@ -306,6 +306,7 @@ export default {
     //获取物业账单列表
     propertyFn() {
       // this.getRoomId();
+      console.log(`propertyFn userRoomId`, this.userRoomId);
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
