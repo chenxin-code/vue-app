@@ -80,7 +80,7 @@ export default {
     Empty
   },
   created() {
-    this.getRoomId();
+    // this.getRoomId();
     this.onLoad();
   },
   methods: {
@@ -100,9 +100,8 @@ export default {
     },
     //获取物业账单列表
     propertyFn() {
+      this.getRoomId();
       let airDefenseNoStr = this.userRoomId;
-      // let airDefenseNoStr =
-      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba";
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
       let propertyObj = {
         airDefenseNo: airDefenseNo,
@@ -133,6 +132,7 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
+      this.getRoomId();
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
