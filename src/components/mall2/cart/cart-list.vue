@@ -564,7 +564,7 @@ export default {
       return true;
     },
     getDataList: function () {
-      this.$Loading.open();
+      // this.$Loading.open();
       let url = "/app/json/app_cart/getCart";
       let paramsData = {
         token: this.$store.state.login.token,
@@ -731,7 +731,7 @@ export default {
         this.getDataList();
         return;
       }
-      this.$Loading.open();
+      // this.$Loading.open();
       let url = "/app/json/app_cart/updateCart";
       let paramsData = {
         token: this.$store.state.login.token,
