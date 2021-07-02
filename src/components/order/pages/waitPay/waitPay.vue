@@ -91,11 +91,13 @@ import yjzdbill from "@zkty-team/x-engine-module-yjzdbill";
 import { Dialog } from "vant";
 import _ from "lodash";
 import { Toast } from "vant";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "waitPay",
 
   data() {
     return {
+      userRoomId: "",
       showDialog: false,
       tipsText: "",
       check: false,
@@ -149,10 +151,25 @@ export default {
     Empty
   },
   created() {
+    this.getRoomId();
     this.onLoad();
   },
   activated() {},
   methods: {
+    //获取原生人房
+    getRoomId() {
+      appLocalstorage
+        .get({ key: "LLBUserRoomId", isPublic: true })
+        .then(res => {
+          if (res.hasOwnProperty("result")) {
+            console.log("我的订单人房id获取成功", res);
+            this.userRoomId = res.result;
+          } else {
+            console.log("我的订单人房id获取失败", res);
+            this.userRoomId = "";
+          }
+        });
+    },
     //合并支付
     mergePay() {
       let payInfoList = Array.from(this.checkData);
@@ -282,7 +299,7 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      let airDefenseNoStr = this.$store.state.userRoomId;
+      let airDefenseNoStr = this.userRoomId;
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
 
       let propertyObj = {
@@ -319,7 +336,7 @@ export default {
         orderTypeList: ["200015", "200502"],
         state: "1",
         page: { index: this.currentPage, pageSize: 30 },
-        airDefenseNo: this.$store.state.userRoomId,
+        airDefenseNo: this.userRoomId,
         billType: this.reqBillType
       };
       return new Promise((resolve, reject) => {
@@ -336,6 +353,9 @@ export default {
       });
     },
     onLoad() {
+      if (!this.userRoomId) {
+        this.getRoomId();
+      }
       this.loading = true;
       let orderError = false;
       let propertyError = false;

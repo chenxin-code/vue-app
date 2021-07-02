@@ -13,6 +13,7 @@ import {
 import userCenter from "../components/usercenter/js/userCenter";
 import dataMergeInterceptor from "./staticData/dataMergeInterceptor";
 import Watchman from './watchman'
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 
 // 在此数组中的路径，都会增加加密字段
 let sunboxEncodeArray = ['/app/json/login/register', '/app/json/login/sendSms', '/app/json/login/emailLogin', '/app/json/login/emailRegister', '/app/json/login/login', '/app/json/login/smsLogin', '/app/json/login/smsRegister', '/app/json/coupon/getMyCouInfo', '/app/json/coupon/getMyCouInfoByPage', '/app/json/login/updateToken']

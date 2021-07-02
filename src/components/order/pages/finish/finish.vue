@@ -44,10 +44,12 @@
 import propertyBill from "@/components/order/components/bill-item2/bill-item";
 import OrderItem from "../../components/order-item/order-item";
 import Empty from "../../components/empty/empty.vue";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "finish",
   data() {
     return {
+      userRoomId: "",
       loading: false,
       finished: false,
       error: false,
@@ -78,12 +80,27 @@ export default {
     Empty
   },
   created() {
+    this.getRoomId();
     this.onLoad();
   },
   methods: {
+    //获取原生人房
+    getRoomId() {
+      appLocalstorage
+        .get({ key: "LLBUserRoomId", isPublic: true })
+        .then(res => {
+          if (res.hasOwnProperty("result")) {
+            console.log("我的订单人房id获取成功", res);
+            this.userRoomId = res.result;
+          } else {
+            console.log("我的订单人房id获取失败", res);
+            this.userRoomId = "";
+          }
+        });
+    },
     //获取物业账单列表
     propertyFn() {
-      let airDefenseNoStr = this.$store.state.userRoomId;
+      let airDefenseNoStr = this.userRoomId;
       // let airDefenseNoStr =
       //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba";
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
@@ -121,7 +138,7 @@ export default {
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
         page: { index: this.currentPage, pageSize: 30 },
-        airDefenseNo: this.$store.state.userRoomId,
+        airDefenseNo: this.userRoomId,
         billType: this.reqBillType
       };
 
@@ -141,6 +158,9 @@ export default {
 
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
+      if (!this.userRoomId) {
+        this.getRoomId();
+      }
       this.loading = true;
       let orderError = false;
       let propertyError = false;
