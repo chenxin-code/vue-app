@@ -4851,7 +4851,8 @@ export default {
 
             .cart-num {
               position: absolute;
-              left: 61%;
+              // right: 6px;
+              left:61%;
               top: 5px;
               border-radius: 12px;
               padding: 2px 4px;
