@@ -16,10 +16,12 @@
       </div>
 
     </div>
-    <div class="scroll-container">
+    <div class="scroll-container" :style="{paddingBottom: `${bottomBlockHeight}px`}">
       <slot></slot>
-      <div v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS"
-           :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+      <!-- v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS" -->
+      <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+      <div 
+           :style="{ height: `${bottomBlockHeight}px`}"
            class="action-block">
         <div class="bottom-load-wrapper">
           <img class="refresh-icon"
@@ -33,8 +35,10 @@
         </div>
       </div>
     </div>
-    <div v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS"
-         :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+    <!-- v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS" -->
+    <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+    <div 
+         :style="{ height: `${bottomBlockHeight}px`}"
          class="action-block">
       <div class="bottom-load-wrapper">
         <img class="refresh-icon"
@@ -427,6 +431,7 @@
     },
     mounted() {
       this.init();
+      console.log(this.bottomLoadMethod,this.isBottomBounce,this.isBottomAutoS)
     }
   };
 </script>

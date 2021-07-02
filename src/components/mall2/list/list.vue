@@ -729,7 +729,7 @@ export default {
       if (this.nowPage == 0) {
         this.listData = [];
       }
-      this.$Loading.open();
+      // this.$Loading.open();
       let paramsData = {
         page: page,
         rows: 20,
