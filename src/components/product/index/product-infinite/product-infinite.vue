@@ -577,7 +577,7 @@
         }
 
         if (this.$store.state.webtype != '-1') {
-          this.$Loading.open();
+          // this.$Loading.open();
         }
         this.$http.post(url, paramsData).then(
           res => {

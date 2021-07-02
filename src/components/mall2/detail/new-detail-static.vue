@@ -1038,7 +1038,7 @@
                         >
                       </div>
                     </div>
-                    <div class="load-next theme_bg_white">
+                    <div class="load-next theme_bg_white" @click="proView = 2">
                       <img src="static/image/mall2/load-next.png" />
                       <span class="theme_font_tint">上拉加载图文详情</span>
                     </div>
@@ -1655,7 +1655,7 @@ export default {
       vipUnitUserCode: "",
       productType: "",
       toptab: 1,
-      proImgIndex: 1,
+      proImgIndex: 0,
       proView: 1,
       page1ScrollTop: 0,
       deliveryType: 2,

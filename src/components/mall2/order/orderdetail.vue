@@ -15,7 +15,7 @@
               <!--待支付-->
               <div class="order-info" v-if="tag == '1'">
                 <div class="row theme_font_white">
-                  <div class="title">等待买家付款</div>
+                  <div class="title lineHeight">等待买家付款</div>
                   <div class="tip">剩余{{timeString}}自动关闭订单</div>
                 </div>
                 <div class="row theme_font_white">
@@ -897,10 +897,12 @@
             v-if="$store.state.deployType == 4"
             @click.stop="consultingService(detailData)"
           >咨询客服</div>
+          <!-- v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500" -->
+          <!-- 不允许修改订单 -->
           <div
             class="row-btn line_circle theme_font_common theme_border_gray"
             @click="modifyAddress(detailData)"
-            v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500"
+            v-if="false"
           >修改订单</div>
           <div
             class="row-btn line_circle theme_font_common theme_border_gray"
@@ -2216,6 +2218,10 @@ export default {
         top: 12px;
         overflow: hidden;
 
+        .lineHeight{
+          line-height:24px;
+        }
+
         .row {
           padding-bottom: 5px;
           overflow: hidden;
@@ -2303,7 +2309,7 @@ export default {
     .place {
       position: relative;
       z-index: 1;
-      margin-top: -40px;
+      margin-top: -30px;
 
       i {
         font-size: 16px;

@@ -16,10 +16,14 @@
       </div>
 
     </div>
-    <div class="scroll-container">
+    <div class="scroll-container" :style="{paddingBottom:`${bottomBlockHeight}px`}">
       <slot></slot>
-      <div v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS"
-           :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+      <!-- v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS" -->
+      <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+      <!-- 商品详情不需要显示loading -->
+      <div 
+          v-if="$route.matched[0].path != '/mall2/detail/:id'" 
+           :style="{ height: `${bottomBlockHeight}px`}"
            class="action-block">
         <div class="bottom-load-wrapper">
           <img class="refresh-icon"
@@ -33,8 +37,12 @@
         </div>
       </div>
     </div>
-    <div v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS"
-         :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+    <!-- v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS" -->
+    <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+    <!-- 商品详情不需要显示加载完成 -->
+    <div 
+        v-if="$route.matched[0].path != '/mall2/detail/:id'"
+         :style="{ height: `${bottomBlockHeight}px`}"
          class="action-block">
       <div class="bottom-load-wrapper">
         <img class="refresh-icon"
