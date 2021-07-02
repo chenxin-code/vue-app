@@ -65,21 +65,15 @@ Axios.interceptors.request.use(
     //中台接口要带一体化token
 
     if (/times\/charge-bff/.test(config.url)) {
-      if (store.state.environment == 'development') {
-        // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
-        let tokenStr1;
-        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-          tokenStr1 = "Bearer " + res.result;
-        });
-        config.headers.Authorization = tokenStr1
-        console.log(`devtoken`, config.headers.Authorization);
-      } else {
+      if (store.state.environment == 'production') {
         let tokenStr2;
         await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
           tokenStr2 = "Bearer " + res.result;
         });
         config.headers.Authorization = tokenStr2
-        console.log(`uat 或生产 token`, config.headers.Authorization);
+        console.log(`生产token`, config.headers.Authorization);
+      } else {
+        config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
       }
       console.log(`一体化token`, config.headers.Authorization);
     }

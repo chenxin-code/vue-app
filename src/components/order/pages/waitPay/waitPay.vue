@@ -107,6 +107,7 @@ export default {
       finished: false,
       error: false,
       errorText: "请求失败，点击重新加载",
+      properWorng: false,
       refreshing: false,
       orderList: [],
       currentPage: 1,
@@ -152,6 +153,11 @@ export default {
   },
   created() {
     this.getRoomId();
+    // this.onLoad();
+    console.log(`created`, this.userRoomId);
+  },
+  mounted() {
+    console.log(`mounted`, this.userRoomId);
     this.onLoad();
   },
   activated() {},
@@ -299,7 +305,7 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      this.getRoomId();
+      // this.getRoomId();
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
@@ -333,7 +339,7 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
-      this.getRoomId();
+      // this.getRoomId();
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -358,15 +364,15 @@ export default {
       });
     },
     onLoad() {
-      if (!this.userRoomId) {
-        this.getRoomId();
-      }
+      // if (!this.userRoomId) {
+      //   this.getRoomId();
+      // }
       this.loading = true;
       let orderError = false;
       let propertyError = false;
       let promiseArr = "";
 
-      if (this.currentPage > 1) {
+      if (this.currentPage > 1 && !this.properWorng) {
         //如果当前页数大于1，那么说明是下滑分页的操作，因为物业账单没有分页，所以此时只需要请求电商订单的接口就好，不需要再请求物业账单接口了
         promiseArr = [this.orderFn()];
       } else {
@@ -411,11 +417,13 @@ export default {
               this.loading = false;
               this.error = true;
               propertyError = true;
+              this.properWorng = true;
             } else {
               this.loading = false;
               //如果propertyRes为空，则说明是翻页操作，此时error要为false，否则会提示物业账单错误信息
               this.error = false;
               propertyError = false;
+              this.properWorng = false;
             }
           }
 
