@@ -4709,7 +4709,8 @@ export default {
 
             .cart-num {
               position: absolute;
-              right: 6px;
+              // right: 6px;
+              left:61%;
               top: 5px;
               border-radius: 12px;
               padding: 2px 4px;
