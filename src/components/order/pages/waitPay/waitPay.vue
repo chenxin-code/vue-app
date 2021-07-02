@@ -151,7 +151,7 @@ export default {
     Empty
   },
   created() {
-    // this.getRoomId();
+    this.getRoomId();
     this.onLoad();
   },
   activated() {},
@@ -299,82 +299,68 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      appLocalstorage
-        .get({ key: "LLBUserRoomId", isPublic: true })
-        .then(res => {
-          if (res.hasOwnProperty("result")) {
-            console.log("propertyFn人房id获取成功", res);
-            this.userRoomId = res.result;
-          } else {
-            console.log("propertyFn人房id获取失败", res);
-            this.userRoomId = "";
+      this.getRoomId();
+      let airDefenseNoStr = this.userRoomId
+        ? this.userRoomId
+        : this.$store.state.userRoomId;
+      let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
+      let propertyObj = {
+        airDefenseNo: airDefenseNo,
+        memberId: this.$store.state.userInfo.phone
+          ? this.$store.state.userInfo.phone
+          : "",
+        status: 10, //账单状态 10-待支付 90-成功
+        type: 1, //type 1、列表 2、详情
+        pageNo: "",
+        pageTimes: ""
+      };
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+        : (url =
+            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+      return new Promise((resolve, reject) => {
+        this.$http.get(url, { params: propertyObj }).then(
+          res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
           }
-
-          let airDefenseNoStr = this.userRoomId;
-          let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
-          let propertyObj = {
-            airDefenseNo: airDefenseNo,
-            memberId: this.$store.state.userInfo.phone
-              ? this.$store.state.userInfo.phone
-              : "",
-            status: 10, //账单状态 10-待支付 90-成功
-            type: 1, //type 1、列表 2、详情
-            pageNo: "",
-            pageTimes: ""
-          };
-          let url = "";
-          this.$store.state.environment == "development"
-            ? (url =
-                "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
-            : (url =
-                "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
-          return new Promise((resolve, reject) => {
-            this.$http.get(url, { params: propertyObj }).then(
-              res => {
-                resolve(res);
-              },
-              err => {
-                reject(err);
-              }
-            );
-          });
-        });
+        );
+      });
     },
     //获取电商订单列表
     orderFn() {
-      appLocalstorage
-        .get({ key: "LLBUserRoomId", isPublic: true })
-        .then(res => {
-          if (res.hasOwnProperty("result")) {
-            console.log("orderFn人房id获取成功", res);
-            this.userRoomId = res.result;
-          } else {
-            console.log("orderFn人房id获取失败", res);
-            this.userRoomId = "";
-          }
-          let obj1 = {
-            orderType: "200015",
-            orderTypeList: ["200015", "200502"],
-            state: "1",
-            page: { index: this.currentPage, pageSize: 30 },
-            airDefenseNo: this.userRoomId,
-            billType: this.reqBillType
-          };
-          return new Promise((resolve, reject) => {
-            this.$http
-              .post("/app/json/app_shopping_order/findOrderFormList", obj1)
-              .then(
-                res => {
-                  resolve(res);
-                },
-                err => {
-                  reject(err);
-                }
-              );
-          });
-        });
+      this.getRoomId();
+      let obj1 = {
+        orderType: "200015",
+        orderTypeList: ["200015", "200502"],
+        state: "1",
+        page: { index: this.currentPage, pageSize: 30 },
+        airDefenseNo: this.userRoomId
+          ? this.userRoomId
+          : this.$store.state.userRoomId,
+        billType: this.reqBillType
+      };
+      return new Promise((resolve, reject) => {
+        this.$http
+          .post("/app/json/app_shopping_order/findOrderFormList", obj1)
+          .then(
+            res => {
+              resolve(res);
+            },
+            err => {
+              reject(err);
+            }
+          );
+      });
     },
     onLoad() {
+      if (!this.userRoomId) {
+        this.getRoomId();
+      }
       this.loading = true;
       let orderError = false;
       let propertyError = false;

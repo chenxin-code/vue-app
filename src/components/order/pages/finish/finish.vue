@@ -101,7 +101,7 @@ export default {
     //获取物业账单列表
     propertyFn() {
       this.getRoomId();
-      let airDefenseNoStr = this.userRoomId;
+      let airDefenseNoStr = this.userRoomId ? this.userRoomId : this.$store.state.userRoomId;
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
       let propertyObj = {
         airDefenseNo: airDefenseNo,
@@ -138,7 +138,7 @@ export default {
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
         page: { index: this.currentPage, pageSize: 30 },
-        airDefenseNo: this.userRoomId,
+        airDefenseNo: this.userRoomId ? this.userRoomId : this.$store.state.userRoomId,
         billType: this.reqBillType
       };
 
