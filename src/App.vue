@@ -156,19 +156,6 @@ export default {
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
     // })
-    if (this.$store.state.webtype !== "3" && this.$store.state.webtype !== "2") {
-      const rate = window.screen.height / window.screen.width;
-      let limit =
-        window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-      // window.screen.height为屏幕高度
-      //  window.screen.availHeight 为浏览器 可用高度
-      if (rate > limit) {
-        this.$store.state.isX = true;
-      }else{
-        this.$store.state.isX = false;
-      }
-    }
-    console.log('$store.state.isX',this.$store.state.isX)
   },
   computed: {
     appBackHomeImg() {
@@ -530,6 +517,19 @@ export default {
       }
       document.title = "时代星选"
       console.log("document.title",document.title)
+      if (this.$store.state.webtype !== "3" && this.$store.state.webtype !== "2") {
+        const rate = window.screen.height / window.screen.width;
+        let limit =
+          window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+        // window.screen.height为屏幕高度
+        //  window.screen.availHeight 为浏览器 可用高度
+        if (rate > limit) {
+          this.$store.state.isX = true;
+        }else{
+          this.$store.state.isX = false;
+        }
+      }
+      console.log('$store.state.isX',this.$store.state.isX)
     },
     "$route.matched"(value) {
       if (value.length !== 0) {
