@@ -2,8 +2,7 @@
 
 <template>
   <transition name="st-indicator">
-    <!-- visible -->
-    <div class="ui-loading" v-show="true" @touchmove.stop.prevent>
+    <div class="ui-loading" v-show="visible" @touchmove.stop.prevent>
       <i>
         <div class='box'>
           <div class="box2"></div>
