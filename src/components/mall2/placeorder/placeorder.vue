@@ -739,7 +739,7 @@
               </div>
             </div>
           </div>
-          <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
         </div>
         <!--          易捷卡弹框（充值卡）-->
         <van-popup class="pay-modal" position="bottom" v-model="showYJChange">

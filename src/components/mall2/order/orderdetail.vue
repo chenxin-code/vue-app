@@ -943,7 +943,7 @@
             v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
           >再次购买</div>
         </div>
-        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
 
       <!-- <div class="customerService" @click="handleCustomer">

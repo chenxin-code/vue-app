@@ -1388,7 +1388,7 @@
           <p class="title">不在可售区域</p>
         </div>
       </div>
-      <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+      <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
     </div>
     <pop-view v-if="showPop" @closeEvent="popClose">
       <div class="pop-body">
@@ -1502,7 +1502,7 @@
         >
           预购下单
         </div>
-        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </pop-view>
     <pop-view v-if="showActivity" @closeEvent="showActivity = false">

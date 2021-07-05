@@ -105,6 +105,7 @@ export default {
   },
   created() {
     // this.viewPortSet();
+    console.log('this.$util.getIsIphoneX_X();',this.$util.getIsIphoneX_X())
     console.log(window.location.href)
     if(/mall-prod-app-linli/.test(window.location.href)){
       this.$store.state.environment = 'production'

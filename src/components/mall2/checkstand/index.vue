@@ -107,7 +107,7 @@
         >
           找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
         </div>
-        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </nav-content>
     <div class="copy-div" v-show="showCopyBtn">

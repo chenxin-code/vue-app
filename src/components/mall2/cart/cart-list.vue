@@ -189,7 +189,7 @@
           :key="index"
         >
         </PayDiv>
-        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </div>
     <div
