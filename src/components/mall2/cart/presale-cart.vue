@@ -199,7 +199,7 @@
           res => {
             let data = res.data;
             if (data.status == 0) {
-              // this.$store.state.mall2.cartNum = data.data
+              this.$store.state.mall2.cartNum = data.data
               if (deliverType == 1) {
                 this.zitiNum = data.data
               } else {

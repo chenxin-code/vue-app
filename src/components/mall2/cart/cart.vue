@@ -254,7 +254,7 @@ export default {
           if (data.status == 0) {
             this.goodsCount = data.data;
 
-            // this.$store.state.mall2.cartNum = data.data
+            this.$store.state.mall2.cartNum = data.data
             console.log('this.$store.state.mall2.cartNum',"cart",this.$store.state.mall2.cartNum)
             if (deliverType == 1) {
               this.zitiNum = data.data;
