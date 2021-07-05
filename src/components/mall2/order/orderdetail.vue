@@ -10,7 +10,7 @@
           :top-load-method="topRefresh"
           :is-top-bounce="true"
         >
-          <div :class="isX?'scroll-box':''">
+          <div :class="$store.state.isX?'scroll-box':''">
             <div class="top-div">
               <!--待支付-->
               <div class="order-info" v-if="tag == '1'">
@@ -943,7 +943,7 @@
             v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
           >再次购买</div>
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
 
       <!-- <div class="customerService" @click="handleCustomer">
@@ -1046,7 +1046,6 @@ export default {
       pivotalProductType: '',
       errorInfo: '',
       showKeyboard: true,
-      isX:false,
       time:null,
     }
   },
@@ -2070,16 +2069,6 @@ export default {
     // 代付相关end
 
     this._getOrderDetail()
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   beforeRouteLeave(to, from, next) {
     this.$keepaliveHelper.deleteCache(this)

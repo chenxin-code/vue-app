@@ -244,9 +244,10 @@ Axios.interceptors.response.use(
     console.log('http res', res)
     if (data.errorCode == 1000 && res.config.url.indexOf('/app/json/login/updateToken?') == -1) {
       res.data.info = '';
-      if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {
-        return userCenter.expireUpdateToken(res);
-      } else {
+      // if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {
+      //   return userCenter.expireUpdateToken(res);
+      // } else {
+      if(store.state.webtype == '1' || store.state.webtype == '0'){
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
@@ -261,6 +262,7 @@ Axios.interceptors.response.use(
           return res;
         })
       }
+      // }
     } else if (data.errorCode == 2051) {
       //设备更换 需要短信登录才行
       util.toSmsLogin();

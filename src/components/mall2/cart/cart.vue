@@ -6,7 +6,7 @@
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
-          <span class="title theme_font_black">购物车({{ goodsCount }})</span>
+          <span class="title theme_font_black">购物车({{ $store.state.mall2.cartNum }})</span>
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
@@ -255,6 +255,7 @@ export default {
             this.goodsCount = data.data;
 
             // this.$store.state.mall2.cartNum = data.data
+            console.log('this.$store.state.mall2.cartNum',"cart",this.$store.state.mall2.cartNum)
             if (deliverType == 1) {
               this.zitiNum = data.data;
             } else {

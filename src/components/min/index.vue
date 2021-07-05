@@ -137,7 +137,6 @@ export default {
         userImage: "",
         userName: "",
       },
-      isX: false,
     };
   },
   components: {

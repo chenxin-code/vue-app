@@ -189,7 +189,7 @@
           :key="index"
         >
         </PayDiv>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </div>
     <div
@@ -258,7 +258,6 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
-      isX:false,
     };
   },
   methods: {
@@ -601,6 +600,23 @@ export default {
 
             //新增商品种类数量
 
+            let num = 0;
+            let occur = 0;
+            data.data.occur.forEach((o)=>{
+              o.store.forEach((s)=>{
+                s.activity.forEach((a)=>{
+                  occur += a.cart.length
+                })
+              })
+            })
+            if(data.data.invalidCart !== ''){
+              num = data.data.invalidCart.length + occur;
+            }else{
+              num = occur
+            }
+            console.log('occur',num)
+            this.$store.state.mall2.cartNum = num;
+
           } else {
             this.$Toast(data.info);
           }
@@ -701,7 +717,8 @@ export default {
           let data = res.data;
 
           if (data.status == 0) {
-            this.$store.state.mall2.cartNum = data.data;
+            // this.$store.state.mall2.cartNum = data.data;
+            console.log('this.$store.state.mall2.cartNum','cart-list',this.$store.state.mall2.cartNum)
           } else {
             this.$Toast(data.info);
           }
@@ -789,9 +806,9 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this._getCartCount()
             this.$Toast("删除成功");
             this.getDataList();
+            this._getCartCount()
           } else {
             this.$Toast(data.info);
           }
@@ -811,16 +828,7 @@ export default {
     },
   },
   created() {
-    console.log(this.$store.state.mall2.selectAddress);
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
+    console.log('$store.state.isX',this.$store.state.isX)
   },
 };
 </script>
