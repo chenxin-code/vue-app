@@ -189,7 +189,7 @@
           :key="index"
         >
         </PayDiv>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
       </div>
     </div>
     <div
@@ -258,7 +258,6 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
-      isX:false,
     };
   },
   methods: {
@@ -811,16 +810,7 @@ export default {
     },
   },
   created() {
-    console.log(this.$store.state.mall2.selectAddress);
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
+    console.log('$store.state.isX',this.$store.state.isX)
   },
 };
 </script>

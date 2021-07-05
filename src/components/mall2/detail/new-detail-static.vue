@@ -1388,7 +1388,7 @@
           <p class="title">不在可售区域</p>
         </div>
       </div>
-      <div class="adapter-iphoneX" v-if="isX"></div>
+      <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
     </div>
     <pop-view v-if="showPop" @closeEvent="popClose">
       <div class="pop-body">
@@ -1502,7 +1502,7 @@
         >
           预购下单
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
       </div>
     </pop-view>
     <pop-view v-if="showActivity" @closeEvent="showActivity = false">
@@ -1854,7 +1854,6 @@ export default {
       lastRequestId: "",
       jdSilmilarSkus: [],
       cartNum: 0,
-      isX:false,
       showSharePopup:false,
     };
   },
@@ -1897,7 +1896,7 @@ export default {
   },
   methods: {
     onShare(){
-      console.log(this.detailData)
+      console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
         this.showShare();
       }else{
@@ -1921,7 +1920,7 @@ export default {
         title: this.getSkuNameStr(this.detailData),
         desc: this.getSkuNameStr(this.detailData),
         link: window.location.href,
-        imageurl: this.detailData.picUrls[0],
+        imageurl: this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10',
         // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
         miniProgramType:
           this.$store.state.environment == "production" ? 0 : 2,
@@ -4067,18 +4066,6 @@ export default {
     } else {
       this.getDatas();
     }
-
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
-    
   },
   activated() {
     if (

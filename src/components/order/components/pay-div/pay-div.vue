@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="adapter-iphoneX" v-if="isX"></div>
+    <div class="adapter-iphoneX" v-if="$store.state.isX"></div>
   </div>
 </template>
 
@@ -46,23 +46,9 @@ export default {
         integer: "0",
         decimal: "00"
       },
-      isX: false
     };
   },
   created() {
-    if (
-      /iphone/gi.test(navigator.userAgent) &&
-      screen.height == 812 &&
-      screen.width == 375
-    ) {
-      //是iphoneX
-      console.log("是iphonex");
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log("不是iphonex");
-      this.isX = false;
-    }
   },
   computed: {
     billTypeName() {
