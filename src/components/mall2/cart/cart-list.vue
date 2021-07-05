@@ -600,22 +600,22 @@ export default {
 
             //新增商品种类数量
 
-            let num = 0;
-            let occur = 0;
-            data.data.occur.forEach((o)=>{
-              o.store.forEach((s)=>{
-                s.activity.forEach((a)=>{
-                  occur += a.cart.length
-                })
-              })
-            })
-            if(data.data.invalidCart !== ''){
-              num = data.data.invalidCart.length + occur;
-            }else{
-              num = occur
-            }
-            console.log('occur',num)
-            this.$store.state.mall2.cartNum = num;
+            // let num = 0;
+            // let occur = 0;
+            // data.data.occur.forEach((o)=>{
+            //   o.store.forEach((s)=>{
+            //     s.activity.forEach((a)=>{
+            //       occur += a.cart.length
+            //     })
+            //   })
+            // })
+            // if(data.data.invalidCart !== ''){
+            //   num = data.data.invalidCart.length + occur;
+            // }else{
+            //   num = occur
+            // }
+            // console.log('occur',num)
+            // this.$store.state.mall2.cartNum = num;
 
           } else {
             this.$Toast(data.info);
@@ -717,7 +717,7 @@ export default {
           let data = res.data;
 
           if (data.status == 0) {
-            // this.$store.state.mall2.cartNum = data.data;
+            this.$store.state.mall2.cartNum = data.data;
             console.log('this.$store.state.mall2.cartNum','cart-list',this.$store.state.mall2.cartNum)
           } else {
             this.$Toast(data.info);
