@@ -19,5 +19,6 @@ module.exports = {
     img: 'src',
     image: 'xlink:href'
   },
-  transpileDependencies: [/@zkty-team/]
+  // transpileDependencies: [/@zkty-team/]
+  transpileDependencies: [/[/\\]node_modules[/\\](.+?)?zkty-team(.*)/]
 }

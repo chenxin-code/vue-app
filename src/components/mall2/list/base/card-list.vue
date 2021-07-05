@@ -329,12 +329,16 @@
           align-items center;
           /*padding 0px 0;*/
           .act-item {
-            padding 2px 8px;
+            padding 4px 8px;
             font-size 10px;
-            border-radius 10px;
+            border-radius 4px;
             border-width 0.5px
-            border-style solid
+            // border-style solid
             margin-right 4px;
+            background-color #FFEEED;
+            font-weight: 400;
+            color: #E3352A;
+            line-height: 11px;
           }
         }
         .num-info {
