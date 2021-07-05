@@ -31,7 +31,8 @@
     "test": {
       "presets": [
         "env",
-        "stage-0"
+        "stage-0",
+        "es2015"
       ],
       "plugins": [
         "istanbul"
