@@ -20,16 +20,7 @@ const ENV = process.env.ENV;
 //交易中心HOST配置 tct
 // const host = "http://10.71.21.46:31117"; //uat环境交易中心接口地址
 // const host = "http://47.112.249.207:8200/";  //uat环境交易中心接口地址 端口号不一样
-const host = process.env.VUE_APP_TST; //uat环境交易中心接口地址
-
-//服务商城中心配置 tsm
-// const times = "http://8.129.225.124:31494"; //uat环境交易中心接口地址
-const times = process.env.VUE_APP_BASE_API; //uat环境交易中心接口地址
-
-//中科服务商域名配置
-// const zkHost = "http://39.105.84.126:28816"; //中科dev环境
-// const zkHost = "https://mall-uat-api-linli.timesgroup.cn"; //中科uat环境
-const zkHost = process.env.VUE_APP_API; //中科dev环境
+const host = process.env.VUE_APP_BASE_API; //uat环境交易中心接口地址
 
 // const assetsCDN = {
 //   // webpack build externals
@@ -178,21 +169,11 @@ const vueConfig = {
     // port: 80,
     // host:'mall-uat-app-linli.timesgroup.cn',
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
-    proxy: {
-       //tct
-       "/times-center-trade/": {
+    proxy: {      
+      "/api/": {
         target: host,
         changeOrigin: true
-      },
-      "/api/": {
-        target: zkHost,
-        changeOrigin: true
-      },
-      //tsm
-      "/times/": {
-        target: times,
-        changeOrigin: true
-      }
+      },   
     }
   },
 
