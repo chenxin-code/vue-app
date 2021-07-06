@@ -174,17 +174,11 @@ const vueConfig = {
     proxy: {
       "/api/mapapi": {
         target: "http://api.map.baidu.com",
-        changeOrigin: true,
-        pathRewrite: {
-          "^/api/mapapi": ""
-        }
+        changeOrigin: true
       },
       "/api/vueapp": {
-        // target: 'http://47.97.215.145:10006',
-        changeOrigin: true,
-        pathRewrite: {
-          "^/api/vueapp": "/vueapp"
-        }
+        target: 'http://47.97.215.145:10006',
+        changeOrigin: true
       },
       "/api": {
         // target: 'https://mall-prod-app-linli.timesgroup.cn',
@@ -194,10 +188,7 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
         // target:'http://henansydemo.deepermobile.com',
         // target: 'http://jlapp.95504.net:81',
-        changeOrigin: true,
-        pathRewrite: {
-          "^/api": ""
-        }
+        changeOrigin: true
       },
       "/app": {
         // target: 'http://tbdapp.deepermobile.com',
