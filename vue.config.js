@@ -43,7 +43,7 @@ const host = process.env.VUE_APP_BASE_API; //uat环境交易中心接口地址
 // vue.config.js
 const vueConfig = {
   // 默认'/'，部署应用包时的基本 URL
-  publicPath: ENV !== "test" ? "/" : "/",
+  publicPath: ENV !== "development" ? "./" : "/",
   outputDir: "app",
   assetsDir: "static",
   configureWebpack: config => {
