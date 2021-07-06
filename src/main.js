@@ -14,6 +14,28 @@ if (store.state.environment != 'production') {
   Vue.use(vConsole)
 }
 console.log('store.state.environment',store.state.environment)
+
+
+
+var sensors = require('sa-sdk-javascript'); 
+sensors.init({
+  server_url: 'https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=llb_uat',
+  is_track_single_page:true, // 单页面配置，默认开启，若页面中有锚点设计，需要将该配置删除，否则触发锚点会多触发 $pageview 事件
+  use_client_time:true,
+  send_type:'beacon',
+  heatmap: {
+     //是否开启点击图，default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭。
+     clickmap:'default',
+     //是否开启触达注意力图，not_collect 表示关闭，不会自动采集 $WebStay 事件，可以设置 'default' 表示开启。
+     scroll_notice_map:'not_collect'
+  }
+});
+sensors.quick('autoTrack'); //用于采集 $pageview 事件
+
+Vue.prototype.$sensors = sensors
+
+
+
 //路由
 import router from './router'
 console.log('----router---', router)
