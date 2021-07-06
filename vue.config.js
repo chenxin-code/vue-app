@@ -60,12 +60,12 @@ const vueConfig = {
       new CopyWebpackPlugin([
         {
           from: resolve("static"),
-          to: this.assetsDir,
+          to: "static",
           ignore: [".*"]
         },
         {
           from: resolve("abc.html"),
-          to: this.assetsDir,
+          to: "static",
           ignore: [".*"]
         }
       ])
