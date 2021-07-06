@@ -111,7 +111,7 @@ const vueConfig = {
       });
 
     // 压缩响应的app.json返回的代码压缩
-    config.optimization.minimize(true);
+    // config.optimization.minimize(true);
 
     config.resolve.alias
       .set("@$", resolve("src"))
