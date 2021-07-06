@@ -16,7 +16,6 @@ function resolve(dir) {
 const isProd = process.env.NODE_ENV === "production";
 const ENV = process.env.ENV;
 
-
 //交易中心HOST配置 tct
 // const host = "http://10.71.21.46:31117"; //uat环境交易中心接口地址
 // const host = "http://47.112.249.207:8200/";  //uat环境交易中心接口地址 端口号不一样
@@ -67,7 +66,7 @@ const vueConfig = {
     //灰度环境
     if (ENV == "staging") {
       config.plugins = [
-        ...config.plugins,
+        ...config.plugins
         // new vConsolePlugin({
         //   filter: [], // 需要过滤的入口文件
         //   enable: true // 发布代码前记得改回 false
@@ -113,10 +112,13 @@ const vueConfig = {
     // 压缩响应的app.json返回的代码压缩
     // config.optimization.minimize(true);
 
+    // 'vue$': 'vue/dist/vue.esm.js',
+    // '@': resolve('src'),
+
     config.resolve.alias
       .set("@$", resolve("src"))
-      .set("@assets", resolve("src/assets"))
-      .set("@request", resolve("src/api/request/apiAddress"));
+      .set("vue$", "vue/dist/vue.esm.js")
+      .set("@assets", resolve("src/assets"));
 
     const svgRule = config.module.rule("svg");
     svgRule.uses.clear();
@@ -169,17 +171,55 @@ const vueConfig = {
     // port: 80,
     // host:'mall-uat-app-linli.timesgroup.cn',
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
-    proxy: {      
-      "/api/": {
-        target: host,
+    proxy: {
+      "/api/mapapi": {
+        target: "http://api.map.baidu.com",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/mapapi": ""
+        }
+      },
+      "/api/vueapp": {
+        // target: 'http://47.97.215.145:10006',
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/vueapp": "/vueapp"
+        }
+      },
+      "/api": {
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
+        // target: 'http://192.168.31.118:18807',
+        // target: 'http://39.105.84.126:28807',
+        target: "http://mall-uat-app-linli.timesgroup.cn/",
+        // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
+        // target:'http://henansydemo.deepermobile.com',
+        // target: 'http://jlapp.95504.net:81',
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": ""
+        }
+      },
+      "/app": {
+        // target: 'http://tbdapp.deepermobile.com',
+        // target: 'http://39.105.84.126:28807',
+        // target: 'http://192.168.31.118:18807',
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
+        target: "http://mall-uat-app-linli.timesgroup.cn/",
         changeOrigin: true
-      },   
+      },
+      "/times": {
+        target: "http://m-center-uat.linli.timesgroup.cn", //中台系统
+        changeOrigin: true
+      },
+      "/pcs": {
+        target: "http://times-pcs.linli580.com.cn:8888", //收费系统
+        changeOrigin: true
+      }
     }
   },
-
   // disable source map in production
   productionSourceMap: false,
-  lintOnSave: undefined,
+  lintOnSave: false,
   // babel-loader no-ignore node_modules/*
   transpileDependencies: [
     "@zkty-team/x-engine-module-device",
