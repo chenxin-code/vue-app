@@ -84,7 +84,8 @@
     "shelljs": "^0.7.6",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vux-loader": "^1.2.9"
+    "vux-loader": "^1.2.9",
+    "copy-webpack-plugin":"^4.6.0"
   },
   "engines": {
     "node": ">= 6.0.0",
