@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const buildDate = JSON.stringify(new Date().toLocaleString());
 // const CompressionWebpackPlugin = require('compression-webpack-plugin'); // 开启gzip压缩， 按需引用
 // const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i; // 开启gzip压缩， 按需写入
-const vConsolePlugin = require("vconsole-webpack-plugin");
+// const vConsolePlugin = require("vconsole-webpack-plugin");
 // const sh = require("./.sh");
 
 //返回路径
@@ -68,10 +68,10 @@ const vueConfig = {
     if (ENV == "staging") {
       config.plugins = [
         ...config.plugins,
-        new vConsolePlugin({
-          filter: [], // 需要过滤的入口文件
-          enable: true // 发布代码前记得改回 false
-        })
+        // new vConsolePlugin({
+        //   filter: [], // 需要过滤的入口文件
+        //   enable: true // 发布代码前记得改回 false
+        // })
       ];
     }
     //正式环境
