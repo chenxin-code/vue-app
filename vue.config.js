@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const buildDate = JSON.stringify(new Date().toLocaleString());
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 // const CompressionWebpackPlugin = require('compression-webpack-plugin'); // 开启gzip压缩， 按需引用
 // const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i; // 开启gzip压缩， 按需写入
 // const vConsolePlugin = require("vconsole-webpack-plugin");
@@ -54,7 +55,20 @@ const vueConfig = {
       new webpack.DefinePlugin({
         APP_VERSION: `"${require("./package.json").version}"`,
         BUILD_DATE: buildDate
-      })
+      }),
+      // copy custom static assets
+      new CopyWebpackPlugin([
+        {
+          from: resolve("static"),
+          to: this.assetsDir,
+          ignore: [".*"]
+        },
+        {
+          from: resolve("abc.html"),
+          to: this.assetsDir,
+          ignore: [".*"]
+        }
+      ])
       // new CompressionWebpackPlugin({
       //   filename: '[path].gz[query]',
       //   algorithm: 'gzip',
@@ -174,11 +188,17 @@ const vueConfig = {
     proxy: {
       "/api/mapapi": {
         target: "http://api.map.baidu.com",
-        changeOrigin: true
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/mapapi": ""
+        }
       },
       "/api/vueapp": {
-        target: 'http://47.97.215.145:10006',
-        changeOrigin: true
+        target: "http://47.97.215.145:10006",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/vueapp": "/vueapp"
+        }
       },
       "/api": {
         // target: 'https://mall-prod-app-linli.timesgroup.cn',
@@ -188,7 +208,10 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
         // target:'http://henansydemo.deepermobile.com',
         // target: 'http://jlapp.95504.net:81',
-        changeOrigin: true
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": ""
+        }
       },
       "/app": {
         // target: 'http://tbdapp.deepermobile.com',
