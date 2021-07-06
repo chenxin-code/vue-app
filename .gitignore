@@ -8,3 +8,6 @@ api/config.js
 .vscode
 
 myUrl.js
+yarn.lock
+package-lock
+yarn-error.log
