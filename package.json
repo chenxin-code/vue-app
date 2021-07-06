@@ -76,10 +76,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "http-proxy-middleware": "^1.0.5",
-    "postcss-import": "^11.0.0",
-    "postcss-loader": "^6.1.1",
-    "postcss-url": "^7.2.1",
-    "px2rem-loader": "^0.1.9",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-pxtorem": "^5.1.1",
     "shelljs": "^0.7.6",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
@@ -98,9 +96,7 @@
     "globals": {
       "BigInt": true
     },
-    "extends": [
-      "eslint:recommended"
-    ],
+    "extends": [],
     "parserOptions": {
       "parser": "babel-eslint"
     },
