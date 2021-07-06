@@ -107,7 +107,7 @@
         >
           找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </nav-content>
     <div class="copy-div" v-show="showCopyBtn">
@@ -167,7 +167,6 @@ export default {
       lsProductName: "",
       isBulk: false,
       bulkData: {},
-      isX:false,
     };
   },
   methods: {
@@ -703,16 +702,6 @@ export default {
     this.setPayWays();
     // this.payment = this.$route.query.payment
     // this.tradeNo = this.$route.query.tradeNo
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   mounted() {
     //从后台进前台的协议
