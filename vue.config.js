@@ -59,12 +59,12 @@ const vueConfig = {
       // copy custom static assets
       new CopyWebpackPlugin([
         {
-          from: path.resolve(__dirname, "../static"),
+          from: resolve("static"),
           to: this.assetsDir,
           ignore: [".*"]
         },
         {
-          from: path.resolve(__dirname, "../abc.html"),
+          from: resolve("abc.html"),
           to: this.assetsDir,
           ignore: [".*"]
         }
