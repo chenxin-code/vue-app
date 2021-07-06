@@ -6,6 +6,7 @@
       title="活动详情"
     ></nav-top>
     <nav-content>
+      <div class="btn-from" @click="navToDetail">本团订单</div>
       <div class="listBox">
         <div
           class="listColumn"
@@ -143,6 +144,15 @@ export default {
         path: "/bulk_goods_deatil",
       });
     },
+    navToDetail(id) {
+      //本团订单
+      this.$router.push({
+        path: "/groupOrder",
+        query: {
+          id: JSON.stringify(this.activityNo),
+        },
+      });
+    },
   },
 };
 </script>
@@ -164,6 +174,14 @@ export default {
   .nav-content {
     overflow-y: scroll;
     padding-bottom: 79px;
+    .btn-from{
+      display :flex;
+      justify-content :flex-end;
+      padding :0 10px;
+      font-size: 15px;
+      font-weight :600;
+      color :#FFF;
+    }
   }
 
   .listBox {
