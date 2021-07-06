@@ -559,7 +559,9 @@ export default {
     },
     enterNav: function (nav) {
       console.log('nnnnnnnnnnnnnnnnnnn', nav)
-      
+      if(nav.link.url == '/mall2/list/1003'){
+        this.$store.state.showCategory = false;
+      }
       let newNav = nav;
 
       if(/token=/.test(newNav.link.url)){

@@ -105,6 +105,7 @@ export default {
   },
   created() {
     // this.viewPortSet();
+    console.log('this.$util.getIsIphoneX_X();',this.$util.getIsIphoneX_X())
     console.log(window.location.href)
     if(/mall-prod-app-linli/.test(window.location.href)){
       this.$store.state.environment = 'production'
@@ -517,6 +518,19 @@ export default {
       }
       document.title = "时代星选"
       console.log("document.title",document.title)
+      if (this.$store.state.webtype !== "3" && this.$store.state.webtype !== "2") {
+        const rate = window.screen.height / window.screen.width;
+        let limit =
+          window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+        // window.screen.height为屏幕高度
+        //  window.screen.availHeight 为浏览器 可用高度
+        if (rate > limit) {
+          this.$store.state.isX = true;
+        }else{
+          this.$store.state.isX = false;
+        }
+      }
+      console.log('$store.state.isX',this.$store.state.isX)
     },
     "$route.matched"(value) {
       if (value.length !== 0) {
@@ -534,6 +548,7 @@ export default {
             ) {
               document.getElementsByTagName("body")[0].style.paddingTop =
                 "0.4rem";
+              this.$store.state.notIndexIsX = true;
             }
           }
         } else {

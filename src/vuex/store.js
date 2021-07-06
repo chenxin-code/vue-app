@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     commonPage:0,
     isPreview:false,//是否是后管配置页面预览
     ythUserInfo:{},
-    isX:false,//是否是iPhoneX全面屏
+    isX:false,//是否是iPhoneX全面屏并且不在微信
     environment:"",//uat、生产环境判断
     projectId: '', //社区id （微信小程序时使用)
     ythToken: '', // 一体化原token,

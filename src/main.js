@@ -8,9 +8,12 @@ import Vue from 'vue'
 import i18n from './locale'
 //vuex
 import store from './vuex/store'
-// import Vconsole from 'vconsole'
-// let vConsole = new Vconsole()
-// Vue.use(vConsole)
+import Vconsole from 'vconsole'
+if (store.state.environment != 'production') {
+  let vConsole = new Vconsole()
+  Vue.use(vConsole)
+}
+console.log('store.state.environment',store.state.environment)
 //路由
 import router from './router'
 console.log('----router---', router)
@@ -123,9 +126,9 @@ import App from './App'
 
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
-    i18n,
-    router,
-    store,
-    render: h => h(App)
+  el: '#app',
+  i18n,
+  router,
+  store,
+  render: h => h(App)
 })

@@ -7,7 +7,7 @@
         :finished-text="showEmpty ? '' : '- 亲, 没有更多订单了 -'"
         @load="onLoad"
         :error.sync="error"
-        error-text="请求失败，点击重新加载"
+        :error-text="errorText"
         :immediate-check="false"
       >
         <property-bill
@@ -58,7 +58,7 @@
             :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
-        <Empty v-show="showEmpty && billResults.length === 0"></Empty>
+        <Empty v-show="showEmpty"></Empty>
       </van-list>
     </van-pull-refresh>
     <pay-div
@@ -91,11 +91,13 @@ import yjzdbill from "@zkty-team/x-engine-module-yjzdbill";
 import { Dialog } from "vant";
 import _ from "lodash";
 import { Toast } from "vant";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 export default {
   name: "waitPay",
 
   data() {
     return {
+      userRoomId: "",
       showDialog: false,
       tipsText: "",
       check: false,
@@ -104,9 +106,11 @@ export default {
       loading: false,
       finished: false,
       error: false,
+      errorText: "请求失败，点击重新加载",
+      properWorng: false,
       refreshing: false,
       orderList: [],
-      currentPage: 0,
+      currentPage: 1,
       totalPage: 0,
       page: 0,
       showEmpty: false,
@@ -119,7 +123,23 @@ export default {
       isDis: false,
       isLoad: true,
       billResults: [], //物业缴费数据
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14", //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
+      /**
+       * 1-物业收费账单
+       * 2-月保续费账单
+       * 3-停车费账单
+       * 4-临时收费账单
+       * 5-零售
+       * 6-预缴费
+       * 7-旅游
+       * 8-家政
+       * 9-拎包
+       * 10-押金
+       * 11-新零售
+       * 12-美居
+       * 13-服务商城
+       * 14-维修服务费
+       */
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
       isShowErrorMsg: false,
       errorMsg: ""
     };
@@ -132,20 +152,30 @@ export default {
     Empty
   },
   created() {
+    this.getRoomId();
+    // this.onLoad();
+    console.log(`created`, this.userRoomId);
+  },
+  mounted() {
+    console.log(`mounted`, this.userRoomId);
     this.onLoad();
-    this.initPropert();
   },
   activated() {},
-  watch: {
-    currentOrderList: function(newVal, oldVal) {
-      if (newVal.length !== 0) {
-        this.showEmpty = false;
-      } else {
-        this.showEmpty = true;
-      }
-    }
-  },
   methods: {
+    //获取原生人房
+    getRoomId() {
+      appLocalstorage
+        .get({ key: "LLBUserRoomId", isPublic: true })
+        .then(res => {
+          if (res.hasOwnProperty("result")) {
+            console.log("我的订单人房id获取成功", res);
+            this.userRoomId = res.result;
+          } else {
+            console.log("我的订单人房id获取失败", res);
+            this.userRoomId = "";
+          }
+        });
+    },
     //合并支付
     mergePay() {
       let payInfoList = Array.from(this.checkData);
@@ -273,86 +303,14 @@ export default {
       )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
 
-    //滚动条与底部距离小于 offset 时触发
-    onLoad() {
-      this.loading = true;
-      let page = this.currentPage;
-      page = page + 1;
-      this.currentPage = page;
-      this.refreshing = false;
-      let obj = {
-        orderType: "200015",
-        orderTypeList: ["200015", "200502"],
-        state: "1",
-        page: { index: page, pageSize: 30 },
-        airDefenseNo: this.$store.state.userRoomId,
-        // airDefenseNo:
-        //   "FE52C78BD9A24BBB9CEE858C656DAEC6|89D94C23347B4952BA77F94FF06431AC",
-        billType: this.reqBillType
-      };
-      this.$http
-        .post("/app/json/app_shopping_order/findOrderFormList", obj)
-        .then(res => {
-          // 判断当前页数是否超过总页数或者等于总页数
-          let dataPages = 0;
-          if (res.data.data.pages == 0) {
-            dataPages = 1;
-          } else {
-            dataPages = res.data.data.pages;
-          }
-          if (page < dataPages || page == dataPages) {
-            if (res.data.data.pages == page) {
-              this.finished = true;
-            }
-            if (res.data.status == 0) {
-              var indexList = res.data.data.records; //将请求到的内容赋值给一个变量
-              this.orderList = this.orderList.concat(indexList);
-              this.page = res.data.data.pages; //将总页数赋值给this
-              if (this.orderList.length !== 0) {
-                this.initData();
-              } else {
-                this.currentOrderList = [];
-              }
-              // 加载状态结束
-              this.loading = false;
-              // if (this.billResults.length) {
-              //   this.isLoadPropertyBill = true;
-              // } else {
-              //   this.isLoadPropertyBill = false;
-              // }
-            } else {
-              // 加载状态结束
-              this.loading = false; //将加载状态关掉
-              // if (this.billResults.length) {
-              //   this.isLoadPropertyBill = true;
-              // } else {
-              //   this.isLoadPropertyBill = false;
-              // }
-              this.error = true; //大家错误状态
-            }
-          } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
-          }
-        })
-        .catch(err => {
-          this.$toast("请求失败，点击重新加载");
-          this.loading = false;
-          this.error = true;
-        });
-    },
-    // 下拉刷新时触发
-    onRefresh() {
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
-      this.finished = false; //将没有更多的状态改成false
-      this.loading = true; //将下拉刷新状态改为true开始刷新
-      this.currentPage = 1;
-
-      let airDefenseNoStr = this.$store.state.userRoomId;
-      // let airDefenseNoStr =
-      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
+    //获取物业账单列表
+    propertyFn() {
+      // this.getRoomId();
+      console.log(`propertyFn userRoomId`, this.userRoomId);
+      let airDefenseNoStr = this.userRoomId
+        ? this.userRoomId
+        : this.$store.state.userRoomId;
       let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
-
       let propertyObj = {
         airDefenseNo: airDefenseNo,
         memberId: this.$store.state.userInfo.phone
@@ -360,60 +318,207 @@ export default {
           : "",
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
-        pageTimes: "",
-        pageNo: ""
+        pageNo: "",
+        pageTimes: ""
       };
-
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
             "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
-
-      this.$http
-        .get(url, { params: propertyObj })
-        .then(res => {
-          let data = res.data.data;
-          if (res.data.code === 200) {
-            this.billResults = data.notpay;
-            this.billResults.forEach(item => {
-              item.totalPrice = item.totalPayableAmount;
-              item.billId = item.spaceId;
-              item.billType = 1;
-            });
-          } else {
-            this.billResults = [];
+      return new Promise((resolve, reject) => {
+        this.$http.get(url, { params: propertyObj }).then(
+          res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
           }
-          this.loading = false;
-        })
-        .finally(() => {
-          let obj = {
-            orderType: "200015",
-            orderTypeList: ["200015", "200502"],
-            state: "1",
-            page: { index: page, pageSize: 30 },
-            airDefenseNo: this.$store.state.userRoomId,
-            billType: this.reqBillType
-          };
-          this.$http
-            .post("/app/json/app_shopping_order/findOrderFormList", obj)
-            .then(res => {
-              if (res.data.status == 0) {
-                this.orderList = res.data.data.records;
-                this.totalPage = res.data.data.pages; //将总页数赋值上去
+        );
+      });
+    },
+    //获取电商订单列表
+    orderFn() {
+      // this.getRoomId();
+      let obj1 = {
+        orderType: "200015",
+        orderTypeList: ["200015", "200502"],
+        state: "1",
+        page: { index: this.currentPage, pageSize: 30 },
+        airDefenseNo: this.userRoomId
+          ? this.userRoomId
+          : this.$store.state.userRoomId,
+        billType: this.reqBillType
+      };
+      return new Promise((resolve, reject) => {
+        this.$http
+          .post("/app/json/app_shopping_order/findOrderFormList", obj1)
+          .then(
+            res => {
+              resolve(res);
+            },
+            err => {
+              reject(err);
+            }
+          );
+      });
+    },
+    onLoad() {
+      // if (!this.userRoomId) {
+      //   this.getRoomId();
+      // }
+      this.loading = true;
+      let orderError = false;
+      let propertyError = false;
+      let promiseArr = "";
+
+      if (this.currentPage > 1 && !this.properWorng) {
+        //如果当前页数大于1，那么说明是下滑分页的操作，因为物业账单没有分页，所以此时只需要请求电商订单的接口就好，不需要再请求物业账单接口了
+        promiseArr = [this.orderFn()];
+      } else {
+        promiseArr = [this.propertyFn(), this.orderFn()];
+      }
+
+      Promise.allSettled(promiseArr)
+        .then(res => {
+          let propertyRes = "";
+          let orderRes = "";
+          if (res.length == 2) {
+            //如果是初始化或者是下拉刷新，会请求两个接口，此时res的长度就是2。所以物业账单和电商订单都要根据对应下标拿数据
+            propertyRes = res[0];
+            orderRes = res[1];
+          } else {
+            propertyRes = "";
+            orderRes = res[0];
+          }
+
+          //这里是物业账单接口返回的数据处理逻辑
+          if (propertyRes && propertyRes.status === "fulfilled") {
+            let results = propertyRes.value.data;
+            //接口发送请求成功
+            if (results.code === 200) {
+              this.billResults = results.data.notpay;
+              this.billResults.forEach(item => {
+                item.totalPrice = item.totalPayableAmount;
+                item.billId = item.spaceId;
+                item.billType = 1;
+              });
+            } else {
+              this.billResults = [];
+            }
+            if (this.billResults.length) {
+              this.isLoadPropertyBill = true;
+            } else {
+              //如果没有物业账单数据，则不显示物业账单标题
+              this.isLoadPropertyBill = false;
+            }
+          } else {
+            if (propertyRes) {
+              this.loading = false;
+              this.error = true;
+              propertyError = true;
+              this.properWorng = true;
+            } else {
+              this.loading = false;
+              //如果propertyRes为空，则说明是翻页操作，此时error要为false，否则会提示物业账单错误信息
+              this.error = false;
+              propertyError = false;
+              this.properWorng = false;
+            }
+          }
+
+          //这里是电商订单接口返回的数据处理逻辑
+          if (orderRes && orderRes.status === "fulfilled") {
+            let orderResult = orderRes.value.data;
+            let { data } = orderResult;
+            // 判断当前页数是否超过总页数或者等于总页数
+            let dataPages = 0;
+            if (data.pages == 0) {
+              dataPages = 1;
+            } else {
+              dataPages = data.pages;
+            }
+
+            if (this.currentPage <= dataPages) {
+              //如果当前页数等于接口返回的页数，那么finished为true，否则会一直加载接口
+              if (data.pages == this.currentPage) {
+                this.finished = true;
+              }
+              if (orderResult.status == 0) {
+                var indexList = data.records; //将请求到的内容赋值给一个变量
+                this.orderList =
+                  this.currentPage == 1
+                    ? indexList
+                    : this.orderList.concat(indexList);
+                this.page = data.pages; //将总页数赋值给this
                 if (this.orderList.length !== 0) {
                   this.initData();
+                } else {
+                  this.currentOrderList = [];
+                  this.finished = true;
                 }
-                this.$toast("刷新成功");
+                // 加载状态结束
                 this.loading = false;
-                this.refreshing = false; //刷新成功后将状态关掉
+              } else {
+                // 加载状态结束
+                this.loading = false; //将加载状态关掉
+                this.error = true; //大家错误状态
               }
-            })
-            .catch(res => {
-              this.$toast("网络繁忙,请稍后再试~");
-            });
+              this.currentPage++;
+            } else {
+              this.finished = true; //如果超过总页数就显示没有更多内容了
+            }
+          } else {
+            this.loading = false; // 加载状态结束
+            this.error = true;
+            orderError = true;
+          }
+
+          if (propertyError && orderError) {
+            this.finished = false;
+            this.errorText = "物业账单和订单请求失败，点击重新加载";
+            this.$toast("物业账单和订单请求失败，点击重新加载");
+          } else if (propertyError && !orderError) {
+            this.finished = false;
+            this.errorText = "物业账单请求失败，点击重新加载";
+            this.$toast("物业账单请求失败，点击重新加载");
+          } else if (!propertyError && orderError) {
+            this.finished = false;
+            this.errorText = "订单请求失败，点击重新加载";
+            this.$toast("订单请求失败，点击重新加载");
+          }
+
+          //如果物业账单列表和电商订单列表都为空,并且请求不出错的情况下，则显示页面显示空状态
+          if (
+            this.billResults.length === 0 &&
+            this.currentOrderList.length === 0 &&
+            !this.error
+          ) {
+            this.showEmpty = true;
+          } else {
+            this.showEmpty = false;
+          }
+
+          //判断是否为下拉刷新操作，如果是，刷新成功后要将状态关掉
+          if (this.refreshing && !this.error) {
+            this.$toast("刷新成功");
+            this.refreshing = false;
+          }
+        })
+        .catch(err => {
+          // this.$toast("请求失败，请稍后重试");
         });
+    },
+
+    // 下拉刷新时触发
+    onRefresh() {
+      let page = 1; //从第一页开始
+      this.page = page; //将当前页数赋值给this
+      this.currentPage = 1;
+      this.finished = false; //将没有更多的状态改成false
+      this.refreshing = true;
+      this.onLoad();
     },
     initData() {
       this.currentOrderList = this.orderList.map(item => {
@@ -589,58 +694,7 @@ export default {
       this.mergeAmount = num;
     },
 
-    //物业缴费列表接口
-    initPropert() {
-      this.loading = true;
-      let airDefenseNoStr = this.$store.state.userRoomId;
-      // let airDefenseNoStr =
-      //   "E1EC637885824F479FC1253389E58161,4E8FF028D93B4C48B18A8A6501139357,5B348999FEC0415CB63A12D7CEEC0A13,aec8fe7ce853498bbac110dbbd2dbf82,2aefaa18689d46fdb0898057bcdc2fc6,bc473c57910c413d83e79a5d925dd580,ed205b9c878e42428a6f42ae5fc49937,d5a35e5ab59f4fd982ec201b5f1db46a,282ab400e934490b8996ba622b93f6f4,9d814023df6e4a0583a6e5e17fb9d99f,5b396961f6ef47fc97f13ea3c7c0e70f,2e89bc8db4104becb7a6c3a5c066ef4a,5dcd605c09754ef4b33e4f5a05f3307a,45c111b67df244aa851cba653455c697,59fc40e69cb24612858999fba56d48ba"; //测试
-      let airDefenseNo = airDefenseNoStr.replace(/\|/gi, ","); //正则，将所有"|"替换成","
-
-      let propertyObj = {
-        airDefenseNo: airDefenseNo,
-        memberId: this.$store.state.userInfo.phone
-          ? this.$store.state.userInfo.phone
-          : "",
-        status: 10, //账单状态 10-待支付 90-成功
-        type: 1, //type 1、列表 2、详情
-        pageNo: "",
-        pageTimes: ""
-      };
-
-      let url = "";
-      this.$store.state.environment == "development"
-        ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
-        : (url =
-            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
-      this.$http
-        .get(url, { params: propertyObj })
-        .then(res => {
-          let data = res.data.data;
-          if (res.data.code === 200) {
-            this.billResults = data.notpay;
-            this.billResults.forEach(item => {
-              item.totalPrice = item.totalPayableAmount;
-              item.billId = item.spaceId;
-              item.billType = 1;
-            });
-          } else {
-            this.billResults = [];
-          }
-          if (this.billResults.length) {
-            this.isLoadPropertyBill = true;
-          } else {
-            this.isLoadPropertyBill = false;
-          }
-          this.loading = false;
-        })
-        .finally(() => {
-          // this.onLoad();
-        });
-    },
-
-    //toast loading
+    //toast
     toast() {
       Toast.loading({
         duration: 0,
@@ -666,18 +720,13 @@ export default {
           // Toast.clear(); //关闭页面loading
           let arr = res.data.data;
           for (let index = 0; index < arr.length; index++) {
-            if (
-              arr[index].status == 1 ||
-              arr[index].status == 2 ||
-              arr[index].status == 3
-            ) {
+            if (arr[index].status == 1 || arr[index].status == 2) {
               check = false;
               checkStatus.push(arr[index].status);
             } else {
               check = true;
             }
           }
-          console.log(`checkStatus`, checkStatus);
 
           if (_.uniq(checkStatus).includes(2)) {
             Toast.clear(); //关闭页面loading

@@ -617,8 +617,7 @@ export default {
             for (let index = 0; index < arr.length; index++) {
               if (
                 arr[index].status == 1 ||
-                arr[index].status == 2 ||
-                arr[index].status == 3
+                arr[index].status == 2
               ) {
                 checkStatus.push(arr[index].status);
               }

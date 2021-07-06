@@ -10,12 +10,12 @@
           :top-load-method="topRefresh"
           :is-top-bounce="true"
         >
-          <div :class="isX?'scroll-box':''">
+          <div :class="$store.state.isX?'scroll-box':''">
             <div class="top-div">
               <!--待支付-->
               <div class="order-info" v-if="tag == '1'">
                 <div class="row theme_font_white">
-                  <div class="title">等待买家付款</div>
+                  <div class="title lineHeight">等待买家付款</div>
                   <div class="tip">剩余{{timeString}}自动关闭订单</div>
                 </div>
                 <div class="row theme_font_white">
@@ -897,10 +897,12 @@
             v-if="$store.state.deployType == 4"
             @click.stop="consultingService(detailData)"
           >咨询客服</div>
+          <!-- v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500" -->
+          <!-- 不允许修改订单 -->
           <div
             class="row-btn line_circle theme_font_common theme_border_gray"
             @click="modifyAddress(detailData)"
-            v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500"
+            v-if="false"
           >修改订单</div>
           <div
             class="row-btn line_circle theme_font_common theme_border_gray"
@@ -941,7 +943,7 @@
             v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
           >再次购买</div>
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
 
       <!-- <div class="customerService" @click="handleCustomer">
@@ -1044,7 +1046,6 @@ export default {
       pivotalProductType: '',
       errorInfo: '',
       showKeyboard: true,
-      isX:false,
       time:null,
     }
   },
@@ -2068,16 +2069,6 @@ export default {
     // 代付相关end
 
     this._getOrderDetail()
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   beforeRouteLeave(to, from, next) {
     this.$keepaliveHelper.deleteCache(this)
@@ -2216,6 +2207,10 @@ export default {
         top: 12px;
         overflow: hidden;
 
+        .lineHeight{
+          line-height:24px;
+        }
+
         .row {
           padding-bottom: 5px;
           overflow: hidden;
@@ -2303,7 +2298,7 @@ export default {
     .place {
       position: relative;
       z-index: 1;
-      margin-top: -40px;
+      margin-top: -30px;
 
       i {
         font-size: 16px;

@@ -1045,7 +1045,7 @@
                         >
                       </div>
                     </div>
-                    <div class="load-next theme_bg_white">
+                    <div class="load-next theme_bg_white" @click="proView = 2">
                       <img src="static/image/mall2/load-next.png" />
                       <span class="theme_font_tint">上拉加载图文详情</span>
                     </div>
@@ -1388,7 +1388,7 @@
           <p class="title">不在可售区域</p>
         </div>
       </div>
-      <div class="adapter-iphoneX" v-if="isX"></div>
+      <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
     </div>
     <pop-view v-if="showPop" @closeEvent="popClose">
       <div class="pop-body">
@@ -1502,7 +1502,7 @@
         >
           预购下单
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </pop-view>
     <pop-view v-if="showActivity" @closeEvent="showActivity = false">
@@ -1613,11 +1613,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="">
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg">
+          <div class="share_botton_item" @click="shareImg" v-show="false">
             <img src="static/image/mall2/share_img.png" alt="">
             <div>图片分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink">
+          <div class="share_botton_item" @click="shareLink" v-show="false">
             <img src="static/image/mall2/share_link.png" alt="">
             <div>链接分享</div>
           </div>
@@ -1684,7 +1684,7 @@ export default {
       vipUnitUserCode: "",
       productType: "",
       toptab: 1,
-      proImgIndex: 1,
+      proImgIndex: 0,
       proView: 1,
       page1ScrollTop: 0,
       deliveryType: 2,
@@ -1854,7 +1854,6 @@ export default {
       lastRequestId: "",
       jdSilmilarSkus: [],
       cartNum: 0,
-      isX:false,
       showSharePopup:false,
     };
   },
@@ -1897,7 +1896,7 @@ export default {
   },
   methods: {
     onShare(){
-      console.log(this.detailData)
+      console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
         this.showShare();
       }else{
@@ -1921,7 +1920,7 @@ export default {
         title: this.getSkuNameStr(this.detailData),
         desc: this.getSkuNameStr(this.detailData),
         link: window.location.href,
-        imageurl: this.detailData.picUrls[0],
+        imageurl: this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10',
         // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
         miniProgramType:
           this.$store.state.environment == "production" ? 0 : 2,
@@ -1931,6 +1930,7 @@ export default {
         // document.getElementById("debug_text").innerText = res;
         // alert("shareThenRes----------", JSON.stringify(res));
       });
+      this.showSharePopup = false;
     },
     shareImg(){
       this.showShare();
@@ -4066,18 +4066,6 @@ export default {
     } else {
       this.getDatas();
     }
-
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
-    
   },
   activated() {
     if (
@@ -4850,7 +4838,8 @@ export default {
 
             .cart-num {
               position: absolute;
-              left: 61%;
+              // right: 6px;
+              left:61%;
               top: 5px;
               border-radius: 12px;
               padding: 2px 4px;

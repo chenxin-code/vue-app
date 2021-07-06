@@ -49,16 +49,20 @@ export default {
   },
   methods: {
     copy() {
-      let text =
-        this.copyText +
-        `\n\n【售价】：${this.price}元\n\n【链接】：${this.link}`;
-      console.log(text);
-      new ClipboardJS(".footerBtn", {
-        text: function (trigger) {
-          return text;
-        },
-      });
-      this.$toast("文案已复制到剪切板");
+      if(this.copyText.length <= 0){
+        this.$toast("请输入商品名称");
+      }else{
+        let text =
+          this.copyText +
+          `\n\n【售价】：${this.price}元\n\n【链接】：${this.link}`;
+        console.log(text);
+        new ClipboardJS(".footerBtn", {
+          text: function (trigger) {
+            return text;
+          },
+        });
+        this.$toast("文案已复制到剪切板");
+      }
     },
   },
 };
@@ -165,7 +169,6 @@ export default {
     width: 100%;
     height: 102px;
     background: #FFFFFF;
-    opacity: 0.5;
     border-radius: 12px 12px 0px 0px;
     position: fixed;
     bottom: 0;

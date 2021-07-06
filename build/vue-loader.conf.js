@@ -19,5 +19,15 @@ module.exports = {
     img: 'src',
     image: 'xlink:href'
   },
-  transpileDependencies: [/@zkty-team/]
+  // transpileDependencies: [/@zkty-team/]
+  transpileDependencies: [
+    'zkty-team/x-engine-module-localstorage',
+    'zkty-team/x-engine-module-nav',
+    'zkty-team/x-engine-module-router',
+    'zkty-team/x-engine-module-share',
+    'zkty-team/x-engine-module-ui',
+    'zkty-team/x-engine-module-yjzdbill'
+  ]
 }
+
+console.log('/[/\\]node_modules[/\\](.+?)?zkty-team(.*)/')
