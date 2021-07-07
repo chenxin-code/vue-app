@@ -3405,6 +3405,28 @@ export default {
           ) {
             this.cartNum = cartEvent.getCartNum();
           }
+
+          let tagList = [];
+          this.detailData.activityList.forEach(e=>{
+            tagList.push(e.title)
+          })
+          let category = this.detailData.categoryName.split('/')
+          console.log('category',category,tagList)
+          this.$sensors.track('goods_detail_view', {
+            module_source: this.$route.query.searchKey !== ""?"商城搜索列表":"商城商品列表页",
+            goods_id:this.skuId,
+            goods_name:this.detailData.skuName,
+            tag:tagList,
+            goods_cls1:category[0],
+            goods_cls2:category[1],
+            goods_cls3:category[2],
+            org_price:this.detailData.salePrice,
+            price:"",
+            store_id:"",
+            store_name:"",
+            merchant_id:"",
+            merchant_name:"",
+          });
         } else {
           this.$Toast(data.info);
         }
@@ -4066,12 +4088,6 @@ export default {
     } else {
       this.getDatas();
     }
-
-    this.$sensors.track('goods_detail_view', {
-      module_source: this.$route.query.searchKey !== ""?"商城搜索列表":"商城商品列表页",
-      goods_id:this.skuId,
-      goods_name:this.detailData.skuName,
-    });
   },
   activated() {
     if (

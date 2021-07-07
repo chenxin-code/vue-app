@@ -186,6 +186,10 @@ export default {
     },
   },
   mounted() {
+    let that = this;
+    this.$sensors.quick('isReady',function(){
+      console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
+    });
     sessionStorage.setItem("js_css_loaded", "1");
 
     this.phone = this.$store.state.login.phone;
