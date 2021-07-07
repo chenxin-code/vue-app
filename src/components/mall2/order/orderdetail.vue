@@ -508,7 +508,7 @@
                 </div>
               </div>
               <div v-for="product in detailData.orderItemList_C">
-                <div class="pro-row">
+                <div class="pro-row" @click="navToDetail(product)">
                   <div class="img-div">
                     <img :src="product.phPictureUrl">
                   </div>
@@ -527,7 +527,7 @@
                         <span class="line-price">¥{{$util.toDecimal2(product.realPrice)}}</span>
                       </div>
                       <PriceOrder :orderdetailp="product" v-else></PriceOrder>
-                      <div class="row-btn line_circle theme_font_common theme_border_gray" @click.stop="toService(product)" v-if="tag == '9' && product.productType != 5 && product.isGift != 1 && product.productType != 8&&$store.state.globalConfig.cut_price_strict!= 1">
+                      <div class="row-btn line_circle theme_font_common " @click.stop="toService(product)" v-if="tag == '9' && product.productType != 5 && product.isGift != 1 && product.productType != 8&&$store.state.globalConfig.cut_price_strict!= 1">
                         申请售后
                       </div>
                     </div>
@@ -893,46 +893,46 @@
           <div class="tip" v-if="detailData.orderMode == 8 && isShowCancelOrder">申请退款剩余时间：{{timeString}}</div>
           <div class="full"></div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             v-if="$store.state.deployType == 4"
             @click.stop="consultingService(detailData)"
           >咨询客服</div>
           <!-- v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500" -->
           <!-- 不允许修改订单 -->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="modifyAddress(detailData)"
             v-if="false"
           >修改订单</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="cancelOrder('clickCancel')"
             v-if="tag == '1' && detailData.orderPayType != 1"
           >取消订单</div>
           <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="applyOrder"
             v-if="isShowCancelOrder">申请退款</div>
           <div
-            class="row-btn line_circle row-btn-big-space theme_font_common theme_border_gray"
+            class="row-btn line_circle row-btn-big-space theme_font_common pay"
             @click="payEvent"
             v-if="tag == '1' && detailData.orderPayType != 1"
           >付款</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="expressType"
             v-if="pivotalProductType != 8 && tag == '4' && detailData.deliverType == 2 && isShowExpress"
           >查看物流</div>
           <!--  如果选择“用提货码确认订单”把确认收货按钮前台隐藏掉
                     配送订单时, 如果  deliveryConfirmType 为null 或者为0 展示确认收货按钮, 如果为 1 隐藏确认收货按钮-->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="confirmProduct"
             v-if="tag == '4' && (detailData.deliverType == 2) && (detailData.interfaceType == '0' || (detailData.interfaceType == '1' && detailData.interfaceOrderType == '5')) && detailData.deliveryConfirmType != 1"
           >确认收货</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="toComment"
             v-if="tag == '9' && detailData.state != 6 && detailData.orderPayType != 1"
           >晒单评价</div>
@@ -1195,6 +1195,16 @@ export default {
           // handle error
         }
       })
+    },
+    navToDetail(product){
+      let path = "/mall2/detail/" + this.$util.getDataString();
+      this.$router.push({
+        path: path,
+        query: {
+          skuId: product.skuId,
+          productType: product.productType
+        }
+      });
     },
     //获取短信验证码
     getMsgCode:function(imgVerifyCode,uuid){
@@ -2094,6 +2104,16 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
+  .line_circle{
+    border: 1px solid #EF2D30;
+    border-radius: 17px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .line_circle:before{
+    border:none;
+  }
+
   .customerService{
     position: fixed;
     width: 42px;
@@ -2410,10 +2430,17 @@ export default {
     .row-btn {
       margin-left: 8px;
       font-size: $font-size-medium;
-      padding: 6px 8px;
+      padding: 10px 20px;
       /*border-radius: 16px;
       border-width: 0.5px;
       border-style: solid;*/
+      color: #EF3034;
+    }
+    .pay{
+      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      font-size: 14px;
+      font-weight: bold;
+      color: #F4F4F4;
     }
   }
   .copy-btn{

@@ -200,7 +200,7 @@ const dataMergeInterceptor = {
         let d = data.data
         this.valueData['UserSummary'] = d
         this.responseAllData()
-        this.getUserTable(d.userInfo.phone)
+        // this.getUserTable(d.userInfo.phone)
       } else {
         if (!this.valueData['UserSummary']) {
           Toast('请求用户数据失败请稍后尝试！')

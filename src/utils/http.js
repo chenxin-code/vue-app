@@ -254,9 +254,27 @@ Axios.interceptors.response.use(
             util.toLogin();
           } else {
             // 用户token过期重新走一体化转商城token接口
-            if (res.data.errorCode == 1000) {
-              window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${window.location.hash}`)}`
+            let url = window.location.hash;
+            let beforeUrl = url.substr(0, url.indexOf("?"));   //?之前主地址
+            let afterUrl = url.substr(url.indexOf("?") + 1);   //？之后参数路径
+            let nextUrl = "";
+            let arr = new Array();
+            if (afterUrl != "") {
+                let urlParamArr = afterUrl.split("&"); //将参数按照&符分成数组
+                for (let i = 0; i < urlParamArr.length; i++) {
+                    let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
+                    //如果键雨要删除的不一致，则加入到参数中
+                    if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId') {
+                        arr.push(urlParamArr[i]);
+                    }
+                }
             }
+            if (arr.length > 0) {
+                nextUrl = "?" + arr.join("&");
+            }
+            url = beforeUrl + nextUrl;
+            console.log('url',url)
+            window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${url}`)}`
           }
           // util.toLogin();
           return res;
