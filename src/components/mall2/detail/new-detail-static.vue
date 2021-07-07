@@ -3410,8 +3410,8 @@ export default {
           this.detailData.activityList.forEach(e=>{
             tagList.push(e.title)
           })
-          let category = this.detailData.categoryName.split('/')
-          console.log('category',category,tagList)
+          let category = this.detailData.categoryName.split('_')
+          console.log('category',this.detailData.categoryName,tagList)
           this.$sensors.track('goods_detail_view', {
             module_source: this.$route.query.searchKey !== ""?"商城搜索列表":"商城商品列表页",
             goods_id:this.skuId,
@@ -3420,10 +3420,10 @@ export default {
             goods_cls1:category[0],
             goods_cls2:category[1],
             goods_cls3:category[2],
-            org_price:this.detailData.salePrice,
-            price:"",
-            store_id:"",
-            store_name:"",
+            org_price:this.detailData.activityPrice,
+            price:this.detailData.salePrice,
+            store_id:this.detailData.storeOuCode,
+            store_name:this.detailData.storeOuName,
             merchant_id:"",
             merchant_name:"",
           });
