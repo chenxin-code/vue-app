@@ -183,6 +183,7 @@ export default {
   },
   created() {
     this.loading = true;
+    this.onLoad();
   },
   methods: {
     goBack() {
