@@ -165,6 +165,21 @@ export default {
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
     confirmOrder() {
+      console.log('提交订单',{
+        activityNo: this.$store.state.CharseInfo.activityId,
+        teamLeaderNo: this.$store.state.CharseInfo.masterPlace
+          .teamLeaderNo,
+        deliveryMode: 0, //0自提1送货上门
+        consigneeName: this.consigneeName,
+        consigneePhoneNumber: this.consigneePhoneNumber,
+        preProductSkuInfoList: [
+          {
+            skuId: this.$store.state.CharseInfo.skuid,
+            buyNumber: this.buyNumber,
+          },
+        ],
+        remark: this.textareaValue,
+      })
       if (this.consigneeName !== "") {
         if (util.checkMobile(this.consigneePhoneNumber)) {
           this.$http
