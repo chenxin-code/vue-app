@@ -25,12 +25,15 @@ sensors.init({
   send_type:'beacon',
   heatmap: {
      //是否开启点击图，default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭。
-     clickmap:'default',
+     clickmap:'not_collect',
      //是否开启触达注意力图，not_collect 表示关闭，不会自动采集 $WebStay 事件，可以设置 'default' 表示开启。
-     scroll_notice_map:'not_collect'
-  }
+     scroll_notice_map:'not_collect',
+     get_vtrack_config:false,
+  },
+  app_js_bridge:true,
 });
-sensors.quick('autoTrack'); //用于采集 $pageview 事件
+
+// sensors.quick('autoTrack'); //用于采集 $pageview 事件
 
 Vue.prototype.$sensors = sensors
 

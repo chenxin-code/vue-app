@@ -908,6 +908,7 @@ export default {
       this.$router.push({
         path: path,
         query: {
+          searchKey:this.searchKey,
           id: product.id,
           skuId: product.skuId,
           lastPath: this.$route.path,

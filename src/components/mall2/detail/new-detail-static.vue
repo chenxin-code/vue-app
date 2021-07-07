@@ -4066,6 +4066,12 @@ export default {
     } else {
       this.getDatas();
     }
+
+    this.$sensors.track('goods_detail_view', {
+      module_source: this.$route.query.searchKey !== ""?"商城搜索列表":"商城商品列表页",
+      goods_id:this.skuId,
+      goods_name:this.detailData.skuName,
+    });
   },
   activated() {
     if (
