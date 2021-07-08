@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    inToDetail:"common",//数据埋点：从哪个入口进入的商品详情，首页，搜索，列表,默认首页
     commonNotch:false,
     userLable:{},//传给客服用户标识
     commonPage:0,

@@ -3422,7 +3422,7 @@ export default {
           let category = this.detailData.categoryName.split('_')
           console.log('category',this.detailData.categoryName,tagList)
           this.$sensors.track('goods_detail_view', {
-            module_source: this.$route.query.searchKey !== ""?"商城搜索列表":"商城商品列表页",
+            module_source: this.$store.state.inToDetail == 'common'?'商城臻选专场':this.$store.state.inToDetail == 'list'?'商城商品列表页':'商城搜索列表',
             goods_id:this.skuId,
             goods_name:this.detailData.skuName,
             tag:tagList,
