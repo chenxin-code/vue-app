@@ -45,7 +45,7 @@ export default {
     let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
-    if (rate < limit) {
+    if (rate > limit) {
       this.adapterTop = "1.173333rem";
     } else {
       this.adapterTop = "0.426667rem";

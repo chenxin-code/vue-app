@@ -8,6 +8,7 @@
       :style="{
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
+      v-show="proView !== 2"
     >
       <div
         class="navcontent"
@@ -16,6 +17,7 @@
           height: $market.getNavHeight(true) + 'px',
           'line-height': $market.getNavHeight(true) + 'px',
         }"
+        v-show="proView !== 2"
       >
         <div
           class="nav-back-btn"
@@ -61,6 +63,7 @@
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
       v-if="detailShow"
+      v-show="proView !== 2"
     >
       <nav-top
         isMust="true"
@@ -133,10 +136,10 @@
         </div>
       </nav-top>
     </div>
+      <!-- :style="getScrollTop()" -->
     <div
       ref="scrollView"
       class="scroll-div theme_bg_white"
-      :style="getScrollTop()"
       v-if="detailShow"
     >
       <swiper class="main-swiper" ref="mySwiper" :options="mainSwiper">
@@ -1056,31 +1059,37 @@
             <transition name="transition2">
               <div
                 class="main-swiper"
-                style="position: absolute; top: 44px"
+                style="position: absolute; top: 15px"
                 v-show="proView == 2"
               >
-                <div class="btns-div theme_bg_white">
+                <div class="btns-flex theme_bg_white">
+                  <div class="back_proView" @click="proView = 1">
+                    <img src="static/image/mall2/backIcon.png" alt="">
+                  </div>
                   <div
-                    class="btn-item theme_font_gray"
-                    :class="{ theme_standard_font_i: introductionIndex == 1 }"
+                    class="btns_flex_item theme_font_gray"
+                    :class="{ standard: introductionIndex == 1 }"
                     @click="introductionSelected(1)"
                   >
                     商品介绍
+                    <div class="line" v-show="introductionIndex == 1"></div>
                   </div>
                   <div
-                    class="btn-item line_left theme_font_gray"
-                    :class="{ theme_standard_font_i: introductionIndex == 2 }"
+                    class="btns_flex_item theme_font_gray"
+                    :class="{ standard: introductionIndex == 2 }"
                     @click="introductionSelected(2)"
                   >
                     规格参数
+                    <div class="line" v-show="introductionIndex == 2"></div>
                   </div>
                   <div
-                    class="btn-item line_left theme_font_gray"
-                    :class="{ theme_standard_font_i: introductionIndex == 3 }"
+                    class="btns_flex_item theme_font_gray"
+                    :class="{ standard: introductionIndex == 3 }"
                     @click="introductionSelected(3)"
                     v-if="detailData.isShowAfterSale != 0"
                   >
                     售后包装
+                    <div class="line" v-show="introductionIndex == 3"></div>
                   </div>
                 </div>
                 <div class="detail-div detail-div-1">
@@ -1104,11 +1113,11 @@
                     <!--<img src="static/testImg/detail.png"/>-->
                     <!--</div>-->
                     <div class="detail-content detail-bottom">
-                      <div class="tip" v-if="introductionIndex == 1">
+                      <!-- <div class="tip" v-if="introductionIndex == 1">
                         <span class="line"></span>
                         <span class="text">商品信息</span>
                         <span class="line"></span>
-                      </div>
+                      </div> -->
                       <div
                         v-html="introduction1"
                         class="introduction-div"
@@ -4138,6 +4147,47 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.btns-flex{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .back_proView{
+    width:75px;
+    height:44px
+    padding-left:15px;
+    display: flex;
+    align-items: center;
+    img{
+      width:8px;
+      height:14px;
+    }
+  }
+  .btns_flex_item{
+    font-size: 15px;
+    font-weight: 400;
+    color: #666666;
+    margin-right:30px;
+    // padding-bottom:5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .line{
+      width: 28px;
+      height: 3px;
+      background: #E54448;
+      border-radius: 1px;
+      margin-top:5px;
+    }
+  }
+  .standard{
+    font-size: 15px;
+    font-weight: 400;
+    color: #121212;
+    // border-bottom: 3px solid #E54448;
+  }
+}
 
 .content{
   display: flex;
