@@ -291,10 +291,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 15;
-    // this.chiefId = '4';
-    // this.userId = '2337237484980666802';
-    // this.activityName = '2132321';
+    // this.purchaseId = 7;
+    // this.chiefId = '3';
+    // this.userId = '2337237484980712751';
+    // this.activityName = '测试活动7';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
