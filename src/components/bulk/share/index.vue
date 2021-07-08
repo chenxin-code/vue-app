@@ -255,6 +255,7 @@ import Qs from "qs";
 import { mapMutations } from "vuex";
 import vantImage from "@/components/bulk/components/vantImage.js"
 import { Toast } from 'vant';
+import { BigNumber } from 'bignumber.js'
 
 export default {
   name: "share",
@@ -288,7 +289,6 @@ export default {
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
-
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);
@@ -415,9 +415,12 @@ export default {
     totalPriceFn() {
       let price = this.checkList.reduce((pre, item) => {
         if (item.isCheck) {
-          return item.count * item.groupPrice + pre;
+          let x = BigNumber(item.count).multipliedBy(item.groupPrice);
+          let y = BigNumber(x).plus(pre)
+          return y
         }
       }, 0);
+      console.log(price,this.$util.toDecimal2(price))
       this.totalPrice = this.$util.toDecimal2(price);
     },
     selectCategory(item, index) {

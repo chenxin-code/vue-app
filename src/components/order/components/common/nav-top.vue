@@ -2,7 +2,7 @@
  * @Description: 这是***页面
  * @Date: 2021-06-10 18:00:33
  * @Author: shuimei
- * @LastEditTime: 2021-06-11 18:17:08
+ * @LastEditTime: 2021-07-07 17:31:39
 -->
 <template>
   <div class="nav-top" :style="{ 'padding-top': adapterTop }">
@@ -30,7 +30,7 @@ export default {
     let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
     // window.screen.height为屏幕高度
     //  window.screen.availHeight 为浏览器 可用高度
-    if (rate < limit) {
+    if (rate > limit) {
       this.adapterTop = "1.173333rem";
     } else {
       this.adapterTop = "0.426667rem";
