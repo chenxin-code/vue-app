@@ -22,6 +22,9 @@
         v-if="!$route.meta.keepAlive"
       />
     </transition>
+    <div class="backTop" @click="backTop" v-if="showBackTop">
+      <img src="static/image/mall2/bcakTop.png" alt="">
+    </div>
     <div
       class="back-index"
       :class="{ ani: ani }"
@@ -101,6 +104,7 @@ export default {
       homeBtnSeat: "right",
 
       ani: false,
+      showBackTop:false,
     };
   },
   created() {
@@ -187,7 +191,6 @@ export default {
   },
   mounted() {
     sessionStorage.setItem("js_css_loaded", "1");
-
     this.phone = this.$store.state.login.phone;
     if (
       this.$store.state.login.token &&
@@ -264,7 +267,15 @@ export default {
       })
     },
 
-
+    backTop () {
+      let scrollElement = "";
+      if(this.$route.matched[0].path == '/mall2/list/:id'){
+        scrollElement = 'scroll-container'
+      }else if(this.$route.path == '/common'){
+        scrollElement = 'scroll-div'
+      }
+      document.getElementsByClassName(scrollElement)[0].scrollTop = 1;
+    },
     oilIsOpen() {
       http
         .post("/app/json/app_youdi/getAcctInfoList", {
@@ -554,6 +565,12 @@ export default {
         } else {
           document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
+        console.log('valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue',value)
+        if(value[0].path == '/common' || value[0].path == "/mall2/list/:id"){
+          this.showBackTop = true;
+        }else{
+          this.showBackTop = false;
+        }
       }
     },
     // '$route'(to, from) {
@@ -650,6 +667,17 @@ export default {
   font-family: BlinkMacSystemFont, 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  .backTop{
+    position: fixed;
+    bottom:170px;
+    right:10px;
+    z-index:9999;
+    img{
+      width:40px;
+      height:40px;
+    }
+  }
 
   .router_class {
     position: absolute;
