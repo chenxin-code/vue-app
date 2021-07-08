@@ -60,6 +60,7 @@
     data() {
       return {
         visible: false,
+        times:null,
         proData: {},
         imgUrl: '',
         proImgUrl: '',
@@ -118,7 +119,11 @@
         //   this.canvasPage();
         // }
         this.getCode().then(() => {
-          this.canvasPage();
+          this.$nextTick(()=>{
+            this.times = setTimeout(()=>{
+              this.canvasPage();
+            },500)
+          })
         })
       },
       canvasPage(){
@@ -192,7 +197,7 @@
               const shortCode = res.data.substr(res.data.indexOf('/s/'))
               // /app/json/we_chat/getwxacodeunlimit
               console.log('shortCode',shortCode)
-              this.$request.post('/app/json/wechat_mini_program/createQrCode', {
+              this.$request.post('https://mall-prod-app-linli.timesgroup.cn/app/json/wechat_mini_program/createQrCode', {
                 // path: `pages/common/home/index`,
                 // scene: shortCode,
                 // width: 430
@@ -243,6 +248,9 @@
     },
     components: {
       [Loading.name]: Loading
+    },
+    destroyed(){
+      clearTimeout(this.times)
     }
   }
 </script>
