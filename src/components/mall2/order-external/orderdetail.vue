@@ -427,10 +427,10 @@
             <div class="label theme_font_tint">下单时间</div>
             <div>{{detailData.submitTime}}</div>
           </div>
-          <div class="flex-row" v-if="detailData.payMode != ''">
+          <!-- <div class="flex-row" v-if="detailData.payMode != ''">
             <div class="label theme_font_tint">支付方式</div>
             <div>{{getPayWayText(detailData.payMode)}}</div>
-          </div>
+          </div> -->
           <div class="flex-row" v-if="detailData.paidTime != ''">
             <div class="label theme_font_tint">支付完成时间</div>
             <div>{{detailData.paidTime}}</div>
