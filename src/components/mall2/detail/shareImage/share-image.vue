@@ -60,7 +60,6 @@
     data() {
       return {
         visible: false,
-        times:null,
         proData: {},
         imgUrl: '',
         proImgUrl: '',
@@ -119,11 +118,7 @@
         //   this.canvasPage();
         // }
         this.getCode().then(() => {
-          this.$nextTick(()=>{
-            this.times = setTimeout(()=>{
-              this.canvasPage();
-            },500)
-          })
+          this.canvasPage();
         })
       },
       canvasPage(){
@@ -139,7 +134,7 @@
           canvas.getContext("2d").scale(scale, scale);
           html2canvas(that.$refs.shareContent, {
             useCORS: true,
-            // scale: 1,
+            scale: 1,
             canvas: canvas
           }).then(canvas => {
             that.imgUrl = canvas.toDataURL()
@@ -249,9 +244,6 @@
     components: {
       [Loading.name]: Loading
     },
-    destroyed(){
-      clearTimeout(this.times)
-    }
   }
 </script>
 
