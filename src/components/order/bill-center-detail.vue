@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-09 09:38:42
+ * @LastEditTime: 2021-07-09 10:13:19
 -->
 <template>
   <div class="bill-center-detail">
@@ -137,6 +137,13 @@ export default {
           titleBig: "500"
         });
       });
+    appNav.setNavLeftBtn({
+      title: "账单详情",
+      titleColor: "#333333",
+      titleSize: 17,
+      titleFontName: "PingFangSC-Medium",
+      titleBig: "500"
+    });
   },
   methods: {
     backEvent() {
