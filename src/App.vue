@@ -266,8 +266,20 @@ export default {
           let that = this;
           this.$sensors.quick('isReady',function(){
             console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
+            that.postSensorsData(that.$sensors.quick('getAnonymousID'),res.data.data.id)
           });
+
         }
+      })
+    },
+    postSensorsData(anonymousID,userID){
+      this.$http.post('http://192.168.31.201:18807/sensors_analytics_init',{
+        sensorsAnalyticsData:{
+          anonymousID:anonymousID,
+          userID:userID
+        }
+      }).then(res=>{
+        console.log(res)
       })
     },
 
