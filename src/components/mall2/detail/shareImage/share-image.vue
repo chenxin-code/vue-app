@@ -134,7 +134,7 @@
           canvas.getContext("2d").scale(scale, scale);
           html2canvas(that.$refs.shareContent, {
             useCORS: true,
-            // scale: 1,
+            scale: 1,
             canvas: canvas
           }).then(canvas => {
             that.imgUrl = canvas.toDataURL()
@@ -243,7 +243,7 @@
     },
     components: {
       [Loading.name]: Loading
-    }
+    },
   }
 </script>
 
@@ -338,7 +338,9 @@
     }
 
     .share-image-content {
-      flex 1
+      // flex 1
+      width:100%;
+      height:100%
       padding: 15px
       border-top-left-radius 15px
       border-top-right-radius 15px

@@ -138,6 +138,7 @@ export default {
        * 12-美居
        * 13-服务商城
        * 14-维修服务费
+       * 15-租售
        */
       reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
       isShowErrorMsg: false,
@@ -154,10 +155,8 @@ export default {
   created() {
     this.getRoomId();
     // this.onLoad();
-    console.log(`created`, this.userRoomId);
   },
   mounted() {
-    console.log(`mounted`, this.userRoomId);
     this.onLoad();
   },
   activated() {},
@@ -340,7 +339,6 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
-      // this.getRoomId();
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -365,9 +363,6 @@ export default {
       });
     },
     onLoad() {
-      // if (!this.userRoomId) {
-      //   this.getRoomId();
-      // }
       this.loading = true;
       let orderError = false;
       let propertyError = false;
@@ -407,6 +402,10 @@ export default {
               });
             } else {
               this.billResults = [];
+              this.loading = false;
+              this.error = true;
+              propertyError = true;
+              this.properWorng = true;
             }
             if (this.billResults.length) {
               this.isLoadPropertyBill = true;
@@ -515,6 +514,18 @@ export default {
 
     // 下拉刷新时触发
     onRefresh() {
+      this.isLoadPropertyBill = false;
+      this.checkData = new Set();
+      this.mergeAmount = 0; //合计选中的账单总金额
+      this.billResults = []; //清空物业账单数据
+      this.currentOrderList = []; //清空订单数据
+      this.$refs.payDiv.isChecked = false; //取消勾选全选按钮
+      this.$refs.payDiv.isShow = false; // 隐藏全选按钮
+      if (this.$refs.propertyOrder) {
+        this.$refs.propertyOrder.$children[0].checked = false;
+        this.$refs.propertyOrder.isDisabled = false;
+      }
+
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
