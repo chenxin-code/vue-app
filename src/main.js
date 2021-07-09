@@ -9,11 +9,11 @@ import i18n from './locale'
 //vuex
 import store from './vuex/store'
 import Vconsole from 'vconsole'
-if (store.state.environment != 'production') {
-  let vConsole = new Vconsole()
-  Vue.use(vConsole)
-}
+
 console.log('store.state.environment',store.state.environment)
+let vConsole = new Vconsole()
+Vue.use(vConsole)
+
 //路由
 import router from './router'
 console.log('----router---', router)

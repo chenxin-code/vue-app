@@ -364,7 +364,9 @@ var payHelper = {
       } else if (payway.payModeSub == 260003) {
         //时代微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
+        console.log('info-info-info',info)
         let wxPayInfo = JSON.parse(info.payData)
+        console.log('wxPayInfo-wxPayInfo-wxPayInfo',wxPayInfo)
 
         
         let redirectUrl = "";
@@ -390,9 +392,11 @@ var payHelper = {
           // wxOrderInfoKey: wxOrderInfoKey,
           // isGroup: isGroup
         }
+        console.log('params-params-params',params)
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
+        console.log('跳转小程序')
 
       } else {
         console.log(payway)
