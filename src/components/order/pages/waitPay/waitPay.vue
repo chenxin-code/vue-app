@@ -402,6 +402,10 @@ export default {
               });
             } else {
               this.billResults = [];
+              this.loading = false;
+              this.error = true;
+              propertyError = true;
+              this.properWorng = true;
             }
             if (this.billResults.length) {
               this.isLoadPropertyBill = true;
