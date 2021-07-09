@@ -134,7 +134,7 @@
                   path: '/common'
                 })
               } else {
-                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
+                appNav.changeBottomToIndex({selectIndex: 2,}).then(res=>{
                   console.log('跳转',res)
                 });
               }
