@@ -138,8 +138,9 @@ export default {
        * 12-美居
        * 13-服务商城
        * 14-维修服务费
+       * 15-租售
        */
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,14,15",
       isShowErrorMsg: false,
       errorMsg: ""
     };

@@ -2,13 +2,13 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-09 10:13:19
+ * @LastEditTime: 2021-07-09 10:46:59
 -->
 <template>
   <div class="bill-center-detail">
-    <!-- <van-sticky :offset-top="offsetTop">
+    <van-sticky :offset-top="offsetTop">
       <nav-top leftTitle="账单详情" @backEvent="backEvent"></nav-top>
-    </van-sticky> -->
+    </van-sticky>
     <div class="content">
       <div class="total">
         <div class="name">物业缴费</div>
@@ -96,7 +96,7 @@
   </div>
 </template>
 <script>
-import appNav from "@zkty-team/x-engine-module-nav";
+// import appNav from "@zkty-team/x-engine-module-nav";
 import _ from "lodash";
 import moment from "moment";
 export default {
@@ -123,27 +123,13 @@ export default {
     }
   },
   mounted() {
-    appNav
-      .setNavBarHidden({
-        isHidden: false,
-        isAnimation: false
-      })
-      .then(res => {
-        appNav.setNavLeftBtn({
-          title: "账单详情",
-          titleColor: "#333333",
-          titleSize: 17,
-          titleFontName: "PingFangSC-Medium",
-          titleBig: "500"
-        });
-      });
-    appNav.setNavLeftBtn({
-      title: "账单详情",
-      titleColor: "#333333",
-      titleSize: 17,
-      titleFontName: "PingFangSC-Medium",
-      titleBig: "500"
-    });
+    // appNav.setNavLeftBtn({
+    //   title: "账单详情",
+    //   titleColor: "#333333",
+    //   titleSize: 17,
+    //   titleFontName: "PingFangSC-Medium",
+    //   titleBig: "500"
+    // });
   },
   methods: {
     backEvent() {
