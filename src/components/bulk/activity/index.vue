@@ -240,6 +240,7 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
+          console.log(this.shareItemData.id,this.userData.teamLeaderNo,this.userData.userNo,this.shareItemData.groupbuyActivityName)
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",

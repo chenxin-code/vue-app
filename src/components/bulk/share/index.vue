@@ -19,7 +19,7 @@
             </van-count-down>
           </div>
           <div class="bulk_share">
-            <div class="bulk_title">拼团中</div>
+            <div class="bulk_title">{{groupStatus=='finish'?'已结束':groupStatus=='notAtThe'?'未开始':'拼团中'}}</div>
             <!-- <img
               :src="require('./images/share.png')"
               alt=""
@@ -162,7 +162,7 @@
         <div class="car" @click="isShowCar = !isShowCar"></div>
         <div class="price">¥{{ totalPrice }}</div>
       </div>
-      <div class="sumbit_btn" @click="confirmOrder">去下单</div>
+      <div :class="groupStatus=='finish' || groupStatus == 'notAtThe' ? 'finish sumbit_btn':'sumbit_btn'"  @click="confirmOrder">去下单</div>
     </div>
     <transition name="van-slide-left">
       <div
@@ -282,6 +282,7 @@ export default {
       chiefId: "",
       userId: "",
       activityName: "",
+      groupStatus:'start'
     };
   },
   created() {
@@ -289,6 +290,12 @@ export default {
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
+
+    // this.purchaseId = 7;
+    // this.chiefId = '3';
+    // this.userId = '2337237484980712751';
+    // this.activityName = '测试活动7';
+
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
       this.result.push(e.id);
@@ -336,6 +343,16 @@ export default {
             this.imgUrls = imgStrs.map((url) => {
               return url.match(/\ssrc=['"](.*?)['"]/)[1];
             });
+          }
+
+          if(this.shareData.groupStatus == 2){
+            this.$toast('活动已结束');
+            this.groupStatus = 'finish';
+            this.shareData.remainingTime = 0;
+          }else if(this.shareData.groupStatus == 0){
+            this.$toast('活动未开始');
+            this.groupStatus = 'notAtThe';
+            this.shareData.remainingTime = 0;
           }
         }
       });
@@ -444,7 +461,14 @@ export default {
         });
     },
     confirmOrder() {
-      
+      if(this.groupStatus == 'finish'){
+        this.$toast('活动已结束');
+        return
+      }else if(this.groupStatus == 'notAtThe'){
+        this.$toast('活动未开始');
+        return
+      }
+
       if (this.checkList.length == 0) {
         this.$toast("请先选购商品");
       } else {
@@ -1017,6 +1041,9 @@ img {
       font-size: 13px;
       font-weight: 400;
       color: #FFFFFF;
+    }
+    .finish{
+      background: #cccccc;
     }
   }
 
