@@ -393,7 +393,6 @@ var payHelper = {
           // isGroup: isGroup
         }
         console.log('params-params-params',params)
-        return
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
