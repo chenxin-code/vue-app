@@ -69,6 +69,7 @@ import MessageBox from "./components/Vendor/messagebox";
 import appUi from "@zkty-team/x-engine-module-ui";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
+import initSensors from '@/utils/sensors'
 export default {
   name: "App",
   data() {
@@ -126,7 +127,8 @@ export default {
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
-    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+    // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
+    if (true) {
       let initObj = {};
       console.log('localtion href', location.href)
       location.href
@@ -154,9 +156,7 @@ export default {
       }
     });
     
-    if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
-      this.getYthUserInfo()
-    }
+    this.getYthUserInfo()
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
@@ -190,10 +190,6 @@ export default {
     },
   },
   mounted() {
-    let that = this;
-    this.$sensors.quick('isReady',function(){
-      console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
-    });
     sessionStorage.setItem("js_css_loaded", "1");
     this.phone = this.$store.state.login.phone;
     if (
@@ -243,7 +239,6 @@ export default {
     // }
   },
   methods: {
-
     // getUserTable(phone){
     //   this.$http.post('/app/json/customer_service/findHeadInfoByList',{
     //     userId:phone,
@@ -263,10 +258,15 @@ export default {
     
     //获取一体化信息
     getYthUserInfo(){
-      this.$http.post("/app/json/login/getYthUser",{token: localStorage.getItem("ythToken")}).then(res=>{
+      this.$http.post("/app/json/login/getYthUser",{token: this.$store.state.ythToken || localStorage.getItem("ythToken")}).then(res=>{
         if(res.data.status == 0){
           this.$store.state.ythUserInfo = res.data.data;
           console.log("一体化信息",this.$store.state.ythUserInfo)
+          initSensors();
+          let that = this;
+          this.$sensors.quick('isReady',function(){
+            console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
+          });
         }
       })
     },

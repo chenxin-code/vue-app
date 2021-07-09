@@ -1864,6 +1864,8 @@ export default {
       jdSilmilarSkus: [],
       cartNum: 0,
       showSharePopup:false,
+      tagList:[],
+      categoryList:[],
     };
   },
   computed: {
@@ -3415,20 +3417,19 @@ export default {
             this.cartNum = cartEvent.getCartNum();
           }
 
-          let tagList = [];
           this.detailData.activityList.forEach(e=>{
-            tagList.push(e.title)
+            this.tagList.push(e.title)
           })
-          let category = this.detailData.categoryName.split('_')
-          console.log('category',this.detailData.categoryName,tagList)
+          this.categoryList = this.detailData.categoryName.split('_')
+          console.log('category',this.detailData.categoryName,this.tagList)
           this.$sensors.track('goods_detail_view', {
             module_source: this.$store.state.inToDetail == 'common'?'商城臻选专场':this.$store.state.inToDetail == 'list'?'商城商品列表页':'商城搜索列表',
             goods_id:this.skuId,
             goods_name:this.detailData.skuName,
-            tag:tagList,
-            goods_cls1:category[0],
-            goods_cls2:category[1],
-            goods_cls3:category[2],
+            tag:this.tagList,
+            goods_cls1:this.categoryList[0],
+            goods_cls2:this.categoryList[1],
+            goods_cls3:this.categoryList[2],
             org_price:this.detailData.activityPrice,
             price:this.detailData.salePrice,
             store_id:this.detailData.storeOuCode,
@@ -3576,6 +3577,24 @@ export default {
             this.$store.state.mall2.cartNum = data.data;
             this.showPop = false;
             this.showProductImg = true;
+
+            this.$sensors.track('add_to_shoppingcart', {
+              goods_id:this.skuId,
+              goods_name:this.detailData.skuName,
+              tag:this.tagList,
+              goods_cls1:this.categoryList[0],
+              goods_cls2:this.categoryList[1],
+              goods_cls3:this.categoryList[2],
+              org_price:this.detailData.activityPrice,
+              price:this.detailData.salePrice,
+              goods_quantity:this.selectedNum,
+              store_id:this.detailData.storeOuCode,
+              store_name:this.detailData.storeOuName,
+              merchant_id:"",
+              merchant_name:"",
+              viewpoint_radio:"",
+            });
+
           } else {
             this.$Toast(data.info);
           }
