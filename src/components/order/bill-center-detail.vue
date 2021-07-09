@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-09 10:46:59
+ * @LastEditTime: 2021-07-09 18:20:43
 -->
 <template>
   <div class="bill-center-detail">
@@ -221,7 +221,7 @@ export default {
           color: #121212;
           line-height: 34px;
           margin-left: 29px;
-          width: 71%
+          width: 71%;
           word-wrap: break-word;
           word-break: normal;
           &.merchant {
