@@ -61,11 +61,6 @@ Axios.interceptors.request.use(
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
     }
-    console.log('config.url',config)
-    if(/sensors_analytics_init/.test(config.url)){
-      config.headers.token = store.state.login.token;
-      config.headers.Authorization = store.state.login.token;
-    }
 
     //中台接口要带一体化token
 
