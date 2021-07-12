@@ -134,7 +134,7 @@
           canvas.getContext("2d").scale(scale, scale);
           html2canvas(that.$refs.shareContent, {
             useCORS: true,
-            // scale: 1,
+            scale: 1,
             canvas: canvas
           }).then(canvas => {
             that.imgUrl = canvas.toDataURL()
@@ -243,7 +243,7 @@
     },
     components: {
       [Loading.name]: Loading
-    }
+    },
   }
 </script>
 

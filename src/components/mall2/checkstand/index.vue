@@ -14,7 +14,7 @@
                 payInfo.dpedData.integer
               }}</span>
               <span
-                class="left-no-space font-small theme_font_red"
+                class="price-z theme_font_red"
                 v-if="!isBulk"
                 >.{{ payInfo.dpedData.decimals }}</span
               >

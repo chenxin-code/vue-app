@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <van-sticky>
+    <van-sticky v-if="false">
       <div class="select_box">
         <div class="select_category">
           <div
