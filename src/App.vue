@@ -273,12 +273,7 @@ export default {
       })
     },
     postSensorsData(anonymousID,userID){
-      this.$http.post('http://192.168.31.201:18807/sensors_analytics_init',{
-        sensorsAnalyticsData:{
-          anonymousID:anonymousID,
-          userID:userID
-        }
-      }).then(res=>{
+      this.$http.post(`http://mall-uat-app-linli.timesgroup.cn/sensors_analytics_init?anonymousID=${anonymousID}&userID=${userID}`).then(res=>{
         console.log(res)
       })
     },

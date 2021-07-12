@@ -61,6 +61,11 @@ Axios.interceptors.request.use(
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
     }
+    console.log('config.url',config)
+    if(/sensors_analytics_init/.test(config.url)){
+      config.headers.token = store.state.login.token;
+      config.headers.Authorization = store.state.login.token;
+    }
 
     //中台接口要带一体化token
 
@@ -250,7 +255,8 @@ Axios.interceptors.response.use(
       if(store.state.webtype == '1' || store.state.webtype == '0'){
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
-          if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
+          // !store.state.ythToken
+          if (store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
           } else {
             // 用户token过期重新走一体化转商城token接口

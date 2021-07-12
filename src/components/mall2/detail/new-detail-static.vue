@@ -1866,6 +1866,7 @@ export default {
       showSharePopup:false,
       tagList:[],
       categoryList:[],
+      scrollTop:0,
     };
   },
   computed: {
@@ -1896,7 +1897,7 @@ export default {
     this.easyCardId = this.$route.query.easyCardId;
     this.recommendCommodity = this.$route.query.recommendCommodity;
     this.cardType = this.$route.query.cardType;
-   
+    window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
   },
   watch: {
     "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
@@ -1906,6 +1907,10 @@ export default {
     },
   },
   methods: {
+    handleScroll (e) {
+      this.scrollTop = e.target.scrollTop;
+      console.log(this.scrollTop)
+    },
     onShare(){
       console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
