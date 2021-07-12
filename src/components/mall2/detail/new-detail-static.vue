@@ -1951,8 +1951,8 @@ export default {
             }
           }
         }
-        this.viewpoint_radio = viewpoint_radio;
-        console.log('viewpoint_radio',viewpoint_radio,this.detailScrollHeight,this.detailClientHeight)
+        this.viewpoint_radio = this.$util.toDecimal2(viewpoint_radio);
+        console.log('viewpoint_radio',this.viewpoint_radio,this.detailScrollHeight,this.detailClientHeight)
       })
 
     },
