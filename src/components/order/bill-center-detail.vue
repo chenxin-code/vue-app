@@ -212,17 +212,16 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #8D8D8D;
-          line-height: 30px;
-          width: 30%;
+          line-height: 34px;
         }
         .result {
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #121212;
-          line-height: 30px;
-          // margin-left: 29px;
-          width: 70%;
+          line-height: 34px;
+          margin-left: 29px;
+          width: 71%;
           word-wrap: break-word;
           word-break: normal;
           &.merchant {
@@ -231,11 +230,11 @@ export default {
           }
           &.saler,
           &.unit{
-            // margin-left: 43px;
+            margin-left: 43px;
           }
           &.buildings {
             line-height: 22px;
-            // margin-left: 56px;
+            margin-left: 56px;
             margin-top: 4px;
           }
         }
