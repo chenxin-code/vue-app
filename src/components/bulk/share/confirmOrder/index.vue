@@ -149,6 +149,7 @@ export default {
             });
           });
           console.log(this.checkList);
+          this.$Loading.open();
           this.$http
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
               activityNo: this.purchaseId,
@@ -160,6 +161,7 @@ export default {
               remark: this.textareaValue,
             })
             .then((res) => {
+              this.$Loading.close();
               if (res.data.result == "success") {
                 this.$router.push({
                   path: "/mall2/checkstand",
