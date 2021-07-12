@@ -657,6 +657,14 @@
                 <div class="label theme_font_tint">配送方式</div>
                 <div>{{getPeisongString(detailData.interfaceType)}}</div>
               </div>
+
+              <div
+                class="flex-row"
+              >
+                <div class="label theme_font_tint">备注</div>
+                <div>{{detailData.remark}}</div>
+              </div>
+
               <div
                 class="flex-row"
                 v-if="pivotalProductType != 8 && detailData.deliveryTime != '' && !hasDateProduct(detailData.orderItemList)"

@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-09 10:46:59
+ * @LastEditTime: 2021-07-09 18:20:43
 -->
 <template>
   <div class="bill-center-detail">
@@ -212,16 +212,17 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #8D8D8D;
-          line-height: 34px;
+          line-height: 30px;
+          width: 30%;
         }
         .result {
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #121212;
-          line-height: 34px;
-          margin-left: 29px;
-          width: 71%
+          line-height: 30px;
+          // margin-left: 29px;
+          width: 70%;
           word-wrap: break-word;
           word-break: normal;
           &.merchant {
@@ -230,11 +231,11 @@ export default {
           }
           &.saler,
           &.unit{
-            margin-left: 43px;
+            // margin-left: 43px;
           }
           &.buildings {
             line-height: 22px;
-            margin-left: 56px;
+            // margin-left: 56px;
             margin-top: 4px;
           }
         }

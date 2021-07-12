@@ -218,6 +218,15 @@
         ></Recommend>
       </div>
     </div>
+    <van-popup v-model="showDelectPopup" round closeable :style="{ height: '196px' }">
+      <div class="delectPopup">
+        <div class="tipsText">确认将这{{deleteCartNum}}个商品删除？</div>
+        <div class="btns">
+          <div class="cancel" @click="showDelectPopup = false">取消</div>
+          <div class="delect" @click="deleteCartItem">删除</div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -258,6 +267,9 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
+      showDelectPopup:false,
+      deleteItem:[],
+      deleteCartNum:0,
     };
   },
   methods: {
@@ -792,12 +804,17 @@ export default {
         this.$Toast("请选择要删除的商品");
         return;
       }
+      this.deleteCartNum = carts.length;
+      this.showDelectPopup = true;
+      this.deleteItem = carts;
+    },
+    deleteCartItem(){
       this.$Loading.open();
       let url = "/app/json/app_cart/deleteCart";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: this.deliverType,
-        carts: carts,
+        carts: this.deleteItem,
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
       };
@@ -806,6 +823,7 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
+            this.showDelectPopup = false;
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
@@ -818,7 +836,7 @@ export default {
           this.$Toast("请求数据失败！");
         }
       );
-    },
+    }
   },
   watch: {
     isEditing: function (val, oldVal) {
@@ -838,6 +856,48 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 $mar-top = 10px;
+
+.delectPopup{
+  width: 271px;
+  height: 196px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  .tipsText{
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333;
+    margin: 70px auto 46px;
+    text-align: center;
+  }
+  .btns{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 27px;
+    .cancel{
+      width: 104px;
+      height: 39px;
+      border: 1px solid #999999;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #666666;
+      text-align: center;
+      line-height: 39px;
+    }
+    .delect{
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #F4F4F4;
+      text-align: center;
+      line-height: 39px;
+    }
+  }
+}
 
 .cart-list {
   flex: 1;
