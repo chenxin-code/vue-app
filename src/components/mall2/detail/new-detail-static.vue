@@ -1685,6 +1685,7 @@ export default {
   data() {
     let that = this;
     return {
+      directWeChatShare: '0',
       backApp:false,
       couFlag: [],
       id: "",
@@ -4066,6 +4067,10 @@ export default {
       ? this.$route.query.showActivityTime
       : "0";
 
+    this.directWeChatShare = this.$route.query.directWeChatShare
+      ? this.$route.query.directWeChatShare
+      : "0";
+
     if (this.id == "" && this.skuId == "") {
       return;
     }
@@ -4075,6 +4080,11 @@ export default {
     } else {
       this.getDatas();
     }
+
+    if(this.directWeChatShare) {
+      this.shareWechatFriends();
+    }
+
   },
   activated() {
     if (
