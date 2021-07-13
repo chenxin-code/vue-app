@@ -45,7 +45,7 @@ const host = process.env.VUE_APP_BASE_API; //uat环境交易中心接口地址
 const vueConfig = {
   // 默认'/'，部署应用包时的基本 URL
   publicPath: ENV !== "development" ? "./" : "/",
-  outputDir: "tuangou",
+  outputDir: "app",
   assetsDir: "static",
   configureWebpack: config => {
     config.plugins = [
