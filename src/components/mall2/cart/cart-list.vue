@@ -558,6 +558,7 @@ export default {
     toDelete: function (occuritem) {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
+      console.log('occuritem',occuritem)
     },
 
     setCommonPara: function (paramsData) {
@@ -827,6 +828,24 @@ export default {
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
+            console.log('this.deleteItem',this.deleteItem)
+            this.deleteItem.forEach(e=>{
+              this.$sensors.track('shoppingcart_edit', {
+                goods_id:this.skuId,
+                goods_name:this.detailData.skuName,
+                tag:this.tagList,
+                goods_cls1:this.categoryList[0],
+                goods_cls2:this.categoryList[1],
+                goods_cls3:this.categoryList[2],
+                org_price:this.detailData.activityPrice,
+                price:this.detailData.salePrice,
+                store_id:this.detailData.storeOuCode,
+                store_name:this.detailData.storeOuName,
+                merchant_id:this.detailData.ouCode,
+                merchant_name:this.detailData.ouName,
+                viewpoint_radio:this.viewpoint_radio,
+              });
+            })
           } else {
             this.$Toast(data.info);
           }
