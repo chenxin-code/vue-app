@@ -210,6 +210,10 @@ export default {
       } else {
         this.$router.go(-1);
       }
+      this.$sensors.track('pay_order_quit',{
+        order_id:this.payInfo.orderId,
+        trade_no:this.payInfo.tradeNo,
+      })
     },
     payWaySelected: function (item) {
       if (item.payModeSub == "") {
