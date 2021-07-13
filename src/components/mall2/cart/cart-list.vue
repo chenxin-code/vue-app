@@ -458,13 +458,15 @@ export default {
       }
 
       if (this.deliverType == 2) {
-        if (
-          this.$store.state.mall2.selectAddress.id == "" ||
-          this.$store.state.mall2.selectAddress.id == "undefined"
-        ) {
-          this.$Toast("请先选择配送区域！");
-          return;
-        } else if (this.$store.state.mall2.selectAddress.id != "-1") {
+        
+        // if (
+        //   this.$store.state.mall2.selectAddress.id == "" ||
+        //   this.$store.state.mall2.selectAddress.id == "undefined"
+        // ) {
+        //   this.$Toast("请先选择配送区域！--------》");
+        //   return;
+        // } else 
+        if (this.$store.state.mall2.selectAddress.id != "-1") {
           paramsData.userAddressId = this.$store.state.mall2.selectAddress.id;
         } else {
           paramsData.userAddress = {};
