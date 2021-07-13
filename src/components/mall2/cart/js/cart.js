@@ -323,7 +323,7 @@ let cart = {
       for (let cartIndex = 0; cartIndex < activityitem.cart.length; cartIndex++) {
         let cartitem = activityitem.cart[cartIndex];
         //更新要是所有
-        if (cartitem[checkKey] || type == 'update') {
+        if (cartitem[checkKey] || type == 'update' || type == 'buried') {
           selArr.push(this.revertCartitemToDic(cartitem, type,storeitem));
         }
       }
@@ -331,7 +331,7 @@ let cart = {
     for (let activityIndex = 0; activityIndex < storeitem.noActivityCart.length; activityIndex++) {
       let cartitem = storeitem.noActivityCart[activityIndex];
       //更新要是所有
-      if (cartitem[checkKey] || type == 'update') {
+      if (cartitem[checkKey] || type == 'update' || type == 'buried') {
         selArr.push(this.revertCartitemToDic(cartitem, type,storeitem));
       }
     }
@@ -349,6 +349,7 @@ let cart = {
   },
   revertCartitemToDic: function (cartitem, type, storeitem) {
     let dic = {};
+    console.log('cartitem     storeitem',cartitem,storeitem)
     if (type == 'update') {
       dic = {
         skuId: cartitem.skuId,
@@ -383,6 +384,23 @@ let cart = {
         storeOuCode: cartitem.storeOuCode,
         isGift:cartitem.isGift,
         activityId:cartitem.activityId,
+      }
+    }else if(type == 'buried'){
+      dic = {
+        goods_id:cartitem.skuId,
+        goods_name:cartitem.productName,
+        categoryName:cartitem.categoryName,
+        goods_quantity:cartitem.number,
+        // tag:this.tagList,
+        // goods_cls1:this.categoryList[0],
+        // goods_cls2:this.categoryList[1],
+        // goods_cls3:this.categoryList[2],
+        // org_price:cartitem.salePrice,
+        price:cartitem.salePrice,
+        store_id:cartitem.storeOuCode,
+        store_name:cartitem.storeName,
+        // merchant_id:this.occuritem.ouCode,
+        // merchant_name:this.occuritem.ouName,
       }
     }
     return dic

@@ -251,7 +251,7 @@ Axios.interceptors.response.use(
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           // !store.state.ythToken
-          if (store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
+          if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
           } else {
             // 用户token过期重新走一体化转商城token接口

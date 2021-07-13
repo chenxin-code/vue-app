@@ -128,7 +128,7 @@ export default {
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
-    if (true) {
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       let initObj = {};
       console.log('localtion href', location.href)
       location.href
