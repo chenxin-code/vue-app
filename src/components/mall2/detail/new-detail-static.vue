@@ -4081,7 +4081,7 @@ export default {
       this.getDatas();
     }
 
-    if(this.directWeChatShare) {
+    if(this.directWeChatShare == 1) {
       this.shareWechatFriends();
     }
 

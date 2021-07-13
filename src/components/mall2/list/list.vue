@@ -308,6 +308,7 @@
             @cateEvent="cateEvent"
           ></Category>
         </div>
+
       </div>
     </nav-content>
     <!-- showGuide  去除遮罩层 -->
@@ -575,6 +576,7 @@ export default {
       });
     },
     sureFunc: function (carts) {
+      console.log(123123);
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
