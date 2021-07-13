@@ -206,6 +206,7 @@
     },
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
+      console.log('支付信息ret',ret)
       if (ret) {
         if (!ret.isCancel) {
           if (ret.billRetStatus == 1) {
