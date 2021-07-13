@@ -2626,6 +2626,7 @@ export default {
         return;
       }
       this.$router.push(pushData);
+      this.$store.state.cartEntrance = 'goodsDetail';
     },
     // 去店铺
     toShop: function () {
@@ -3827,7 +3828,7 @@ export default {
               });
             }
 
-            this.$sensors.track('add_to_shoppingcart', {
+            this.$sensors.track('buy_now', {
               goods_id:this.skuId,
               goods_name:this.detailData.skuName,
               tag:this.tagList,

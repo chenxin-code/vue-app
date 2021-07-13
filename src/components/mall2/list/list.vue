@@ -560,6 +560,7 @@ export default {
             vipUnitUserCode: this.vipUnitUserCode,
           },
         });
+        this.$store.state.cartEntrance = 'goodsList';
       }
     },
     goGift: function () {

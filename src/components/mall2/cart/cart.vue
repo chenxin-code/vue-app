@@ -115,6 +115,7 @@ export default {
       lastPath: "",
       cartNum: 0,
       showBackBtn:true,
+      entrance:"",
     };
   },
   methods: {
@@ -323,6 +324,25 @@ export default {
         this._getCartCount(1);
       }
     }
+    let entrance = "";
+    switch (this.$store.state.cartEntrance) {
+      case 'common':
+        entrance = '首页'
+        break;
+      case 'goodsDetail':
+        entrance = '商品详情'
+        break;
+      case 'goodsList':
+        entrance = '商品列表'
+        break;
+      case 'wechatBottomNav':
+        entrance = '小程序底部栏'
+        break;
+    }
+    console.log('entrance',entrance)
+    this.$sensors.track('shoppingcart_view',{
+      entrance:entrance,
+    })
   },
   created() {
     this.lastPath = this.$route.query.lastPath
