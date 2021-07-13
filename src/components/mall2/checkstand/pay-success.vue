@@ -67,6 +67,8 @@
         payResult: '',
         wxOrderInfoKey:"",
         wxOrderInfo:{},
+        tradeNo:"",
+        orderId:"",
       }
     },
     methods: {
@@ -230,6 +232,9 @@
       })
       this.$store.state.microSho.carts = cartsNew
       this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey || '';
+      this.tradeNo = this.$route.query.tradeNo;
+      this.orderId = this.$route.query.orderId;
+      console.log('payInfo',this.tradeNo,this.orderId)
     }
   }
 </script>
