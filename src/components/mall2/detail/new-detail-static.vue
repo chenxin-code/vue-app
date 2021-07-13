@@ -1622,11 +1622,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="">
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="false">
+          <div class="share_botton_item" @click="shareImg" v-show="true">
             <img src="static/image/mall2/share_img.png" alt="">
             <div>图片分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink" v-show="false">
+          <div class="share_botton_item" @click="shareLink" v-show="true">
             <img src="static/image/mall2/share_link.png" alt="">
             <div>链接分享</div>
           </div>
@@ -1956,6 +1956,25 @@ export default {
       })
 
     },
+    shareSensors(share_type){
+      this.$sensors.track('goods_share', {
+        goods_id:this.skuId,
+        goods_name:this.detailData.skuName,
+        tag:this.tagList,
+        goods_cls1:this.categoryList[0],
+        goods_cls2:this.categoryList[1],
+        goods_cls3:this.categoryList[2],
+        org_price:this.detailData.activityPrice,
+        price:this.detailData.salePrice,
+        goods_quantity:this.selectedNum,
+        store_id:this.detailData.storeOuCode,
+        store_name:this.detailData.storeOuName,
+        merchant_id:this.detailData.ouCode,
+        merchant_name:this.detailData.ouName,
+        viewpoint_radio:this.viewpoint_radio,
+        share_type:share_type,
+      }); 
+    },
     onShare(){
       console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
@@ -1992,6 +2011,7 @@ export default {
         // alert("shareThenRes----------", JSON.stringify(res));
       });
       this.showSharePopup = false;
+      this.shareSensors('微信');
     },
     shareImg(){
       this.showShare();
@@ -2003,6 +2023,23 @@ export default {
           price:this.detailData.activityPrice,
           link:window.location.href,
           goodsTitle:this.getSkuNameStr(this.detailData),
+          goods_share_data:JSON.stringify({
+            goods_id:this.skuId,
+            goods_name:this.detailData.skuName,
+            tag:this.tagList,
+            goods_cls1:this.categoryList[0],
+            goods_cls2:this.categoryList[1],
+            goods_cls3:this.categoryList[2],
+            org_price:this.detailData.activityPrice,
+            price:this.detailData.salePrice,
+            goods_quantity:this.selectedNum,
+            store_id:this.detailData.storeOuCode,
+            store_name:this.detailData.storeOuName,
+            merchant_id:this.detailData.ouCode,
+            merchant_name:this.detailData.ouName,
+            viewpoint_radio:this.viewpoint_radio,
+            share_type:'文字',
+          }),
         }
       })
     },
@@ -2152,6 +2189,7 @@ export default {
         ShareImage.show({
           proData: this.detailData || {},
         });
+        this.shareSensors('图片')
       }
     },
     getPackageStartTime: function () {
@@ -3788,6 +3826,24 @@ export default {
                 params: params,
               });
             }
+
+            this.$sensors.track('add_to_shoppingcart', {
+              goods_id:this.skuId,
+              goods_name:this.detailData.skuName,
+              tag:this.tagList,
+              goods_cls1:this.categoryList[0],
+              goods_cls2:this.categoryList[1],
+              goods_cls3:this.categoryList[2],
+              org_price:this.detailData.activityPrice,
+              price:this.detailData.salePrice,
+              goods_quantity:this.selectedNum,
+              store_id:this.detailData.storeOuCode,
+              store_name:this.detailData.storeOuName,
+              merchant_id:this.detailData.ouCode,
+              merchant_name:this.detailData.ouName,
+              viewpoint_radio:this.viewpoint_radio,
+            });
+
           } else {
             this.$Toast(data.info);
           }
@@ -3852,6 +3908,24 @@ export default {
           if (data.status == 0) {
             if (this.isCollect == false) {
               this.isCollect = true;
+
+              this.$sensors.track('add_to_favourite', {
+                goods_id:this.skuId,
+                goods_name:this.detailData.skuName,
+                tag:this.tagList,
+                goods_cls1:this.categoryList[0],
+                goods_cls2:this.categoryList[1],
+                goods_cls3:this.categoryList[2],
+                org_price:this.detailData.activityPrice,
+                price:this.detailData.salePrice,
+                goods_quantity:this.selectedNum,
+                store_id:this.detailData.storeOuCode,
+                store_name:this.detailData.storeOuName,
+                merchant_id:this.detailData.ouCode,
+                merchant_name:this.detailData.ouName,
+                viewpoint_radio:this.viewpoint_radio,
+              }); 
+
             } else {
               this.isCollect = false;
             }

@@ -258,8 +258,6 @@ export default {
     
     //获取一体化信息
     getYthUserInfo(){
-      initSensors();
-      return
       this.$http.post("/app/json/login/getYthUser",{token: this.$store.state.ythToken || localStorage.getItem("ythToken")}).then(res=>{
         if(res.data.status == 0){
           this.$store.state.ythUserInfo = res.data.data;
@@ -274,11 +272,11 @@ export default {
         }
       })
     },
-    // postSensorsData(anonymousID,userID){
-    //   this.$http.post(`http://mall-uat-app-linli.timesgroup.cn/sensors_analytics_init?anonymousID=${anonymousID}&userID=${userID}`).then(res=>{
-    //     console.log(res)
-    //   })
-    // },
+    postSensorsData(anonymousID,userID){
+      this.$http.post(`/app/json/sensors_analytics/sensorsAnalyticsInit?anonymousID=${anonymousID}&userID=${userID}`).then(res=>{
+        console.log(res)
+      })
+    },
 
     backTop () {
       let scrollElement = "";
