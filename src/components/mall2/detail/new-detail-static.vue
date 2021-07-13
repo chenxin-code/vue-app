@@ -4071,6 +4071,14 @@ export default {
       ? this.$route.query.directWeChatShare
       : "0";
 
+    console.log(this.directWeChatShare + "this.directWeChatShare");
+    console.log(this.id + "this.id");
+    conosle.log(this.skuId + "this.skuId");
+
+    if(this.directWeChatShare == 1) {
+      this.shareWechatFriends();
+    }
+
     if (this.id == "" && this.skuId == "") {
       return;
     }
@@ -4079,10 +4087,6 @@ export default {
       this.getWechatDatas();
     } else {
       this.getDatas();
-    }
-
-    if(this.directWeChatShare == 1) {
-      this.shareWechatFriends();
     }
 
   },
