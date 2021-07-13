@@ -7,7 +7,7 @@ module.exports = {
   plugins: {
     // 转rem
     "postcss-pxtorem": {
-      rootValue: 50,
+      rootValue: 37.5,
       minPixelValue: 2,
       propWhiteList: []
     },
