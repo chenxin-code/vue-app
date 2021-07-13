@@ -2,7 +2,7 @@
 .idea
 node_modules
 dist
-app
+# app
 app.zip
 api/config.js
 .vscode
