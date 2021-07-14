@@ -8,11 +8,9 @@ import Vue from 'vue'
 import i18n from './locale'
 //vuex
 import store from './vuex/store'
-// import Vconsole from 'vconsole'
-
-// console.log('store.state.environment',store.state.environment)
-// let vConsole = new Vconsole()
-// Vue.use(vConsole)
+import Vconsole from 'vconsole'
+let vConsole = new Vconsole()
+Vue.use(vConsole)
 
 //路由
 import router from './router'
