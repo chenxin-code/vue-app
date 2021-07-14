@@ -258,7 +258,14 @@ export default {
     
     //获取一体化信息
     getYthUserInfo(){
-      this.$http.post("/app/json/login/getYthUser",{token: this.$store.state.ythToken || localStorage.getItem("ythToken")}).then(res=>{
+      let token = "";
+      if(this.$store.state.webtype == "2" || this.$store.state.webtype == "3"){
+        token = localStorage.getItem("ythToken");
+      }else{
+        token = this.$store.state.ythToken;
+      }
+      console.log("getYthUserInfo",this.$store.state.ythToken)
+      this.$http.post("/app/json/login/getYthUser",{token:token}).then(res=>{
         if(res.data.status == 0){
           this.$store.state.ythUserInfo = res.data.data;
           console.log("一体化信息",this.$store.state.ythUserInfo)
