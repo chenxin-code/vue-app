@@ -9,7 +9,7 @@
           <template #default="timeData">
             <div style="display: flex;align-items: center">
               <div class="time-bg-block">{{ timeData.days }}天</div>
-          
+
               <span style="color: #C0003F;">:</span>
               <div class="time-bg-block">{{ timeData.hours }}</div>
               <span style="color: #C0003F;">:</span>
@@ -24,19 +24,24 @@
       <div class="user-card">
         <div class="user-message">
           <img
-            :src="shareData.headAvtUrl"
+            src="./images/img_user_01@2x.png"
             :error-icon="defaultAvatar"
             class="user-pic"
           />
+          <!-- <img
+            :src="shareData.headAvtUrl ? shareData.headAvtUrl : ''"
+            :error-icon="defaultAvatar"
+            class="user-pic"
+          /> -->
+
           <div class="user-message-right">
             <div class="user-message-top">
               团长名称：{{ shareData.headUser }}
+              <img src="./images/img_tips_default@2x.png" class="group-status" />
             </div>
             <div class="user-message-bottom">
               <span style="color: #999999">提货地址：</span>
-              <span style="color: #121212"
-                >提货地址：{{ shareData.place }}</span
-              >
+              <span style="color: #121212">{{ shareData.place }}</span>
             </div>
           </div>
         </div>
@@ -70,15 +75,26 @@
         <div class="product-message">
           <img class="product-pic" :src="item.skuImg[0]" />
           <div class="product-desc">
-            <div class="product-title">产品名称：{{ item.skuName }}</div>
-            <div class="product-prize-old">
-              销售价格：￥{{ item.crossedPrice }}
+            <div style="display: flex;flex-direction: column;">
+              <div class="product-title">产品名称：{{ item.skuName }}</div>
+              <div class="product-prize-old">
+                销售价格：￥{{ item.crossedPrice }}
+              </div>
+              <div class="product-prize-group">
+                团购价格：￥{{ item.groupPrice }}
+              </div>
             </div>
-            <div class="product-prize-group">
-              团购价格：￥{{ item.groupPrice }}
-            </div>
+
             <div class="change-product-num">
-              <img
+              <van-stepper
+                v-model="item.count"
+                min="0"
+                integer
+                theme="round"
+                :max="item.remainingItem"
+                @change="goodsChange(item)"
+              />
+              <!-- <img
                 src="./images/button_add_default@2x.png"
                 alt=""
                 class="change-num-pic"
@@ -88,7 +104,7 @@
                 src="./images/button_del_default@2x.png"
                 alt=""
                 class="change-num-pic"
-              />
+              /> -->
             </div>
           </div>
         </div>
@@ -106,18 +122,24 @@
       <div class="group-people">
         <div v-for="(item, index) in otherBuyList" :key="index">
           <div class="group-people-item">
-            <van-image
+            <img
               class="group-people-pic"
-              :src="item.buyerAvtUrl"
-              :error-icon="defaultAvatar"
+              src="./images/img_user_01@2x.png"
             />
             <div class="group-people-message">
               <div class="people-item-phone">{{ item.buyerName }}</div>
               <div class="people-item-time">{{ item.buyTime }}</div>
-              <div class="people-item-desc">{{item.orderItemList[0].groupbuySkuName}} X{{ item.orderItemList[0].buyNumber }}</div>
+              <div
+                class="people-item-desc"
+                v-for="(targetItem, indexTarget) in item.orderItemList"
+                :key="indexTarget"
+              >
+                <span>{{ targetItem.groupbuySkuName }}</span>
+                <span>X{{ targetItem.buyNumber }}</span>
+              </div>
             </div>
           </div>
-          <div class="divLine" style="width:6rem"></div>
+          <div class="divLine" style="width: 8rem"></div>
         </div>
       </div>
     </div>
@@ -416,7 +438,8 @@ export default {
       }
       .time-bg-block {
         height: 54px;
-        background: #cc0043;
+        background: #DE316B;
+        color: #ffffff;
         border-radius: 9px;
         width: 40px;
         height: 26px;
@@ -447,10 +470,17 @@ export default {
           display: flex;
           flex-direction: column;
           .user-message-top {
+            display: flex;
+            align-items: center;
             font-size: 16px;
             font-family: PingFang SC;
             font-weight: bold;
             color: #121212;
+          }
+          .group-status {
+            width: 53px;
+            height: 18px;
+            margin-left: 10px;
           }
           .user-message-bottom {
             margin-top: 10px;
@@ -513,6 +543,7 @@ export default {
         display: flex;
         flex-direction: column;
         margin-left: 8px;
+        justify-content: space-between;
         .product-title {
           font-size: 13px;
           font-family: PingFang SC;
@@ -553,7 +584,7 @@ export default {
 
   .user-group-team {
     width: 350px;
-    margin: 12px 0 180px 12px;
+    margin: 12px 0 130px 12px;
     background: #ffffff;
     box-shadow: 0px 2px 3px 0px rgba(139, 139, 139, 0.02);
     border-radius: 6px;
@@ -607,6 +638,9 @@ export default {
             font-weight: bold;
             color: #666666;
             margin-top: 8px;
+            display: flex;
+            justify-content:space-between;
+            width: 250px;
           }
         }
       }
