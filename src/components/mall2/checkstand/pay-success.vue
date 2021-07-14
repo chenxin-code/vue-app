@@ -235,6 +235,14 @@
       this.tradeNo = this.$route.query.tradeNo;
       this.orderId = this.$route.query.orderId;
       console.log('payInfo',this.tradeNo,this.orderId)
+    },
+    mounted(){
+      if(this.icbcFailed == 'icbcFailed'){
+        this.$sensors.track('pay_order_fail', {
+          order_id:this.orderId,
+          trade_no:this.tradeNo,
+        });
+      }
     }
   }
 </script>

@@ -96,6 +96,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -115,6 +117,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -270,6 +274,7 @@ export default {
       showDelectPopup:false,
       deleteItem:[],
       deleteCartNum:0,
+      occuritem:{},
     };
   },
   methods: {
@@ -560,6 +565,8 @@ export default {
     toDelete: function (occuritem) {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
+      console.log('carts',cartJS.getSelOccur(occuritem, this.isEditing, "buried"))
+      this.occuritem = cartJS.getSelOccur(occuritem, this.isEditing, "buried");
     },
 
     setCommonPara: function (paramsData) {
@@ -756,6 +763,32 @@ export default {
       ];
       this.updateCart(carts);
     },
+    plusNum(itemInfo){
+      this.sensorsEdit('增加',itemInfo);
+    },
+    minusNum(itemInfo){
+      this.sensorsEdit('减少',itemInfo);
+    },
+    sensorsEdit(behavior,itemInfo){
+      console.log('itemInfo',itemInfo)
+      let categoryList = itemInfo.categoryName.split('_')
+      this.$sensors.track('shoppingcart_edit', {
+        goods_id:itemInfo.skuId,
+        goods_name:itemInfo.productName,
+        // tag:this.tagList,
+        goods_cls1:categoryList[0],
+        goods_cls2:categoryList[1],
+        goods_cls3:categoryList[2],
+        // org_price:this.detailData.activityPrice,
+        price:itemInfo.price,
+        goods_quantity:1,
+        store_id:itemInfo.storeOuCode,
+        store_name:itemInfo.storeName,
+        // merchant_id:this.occuritem.ouCode,
+        // merchant_name:this.occuritem.ouName,
+        behavior:behavior,
+      });
+    },
     updateCart: function (carts, callBack) {
       if (this.isPresale == true) {
         cartEvent.updateCart(carts);
@@ -829,6 +862,25 @@ export default {
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
+            this.occuritem.forEach(e=>{
+              let categoryList = e.categoryName.split('_');
+              this.$sensors.track('shoppingcart_edit', {
+                goods_id:e.goods_id,
+                goods_name:e.goods_name,
+                // tag:this.tagList,
+                goods_cls1:categoryList[0],
+                goods_cls2:categoryList[1],
+                goods_cls3:categoryList[2],
+                // org_price:this.detailData.activityPrice,
+                price:e.price,
+                goods_quantity:e.goods_quantity,
+                store_id:e.store_id,
+                store_name:e.store_name,
+                // merchant_id:this.occuritem.ouCode,
+                // merchant_name:this.occuritem.ouName,
+                behavior:'删除',
+              });
+            })
           } else {
             this.$Toast(data.info);
           }
