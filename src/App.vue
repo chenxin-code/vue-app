@@ -144,6 +144,8 @@ export default {
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
+        console.log('---------------一体化token获取成功----------',res)
+        console.log('---------------this.$store.state.ythToken----------',this.$store.state.ythToken)
       });
     }
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
