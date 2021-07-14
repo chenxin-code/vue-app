@@ -141,9 +141,13 @@ export default {
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem('ythToken', initObj.ythToken)
+      this.getYthUserInfo()
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
+        console.log('---------------一体化token获取成功----------',res)
+        console.log('---------------this.$store.state.ythToken----------',this.$store.state.ythToken)
+        this.getYthUserInfo()
       });
     }
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
@@ -156,7 +160,6 @@ export default {
       }
     });
     
-    this.getYthUserInfo()
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
@@ -258,7 +261,14 @@ export default {
     
     //获取一体化信息
     getYthUserInfo(){
-      this.$http.post("/app/json/login/getYthUser",{token: this.$store.state.ythToken || localStorage.getItem("ythToken")}).then(res=>{
+      let token = "";
+      if(this.$store.state.webtype == "2" || this.$store.state.webtype == "3"){
+        token = localStorage.getItem("ythToken");
+      }else{
+        token = this.$store.state.ythToken;
+      }
+      console.log("getYthUserInfo",this.$store.state.ythToken)
+      this.$http.post("/app/json/login/getYthUser",{token:token}).then(res=>{
         if(res.data.status == 0){
           this.$store.state.ythUserInfo = res.data.data;
           console.log("一体化信息",this.$store.state.ythUserInfo)

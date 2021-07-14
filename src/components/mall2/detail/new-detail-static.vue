@@ -1685,6 +1685,7 @@ export default {
   data() {
     let that = this;
     return {
+      directWeChatShare: '0',
       backApp:false,
       couFlag: [],
       id: "",
@@ -1855,6 +1856,7 @@ export default {
       },
       arrLen: 0,
       showActivityTime: "0",
+      directWeChatShare: "0",
       cardType: "", // 区分充值卡 计次卡 551充值卡 552 计次卡(只有计次卡不需要推荐和领券，底部只有立即购买按钮)
       easyCardId: "", // 从易捷卡页面过来的才有easyCardI
       recommendCommodity: false, // 从推荐购物传过来的只有 推荐购物有
@@ -1985,6 +1987,7 @@ export default {
     },
     shareWechatFriends(){
       let routeQuery = this.$route.query;
+      console.log(routeQuery);
       let queryStr = "";
       for(let key in routeQuery){
         queryStr+=`${key}=${routeQuery[key]}&`
@@ -2000,7 +2003,7 @@ export default {
         title: this.getSkuNameStr(this.detailData),
         desc: this.getSkuNameStr(this.detailData),
         link: window.location.href,
-        imageurl: this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10',
+        imageurl: this.detailData.picUrls[0]+'?x-oss-process=image/format,jpg/quality,Q_10',
         // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
         miniProgramType:
           this.$store.state.environment == "production" ? 0 : 2,
@@ -4227,6 +4230,7 @@ export default {
     },
   },
   created() {
+    console.log("created");
     this.backApp = this.$route.query.backApp ? this.$route.query.backApp : false;
     this.lastPath = this.$route.query.lastPath
       ? this.$route.query.lastPath
@@ -4253,6 +4257,10 @@ export default {
       ? this.$route.query.showActivityTime
       : "0";
 
+    this.directWeChatShare = this.$route.query.directWeChatShare
+      ? this.$route.query.directWeChatShare
+      : "0";
+
     if (this.id == "" && this.skuId == "") {
       return;
     }
@@ -4262,6 +4270,7 @@ export default {
     } else {
       this.getDatas();
     }
+
   },
   activated() {
     if (

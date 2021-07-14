@@ -88,8 +88,8 @@
       border-radius 8px 8px 0 0;
       .close-btn {
         position absolute;
-        right 8px;
-        top 8px;
+        right 0px;
+        top 0px;
         padding 7px;
         z-index 99;
         i {

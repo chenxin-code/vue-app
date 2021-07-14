@@ -2692,6 +2692,24 @@ export default {
             });
           })
           .catch(action => {});
+      }else {
+        if(this.$store.state.mall2.selectAddress.id == "" || this.$store.state.mall2.selectAddress.id == "undefined") {
+          this.$MessageBox
+            .confirm("没有相关区域的收货地址，是否要添加？", "提示", {
+              confirmButtonText: "确定"
+            })
+            .then(action => {
+              this.$router.push({
+                path: "addaddress",
+                query: {
+                  type: 1,
+                    isSave: true,
+                  direct: "direct"
+                }
+              });
+            })
+          .catch(action => {});
+        }
       }
     },
 
