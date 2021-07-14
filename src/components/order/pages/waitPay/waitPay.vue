@@ -813,6 +813,8 @@ export default {
                         "relative";
                       this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
                     });
+                  } else {
+                    Toast.clear(); //关闭页面loading
                   }
                 }
               });
