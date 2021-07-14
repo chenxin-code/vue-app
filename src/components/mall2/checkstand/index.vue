@@ -562,7 +562,7 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/mall2/paysuccess?orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+            `/app-vue/app/index.html#/mall2/paysuccess?token=${this.$store.state.login.token}&orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
         )}`;
         // this.$router.replace({
         //   path: "/mall2/paysuccess",
