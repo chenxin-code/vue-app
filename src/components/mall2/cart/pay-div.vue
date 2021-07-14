@@ -145,6 +145,7 @@
 <style lang="stylus" scoped type="text/stylus">
   @import "~@/common/stylus/variable.styl"
   .pay-div {
+    height 70px;
     position relative;
     z-index 10;
     padding 10px
