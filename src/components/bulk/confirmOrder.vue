@@ -182,6 +182,7 @@ export default {
       })
       if (this.consigneeName !== "") {
         if (util.checkMobile(this.consigneePhoneNumber)) {
+          this.$Loading.open();
           this.$http
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
               activityNo: this.$store.state.CharseInfo.activityId,
@@ -199,6 +200,7 @@ export default {
               remark: this.textareaValue,
             })
             .then((res) => {
+              this.$Loading.close();
               if (res.data.result == "success") {
                 this.$router.push({
                   path: "/mall2/checkstand",

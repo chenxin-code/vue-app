@@ -8,7 +8,7 @@ import Vue from 'vue'
 import i18n from './locale'
 //vuex
 import store from './vuex/store'
-import Vconsole from 'vconsole'
+// import Vconsole from 'vconsole'
 
 // console.log('store.state.environment',store.state.environment)
 // let vConsole = new Vconsole()
