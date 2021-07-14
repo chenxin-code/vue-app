@@ -1063,7 +1063,7 @@
                 v-show="proView == 2"
               >
                 <div class="btns-flex theme_bg_white">
-                  <div class="back_proView" @click="proView = 1">
+                  <div class="back_proView" @click="backEvent">
                     <img src="static/image/mall2/backIcon.png" alt="">
                   </div>
                   <div
@@ -1866,6 +1866,15 @@ export default {
       jdSilmilarSkus: [],
       cartNum: 0,
       showSharePopup:false,
+      tagList:[],
+      categoryList:[],
+      scrollTop:0,
+      detailScrollHeight:0,//第二页滚动总高度
+      detailClientHeight:0,//屏幕高度
+      detailScrollTop:0,//第二页滚动高度
+      detailView:1,//默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
+      reachBottom:false,//是否到达底部,
+      viewpoint_radio:0,
     };
   },
   computed: {
@@ -1896,7 +1905,7 @@ export default {
     this.easyCardId = this.$route.query.easyCardId;
     this.recommendCommodity = this.$route.query.recommendCommodity;
     this.cardType = this.$route.query.cardType;
-   
+    window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
   },
   watch: {
     "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
@@ -1904,8 +1913,70 @@ export default {
         this.getDatas();
       }
     },
+    proView:function(newVal,oldVal){
+      if(newVal == 2){
+        this.detailView = 2;
+        this.$nextTick(()=>{
+          document.getElementsByClassName('scroll-container')[1].scrollTop = 1;
+          this.detailScrollHeight = document.getElementsByClassName('scroll-container')[1].scrollHeight;
+          this.detailClientHeight = document.getElementsByClassName('scroll-container')[1].clientHeight;
+        })
+      }
+    }
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    handleScroll (e) {
+      this.scrollTop = e.target.scrollTop;
+      this.$nextTick(()=>{
+        if(this.proView == 2){
+          this.detailScrollTop = e.target.scrollTop;
+          if(this.detailScrollHeight- this.detailScrollTop == this.detailClientHeight){
+            this.reachBottom = true;
+            console.log('到底了')
+          }
+        }
+
+        let viewpoint_radio = 0;
+        if(this.detailView == 1){
+          viewpoint_radio = 0
+        }else{
+          if(this.reachBottom){
+            viewpoint_radio = 1;
+          }else{
+            if(this.detailScrollTop == 1 || this.detailScrollTop == 0){
+              viewpoint_radio = (this.detailClientHeight/(this.detailScrollHeight - this.detailScrollTop))*0.5+0.5
+            }else{
+              viewpoint_radio = (this.detailScrollTop/(this.detailScrollHeight - this.detailClientHeight))*0.5+0.5
+            }
+          }
+        }
+        this.viewpoint_radio = this.$util.toDecimal2(viewpoint_radio);
+        console.log('viewpoint_radio',this.viewpoint_radio,this.detailScrollHeight,this.detailClientHeight)
+      })
+
+    },
+    shareSensors(share_type){
+      this.$sensors.track('goods_share', {
+        goods_id:this.skuId,
+        goods_name:this.detailData.skuName,
+        tag:this.tagList,
+        goods_cls1:this.categoryList[0],
+        goods_cls2:this.categoryList[1],
+        goods_cls3:this.categoryList[2],
+        org_price:this.detailData.activityPrice,
+        price:this.detailData.salePrice,
+        goods_quantity:this.selectedNum,
+        store_id:this.detailData.storeOuCode,
+        store_name:this.detailData.storeOuName,
+        merchant_id:this.detailData.ouCode,
+        merchant_name:this.detailData.ouName,
+        viewpoint_radio:this.viewpoint_radio,
+        share_type:share_type,
+      }); 
+    },
     onShare(){
       console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
@@ -1943,6 +2014,7 @@ export default {
         // alert("shareThenRes----------", JSON.stringify(res));
       });
       this.showSharePopup = false;
+      this.shareSensors('微信');
     },
     shareImg(){
       this.showShare();
@@ -1954,6 +2026,23 @@ export default {
           price:this.detailData.activityPrice,
           link:window.location.href,
           goodsTitle:this.getSkuNameStr(this.detailData),
+          goods_share_data:JSON.stringify({
+            goods_id:this.skuId,
+            goods_name:this.detailData.skuName,
+            tag:this.tagList,
+            goods_cls1:this.categoryList[0],
+            goods_cls2:this.categoryList[1],
+            goods_cls3:this.categoryList[2],
+            org_price:this.detailData.activityPrice,
+            price:this.detailData.salePrice,
+            goods_quantity:this.selectedNum,
+            store_id:this.detailData.storeOuCode,
+            store_name:this.detailData.storeOuName,
+            merchant_id:this.detailData.ouCode,
+            merchant_name:this.detailData.ouName,
+            viewpoint_radio:this.viewpoint_radio,
+            share_type:'文字',
+          }),
         }
       })
     },
@@ -2103,6 +2192,7 @@ export default {
         ShareImage.show({
           proData: this.detailData || {},
         });
+        this.shareSensors('图片')
       }
     },
     getPackageStartTime: function () {
@@ -2539,6 +2629,7 @@ export default {
         return;
       }
       this.$router.push(pushData);
+      this.$store.state.cartEntrance = 'goodsDetail';
     },
     // 去店铺
     toShop: function () {
@@ -2555,16 +2646,37 @@ export default {
       // if (this.$store.state.webtype == 3 && window.history.length === 1) {
       //   wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
       // }
+      // detailScrollHeight:0,//第二页滚动总高度
+      // detailClientHeight:0,//屏幕高度
+      // detailScrollTop:0,//第二页滚动高度
+      console.log('this.viewpoint_radio',this.viewpoint_radio)
+      this.$sensors.track('goods_detail_quit', {
+        module_source: this.$store.state.inToDetail == 'common'?'商城臻选专场':this.$store.state.inToDetail == 'list'?'商城商品列表页':'商城搜索列表',
+        goods_id:this.skuId,
+        goods_name:this.detailData.skuName,
+        tag:this.tagList,
+        goods_cls1:this.categoryList[0],
+        goods_cls2:this.categoryList[1],
+        goods_cls3:this.categoryList[2],
+        org_price:this.detailData.activityPrice,
+        price:this.detailData.salePrice,
+        store_id:this.detailData.storeOuCode,
+        store_name:this.detailData.storeOuName,
+        merchant_id:this.detailData.ouCode,
+        merchant_name:this.detailData.ouName,
+        viewpoint_radio:this.viewpoint_radio,
+      });
+
       if(this.backApp){
         appNav.navigatorBack({ url: "0" }).then((res) => {
           console.log(res);
         });
         return;
       }
-      if (this.proView == 2) {
-        this.proView = 1;
-        return;
-      }
+      // if (this.proView == 2) {
+      //   this.proView = 1;
+      //   return;
+      // }
       if (this.$store.state.webtype == 2|| this.$store.state.webtype == 3) {
         if(window.history.length === 1){
           this.$router.replace('/common')
@@ -3417,6 +3529,27 @@ export default {
           ) {
             this.cartNum = cartEvent.getCartNum();
           }
+
+          this.detailData.activityList.forEach(e=>{
+            this.tagList.push(e.title)
+          })
+          this.categoryList = this.detailData.categoryName.split('_')
+          console.log('category',this.detailData.categoryName,this.tagList)
+          this.$sensors.track('goods_detail_view', {
+            module_source: this.$store.state.inToDetail == 'common'?'商城臻选专场':this.$store.state.inToDetail == 'list'?'商城商品列表页':'商城搜索列表',
+            goods_id:this.skuId,
+            goods_name:this.detailData.skuName,
+            tag:this.tagList,
+            goods_cls1:this.categoryList[0],
+            goods_cls2:this.categoryList[1],
+            goods_cls3:this.categoryList[2],
+            org_price:this.detailData.activityPrice,
+            price:this.detailData.salePrice,
+            store_id:this.detailData.storeOuCode,
+            store_name:this.detailData.storeOuName,
+            merchant_id:this.detailData.ouCode,
+            merchant_name:this.detailData.ouName,
+          });
         } else {
           this.$Toast(data.info);
         }
@@ -3557,6 +3690,24 @@ export default {
             this.$store.state.mall2.cartNum = data.data;
             this.showPop = false;
             this.showProductImg = true;
+
+            this.$sensors.track('add_to_shoppingcart', {
+              goods_id:this.skuId,
+              goods_name:this.detailData.skuName,
+              tag:this.tagList,
+              goods_cls1:this.categoryList[0],
+              goods_cls2:this.categoryList[1],
+              goods_cls3:this.categoryList[2],
+              org_price:this.detailData.activityPrice,
+              price:this.detailData.salePrice,
+              goods_quantity:this.selectedNum,
+              store_id:this.detailData.storeOuCode,
+              store_name:this.detailData.storeOuName,
+              merchant_id:this.detailData.ouCode,
+              merchant_name:this.detailData.ouName,
+              viewpoint_radio:this.viewpoint_radio,
+            });
+
           } else {
             this.$Toast(data.info);
           }
@@ -3679,6 +3830,24 @@ export default {
                 params: params,
               });
             }
+
+            this.$sensors.track('buy_now', {
+              goods_id:this.skuId,
+              goods_name:this.detailData.skuName,
+              tag:this.tagList,
+              goods_cls1:this.categoryList[0],
+              goods_cls2:this.categoryList[1],
+              goods_cls3:this.categoryList[2],
+              org_price:this.detailData.activityPrice,
+              price:this.detailData.salePrice,
+              goods_quantity:this.selectedNum,
+              store_id:this.detailData.storeOuCode,
+              store_name:this.detailData.storeOuName,
+              merchant_id:this.detailData.ouCode,
+              merchant_name:this.detailData.ouName,
+              viewpoint_radio:this.viewpoint_radio,
+            });
+
           } else {
             this.$Toast(data.info);
           }
@@ -3743,6 +3912,24 @@ export default {
           if (data.status == 0) {
             if (this.isCollect == false) {
               this.isCollect = true;
+
+              this.$sensors.track('add_to_favourite', {
+                goods_id:this.skuId,
+                goods_name:this.detailData.skuName,
+                tag:this.tagList,
+                goods_cls1:this.categoryList[0],
+                goods_cls2:this.categoryList[1],
+                goods_cls3:this.categoryList[2],
+                org_price:this.detailData.activityPrice,
+                price:this.detailData.salePrice,
+                goods_quantity:this.selectedNum,
+                store_id:this.detailData.storeOuCode,
+                store_name:this.detailData.storeOuName,
+                merchant_id:this.detailData.ouCode,
+                merchant_name:this.detailData.ouName,
+                viewpoint_radio:this.viewpoint_radio,
+              }); 
+
             } else {
               this.isCollect = false;
             }

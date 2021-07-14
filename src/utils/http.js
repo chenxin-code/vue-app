@@ -250,6 +250,7 @@ Axios.interceptors.response.use(
       if(store.state.webtype == '1' || store.state.webtype == '0'){
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
+          // !store.state.ythToken
           if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
           } else {

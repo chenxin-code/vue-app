@@ -561,6 +561,7 @@ export default {
             vipUnitUserCode: this.vipUnitUserCode,
           },
         });
+        this.$store.state.cartEntrance = 'goodsList';
       }
     },
     goGift: function () {
@@ -926,6 +927,11 @@ export default {
           cardName: this.$route.query.cardName, // 计次卡名称
         },
       });
+      if(this.searchKey !== ''){
+        this.$store.state.inToDetail = 'search'
+      }else{
+        this.$store.state.inToDetail = 'list'
+      }
     },
     // 获取购物车数量
     _getCartCount: function () {

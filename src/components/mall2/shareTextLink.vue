@@ -46,6 +46,8 @@ export default {
     this.price = this.$route.query.price;
     this.link = this.$route.query.link;
     this.copyText = this.$route.query.goodsTitle;
+    this.goods_share_data = JSON.parse(this.$route.query.goods_share_data);
+    console.log({...this.goods_share_data})
   },
   methods: {
     copy() {
@@ -62,6 +64,7 @@ export default {
           },
         });
         this.$toast("文案已复制到剪切板");
+        this.$sensors.track('goods_share', {...this.goods_share_data}); 
       }
     },
   },
