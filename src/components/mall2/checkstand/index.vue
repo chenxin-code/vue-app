@@ -210,6 +210,10 @@ export default {
       } else {
         this.$router.go(-1);
       }
+      this.$sensors.track('pay_order_quit',{
+        order_id:this.payInfo.orderId,
+        trade_no:this.payInfo.tradeNo,
+      })
     },
     payWaySelected: function (item) {
       if (item.payModeSub == "") {
@@ -542,7 +546,6 @@ export default {
             "deviceCode": this.$route.query.deviceCode,
             "storeOuCode": this.$route.query.storeOuCode,
             "stationName": this.$route.query.stationName,
-
         }
         console.log(currentOrderDetails)
         localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
@@ -559,7 +562,7 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+            `/app-vue/app/index.html#/mall2/paysuccess?orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
         )}`;
         // this.$router.replace({
         //   path: "/mall2/paysuccess",

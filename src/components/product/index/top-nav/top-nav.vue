@@ -707,6 +707,7 @@ export default {
           vipUnitUserCode: "",
         },
       });
+      this.$store.state.cartEntrance = 'common';
     },
     /**
      * @description 热力统计事件

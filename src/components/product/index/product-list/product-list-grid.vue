@@ -46,6 +46,8 @@
         </div>
       </div>
     </div>
+
+    
   </div>
 </template>
 
@@ -105,6 +107,8 @@ export default {
     },
     enterNav:function(product){
       this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
+      this.$store.state.inToDetail = "common"
+      console.log('inToDetail')
     },
     addToCart: function (item) {
       this.$Loading.open();

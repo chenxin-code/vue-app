@@ -322,7 +322,9 @@ export default {
       }
       item.hasShow = true;
       this.selectedIndex = index;
-
+      if(item.code == 'Mallshoppingcart'){
+        this.$store.state.cartEntrance = 'wechatBottomNav'
+      }
       this.$nextTick(() => {
         if (this.getComRef(index) && this.$refs[this.getComRef(index)]) {
           //判断是否是配置组件  再去刷新   liqiang

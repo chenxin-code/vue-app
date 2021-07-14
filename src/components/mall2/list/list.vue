@@ -308,6 +308,7 @@
             @cateEvent="cateEvent"
           ></Category>
         </div>
+
       </div>
     </nav-content>
     <!-- showGuide  去除遮罩层 -->
@@ -560,6 +561,7 @@ export default {
             vipUnitUserCode: this.vipUnitUserCode,
           },
         });
+        this.$store.state.cartEntrance = 'goodsList';
       }
     },
     goGift: function () {
@@ -575,6 +577,7 @@ export default {
       });
     },
     sureFunc: function (carts) {
+      console.log(123123);
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -924,6 +927,11 @@ export default {
           cardName: this.$route.query.cardName, // 计次卡名称
         },
       });
+      if(this.searchKey !== ''){
+        this.$store.state.inToDetail = 'search'
+      }else{
+        this.$store.state.inToDetail = 'list'
+      }
     },
     // 获取购物车数量
     _getCartCount: function () {

@@ -96,6 +96,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -115,6 +117,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -218,6 +222,15 @@
         ></Recommend>
       </div>
     </div>
+    <van-popup v-model="showDelectPopup" round closeable :style="{ height: '196px' }">
+      <div class="delectPopup">
+        <div class="tipsText">确认将这{{deleteCartNum}}个商品删除？</div>
+        <div class="btns">
+          <div class="cancel" @click="showDelectPopup = false">取消</div>
+          <div class="delect" @click="deleteCartItem">删除</div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -258,6 +271,10 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
+      showDelectPopup:false,
+      deleteItem:[],
+      deleteCartNum:0,
+      occuritem:{},
     };
   },
   methods: {
@@ -548,6 +565,8 @@ export default {
     toDelete: function (occuritem) {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
+      console.log('carts',cartJS.getSelOccur(occuritem, this.isEditing, "buried"))
+      this.occuritem = cartJS.getSelOccur(occuritem, this.isEditing, "buried");
     },
 
     setCommonPara: function (paramsData) {
@@ -744,6 +763,32 @@ export default {
       ];
       this.updateCart(carts);
     },
+    plusNum(itemInfo){
+      this.sensorsEdit('增加',itemInfo);
+    },
+    minusNum(itemInfo){
+      this.sensorsEdit('减少',itemInfo);
+    },
+    sensorsEdit(behavior,itemInfo){
+      console.log('itemInfo',itemInfo)
+      let categoryList = itemInfo.categoryName.split('_')
+      this.$sensors.track('shoppingcart_edit', {
+        goods_id:itemInfo.skuId,
+        goods_name:itemInfo.productName,
+        // tag:this.tagList,
+        goods_cls1:categoryList[0],
+        goods_cls2:categoryList[1],
+        goods_cls3:categoryList[2],
+        // org_price:this.detailData.activityPrice,
+        price:itemInfo.price,
+        goods_quantity:1,
+        store_id:itemInfo.storeOuCode,
+        store_name:itemInfo.storeName,
+        // merchant_id:this.occuritem.ouCode,
+        // merchant_name:this.occuritem.ouName,
+        behavior:behavior,
+      });
+    },
     updateCart: function (carts, callBack) {
       if (this.isPresale == true) {
         cartEvent.updateCart(carts);
@@ -794,12 +839,17 @@ export default {
         this.$Toast("请选择要删除的商品");
         return;
       }
+      this.deleteCartNum = carts.length;
+      this.showDelectPopup = true;
+      this.deleteItem = carts;
+    },
+    deleteCartItem(){
       this.$Loading.open();
       let url = "/app/json/app_cart/deleteCart";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: this.deliverType,
-        carts: carts,
+        carts: this.deleteItem,
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
       };
@@ -808,9 +858,29 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
+            this.showDelectPopup = false;
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
+            this.occuritem.forEach(e=>{
+              let categoryList = e.categoryName.split('_');
+              this.$sensors.track('shoppingcart_edit', {
+                goods_id:e.goods_id,
+                goods_name:e.goods_name,
+                // tag:this.tagList,
+                goods_cls1:categoryList[0],
+                goods_cls2:categoryList[1],
+                goods_cls3:categoryList[2],
+                // org_price:this.detailData.activityPrice,
+                price:e.price,
+                goods_quantity:e.goods_quantity,
+                store_id:e.store_id,
+                store_name:e.store_name,
+                // merchant_id:this.occuritem.ouCode,
+                // merchant_name:this.occuritem.ouName,
+                behavior:'删除',
+              });
+            })
           } else {
             this.$Toast(data.info);
           }
@@ -820,7 +890,7 @@ export default {
           this.$Toast("请求数据失败！");
         }
       );
-    },
+    }
   },
   watch: {
     isEditing: function (val, oldVal) {
@@ -840,6 +910,48 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 $mar-top = 10px;
+
+.delectPopup{
+  width: 271px;
+  height: 196px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  .tipsText{
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333;
+    margin: 70px auto 46px;
+    text-align: center;
+  }
+  .btns{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 27px;
+    .cancel{
+      width: 104px;
+      height: 39px;
+      border: 1px solid #999999;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #666666;
+      text-align: center;
+      line-height: 39px;
+    }
+    .delect{
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #F4F4F4;
+      text-align: center;
+      line-height: 39px;
+    }
+  }
+}
 
 .cart-list {
   flex: 1;

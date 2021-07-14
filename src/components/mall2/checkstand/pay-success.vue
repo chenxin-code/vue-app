@@ -67,6 +67,8 @@
         payResult: '',
         wxOrderInfoKey:"",
         wxOrderInfo:{},
+        tradeNo:"",
+        orderId:"",
       }
     },
     methods: {
@@ -206,6 +208,7 @@
     },
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
+      console.log('支付信息ret',ret)
       if (ret) {
         if (!ret.isCancel) {
           if (ret.billRetStatus == 1) {
@@ -229,6 +232,17 @@
       })
       this.$store.state.microSho.carts = cartsNew
       this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey || '';
+      this.tradeNo = this.$route.query.tradeNo;
+      this.orderId = this.$route.query.orderId;
+      console.log('payInfo',this.tradeNo,this.orderId)
+    },
+    mounted(){
+      if(this.icbcFailed == 'icbcFailed'){
+        this.$sensors.track('pay_order_fail', {
+          order_id:this.orderId,
+          trade_no:this.tradeNo,
+        });
+      }
     }
   }
 </script>
