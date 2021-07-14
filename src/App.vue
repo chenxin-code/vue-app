@@ -141,11 +141,13 @@ export default {
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem('ythToken', initObj.ythToken)
+      this.getYthUserInfo()
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
         console.log('---------------一体化token获取成功----------',res)
         console.log('---------------this.$store.state.ythToken----------',this.$store.state.ythToken)
+        this.getYthUserInfo()
       });
     }
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then((res) => {
@@ -158,7 +160,6 @@ export default {
       }
     });
     
-    this.getYthUserInfo()
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
