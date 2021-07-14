@@ -1906,6 +1906,8 @@ export default {
     this.recommendCommodity = this.$route.query.recommendCommodity;
     this.cardType = this.$route.query.cardType;
     window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
+    console.log('商品详情参数',this.$route.query);
+    console.log('商品详情路径',window.location);
   },
   watch: {
     "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
@@ -2667,11 +2669,13 @@ export default {
         viewpoint_radio:this.viewpoint_radio,
       });
 
-      if(this.backApp){
-        appNav.navigatorBack({ url: "0" }).then((res) => {
-          console.log(res);
-        });
-        return;
+      if(this.$store.state.webtype != "2" || this.$store.state.webtype != "3"){
+        if(this.backApp){
+          appNav.navigatorBack({ url: "0" }).then((res) => {
+            console.log(res);
+          });
+          return;
+        }
       }
       // if (this.proView == 2) {
       //   this.proView = 1;

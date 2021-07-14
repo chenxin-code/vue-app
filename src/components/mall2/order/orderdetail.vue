@@ -2028,6 +2028,23 @@ export default {
             if (myData.orderExtendData) {
               this.orderExtendData = JSON.parse(decodeURIComponent(myData.orderExtendData))
             }
+            try{
+                //在此运行代码
+              let remark = "";
+              remark = JSON.parse(this.detailData.remark)[0].remark;
+              if(remark == null){
+                remark = "";
+              }
+              this.detailData.remark = remark;
+              console.log('this.detailData.remark',this.detailData.remark)
+            }
+            catch(err)
+            {
+              //在此处理错误
+              this.detailData.remark = this.detailData.remark;
+              console.log('err',err)
+            }
+            console.log('detailData.remark',this.detailData.remark)
           } else {
             this.$Toast(data.info);
           }
