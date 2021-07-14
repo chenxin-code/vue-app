@@ -669,6 +669,7 @@ export default {
                     );
                     console.log(res);
                     if (res.billRetStatus == "1") {
+                      Toast.clear(); //关闭页面loading
                       //支付成功
                       this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
                     } else {
