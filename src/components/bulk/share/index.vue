@@ -37,7 +37,7 @@
           <div class="user-message-right">
             <div class="user-message-top">
               团长名称：{{ shareData.headUser }}
-              <img src="./images/img_tips_default@2x.png" class="group-status" />
+              <img :src="groupStatus=='finish' ? require('@/components/bulk/share/images/img_tips_over@2x.png') : groupStatus=='notAtThe' ? require('@/components/bulk/share/images/img_tips_ready@2x.png') : require('@/components/bulk/share/images/img_tips_default@2x.png')" class="group-status" />
             </div>
             <div class="user-message-bottom">
               <span style="color: #999999">提货地址：</span>
@@ -124,7 +124,7 @@
           <div class="group-people-item">
             <img
               class="group-people-pic"
-              src="./images/img_user_01@2x.png"
+              src="./images/user_01@2x.png"
             />
             <div class="group-people-message">
               <div class="people-item-phone">{{ item.buyerName }}</div>
