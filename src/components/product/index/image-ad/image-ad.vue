@@ -558,12 +558,12 @@ export default {
         return "";
     },
     enterNav: function (nav) {
-      console.log('nnnnnnnnnnnnnnnnnnn', newNav.link.url)
+      console.log('nnnnnnnnnnnnnnnnnnn', nav.link.url)
       if(nav.link.url == '/mall2/list/1003'){
         this.$store.state.showCategory = false;
       }
-      let newNav = JSON.parse(Json.stringify(nav));
-
+      let newNav = JSON.parse(JSON.stringify(nav));
+    
       if(/token=/.test(newNav.link.url)){
         let ythToken = "";
 
