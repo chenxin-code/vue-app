@@ -198,6 +198,9 @@ export default {
         case 14:
           billName = "维修服务费";
           break;
+        case 15:
+          billName = "租售";
+          break;
       }
       return billName;
     }

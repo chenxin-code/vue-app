@@ -45,11 +45,10 @@ export default {
       amount: {
         integer: "0",
         decimal: "00"
-      },
+      }
     };
   },
-  created() {
-  },
+  created() {},
   computed: {
     billTypeName() {
       let billName = "";
@@ -93,6 +92,9 @@ export default {
         case 14:
           billName = "维修服务费";
           break;
+        case 15:
+          billName = "租售";
+          break;
       }
       return billName;
     }
@@ -124,7 +126,7 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-
+$color = #E5165A;
 .pay-content{
   position: fixed;
   bottom: 0;
