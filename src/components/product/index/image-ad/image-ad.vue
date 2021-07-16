@@ -558,11 +558,11 @@ export default {
         return "";
     },
     enterNav: function (nav) {
-      console.log('nnnnnnnnnnnnnnnnnnn', nav)
+      console.log('nnnnnnnnnnnnnnnnnnn', newNav.link.url)
       if(nav.link.url == '/mall2/list/1003'){
         this.$store.state.showCategory = false;
       }
-      let newNav = nav;
+      let newNav = JSON.parse(Json.stringify(nav));
 
       if(/token=/.test(newNav.link.url)){
         let ythToken = "";
@@ -584,6 +584,7 @@ export default {
         newNav.link.url = newNav.link.url.replace(/scToken=/,`scToken=${this.$store.state.login.token}`)
       }
 
+      console.log('ccccccccccccccccc', newNav.link.url)
 
       if (this.canEnterNav) {
         this.$market.enterNav(newNav, this.pageData.pgCode);
