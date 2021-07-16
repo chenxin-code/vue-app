@@ -74,7 +74,7 @@
       </div>
       <div class="bottom-btns">
         <div class="btn" @click="resetData">重置</div>
-        <div class="btn theme_font_white theme_bg_red" @click="sureEvent">确定</div>
+        <div class="btn" style="border-left: solid 1px #efefef; color: red;" @click="sureEvent">确定</div>
       </div>
     </div>
     <Brand @closeEventBtn="closeEventBtn" @closeEvent="filtrateCloseEvent" v-if="showAllBrand" :category="category" :selectBrandList="selectBrandList"></Brand>
@@ -475,7 +475,7 @@
         right 0px;
         bottom 0px;
         height 50px;
-        box-shadow 0 -2px 2px #efefef;
+        border: solid 1px #efefef;
         display flex;
         .btn {
           text-align center;

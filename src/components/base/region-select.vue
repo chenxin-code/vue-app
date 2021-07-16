@@ -190,12 +190,12 @@
 
       .selected-item {
         height 32px;
-        padding 0px 10px;
+        padding 0px 0px;
         border-bottom 1px solid $color-line-gray-l
 
         .item-div {
           display inline-block;
-          padding 0px 10px;
+          padding 0px 2px;
           height 32px;
 
           .item-text {
@@ -212,7 +212,7 @@
 
       .options-div {
         position absolute;
-        top 72px;
+        top 92px;
         bottom 0px;
         left 0px;
         right 0px;

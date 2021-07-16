@@ -125,7 +125,8 @@
           @click="navToCar"
           v-if="isCommon && $store.state.webtype !== '3'"
         >
-          <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i>
+          <!-- <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i> -->
+          <i v-show="shoppingCartCount > 0">{{numChange(100)}}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
         <!-- <van-icon
@@ -556,6 +557,12 @@ export default {
     this._getCartCount();
   },
   methods: {
+    numChange: function(nums) {
+     let num = parseInt(nums);
+      if(num > 99){
+        return "···";
+      }
+    },
     // 唤起客服
     // handleCustomer: function() {
     //   ysf('config', {
@@ -869,7 +876,7 @@ export default {
   position: relative;
 
   i {
-    width: 16px;
+    width: 20px;
     height: 16px;
     position: absolute;
     border: 1px solid #fff;
