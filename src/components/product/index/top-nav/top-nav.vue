@@ -126,7 +126,7 @@
           v-if="isCommon && $store.state.webtype !== '3'"
         >
           <!-- <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i> -->
-          <i v-show="shoppingCartCount > 0">{{numChange(100)}}</i>
+          <i v-show="shoppingCartCount > 0">{{numChange(shoppingCartCount)}}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
         <!-- <van-icon
@@ -561,6 +561,8 @@ export default {
      let num = parseInt(nums);
       if(num > 99){
         return "···";
+      } else {
+        return num;
       }
     },
     // 唤起客服
