@@ -237,11 +237,14 @@
       console.log('payInfo',this.tradeNo,this.orderId)
     },
     mounted(){
-      if(this.icbcFailed == 'icbcFailed'){
+      console.log('this.icbcFailed',this.payResult)
+      if(this.payResult == 'icbcFailed'){
+        console.log('埋点前',this.payResult)
         this.$sensors.track('pay_order_fail', {
           order_id:this.orderId,
           trade_no:this.tradeNo,
         });
+        console.log('埋点后',this.payResult)
       }
     }
   }

@@ -6,20 +6,28 @@
         <div class="bulk_time_share">
           <div class="bulk_time">
             拼团结束时间剩余
-            <van-count-down :time="shareData.remainingTime*1000">
+            <van-count-down :time="shareData.remainingTime * 1000">
               <template #default="timeData">
-                <span class="block"> {{ timeData.days }} 天 </span>
+                <span class="block">
+                  {{ timeData.days ? timeData.days : 1 }}天
+                </span>
                 <span class="colon">:</span>
-                <span class="block">{{ timeData.hours }}</span>
+                <span class="block">{{
+                  timeData.hours ? timeData.hours : 1
+                }}</span>
                 <span class="colon">:</span>
-                <span class="block">{{ timeData.minutes }}</span>
+                <span class="block">{{
+                  timeData.minutes ? timeData.minutes : 30
+                }}</span>
                 <span class="colon">:</span>
-                <span class="block">{{ timeData.seconds }}</span>
+                <span class="block">{{
+                  timeData.seconds ? timeData.second : 40
+                }}</span>
               </template>
             </van-count-down>
           </div>
           <div class="bulk_share">
-            <div class="bulk_title">{{groupStatus=='finish'?'已结束':groupStatus=='notAtThe'?'未开始':'拼团中'}}</div>
+            <div class="bulk_title">拼团中</div>
             <!-- <img
               :src="require('./images/share.png')"
               alt=""
@@ -28,10 +36,18 @@
           </div>
         </div>
         <div class="user_detail">
-          <van-image class="avatar" :src="shareData.headAvtUrl" :error-icon="defaultAvatar" />
+          <van-image
+            class="avatar"
+            :src="shareData.headAvtUrl"
+            :error-icon="defaultAvatar"
+          />
           <div class="user_detail_detail">
-            <div class="colonel_name">团长名称：{{ shareData.headUser }}</div>
-            <div class="take_address">提货地址：{{ shareData.place }}</div>
+            <div class="colonel_name">
+              {{ shareData.headUser ? shareData.headUser : "虾米" }}
+            </div>
+            <div class="take_address">
+              提货地址：{{ shareData.place ? shareData.place : "时代地产中心" }}
+            </div>
           </div>
         </div>
       </div>
@@ -39,7 +55,7 @@
       <div class="activity_description">
         <div class="activity_description_text">
           团购活动描述:
-          <div v-html="str"></div>
+          <div v-html="str">123566大幅度通过水电费</div>
         </div>
         <div class="bulk_img" v-if="imgUrls.length !== 0">
           <img
@@ -58,7 +74,7 @@
         </div>
       </div>
     </div>
-    <van-sticky v-if="false">
+    <van-sticky>
       <div class="select_box">
         <div class="select_category">
           <div
@@ -117,14 +133,18 @@
         :key="index"
       >
         <div class="other_user_item_user">
-          <van-image class="other_user_avatar" :src="item.buyerAvtUrl" :error-icon="defaultAvatar" />
+          <van-image
+            class="other_user_avatar"
+            :src="item.buyerAvtUrl"
+            :error-icon="defaultAvatar"
+          />
           <!-- <img :src="item.buyerAvtUrl" alt="" class="other_user_avatar" /> -->
           <div class="other_user_info">
             <div class="other_user_name">{{ item.buyerName }}</div>
             <div class="detail_btn">
               <div class="other_user_date">{{ item.buyTime }}</div>
               <img
-                v-if="item.orderItemList.length>1"
+                v-if="item.orderItemList.length > 1"
                 :src="
                   item.isShowOther
                     ? require('./images/show_icon.png')
@@ -162,13 +182,14 @@
         <div class="car" @click="isShowCar = !isShowCar"></div>
         <div class="price">¥{{ totalPrice }}</div>
       </div>
-      <div :class="groupStatus=='finish' || groupStatus == 'notAtThe' ? 'finish sumbit_btn':'sumbit_btn'"  @click="confirmOrder">去下单</div>
+      <div class="sumbit_btn" @click="confirmOrder">去下单</div>
     </div>
     <transition name="van-slide-left">
       <div
         class="navigation_hidden"
         v-show="!isShowNavigation"
-        @click.stop="$router.push({path:'/'})">
+        @click.stop="$router.push({ path: '/' })"
+      >
         <div>返回</div>
         <div>主页</div>
       </div>
@@ -253,16 +274,15 @@
 <script>
 import Qs from "qs";
 import { mapMutations } from "vuex";
-import vantImage from "@/components/bulk/components/vantImage.js"
-import { Toast } from 'vant';
-import { BigNumber } from 'bignumber.js'
+import vantImage from "@/components/bulk/components/vantImage.js";
+import { Toast } from "vant";
 
 export default {
   name: "share",
   props: {},
   data() {
     return {
-			defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
+      defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
       isShowNavigation: false,
       isShowOther: false,
       isShowCar: false,
@@ -282,19 +302,14 @@ export default {
       chiefId: "",
       userId: "",
       activityName: "",
-      groupStatus:'start'
     };
   },
   created() {
+    //purchaseId=1157027699500271501&chiefId=73&userId=2337237484980667139
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
-
-    // this.purchaseId = 7;
-    // this.chiefId = '3';
-    // this.userId = '2337237484980712751';
-    // this.activityName = '测试活动7';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
@@ -305,10 +320,10 @@ export default {
         purchaseId: this.purchaseId,
         chiefId: this.chiefId,
         userId: this.userId,
-        status: "1,2,3,4,5"
+        status: "1,2,3,4,5",
       })
       .then((res) => {
-        console.log("分享页面信息~~~~~~~",res);
+        console.log("分享页面信息~~~~~~~", res);
         if (res.data.result == "success") {
           this.shareData = res.data.data;
           this.goodsList = this.shareData.groupbuySkuInfoList;
@@ -317,7 +332,7 @@ export default {
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
           });
-          if(this.shareData.currentActOrderList){
+          if (this.shareData.currentActOrderList) {
             this.otherBuyList = this.shareData.currentActOrderList;
             this.otherBuyList.forEach((e) => {
               e["isShowOther"] = false;
@@ -336,23 +351,14 @@ export default {
 
           this.str = this.descData.replace(/<img.*?>/g, "");
 
-          let imgStrs = this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
+          let imgStrs =
+            this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
 
           // 获取每个img url
-          if(imgStrs){
+          if (imgStrs) {
             this.imgUrls = imgStrs.map((url) => {
               return url.match(/\ssrc=['"](.*?)['"]/)[1];
             });
-          }
-
-          if(this.shareData.groupStatus == 2){
-            this.$toast('活动已结束');
-            this.groupStatus = 'finish';
-            this.shareData.remainingTime = 0;
-          }else if(this.shareData.groupStatus == 0){
-            this.$toast('活动未开始');
-            this.groupStatus = 'notAtThe';
-            this.shareData.remainingTime = 0;
           }
         }
       });
@@ -432,12 +438,9 @@ export default {
     totalPriceFn() {
       let price = this.checkList.reduce((pre, item) => {
         if (item.isCheck) {
-          let x = BigNumber(item.count).multipliedBy(item.groupPrice);
-          let y = BigNumber(x).plus(pre)
-          return y
+          return item.count * item.groupPrice + pre;
         }
       }, 0);
-      console.log(price,this.$util.toDecimal2(price))
       this.totalPrice = this.$util.toDecimal2(price);
     },
     selectCategory(item, index) {
@@ -460,21 +463,28 @@ export default {
           });
         });
     },
+    /*下单*/
     confirmOrder() {
-      if(this.groupStatus == 'finish'){
-        this.$toast('活动已结束');
-        return
-      }else if(this.groupStatus == 'notAtThe'){
-        this.$toast('活动未开始');
-        return
+      /*1：零售,3:家政,4：旅游*/
+      let businessType = 4;
+      if (businessType == 4) {
+        this.$router.push({
+          path: "/travel_goods_detail",
+          query: {
+            spuCode: "1134360",
+            id: "134360",
+            businessType: 4,
+            projectCommunityId: "2311040709915842120",
+          },
+        });
       }
-
+      return;
       if (this.checkList.length == 0) {
         this.$toast("请先选购商品");
       } else {
         Toast.loading({
-          message: '加载中...',
-          duration: 'toast',
+          message: "加载中...",
+          duration: "toast",
           forbidClick: true,
         });
         this.setBulkTotalPrice(this.totalPrice);
@@ -643,7 +653,7 @@ img {
               background-color: #ee0a24;
               border-radius: 5px;
               padding: 0 1px;
-              text-align center
+              text-align: center;
             }
           }
         }
@@ -873,19 +883,23 @@ img {
             color: #999999;
             margin-top: 4px;
           }
-          .user-image{
+
+          .user-image {
             width: 22px;
           }
-          /deep/.user-image img{
+
+          /deep/.user-image img {
             width: 22px;
             height: 22px;
             margin: 2px 8px 0 4px;
             border-radius: 50%;
           }
-          /deep/.van-image__error{
+
+          /deep/.van-image__error {
             background-color: transparent;
           }
-          /deep/.van-icon{
+
+          /deep/.van-icon {
             font: initial;
           }
         }
@@ -1041,9 +1055,6 @@ img {
       font-size: 13px;
       font-weight: 400;
       color: #FFFFFF;
-    }
-    .finish{
-      background: #cccccc;
     }
   }
 

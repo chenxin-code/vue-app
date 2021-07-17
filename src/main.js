@@ -10,7 +10,7 @@ import i18n from './locale'
 import store from './vuex/store'
 import Vconsole from 'vconsole'
 let vConsole = new Vconsole()
-Vue.use(vConsole)
+// Vue.use(vConsole)
 
 //路由
 import router from './router'

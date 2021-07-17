@@ -136,7 +136,11 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
-      // this.getRoomId();
+      //这里是帮租售在uat加15类型测试的，不上生产环境
+      if (this.$store.state.environment == "development") {
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+      }
+
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
