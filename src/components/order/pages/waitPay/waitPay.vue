@@ -339,6 +339,11 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
+      //这里是帮租售在uat加15类型测试的，不上生产环境
+      if (this.$store.state.environment == "development") {
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+      }
+
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -840,7 +845,8 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 182px;
+  // padding-bottom: 182px;
+  padding-bottom: 220px;
 }
 
 .tipsText {

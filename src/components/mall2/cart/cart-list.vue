@@ -274,7 +274,7 @@ export default {
       showDelectPopup:false,
       deleteItem:[],
       deleteCartNum:0,
-      occuritem:{},
+      detItem:[],
     };
   },
   methods: {
@@ -566,7 +566,8 @@ export default {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
       console.log('carts',cartJS.getSelOccur(occuritem, this.isEditing, "buried"))
-      this.occuritem = cartJS.getSelOccur(occuritem, this.isEditing, "buried");
+      this.detItem = cartJS.getSelOccur(occuritem, this.isEditing, "buried");
+      console.log('occuritem',occuritem)
     },
 
     setCommonPara: function (paramsData) {
@@ -842,6 +843,8 @@ export default {
       this.deleteCartNum = carts.length;
       this.showDelectPopup = true;
       this.deleteItem = carts;
+      console.log('carts',carts)
+      this.detItem = carts;
     },
     deleteCartItem(){
       this.$Loading.open();
@@ -862,7 +865,7 @@ export default {
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
-            this.occuritem.forEach(e=>{
+            this.detItem.forEach(e=>{
               let categoryList = e.categoryName.split('_');
               this.$sensors.track('shoppingcart_edit', {
                 goods_id:e.goods_id,

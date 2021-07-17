@@ -1622,11 +1622,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="">
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="true">
+          <div class="share_botton_item" @click="shareImg" v-show="false">
             <img src="static/image/mall2/share_img.png" alt="">
             <div>图片分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink" v-show="true">
+          <div class="share_botton_item" @click="shareLink" v-show="false">
             <img src="static/image/mall2/share_link.png" alt="">
             <div>链接分享</div>
           </div>
@@ -1906,6 +1906,8 @@ export default {
     this.recommendCommodity = this.$route.query.recommendCommodity;
     this.cardType = this.$route.query.cardType;
     window.addEventListener('scroll', this.handleScroll, true);  // 监听（绑定）滚轮滚动事件
+    console.log('商品详情参数',this.$route.query);
+    console.log('商品详情路径',window.location);
   },
   watch: {
     "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
@@ -1986,19 +1988,19 @@ export default {
       }
     },
     shareWechatFriends(){
-      let routeQuery = this.$route.query;
-      console.log(routeQuery);
-      let queryStr = "";
-      for(let key in routeQuery){
-        queryStr+=`${key}=${routeQuery[key]}&`
-      }
-      queryStr=queryStr.substr(0,queryStr.length-1);
+      // let routeQuery = this.$route.query;
+      // console.log(routeQuery);
+      // let queryStr = "";
+      // for(let key in routeQuery){
+      //   queryStr+=`${key}=${routeQuery[key]}&`
+      // }
+      // queryStr=queryStr.substr(0,queryStr.length-1);
       appShare
       .shareForOpenWXMiniProgram({
         // userName: "gh_2a45a4d38d81",
         userName: "gh_28d617271c97",
         path: `pages/common/home/index?redirect=${encodeURIComponent(
-          `/app-vue/app/index.html#/mall2/detail/1000?${queryStr}`
+          `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
         )}`,
         title: this.getSkuNameStr(this.detailData),
         desc: this.getSkuNameStr(this.detailData),
@@ -2667,11 +2669,13 @@ export default {
         viewpoint_radio:this.viewpoint_radio,
       });
 
-      if(this.backApp){
-        appNav.navigatorBack({ url: "0" }).then((res) => {
-          console.log(res);
-        });
-        return;
+      if(this.$store.state.webtype != "2" || this.$store.state.webtype != "3"){
+        if(this.backApp){
+          appNav.navigatorBack({ url: "0" }).then((res) => {
+            console.log(res);
+          });
+          return;
+        }
       }
       // if (this.proView == 2) {
       //   this.proView = 1;
