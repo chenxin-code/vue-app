@@ -71,7 +71,7 @@
                 }}</span>
                 <!-- <span>已团{{ item.orderCount }}单</span> -->
                 <span>共{{ item.productCount }}件商品</span>
-                <span><van-icon name="arrow" /></span>
+                <span><van-icon name="arrow"/></span>
               </p>
               <p>
                 <span
@@ -111,9 +111,7 @@
 import Qs from "qs";
 import ClipboardJS from "clipboard";
 import appShare from "@zkty-team/x-engine-module-share";
-import {
-  getLocation
-} from '../utils'
+import { getLocation } from "../utils";
 export default {
   name: "activity",
   // mixins: [api],
@@ -122,7 +120,7 @@ export default {
       state: 1,
       showShare: false,
       options: [
-        { name: "微信", icon: "wechat" },
+        { name: "微信", icon: "wechat" }
         // { name: "复制链接", icon: "link" },
       ],
       copybtn: null,
@@ -130,7 +128,7 @@ export default {
         { title: "全部" },
         { title: "进行中" },
         { title: "未开始" },
-        { title: "已结束" },
+        { title: "已结束" }
       ],
       currentTab: 0,
       allList: [],
@@ -144,20 +142,20 @@ export default {
       shareItemData: {},
       link: "",
       getDataOk: false,
-      page: 1,
+      page: 1
     };
   },
   created() {
     this.allList = [];
     this.$http
       .get("/app/json/group_buying_head_info/findSelfInfo")
-      .then((res) => {
+      .then(res => {
         if (res.data.result == "success") {
           this.userData = res.data.data;
         }
       });
     this.getlist();
-    console.log('getLocation---->',getLocation())
+    console.log("getLocation---->", getLocation());
   },
   methods: {
     // 切换tab
@@ -191,11 +189,11 @@ export default {
             ? 0
             : this.currentTab == 3
             ? 2
-            : undefined,
+            : undefined
       };
       this.$http
         .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
-        .then((res) => {
+        .then(res => {
           if (res.data.result == "success") {
             this.allList = this.allList.concat(res.data.data);
             this.page = res.data.page; //将总页数赋值给this
@@ -207,7 +205,7 @@ export default {
             this.error = true; //大家错误状态
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
@@ -234,7 +232,28 @@ export default {
       this.shareItemData = item;
       this.showShare = true;
     },
-    onShare: function (option) {
+    //加密参数
+    addCode(url = "") {
+      return new Promise((resolve, reject) => {
+        this.$request
+          .post("/app/json/short_address/makeShortAddress", {
+            longAddress: url
+          })
+          .then(res => {
+            if (res.status == 0) {
+              resolve(new URL(res.data).pathname);
+            } else {
+              reject();
+            }
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    onShare: async function(option) {
+      ///app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}
+      const sence = await this.addCode(`https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`)
       if (option.icon == "wechat") {
         if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
           console.log("当前是小程序~~~");
@@ -244,24 +263,32 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
-          console.log(this.shareItemData.id,this.userData.teamLeaderNo,this.userData.userNo,this.shareItemData.groupbuyActivityName)
+          console.log(
+            this.shareItemData.id,
+            this.userData.teamLeaderNo,
+            this.userData.userNo,
+            this.shareItemData.groupbuyActivityName
+          );
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
               userName: "gh_28d617271c97",
-              path: `pages/common/home/index?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
-              )}`,
+               path: `pages/common/home/index?sence=${sence}`,
+              // path: `pages/common/home/index?redirect=${encodeURIComponent(
+              //   `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+              // )}`,
               title: this.shareItemData.groupbuyActivityName,
               desc: this.shareItemData.groupbuyActivityName,
               link: getLocation(window.location.href),
-              imageurl: this.shareItemData.groupbuyActivityPicurl+'?x-oss-process=image/format,jpg/quality,Q_10',
+              imageurl:
+                this.shareItemData.groupbuyActivityPicurl +
+                "?x-oss-process=image/format,jpg/quality,Q_10",
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
                 this.$store.state.environment == "production" ? 0 : 2,
-              __event__: (res) => {},
+              __event__: res => {}
             })
-            .then((res) => {
+            .then(res => {
               // document.getElementById("debug_text").innerText = res;
               // alert("shareThenRes----------", JSON.stringify(res));
             });
@@ -283,16 +310,16 @@ export default {
             path: "/pages/homePage/temporaryCapture",
             query: `redirect=${encodeURIComponent(
               `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
-            )}`,
+            )}`
           })
-          .then((res) => {
+          .then(res => {
             if (res.data.data.errcode == 0) {
               this.link = getLocation(res.data.data.openlink);
               // weixin://dl/business/?t=lzjYaPnRpgo
               new ClipboardJS(".btn", {
-                text: function (trigger) {
+                text: function(trigger) {
                   return this.link;
-                },
+                }
               });
             }
           });
@@ -304,19 +331,19 @@ export default {
       this.$router.push({
         path: "/groupOrder",
         query: {
-          id: JSON.stringify(id),
-        },
+          id: JSON.stringify(id)
+        }
       });
     },
     goToDeatil(id) {
       this.$router.push({
         path: "/bulkDetails",
         query: {
-          activityNo: JSON.stringify(id),
-        },
+          activityNo: JSON.stringify(id)
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
