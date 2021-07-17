@@ -20,7 +20,6 @@
           消费一码通顾客专享礼遇
         </div>
       </div>
-      <!--<div style="width: 100%;  background: #000;color:#fff;">{{wxQuery}}</div>-->
       <div
         class="full-div"
         :class="{ 'has-top-div': pageType == 'jiankangma' }"

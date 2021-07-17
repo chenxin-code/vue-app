@@ -56,7 +56,7 @@
         </div>
         <div
           class="cancel-con theme_font_tint"
-          style="padding: 12px; line-height: 20px"
+          style="padding: 12px; line-height: 20px; font-size:14px"
           @click="cancelBtn"
         >
           取消
