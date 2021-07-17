@@ -286,23 +286,29 @@ export default {
     };
   },
   created() {
-    var middleHref = JSON.parse(JSON.stringify(location.href));
-    var hrefParams = middleHref.split("?")[1];
-    var originUrl = middleHref.split("?")[0] + "?";
-    var herfParamsList = hrefParams.split("&");
+    try {
+      var middleHref = JSON.parse(JSON.stringify(window.location.href));
+      console.log('middleHref-->', middleHref);
+      var hrefParams = middleHref.split("?")[1];
+      var originUrl = middleHref.split("?")[0] + "?";
+      var herfParamsList = hrefParams.split("&");
+      let urlObj = {};
+      console.log('---herfParamsList-->', herfParamsList);
+      herfParamsList.forEach(item => {
+        let middleKey = item.split('=');
+        urlObj[middleKey[0]] = middleKey[1]
+      })
+      console.log('---->urlObj--->', urlObj);
+      for (let item in urlObj) {
+        originUrl += `${item}=${urlObj[item]}&`;
+      }
 
-    let urlObj = {};
-
-    for (let item in herfParamsList) {
-      var pair = herfParamsList[item].split("=");
-      urlObj[pair[0]] = pair[1];
+      location.href = originUrl;
+      console.log('originUrl', originUrl);
+    } catch (err) {
+      console.log("---err", err);
     }
 
-    for (item in urlObj) {
-      originUrl += urlObj[item] + "&";
-    }
-
-    location.href = originUrl
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
