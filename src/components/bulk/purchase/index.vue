@@ -84,6 +84,7 @@ export default {
         }
       });
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      this.$store.state.communityId = this.$store.state.projectId;
       this.communityId = this.$store.state.projectId;
       console.log("res-------------------", this.communityId);
     } else {
@@ -96,10 +97,11 @@ export default {
         })
         .then((res) => {
           this.communityId = res.result;
+          this.$store.state.communityId = this.communityId;
           console.log("res-------------------", JSON.stringify(res));
         });
     }
-    this.communityId = "2252994639227258048";
+    // this.communityId = "2248412888374968908";
   },
   mounted() {
     this.$nextTick(() => {

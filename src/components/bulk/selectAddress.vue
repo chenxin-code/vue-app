@@ -60,7 +60,7 @@ export default {
       this.$router.go(-1);
     },
     getList(){
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}&cuNo=${this.$store.state.communityId}`;
       this.$http.get(url).then(res => {
         if(res.data.status == 0)this.list = res.data.data.records;
       }).catch(e=>{

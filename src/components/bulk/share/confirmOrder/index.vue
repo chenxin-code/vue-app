@@ -72,6 +72,7 @@
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
         placeholder="请输入订单备注"
+        @input="vaidateEmoji"
       ></textarea>
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
@@ -127,6 +128,15 @@ export default {
     showMore() {
       this.goodsList = this.checkList;
       this.isShowMore = false;
+    },
+    vaidateEmoji(e) {
+      let value = e.target.value
+      //禁止输入emoji表情，兼容大部分手机
+      value = value.replace(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig, '')
+      value = value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""); 
+      value = value.replace(/[\uE000-\uF8FF]/g, '');
+      this.textareaValue = value;
+      console.log("textareaValue",this.textareaValue)
     },
     //实现文本域自适应大小
     getHeight() {

@@ -218,6 +218,7 @@ export default {
       this.finished = false; //将没有更多的状态改成false
       this.refreshing = true;
       this.loading = true; //将下拉刷新状态改为true开始刷新
+      let { tab, currentTab } = this;
       let obj = {
         pageNum: this.currentPage,
         pageSize: 10,

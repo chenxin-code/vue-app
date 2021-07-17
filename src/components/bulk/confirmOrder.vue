@@ -10,7 +10,7 @@
         <span>提货人姓名：</span>
         <input placeholder="请输入姓名" v-model="consigneeName" />
       </div>
-      <div class="info" style="margin-top: 12px;">
+      <div class="info" style="margin-top: 12px">
         <span>联系人电话：</span>
         <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" />
       </div>
@@ -28,11 +28,17 @@
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ placelist[0].teamLeaderName }} {{ placelist[0].teamLeaderPhoneNumber }}</div>
+            <div class="adders-val">
+              {{ placelist[0].teamLeaderName }}
+              {{ placelist[0].teamLeaderPhoneNumber }}
+            </div>
           </div>
-          <div class="addres" style="margin-top: 10px;">
+          <div class="addres" style="margin-top: 10px">
             <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{ placelist[0].cucName }}{{ placelist[0].cudName}}{{ placelist[0].cuName }}</div>
+            <div class="adders-val">
+              {{ placelist[0].cucName }}{{ placelist[0].cudName
+              }}{{ placelist[0].cuName }}
+            </div>
           </div>
         </div>
       </div>
@@ -87,6 +93,7 @@
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
         placeholder="请输入备注"
+        @input="vaidateEmoji"
       ></textarea>
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
@@ -128,15 +135,15 @@ export default {
         { text: "送货上门", value: 2 },
       ],
       takeWay: 1,
-      pageAvtive: false
+      pageAvtive: false,
     };
   },
   activated() {
-    if(this.pageAvtive){
-      console.log("sss")
+    if (this.pageAvtive) {
+      console.log("sss");
       this.placelist = [this.$store.state.CharseInfo.masterPlace];
-    }else{
-      console.log("xxx")
+    } else {
+      console.log("xxx");
       this.getPlaceList();
       this.resouce = this.$store.state.CharseInfo;
       this.total = BigNumber(this.buyNumber)
@@ -144,11 +151,11 @@ export default {
         .toFixed(2);
     }
   },
-  beforeRouteLeave(to,form,next){
-    if(to.path == '/mall2/checkstand'){
-      console.log("aaa")
+  beforeRouteLeave(to, form, next) {
+    if (to.path == "/mall2/checkstand") {
+      console.log("aaa");
       this.pageAvtive = true;
-    }else{
+    } else {
       this.pageAvtive = false;
     }
     next();
@@ -164,11 +171,19 @@ export default {
       //浏览器随着内容大小滚动
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
+    vaidateEmoji(e) {
+      let value = e.target.value
+      //禁止输入emoji表情，兼容大部分手机
+      value = value.replace(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig, '')
+      value = value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""); 
+      value = value.replace(/[\uE000-\uF8FF]/g, '');
+      this.textareaValue = value;
+      console.log("textareaValue",this.textareaValue)
+    },
     confirmOrder() {
-      console.log('提交订单',{
+      console.log("提交订单", {
         activityNo: this.$store.state.CharseInfo.activityId,
-        teamLeaderNo: this.$store.state.CharseInfo.masterPlace
-          .teamLeaderNo,
+        teamLeaderNo: this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
         deliveryMode: 0, //0自提1送货上门
         consigneeName: this.consigneeName,
         consigneePhoneNumber: this.consigneePhoneNumber,
@@ -179,15 +194,15 @@ export default {
           },
         ],
         remark: this.textareaValue,
-      })
+      });
       if (this.consigneeName !== "") {
         if (util.checkMobile(this.consigneePhoneNumber)) {
           this.$Loading.open();
           this.$http
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
               activityNo: this.$store.state.CharseInfo.activityId,
-              teamLeaderNo: this.$store.state.CharseInfo.masterPlace
-                .teamLeaderNo,
+              teamLeaderNo:
+                this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
               deliveryMode: 0, //0自提1送货上门
               consigneeName: this.consigneeName,
               consigneePhoneNumber: this.consigneePhoneNumber,
@@ -228,7 +243,7 @@ export default {
       }
     },
     getPlaceList() {
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}&cuNo=${this.$store.state.communityId}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -323,7 +338,7 @@ export default {
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
-        margin-left 10px;
+        margin-left: 10px;
       }
 
       input:last-child {
@@ -451,12 +466,14 @@ export default {
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          display flex;
-          .adders-key{
+          display: flex;
+
+          .adders-key {
             width: 96px;
             font-weight: bolder;
           }
-          .adders-val{
+
+          .adders-val {
             width: 220px;
           }
         }
@@ -600,7 +617,7 @@ export default {
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom 50px;
+    margin-bottom: 50px;
     padding: 14.5px 20px 14.5px 20px;
 
     span {
