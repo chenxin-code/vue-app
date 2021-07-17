@@ -107,7 +107,7 @@
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now">
+    <div class="pay_now" :style="{paddingBottom:this.$store.state.isX?'0.98667rem':'0.64rem'}">
       <div class="pay_price">
         <div class="pay_title">应付金额：</div>
         <div class="pay_value">¥{{ total }}</div>
@@ -296,6 +296,9 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
+.router_class{
+  background-color: #f6f6f6 !important;
+}
 .body {
   width: 100%;
   height: 100%;
@@ -690,7 +693,7 @@ export default {
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 74px;
     padding: 22px 22px 22px 28px;
     width: 351px;
     border-radius: 12px;
@@ -720,12 +723,12 @@ export default {
 
   .pay_now {
     width: 100%;
-    height: 49px;
+    // height: 49px;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 8px 22px 5px 30px;
+    padding: 8px 22px 24px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
