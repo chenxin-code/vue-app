@@ -65,11 +65,13 @@ export default {
 }
 .component-purchaseNav {
   width: 100%;
-  height: 107px;
-  background:#FF7BA6;
+  height: 102px;
   display: flex;
   justify-content: flex-start;
   overflow: auto;
+  background-image: url('../../activity/images/main_bg_2.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 .purchaseNav-column {
   width: 25%;

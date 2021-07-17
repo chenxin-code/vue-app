@@ -210,7 +210,7 @@ export default {
 
 .header-x {
   // height: 56px;
-  background: #FF7BA6;
+  // background: #FF7BA6;
   padding-top: 10px;
 }
 

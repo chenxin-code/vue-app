@@ -355,6 +355,7 @@ export default {
         line-height: 20px;
         letter-spacing: 1px;
         margin-left: 10px;
+        text-align: right;
       }
 
       input::-webkit-input-placeholder {

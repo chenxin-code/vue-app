@@ -40,12 +40,15 @@ export default {
   }
 .component-channelsearch {
   width: 100%;
-  height: 56px;
+  height: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
   /* padding-top: 14px; */
   position: relative;
+  background-image: url("./main_bg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .transparent_back_botton{
