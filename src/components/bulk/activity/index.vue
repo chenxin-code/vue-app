@@ -111,6 +111,9 @@
 import Qs from "qs";
 import ClipboardJS from "clipboard";
 import appShare from "@zkty-team/x-engine-module-share";
+import {
+  getLocation
+} from '../utils'
 export default {
   name: "activity",
   // mixins: [api],
@@ -154,6 +157,7 @@ export default {
         }
       });
     this.getlist();
+    console.log('getLocation---->',getLocation())
   },
   methods: {
     // 切换tab
@@ -250,7 +254,7 @@ export default {
               )}`,
               title: this.shareItemData.groupbuyActivityName,
               desc: this.shareItemData.groupbuyActivityName,
-              link: window.location.href,
+              link: getLocation(window.location.href),
               imageurl: this.shareItemData.groupbuyActivityPicurl+'?x-oss-process=image/format,jpg/quality,Q_10',
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
@@ -283,7 +287,7 @@ export default {
           })
           .then((res) => {
             if (res.data.data.errcode == 0) {
-              this.link = res.data.data.openlink;
+              this.link = getLocation(res.data.data.openlink);
               // weixin://dl/business/?t=lzjYaPnRpgo
               new ClipboardJS(".btn", {
                 text: function (trigger) {
