@@ -5,7 +5,7 @@
       <div class="scrolcontent">
         <div class="shadow-con shadow-cell">
           <mt-field class="mt-title border" label="收货人姓名" placeholder="请输入收货人姓名" v-model="receiverName"  @input.native.capture="receiverInputChange"></mt-field>
-          <mt-field class="mt-title border" label="手机号" placeholder="请输入手机号码" v-model="mobile" type="tel"></mt-field>
+          <mt-field class="mt-title border" label="手机号" placeholder="请输入手机号码" :state="phoneState"  @input="phoneInputChange" v-model="mobile" type="tel"></mt-field>
           <div @click.stop="selectRegion">
             <mt-field class="mt-title border" label="选择区域" placeholder="请选择区域" v-model="regionText" readonly='readonly'>
               <img width="20px" height="20px" src="static/image/mall2/area.png">
@@ -43,7 +43,8 @@
     },
     data() {
       return {
-        eventType: 1,//1新建保存，2编辑
+        phoneState: "",
+        eventType: 1, //1新建保存，2编辑
         receiverName: '',
         mobile: '',
         regionText: '',
@@ -74,8 +75,16 @@
     },
     methods: {
 
-      receiverInputChange: function (e) {
+      phoneInputChange: function(e) {
+        let num = parseInt(e);
+        if(!this.$util.checkPhone(num)) {
+          this.phoneState = "error";
+        } else {
+          this.phoneState = "success";
+        }
+      },
 
+      receiverInputChange: function (e) {
         let value = e.target.value;
         if(value.length>50){
           value=value.slice(0,50)

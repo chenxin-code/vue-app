@@ -6,7 +6,7 @@
       <div class="title theme_border_red">同店好货</div>
     </div>
     <div ref="sroll_list" class="list">
-      <CardList @productEvent="productEvent" :listData="listData"></CardList>
+      <CardList @productEvent="productEvent" :listData="listData" @addToCart="addToCart"></CardList>
     </div>
   </div>
 </template>
@@ -26,6 +26,40 @@
       }
     },
     methods: {
+      addToCart(item){
+        this.$Loading.open();
+        let url = "/app/json/app_cart/addCart";
+        let paramsData = {
+          token: this.$store.state.login.token,
+          carts: [
+            {
+              skuId: item.skuId,
+              storeOuCode: item.storeOuCode,
+              number: 1,
+              selfActivityId: "",
+            },
+          ],
+          deliveryType: "2",
+          orderCategory: "",
+          vipUnitUserCode: "",
+        };
+        this.$http.post(url, paramsData).then(
+          (res) => {
+            this.$Loading.close();
+            let data = res.data;
+            if (data.status == 0) {
+              this.$Toast("添加购物车成功！")
+              this.$store.state.mall2.cartNum = data.data;
+            } else {
+              this.$Toast(data.info);
+            }
+          },
+          (error) => {
+            this.$Loading.close();
+            this.$Toast("请求数据失败！");
+          }
+        );
+      },
       getScrollSite () {
         if (this.$refs.sroll_list) {
           return this.$refs.sroll_list.scrollTop

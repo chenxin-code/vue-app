@@ -21,6 +21,16 @@ const dev = process.env.NODE_ENV !== 'production'
 
 
 var utils = {
+
+  //手机号码校验
+  checkPhone: function(num) {
+    if(!(/^1[3456789]\d{9}$/.test(num))){ 
+        return false; 
+    } else {
+      return true;
+    }
+  },
+
   getUrlParam: function (url, name) {
     let reg = new RegExp('([?]|&)' + name + "=([^&]*)(&|$)");
     let r = url.substr(1).match(reg);
