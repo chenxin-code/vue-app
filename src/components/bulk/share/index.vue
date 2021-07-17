@@ -286,6 +286,23 @@ export default {
     };
   },
   created() {
+    var middleHref = JSON.parse(JSON.stringify(location.href));
+    var hrefParams = middleHref.split("?")[1];
+    var originUrl = middleHref.split("?")[0] + "?";
+    var herfParamsList = hrefParams.split("&");
+
+    let urlObj = {};
+
+    for (let item in herfParamsList) {
+      var pair = herfParamsList[item].split("=");
+      urlObj[pair[0]] = pair[1];
+    }
+
+    for (item in urlObj) {
+      originUrl += urlObj[item] + "&";
+    }
+
+    location.href = originUrl
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
