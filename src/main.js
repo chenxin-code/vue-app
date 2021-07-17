@@ -8,8 +8,8 @@ import Vue from 'vue'
 import i18n from './locale'
 //vuex
 import store from './vuex/store'
-// import Vconsole from 'vconsole'
-// let vConsole = new Vconsole()
+import Vconsole from 'vconsole'
+let vConsole = new Vconsole()
 // Vue.use(vConsole)
 
 //路由
