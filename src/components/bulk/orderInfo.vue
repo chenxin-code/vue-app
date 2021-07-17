@@ -89,7 +89,7 @@
       <span>订单备注：</span>
       <textarea
         ref="textarea"
-        :style="{ height: textareaHeight }"
+        :style="{ minHeight: textareaHeight }"
         v-model="textareaValue"
         disabled
       ></textarea>
@@ -171,7 +171,7 @@ export default {
         this.navTopTitle = titleData[this.pageType][this.state];
     }else{
         this.navTopTitle = titleData[this.pageType];
-    }
+    };
   },
 //   activated() {
 //     if (this.pageAvtive) {
@@ -232,8 +232,11 @@ export default {
             this.orderInfo = res.data.data;
             this.consigneeName = this.orderInfo.receiptName;
             this.consigneePhoneNumber = this.orderInfo.receiptTel;
-            this.textareaValue = this.orderInfo.orderRemark;
             this.total = this.orderInfo.totalPrice;
+            this.textareaValue = this.orderInfo.orderRemark;
+            this.$nextTick(()=>{
+              this.getHeight();
+            })
           }
         });
     },

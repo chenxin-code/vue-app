@@ -9,6 +9,7 @@
       <div class="key-dom" :class="index == navIndex ? 'active' : ''">
         <img :src="item.categoryPicurl" alt="" />
         <span>{{ item.categoryName }} </span>
+        <img :src="require('../../activity/images/button_roll_default.png')" alt="" class="active_select" v-show="index == navIndex" />
       </div>
     </div>
   </div>
@@ -64,8 +65,8 @@ export default {
 }
 .component-purchaseNav {
   width: 100%;
-  height: 120px;
-  background: #f6f6f6;
+  height: 107px;
+  background:#FF7BA6;
   display: flex;
   justify-content: flex-start;
   overflow: auto;
@@ -79,40 +80,48 @@ export default {
 .key-dom {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
+  position: relative;
 }
 .key-dom img {
   width: 60px;
   height: 60px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #f6f6f6;
+  /* border: 1px solid #f6f6f6; */
 }
 .key-dom span {
   width: 120%;
-  color: #000000;
+  color:  #fff;
   margin-top: 8px;
-  width: var(--navWidth);
-  height: var(--navHeight);
+  width: 43px;
+  height: 17px;
   text-align: center;
-  line-height: var(--navHeight);
+  line-height: 17px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 .key-dom.active img {
-  border: 1px solid #b52232;
+  /* border: 1px solid #b52232; */
 }
 .key-dom.active span {
-  color: #fff;
-  background: #b52232;
-  width: var(--navWidth);
-  height: var(--navHeight);
-  line-height: var(--navHeight);
+  color: #F96595;
+  background: #fff;
+  line-height: 17px;
   text-align: center;
-  border-radius: 13px;
   font-size: 12px;
+  width: 43px;
+  height: 17px;
+  background: #FFFFFF;
+  border-radius: 8px;
+}
+.key-dom .active_select{
+  width: 33px;
+  height: 11px;
+  position: absolute;
+  bottom: -2px;
 }
 </style>
