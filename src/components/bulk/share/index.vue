@@ -286,28 +286,28 @@ export default {
     };
   },
   created() {
-    try {
-      var middleHref = JSON.parse(JSON.stringify(window.location.href));
-      console.log('middleHref-->', middleHref);
-      var hrefParams = middleHref.split("?")[1];
-      var originUrl = middleHref.split("?")[0] + "?";
-      var herfParamsList = hrefParams.split("&");
-      let urlObj = {};
-      console.log('---herfParamsList-->', herfParamsList);
-      herfParamsList.forEach(item => {
-        let middleKey = item.split('=');
-        urlObj[middleKey[0]] = middleKey[1]
-      })
-      console.log('---->urlObj--->', urlObj);
-      for (let item in urlObj) {
-        originUrl += `${item}=${urlObj[item]}&`;
-      }
+    // try {
+    //   var middleHref = JSON.parse(JSON.stringify(window.location.href));
+    //   console.log('middleHref-->', middleHref);
+    //   var hrefParams = middleHref.split("?")[1];
+    //   var originUrl = middleHref.split("?")[0] + "?";
+    //   var herfParamsList = hrefParams.split("&");
+    //   let urlObj = {};
+    //   console.log('---herfParamsList-->', herfParamsList);
+    //   herfParamsList.forEach(item => {
+    //     let middleKey = item.split('=');
+    //     urlObj[middleKey[0]] = middleKey[1]
+    //   })
+    //   console.log('---->urlObj--->', urlObj);
+    //   for (let item in urlObj) {
+    //     originUrl += `${item}=${urlObj[item]}&`;
+    //   }
 
-      location.href = originUrl;
-      console.log('originUrl', originUrl);
-    } catch (err) {
-      console.log("---err", err);
-    }
+    //   location.href = originUrl;
+    //   console.log('originUrl', originUrl);
+    // } catch (err) {
+    //   console.log("---err", err);
+    // }
 
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
