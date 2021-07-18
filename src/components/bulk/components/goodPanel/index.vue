@@ -89,7 +89,8 @@ export default {
       return endT;
     },
     toDetails() {
-      this.$store.commit("setCharseInfo", this.resouce);
+      // this.$store.commit("setCharseInfo", this.resouce);
+      this.$store.state.CharseInfo = this.resouce;
       this.$router.push({
         name: "商品详情",
         params: {
@@ -102,7 +103,8 @@ export default {
         this.$toast('该商品没有库存啦~')
         return
       }
-      this.$store.commit("setCharseInfo", this.resouce);
+      // this.$store.commit("setCharseInfo", this.resouce);
+      this.$store.state.CharseInfo = this.resouce;
       this.$router.push({
         name: "确认订单",
         params: {

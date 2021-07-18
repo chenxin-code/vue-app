@@ -270,7 +270,19 @@ export default {
 
   methods: {
     navToDetail(item){
-      this.$store.commit("setCharseInfo", item);
+      let time = BigNumber(this.shareData.remainingTime).multipliedBy(1000);
+      this.$store.state.CharseInfo = {
+        groupbuySkuPicurl:item.skuImg,
+        groupbuyBuyerPrice:item.groupPrice,
+        groupbuyLinePrice:item.crossedPrice,
+        groupbuyEndDatetime:this.$util.getPreTime(this.shareData.remainingTime),
+        groupbuySkuName:item.skuName,
+        groupbuyPurchaseNumber:item.buyerCount,
+        groupbuyRuleDescribe:this.shareData.ruleDescription,
+        noSkuDetail:true,
+        groupbuySkuDetail:item.skuPicUrl,
+      };
+      console.log('this.$store.state.charseInfo',this.$store.state.CharseInfo)
       this.$router.push({
         name: "商品详情",
         params: {
