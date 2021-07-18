@@ -26,13 +26,13 @@
            :style="{ height: `${bottomBlockHeight}px`}"
            class="action-block">
         <div class="bottom-load-wrapper">
-          <img class="refresh-icon"
+          <!-- <img class="refresh-icon"
                v-if="bottomIconSrc && bottomIconSrc != 'undefined'"
                :class="{
                'icon-loading': state === 'loading'
              }"
                :src="bottomIconSrc"
-               alt="">
+               alt=""> -->
           <span class="refresh-span">{{ bottomText }}</span>
         </div>
       </div>
@@ -45,13 +45,13 @@
          :style="{ height: `${bottomBlockHeight}px`}"
          class="action-block">
       <div class="bottom-load-wrapper">
-        <img class="refresh-icon"
+        <!-- <img class="refresh-icon"
              v-if="bottomIconSrc && bottomIconSrc != 'undefined'"
              :class="{
                'icon-loading': state === 'loading'
              }"
              :src="bottomIconSrc"
-             alt="">
+             alt=""> -->
         <span class="refresh-span">{{ bottomText }}</span>
       </div>
     </div>

@@ -290,7 +290,7 @@
                     {{ prodata.productName }}
                   </div>
                   <div class="title theme_font_black">
-                    <span>{{ prodata.specs }}</span>
+                    <span style="font-size:11px; color:#696969">{{ prodata.specs }}</span>
                   </div>
                   <div class="price">
                     <PriceOrder :productData="prodata"></PriceOrder>
