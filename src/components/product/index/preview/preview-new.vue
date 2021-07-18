@@ -1,4 +1,5 @@
 <template>
+  <!-- 首页核心代码 -->
   <div class="preview-component">
     <div class="general-div">
       <component

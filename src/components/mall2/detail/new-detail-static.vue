@@ -8,7 +8,7 @@
       :style="{
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
-      v-show="proView !== 2"
+      v-if="proView !== 2"
     >
       <div
         class="navcontent"
@@ -62,7 +62,7 @@
       :style="{
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
-      v-if="detailShow"
+      v-if="detailShow && proView !== 2"
       v-show="proView !== 2"
     >
       <nav-top
@@ -143,7 +143,7 @@
       v-if="detailShow"
     >
       <swiper class="main-swiper" ref="mySwiper" :options="mainSwiper">
-        <swiper-slide :class="{ 'swiper-no-swiping': proView == 2 }">
+        <swiper-slide class="swiper-no-swiping" :class="{ 'swiper-no-swiping': proView == 2 }">
           <div class="main-swiper" style="position: relative">
             <transition name="transition1">
               <div
@@ -203,6 +203,7 @@
                             theme_bg_red_i: proImgIndex == idx,
                           }"
                           v-for="(d, idx) in arrLen"
+                          :key="idx"
                         ></div>
                       </div>
                       <div
@@ -514,7 +515,8 @@
                         "
                       >
                         <div class="font-small theme_font_tint">
-                          <span v-for="rule in tgfxData.returnRules"
+                          <span v-for="(rule,idx) in tgfxData.returnRules"
+                          :key="idx"
                             >满{{ rule.number }}件，每件返{{ rule.returnValue
                             }}{{ getFxUnit(tgfxData.returnType) }}</span
                           >
@@ -680,7 +682,8 @@
                       <div class="block-div theme_bg_white" v-else>
                         <div
                           class="flex-row"
-                          v-for="saitem in singleActivities_2"
+                          v-for="(saitem,idx) in singleActivities_2"
+                           :key="idx"
                         >
                           <p
                             class="sl-tag line_circle theme_standard_bdr_i theme_standard_font"
@@ -721,6 +724,7 @@
                           v-for="(
                             couponModel, cidx
                           ) in detailData.proCanUseCouList"
+                           :key="cidx"
                         >
                           {{ couponModel.couTypeTitle }}
                         </div>
@@ -822,8 +826,9 @@
                       >
                         <div
                           class="server-item"
-                          v-for="server in detailData.saleServices"
+                          v-for="(server,index) in detailData.saleServices"
                           v-if="parseInt(server.days) > 0"
+                          :key="index"
                         >
                           <i
                             class="iconfont mall-dui theme_standard_font icon-font"
@@ -832,7 +837,8 @@
                         </div>
                         <div
                           class="server-item"
-                          v-for="server in detailData.serviceInfoJson"
+                          v-for="(server,index) in detailData.serviceInfoJson"
+                          :key="index"
                         >
                           <i
                             class="iconfont mall-dui theme_standard_font icon-font"
@@ -876,7 +882,8 @@
                       </div>
                       <div
                         class="comment-div"
-                        v-for="comment in detailComment.evaluateList"
+                        v-for="(comment,index) in detailComment.evaluateList"
+                        :key="index"
                       >
                         <div class="flex-row comment-row theme_font_common">
                           <div class="header-img right-margin">
@@ -897,7 +904,8 @@
                               :class="{
                                 theme_standard_font_i: comment.score >= lv,
                               }"
-                              v-for="lv in 5"
+                              v-for="(lv,index) in 5"
+                              :key="index"
                             ></i>
                           </div>
                         </div>
@@ -913,6 +921,7 @@
                               comment.evaluateImages
                             )"
                             v-if="idx < 4"
+                            :key="idx"
                           >
                             <img :src="pic" />
                           </div>
@@ -967,8 +976,9 @@
                       <div class="recommend-div padding-bottom-8">
                         <div
                           class="pro-div"
-                          v-for="item in detailData.packageList"
+                          v-for="(item,index) in detailData.packageList"
                           @click="productPickageEvent(item)"
+                          :key="index"
                         >
                           {{ dataProcessing(item) }}
                           <div class="img-div">
@@ -1025,8 +1035,9 @@
                       <div class="recommend-div">
                         <div
                           class="pro-div"
-                          v-for="item in detailData.recommendSkuList"
+                          v-for="(item,index) in detailData.recommendSkuList"
                           @click="productEvent(item)"
+                          :key="index"
                         >
                           {{ dataProcessing(item) }}
                           <div class="img-div">
@@ -1420,6 +1431,7 @@
             class="items-div"
             v-for="(feature, fidx) in detailData.featureList"
             v-if="featureRefresh"
+            :key="fidx"
           >
             <div class="title theme_font_common">{{ feature.featureName }}</div>
             <div
@@ -1428,8 +1440,9 @@
                 'theme_light_bg_i theme_standard_font_i theme_standard_bdr_i':
                   subFeature.selected,
               }"
-              v-for="subFeature in feature.featureValueList"
+              v-for="(subFeature,index) in feature.featureValueList"
               @click="subFeatureEvent(subFeature, fidx)"
+              :key="index"
             >
               {{ subFeature.featureValue }}
             </div>
@@ -1522,6 +1535,7 @@
             class="activity-div"
             v-for="(aactivity, aidx) in detailData.activityList"
             @click="activityProducts(aactivity)"
+            :key="aidx"
           >
             <div
               class="act-item-empty line_circle theme_border_red theme_font_red"
