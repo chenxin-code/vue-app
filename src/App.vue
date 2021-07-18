@@ -295,7 +295,6 @@ export default {
             console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
             that.postSensorsData(that.$sensors.quick('getAnonymousID'),res.data.data.id)
           });
-          this.getUser(res.data.data);
         }
       })
     },
@@ -307,18 +306,6 @@ export default {
         .then(res => {
           console.log(res);
         });
-    },
-    getUser(ythData){
-      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
-        if(res.data.status == 0){
-          let data = res.data.data;
-          this.$store.state.bulkUserInfo = {
-            mobile:data.mobile == '' ? ythData.phone : data.mobile,
-            bulkName:data.name == '' ? ythData.userName : data.name,
-          }
-          console.log('this.$store.state.bulkUserInfo',this.$store.state.bulkUserInfo)
-        }
-      })
     },
 
     backTop() {
