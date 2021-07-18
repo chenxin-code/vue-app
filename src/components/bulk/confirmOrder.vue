@@ -39,10 +39,16 @@
             </div>
           </div>
           <div class="addres" style="margin-top: 0.42667rem">
-            <div class="adders-key">提货地址：</div>
+            <div class="adders-key">提货小区：</div>
             <div class="adders-val">
               {{ placelist[0].cucName }}{{ placelist[0].cudName
               }}{{ placelist[0].cuName }}
+            </div>
+          </div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">详细地址：</div>
+            <div class="adders-val">
+              {{placelist[0].teamLeaderAddress}}
             </div>
           </div>
         </div>
@@ -154,6 +160,7 @@ export default {
     if (this.pageAvtive) {
       console.log("sss");
       this.placelist = [this.$store.state.CharseInfo.masterPlace];
+      this.getPlaceList();
     } else {
       console.log("xxx");
       this.getPlaceList();

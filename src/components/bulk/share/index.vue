@@ -199,10 +199,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 54;
+    // this.purchaseId = 53;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '新疆西州蜜瓜哈密瓜';
+    // this.activityName = '山楂团购活动';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -270,24 +270,26 @@ export default {
 
   methods: {
     navToDetail(item){
-      let time = BigNumber(this.shareData.remainingTime).multipliedBy(1000);
-      this.$store.state.CharseInfo = {
+      let obj = {
         groupbuySkuPicurl:item.skuImg,
         groupbuyBuyerPrice:item.groupPrice,
         groupbuyLinePrice:item.crossedPrice,
-        groupbuyEndDatetime:this.$util.getPreTime(this.shareData.remainingTime),
+        groupbuyEndDatetime:this.shareData.actEndTime,
         groupbuySkuName:item.skuName,
         groupbuyPurchaseNumber:item.buyerCount,
         groupbuyRuleDescribe:this.shareData.ruleDescription,
-        noSkuDetail:true,
-        groupbuySkuDetail:item.skuPicUrl,
-      };
+        groupbuySkuDetail:item.groupbuySkuDetail,
+      }
+      this.$store.state.CharseInfo = obj;
       console.log('this.$store.state.charseInfo',this.$store.state.CharseInfo)
       this.$router.push({
         name: "商品详情",
         params: {
-          resouce: item,
+          resouce: obj,
         },
+        query:{
+          isWxShare:true,
+        }
       });
     },
     checkAll() {
@@ -535,13 +537,13 @@ export default {
           .group-desc-content-right-top {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #666666;
           }
           .group-desc-content-right-bottom {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
             margin-top: 10px;
             width: 330px;
@@ -549,7 +551,7 @@ export default {
             /deep/p{
               font-size: 13px;
               font-family: PingFang SC;
-              font-weight: bold;
+              font-weight: 400;
               color: #999999;
             }
           }

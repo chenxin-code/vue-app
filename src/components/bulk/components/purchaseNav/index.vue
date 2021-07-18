@@ -1,15 +1,17 @@
 <template>
   <div class="component-purchaseNav">
-    <div
-      class="purchaseNav-column"
-      v-for="(item, index) in navList"
-      :key="index"
-      @click="enterNav(item, index)"
-    >
-      <div class="key-dom" :class="index == navIndex ? 'active' : ''">
-        <img :src="item.categoryPicurl" alt="" />
-        <span>{{ item.categoryName }} </span>
-        <img :src="require('../../activity/images/button_roll_default.png')" alt="" class="active_select" v-show="index == navIndex" />
+    <div class="purchaseNav_box">
+      <div
+        class="purchaseNav-column"
+        v-for="(item, index) in navList"
+        :key="index"
+        @click="enterNav(item, index)"
+      >
+        <div class="key-dom" :class="index == navIndex ? 'active' : ''">
+          <img :src="item.categoryPicurl" alt="" />
+          <span>{{ item.categoryName }} </span>
+          <img :src="require('../../activity/images/button_roll_default.png')" alt="" class="active_select" v-show="index == navIndex" />
+        </div>
       </div>
     </div>
   </div>
@@ -67,11 +69,16 @@ export default {
   width: 100%;
   height: 102px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   background-image: url('../../activity/images/main_bg_2.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   padding-top: 2px;
+  overflow-x: auto;
+}
+.purchaseNav_box{
+  display: flex;
+  justify-content: flex-start;
 }
 .purchaseNav-column {
   width: 25%;
@@ -124,6 +131,6 @@ export default {
   width: 33px;
   height: 11px;
   position: absolute;
-  bottom: -2px;
+  bottom: -3px;
 }
 </style>

@@ -76,10 +76,7 @@
         <div class="point"></div>
         商品详情
       </div>
-      <div class="goods_sku_detail" v-if="resouce.noSkuDetail">
-        <img :src="resouce.groupbuySkuDetail" alt="">
-      </div>
-      <div class="contnt-style" v-html="resouce.groupbuySkuDetail" v-else></div>
+      <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
     <!-- <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
@@ -155,6 +152,9 @@ export default {
       return endT;
     },
     goConfirm() {
+      if(this.$route.query.isWxShare){
+        this.$router.go(-1)
+      }
       this.$router.push({
         name: "确认订单",
         params: {

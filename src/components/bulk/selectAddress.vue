@@ -21,7 +21,7 @@
                 </div>
               </div>
               <div class="asyncBox-ul-dt">
-                <div class="asyncBox-ul-dt-place">提货地点：{{item.cucName}} {{item.cudName}} {{item.cuName}}</div>
+                <div class="asyncBox-ul-dt-place">提货地点：{{item.cucName}} {{item.cudName}}{{item.cuName}}{{item.teamLeaderAddress}}</div>
                 <div class="asyncBox-ul-dt-icon">
                   <img src="./components/channelSearch/arrow.png" alt="">
                 </div>
@@ -98,13 +98,14 @@ export default {
   }
   .master-info-list{
     width:100%;
-    height: 100px;
+    min-height: 100px;
     background: #FFFFFF;
     box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 8px;
     display:flex;
     display :flex;
     align-items :center;
+    padding: 15px;
     margin-top:15px;
     .asyncSrc{
       width: 65px;
