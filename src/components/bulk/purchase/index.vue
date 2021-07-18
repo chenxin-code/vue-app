@@ -101,8 +101,8 @@ export default {
           console.log("res-------------------", JSON.stringify(res));
         });
     }
-    this.communityId = "2248412888374968908";
-    this.$store.state.communityId = this.communityId;
+    // this.communityId = "2248412888374968908";
+    // this.$store.state.communityId = this.communityId;
   },
   mounted() {
     this.$nextTick(() => {

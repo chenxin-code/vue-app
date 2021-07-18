@@ -8,26 +8,23 @@
       </van-tab>
     </van-tabs> -->
     <van-sticky>
-      <div class="heard">
-        <div class="tab">
-          <div class="tab_back" @click="goBack()">
-            <van-icon
-              name="arrow-left"
-              class="arrow_left"
-              color="#000000"
-              size="0.471467rem"
-            />
+      <div class="nav">
+        <div class="nav_top">
+          <div class="back" @click="$router.go(-1)">
+            <img :src="require('./images/button_back.png')" alt="" />
           </div>
-          <div class="tab_item_box">
-            <div
-              class="tab_item"
-              v-for="(item, index) in tabTitle"
-              :key="index"
-              @click="changesTab(index)"
-              :class="currentTab == index ? 'current_tab' : ''"
-            >
-              {{ item.title }}
-            </div>
+          <div class="title">我的活动</div>
+          <div class="no"></div>
+        </div>
+        <div class="nav_tabs">
+          <div
+            class="tab_item"
+            v-for="(item, index) in tabTitle"
+            :key="index"
+            @click="changesTab(index)"
+            :class="currentTab == index ? 'current_tab' : ''"
+          >
+            {{ item.title }}
           </div>
         </div>
       </div>
@@ -48,7 +45,7 @@
       >
         <div
           class="box"
-          @click="goToDeatil(item.id)"
+          @click="goToDeatil(item.id, item.groupbuyActivityName)"
           v-for="(item, index) in allList"
           :key="index"
         >
@@ -118,7 +115,7 @@
       </van-list>
       <!-- <div v-if="allList.length == 0 && getDataOk" class="not-data">暂无数据</div> -->
     </van-pull-refresh>
-
+    <!-- 
     <van-share-sheet
       class="copyData"
       v-model="showShare"
@@ -126,7 +123,27 @@
       :options="options"
       cancel-text=""
       @select="onShare"
-    />
+    /> -->
+    <van-overlay :show="showShare" @click="showShare = false">
+      <div class="share">
+        <div class="share_box">
+          <img
+            :src="require('./images/button_close_default.png')"
+            alt=""
+            class="close"
+            @click.stop="showShare = false"
+          />
+          <div class="share_title">分享至</div>
+          <img
+            :src="require('./images/icon_default_wechat.png')"
+            alt=""
+            @click.stop="onShare('wechat')"
+            class="wechat"
+          />
+          <div class="share_tips">发送至好友</div>
+        </div>
+      </div>
+    </van-overlay>
     <!-- <button
       v-show="false"
       ref="copybtn"
@@ -210,7 +227,7 @@ export default {
       this.refreshing = false;
 
       let obj = {
-        pageIndex: this.page,
+        pageIndex: this.currentPage,
         groupbuyActivityStatus:
           this.currentTab == 0
             ? undefined
@@ -257,6 +274,7 @@ export default {
       this.allList = [];
       this.finished = false;
       this.page = 1;
+      this.currentPage = 0;
       this.getlist();
     },
     share(item) {
@@ -287,7 +305,7 @@ export default {
       const sence = await this.addCode(
         `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
       );
-      if (option.icon == "wechat") {
+      if (option == "wechat") {
         if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
           console.log("当前是小程序~~~");
           //判断小程序
@@ -337,7 +355,7 @@ export default {
           //   },
           // });
         }
-      } else if (option.icon == "link") {
+      } else if (option == "link") {
         this.$http
           .post("/app/json/app_group_buying_share_home/generateShareLink", {
             path: "/pages/homePage/temporaryCapture",
@@ -368,11 +386,12 @@ export default {
         },
       });
     },
-    goToDeatil(id) {
+    goToDeatil(id, groupbuyActivityName) {
       this.$router.push({
         path: "/bulkDetails",
         query: {
           activityNo: JSON.stringify(id),
+          groupbuyActivityName: JSON.stringify(groupbuyActivityName),
         },
       });
     },
@@ -390,66 +409,72 @@ export default {
   width: 100%;
   height: 100%;
 
-  .heard {
-    background: #fff;
-    padding-top: 10px;
-  }
-
-  .not-data {
-    width: 100%;
-    font-size: 15px;
-    font-family: Source Han Sans CN;
-    font-weight: 400;
-    color: #999999;
-    text-align: center;
-    margin-top: 240px;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .tab {
-    width: 100%;
-    height: 44px;
-    padding: 0px 20px 0px 0px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  .nav {
     background-color: #fff;
+    width: 100%;
+    height: 128px;
 
-    .tab_back {
-      width: 75px;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-right: 21px;
-    }
-
-    .tab_item_box {
-      width: 80%;
-      height: 100%;
+    .nav_top {
+      width: 100%;
+      height: 44px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      // margin-left: 21px;
+      padding-top: 56px;
+      padding-bottom: 21px;
+
+      .back {
+        width: 75px;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 9px;
+          height: 16px;
+        }
+      }
+
+      .title {
+        font-size: 17px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #000000;
+      }
+
+      .no {
+        width: 75px;
+        height: 44px;
+      }
     }
 
-    .tab_item {
-      font-size: 14px;
-      font-weight: 400;
-      color: #333333;
-      // line-height: 20px;
+    .nav_tabs {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding-bottom: 6.5px;
-    }
+      padding: 21px 39px 12px;
 
-    .current_tab {
-      color: #C61606;
-      border-bottom: 1px solid #C61606;
+      .tab_item {
+        width: 49px;
+        height: 22px;
+        background: #fff;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 22px;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #666666;
+      }
+
+      .current_tab {
+        background: #E9306D;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #FFFFFF;
+      }
     }
   }
 
@@ -621,6 +646,57 @@ export default {
 
   /deep/.van-pull-refresh__track {
     min-height: 400px;
+  }
+
+  .share {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .share_box {
+      width: 265px;
+      height: 170px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      .close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .share_title {
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #333333;
+        line-height: 16px;
+        margin: 27px 0 28px;
+      }
+
+      .wechat {
+        width: 51px;
+        height: 51px;
+        margin-bottom: 10px;
+      }
+
+      .share_tips {
+        font-size: 12px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #121212;
+        line-height: 15px;
+      }
+    }
   }
 }
 

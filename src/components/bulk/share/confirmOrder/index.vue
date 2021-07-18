@@ -481,18 +481,22 @@ export default {
           justify-content: space-between;
 
           .adders-key {
-            width :84px;
+            width :100px;
             font-size: 13px;
             font-family: PingFang SC;
             font-weight: 300;
             color: #666666;
             text-align: right;
+            flex-wrap: nowrap;
+            white-space :nowrap;
           }
 
           .adders-val {
             // width: 220px;
             flex: 1;
             text-align:right;
+            flex-wrap: nowrap;
+            white-space :nowrap;
           }
         }
       }
