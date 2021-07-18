@@ -313,6 +313,7 @@ const store = new Vuex.Store({
     bulkCheckList: [],
     CharseInfo: {},
     showCategory: true,
+    isShowBackTop: true
   },
   getters: {
     webtype: state => {
@@ -408,7 +409,7 @@ const store = new Vuex.Store({
     getShowCategory: state => {
       return state.showCategory
     },
-
+    isShowBackTop: state => state.isShowBackTop
   },
   mutations: {
     setCharseInfo: (state, info) => {
@@ -482,6 +483,9 @@ const store = new Vuex.Store({
     },
     setShowCategory: (state, info) => {
       state.showCategory = info
+    },
+    setShowBackTop: (state, isShowBackTop) => {
+      state.isShowBackTop = isShowBackTop
     },
   },
   actions: {

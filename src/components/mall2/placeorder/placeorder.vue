@@ -2006,9 +2006,9 @@ export default {
     payWayShow: function() {
       //企业团购
       if (this.pageType == 2) {
-        this.payWayPopShow1 = true;
+        // this.payWayPopShow1 = true;
       } else {
-        this.payWayPopShow = true;
+        // this.payWayPopShow = true;
       }
     },
     contratWayShow: function() {
