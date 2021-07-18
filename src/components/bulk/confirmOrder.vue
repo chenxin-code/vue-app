@@ -13,7 +13,7 @@
       <div class="line"></div>
       <div class="info">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" />
+        <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" type="number" />
       </div>
     </div>
     <div class="pick_up_address">
@@ -162,6 +162,8 @@ export default {
         .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
         .toFixed(2);
     }
+    this.consigneeName = this.$store.state.bulkUserInfo.bulkName;
+    this.consigneePhoneNumber = this.$store.state.bulkUserInfo.mobile;
   },
   beforeRouteLeave(to, form, next) {
     if (to.path == "/mall2/checkstand") {

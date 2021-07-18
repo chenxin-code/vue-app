@@ -10,7 +10,7 @@
       <div class="line"></div>
       <div class="info">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model.number="userPhone" />
+        <input placeholder="请输入联系人电话" v-model.number="userPhone" type="number" />
       </div>
       <!-- <div class="pick_up_way">
         <span> 提货方式：</span>
@@ -137,6 +137,8 @@ export default {
       this.isShowMore = false;
     }
     console.log(this.shareData);
+    this.userName = this.$store.state.bulkUserInfo.bulkName;
+    this.userPhone = this.$store.state.bulkUserInfo.mobile;
   },
   methods: {
     showMore() {

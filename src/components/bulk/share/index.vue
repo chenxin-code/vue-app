@@ -71,7 +71,7 @@
     </div>
 
     <div v-for="(item, index) in goodsList" :key="index">
-      <div class="product-card">
+      <div class="product-card" @click.stop="navToDetail(item)">
         <div class="product-message">
           <img class="product-pic" :src="item.skuImg[0]" />
           <div class="product-desc">
@@ -85,7 +85,7 @@
               </div>
             </div>
 
-            <div class="change-product-num">
+            <div class="change-product-num" @click.stop>
               <van-stepper
                 v-model="item.count"
                 min="0"
@@ -139,7 +139,7 @@
               </div>
             </div>
           </div>
-          <div class="divLine" style="width: 8rem"></div>
+          <div class="divLine" style="width: 8rem" v-show="index !== otherBuyList.length-1"></div>
         </div>
       </div>
     </div>
@@ -199,10 +199,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 27;
+    // this.purchaseId = 54;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '退款测试03';
+    // this.activityName = '新疆西州蜜瓜哈密瓜';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -269,6 +269,15 @@ export default {
   },
 
   methods: {
+    navToDetail(item){
+      this.$store.commit("setCharseInfo", item);
+      this.$router.push({
+        name: "商品详情",
+        params: {
+          resouce: item,
+        },
+      });
+    },
     checkAll() {
       if (this.isCheckAll) {
         this.checkList.forEach(item => {
@@ -524,6 +533,13 @@ export default {
             color: #999999;
             margin-top: 10px;
             width: 330px;
+            line-height: 20px;
+            /deep/p{
+              font-size: 13px;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #999999;
+            }
           }
         }
       }

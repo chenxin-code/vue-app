@@ -159,7 +159,7 @@ export default {
         this.$store.state.userRoomId = '';
       }
     });
-    
+    this.getUser();
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
@@ -278,13 +278,25 @@ export default {
             console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
             that.postSensorsData(that.$sensors.quick('getAnonymousID'),res.data.data.id)
           });
-
+          this.getUser(res.data.data);
         }
       })
     },
     postSensorsData(anonymousID,userID){
       this.$http.post(`/app/json/sensors_analytics/sensorsAnalyticsInit?anonymousID=${anonymousID}&userID=${userID}`).then(res=>{
         console.log(res)
+      })
+    },
+    getUser(ythData){
+      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
+        if(res.data.status == 0){
+          let data = res.data.data;
+          this.$store.state.bulkUserInfo = {
+            mobile:data.mobile == '' ? ythData.phone : data.mobile,
+            bulkName:data.name == '' ? ythData.userName : data.name,
+          }
+          console.log('this.$store.state.bulkUserInfo',this.$store.state.bulkUserInfo)
+        }
       })
     },
 
