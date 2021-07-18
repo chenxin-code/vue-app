@@ -71,7 +71,7 @@
     </div>
 
     <div v-for="(item, index) in goodsList" :key="index">
-      <div class="product-card">
+      <div class="product-card" @click.stop="navToDetail(item)">
         <div class="product-message">
           <img class="product-pic" :src="item.skuImg[0]" />
           <div class="product-desc">
@@ -85,7 +85,7 @@
               </div>
             </div>
 
-            <div class="change-product-num">
+            <div class="change-product-num" @click.stop>
               <van-stepper
                 v-model="item.count"
                 min="0"
@@ -139,7 +139,7 @@
               </div>
             </div>
           </div>
-          <div class="divLine" style="width: 8rem"></div>
+          <div class="divLine" style="width: 8rem" v-show="index !== otherBuyList.length-1"></div>
         </div>
       </div>
     </div>
@@ -199,10 +199,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 50;
+    // this.purchaseId = 54;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '测试订单取消01';
+    // this.activityName = '新疆西州蜜瓜哈密瓜';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -269,6 +269,27 @@ export default {
   },
 
   methods: {
+    navToDetail(item){
+      let time = BigNumber(this.shareData.remainingTime).multipliedBy(1000);
+      this.$store.state.CharseInfo = {
+        groupbuySkuPicurl:item.skuImg,
+        groupbuyBuyerPrice:item.groupPrice,
+        groupbuyLinePrice:item.crossedPrice,
+        groupbuyEndDatetime:this.$util.getPreTime(this.shareData.remainingTime),
+        groupbuySkuName:item.skuName,
+        groupbuyPurchaseNumber:item.buyerCount,
+        groupbuyRuleDescribe:this.shareData.ruleDescription,
+        noSkuDetail:true,
+        groupbuySkuDetail:item.skuPicUrl,
+      };
+      console.log('this.$store.state.charseInfo',this.$store.state.CharseInfo)
+      this.$router.push({
+        name: "商品详情",
+        params: {
+          resouce: item,
+        },
+      });
+    },
     checkAll() {
       if (this.isCheckAll) {
         this.checkList.forEach(item => {
@@ -388,7 +409,9 @@ export default {
           forbidClick: true
         });
         this.setBulkTotalPrice(this.totalPrice);
-        this.setBulkCheckList(this.checkList);
+        // this.setBulkCheckList(this.checkList);
+        this.$store.state.bulkCheckList = this.checkList;
+        console.log('this.$store.state.bulkCheckList',this.$store.state.bulkCheckList)
         this.$router.push({
           path: "/bulk_share_confirm_order",
           query: {
@@ -396,8 +419,9 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            activityName: JSON.stringify(this.activityName)
-          }
+            activityName: JSON.stringify(this.activityName),
+            checkList:JSON.stringify(this.checkList)
+          },
         });
       }
     },
@@ -521,6 +545,13 @@ export default {
             color: #999999;
             margin-top: 10px;
             width: 330px;
+            line-height: 20px;
+            /deep/p{
+              font-size: 13px;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #999999;
+            }
           }
         }
       }

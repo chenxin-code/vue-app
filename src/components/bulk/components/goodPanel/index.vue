@@ -1,17 +1,18 @@
 <template>
-  <div
-    class="component-goodPanel"
-    @click="toDetails"
-  >
-    <div class="goodPanel-remain">
-      <div class="remain_title">{{getTimeTitle()}}</div>
+  <div class="component-goodPanel" @click="toDetails">
+    <div
+      class="goodPanel-remain"
+      :style="{
+        backgroundImage: require('../../activity/images/-s-img_card_tips_default.png'),
+      }"
+    >
       <div class="remain-times" v-if="getTimeTitle() !== '活动已结束'">
-         <Countdown :endTime="getCountdownTime()"></Countdown>
+        <Countdown :endTime="getCountdownTime()"></Countdown>
       </div>
     </div>
     <dl class="good-ms">
       <dd>
-        <van-image class="image-comm" :src="resouce.groupbuySkuPicurl[0]"/>
+        <van-image class="image-comm" :src="resouce.groupbuySkuPicurl[0]" />
       </dd>
       <dt>
         <div class="good-name">{{ resouce.groupbuySkuName }}</div>
@@ -38,19 +39,19 @@
       </div>
       <span>等{{resouce.purchasedQuantity > 999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
     </div> -->
-    <button class="buy-button-x" @click.stop="goConfirm()">
-      立即购买
+    <button :class="resouce.groupbuyStockNumber == 0?'no_goods buy-button-x':'buy-button-x' " @click.stop="goConfirm()">
+      <img :src="require('../../activity/images/icon_shop_default.png')" alt="">
+      <div>购买</div>
     </button>
-    <div class="line"></div>
   </div>
 </template>
 <script>
 import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
-import vantImage from "@/components/bulk/components/vantImage.js"
+import vantImage from "@/components/bulk/components/vantImage.js";
 export default {
   name: "goodPanel",
-  components:{
-    Countdown
+  components: {
+    Countdown,
   },
   props: {
     resouce: {
@@ -64,47 +65,53 @@ export default {
   },
   methods: {
     getTimeTitle: function () {
-        let nowT = this.$store.state.severTime.currentTime;
-        // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        // if (nowT < startT) {
-        //   return '距离开始还剩:'
-        // }
-        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        if (nowT < endT) {
-          return '距离结束还剩:'
-        }
-        return '活动已结束'
+      let nowT = this.$store.state.severTime.currentTime;
+      // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+      // if (nowT < startT) {
+      //   return '距离开始还剩:'
+      // }
+      let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
+      if (nowT < endT) {
+        return "距离结束还剩:";
+      }
+      return "活动已结束";
     },
-     getCountdownTime: function () {
-        let nowT = this.$store.state.severTime.currentTime;
-        // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        // if (nowT < startT) {
-        //   return startT
-        // }
-        let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
-        if (nowT < endT) {
-          return endT
-        }
-        return endT
-      },
+    getCountdownTime: function () {
+      let nowT = this.$store.state.severTime.currentTime;
+      // let startT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime)
+      // if (nowT < startT) {
+      //   return startT
+      // }
+      let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
+      if (nowT < endT) {
+        return endT;
+      }
+      return endT;
+    },
     toDetails() {
-        this.$store.commit("setCharseInfo",this.resouce);
-        this.$router.push({
-          name: '商品详情',
-          params: {
-            resouce:this.resouce
-          }
-        });
-    },
-    goConfirm(){
-      this.$store.commit("setCharseInfo",this.resouce);
+      // this.$store.commit("setCharseInfo", this.resouce);
+      this.$store.state.CharseInfo = this.resouce;
       this.$router.push({
-          name: '确认订单',
-          params: {
-            resouce:this.resouce
-          }
-        });
-    }
+        name: "商品详情",
+        params: {
+          resouce: this.resouce,
+        },
+      });
+    },
+    goConfirm() {
+      if(this.resouce.groupbuyStockNumber == 0){
+        this.$toast('该商品没有库存啦~')
+        return
+      }
+      // this.$store.commit("setCharseInfo", this.resouce);
+      this.$store.state.CharseInfo = this.resouce;
+      this.$router.push({
+        name: "确认订单",
+        params: {
+          resouce: this.resouce,
+        },
+      });
+    },
   },
 };
 </script>
@@ -112,13 +119,7 @@ export default {
 .line-though {
   text-decoration: line-through;
 }
-.line {
-  width: 334.5px;
-  height: 1px;
-  background-color: #eeeded;
-  margin: 9.5px auto 0;
-}
-.component-goodPanel:nth-last-child(1) > .line{
+.component-goodPanel:nth-last-child(1) > .line {
   background: transparent;
 }
 .component-goodPanel {
@@ -128,22 +129,23 @@ export default {
   flex-direction: column;
   background: #fff;
   position: relative;
+  width: 345px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  padding: 0 15px 16px 0;
 }
 
 .goodPanel-remain {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px;
-  width: 100%;
+  height: 29px;
+  width: 215px;
+  background-image: url("../../activity/images/-s-img_card_tips_default.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
-.goodPanel-remain .remain_title {
-  font-size: 13px;
-  font-weight: 400;
-  color: #d0021b;
-  line-height: 18.5px;
-  letter-spacing: 1px;
-}
+
 .remain-times {
   margin-left: 10.5px;
 }
@@ -170,19 +172,18 @@ export default {
 
 .good-ms {
   display: flex;
-  padding: 0 10px;
   box-sizing: border-box;
+  padding: 20px 0 0 15px;
 }
 .good-ms dd {
-  width: 85px;
-  height: 85px;
+  width: 70px;
+  height: 70px;
 }
-.image-comm{
-  width: 85px;
-  height: 85px;
-
+.image-comm {
+  width: 70px;
+  height: 70px;
 }
-/deep/.image-comm img{
+/deep/.image-comm img {
   object-fit: cover;
 }
 .good-ms dd img {
@@ -193,40 +194,41 @@ export default {
   object-fit: cover;
 }
 .good-ms dt {
-  margin-left: 20px;
+  margin-left: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .good-ms dt .good-name {
   font-size: 14px;
-  font-weight: 400;
-  color: #424242;
-  line-height: 20px;
-  letter-spacing: 1px;
+  font-family: PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  line-height: 16px;
 }
 .good-ms dt .price-x {
-  margin-top: 24.5px;
+  margin-top: 11px;
+  padding-bottom: 9px;
 }
 .good-ms dt .price-x .sale-price {
+  font-size: 12px;
+  font-family: PingFang SC;
+  font-weight: bold;
   text-decoration: line-through;
-  font-size: 13px;
-  font-weight: 400;
-  color: #666666;
-  line-height: 18.5px;
-  letter-spacing: 1px;
+  color: #999999;
+  line-height: 15px;
 }
 em,
 i {
   font-style: normal;
 }
 .good-ms dt .price-x .purchase-price {
-  font-size: 14px;
-  font-weight: 600;
-  color: #424242;
-  line-height: 20px;
-  letter-spacing: 1px;
-  margin-top: 4px;
+  font-size: 13px;
+  font-family: PingFang SC;
+  font-weight: bold;
+  color: #F00000;
+  line-height: 15px;
+  margin-top: 9px;
 }
 .remain-num-x {
   margin-top: 10px;
@@ -268,37 +270,48 @@ i {
 }
 .buy-button-x {
   position: absolute;
-  right: 10px;
-  bottom: 20px;
+  right: 15px;
+  bottom: 21px;
   border: none;
   outline: none;
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 86px;
-  height: 27.5px;
-  background: #b52232;
-  border-radius: 14px;
-  font-size: 13px;
-  font-weight: 400;
-  color: #ffffff;
-  line-height: 18.5px;
-  letter-spacing: 1px;
+  align-items: center;
+  width: 64px;
+  height: 23px;
+  background: linear-gradient(180deg, #ff7ba6 0%, #e9306d 100%);
+  border-radius: 12px;
 }
-.user-image{
+.no_goods{
+  background:#999999
+}
+.buy-button-x img{
+  width: 16px;
+  height: 15px;
+  display: block;
+  margin-right: 6px;
+}
+.buy-button-x div{
+  font-size: 13px;
+  font-family: PingFang SC;
+  font-weight: bold;
+  color: #F7F8F9;
+  line-height: 16px;
+}
+.user-image {
   width: 22px;
   margin-left: 2px;
 }
-/deep/.user-image img{
+/deep/.user-image img {
   width: 22px;
   height: 22px;
   margin-left: 2px;
   border-radius: 50%;
 }
-/deep/.van-image__error{
+/deep/.van-image__error {
   background-color: transparent;
 }
-/deep/.van-icon{
+/deep/.van-icon {
   font: initial;
 }
 </style>

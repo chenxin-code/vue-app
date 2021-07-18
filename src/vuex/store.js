@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    bulkUserInfo:{},
     inToDetail:"common",//数据埋点：从哪个入口进入的商品详情，首页，搜索，列表,默认首页
     cartEntrance:"common",//数据埋点：从哪个入口进入的购物车，首页，商品列表，商品详情,小程序底部导航栏，默认首页
     commonNotch:false,
@@ -313,6 +314,7 @@ const store = new Vuex.Store({
     bulkCheckList: [],
     CharseInfo: {},
     showCategory: true,
+    isShowBackTop: true
   },
   getters: {
     webtype: state => {
@@ -408,7 +410,7 @@ const store = new Vuex.Store({
     getShowCategory: state => {
       return state.showCategory
     },
-
+    isShowBackTop: state => state.isShowBackTop
   },
   mutations: {
     setCharseInfo: (state, info) => {
@@ -482,6 +484,9 @@ const store = new Vuex.Store({
     },
     setShowCategory: (state, info) => {
       state.showCategory = info
+    },
+    setShowBackTop: (state, isShowBackTop) => {
+      state.isShowBackTop = isShowBackTop
     },
   },
   actions: {

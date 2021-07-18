@@ -151,11 +151,11 @@ export default [{
     redirect: "/bulk_index",
     children: [{
         path: '/bulk_index',
-        name: '活动首页',
+        name: '我的活动',
         component: () =>
           import('@/components/bulk/activity/index.vue'),
         meta: {
-          title: '活动首页',
+          title: '我的活动',
           keepAlive: true
         }
 

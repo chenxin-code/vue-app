@@ -7,9 +7,10 @@
         <span>提货人姓名：</span>
         <input placeholder="请输入姓名" v-model="userName" />
       </div>
-      <div class="info" style="margin-top: 12px;">
+      <div class="line"></div>
+      <div class="info">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model.number="userPhone" />
+        <input placeholder="请输入联系人电话" v-model.number="userPhone" type="number" />
       </div>
       <!-- <div class="pick_up_way">
         <span> 提货方式：</span>
@@ -18,9 +19,16 @@
     </div>
     <div class="pick_up_address">
       <div class="addres_title">
-        <div class="addres_title_text">团购提货地点</div>
-        <div class="line"></div>
+        <div class="addres_title_text">
+          <span></span>
+          团购提货地点
+        </div>
+        <!-- <div class="change" @click="$router.push('/selectAddress')">
+          切换提货地址
+          <img :src="require('./activity/images/button_next_default.png')" alt="">
+        </div> -->
       </div>
+      <div class="line"></div>
       <div class="addres_info">
         <div class="addres_info_detail">
           <div class="addres">
@@ -34,12 +42,15 @@
         </div>
       </div>
     </div>
-    <div class="goods_info">
+    <div class="goods_info"  v-for="(item, index) in goodsList" :key="index">
       <div class="goods_title">
-        <div class="goods_title_text">商品信息</div>
+        <div class="goods_title_text">
+          <span></span>
+          商品信息
+        </div>
         <div class="line"></div>
       </div>
-      <div class="goods_item" v-for="(item, index) in goodsList" :key="index">
+      <div class="goods_item">
         <div class="goods_info_item">
           <img :src="item.skuPicUrl.split(',')[0]" alt="" />
           <div class="goods_info_detail">
@@ -51,9 +62,9 @@
             </div>
           </div>
         </div>
-        <div class="line" v-show="index !== goodsList.length <= 3"></div>
+        <!-- <div class="line" v-show="index !== goodsList.length <= 3"></div> -->
       </div>
-      <img
+      <!-- <img
         :src="require('./images/more_icon.png')"
         alt=""
         class="more"
@@ -63,7 +74,7 @@
       <div class="goods_detail" v-else>
         <div class="sell_price_statistics">¥{{ crossedPrice }}</div>
         <div class="bulk_price_statistics">团购价格：¥{{ totalPrice }}</div>
-      </div>
+      </div> -->
     </div>
     <div class="remark">
       <span>订单备注</span>
@@ -77,8 +88,11 @@
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now">
-      <div class="pay_price">¥{{ totalPrice }}</div>
+    <div class="pay_now" :style="{paddingBottom:this.$store.state.isX?'0.98667rem':'0.64rem'}">
+      <div class="pay_price">
+        <div class="pay_title">应付金额：</div>
+        <div class="pay_value">¥{{ totalPrice }}</div>
+      </div>
       <div class="pay" @click="pay">立即支付</div>
     </div>
   </div>
@@ -122,9 +136,24 @@ export default {
       this.goodsList = this.checkList;
       this.isShowMore = false;
     }
-    console.log(this.checkList);
+    console.log(this.shareData);
+    this.getUser();
   },
   methods: {
+    getUser(){
+      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
+        if(res.data.status == 0){
+          let data = res.data.data;
+          this.$store.state.bulkUserInfo = {
+            mobile:data.mobile == '' ? this.$store.state.ythUserInfo.phone : data.mobile,
+            bulkName:data.name == '' ? this.$store.state.ythUserInfo.userName : data.name,
+          }
+          this.userName = this.$store.state.bulkUserInfo.bulkName;
+          this.userPhone = this.$store.state.bulkUserInfo.mobile;
+          console.log('confirmOrder----this.$store.state.bulkUserInfo',this.$store.state.bulkUserInfo)
+        }
+      })
+    },
     showMore() {
       this.goodsList = this.checkList;
       this.isShowMore = false;
@@ -224,7 +253,8 @@ export default {
     },
     checkList: {
       get() {
-        return this.$store.state.bulkCheckList;
+        console.log('this.$route.query.checkList',JSON.parse(this.$route.query.checkList))
+        return JSON.parse(this.$route.query.checkList);
       },
       set() {},
     },
@@ -236,21 +266,24 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
-.router_class {
-  background-color: #F6F6F6;
+.router_class{
+  background-color: #f6f6f6 !important;
 }
-
 .confirm_order {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  padding: 10px 10px 61px;
   background-color: #F6F6F6;
-  font-family: PingFangSC-Medium, PingFang SC;
-  background-image: url('./images/background.png');
-  background-position: 0 -60px;
-  background-size: 100% 135.5px;
+  background-image: url('../../activity/images/bg.png');
   background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top;
+  padding: 12px;
+  // overflow: auto;
+  overflow-y: auto;
+  bottom: 49px !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
 
   .line {
     width: 315px;
@@ -261,12 +294,14 @@ export default {
   .user_info {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
+    box-shadow: 0 2px 11px 3px rgba(210, 207, 207, 0.5);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    padding: 10px 20px;
+    justify-content: space-between;
+    margin: 0 auto 0;
+    padding: 22px 24px 22px 28px;
+    border-radius: 12px;
 
     .info {
       display: flex;
@@ -276,24 +311,21 @@ export default {
 
       span {
         font-size: 14px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 600;
-        color: #424242;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #121212;
+        line-height: 15px;
       }
 
       input {
         width: 190px;
-        border-right: 1px solid #D8D7D7;
         font-size: 14px;
         font-weight: 400;
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
-        margin-left 10px;
-      }
-
-      input:last-child {
-        border: none;
+        margin-left: 10px;
+        text-align: right;
       }
 
       input::-webkit-input-placeholder {
@@ -301,7 +333,14 @@ export default {
         font-weight: 400;
         color: #999999;
         line-height: 20px;
+        text-align: right;
       }
+    }
+    .line{
+      width: 100%;
+      height 1px;
+      background: #F0F0F0;
+      margin: 20px 0;
     }
 
     .pick_up_way {
@@ -309,6 +348,25 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
+      /deep/ .van-dropdown-menu {
+        // margin-left 20px
+        // font-size: 14px;
+        color: #424242;
+        // width: 180px;
+        border: none;
+        resize: none;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+
+      /deep/ .van-dropdown-menu__bar {
+        height: auto;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
 
       span {
         font-size: 14px;
@@ -329,22 +387,66 @@ export default {
   .pick_up_address {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 12px 10px 12px 20px;
+    padding: 20px 25px 20px 18px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-image:url('../../activity/images/card_line_default.png');
+    background-repeat: no-repeat;
+    background-size :100% 3px;
+    background-position: 0 0;
 
     .addres_title {
+      display: flex;
+      // padding-bottom: 17px;
+
       .addres_title_text {
-        padding-bottom: 9.5px;
+        flex: 1;
         font-size: 14px;
-        font-weight: bolder;
-        color: #424242;
-        line-height: 20px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #666666;
+        line-height: 16px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        span {
+          display: inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right:7px;
+        }
       }
+
+      .change {
+        font-size: 13px;
+        font-family: PingFang SC;
+        font-weight: 300;
+        color: #999999;
+        display: flex;
+        justify-content :flex-start;
+        align-items :center;
+        img{
+          width :6px;
+          height :10px;
+          margin-left: 6px;
+        }
+      }
+    }
+
+    .line {
+      width: 315px;
+      height: 1px;
+      background-color: #EEEDED;
+      margin:17px 0;
     }
 
     .addres_info {
@@ -370,10 +472,10 @@ export default {
       }
 
       .addres_info_detail {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding-top: 12px;
 
         .colonel_name {
           font-size: 14px;
@@ -385,59 +487,95 @@ export default {
         }
 
         .addres {
+          width: 100%;
           font-size: 14px;
           font-weight: 500;
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          display flex;
-          .adders-key{
-            width: 90px;
-            font-weight: bolder;
+          display: flex;
+          justify-content: space-between;
+
+          .adders-key {
+            width :100px;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: 300;
+            color: #666666;
+            text-align: right;
+            flex-wrap: nowrap;
+            white-space :nowrap;
           }
-          .adders-val{
-            width: 230px;
+
+          .adders-val {
+            // width: 220px;
+            flex: 1;
+            text-align:right;
+            flex-wrap: nowrap;
+            white-space :nowrap;
           }
         }
       }
     }
-
   }
 
   .goods_info {
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 1px 11px 3px rgba(231, 230, 230, 0.5);
-    border-radius: 10px;
-    padding: 10px 7px 10px 20px;
-    margin-top: 10px;
+    box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
+    padding: 17px 19px;
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border-radius: 12px;
 
     .goods_title {
       .goods_title_text {
-        padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: bolder;
+        font-weight: 700;
         color: #424242;
         line-height: 20px;
+        display :flex;
+        justify-content :flex-start;
+        align-items: center;
+
+        span {
+          display :inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right :7px;
+        }
       }
+    }
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #EEEDED;
+      margin: 17px 0 14px;
     }
 
     .goods_item {
-      padding-top: 9.5px;
+
+      .stepper {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
 
       .goods_info_item {
         display: flex;
         justify-content: flex-start;
-        padding-bottom: 9.5px;
+        padding-left:12px;
 
         img {
-          width: 105px;
-          height: 105px;
+          width: 70px;
+          height: 70px;
+          margin-right: 14px;
           object-fit: cover;
-          margin-right: 10px;
         }
 
         .goods_info_detail {
@@ -445,25 +583,24 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
-          padding-top: 12px;
 
           .goods_name {
             font-size: 14px;
-            font-weight: 400;
-            color: #424242;
-            line-height: 20px;
-            letter-spacing: 1px;
-            margin-bottom: 24.5px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #333333;
+            line-height: 16px;
           }
 
           .sell_price {
-            font-size: 13px;
-            font-weight: 400;
-            color: #666666;
-            line-height: 18.5px;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: bold;
             text-decoration: line-through;
+            color: #999999;
+            line-height: 15px;
+            text-decoration: line-through;
+            margin:11px 0 9px;
           }
 
           .count_price {
@@ -473,10 +610,11 @@ export default {
             align-items: center;
 
             .bulk_price {
-              font-size: 14px;
-              font-weight: 600;
-              color: #424242;
-              line-height: 20px;
+              font-size: 13px;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #F00000;
+              line-height: 15px;
               letter-spacing: 1px;
             }
 
@@ -503,7 +641,6 @@ export default {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 10px 0 0;
 
       .sell_price_statistics {
         font-size: 12px;
@@ -529,13 +666,14 @@ export default {
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
-    border-radius: 10px;
     display: flex;
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom 50px;
-    padding: 14.5px 20px 14.5px 20px;
+    margin-bottom: 74px;
+    padding: 22px 22px 22px 28px;
+    width: 351px;
+    border-radius: 12px;
 
     span {
       font-size: 14px;
@@ -562,36 +700,46 @@ export default {
 
   .pay_now {
     width: 100%;
-    height: 49px;
+    // height: 49px;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 11px 20px 10.5px 0;
+    padding: 8px 22px 24px 30px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 
     .pay_price {
-      font-size: 16px;
-      font-weight: 600;
-      color: #000000;
-      line-height: 22.5px;
-      letter-spacing: 1px;
-      margin-right: 15px;
+      display :flex;
+      justify-content: flex-start;
+      align-items: center;
+      .pay_title{
+        font-size: 15px;
+        font-weight: 400;
+        font-family: PingFang SC;
+        color: #121212;
+        line-height: 27.5px;
+      }
+      .pay_value{
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #F00000;
+      }
     }
 
     .pay {
-      width: 86px;
-      height: 27.5px;
-      background: #B52232;
-      border-radius: 14px;
-      font-size: 13px;
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%);
+      border-radius: 20px;
+      font-size: 14px;
+      font-family: PingFang SC;
       font-weight: 400;
-      color: #FFFFFF;
-      line-height: 27.5px;
-      letter-spacing: 1px;
+      color: #F4F4F4;
       text-align: center;
+      line-height :39px;
     }
   }
 }

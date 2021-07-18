@@ -11,13 +11,13 @@
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
-          <span class="title theme_font_black">购物车({{ $store.state.mall2.cartNum }})</span>
+          <span class="title theme_font_black" :style="goodsCount > 0?{marginLeft:'40px'}:{marginRight:'20px'}">购物车({{ $store.state.mall2.cartNum }})</span>
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
         <p
           class="cart-edit theme_font_gray"
-          v-if="goodsCount > 0"
+          v-show="goodsCount > 0"
           @click="setEdit"
         >
           {{ isEditing ? "完成" : "编辑" }}
@@ -427,7 +427,7 @@ export default {
   overflow: hidden;
 
   .cart-top {
-    margin-left: 40px;
+    // margin-left: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -438,8 +438,8 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      text-indent: 25px;
-
+      // text-indent: 25px;
+      // margin-left 15px;
       .title {
         font-size: $font-size-large;
       }

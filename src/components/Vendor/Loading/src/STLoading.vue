@@ -45,11 +45,10 @@
     transition: opacity .2s linear;
     position: absolute;
     left: 0;
-    right 0
+    right 0;
     top: 0;
-    bottom 0
-
-    z-index: 9999;
+    bottom 0;
+    z-index: 9999;       
 
     .ui-loading-mask {
       position: absolute;

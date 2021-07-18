@@ -15,12 +15,12 @@
           <van-list
             v-model="loading"
             :finished="finished"
-            finished-text="没有更多了"
+            :finished-text="saleDataList.length == 0 ? '暂无商品':'没有更多商品了'"
             @load="onLoad"
             :offset="offset"
             class="content"
           >
-            <van-cell style="height: auto; padding: 0">
+            <van-cell style="height: auto; padding: 16px 0 0;background:#f6f6f6;">
               <goodPanel
                 v-for="(item, index) in saleDataList"
                 :key="index"
@@ -38,7 +38,7 @@
     <div
       v-if="entrance"
       class="entrance-tuanzhang"
-      @click="$router.push({ name: '活动首页' })"
+      @click="$router.push({ path: '/bulk_index' })"
     >
       <img src="../activity/images/pintuan.png" />
     </div>
@@ -102,6 +102,7 @@ export default {
         });
     }
     // this.communityId = "2248412888374968908";
+    // this.$store.state.communityId = this.communityId;
   },
   mounted() {
     this.$nextTick(() => {
@@ -209,8 +210,8 @@ export default {
 
 .header-x {
   // height: 56px;
-  background: #b52232;
-  padding-top: 10px;
+  // background: #FF7BA6;
+  // padding-top: 10px;
 }
 
 .section-x {
@@ -230,7 +231,7 @@ export default {
   flex: 1;
   height: 0;
   overflow: auto;
-  padding: 10px 10px;
+  padding: 0px 15px 16px;
   box-sizing: border-box;
   background: #f6f6f6;
   /* padding-bottom: 30px; */
@@ -257,10 +258,10 @@ export default {
 }
 
 .entrance-tuanzhang {
-  width: 48px;
-  height: 48px;
+  width: 78px;
+  height: 78px;
   position: fixed;
-  left: 8px;
+  left: 0px;
   bottom: 16%;
 
   img {
