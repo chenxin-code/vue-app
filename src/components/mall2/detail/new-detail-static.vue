@@ -8,7 +8,7 @@
       :style="{
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
-      v-show="proView !== 2"
+      v-if="proView !== 2"
     >
       <div
         class="navcontent"
@@ -62,7 +62,7 @@
       :style="{
         height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
-      v-if="detailShow"
+      v-if="detailShow && proView !== 2"
       v-show="proView !== 2"
     >
       <nav-top
