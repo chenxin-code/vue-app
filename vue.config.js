@@ -208,6 +208,7 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com', // 原来的测试地址
         // target:'http://henansydemo.deepermobile.com',
         // target: 'http://jlapp.95504.net:81',
+        // target: process.env.VUE_APP_BASE_PROD_API,
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true,
         pathRewrite: {
