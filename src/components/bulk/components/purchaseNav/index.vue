@@ -76,10 +76,12 @@ export default {
   padding-top: 2px;
 }
 .purchaseNav_box{
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
+
 }
 .purchaseNav-column {
   width: 25%;

@@ -153,14 +153,18 @@ export default {
     },
     goConfirm() {
       if(this.$route.query.isWxShare){
+        console.log('跳转go-1',window.location.href)
         this.$router.go(-1)
-      }
-      this.$router.push({
+        return
+      }else{
+        console.log('确认订单',window.location.href)
+        this.$router.push({
         name: "确认订单",
         params: {
           resouce: this.resouce,
         },
       });
+      }
     },
   },
   // activated 当keepalive包含的组件再次渲染的时候触发

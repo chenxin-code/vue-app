@@ -157,6 +157,7 @@ export default {
     };
   },
   activated() {
+    this.getUser();
     if (this.pageAvtive) {
       console.log("sss");
       this.placelist = [this.$store.state.CharseInfo.masterPlace];
@@ -169,8 +170,7 @@ export default {
         .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
         .toFixed(2);
     }
-    this.consigneeName = this.$store.state.bulkUserInfo.bulkName;
-    this.consigneePhoneNumber = this.$store.state.bulkUserInfo.mobile;
+
   },
   beforeRouteLeave(to, form, next) {
     if (to.path == "/mall2/checkstand") {
@@ -182,6 +182,15 @@ export default {
     next();
   },
   methods: {
+    getUser(){
+      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
+        if(res.data.status == 0){
+          let data = res.data.data;
+          this.consigneePhoneNumber = data.mobile == '' ? this.$store.state.ythUserInfo.phone : data.mobile;
+          this.consigneeName = data.name == '' ? this.$store.state.ythUserInfo.userName : data.name;
+        }
+      })
+    },
     //实现文本域自适应大小
     getHeight() {
       this.textareaHeight = calcTextareaHeight(
@@ -546,6 +555,10 @@ export default {
             // width: 220px;
             flex: 1;
             text-align:right;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: 300;
+            color: #121212;
           }
         }
       }
