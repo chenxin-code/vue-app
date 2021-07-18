@@ -74,11 +74,12 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   padding-top: 2px;
-  overflow-x: auto;
 }
 .purchaseNav_box{
   display: flex;
   justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .purchaseNav-column {
   width: 25%;

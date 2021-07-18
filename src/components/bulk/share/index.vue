@@ -41,7 +41,7 @@
             </div>
             <div class="user-message-bottom">
               <span style="color: #999999">提货地址：</span>
-              <span style="color: #121212">{{ shareData.place }}</span>
+              <span style="color: #121212">{{shareData.communityName}}{{ shareData.place }}</span>
             </div>
           </div>
         </div>

@@ -35,8 +35,14 @@
             <div class="adders-val">{{ orderInfo.headName }} {{ orderInfo.headContactTel }}</div>
           </div>
           <div class="addres" style="margin-top: 10px">
-            <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{ orderInfo.pickupAddress }}</div>
+            <div class="adders-key">提货小区：</div>
+            <div class="adders-val">{{ orderInfo.pickupCityName }}{{ orderInfo.pickupDistrictName }}{{ orderInfo.communityName }}</div>
+          </div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">详细地址：</div>
+            <div class="adders-val">
+              {{orderInfo.pickupAddress}}
+          </div>
           </div>
         </div>
       </div>

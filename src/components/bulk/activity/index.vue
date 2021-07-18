@@ -23,6 +23,7 @@
             :key="index"
             @click="changesTab(index)"
             :class="currentTab == index ? 'current_tab' : ''"
+            v-show="index !== 0"
           >
             {{ item.title }}
           </div>
@@ -178,7 +179,7 @@ export default {
         { title: "未开始" },
         { title: "已结束" },
       ],
-      currentTab: 0,
+      currentTab: 1,
       allList: [],
       loading: false, //是否处于加载状态，加载过程中不触发load事件
       finished: false, //是否已加载完成，加载完成后不再触发load事件

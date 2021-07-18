@@ -36,7 +36,11 @@
             <div class="adders-val">{{ shareData.headUser }}</div>
           </div>
           <div class="addres" style="margin-top: 10px;">
-            <div class="adders-key">提货地址：</div>
+            <div class="adders-key">提货小区：</div>
+            <div class="adders-val">{{ shareData. communityCityName }}{{shareData.communityDistrictName}}{{ shareData.communityName }}</div>
+          </div>
+          <div class="addres" style="margin-top: 10px;">
+            <div class="adders-key">详细地址：</div>
             <div class="adders-val">{{ shareData.place }}</div>
           </div>
         </div>

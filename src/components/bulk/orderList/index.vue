@@ -488,7 +488,7 @@ export default {
         .goods_type {
           font-size: 14px;
           font-weight: 600;
-          color: #C82010;
+          color: #e9306d;
           line-height: 20px;
         }
       }
@@ -638,7 +638,7 @@ export default {
       .confirm_btn {
         width: 80px;
         height: 28px;
-        background: #C61606;
+        background: #e9306d;
         border-radius: 15px;
         text-align: center;
         line-height: 28px;
