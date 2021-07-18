@@ -174,7 +174,6 @@ export default {
         this.$store.state.userRoomId = "";
       }
     });
-    this.getUser();
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)

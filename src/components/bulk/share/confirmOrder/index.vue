@@ -137,10 +137,23 @@ export default {
       this.isShowMore = false;
     }
     console.log(this.shareData);
-    this.userName = this.$store.state.bulkUserInfo.bulkName;
-    this.userPhone = this.$store.state.bulkUserInfo.mobile;
+    this.getUser();
   },
   methods: {
+    getUser(){
+      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
+        if(res.data.status == 0){
+          let data = res.data.data;
+          this.$store.state.bulkUserInfo = {
+            mobile:data.mobile == '' ? this.$store.state.ythUserInfo.phone : data.mobile,
+            bulkName:data.name == '' ? this.$store.state.ythUserInfo.userName : data.name,
+          }
+          this.userName = this.$store.state.bulkUserInfo.bulkName;
+          this.userPhone = this.$store.state.bulkUserInfo.mobile;
+          console.log('confirmOrder----this.$store.state.bulkUserInfo',this.$store.state.bulkUserInfo)
+        }
+      })
+    },
     showMore() {
       this.goodsList = this.checkList;
       this.isShowMore = false;

@@ -76,7 +76,10 @@
         <div class="point"></div>
         商品详情
       </div>
-      <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
+      <div class="goods_sku_detail" v-if="resouce.noSkuDetail">
+        <img :src="resouce.groupbuySkuDetail" alt="">
+      </div>
+      <div class="contnt-style" v-html="resouce.groupbuySkuDetail" v-else></div>
     </div>
     <!-- <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
@@ -104,7 +107,7 @@ export default {
   },
   created() {
     this.resouce = this.$store.state.CharseInfo;
-    console.log([this.resouce.groupbuySkuPicurl])
+    console.log('this.resouce',this.resouce)
   },
   methods: {
     // 唤起客服
@@ -207,6 +210,9 @@ export default {
       z-index: 2;
       width: 75px;
       height: 44px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
     }
   }
 
