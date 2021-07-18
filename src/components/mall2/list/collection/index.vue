@@ -33,9 +33,9 @@
                         <!--<div class="act-item theme_font_red theme_border_red" v-for="(activity, aidx) in item.showActivities" v-if="aidx < 4">{{activity}}</div>-->
                         <!--</div>-->
                         <div class="info-row price">
-                          <span class="price-x theme_font_red">￥</span>
+                          <span class="price-x theme_font_red">￥&nbsp;</span>
                           <span class="left-no-space price-z theme_font_red">{{item.dpedData.integer}}</span>
-                          <span class="left-no-space price-x theme_font_red">.{{item.dpedData.decimals}}</span>
+                          <span class="left-no-space price-z theme_font_red">&nbsp;.{{item.dpedData.decimals}}</span>
                           <span class="font-small theme_font_tint line-through" v-if="item.dpedData.linePrice">￥{{item.dpedData.linePrice}}</span>
                         </div>
                         <!--<div class="info-row num-info">-->

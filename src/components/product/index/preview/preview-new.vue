@@ -32,12 +32,19 @@
         </div>
         <!--<scroll ref="preview_scroll" :data="fakeData" :pullDownRefresh="true" @scroll="pageSite" @pullingDown="topRefresh" :listenScroll="true" :hasMore="hasMore" :pullUpLoad="hasPullUpLoad()" @pullingUp="moduleLoadMore" v-else>-->
         <!---->
-        <div ref="preview_scroll" class="scroll-div" @scroll="pageSite" v-else :style="{'padding-bottom':scrollPadding}">
+        <div
+          ref="preview_scroll"
+          class="scroll-div"
+          @scroll="pageSite"
+          v-else
+          :style="{ 'padding-bottom': scrollPadding }"
+        >
           <van-pull-refresh v-model="refreshing" @refresh="topRefresh">
             <van-list
               v-model="loading"
               :finished="!hasMore"
               finished-text=""
+              loading-text="加载"
               @load="moduleLoadMore"
             >
               <component
@@ -58,8 +65,8 @@
                 ref="ProductInfinite"
                 v-if="
                   pageData.productInfinite &&
-                  pageData.productInfinite.data.type != 'none' &&
-                  moduleIsShow(pageData.productInfinite.data)
+                    pageData.productInfinite.data.type != 'none' &&
+                    moduleIsShow(pageData.productInfinite.data)
                 "
                 :scrollSite="scrollSite"
                 :usePorpData="true"
@@ -146,7 +153,7 @@ export default {
     HYStation: () => import("../hy-station/hy-station"),
     CardProvincial: () => import("../card-provincial/card-provincial"),
     BtnProduct: () => import("../btn-product/btn-product"),
-    GetCoupon: () => import("../get-coupon/get-coupon"),
+    GetCoupon: () => import("../get-coupon/get-coupon")
   },
   props: ["pageData", "barHeight"],
   data() {
@@ -160,20 +167,20 @@ export default {
       hasMore: false,
       refreshing: false,
       loading: true,
-      scrollPadding:"0rem"
+      scrollPadding: "0rem"
     };
   },
-  created(){
-    if(this.$route.path == "/common"){
-      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ){
-        this.scrollPadding = "1.333333rem"
-      }else{
-        this.scrollPadding = "4rem"
+  created() {
+    if (this.$route.path == "/common") {
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+        this.scrollPadding = "1.333333rem";
+      } else {
+        this.scrollPadding = "4rem";
       }
     }
   },
   methods: {
-    componentEvent: function (d) {
+    componentEvent: function(d) {
       // 组建里面调用父级事件
       let code = d.code;
       if (code == "refreshPage") {
@@ -184,7 +191,7 @@ export default {
     refresh() {
       // this.$refs.preview_scroll.refresh()
     },
-    hasPullUpLoad: function () {
+    hasPullUpLoad: function() {
       if (
         this.pageData.productInfinite &&
         this.pageData.productInfinite.data.type != "none"
@@ -193,7 +200,7 @@ export default {
       }
       return false;
     },
-    loadedEvent: function (hasMore) {
+    loadedEvent: function(hasMore) {
       if (hasMore == true) {
         this.hasMore = true;
         // setTimeout(() => {
@@ -205,11 +212,11 @@ export default {
       }
       this.loading = false;
     },
-    moduleLoadMore: function (loaded) {
+    moduleLoadMore: function(loaded) {
       let dom = this.$refs.ProductInfinite;
       dom.loadMore();
     },
-    moduleIsShow: function (moduleData) {
+    moduleIsShow: function(moduleData) {
       if (moduleData.modelMustLogin == true) {
         if (this.$store.state.login.token == "") {
           return false;
@@ -225,11 +232,11 @@ export default {
       }
       return false;
     },
-    floterEdit: function () {
+    floterEdit: function() {
       console.log("click stop!");
     },
-    bottomLoad: function () {},
-    getOtherHeader: function () {
+    bottomLoad: function() {},
+    getOtherHeader: function() {
       if (!this.pageData.header) {
         this.pageData.header = { data: {} };
       }
@@ -251,7 +258,7 @@ export default {
       }
       return "";
     },
-    pageSite: function (pageSite) {
+    pageSite: function(pageSite) {
       // console.log('pageSite', pageSite.target.scrollTop)
       this.scrollSite = pageSite.target.scrollTop;
       if (this.scrollSite > 200) {
@@ -260,10 +267,10 @@ export default {
         this.showToTop = false;
       }
     },
-    toTopEvent: function () {
+    toTopEvent: function() {
       this.setScrollSite(0);
     },
-    getTopStyle: function () {
+    getTopStyle: function() {
       let styleStr = "";
       if (
         this.pageData.header.data.type == "custom" &&
@@ -274,14 +281,14 @@ export default {
       }
       return styleStr;
     },
-    testFunc: function () {
+    testFunc: function() {
       console.log("testFunc");
     },
-    topRefresh: function (loaded) {
+    topRefresh: function(loaded) {
       this.refreshLoaded = loaded;
       this.$emit("getPageData");
     },
-    pageShow: function () {
+    pageShow: function() {
       for (let i = 0; i < this.pageData.moduleList.length; i++) {
         let mData = this.pageData.moduleList[i];
         if (
@@ -315,7 +322,7 @@ export default {
         this.$refs.Floater_Module.modeleReshow();
       }
     },
-    imageAdRefresh: function () {
+    imageAdRefresh: function() {
       for (let i = 0; i < this.pageData.moduleList.length; i++) {
         let mData = this.pageData.moduleList[i];
         if (mData.code == "ImageAd") {
@@ -326,7 +333,7 @@ export default {
         }
       }
     },
-    setScrollSite: function (value) {
+    setScrollSite: function(value) {
       value = parseInt(value);
       if (this.scrollSite - value < 10 && this.scrollSite - value > -10) {
         let el = this.$refs.preview_scroll;
@@ -357,18 +364,18 @@ export default {
         }, 10);
       }
     },
-    getScrollSite: function () {
+    getScrollSite: function() {
       return this.scrollSite;
-    },
+    }
   },
   watch: {
-    pageData: function (val, oldVal) {
+    pageData: function(val, oldVal) {
       this.refreshing = false;
       if (this.refreshLoaded) {
         this.refreshLoaded("done");
         this.refreshLoaded = null;
       }
-    },
+    }
   },
   computed: {
     // fakeData: function () {
@@ -387,9 +394,9 @@ export default {
             return false;
         }
       },
-      set() {},
-    },
-  },
+      set() {}
+    }
+  }
   // activated() {
   //   console.log('preview component activated', this.scrollSite, this.markScrollSite)
   //   if (this.scrollSite > 0) {
