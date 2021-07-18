@@ -37,7 +37,7 @@
                 <i class="iconfont mall-xuanzhong theme_font_red"></i>
               </div>
               <div
-                v-if="list.id !== $store.state.mall2.selectAddress.id"
+                v-else
                 class="left-select"
               >
                 <i class="iconfont mall-xuanzhong"></i>
