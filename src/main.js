@@ -8,10 +8,10 @@ import Vue from "vue";
 import i18n from "./locale";
 //vuex
 import store from "./vuex/store";
+import Vconsole from "vconsole";
 
 const { NODE_ENV } = process.env;
 if (NODE_ENV !== "production") {
-  import Vconsole from "vconsole";
   let vConsole = new Vconsole();
   Vue.use(vConsole);
 }
