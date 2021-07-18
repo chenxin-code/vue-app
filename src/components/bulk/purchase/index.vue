@@ -38,7 +38,7 @@
     <div
       v-if="entrance"
       class="entrance-tuanzhang"
-      @click="$router.push({ name: '活动首页' })"
+      @click="$router.push({ path: '/bulk_index' })"
     >
       <img src="../activity/images/pintuan.png" />
     </div>
@@ -211,7 +211,7 @@ export default {
 .header-x {
   // height: 56px;
   // background: #FF7BA6;
-  padding-top: 10px;
+  // padding-top: 10px;
 }
 
 .section-x {

@@ -72,6 +72,7 @@ export default {
   background-image: url('../../activity/images/main_bg_2.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  padding-top: 2px;
 }
 .purchaseNav-column {
   width: 25%;

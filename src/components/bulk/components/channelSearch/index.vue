@@ -42,9 +42,9 @@ export default {
   width: 100%;
   height: 90px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  /* padding-top: 14px; */
+  padding-top: 29px;
   position: relative;
   background-image: url("./main_bg.png");
   background-repeat: no-repeat;
