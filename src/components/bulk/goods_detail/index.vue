@@ -41,7 +41,8 @@
     <div class="goods_detail_info">
       <div class="goods_item_detail">
         <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
-        <div class="goods_count">已抢{{ resouce.groupbuyPurchaseNumber }}件  剩余{{ resouce.groupbuyStockNumber }}件</div>
+        <!-- 剩余{{ resouce.groupbuyStockNumber }}件 -->
+        <div class="goods_count">已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
         <!-- <div class="goods_other">
           <img
             :src="item"

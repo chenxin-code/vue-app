@@ -136,7 +136,7 @@ export default {
       this.goodsList = this.checkList;
       this.isShowMore = false;
     }
-    console.log(this.checkList);
+    console.log(this.shareData);
   },
   methods: {
     showMore() {
@@ -238,7 +238,8 @@ export default {
     },
     checkList: {
       get() {
-        return this.$store.state.bulkCheckList;
+        console.log('this.$route.query.checkList',JSON.parse(this.$route.query.checkList))
+        return JSON.parse(this.$route.query.checkList);
       },
       set() {},
     },

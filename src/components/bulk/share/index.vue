@@ -199,10 +199,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 50;
+    // this.purchaseId = 27;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '测试订单取消01';
+    // this.activityName = '退款测试03';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -388,7 +388,9 @@ export default {
           forbidClick: true
         });
         this.setBulkTotalPrice(this.totalPrice);
-        this.setBulkCheckList(this.checkList);
+        // this.setBulkCheckList(this.checkList);
+        this.$store.state.bulkCheckList = this.checkList;
+        console.log('this.$store.state.bulkCheckList',this.$store.state.bulkCheckList)
         this.$router.push({
           path: "/bulk_share_confirm_order",
           query: {
@@ -396,8 +398,9 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            activityName: JSON.stringify(this.activityName)
-          }
+            activityName: JSON.stringify(this.activityName),
+            checkList:JSON.stringify(this.checkList)
+          },
         });
       }
     },

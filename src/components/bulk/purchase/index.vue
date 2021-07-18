@@ -15,7 +15,7 @@
           <van-list
             v-model="loading"
             :finished="finished"
-            finished-text="没有更多了"
+            :finished-text="saleDataList.length == 0 ? '暂无商品':'没有更多商品了'"
             @load="onLoad"
             :offset="offset"
             class="content"

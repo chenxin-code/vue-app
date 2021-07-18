@@ -39,7 +39,7 @@
       </div>
       <span>等{{resouce.purchasedQuantity > 999 ? '999+':resouce.purchasedQuantity}}人购买了此商品</span>
     </div> -->
-    <button class="buy-button-x" @click.stop="goConfirm()">
+    <button :class="resouce.groupbuyStockNumber == 0?'no_goods buy-button-x':'buy-button-x' " @click.stop="goConfirm()">
       <img :src="require('../../activity/images/icon_shop_default.png')" alt="">
       <div>购买</div>
     </button>
@@ -98,6 +98,10 @@ export default {
       });
     },
     goConfirm() {
+      if(this.resouce.groupbuyStockNumber == 0){
+        this.$toast('该商品没有库存啦~')
+        return
+      }
       this.$store.commit("setCharseInfo", this.resouce);
       this.$router.push({
         name: "确认订单",
@@ -275,6 +279,9 @@ i {
   height: 23px;
   background: linear-gradient(180deg, #ff7ba6 0%, #e9306d 100%);
   border-radius: 12px;
+}
+.no_goods{
+  background:#999999
 }
 .buy-button-x img{
   width: 16px;

@@ -68,7 +68,6 @@ export default {
   height: 102px;
   display: flex;
   justify-content: flex-start;
-  overflow: auto;
   background-image: url('../../activity/images/main_bg_2.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
