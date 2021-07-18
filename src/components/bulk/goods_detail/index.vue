@@ -17,30 +17,32 @@
           <img class="goods_img" :src="item" alt="" />
         </van-swipe-item>
       </van-swipe>
-      <div class="goods_info_box">
-        <div class="goods_info">
-          <div class="goods_price">
-            <div class="goods_price_detail">
-              <div class="goods_price_title">团购价格：</div>
-              <div class="unit">￥</div>
-              <div class="price">{{ resouce.groupbuyBuyerPrice }}</div>
-              <div class="line_price">¥{{ resouce.groupbuyLinePrice }}</div>
-            </div>
-            <div class="goods_count">
-              <div>已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
-              <div>剩余{{ resouce.groupbuyStockNumber }}件</div>
-            </div>
+    </div>
+    <div class="goods_info_box">
+      <div class="goods_info">
+        <div class="goods_price">
+          <div class="goods_price_detail">
+            <div class="goods_price_title">团购价格：</div>
+            <div class="unit">￥</div>
+            <div class="price">{{ resouce.groupbuyBuyerPrice }}</div>
+            <div class="line_price">¥{{ resouce.groupbuyLinePrice }}</div>
           </div>
-          <div class="goods_time">
-            <div class="goods_time_title">{{ getTimeTitle() }}</div>
-            <Countdown :endTime="getCountdownTime()" color="blue"></Countdown>
-          </div>
+          <!-- <div class="goods_count">
+            <div>已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
+            <div>剩余{{ resouce.groupbuyStockNumber }}件</div>
+          </div> -->
+        </div>
+        <div class="goods_time">
+          <div class="goods_time_title">{{ getTimeTitle() }}</div>
+          <Countdown :endTime="getCountdownTime()" color="blue"></Countdown>
         </div>
       </div>
     </div>
     <div class="goods_detail_info">
       <div class="goods_item_detail">
         <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
+        <!-- 剩余{{ resouce.groupbuyStockNumber }}件 -->
+        <div class="goods_count">已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
         <!-- <div class="goods_other">
           <img
             :src="item"
@@ -57,21 +59,31 @@
           </div>
         </div> -->
       </div>
-      <div class="buy_btn" @click="goConfirm()">立即购买</div>
+      <!-- <div class="buy_btn" @click="goConfirm()">立即购买</div> -->
     </div>
     <div class="activity">
-      <div class="activity_title">活动</div>
+      <div class="activity_title">
+        <div class="point"></div>
+        活动说明
+      </div>
       <div class="activity_detail">
         {{ resouce.groupbuyRuleDescribe }}
       </div>
     </div>
+    <div class="line"></div>
     <div class="goods_item_detail_info">
-      <div class="goods_item_detail_info_title">商品详情</div>
+      <div class="goods_item_detail_info_title">
+        <div class="point"></div>
+        商品详情
+      </div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
     <!-- <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
     </div> -->
+    <div class="pay_btn">
+      <div class="pay" @click="goConfirm()">立即购买</div>
+    </div>
   </div>
 </template>
 
@@ -92,7 +104,7 @@ export default {
   },
   created() {
     this.resouce = this.$store.state.CharseInfo;
-    console.log([this.resouce.groupbuySkuPicurl])
+    console.log('this.resouce',this.resouce)
   },
   methods: {
     // 唤起客服
@@ -121,7 +133,7 @@ export default {
       // }
       let endT = this.$util.getDateFromString(this.resouce.groupbuyEndDatetime);
       if (nowT < endT) {
-        return "距离结束还剩:";
+        return "拼团剩余时间:";
       }
       return "活动已结束";
     },
@@ -140,6 +152,9 @@ export default {
       return endT;
     },
     goConfirm() {
+      if(this.$route.query.isWxShare){
+        this.$router.go(-1)
+      }
       this.$router.push({
         name: "确认订单",
         params: {
@@ -164,7 +179,6 @@ export default {
 }
 
 .goods_detail {
-  position: relative;
   width: 100%;
   height: 100%;
   background-color: #F6F6F6;
@@ -196,6 +210,9 @@ export default {
       z-index: 2;
       width: 75px;
       height: 44px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
     }
   }
 
@@ -211,9 +228,6 @@ export default {
   .goods_info_box {
     width: 100%;
     background-color: #fff;
-    position: absolute;
-    bottom: 0;
-    left: 0;
 
     .goods_info {
       width: 100%;
@@ -228,34 +242,48 @@ export default {
 
       .goods_price {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        // flex-direction: column;
+        justify-content: center;
 
         .goods_price_detail {
           display: flex;
           justify-content: space-between;
-          align-items: flex-end;
+          align-items: center;
           color: #C61606;
           font-weight: 600;
 
           .goods_price_title {
             font-size: 14px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 16px;
           }
 
           .unit {
-            font-size: 12px;
+            font-size: 17px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 16px;
           }
 
           .price {
-            font-size: 24px;
+            font-size: 17px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 29px;
           }
 
           .line_price {
-            font-size: 12px;
+            font-size: 17px;
+            font-family: PingFang SC;
             font-weight: 400;
-            color: #DA5969;
-            line-height: 16.5px;
-            margin-left: 5px;
+            text-decoration: line-through;
+            color: #FFFFFF;
+            line-height: 29px;
+            margin-left: 8px;
             text-decoration: line-through;
           }
         }
@@ -283,10 +311,10 @@ export default {
 
         .goods_time_title {
           font-size: 12px;
-          font-weight: 400;
+          font-family: PingFang SC;
+          font-weight: bold;
           color: #FFFFFF;
-          line-height: 16.5px;
-          margin-bottom: 5px;
+          line-height: 16px;
           text-align :center;
         }
 
@@ -314,7 +342,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 16px 20px 15px 20.5px;
+    padding: 20px 17px;
     background-color: #fff;
 
     .goods_item_detail {
@@ -323,11 +351,19 @@ export default {
       justify-content: space-between;
 
       .goods_name {
-        font-size: 14px;
-        font-weight: 400;
+        font-size: 17px;
+        font-family: PingFang SC;
+        font-weight: bold;
         color: #333333;
-        line-height: 20px;
-        margin-bottom: 4px;
+        line-height: 16px;
+      }
+      .goods_count{
+        font-size: 12px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #EE1636;
+        line-height: 16px;
+        margin-top :9px;
       }
 
       .goods_other {
@@ -368,10 +404,11 @@ export default {
 
   .activity {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 12px;
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    padding: 13px 20.5px 11px;
+    padding: 14px 17px 17px;
     background-color: #fff;
 
     .activity_title {
@@ -379,8 +416,17 @@ export default {
       font-weight: 600;
       color: #333333;
       line-height: 18.5px;
-      margin-right: 32px;
-      white-space: nowrap;
+      margin-bottom: 11px;
+      display :flex;
+      justify-content :flex-start;
+      align-items: center;
+      .point{
+        width: 4px;
+        height: 4px;
+        background: #FE4886;
+        border-radius: 50%;
+        margin-right :8px;
+      }
     }
 
     .activity_detail {
@@ -389,15 +435,18 @@ export default {
       justify-content: flex-start;
       flex-wrap: wrap;
       align-items: center;
+      font-size: 13px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      color: #666666;
+      line-height: 18px;
 
       div {
         font-size: 13px;
+        font-family: PingFang SC;
         font-weight: 400;
-        color: #333333;
-        line-height: 18.5px;
-        margin-right: 16px;
-        white-space: nowrap;
-        margin-bottom: 5px;
+        color: #666666;
+        line-height: 18px;
       }
 
       div:first-child {
@@ -406,6 +455,7 @@ export default {
     }
   }
 
+
   .goods_item_detail_info {
     width: 100%;
     background-color: #fff;
@@ -413,14 +463,25 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     padding: 13px 20px;
-    margin-top: 10px;
+    border-top :1px solid #F5F5F5;
+    margin-bottom :94px;
 
     .goods_item_detail_info_title {
       font-size: 13px;
       font-weight: 600;
       color: #333333;
       line-height: 18.5px;
-      margin-bottom: 12.5px;
+      margin-bottom: 21px;
+      display :flex;
+      justify-content :flex-start;
+      align-items: center;
+      .point{
+        width: 4px;
+        height: 4px;
+        background: #FE4886;
+        border-radius: 50%;
+        margin-right :8px;
+      }
     }
 
     /deep/.contnt-style{
@@ -430,6 +491,27 @@ export default {
     }
     img {
       width: 100%;
+    }
+  }
+  .pay_btn{
+    width: 100%;
+    background: #FFFFFF;
+    position :fixed;
+    bottom: 0;
+    left :0;
+    padding :15px 25px 30px;
+    .pay{
+      width: 86%;
+      height: 49px;
+      background: linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%);
+      border-radius: 23px;
+      text-align: center;
+      line-height :49px;
+      font-size: 16px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #FFFFFF;
+      margin :0 auto;
     }
   }
 }

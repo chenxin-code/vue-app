@@ -1,8 +1,11 @@
 // common路由页
 <template>
-  <div class="common-box" :class="[$store.state.webtype == '1' ? 'bottom-space' : '']">
+  <div
+    class="common-box"
+    :class="[$store.state.webtype == '1' ? 'bottom-space' : '']"
+  >
     <div class="top_bg" v-if="notch" v-show="!$store.state.isPreview"></div>
-    <div class="mobile-preview" v-if="pageShow">
+    <div class="mobile-preview">
       <div class="jiankangma" v-if="pageType == 'jiankangma'">
         <div class="back-div" @click="$router.go(-1)">
           <i
@@ -41,9 +44,9 @@
         <div class="page-content">
           <div
             class="full-div"
-            :key="index"
             v-for="(item, index) in tabbarSubDatas"
             v-if="item.hasShow && item.data"
+            :key="index"
             v-show="index == selectedIndex"
           >
             <component
@@ -148,7 +151,7 @@ import appUi from "@zkty-team/x-engine-module-ui";
 export default {
   name: "index",
   components: {
-    NewMinPage:()=>import("@/components/min/index"),
+    NewMinPage: () => import("@/components/min/index"),
     IndustryGroup: () => import("@/components/industryGroup/index"),
     Mallshoppingcart: () => import("@/components/mall2/cart/cart"),
     Mallcategories: () => import("@/components/mall2/categories/index"),
@@ -178,7 +181,7 @@ export default {
     Hobby,
     HyActivityModal,
     PopupEvaluation: () =>
-      import("@/components/product/index/subpage/popup-evaluation"),
+      import("@/components/product/index/subpage/popup-evaluation")
   },
   data() {
     return {
@@ -203,19 +206,19 @@ export default {
       jkmName: "",
       adPageKey: "",
       businessType: "",
-      notch: false,
+      notch: false
     };
   },
   computed: {
-    ...mapGetters({ orderList: "oilPayOrderList" }),
+    ...mapGetters({ orderList: "oilPayOrderList" })
   },
   activated() {
     this.queryOrder();
   },
   methods: {
-    toGetCoupon: function () {
+    toGetCoupon: function() {
       this.$market.customPush({
-        path: "/get_coupon",
+        path: "/get_coupon"
       });
     },
     payOrder() {
@@ -229,14 +232,14 @@ export default {
       ) {
         this.$request
           .post("/app/json/refuel_center/queryOrder", { state: 1 })
-          .then((res) => {
+          .then(res => {
             if (res.status === 0) {
               this.$store.state.oilPayOrderList = res.data.orderList;
             }
           });
       }
     },
-    getItemCode: function (item) {
+    getItemCode: function(item) {
       if ("LinkComponent" == item.code) {
         if (item.data.url.indexOf("http") == 0) {
           item.code = "WebViewComponent";
@@ -250,21 +253,21 @@ export default {
 
       return item.code;
     },
-    tabbarChanged: function (index) {
+    tabbarChanged: function(index) {
       this.$refs.tabbar.tabbarEvent(index);
     },
-    getHasbackEvent: function (code) {
+    getHasbackEvent: function(code) {
       // if (code == 'Mallcategories' || code == 'Mallshoppingcart' || code == 'Mallorderlist') {
       //   return false
       // }
       return false;
     },
-    getComRef: function (index) {
+    getComRef: function(index) {
       return "com" + index;
     },
-    tabbarEvent: function (index) {
+    tabbarEvent: function(index) {
       this.$store.state.commonPage = index;
-      console.log("this.$store.state.commonPage",this.$store.state.commonPage)
+      console.log("this.$store.state.commonPage", this.$store.state.commonPage);
       if (index == -1) {
         return;
       }
@@ -321,8 +324,8 @@ export default {
       }
       item.hasShow = true;
       this.selectedIndex = index;
-      if(item.code == 'Mallshoppingcart'){
-        this.$store.state.cartEntrance = 'wechatBottomNav'
+      if (item.code == "Mallshoppingcart") {
+        this.$store.state.cartEntrance = "wechatBottomNav";
       }
       this.$nextTick(() => {
         if (this.getComRef(index) && this.$refs[this.getComRef(index)]) {
@@ -336,11 +339,11 @@ export default {
         }
       });
     },
-    getTopHeight: function () {
+    getTopHeight: function() {
       return this.$store.state.barHeight;
     },
     // 引导模块
-    actionGuide: function () {
+    actionGuide: function() {
       const guideData = this.pageData.guideData;
       if (guideData) {
         let ver = guideData._v;
@@ -352,16 +355,16 @@ export default {
           active: {
             stepIdx: 0,
             showGuide: true,
-            production: true,
+            production: true
           },
           guideData,
           callback: () => {
             vm.remove();
-          },
+          }
         });
       }
     },
-    getPageData: function (pgcode, tabbarIndex) {
+    getPageData: function(pgcode, tabbarIndex) {
       console.log("home:::::::::", pgcode, tabbarIndex);
       if (tabbarIndex == -1) {
         // this.fullPageData = fdata;
@@ -418,13 +421,18 @@ export default {
       }
 
       this.$STLoading.open();
-      staticDataRequest.request(url, funcName, args).then((data) => {
+      staticDataRequest.request(url, funcName, args).then(data => {
         this.$STLoading.close();
         if (data.status == 0) {
           this.pageLoaded = true;
-          console.log('首页获取布局入参', args)
-          console.log('首页获取布局', data.data.pageData)
-          console.log('首页获取布局的webtype', webType,"----this.$store.state.webtype",this.$store.state.webtype)
+          console.log("首页获取布局入参", args);
+          console.log("首页获取布局", data.data.pageData);
+          console.log(
+            "首页获取布局的webtype",
+            webType,
+            "----this.$store.state.webtype",
+            this.$store.state.webtype
+          );
           let fdata = data.data.pageData;
           if (!fdata.pageDataJson) {
             this.$toast("首页布局获取失败11");
@@ -480,12 +488,18 @@ export default {
               this.tabbarSubDatas[tabbarIndex].data = pdata;
               this.pageShow = true;
               this.$nextTick(() => {
-                console.log("22222222222222")
+                console.log("22222222222222");
                 // this.$refs.tabbar.tabbarEvent(this.selectedIndex);
-                console.log("this.$store.state.commonPage",this.$store.state.commonPage)
-                if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+                console.log(
+                  "this.$store.state.commonPage",
+                  this.$store.state.commonPage
+                );
+                if (
+                  this.$store.state.webtype == 2 ||
+                  this.$store.state.webtype == 3
+                ) {
                   this.$refs.tabbar.tabbarEvent(this.$store.state.commonPage);
-                }else{
+                } else {
                   this.$refs.tabbar.tabbarEvent(this.selectedIndex);
                 }
               });
@@ -529,11 +543,11 @@ export default {
         query: {
           id: this.evaluateObj.id,
           orderId: this.evaluateObj.orderId,
-          refuelOrderId: this.evaluateObj.refuelOrderId,
-        },
+          refuelOrderId: this.evaluateObj.refuelOrderId
+        }
       });
     },
-    getSubPageDatas: function () {
+    getSubPageDatas: function() {
       let count = this.pageData.moduleList.length;
       let tempArr = [];
       let defaultIndex = -1;
@@ -552,13 +566,13 @@ export default {
           pdata.code = link.code;
           pdata.data = {
             title: link.label,
-            url: link.url,
+            url: link.url
           };
         } else if (link.type == "3") {
           pdata.code = "LinkComponent";
           pdata.data = {
             title: link.label,
-            url: link.url,
+            url: link.url
           };
         }
         pdata.hasShow = false;
@@ -572,9 +586,9 @@ export default {
       //     this.getPageData(item.pgCode, i)
       //   }
       // }
-      console.log("444444444444444444444",this.$store.state.commonPage)
-      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
-        defaultIndex = this.$store.state.commonPage
+      console.log("444444444444444444444", this.$store.state.commonPage);
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+        defaultIndex = this.$store.state.commonPage;
       }
 
       if (this.$store.state.indexData.useSaveIndex == true) {
@@ -600,10 +614,10 @@ export default {
       try {
         pageData.moduleList =
           pageData.moduleList &&
-          pageData.moduleList.map((m) => {
+          pageData.moduleList.map(m => {
             if (m.code === "ImageAd" && m.data.rows) {
               const idx = m.data.rows.findIndex(
-                (row) => row.link.url === "/phone-bill-recharge"
+                row => row.link.url === "/phone-bill-recharge"
               );
               if (
                 idx > -1 &&
@@ -620,7 +634,7 @@ export default {
       }
       return pageData;
     },
-    getLocation: function () {
+    getLocation: function() {
       this.$bridgefunc.getLocation((locationinfo, precision) => {
         let logBody = "locationinfo：" + JSON.stringify(locationinfo) + "<br/>";
         logCenter.addLog("获取定位信息", logBody);
@@ -685,31 +699,31 @@ export default {
                   locationinfo.city,
                 "提示"
               )
-              .then((action) => {
+              .then(action => {
                 this._setNewLocation(locationinfo);
               })
-              .catch((action) => {});
+              .catch(action => {});
           } else {
             this._setNewLocation(locationinfo);
           }
         }
       });
     },
-    getShortName: function (longname) {
+    getShortName: function(longname) {
       let shortname = longname;
       if (shortname.indexOf("省") != -1 || shortname.indexOf("市") != -1) {
         shortname = shortname.substring(0, shortname.length - 1);
       }
       return shortname;
     },
-    saveCoordinate: function (locationinfo) {
+    saveCoordinate: function(locationinfo) {
       // let tempLocDic = this.$util.bd_decrypt(locationinfo.longitude, locationinfo.latitude);
       this.$store.state.currentLocation.posx = locationinfo.longitude;
       this.$store.state.currentLocation.posy = locationinfo.latitude;
 
-      this.$bridgefunc.vuexStorage(function () {});
+      this.$bridgefunc.vuexStorage(function() {});
     },
-    _setNewLocation: function (locationinfo) {
+    _setNewLocation: function(locationinfo) {
       this.$mallCommon.addressAnalysis((result, address) => {
         this.$store.state.indexData.province = locationinfo.province;
         this.$store.state.indexData.city = locationinfo.city;
@@ -719,7 +733,7 @@ export default {
         }
       }, locationinfo);
     },
-    commonPageShow: function (i) {
+    commonPageShow: function(i) {
       let comref = this.getComRef(i);
       if (this.$refs[comref]) {
         let arr = this.$refs[comref];
@@ -731,16 +745,16 @@ export default {
       }
     },
     // 获取未评价订单
-    getEvaluateOrder: function () {
+    getEvaluateOrder: function() {
       if (this.$store.state.login.token == "") {
         return;
       }
       let paramsData = {
-        token: this.$store.state.login.token,
+        token: this.$store.state.login.token
       };
       let url = "/app/json/questionaire/getLatestAppraise";
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
             this.evaluateObj = data.data;
@@ -762,31 +776,31 @@ export default {
             this.$Toast("网络加载较慢，请稍后重试!");
           }
         },
-        (error) => {}
+        error => {}
       );
     },
     // 获取会员信息
-    getMyAssets: function () {
+    getMyAssets: function() {
       if (this.$store.state.login.token == "") {
         return;
       }
       let url = this.$market.apiBaseURL() + "/app/json/user/getUserWallet";
       let paramsData = {
-        token: this.$store.state.login.token,
+        token: this.$store.state.login.token
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
             this.$store.state.mall2.myAssets = data.data;
             this.$store.state.userInfo.levelNo = data.data.levelNo;
           }
         },
-        (error) => {}
+        error => {}
       );
     },
     // 获取附件加油站
-    getNearStations: function (nowpoint) {
+    getNearStations: function(nowpoint) {
       this.$Loading.open();
       let url = "/app/json/station/getStationList";
       let params1 = {
@@ -796,10 +810,10 @@ export default {
         rows: 1,
         // token: this.$store.state.login.token,
         //1百度 2腾讯
-        getType: "1",
+        getType: "1"
       };
       this.$http.post(url, params1).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0 && data.data.length > 0) {
@@ -817,11 +831,11 @@ export default {
             Toast({
               message: data.info,
               position: "bottom",
-              duration: 2000,
+              duration: 2000
             });
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
         }
       );
@@ -829,7 +843,7 @@ export default {
     /*
       每天访客
        */
-    statViewPerson: async function () {
+    statViewPerson: async function() {
       var oDate = new Date(),
         oYear = oDate.getFullYear(),
         oMonth = oDate.getMonth() + 1,
@@ -842,20 +856,20 @@ export default {
       let url = "/app/json/home/statViewPerson";
       let nArgs = await this.$bridgefunc.getArgsWithPromise();
       let paramsData = {
-        appDeviceid: nArgs.deviceId ? nArgs.deviceId : "",
+        appDeviceid: nArgs.deviceId ? nArgs.deviceId : ""
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
             localStorage.setItem("statViewPerson", nowDate);
           } else {
           }
         },
-        (err) => {}
+        err => {}
       );
     },
-    imageAdRefresh: function () {
+    imageAdRefresh: function() {
       let comref = this.getComRef(this.selectedIndex);
       if (this.$refs[comref]) {
         let arr = this.$refs[comref];
@@ -870,7 +884,7 @@ export default {
     getStation() {
       this.$http
         .post("/app/json/hy_station/getDefaultStation", {})
-        .then((res) => {
+        .then(res => {
           let data = res.data;
           if (data.status == 0) {
             this.$store.commit("setStationInfo", data.data);
@@ -879,7 +893,7 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$Toast(err);
         });
     },
@@ -911,9 +925,9 @@ export default {
       this.$STLoading.open();
       this.$http
         .post("/app/json/hy_station/getStoreInfo", {
-          standardCode,
+          standardCode
         })
-        .then((res) => {
+        .then(res => {
           let data = res.data;
           if (data.status == 0) {
             this.$store.state.mall2.zitiAddress.id = data.data.storeId;
@@ -940,15 +954,15 @@ export default {
           }
           this.$STLoading.close();
         })
-        .catch((err) => {
+        .catch(err => {
           this.$Toast(`getStoreInfo err ${err}`);
           this.$STLoading.close();
         });
-    },
+    }
   },
   watch: {
     // // 监听城市变化
-    "$store.state.indexData.city": function (val, oldVal) {
+    "$store.state.indexData.city": function(val, oldVal) {
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
         return;
       } else if (this.$store.state.webtype == "4") {
@@ -970,7 +984,7 @@ export default {
     //   }
     // },
     $route: {
-      handler: function (to) {
+      handler: function(to) {
         // 小程序登录
         // if (to.query.hasOwnProperty('mp')) {
         //   // 记住的是MD5后的密码
@@ -981,8 +995,8 @@ export default {
         //   this.$userCenter.saveLoginData(userInfo);
         // }
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   mounted() {
     setTimeout(() => {
@@ -1010,15 +1024,15 @@ export default {
       ) {
         this.notch = true;
         this.$store.state.commonNotch = true;
-      }else{
+      } else {
         this.$store.state.commonNotch = false;
       }
     }
   },
   activated() {
     // 爱心积分特殊处理
-    console.log('再次进入首页hhhhhhh  activated')
-    appUi && appUi.showTabbar(); 
+    console.log("再次进入首页hhhhhhh  activated");
+    appUi && appUi.showTabbar();
     let dStr = sessionStorage.getItem("SAVE_AXJF_Enterprise");
     if (dStr) {
       let d = JSON.parse(dStr);
@@ -1090,9 +1104,11 @@ export default {
     next();
   },
   created() {
-    console.log('再次进入首页hhhhhhh  created')
-    this.$route.query.isPreview ? this.$store.state.isPreview = true : this.$store.state.isPreview = false;
-    appUi && appUi.showTabbar(); 
+    console.log("再次进入首页hhhhhhh  created");
+    this.$route.query.isPreview
+      ? (this.$store.state.isPreview = true)
+      : (this.$store.state.isPreview = false);
+    appUi && appUi.showTabbar();
     this.$store.state.clientWidth = document.documentElement.clientWidth;
     this.pgCode = this.$route.query.pgCode ? this.$route.query.pgCode : "";
     this.businessType = this.$route.query.businessType
@@ -1114,7 +1130,7 @@ export default {
         this.getStation();
       } else if (this.$store.state.webtype == "4") {
         this._setNewLocation(this.$store.state.globalConfig);
-        this.$mallCommon.pureLocationAnalysis((address) => {
+        this.$mallCommon.pureLocationAnalysis(address => {
           this.$store.state.indexData.provinceId = address.provinceId;
           this.$store.state.indexData.cityId = address.cityId;
           this.$store.state.indexData.countryId = address.countryId;
@@ -1168,11 +1184,11 @@ export default {
             appLogo: appLogo, // 替换登录页的logo图片
             appBg: appBg, // 替换登录页的背景图片
             isShowWXLoginBtn: "0",
-            isShowAliLoginBtn: "0",
+            isShowAliLoginBtn: "0"
             // isShowWXLoginBtn: isShowWXLoginBtn ? isShowWXLoginBtn : '0', // 是否显示微信登录按钮
             // isShowAliLoginBtn: isShowAliLoginBtn ? isShowAliLoginBtn : '0' // 是否显示支付宝登录按钮
           },
-          (res) => {
+          res => {
             if (res == "1") {
               console.log("闪验初始化成功！");
               sessionStorage.setItem("shanyanInitResult", "1");
@@ -1183,7 +1199,7 @@ export default {
         );
       }
     }, 500);
-  },
+  }
 };
 </script>
 

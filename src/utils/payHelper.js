@@ -17,9 +17,9 @@ var payHelper = {
     // app 1 h5 2 mp 3 mnp 4 offline 5 IS_FJSH 6
     let payScene = 1 // 这里本来为2的，为了调试方便写成1
     payScene = payHelper.queryOrderScene()
-    if (dev) {
-      payScene = 1
-    }
+    // if (dev) {
+    //   payScene = 1
+    // }
     let url = '/app/json/app_pay/queryPayModeList';
     let paramsData = {
       token: store.state.login.token,

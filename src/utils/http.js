@@ -38,7 +38,7 @@ let Axios = axios.create({
 })
 console.log('Config.baseURL', Config.baseURL)
 
-let bulkApi = ['/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/group_buying_areas/findByRecentUseAddress','/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
@@ -251,7 +251,7 @@ Axios.interceptors.response.use(
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           // !store.state.ythToken
-          // util.toLogin();
+          if(process.env.VUE_APP_ENV === 'development') util.toLogin();
           if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
           } else {
