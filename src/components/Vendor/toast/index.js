@@ -48,7 +48,7 @@ let Toast = (options = {}) => {
   instance.closed = false;
   clearTimeout(instance.timer);
   instance.message = message;
-  instance.position = options.position || 'bottom';
+  instance.position = options.position || 'center';
   instance.className = options.className || '';
   instance.iconClass = options.iconClass || '';
 
