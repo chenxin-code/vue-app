@@ -302,10 +302,9 @@ export default {
     },
     onShare: async function (option) {
       ///app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}
-      const sence = await this.addCode(
-        `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
-      );
-      console.log('sence',sence)
+      // const sence = await this.addCode(
+      //   `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+      // );
       if (option == "wechat") {
         if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
           console.log("当前是小程序~~~");
@@ -325,10 +324,10 @@ export default {
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
               userName: "gh_28d617271c97",
-              path: `pages/common/home/index?sence=${sence}`,
-              // path: `pages/common/home/index?redirect=${encodeURIComponent(
-              //   `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
-              // )}`,
+              // path: `pages/common/home/index?sence=${sence}`,
+              path: `pages/common/home/index?redirect=${encodeURIComponent(
+                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+              )}`,
               title: this.shareItemData.groupbuyActivityName,
               desc: this.shareItemData.groupbuyActivityName,
               link: getLocation(window.location.href),
