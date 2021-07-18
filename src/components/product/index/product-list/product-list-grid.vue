@@ -13,15 +13,10 @@
             @click="enterNav(item);"
           >
             <div class="goods-picture">
-              <img
-                class="full-img"
-                :src="item.phMainUrl?item.phMainUrl+'?x-oss-process=image/format,jpg':'static/images/defaultImg_w.png'"
-              >
-                <div
-                  class="corner-mark"
-                  v-if="item.cornerMark>0"
-                >
-                  <img :src="item | counerMarkUrl">
+              <img class="full-img" :src="item.phMainUrl?item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25':'static/images/defaultImg_w.png'">
+              <div class="corner-mark" v-if="item.cornerMark>0">
+                <img :src="item | counerMarkUrl">
+              </div>
             </div>
       </div>
       <div

@@ -141,7 +141,7 @@
         })
       },
       _loadProCateList: function (id) {
-        this.$Loading.open();
+        // this.$Loading.open();
         let url = '/app/json/product/getAppProCategoryList';
         let paramsData = {
           token: this.$store.state.login.token

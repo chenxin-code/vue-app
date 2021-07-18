@@ -8,7 +8,7 @@
           <div v-show="isOpen || index < 1" style="height: 100%;">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
@@ -45,7 +45,7 @@
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
@@ -80,7 +80,7 @@
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
