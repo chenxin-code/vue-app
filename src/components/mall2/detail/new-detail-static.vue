@@ -2052,17 +2052,9 @@ export default {
         share_type: share_type
       });
     },
-<<<<<<< HEAD
-    onShare() {
-      console.log(
-        this.detailData.picUrls[0] + "?x-oss-process=image/quality,Q_10"
-      );
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-=======
     onShare(){
       console.log(this.detailData.picUrls[0]+'?x-oss-process=image/format,jpg/quality,Q_25')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
->>>>>>> 2b7b6238e24136e4a39e99703c5d1b0c73319584
         this.showShare();
       } else {
         this.showSharePopup = true;
