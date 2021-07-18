@@ -1980,7 +1980,7 @@ export default {
       }); 
     },
     onShare(){
-      console.log(this.detailData.picUrls[0]+'?x-oss-process=image/quality,Q_10')
+      console.log(this.detailData.picUrls[0]+'?x-oss-process=image/format,jpg/quality,Q_25')
       if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
         this.showShare();
       }else{
