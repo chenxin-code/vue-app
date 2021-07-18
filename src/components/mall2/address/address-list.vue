@@ -31,15 +31,10 @@
               style="width: 100%;display: flex;align-items: center"
             >
               <div
-                v-if="
-                  list.id == $store.state.mall2.selectAddress.id &&
-                    pageType == 0
-                "
+                v-if=" list.id == $store.state.mall2.selectAddress.id && pageType == 0"
                 class="left-select"
               >
                 <i class="iconfont mall-xuanzhong theme_font_red"></i>
-                <!-- <i v-if="!list.isDefault" class="iconfont mall-weixuanzhong theme_font_tint"></i>
-                <img class="image-con" :src="list.isSelected?'/static/image/mall2/checked.png':'/static/image/mall2/unchecked.png'"/> -->
               </div>
               <div
                 v-if="list.id !== $store.state.mall2.selectAddress.id"
