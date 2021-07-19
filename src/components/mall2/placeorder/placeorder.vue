@@ -290,7 +290,7 @@
                     {{ prodata.productName }}
                   </div>
                   <div class="title theme_font_black">
-                    <span>{{ prodata.specs }}</span>
+                    <span style="font-size:11px; color:#696969">{{ prodata.specs }}</span>
                   </div>
                   <div class="price">
                     <PriceOrder :productData="prodata"></PriceOrder>
@@ -2006,9 +2006,9 @@ export default {
     payWayShow: function() {
       //企业团购
       if (this.pageType == 2) {
-        this.payWayPopShow1 = true;
+        // this.payWayPopShow1 = true;
       } else {
-        this.payWayPopShow = true;
+        // this.payWayPopShow = true;
       }
     },
     contratWayShow: function() {

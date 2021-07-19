@@ -879,7 +879,7 @@ export default {
 
   i {
     width: 20px;
-    height: 16px;
+    height: 20px;
     position: absolute;
     border: 1px solid #fff;
     text-align: center;
