@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 14:16:33
+ * @LastEditTime: 2021-07-19 15:45:26
 -->
 <template>
   <div class="bill-detail">
@@ -39,6 +39,7 @@
                 v-model="billValue"
                 :options="typeOption"
                 @change="onChangeBillType"
+                :disabled="isDisabled"
               />
             </van-dropdown-menu>
           </div>
@@ -219,7 +220,8 @@ export default {
       totalPayableAmount: 0,
       checkPcs: false,
       errorMsg: "",
-      showErrorMsg: false
+      showErrorMsg: false,
+      isDisabled: true
     };
   },
 
@@ -346,12 +348,14 @@ export default {
           console.log(`this.results`, this.results);
 
           this.loading = false; //清除loading
+          this.isDisabled = false;
           this.isLoading = false;
           if (this.results.length === 0) {
             this.showEmpty = true;
             this.finished = true;
             this.showFinishText = false;
           } else {
+            this.showEmpty = false;
             this.isMonthPay =
               this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
           }
@@ -562,6 +566,7 @@ export default {
       this.results = [];
       this.showFinishText = false;
       this.loading = true;
+      this.isDisabled = true;
       this.finished = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
@@ -582,6 +587,7 @@ export default {
       this.results = [];
       this.showFinishText = false;
       this.loading = true;
+      this.isDisabled = true;
       this.finished = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
