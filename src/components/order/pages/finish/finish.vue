@@ -145,7 +145,7 @@ export default {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
-        page: { index: this.currentPage, pageSize: 100 },
+        page: { index: this.currentPage, pageSize: 50 },
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,
