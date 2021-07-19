@@ -680,7 +680,7 @@
             class="tip theme_bg_yl theme_standard_font theme_light_bg"
             v-if="deliveryType == 2 && occurData.needAddress == 1"
           >
-            {{ $store.state.mall2.selectAddress.addressFull }}
+            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
           </div>
           <div
             class="btn theme_standard_bg theme_font_white"
