@@ -76,10 +76,7 @@
         <div class="point"></div>
         商品详情
       </div>
-      <div class="goods_sku_detail" v-if="resouce.noSkuDetail">
-        <img :src="resouce.groupbuySkuDetail" alt="">
-      </div>
-      <div class="contnt-style" v-html="resouce.groupbuySkuDetail" v-else></div>
+      <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
     <!-- <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
@@ -155,12 +152,19 @@ export default {
       return endT;
     },
     goConfirm() {
-      this.$router.push({
+      if(this.$route.query.isWxShare){
+        console.log('跳转go-1',window.location.href)
+        this.$router.go(-1)
+        return
+      }else{
+        console.log('确认订单',window.location.href)
+        this.$router.push({
         name: "确认订单",
         params: {
           resouce: this.resouce,
         },
       });
+      }
     },
   },
   // activated 当keepalive包含的组件再次渲染的时候触发

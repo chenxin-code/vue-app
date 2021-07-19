@@ -1,6 +1,11 @@
 <template>
   <div class="bulk-share-main">
     <div class="bulk-header">
+      <div class="bulk-back" @click="backHome">
+        <!-- <img src="./images/icon_time_default@2x.png" class="block-time" /> -->
+        <div class="back-img"></div>
+        <div class="back-word">返回</div>
+      </div>
       <div class="time-block">
         <img src="./images/icon_time_default@2x.png" class="block-time" />
         <div style="margin-left: 7px">拼团结束时间</div>
@@ -41,7 +46,7 @@
             </div>
             <div class="user-message-bottom">
               <span style="color: #999999">提货地址：</span>
-              <span style="color: #121212">{{ shareData.place }}</span>
+              <span style="color: #121212">{{shareData.communityName}}{{ shareData.place }}</span>
             </div>
           </div>
         </div>
@@ -199,10 +204,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 54;
-    // this.chiefId = '4';
-    // this.userId = '2337237484980666802';
-    // this.activityName = '新疆西州蜜瓜哈密瓜';
+    // this.purchaseId = 27;
+    // this.chiefId = '3';
+    // this.userId = '2337237484980712751';
+    // this.activityName = '夏季进口水果特价团';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -270,26 +275,33 @@ export default {
 
   methods: {
     navToDetail(item){
-      let time = BigNumber(this.shareData.remainingTime).multipliedBy(1000);
-      this.$store.state.CharseInfo = {
+      let obj = {
         groupbuySkuPicurl:item.skuImg,
         groupbuyBuyerPrice:item.groupPrice,
         groupbuyLinePrice:item.crossedPrice,
-        groupbuyEndDatetime:this.$util.getPreTime(this.shareData.remainingTime),
+        groupbuyEndDatetime:this.shareData.actEndTime,
         groupbuySkuName:item.skuName,
         groupbuyPurchaseNumber:item.buyerCount,
         groupbuyRuleDescribe:this.shareData.ruleDescription,
-        noSkuDetail:true,
-        groupbuySkuDetail:item.skuPicUrl,
-      };
+        groupbuySkuDetail:item.groupbuySkuDetail,
+      }
+      this.$store.state.CharseInfo = obj;
       console.log('this.$store.state.charseInfo',this.$store.state.CharseInfo)
       this.$router.push({
-        name: "商品详情",
+        path:'/bulk_goods_deatil',
         params: {
-          resouce: item,
+          resouce: obj,
         },
+        query:{
+          isWxShare:true,
+        }
       });
     },
+
+    backHome() {
+      wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
+    },
+
     checkAll() {
       if (this.isCheckAll) {
         this.checkList.forEach(item => {
@@ -449,10 +461,35 @@ export default {
     background-image: url("./images/main_bg_default@2x.png");
     background-repeat: no-repeat;
     background-color: #ffffff;
+    padding-top: 8px;
+    .bulk-back {
+      width: 50px;
+      height: 25px;
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 0px 10.67px 10.67px 0px;
+      display: flex;
+      padding-left: 5px;
+      .back-img {
+        background-image: url("./images/btn-back.png");
+        background-size: 100% 100%;
+        width: 4px;
+        height: 12px;
+        margin-top: 3px;
+        flex: 0.15;
+      }
+      .back-word {
+        font-size: 12px;
+        color: #FFFFFF;
+        font-weight: blod;
+        line-height 21px;
+        flex: 0.85;
+        padding-left: 4px;
+      }
+    }
     .time-block {
       display: flex;
       align-items: center;
-      padding: 26px 14px;
+      padding: 10px 14px;
       font-size: 14px;
       font-family: PingFang SC;
       font-weight: bold;
@@ -535,13 +572,13 @@ export default {
           .group-desc-content-right-top {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #666666;
           }
           .group-desc-content-right-bottom {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
             margin-top: 10px;
             width: 330px;
@@ -549,7 +586,7 @@ export default {
             /deep/p{
               font-size: 13px;
               font-family: PingFang SC;
-              font-weight: bold;
+              font-weight: 400;
               color: #999999;
             }
           }
