@@ -337,6 +337,10 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
+      if (this.$store.state.environment == "development") {
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+      }
+
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
