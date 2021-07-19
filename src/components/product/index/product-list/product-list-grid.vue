@@ -18,35 +18,36 @@
                 <img :src="item | counerMarkUrl">
               </div>
             </div>
-      </div>
-      <div
-        class="goods-name double-line"
-        v-if="moduleData.layout.hasTitle == '1'"
-        v-html="item.showTitle"
-      ></div>
-    <div
-      class="activity-tags"
-      v-if="item.activityTags.length > 0"
-    >
-      <div
-        class="tag single-line"
-        v-for="text in item.activityTags"
-      >{{text}}</div>
-  </div>
-  <div class="goods-footer">
-    <div
-      class="price"
-      v-if="moduleData.layout.hasPrice == '1'"
-    >
-      <PriceOrder
-        :listitem="item"
-        :isRMBEnd="isRMBEnd"
-      ></PriceOrder>
-        <!--<span class="price-x">￥</span>-->
-        <!--<span class="price-z">{{item.dpedData.integer}}</span>-->
-        <!--<span class="price-x">.{{item.dpedData.decimals}}</span>-->
-        <!--<span class="line-price" v-if="item.dpedData.linePrice">原价:￥{{$market.toDecimal2(item.dpedData.linePrice)}}</span>-->
-  </div>
+            <div
+              class="goods-name double-line"
+              v-if="moduleData.layout.hasTitle == '1'"
+              v-html="item.showTitle"
+            ></div>
+            
+            <div
+              class="activity-tags"
+              v-if="item.activityTags.length > 0"
+            >
+              <div
+                class="tag single-line"
+                v-for="text in item.activityTags" 
+              >{{text}}</div>
+              </div>
+              <div class="goods-footer">
+              <div
+                class="price"
+                v-if="moduleData.layout.hasPrice == '1'"
+              >
+              <PriceOrder
+                :listitem="item"
+                :isRMBEnd="isRMBEnd"
+              ></PriceOrder>
+                <!--<span class="price-x">￥</span>-->
+                <!--<span class="price-z">{{item.dpedData.integer}}</span>-->
+                <!--<span class="price-x">.{{item.dpedData.decimals}}</span>-->
+                <!--<span class="line-price" v-if="item.dpedData.linePrice">原价:￥{{$market.toDecimal2(item.dpedData.linePrice)}}</span>-->
+          </div>
+
   <!--<div>-->
   <!--<del v-if="item.showPrice > item.salePrice">￥{{item.showPrice}} </del>-->
   <!--</div>-->
@@ -95,8 +96,8 @@
                 </div>
                 </div>
                 </div>
-
                 </div>
+                
 </template>
 
 <script>
@@ -108,13 +109,13 @@ export default {
   components: { PriceOrder },
   props: ["myIndex", "usePorpData", "propData", "isRMBEnd"],
   computed: {
-    pageData: function() {
+    pageData: function () {
       if (this.usePorpData == true) {
         return this.propData;
       }
       return this.$store.state.pageData;
     },
-    moduleData: function() {
+    moduleData: function () {
       if (this.myIndex == -1) {
         return this.pageData.productInfinite.data;
       }
@@ -122,7 +123,7 @@ export default {
     },
     dev() {
       return this.$store.state.webtype === "-1";
-    }
+    },
   },
   data() {
     return {};
@@ -135,18 +136,18 @@ export default {
       return item.cornerMark < 6
         ? `static/images/product-list/icon_gods_hot0${item.cornerMark}.png`
         : item.selfCornerMarkUrl;
-    }
+    },
   },
   methods: {
     testCorerMark() {
-      this.moduleData.rows.forEach(item => {
+      this.moduleData.rows.forEach((item) => {
         item.cornerMark ? null : this.$set(item, "cornerMark", 0);
         item.selfCornerMarkUrl
           ? null
           : this.$set(item, "selfCornerMarkUrl", "");
       });
     },
-    getSideMargin: function() {
+    getSideMargin: function () {
       let sideMargin = this.moduleData.sideMargin;
       if (sideMargin) {
         let sty = "margin-left:" + sideMargin + "%;";
@@ -155,7 +156,7 @@ export default {
       }
       return "";
     },
-    enterNav: function(product) {
+    enterNav: function (product) {
       this.$market.productEvent(
         product,
         this.$route,
@@ -164,7 +165,7 @@ export default {
       this.$store.state.inToDetail = "common";
       console.log("inToDetail");
     },
-    addToCart: function(item) {
+    addToCart: function (item) {
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -176,15 +177,15 @@ export default {
             activityId: "",
             selfActivityId: item.activityId,
             deliveryType: this.$store.state.mall2.staticDeliverType,
-            number: 1
-          }
+            number: 1,
+          },
         ],
         orderCategory: undefined,
         vipUnitUserCode: undefined,
-        deliveryType: item.deliverType
+        deliveryType: item.deliverType,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -207,13 +208,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -341,15 +342,15 @@ export default {
     }
 
     /* div:nth-child(1) {
-       color: $color-theme-o;
-       font-size: $font-size-medium-x;
-       }
-       div:nth-child(2) {
-       color: #a0a0a0;
-       font-size: $font-size-medium-s;
-       flex: 1;
-       padding-left: 5px;
-       } */
+    color: $color-theme-o;
+    font-size: $font-size-medium-x;
+    }
+    div:nth-child(2) {
+    color: #a0a0a0;
+    font-size: $font-size-medium-s;
+    flex: 1;
+    padding-left: 5px;
+    } */
     .icon {
       position: relative;
       display: flex;
