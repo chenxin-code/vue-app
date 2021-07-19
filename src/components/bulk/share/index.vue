@@ -463,8 +463,8 @@ export default {
     background-color: #ffffff;
     padding-top: 8px;
     .bulk-back {
-      width: 47px;
-      height: 21px;
+      width: 50px;
+      height: 25px;
       background-color: rgba(0,0,0,0.3);
       border-radius: 0px 10.67px 10.67px 0px;
       display: flex;
@@ -473,12 +473,12 @@ export default {
         background-image: url("./images/btn-back.png");
         background-size: 100% 100%;
         width: 4px;
-        height: 10px;
-        margin-top: 4px;
+        height: 12px;
+        margin-top: 3px;
         flex: 0.15;
       }
       .back-word {
-        font-size: 8px;
+        font-size: 12px;
         color: #FFFFFF;
         font-weight: blod;
         line-height 21px;
