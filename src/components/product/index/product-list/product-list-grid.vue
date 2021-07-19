@@ -2,20 +2,30 @@
   <div class="product-list">
     <div class="wrapper">
       <div class="scroll">
-        <div
-          class="layout-grid good-list"
-          :style="getSideMargin()"
-        >
+        <div class="layout-grid good-list" :style="getSideMargin()">
           <div
             class="goods"
-            :class="{'no-stock': (item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1', 'row-three-pro': moduleData.rowThreeProduct == true}"
+            :class="{
+              'no-stock':
+                item.stockNum == '0' &&
+                $store.state.globalConfig.showNoStockCover == '1',
+              'row-three-pro': moduleData.rowThreeProduct == true,
+            }"
             v-for="(item, index) in moduleData.rows"
-            @click="enterNav(item);"
+            @click="enterNav(item)"
           >
             <div class="goods-picture">
-              <img class="full-img" :src="item.phMainUrl?item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25':'static/images/defaultImg_w.png'">
-              <div class="corner-mark" v-if="item.cornerMark>0">
-                <img :src="item | counerMarkUrl">
+              <img
+                class="full-img"
+                :src="
+                  item.phMainUrl
+                    ? item.phMainUrl +
+                      '?x-oss-process=image/format,jpg/quality,Q_25'
+                    : 'static/images/defaultImg_w.png'
+                "
+              />
+              <div class="corner-mark" v-if="item.cornerMark > 0">
+                <img :src="item | counerMarkUrl" />
               </div>
             </div>
             <div
@@ -23,81 +33,58 @@
               v-if="moduleData.layout.hasTitle == '1'"
               v-html="item.showTitle"
             ></div>
-            
-            <div
-              class="activity-tags"
-              v-if="item.activityTags.length > 0"
-            >
-              <div
-                class="tag single-line"
-                v-for="text in item.activityTags" 
-              >{{text}}</div>
+
+            <div class="activity-tags" v-if="item.activityTags.length > 0">
+              <div class="tag single-line" v-for="text in item.activityTags">
+                {{ text }}
               </div>
-              <div class="goods-footer">
-              <div
-                class="price"
-                v-if="moduleData.layout.hasPrice == '1'"
-              >
-              <PriceOrder
-                :listitem="item"
-                :isRMBEnd="isRMBEnd"
-              ></PriceOrder>
+            </div>
+            <div class="goods-footer">
+              <div class="price" v-if="moduleData.layout.hasPrice == '1'">
+                <PriceOrder :listitem="item" :isRMBEnd="isRMBEnd"></PriceOrder>
                 <!--<span class="price-x">￥</span>-->
                 <!--<span class="price-z">{{item.dpedData.integer}}</span>-->
                 <!--<span class="price-x">.{{item.dpedData.decimals}}</span>-->
                 <!--<span class="line-price" v-if="item.dpedData.linePrice">原价:￥{{$market.toDecimal2(item.dpedData.linePrice)}}</span>-->
-          </div>
+              </div>
 
-  <!--<div>-->
-  <!--<del v-if="item.showPrice > item.salePrice">￥{{item.showPrice}} </del>-->
-  <!--</div>-->
-  <div
-    v-if="moduleData.layout.btnType == '1'"
-    class="icon"
-  >
-    <img
-      src="static/images/product-list/icon_gods_car01.png"
-      v-if="item.productType != 2 && $store.state.webtype == -1"
-    >
-      <i
-        class="iconfont mall-gouwuche theme_font_red car-size"
-        :class="{'theme_font_gray_i': item.stockNum == '0'}"
-        v-else-if="item.productType != 2"
-        @click.stop="addToCart(item)"
-      ></i>
-        </div>
-        <div
-          v-if="moduleData.layout.btnType == '2'"
-          class="icon"
-          @click.stop="addToCart(item)"
-        >
-          <img src="static/images/product-list/icon_gods_car02.png">
-          </div>
-          <div
-            v-if="moduleData.layout.btnType == '3'"
-            class="icon"
-          >
-            <img src="static/images/product-list/icon_gods_car03.png">
-            </div>
-            <div
-              v-if="moduleData.layout.btnType == '4'"
-              class="icon"
-            >
-              <img src="static/images/product-list/icon_gods_car04.png">
+              <!--<div>-->
+              <!--<del v-if="item.showPrice > item.salePrice">￥{{item.showPrice}} </del>-->
+              <!--</div>-->
+              <div v-if="moduleData.layout.btnType == '1'" class="icon">
+                <img
+                  src="static/images/product-list/icon_gods_car01.png"
+                  v-if="item.productType != 2 && $store.state.webtype == -1"
+                />
+                <i
+                  class="iconfont mall-gouwuche theme_font_red car-size"
+                  :class="{ theme_font_gray_i: item.stockNum == '0' }"
+                  v-else-if="item.productType != 2"
+                  @click.stop="addToCart(item)"
+                ></i>
               </div>
               <div
-                v-if="moduleData.layout.btnType == '5'"
+                v-if="moduleData.layout.btnType == '2'"
                 class="icon"
+                @click.stop="addToCart(item)"
               >
-                <img src="static/images/product-list/icon_gods_car05.png">
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                
+                <img src="static/images/product-list/icon_gods_car02.png" />
+              </div>
+              <div v-if="moduleData.layout.btnType == '3'" class="icon">
+                <img src="static/images/product-list/icon_gods_car03.png" />
+              </div>
+              <div v-if="moduleData.layout.btnType == '4'" class="icon">
+                <img src="static/images/product-list/icon_gods_car04.png" />
+              </div>
+              <div v-if="moduleData.layout.btnType == '5'" class="icon">
+                <img src="static/images/product-list/icon_gods_car05.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
