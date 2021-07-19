@@ -1,5 +1,5 @@
 <template>
-  <div class="waitPay">
+  <div class="waitPay" :class="{ 'wait-pay-x': this.$util.getIsIphoneX_X() }">
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         v-model="loading"
@@ -11,12 +11,12 @@
         :immediate-check="false"
       >
         <property-bill
+          v-show="isLoadPropertyBill"
           pageName="waitPay"
           ref="propertyOrder"
           :isDisAll="isDisAll"
           :isDis="isDis"
           :results="billResults"
-          v-show="isLoadPropertyBill"
           @checkEvent="checkEvent"
         >
           <div v-for="(item, index) in billResults" :key="index" class="scroll">
@@ -58,7 +58,7 @@
             :tradeNo="item.tradeNo"
           ></OrderItem>
         </div>
-        <Empty v-show="showEmpty"></Empty>
+        <!-- <Empty v-show="showEmpty"></Empty> -->
       </van-list>
     </van-pull-refresh>
     <pay-div
@@ -304,8 +304,6 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      // this.getRoomId();
-      console.log(`propertyFn userRoomId`, this.userRoomId);
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
@@ -339,7 +337,6 @@ export default {
     },
     //获取电商订单列表
     orderFn() {
-      //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
         this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
       }
@@ -412,12 +409,13 @@ export default {
               propertyError = true;
               this.properWorng = true;
             }
-            if (this.billResults.length) {
-              this.isLoadPropertyBill = true;
-            } else {
-              //如果没有物业账单数据，则不显示物业账单标题
-              this.isLoadPropertyBill = false;
-            }
+
+            // if (this.billResults.length) {
+            //   this.isLoadPropertyBill = true;
+            // } else {
+            //   //如果没有物业账单数据，则不显示物业账单标题
+            //   this.isLoadPropertyBill = false;
+            // }
           } else {
             if (propertyRes) {
               this.loading = false;
@@ -484,14 +482,19 @@ export default {
             this.finished = false;
             this.errorText = "物业账单和订单请求失败，点击重新加载";
             this.$toast("物业账单和订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (propertyError && !orderError) {
             this.finished = false;
             this.errorText = "物业账单请求失败，点击重新加载";
             this.$toast("物业账单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (!propertyError && orderError) {
             this.finished = false;
             this.errorText = "订单请求失败，点击重新加载";
             this.$toast("订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = true;
+          } else {
+            this.isLoadPropertyBill = true;
           }
 
           //如果物业账单列表和电商订单列表都为空,并且请求不出错的情况下，则显示页面显示空状态
@@ -845,8 +848,10 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-  // padding-bottom: 182px;
-  padding-bottom: 220px;
+  padding-bottom: 182px;
+  &.wait-pay-x {
+    padding-bottom: 220px;
+  }
 }
 
 .tipsText {
@@ -903,7 +908,8 @@ export default {
       .btn-box {
         // width: 100%;
         height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        background: linear-gradient(270deg, #E5165A 0%, #FF6094 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;

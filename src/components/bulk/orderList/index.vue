@@ -53,6 +53,7 @@
           :finished="finished"
           finished-text="没有更多了"
           @load="onLoad"
+          :immediate-check="false"
           :error.sync="error"
           error-text="请求失败，点击重新加载"
         >
@@ -104,7 +105,7 @@
                 class="user_type"
                 v-show="
                   item.activityOrderItemState == 2 ||
-                  item.activityOrderItemState == 3
+                    item.activityOrderItemState == 3
                 "
               >
                 {{
@@ -133,8 +134,8 @@
                 class="confirm"
                 v-show="
                   item.activityOrderItemState !== 0 &&
-                  item.activityOrderItemState !== 4 &&
-                  item.activityOrderItemState !== 5
+                    item.activityOrderItemState !== 4 &&
+                    item.activityOrderItemState !== 5
                 "
                 @click.stop="confirm(item)"
               >
@@ -190,7 +191,7 @@ export default {
         { name: "待发货", value: 1 },
         { name: "待提货", value: 3 },
         { name: "已完成", value: 4 },
-        { name: "已取消", value: 5 },
+        { name: "已取消", value: 5 }
       ],
       allList: [],
       currentTab: 0,
@@ -200,7 +201,7 @@ export default {
       showPopup: false,
       currentPage: 1,
       error: false,
-      skuInfo: {},
+      skuInfo: {}
     };
   },
   created() {
@@ -213,6 +214,7 @@ export default {
     },
     /*订单状态tab切换*/
     changesTab(index) {
+      console.log(index);
       this.currentTab = index;
       this.currentPage = 1;
       this.allList = [];
@@ -228,7 +230,7 @@ export default {
         pageNum: currentPage,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        orderItemState: tab[currentTab].value ? tab[currentTab].value : "",
+        orderItemState: tab[currentTab].value ? tab[currentTab].value : ""
       };
       if (!finished) {
         this.getListFn(obj);
@@ -241,31 +243,35 @@ export default {
       this.refreshing = true;
       this.loading = true; //将下拉刷新状态改为true开始刷新
       let { tab, currentTab } = this;
+      this.allList = [];
       let obj = {
         pageNum: this.currentPage,
         pageSize: 10,
         sortBy: "create_time_DESC",
-        orderItemState: tab[currentTab] ? tab[currentTab].value : "",
+        orderItemState: tab[currentTab] ? tab[currentTab].value : ""
       };
       this.getListFn(obj);
     },
     /*订单列表数据*/
     getListFn(obj) {
-      let { currentPage } = this;
+      let nowPages = this.currentPage;
       this.$http
         .post(
           "/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId",
           Qs.stringify(obj)
         )
-        .then((res) => {
+        .then(res => {
           this.loading = false; //将加载状态关掉
           this.refreshing = false;
           if (res.data.result == "success") {
             let { data } = res.data;
-            if (currentPage < data.pages || currentPage == data.pages) {
+            if (
+              nowPages < parseInt(data.pages) ||
+              nowPages == data.pages
+            ) {
               // 判断当前页数是否超过总页数或者等于总页数
               var indexList = data.records; //将请求到的内容赋值给一个变量
-              indexList.map((e) => {
+              indexList.map(e => {
                 if (e.productSkuInfo !== "") {
                   let productSkuInfo = JSON.parse(e.productSkuInfo)[0];
                   e.orderSkuImg = productSkuInfo.groupbuySkuPicurl.split(",");
@@ -274,8 +280,10 @@ export default {
                 }
               });
               this.allList = this.allList.concat(indexList);
+              console.log(this.allList);
               this.currentPage++;
-              if (currentPage == data.pages) {
+              console.log(this.currentPage);
+              if (nowPages == data.pages) {
                 this.finished = true;
               }
             } else {
@@ -286,8 +294,9 @@ export default {
             this.error = true; //加载错误状态
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$toast("请求失败，点击重新加载");
+          console.log("haha");
           this.refreshing = false;
           this.loading = false;
           this.error = true;
@@ -298,8 +307,8 @@ export default {
       this.$router.push({
         path: "/bulk_order_detail",
         query: {
-          id: JSON.stringify(item.activityOrderItemNo),
-        },
+          id: JSON.stringify(item.activityOrderItemNo)
+        }
       });
     },
     confirm(item) {
@@ -321,9 +330,9 @@ export default {
       this.$http
         .post("/app/json/group_buying_order/confirmReceiveDeliveryPickup", {
           orderItemId: this.skuInfo.activityOrderItemNo,
-          confirmType,
+          confirmType
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.data.isTrue) {
             this.showPopup = false;
             this.$toast("操作成功");
@@ -334,12 +343,12 @@ export default {
             this.$toast(res.data.info);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.showPopup = false;
           this.$toast("请求失败，请重新尝试");
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

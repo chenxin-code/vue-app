@@ -38,7 +38,7 @@ let Axios = axios.create({
 })
 console.log('Config.baseURL', Config.baseURL)
 
-let bulkApi = ['/app/json/group_buying_areas/findByRecentUseAddress','/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
+let bulkApi = ['/app/json/group_buying_areas/findByRecentUseAddress', '/app/json/app_community_group_order/queryByShoppingOrderId', '/app/json/home/getVueAppTempData', '/app/json/home/vueAppTempData', '/app/json/app_member_center/findIntegralRecordList', '/app/json/login/getYthUser', '/app/json/app_pay/getWalletBalance', '/app/json/app_shopping_order/findOrderFormList', '/app/json/logistics_system/queryLogisticsInfo', '/app/json/app_group_buying_share_home/generateShareLink', '/app/json/groupbuying_activity_app/list', '/app/json/group_buying_head_info/findHeadInfoByList', '/app/json/group_buying_head_info/findSelfInfo', '/app/json/group_buying_my_earnings/getMyEarnings', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList', '/app/json/app_group_buying_share_home/queryShareHomePageInfo', '/app/json/group_buying_order/findGroupBuyingActivityOrderItemListByOrderId', '/app/json/group_buying_order/findGroupBuyingActivityOrderByList'];
 
 /**
  * 重写Axios post，以实现合并接口以及静态数据的直接返回。
@@ -65,20 +65,12 @@ Axios.interceptors.request.use(
     //中台接口要带一体化token
 
     if (/times\/charge-bff/.test(config.url)) {
-      if (store.state.environment == 'production') {
-        let tokenStr2;
-        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-          tokenStr2 = "Bearer " + res.result;
-        });
-        config.headers.Authorization = tokenStr2
-      } else {
-        // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
-        let tokenStr1;
-        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-          tokenStr1 = "Bearer " + res.result;
-        });
-        config.headers.Authorization = tokenStr1
-      }
+      // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
+      let tokenStr1;
+      await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+        tokenStr1 = "Bearer " + res.result;
+      });
+      config.headers.Authorization = tokenStr1
       console.log(`一体化token`, config.headers.Authorization);
     }
     /*物业系统请求处理逻辑
@@ -247,11 +239,11 @@ Axios.interceptors.response.use(
       // if (store.state.login.token != '' && (store.state.webtype == '1' || store.state.webtype == '0')) {
       //   return userCenter.expireUpdateToken(res);
       // } else {
-      if(store.state.webtype == '1' || store.state.webtype == '0'){
+      if (store.state.webtype == '1' || store.state.webtype == '0') {
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           // !store.state.ythToken
-          if(process.env.VUE_APP_ENV === 'development') util.toLogin();
+          if (process.env.VUE_APP_ENV === 'development') util.toLogin();
           if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
             util.toLogin();
           } else {
@@ -262,20 +254,20 @@ Axios.interceptors.response.use(
             let nextUrl = "";
             let arr = new Array();
             if (afterUrl != "") {
-                let urlParamArr = afterUrl.split("&"); //将参数按照&符分成数组
-                for (let i = 0; i < urlParamArr.length; i++) {
-                    let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
-                    //如果键雨要删除的不一致，则加入到参数中
-                    if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId') {
-                        arr.push(urlParamArr[i]);
-                    }
+              let urlParamArr = afterUrl.split("&"); //将参数按照&符分成数组
+              for (let i = 0; i < urlParamArr.length; i++) {
+                let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
+                //如果键雨要删除的不一致，则加入到参数中
+                if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId') {
+                  arr.push(urlParamArr[i]);
                 }
+              }
             }
             if (arr.length > 0) {
-                nextUrl = "?" + arr.join("&");
+              nextUrl = "?" + arr.join("&");
             }
             url = beforeUrl + nextUrl;
-            console.log('url',url)
+            console.log('url', url)
             window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${url}`)}`
           }
           // util.toLogin();

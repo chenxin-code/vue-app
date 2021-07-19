@@ -1,6 +1,11 @@
 <template>
   <div class="bulk-share-main">
     <div class="bulk-header">
+      <div class="bulk-back" @click="backHome">
+        <!-- <img src="./images/icon_time_default@2x.png" class="block-time" /> -->
+        <div class="back-img"></div>
+        <div class="back-word">返回</div>
+      </div>
       <div class="time-block">
         <img src="./images/icon_time_default@2x.png" class="block-time" />
         <div style="margin-left: 7px">拼团结束时间</div>
@@ -292,6 +297,11 @@ export default {
         }
       });
     },
+
+    backHome() {
+      wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
+    },
+
     checkAll() {
       if (this.isCheckAll) {
         this.checkList.forEach(item => {
@@ -451,10 +461,35 @@ export default {
     background-image: url("./images/main_bg_default@2x.png");
     background-repeat: no-repeat;
     background-color: #ffffff;
+    padding-top: 8px;
+    .bulk-back {
+      width: 47px;
+      height: 21px;
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 0px 10.67px 10.67px 0px;
+      display: flex;
+      padding-left: 5px;
+      .back-img {
+        background-image: url("./images/btn-back.png");
+        background-size: 100% 100%;
+        width: 4px;
+        height: 10px;
+        margin-top: 4px;
+        flex: 0.15;
+      }
+      .back-word {
+        font-size: 8px;
+        color: #FFFFFF;
+        font-weight: blod;
+        line-height 21px;
+        flex: 0.85;
+        padding-left: 4px;
+      }
+    }
     .time-block {
       display: flex;
       align-items: center;
-      padding: 26px 14px;
+      padding: 10px 14px;
       font-size: 14px;
       font-family: PingFang SC;
       font-weight: bold;
