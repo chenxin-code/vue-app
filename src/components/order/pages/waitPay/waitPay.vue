@@ -908,7 +908,8 @@ export default {
       .btn-box {
         // width: 100%;
         height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        background: linear-gradient(270deg, #E5165A 0%, #FF6094 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;

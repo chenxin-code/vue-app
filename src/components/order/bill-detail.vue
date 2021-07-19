@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 11:36:59
+ * @LastEditTime: 2021-07-19 14:16:33
 -->
 <template>
   <div class="bill-detail">
@@ -1080,7 +1080,8 @@ $color = #8D8D8D;
       .btn-box {
         // width: 100%;
         height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        background: linear-gradient(270deg, #E5165A 0%, #FF6094 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;
