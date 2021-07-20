@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 11:40:36
+ * @LastEditTime: 2021-06-23 14:51:09
 -->
 <template>
   <div class="content-list">
@@ -10,7 +10,7 @@
       <van-checkbox
         v-model="isChecked"
         :disabled="isDisabled"
-        checked-color="#E5165A"
+        checked-color="#f80f16"
         icon-size="18px"
         @change="checkEvent($event, item)"
       ></van-checkbox>
@@ -101,6 +101,7 @@ export default {
     },
     onClickBill(type) {
       this.isOpen = !type;
+      console.log(`this.isOpen`, this.isOpen);
     },
     titleIcon(e) {
       let iconClass = "";
@@ -130,7 +131,6 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-$title-color = #E5165A;
 .content-list {
   // margin-bottom: 28px;
   // border-bottom:1px dashed #cccccc;
@@ -210,7 +210,7 @@ $title-color = #E5165A;
       font-size: 13px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: $title-color;
+      color: #E8374A;
       line-height: 18px;
       // width: 65px;
       // right: 16px;

@@ -474,14 +474,14 @@ export default {
         background-size: 100% 100%;
         width: 4px;
         height: 12px;
-        margin-top: 3px;
+        margin-top: 5px;
         flex: 0.15;
       }
       .back-word {
         font-size: 12px;
         color: #FFFFFF;
         font-weight: blod;
-        line-height 21px;
+        line-height 25px;
         flex: 0.85;
         padding-left: 4px;
       }

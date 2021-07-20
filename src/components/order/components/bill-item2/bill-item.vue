@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 11:40:09
+ * @LastEditTime: 2021-07-20 10:07:47
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -12,7 +12,7 @@
         v-show="pageName === 'waitPay'"
         v-model="checkAllBill"
         :disabled="isDisAll"
-        checked-color="#E5165A"
+        checked-color="#f80f16"
         icon-size="18px"
       ></van-checkbox>
       <div
@@ -37,7 +37,7 @@
                 v-show="pageName === 'waitPay'"
                 v-model="item.checked"
                 :disabled="isDis"
-                checked-color="#E5165A"
+                checked-color="#f80f16"
                 icon-size="18px"
                 @change="checkEvent($event, item)"
               ></van-checkbox>
@@ -86,7 +86,7 @@ export default {
       isDisabledItem: false,
       isChecked: false,
       activeNames: ["1"],
-      isOpen: false, //默认收缩
+      isOpen: false,
       query: this.$route.query //获取路由信息
     };
   },
@@ -113,6 +113,11 @@ export default {
     }
   },
   created() {
+    /**
+     * 1.从金刚区“物业缴费”icon进入,则物业缴费类型是展开样式。
+     * 2.从个人中心“我的订单”进入,则物业缴费类型是展开样式。
+     * 3.默认关闭。
+     */
     // if (this.query.orderPage == "true" || this.query.orderPage == undefined) {
     //   this.isOpen = false;
     // } else {
@@ -158,7 +163,6 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-$title-color = #E5165A;
 .property-bill {
   margin-top: 10px;
   .property-box {
@@ -179,7 +183,7 @@ $title-color = #E5165A;
       font-size: 16px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
-      color: $title-color;
+      color: #E8374A;
       line-height: 40px;
       margin-left: 25px;
       width: 80%;
@@ -290,7 +294,7 @@ $title-color = #E5165A;
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: $title-color;
+            color: #E8374A;
             line-height: 18px;
             width: 65px;
             right: 16px;

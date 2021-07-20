@@ -5,7 +5,7 @@
         <div class="pay-box" v-show="isShow">
           <van-checkbox
             v-model="isChecked"
-            checked-color="#E5165A"
+            checked-color="#f80f16"
             @click="checkEvent($event)"
             icon-size="18px"
           ></van-checkbox>
@@ -43,10 +43,11 @@ export default {
       amount: {
         integer: "0",
         decimal: "00"
-      }
+      },
     };
   },
-  created() {},
+  created() {
+  },
 
   methods: {
     checkEvent(event) {
@@ -82,7 +83,7 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-$color = #E5165A;
+
 .pay-content{
   position: fixed;
   bottom: 0;
@@ -169,7 +170,7 @@ $color = #E5165A;
             font-size: 16px;
             font-family: SourceHanSansCN-Medium, SourceHanSansCN;
             font-weight: 500;
-            color: $color;
+            color: #FD3A3A;
             line-height: 16px;
           }
           .decimal{
@@ -218,7 +219,7 @@ $color = #E5165A;
       height: 40px;
       text-align: center;
       line-height: 45px;
-      background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
+      background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
       border-radius: 20px;
       margin-left: 6px;
 

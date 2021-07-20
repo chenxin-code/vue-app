@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 15:45:26
+ * @LastEditTime: 2021-07-20 10:18:23
 -->
 <template>
   <div class="bill-detail">
@@ -44,25 +44,13 @@
             </van-dropdown-menu>
           </div>
         </div>
-        <div class="desc" v-if="this.results.managementFeeCycle === '1'">
-          按月度缴费
-        </div>
-        <div class="desc" v-if="this.results.managementFeeCycle === '3'">
-          按季度缴费
-        </div>
 
-        <div
-          class="content"
-          :class="[
-            showEmpty ? 'empty' : '',
-            !isFinishBill && !showEmpty ? 'not-pay-bill' : ''
-          ]"
-        >
+        <div class="content" :class="showEmpty ? 'empty' : ''">
           <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
             <van-list
               v-model="loading"
               :finished="finished"
-              :finished-text="showFinishText ? '- 亲, 没有更多账单了 -' : ''"
+              :finished-text="showFinishText ? '--没有更多了--' : ''"
               :immediate-check="false"
               :offset="10"
               @load="getBillDetail"
@@ -79,7 +67,7 @@
                     :name="index"
                     v-model="item.shopCheck"
                     @click="checkShop(item, index, isMonthPay)"
-                    checked-color="#E5165A"
+                    checked-color="#ee0a24"
                     ref="checkShop"
                     >{{ item.quarterTitle }}</van-checkbox
                   >
@@ -102,7 +90,7 @@
                       v-show="isMonthPay"
                       @change="checkSingle(item, detail, i)"
                       ref="checkboxGroup"
-                      checked-color="#E5165A"
+                      checked-color="#ee0a24"
                     ></van-checkbox>
                   </div>
                   <div
@@ -757,8 +745,7 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-$title-color = #E5165A;
-$color = #8D8D8D;
+
 .bill-detail {
   .warpper {
     height: 100%;
@@ -816,7 +803,6 @@ $color = #8D8D8D;
           background-size: 100%;
           position: relative;
           top: 3px;
-          margin-right: 10px;
         }
         .text {
           font-size: 16px;
@@ -828,13 +814,13 @@ $color = #8D8D8D;
           span::after {
             content: "";
             height: 10px;
-            width: 40%;
-            background: linear-gradient(270deg, #FFFFFF 0%, $title-color 500%);
+            width: 50%;
+            background: linear-gradient(270deg, #FFFFFF 0%, #FFE3E5 100%);
             border-radius: 5px;
             position: absolute;
             z-index: -1;
             left: 0;
-            margin-top: 12px;
+            margin-top: 14px;
             margin-left: 12px;
           }
         }
@@ -908,15 +894,6 @@ $color = #8D8D8D;
           }
         }
       }
-      .desc {
-        font-size: 13px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: $color;
-        line-height: 18px;
-        margin-left: 36px;
-        margin-top: 5px;
-      }
       .content {
         margin-top: 15px;
         padding-bottom: 320px;
@@ -926,9 +903,6 @@ $color = #8D8D8D;
         height: 100%;
         &.empty{
           padding-bottom: 0
-        }
-        &.not-pay-bill {
-          padding-bottom: 400px;
         }
         .list {
           padding: 17px 11px;
@@ -964,7 +938,7 @@ $color = #8D8D8D;
                     font-size: 16px;
                     font-family: PingFangSC-Medium, PingFang SC;
                     font-weight: 500;
-                    color: $title-color;
+                    color: #E8374A;
                     line-height: 33px;
                   }
                   .num {
@@ -972,8 +946,8 @@ $color = #8D8D8D;
                     &::after {
                       content: "";
                       height: 10px;
-                      width: 26%;
-                      background: linear-gradient(270deg, #FFFFFF 0%, $title-color 400%);
+                      width: 35%;
+                      background: linear-gradient(270deg, #FFFFFF 0%, #FFE3E5 100%);
                       border-radius: 5px;
                       position: absolute;
                       z-index: -1;
@@ -993,12 +967,12 @@ $color = #8D8D8D;
                     font-size: 14px;
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
-                    color: $title-color
+                    color: #E8374A;
                     line-height: 20px;
                   }
                   .pay-status {
                     &.finish {
-                      color: $color;
+                      color: #8D8D8D;
                     }
                     &.need {
                       color: #121212
@@ -1016,7 +990,7 @@ $color = #8D8D8D;
                   font-size: 13px;
                   font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
-                  color: $color;
+                  color: #8D8D8D;
                   line-height: 26px;
                 }
                 i {
@@ -1086,8 +1060,7 @@ $color = #8D8D8D;
       .btn-box {
         // width: 100%;
         height: 38px;
-        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
-        background: linear-gradient(270deg, #E5165A 0%, #FF6094 100%);
+        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;

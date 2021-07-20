@@ -238,7 +238,12 @@ export default {
               this.finished = true;
             }
             if (orderResult.status == 0) {
-              var indexList = data.records; //将请求到的内容赋值给一个变量
+              // var indexList = data.records; //将请求到的内容赋值给一个变量
+              var indexList = data.records.filter(
+                item =>
+                  item.billType != 11 ||
+                  (item.orderStateType == "200017" && item.state == 9)
+              );
               this.orderList =
                 this.currentPage == 1
                   ? indexList

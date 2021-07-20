@@ -6,7 +6,7 @@
         v-model="active"
         swipeable
         swipe-threshold="6"
-        title-active-color="#e5165a"
+        title-active-color="#E8374A"
         @click="navTo"
       >
         <van-tab
@@ -147,11 +147,11 @@ export default {
     bottom: 15px;
     left: 0;
     z-index: 1;
-    width: 44px;
+    width: 32px;
     height: 4px;
     background: url('./img/currentSelectIcon.png');
     background-repeat: no-repeat;
-    background-size: 44px 4px;
+    background-size: 32px 4px;
     padding-bottom: 9px;
     border-radius: 0px;
   }
