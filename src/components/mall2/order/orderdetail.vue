@@ -1133,11 +1133,14 @@ export default {
             if (this.detailData.orderMode == 8 && this.timeValue <= 0) {
               return false
             }
+            if(this.detailData.state !== 17){
+              return false
+            }
             return true;
           }
         }
       }
-      return false
+      // return false
     },
     isShowExpress() {
       if (this.detailData.deliverType == 3) {
