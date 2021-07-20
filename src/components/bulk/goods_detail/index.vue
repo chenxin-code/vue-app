@@ -13,7 +13,7 @@
       /> -->
       <!-- </van-sticky> -->
       <div class="backIcon" @click="$router.go(-1)">
-        <img src="./images/button_back_default.png" alt="">
+        <img src="./images/button_back_default.png" alt="" />
       </div>
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
         <van-swipe-item v-for="item in resouce.groupbuySkuPicurl" :key="item">
@@ -37,7 +37,11 @@
         </div>
         <div class="goods_time">
           <div class="goods_time_title">{{ getTimeTitle() }}</div>
-          <Countdown :endTime="getCountdownTime()" color="blue" :isShowEndText="false"></Countdown>
+          <Countdown
+            :endTime="getCountdownTime()"
+            color="blue"
+            :isShowEndText="false"
+          ></Countdown>
         </div>
       </div>
     </div>
@@ -45,7 +49,9 @@
       <div class="goods_item_detail">
         <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
         <!-- 剩余{{ resouce.groupbuyStockNumber }}件 -->
-        <div class="goods_count">已抢{{ resouce.groupbuyPurchaseNumber }}件</div>
+        <div class="goods_count">
+          已抢{{ resouce.groupbuyPurchaseNumber }}件
+        </div>
         <!-- <div class="goods_other">
           <img
             :src="item"
@@ -85,7 +91,18 @@
       <img :src="customerService" alt="">
     </div> -->
     <div class="pay_btn">
-      <div class="pay" @click="goConfirm()">立即购买</div>
+      <div
+        class="pay"
+        @click="goConfirm()"
+        :style="{
+          background:
+            resouce.groupbuyStockNumber == 0
+              ? '#999999'
+              : 'linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%)',
+        }"
+      >
+        立即购买
+      </div>
     </div>
   </div>
 </template>
@@ -95,36 +112,38 @@ import Countdown from "@/components/Vendor/countdown/purchaseTime.vue";
 export default {
   name: "orderList",
   props: {},
-  components:{
-    Countdown
+  components: {
+    Countdown,
   },
   data() {
     return {
       time: 1614071248931,
       resouce: {},
-      customerService:require('../../../../static/images/service.png'),
+      customerService: require("../../../../static/images/service.png"),
     };
   },
   created() {
     this.resouce = this.$store.state.CharseInfo;
-    console.log('this.resouce',this.resouce)
+    console.log("this.resouce", this.resouce);
   },
   methods: {
     // 唤起客服
-    handleCustomer: function() {
-      ysf('config', {
+    handleCustomer: function () {
+      ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
-        email:'',
+        email: "",
         mobile: this.$store.state.userInfo.phone,
         data: this.$store.state.userLable,
-        success: function(){     // 成功回调
-          ysf('open');
+        success: function () {
+          // 成功回调
+          ysf("open");
         },
-        error: function(){       // 错误回调
+        error: function () {
+          // 错误回调
           // handle error
-        }
-      })
+        },
+      });
     },
     getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;
@@ -155,18 +174,22 @@ export default {
       return endT;
     },
     goConfirm() {
-      if(this.$route.query.isWxShare){
-        console.log('跳转go-1',window.location.href)
-        this.$router.go(-1)
-        return
-      }else{
-        console.log('确认订单',window.location.href)
-        this.$router.push({
-        name: "确认订单",
-        params: {
-          resouce: this.resouce,
-        },
-      });
+      if (this.$route.query.isWxShare) {
+        console.log("跳转go-1", window.location.href);
+        this.$router.go(-1);
+        return;
+      } else {
+        console.log("确认订单", window.location.href);
+        if (this.resouce.groupbuyStockNumber !== 0) {
+          this.$router.push({
+            name: "确认订单",
+            params: {
+              resouce: this.resouce,
+            },
+          });
+        } else {
+          this.$toast("该商品没有库存啦~请选择其他商品购买吧~");
+        }
       }
     },
   },
@@ -193,15 +216,16 @@ export default {
   font-family: PingFangSC-Semibold, PingFang SC;
   letter-spacing: 1px;
 
-  .customerService{
+  .customerService {
     position: fixed;
     width: 42px;
-    height : 42px;
+    height: 42px;
     right: 0;
     bottom: 112px;
-    img{
-      width 100%;
-      height 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -220,9 +244,10 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      img{
+
+      img {
         width: 9px;
-        height :16px;
+        height: 16px;
       }
     }
   }
@@ -326,7 +351,7 @@ export default {
           font-weight: bold;
           color: #FFFFFF;
           line-height: 16px;
-          text-align :center;
+          text-align: center;
         }
 
         .block {
@@ -368,13 +393,14 @@ export default {
         color: #333333;
         line-height: 16px;
       }
-      .goods_count{
+
+      .goods_count {
         font-size: 12px;
         font-family: PingFang SC;
         font-weight: 400;
         color: #EE1636;
         line-height: 16px;
-        margin-top :9px;
+        margin-top: 9px;
       }
 
       .goods_other {
@@ -428,15 +454,16 @@ export default {
       color: #333333;
       line-height: 18.5px;
       margin-bottom: 11px;
-      display :flex;
-      justify-content :flex-start;
+      display: flex;
+      justify-content: flex-start;
       align-items: center;
-      .point{
+
+      .point {
         width: 4px;
         height: 4px;
         background: #FE4886;
         border-radius: 50%;
-        margin-right :8px;
+        margin-right: 8px;
       }
     }
 
@@ -466,7 +493,6 @@ export default {
     }
   }
 
-
   .goods_item_detail_info {
     width: 100%;
     background-color: #fff;
@@ -474,8 +500,8 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     padding: 13px 20px;
-    border-top :1px solid #F5F5F5;
-    margin-bottom :94px;
+    border-top: 1px solid #F5F5F5;
+    margin-bottom: 94px;
 
     .goods_item_detail_info_title {
       font-size: 13px;
@@ -483,47 +509,51 @@ export default {
       color: #333333;
       line-height: 18.5px;
       margin-bottom: 21px;
-      display :flex;
-      justify-content :flex-start;
+      display: flex;
+      justify-content: flex-start;
       align-items: center;
-      .point{
+
+      .point {
         width: 4px;
         height: 4px;
         background: #FE4886;
         border-radius: 50%;
-        margin-right :8px;
+        margin-right: 8px;
       }
     }
 
-    /deep/.contnt-style{
-      img{
+    /deep/.contnt-style {
+      img {
         width: 100%;
       }
     }
+
     img {
       width: 100%;
     }
   }
-  .pay_btn{
+
+  .pay_btn {
     width: 100%;
     background: #FFFFFF;
-    position :fixed;
+    position: fixed;
     bottom: 0;
-    left :0;
-    padding :15px 25px 30px;
+    left: 0;
+    padding: 15px 25px 30px;
     box-shadow: 0px 3px 14px 1px rgba(0, 0, 0, 0.46);
-    .pay{
+
+    .pay {
       width: 86%;
       height: 49px;
       background: linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%);
       border-radius: 23px;
       text-align: center;
-      line-height :49px;
+      line-height: 49px;
       font-size: 16px;
       font-family: PingFang SC;
       font-weight: bold;
       color: #FFFFFF;
-      margin :0 auto;
+      margin: 0 auto;
     }
   }
 }

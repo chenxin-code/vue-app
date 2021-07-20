@@ -556,13 +556,13 @@ export default {
           .adders-val {
             // width: 220px;
             flex: 1;
-            text-align:right;
+            text-align:left;
             font-size: 13px;
             font-family: PingFang SC;
             font-weight: 300;
             color: #121212;
-            white-space :nowrap;
-            flex-wrap :nowrap;
+            // white-space :nowrap;
+            // flex-wrap :nowrap;
           }
         }
       }
