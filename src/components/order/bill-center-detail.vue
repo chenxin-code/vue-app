@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-19 11:34:25
+ * @LastEditTime: 2021-07-09 18:20:43
 -->
 <template>
   <div class="bill-center-detail">
@@ -140,7 +140,6 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-$color = #E5165A;
 .bill-center-detail {
   height: 100%;
   background-color: #F9F9F9 !important;
@@ -191,7 +190,7 @@ $color = #E5165A;
         font-size: 16px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: $color;
+        color: #E8374A;
         line-height: 22px;
       }
     }
