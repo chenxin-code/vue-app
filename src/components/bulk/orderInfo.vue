@@ -34,7 +34,7 @@
             <div class="adders-key">提货联系人：</div>
             <div class="adders-val">{{ orderInfo.headName }} {{ orderInfo.headContactTel }}</div>
           </div>
-          <div class="addres" style="margin-top: 10px">
+          <div class="addres" style="margin-top: 0.42667rem">
             <div class="adders-key">提货小区：</div>
             <div class="adders-val">{{ orderInfo.pickupCityName }}{{ orderInfo.pickupDistrictName }}{{ orderInfo.communityName }}</div>
           </div>
@@ -617,6 +617,8 @@ export default {
             font-weight: 300;
             color: #666666;
             text-align: right;
+            white-space :nowrap;
+            flex-wrap :nowrap;
           }
 
           .adders-val {
@@ -627,6 +629,8 @@ export default {
             font-family: PingFang SC;
             font-weight: 300;
             color: #121212;
+            white-space :nowrap;
+            flex-wrap :nowrap;
           }
         }
       }

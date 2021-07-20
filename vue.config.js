@@ -2,6 +2,8 @@ const path = require("path");
 const webpack = require("webpack");
 const buildDate = JSON.stringify(new Date().toLocaleString());
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+// const CompressionWebpackPlugin = require('compression-webpack-plugin')
+// const productionGzipExtensions = ['js', 'css']
 // const CompressionWebpackPlugin = require('compression-webpack-plugin'); // 开启gzip压缩， 按需引用
 // const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i; // 开启gzip压缩， 按需写入
 // const vConsolePlugin = require("vconsole-webpack-plugin");
@@ -67,8 +69,18 @@ const vueConfig = {
           from: resolve("abc.html"),
           to: "static",
           ignore: [".*"]
-        }
-      ])
+        },
+      ]),
+      // new CompressionWebpackPlugin({
+      //   algorithm: 'gzip',
+      //   test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+      //   threshold: 10240,
+      //   minRatio: 0.8
+      // }),
+      // new webpack.optimize.LimitChunkCountPlugin({
+      //   maxChunks: 5, 
+      //   minChunkSize: 100
+      // })
       // new CompressionWebpackPlugin({
       //   filename: '[path].gz[query]',
       //   algorithm: 'gzip',
@@ -201,7 +213,7 @@ const vueConfig = {
         }
       },
       "/api": {
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
         // target: 'http://192.168.31.118:18807',
         // target: 'http://39.105.84.126:28807',
         // target: "http://mall-uat-app-linli.timesgroup.cn/",
@@ -209,7 +221,7 @@ const vueConfig = {
         // target:'http://henansydemo.deepermobile.com',
         // target: 'http://jlapp.95504.net:81',
         // target: process.env.VUE_APP_BASE_PROD_API,
-        // target: process.env.VUE_APP_BASE_API,
+        target: process.env.VUE_APP_BASE_API,
         changeOrigin: true,
         pathRewrite: {
           "^/api": ""
@@ -219,8 +231,8 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com',
         // target: 'http://39.105.84.126:28807',
         // target: 'http://192.168.31.118:18807',
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
-        // target: process.env.VUE_APP_BASE_API,
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
+        target: process.env.VUE_APP_BASE_API,
         changeOrigin: true
       },
       "/times": {

@@ -7,7 +7,7 @@
       }"
     >
       <div class="remain-times" v-if="getTimeTitle() !== '活动已结束'">
-        <Countdown :endTime="getCountdownTime()"></Countdown>
+        <Countdown :endTime="getCountdownTime()" :isShowEndText="true"></Countdown>
       </div>
     </div>
     <dl class="good-ms">

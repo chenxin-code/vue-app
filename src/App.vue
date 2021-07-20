@@ -117,7 +117,13 @@ export default {
       homeBtnSeat: "right",
 
       ani: false,
-      showBackTop: false
+      showBackTop: false,
+      bulkRoutePath:[
+        '/confirmOrder',
+        '/purchase',
+        '/bulkDetails',
+        '/orderInfo'
+      ]
     };
   },
   created() {
@@ -591,7 +597,7 @@ export default {
     },
     "$route.matched"(value) {
       if (value.length !== 0) {
-        if (value[0].path !== "/common" && value[0].path !== "/common2/:id") {
+        if (value[0].path !== "/common" && value[0].path !== "/common2/:id" && value[0].path !== "/purchase" && value[0].path !== "/confirmOrder" && value[0].path !== "/bulkDetails" && value[0].path !== "/orderInfo") {
           // 判断是否是刘海屏
           const rate = window.screen.height / window.screen.width;
           let limit =

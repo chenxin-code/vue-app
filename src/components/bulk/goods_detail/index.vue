@@ -4,14 +4,17 @@
   <div class="goods_detail">
     <div class="goods_swiper">
       <!-- <van-sticky> -->
-      <van-icon
+      <!-- <van-icon
         name="arrow-left"
         class="arrow_left"
         color="#000000"
         size="0.471467rem"
         @click="$router.go(-1)"
-      />
+      /> -->
       <!-- </van-sticky> -->
+      <div class="backIcon" @click="$router.go(-1)">
+        <img src="./images/button_back_default.png" alt="">
+      </div>
       <van-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
         <van-swipe-item v-for="item in resouce.groupbuySkuPicurl" :key="item">
           <img class="goods_img" :src="item" alt="" />
@@ -34,7 +37,7 @@
         </div>
         <div class="goods_time">
           <div class="goods_time_title">{{ getTimeTitle() }}</div>
-          <Countdown :endTime="getCountdownTime()" color="blue"></Countdown>
+          <Countdown :endTime="getCountdownTime()" color="blue" :isShowEndText="false"></Countdown>
         </div>
       </div>
     </div>
@@ -207,7 +210,7 @@ export default {
     width: 100%;
     height: 380px;
 
-    .arrow_left {
+    .backIcon {
       position: absolute;
       top: 14px;
       left: 11.5px;
@@ -217,6 +220,10 @@ export default {
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
+      img{
+        width: 9px;
+        height :16px;
+      }
     }
   }
 
@@ -273,11 +280,11 @@ export default {
           }
 
           .price {
-            font-size: 17px;
+            font-size: 25px;
             font-family: PingFang SC;
             font-weight: bold;
             color: #FFFFFF;
-            line-height: 29px;
+            // line-height: 29px;
           }
 
           .line_price {
@@ -298,7 +305,7 @@ export default {
           align-items: center;
           font-size: 12px;
           font-weight: 400;
-          color: #DA5969;
+          color: #EE1636;
           line-height: 16.5px;
 
           div:last-child {
@@ -443,7 +450,7 @@ export default {
       font-family: PingFang SC;
       font-weight: 400;
       color: #666666;
-      line-height: 18px;
+      line-height: 20px;
 
       div {
         font-size: 13px;
@@ -504,6 +511,7 @@ export default {
     bottom: 0;
     left :0;
     padding :15px 25px 30px;
+    box-shadow: 0px 3px 14px 1px rgba(0, 0, 0, 0.46);
     .pay{
       width: 86%;
       height: 49px;

@@ -204,10 +204,10 @@ export default {
     this.userId = JSON.parse(this.$route.query.userId);
     this.activityName = this.$route.query.activityName;
 
-    // this.purchaseId = 27;
-    // this.chiefId = '3';
-    // this.userId = '2337237484980712751';
-    // this.activityName = '夏季进口水果特价团';
+    // this.purchaseId = 53;
+    // this.chiefId = '4';
+    // this.userId = '2337237484980666802';
+    // this.activityName = '山楂团购活动';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {

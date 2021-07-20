@@ -35,11 +35,11 @@
             <div class="adders-key">提货联系人：</div>
             <div class="adders-val">{{ shareData.headUser }}</div>
           </div>
-          <div class="addres" style="margin-top: 10px;">
+          <div class="addres" style="margin-top: 0.42667rem">
             <div class="adders-key">提货小区：</div>
             <div class="adders-val">{{ shareData. communityCityName }}{{shareData.communityDistrictName}}{{ shareData.communityName }}</div>
           </div>
-          <div class="addres" style="margin-top: 10px;">
+          <div class="addres" style="margin-top: 0.42667rem">
             <div class="adders-key">详细地址：</div>
             <div class="adders-val">{{ shareData.place }}</div>
           </div>
@@ -516,6 +516,8 @@ export default {
             font-family: PingFang SC;
             font-weight: 300;
             color: #121212;
+            white-space :nowrap;
+            flex-wrap :nowrap;
           }
         }
       }
