@@ -577,6 +577,7 @@ export default {
       this.loading = true;
       this.isDisabled = true;
       this.finished = false;
+      this.showEmpty = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
       this.isShowPayDiv = false;
