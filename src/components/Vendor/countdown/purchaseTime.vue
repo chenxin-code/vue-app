@@ -38,7 +38,7 @@
     >
       {{ s }}
     </div>
-    <div class="text">后结束</div>
+    <div class="text" v-if="isShowEndText">后结束</div>
   </div>
 </template>
 
@@ -48,7 +48,7 @@ import countDownJs from "./js/index";
 export default {
   name: "countdown",
   // 这里都传时间戳，方便计算
-  props: ["endTime", "type", "hiddenDay", "color"], // 默认红色 type: className 秒杀倒计时样式
+  props: ["endTime", "type", "hiddenDay", "color",'isShowEndText'], // 默认红色 type: className 秒杀倒计时样式
   components: {},
   data() {
     return {
