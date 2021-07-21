@@ -146,9 +146,9 @@
       <p>请点击右上角进行分享</p>
     </van-popup>
 
-    <!-- <div class="customerService" @click="handleCustomer">
+    <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
-    </div> -->
+    </div>
   </div>
 </template>
 

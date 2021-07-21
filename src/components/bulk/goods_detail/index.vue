@@ -87,9 +87,9 @@
       </div>
       <div class="contnt-style" v-html="resouce.groupbuySkuDetail"></div>
     </div>
-    <!-- <div class="customerService" @click="handleCustomer">
+    <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
-    </div> -->
+    </div>
     <div class="pay_btn">
       <div
         class="pay"

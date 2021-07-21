@@ -200,7 +200,7 @@
         });
       },
       deleteCartItem: function () {
-        this.$emit('deleteCart', [this.cartitem]);
+        this.$emit('deleteCart', [this.cartitem],'spreads');
       },
       enterGoodDetail: function (cartitem) {
         let path = '/mall2/detail/' + this.$util.getDataString()
