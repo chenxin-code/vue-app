@@ -110,7 +110,7 @@
         if (this.receiverName == '' || this.mobile == '' || this.regionText == '' || this.address == '') {
           this.$Toast('所有填写项都为必填项，请将信息填写完整！')
           return
-        } else if (!this.$util.checkMobile(this.mobile)) {
+        } else if (!this.$util.checkPhone(this.mobile)) {
           this.$Toast('请填写正确的手机号码！')
           return
         }else if (this.isEmojiCharacter(this.address)) {

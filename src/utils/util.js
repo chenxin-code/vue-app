@@ -24,7 +24,7 @@ var utils = {
 
   //手机号码校验
   checkPhone: function(num) {
-    if(!(/^1[3456789]\d{9}$/.test(num))){ 
+    if(!(/^[1][3-8]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/.test(num))){ 
         return false; 
     } else {
       return true;
