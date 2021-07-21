@@ -56,6 +56,9 @@ Axios.post = function (url, data, config) {
 
 Axios.interceptors.request.use(
   async config => {
+    
+    config.headers.token = store.state.login.token;
+    config.headers.Authorization = store.state.login.token;
 
     if (bulkApi.indexOf(config.url) !== -1) {
       config.headers.token = store.state.login.token;
