@@ -245,6 +245,7 @@ import Recommend from "../list/recommend/index";
 import BScroll from "better-scroll";
 import PayDiv from "./pay-div";
 import cartEvent from "../../../utils/presale/cart";
+import cart from './js/cart';
 
 export default {
   name: "cart-list",
@@ -275,6 +276,8 @@ export default {
       deleteItem:[],
       deleteCartNum:0,
       detItem:[],
+      checkedDelectItem:[],
+      deleteType:"checked"
     };
   },
   methods: {
@@ -565,9 +568,9 @@ export default {
     toDelete: function (occuritem) {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
-      console.log('carts',cartJS.getSelOccur(occuritem, this.isEditing, "buried"))
-      this.detItem = cartJS.getSelOccur(occuritem, this.isEditing, "buried");
-      console.log('occuritem',occuritem)
+      this.detItem = cartJS.getSelOccur(occuritem, true, "buried");
+      console.log('carts',cartJS.getSelOccur(occuritem, true, "buried"))
+      console.log('detItem',this.detItem)
     },
 
     setCommonPara: function (paramsData) {
@@ -830,7 +833,42 @@ export default {
         }
       );
     },
-    deleteCart: function (carts) {
+    sensorsDelete(){
+      let item = [];
+      if(this.deleteType == 'checked'){
+        this.detItem.forEach(e=>{
+          this.checkedDelectItem.forEach(i=>{
+            if(e.goods_id == i.skuId){
+              item.push(e)
+            }
+          })
+        })
+      }else{
+        item = this.detItem;
+      }
+      console.log('item',this.detItem)
+      console.log('item',this.checkedDelectItem)
+      item.forEach(e=>{
+        let categoryList = e.categoryName.split('_');
+        this.$sensors.track('shoppingcart_edit', {
+          goods_id:e.goods_id,
+          goods_name:e.goods_name,
+          // tag:this.tagList,
+          goods_cls1:categoryList[0],
+          goods_cls2:categoryList[1],
+          goods_cls3:categoryList[2],
+          // org_price:this.detailData.activityPrice,
+          price:e.price,
+          goods_quantity:e.goods_quantity,
+          store_id:e.store_id,
+          store_name:e.store_name,
+          // merchant_id:this.occuritem.ouCode,
+          // merchant_name:this.occuritem.ouName,
+          behavior:'删除',
+        });
+      })
+    },
+    deleteCart: function (carts,type) {
       if (this.isPresale == true) {
         cartEvent.deleteCart(carts);
         this.getDataList();
@@ -843,8 +881,25 @@ export default {
       this.deleteCartNum = carts.length;
       this.showDelectPopup = true;
       this.deleteItem = carts;
-      console.log('carts',carts)
-      this.detItem = carts;
+      if(type == 'spreads'){
+        let item = [];
+        let obj = {
+          goods_id:carts[0].skuId,
+          goods_name:carts[0].productName,
+          categoryName:carts[0].categoryName,
+          price:carts[0].salePrice,
+          goods_quantity:1,
+          store_id:carts[0].storeOuCode,
+          store_name:carts[0].storeName,
+        };
+        item.push(obj)
+        this.detItem = item;
+        this.deleteType = 'spreads'
+      }else{
+        this.checkedDelectItem = carts;
+        this.deleteType = 'checked'
+        console.log('cartsasdasdadadas',this.checkedDelectItem)
+      }
     },
     deleteCartItem(){
       this.$Loading.open();
@@ -865,25 +920,8 @@ export default {
             this.$Toast("删除成功");
             this.getDataList();
             this._getCartCount()
-            this.detItem.forEach(e=>{
-              let categoryList = e.categoryName.split('_');
-              this.$sensors.track('shoppingcart_edit', {
-                goods_id:e.goods_id,
-                goods_name:e.goods_name,
-                // tag:this.tagList,
-                goods_cls1:categoryList[0],
-                goods_cls2:categoryList[1],
-                goods_cls3:categoryList[2],
-                // org_price:this.detailData.activityPrice,
-                price:e.price,
-                goods_quantity:e.goods_quantity,
-                store_id:e.store_id,
-                store_name:e.store_name,
-                // merchant_id:this.occuritem.ouCode,
-                // merchant_name:this.occuritem.ouName,
-                behavior:'删除',
-              });
-            })
+            console.log('this.detItem',this.detItem)
+            this.sensorsDelete();
           } else {
             this.$Toast(data.info);
           }
