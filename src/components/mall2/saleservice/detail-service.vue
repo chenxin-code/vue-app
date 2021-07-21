@@ -80,6 +80,9 @@
       <!--<div v-if="(orderInfo.type == 0 && orderInfo.state == 2) || (orderInfo.type == 1 && orderInfo.state == 2) || (orderInfo.type == 2 && orderInfo.state == 2 && orderInfo.repairType == 1)" class="submit-btn theme_bg_red theme_font_white" @click="rewriteExpress">-->
       <!--<p v-if="!toRewrite">重填快递单号</p>-->
       <!--</div>-->
+      <div class="customerService" @click="handleCustomer">
+        <img :src="customerService" alt="">
+      </div>
     </nav-content>
   </div>
 </template>
@@ -95,6 +98,7 @@
     },
     data() {
       return {
+        customerService:require('../../../../static/images/service.png'),
         isShow: false,
         liftsVoucher: '', // 退货码
         goodsInfo: {
@@ -149,6 +153,22 @@
       }
     },
     methods: {
+      // 唤起客服
+      handleCustomer: function() {
+        ysf('config', {
+          uid: this.$store.state.userInfo.userId,
+          name: this.$store.state.userInfo.nickName,
+          email:'',
+          mobile: this.$store.state.userInfo.phone,
+          data: this.$store.state.userLable,
+          success: function(){     // 成功回调
+            ysf('open');
+          },
+          error: function(){       // 错误回调
+            // handle error
+          }
+        })
+      },
       _cancelapplyOrder:function(order){//取消申请
         this.$Loading.open();
         let url = '/app/json/app_order_after_sale/updateAfterStatus';
@@ -375,6 +395,19 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
   @import "~@/common/stylus/variable.styl"
+
+  .customerService{
+    position: fixed;
+    width: 42px;
+    height : 42px;
+    right: 0;
+    bottom: 112px;
+    img{
+      width 100%;
+      height 100%;
+    }
+  }
+
   .detailservice {
     width 100%
     height 100%

@@ -48,7 +48,7 @@ import countDownJs from "./js/index";
 export default {
   name: "countdown",
   // 这里都传时间戳，方便计算
-  props: ["endTime", "type", "hiddenDay", "color",'isShowEndText'], // 默认红色 type: className 秒杀倒计时样式
+  props: ["endTime", "type", "hiddenDay", "color",'isShowEndText','background'], // 默认红色 type: className 秒杀倒计时样式
   components: {},
   data() {
     return {
@@ -136,6 +136,12 @@ export default {
 .grewColor {
   background: #FD5B92;
 }
+.detail{
+  background: #E6306D;
+}
+.list{
+  background: #FD5B92;
+}
 
 .point {
   font-size: 12px;
@@ -161,7 +167,7 @@ export default {
   color: #d0021b;
 
   .red-div {
-    background: #FD5B92;
+    // background: #FD5B92;
     border-radius: 5px;
     font-size: 12px;
     font-family: PingFang SC;
