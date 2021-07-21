@@ -56,9 +56,19 @@ Axios.post = function (url, data, config) {
 
 Axios.interceptors.request.use(
   async config => {
-    
-    config.headers.token = store.state.login.token;
-    config.headers.Authorization = store.state.login.token;
+    if (/times\/charge-bff/.test(config.url)) {
+      // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
+      // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODY2NDc3NjYzMiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjI3MDQ3OTg5Nzc2NTg3ODk2NSwiZXhwIjoxNjM0NjY2OTE2LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMzgyNDNlMmUtNjExNy00YmNiLTkyNTUtZDcwODAwNWRiODQyIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.EZBNhNh_vW95cEQdr-TTSsYmn-pmGBw-RDGzujtzg_M3KvQhPtv5O4YJp4LT3zgY0pnG-2Z6tNvyNiDc3Lc3BxTwVlopnVFz0N2YI0p5LahM7uTqdqMlYxSe2zuIWdy8rI2YnlJAPf_IsX3ooql8cTtMfuMMT6Nfd8uzaYepBoepeQKUnz1x-geoE5RW629RFjXMKWHePIQhm03NXlM5Ywhs0MTJbi1uWOL4Be0elT9wwJZBI1P1oufUgj7Foh8k_sxaKWL2B4GZFuqtw6hj39WnucKuiHNrxWHyX4mInsXX0d0yzlDKZipky0NcaI8U8dlevWzQQiuVEcY5f3heiA"
+      let tokenStr1;
+      await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+        tokenStr1 = "Bearer " + res.result;
+      });
+      config.headers.Authorization = tokenStr1
+      console.log(`一体化token`, config.headers.Authorization);
+    }else{
+      config.headers.token = store.state.login.token;
+      config.headers.Authorization = store.state.login.token;
+    }
 
     if (bulkApi.indexOf(config.url) !== -1) {
       config.headers.token = store.state.login.token;
@@ -67,15 +77,6 @@ Axios.interceptors.request.use(
 
     //中台接口要带一体化token
 
-    if (/times\/charge-bff/.test(config.url)) {
-      // config.headers.Authorization = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTgxNTgxODE4MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjgzNzc3MzYwOTczMDMyMiwiZXhwIjoxNjMxNjEzNzE0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiZDVhMmY4N2MtNTc4Yi00ZGQxLTlmYjktY2Y3ZTJiMGY0N2IwIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.XfV140QRp8G1nRNk3Bn8B4o5CO0yzmxEtZ9DxTJPxKwf075e8esuwbDHec5Ge85m2fvOSF4p9-uwSO_FaIZeRf3MfVz5flLuSQb18FC3O5HmEs1JKOA41ZG6emhWJukOpjvibhaLmCXBD--k3Or_RGnP0AS2XqTeJUnnQ-D_91YrlMj9eGHjHG5YcBxyfzUkU6kG2aQ0DDStpcdMUIA6M-nGVmpW0QjkazElYuLUg1h1cLDubtnsozU1xupRIK_DWHANzUdkH6tJ8z6-8YqKZCiEceGEw_QIff5xP0cSXbgiw8ivNdHuesX8YOFewiZbpYZEVImw5CNZ548u-wYNGQ"
-      let tokenStr1;
-      await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-        tokenStr1 = "Bearer " + res.result;
-      });
-      config.headers.Authorization = tokenStr1
-      console.log(`一体化token`, config.headers.Authorization);
-    }
     /*物业系统请求处理逻辑
     Content-Type方式是: application/json;charset=UTF-8
     */
