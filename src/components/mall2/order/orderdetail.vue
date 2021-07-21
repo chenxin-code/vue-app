@@ -2417,7 +2417,7 @@ export default {
   }
 
   .bottom-btns-box{
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     // height: 48px;
     z-index: 1;
