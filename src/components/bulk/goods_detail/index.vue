@@ -25,7 +25,6 @@
       <div class="goods_info">
         <div class="goods_price">
           <div class="goods_price_detail">
-            <div class="goods_price_title">团购价格：</div>
             <div class="unit">￥</div>
             <div class="price">{{ resouce.groupbuyBuyerPrice }}</div>
             <div class="line_price">¥{{ resouce.groupbuyLinePrice }}</div>
@@ -39,8 +38,8 @@
           <div class="goods_time_title">{{ getTimeTitle() }}</div>
           <Countdown
             :endTime="getCountdownTime()"
-            color="blue"
             :isShowEndText="false"
+            type="detail"
           ></Countdown>
         </div>
       </div>
@@ -273,7 +272,8 @@ export default {
       background-size: 100% 70px;
       display: flex;
       justify-content: space-between;
-      padding: 8px 10px 8px 20.5px;
+      align-items: center;
+      padding: 8px 14px 8px 17px;
       background-color: #fff;
 
       .goods_price {
@@ -313,14 +313,14 @@ export default {
           }
 
           .line_price {
-            font-size: 17px;
+            font-size: 14px;
             font-family: PingFang SC;
             font-weight: 400;
             text-decoration: line-through;
             color: #FFFFFF;
             line-height: 29px;
-            margin-left: 8px;
-            text-decoration: line-through;
+            margin-left: 11px;
+            margin-top :8px;
           }
         }
 
@@ -342,8 +342,7 @@ export default {
       .goods_time {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 7px;
+        justify-content: center;
 
         .goods_time_title {
           font-size: 12px;
@@ -352,6 +351,7 @@ export default {
           color: #FFFFFF;
           line-height: 16px;
           text-align: center;
+          margin-bottom:5px;
         }
 
         .block {
@@ -540,7 +540,7 @@ export default {
     bottom: 0;
     left: 0;
     padding: 15px 25px 30px;
-    box-shadow: 0px 3px 14px 1px rgba(0, 0, 0, 0.46);
+    box-shadow: 0px 3px 14px 1px rgba(0, 0, 0, 0.15);
 
     .pay {
       width: 86%;

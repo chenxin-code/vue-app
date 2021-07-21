@@ -60,7 +60,7 @@
         </div>
         <!-- v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3" 修复app配置专题页有返回，小程序无返回 -->
         <div
-          class="img-btn-pading space-margin"
+          class="img-btn-pading space-margin flex-icon"
           :class="{
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
@@ -950,6 +950,12 @@ export default {
       .other-full {
         flex: 1;
       }
+      
+      .flex-icon{
+        display:flex;
+        justify-content :flex-start;
+        align-items :flex-end;
+      }
 
       .space-margin {
         margin-left: 8px;
@@ -962,11 +968,14 @@ export default {
       .img-btn-pading {
         position: relative;
         // padding: 12px;
-        padding-right: 55px;
-        padding-bottom: 24px;
+        // padding-right: 55px;
+        // padding-bottom: 24px;
+        width:75px;
+        height:44px;
 
         img {
           display: block;
+          margin-bottom:8px;
         }
 
         .msg-div {
