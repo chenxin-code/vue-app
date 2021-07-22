@@ -194,7 +194,6 @@ export default {
       purchaseId: "",
       chiefId: "",
       userId: "",
-      activityName: "",
       groupStatus: "start"
     };
   },
@@ -202,12 +201,10 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = this.$route.query.activityName;
 
     // this.purchaseId = 53;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '山楂团购活动';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -441,7 +438,6 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            activityName: JSON.stringify(this.activityName),
             checkList:JSON.stringify(this.checkList)
           },
         });

@@ -142,7 +142,6 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = JSON.parse(this.$route.query.activityName);
     if (this.checkList.length > 3) {
       this.goodsList.push(this.checkList[0]);
       this.goodsList.push(this.checkList[1]);
