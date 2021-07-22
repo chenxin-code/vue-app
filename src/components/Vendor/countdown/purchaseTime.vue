@@ -174,8 +174,8 @@ export default {
     font-weight: bold;
     color: #FFFFFF;
     line-height: 18px;
-    padding: 1px;
-    margin-right: 5px;
+    padding: 2px;
+    margin: 0 5px;
   }
 
   &.quan {
@@ -196,5 +196,12 @@ export default {
       justify-content: center;
     }
   }
+}
+.countdown :last-child{
+  margin-right: 0;
+}
+.countdown :first-child{
+  margin-right :0;
+  margin-left :0;
 }
 </style>
