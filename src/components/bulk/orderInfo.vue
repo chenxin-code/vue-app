@@ -611,23 +611,23 @@ export default {
           justify-content: space-between;
 
           .adders-key {
-            width :84px;
+            width: 84px;
             font-size: 13px;
             font-family: PingFang SC;
             font-weight: 300;
             color: #666666;
             text-align: right;
-            white-space :nowrap;
-            flex-wrap :nowrap;
+            white-space: nowrap;
+            flex-wrap: nowrap;
           }
 
           .adders-val {
             // width: 220px;
             flex: 1;
-            text-align:right;
+            text-align: left;
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: 300;
+            font-weight: bold;
             color: #121212;
             // white-space :nowrap;
             // flex-wrap :nowrap;
