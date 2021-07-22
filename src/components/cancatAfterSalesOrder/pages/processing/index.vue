@@ -15,7 +15,7 @@
           :key="index"
           class="scroll"
         >
-          11111
+          <AfterSalesItem />
         </div>
       </van-list>
     </van-pull-refresh>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import AfterSalesItem from "@/components/cancatAfterSalesOrder/components/after-sales-item/index";
 export default {
   name: "processing",
   data() {
@@ -33,6 +34,9 @@ export default {
       finished: false,
       error: false,
     };
+  },
+  components: {
+    AfterSalesItem,
   },
   methods: {
     onLoad() {},
