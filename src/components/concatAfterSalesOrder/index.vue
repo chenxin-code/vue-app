@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import navTop from "@/components/cancatAfterSalesOrder/components/nav-top/nav-top";
+import navTop from "@/components/concatAfterSalesOrder/components/nav-top/nav-top";
 import Processing from "./pages/processing/index";
 import FigureOut from "./pages/figureOut/index";
 import CloseProcess from "./pages/closeProcess/index";

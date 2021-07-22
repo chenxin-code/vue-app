@@ -2,9 +2,9 @@
 
 export default [
   {
-    path: '/cancatAfterSalesOrder/:id',
+    path: '/concatAfterSalesOrder/:id',
     name: '售后订单',
-    component: () => import('@/components/cancatAfterSalesOrder/index'),
+    component: () => import('@/components/concatAfterSalesOrder/index'),
     meta: {
       keepAlive: true
     }

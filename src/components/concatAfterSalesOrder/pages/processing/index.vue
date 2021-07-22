@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import AfterSalesItem from "@/components/cancatAfterSalesOrder/components/after-sales-item/index";
+import AfterSalesItem from "@/components/concatAfterSalesOrder/components/after-sales-item/index";
 export default {
   name: "processing",
   data() {

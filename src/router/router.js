@@ -15,11 +15,11 @@ let routerArr = [
   },
 ];
 
-// cancatAfterSalesOrder
+// concatAfterSalesOrder
 
-import cancatAfterSalesOrder from './modules/cancatAfterSalesOrder.js'
+import concatAfterSalesOrder from './modules/concatAfterSalesOrder.js'
 
-routerArr = routerArr.concat(cancatAfterSalesOrder);
+routerArr = routerArr.concat(concatAfterSalesOrder);
 
 // error
 
