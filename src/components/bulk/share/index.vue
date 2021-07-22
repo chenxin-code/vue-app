@@ -269,7 +269,7 @@ export default {
             this.groupStatus = "notAtThe";
             this.shareData.remainingTime = 0;
           }
-          this.$sensors.track("goods_detail_quit", {
+          this.$sensors.track("group_buying_view", {
             group_buying_id:this.purchaseId,
             group_buying_name: this.shareData.actName,
             head_id: this.chiefId,

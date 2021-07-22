@@ -159,6 +159,9 @@ export default {
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
+      console.log("initObj",initObj);
+      console.log("initObj.ythToken",initObj.ythToken);
+      console.log("getYthUserInfo",this.$store.state.ythToken);
       this.getYthUserInfo();
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
@@ -290,7 +293,6 @@ export default {
       } else {
         token = this.$store.state.ythToken;
       }
-      console.log("getYthUserInfo",this.$store.state.ythToken)
       this.$http.post("/app/json/login/getYthUser",{token:token}).then(res=>{
         if(res.data.status == 0){
           this.$store.state.ythUserInfo = res.data.data;
