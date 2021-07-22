@@ -81,7 +81,7 @@
           <img class="product-pic" :src="item.skuImg[0]" />
           <div class="product-desc">
             <div style="display: flex;flex-direction: column;">
-              <div class="product-title">产品名称：{{ item.skuName }}</div>
+              <div class="product-title">{{ item.skuName }}</div>
               <div class="product-prize-old">
                 销售价格：￥{{ item.crossedPrice }}
               </div>
@@ -269,6 +269,16 @@ export default {
             this.groupStatus = "notAtThe";
             this.shareData.remainingTime = 0;
           }
+          this.$sensors.track("goods_detail_quit", {
+            group_buying_id:this.purchaseId,
+            group_buying_name: this.shareData.actName,
+            head_id: this.chiefId,
+            head_name: this.shareData.headUser,
+            take_goods_address: this.shareData.communityName+this.shareData.place,
+            group_buying_describe: this.shareData.groupDescriptionRichTxt,
+            group_buying_rule_descibe: this.shareData.ruleDescription,
+            group_buying_end_time: this.shareData.actEndTime,
+          });
         }
       });
   },
