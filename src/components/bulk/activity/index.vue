@@ -327,7 +327,7 @@ export default {
               userName: "gh_28d617271c97",
               // path: `pages/common/home/index?sence=${sence}`,
               path: `pages/common/home/index?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
               )}`,
               title: this.shareItemData.groupbuyActivityName,
               desc: this.shareItemData.groupbuyActivityName,
