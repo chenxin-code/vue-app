@@ -559,7 +559,7 @@ export default {
             text-align:left;
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: 300;
+            font-weight: bold;
             color: #121212;
             // white-space :nowrap;
             // flex-wrap :nowrap;

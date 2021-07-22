@@ -231,8 +231,15 @@ const dataMergeInterceptor = {
           arr.push({label:e.labelName, value:e.labelValue?e.labelValue:'无'})
         }
       })
+      let avatar = {
+        key:'avatar',
+        label:'头像',
+        value:Store.state.ythUserInfo.userImage
+      };
+      arr.push(avatar)
       Store.state.userLable = JSON.stringify(arr);
       console.log('Store.state.userLable',Store.state.userLable)
+      console.log('Store.state.userLable',Store.state.ythUserInfo)
     })
   },
   /**
