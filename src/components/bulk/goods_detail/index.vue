@@ -46,7 +46,7 @@
     </div>
     <div class="goods_detail_info">
       <div class="goods_item_detail">
-        <div class="goods_name">{{ resouce.groupbuySkuName }}</div>
+        <div class="goods_name">{{resouce.groupbuySkuName}}</div>
         <!-- 剩余{{ resouce.groupbuyStockNumber }}件 -->
         <div class="goods_count">
           已抢{{ resouce.groupbuyPurchaseNumber }}件
@@ -391,7 +391,8 @@ export default {
         font-family: PingFang SC;
         font-weight: bold;
         color: #333333;
-        line-height: 16px;
+        line-height: 26px;
+        letter-spacing:0px;
       }
 
       .goods_count {
