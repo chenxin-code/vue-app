@@ -6,7 +6,7 @@
       ref="detailTop2"
       class="detail-top"
       :style="{
-        height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
+        height: $store.state.barHeight + $market.getNavHeight(true) + 'px'
       }"
       v-if="proView !== 2"
     >
@@ -15,7 +15,7 @@
         :style="{
           top: $store.state.barHeight + 'px',
           height: $market.getNavHeight(true) + 'px',
-          'line-height': $market.getNavHeight(true) + 'px',
+          'line-height': $market.getNavHeight(true) + 'px'
         }"
         v-show="proView !== 2"
       >
@@ -29,88 +29,88 @@
             style="display: block; width: 24px; height: 24px"
             src="static/image/mall2/back.png"
           />
-  </div>
-  <div
-    class="nav-back-btn"
-    style="right: 10px; top: 5px; width: 34px; height: 34px; padding: 5px"
-    @click="sharegoods"
-    v-if="$store.state.webtype == 1"
-  >
-    <img
-      style="display: block; width: 100%; height: 100%"
-      src="static/image/mall2/fenxiang.png"
-    />
+        </div>
+        <div
+          class="nav-back-btn"
+          style="right: 10px; top: 5px; width: 34px; height: 34px; padding: 5px"
+          @click="sharegoods"
+          v-if="$store.state.webtype == 1"
+        >
+          <img
+            style="display: block; width: 100%; height: 100%"
+            src="static/image/mall2/fenxiang.png"
+          />
+        </div>
+        <div
+          class="nav-back-btn"
+          style="right: 10px; top: 5px; width: 34px; height: 34px; padding: 5px"
+          @click="showShare"
+          v-if="false"
+        >
+          <!-- $store.state.webtype == 3 -->
+          <img
+            style="display: block; width: 100%; height: 100%"
+            src="static/image/mall2/share.png"
+          />
+        </div>
+      </div>
     </div>
     <div
-      class="nav-back-btn"
-      style="right: 10px; top: 5px; width: 34px; height: 34px; padding: 5px"
-      @click="showShare"
-      v-if="false"
-    >
-      <!-- $store.state.webtype == 3 -->
-      <img
-        style="display: block; width: 100%; height: 100%"
-        src="static/image/mall2/share.png"
-      />
-      </div>
-      </div>
-      </div>
-      <div
-        ref="detailTop1"
-        class="detail-top"
-        style="visibility: hidden"
-        :style="{
-        height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
+      ref="detailTop1"
+      class="detail-top"
+      style="visibility: hidden"
+      :style="{
+        height: $store.state.barHeight + $market.getNavHeight(true) + 'px'
       }"
-        v-if="detailShow"
-        v-show="proView !== 2"
+      v-if="detailShow"
+      v-show="proView !== 2"
+    >
+      <nav-top
+        isMust="true"
+        :noBack="$store.state.webtype == 2"
+        :noTitle="true"
+        @backEvent="backEvent"
       >
-        <nav-top
-          isMust="true"
-          :noBack="$store.state.webtype == 2"
-          :noTitle="true"
-          @backEvent="backEvent"
-        >
-          <transition name="transition1">
+        <transition name="transition1">
+          <div
+            class="detail-tab"
+            style="left: 20%; right: 20%; font-size: 16px"
+            v-show="proView == 1"
+          >
             <div
-              class="detail-tab"
-              style="left: 20%; right: 20%; font-size: 16px"
-              v-show="proView == 1"
+              class="btn-div"
+              :style="getSelectedTabStyle(1)"
+              @click="toptabEvent(1)"
             >
-              <div
-                class="btn-div"
-                :style="getSelectedTabStyle(1)"
-                @click="toptabEvent(1)"
-              >
-                商品
-                </div>
-                <div
-                  class="btn-div"
-                  :style="getSelectedTabStyle(2)"
-                  @click="toptabEvent(2)"
-                >
-                  详情
-                  </div>
-                  <div
-                    class="btn-div"
-                    :style="getSelectedTabStyle(3)"
-                    @click="toptabEvent(3)"
-                  >
-                    评价
-                    </div>
-                    <div
-                      class="btn-div"
-                      :style="getSelectedTabStyle(4)"
-                      @click="toptabEvent(4)"
-                    >
-                      推荐
-                      <!--<span :class="{theme_border_red_i: toptab == 4, theme_font_red_i: toptab == 4}"></span>-->
-                      </div>
-                      </div>
-          </transition>
-          <transition name="transition2">
+              商品
+            </div>
             <div
-              style="
+              class="btn-div"
+              :style="getSelectedTabStyle(2)"
+              @click="toptabEvent(2)"
+            >
+              详情
+            </div>
+            <div
+              class="btn-div"
+              :style="getSelectedTabStyle(3)"
+              @click="toptabEvent(3)"
+            >
+              评价
+            </div>
+            <div
+              class="btn-div"
+              :style="getSelectedTabStyle(4)"
+              @click="toptabEvent(4)"
+            >
+              推荐
+              <!--<span :class="{theme_border_red_i: toptab == 4, theme_font_red_i: toptab == 4}"></span>-->
+            </div>
+          </div>
+        </transition>
+        <transition name="transition2">
+          <div
+            style="
               position: absolute;
               left: 20%;
               right: 20%;
@@ -118,50 +118,39 @@
               font-weight: 500;
               text-align: center;
             "
-              v-show="proView == 2"
-            >
-              图文详情
-              </div>
-          </transition>
-          <div
-            class="right-btn"
-            style="right: 0px; height: 44px; top: 0px; padding-right: 12px"
-            v-if="$store.state.webtype == 1"
-            @click="sharegoods"
+            v-show="proView == 2"
           >
-            <i
-              class="iconfont mall-fenxiang theme_font_common"
-              style="font-size: 20px"
-            ></i>
-              </div>
-              </nav-top>
-              </div>
-              <!-- :style="getScrollTop()" -->
+            图文详情
+          </div>
+        </transition>
+        <div
+          class="right-btn"
+          style="right: 0px; height: 44px; top: 0px; padding-right: 12px"
+          v-if="$store.state.webtype == 1"
+          @click="sharegoods"
+        >
+          <i
+            class="iconfont mall-fenxiang theme_font_common"
+            style="font-size: 20px"
+          ></i>
+        </div>
+      </nav-top>
+    </div>
+    <!-- :style="getScrollTop()" -->
+    <div ref="scrollView" class="scroll-div theme_bg_white" v-if="detailShow">
+      <swiper class="main-swiper" ref="mySwiper" :options="mainSwiper">
+        <swiper-slide :class="{ 'swiper-no-swiping': proView == 2 }">
+          <div class="main-swiper" style="position: relative">
+            <transition name="transition1">
               <div
-                ref="scrollView"
-                class="scroll-div theme_bg_white"
-                v-if="detailShow"
+                class="main-swiper theme_bg_white_f5"
+                style="position: absolute"
+                v-show="proView == 1"
               >
-                <swiper
-                  class="main-swiper"
-                  ref="mySwiper"
-                  :options="mainSwiper"
-                >
-                  <swiper-slide :class="{ 'swiper-no-swiping': proView == 2 }">
-                    <div
-                      class="main-swiper"
-                      style="position: relative"
-                    >
-                      <transition name="transition1">
-                        <div
-                          class="main-swiper theme_bg_white_f5"
-                          style="position: absolute"
-                          v-show="proView == 1"
-                        >
-                          <!--<div ref="scrollView1" @scroll="pageSite" @touchend="touchend" class="main-swiper enable-scroll theme_bg_white_f5" style="position: absolute;" v-show="proView == 1">-->
-                          <pull-to
-                            ref="pullTo1"
-                            :bottomConfig="{
+                <!--<div ref="scrollView1" @scroll="pageSite" @touchend="touchend" class="main-swiper enable-scroll theme_bg_white_f5" style="position: absolute;" v-show="proView == 1">-->
+                <pull-to
+                  ref="pullTo1"
+                  :bottomConfig="{
                     pullText: '',
                     triggerText: '释放显示商品详情',
                     loadingText: '加载中...',
@@ -169,61 +158,64 @@
                     failText: '加载失败',
                     loadedStayTime: 400,
                     stayDistance: 40,
-                    triggerDistance: 50,
+                    triggerDistance: 50
                   }"
-                            :bottom-load-method="bottomPull"
-                            :top-load-method="topPull"
-                            :is-bottom-bounce="true"
-                            :is-top-bounce="false"
-                            :doSiteCallback="true"
-                            @pageSite="pullScrollEvent"
+                  :bottom-load-method="bottomPull"
+                  :top-load-method="topPull"
+                  :is-bottom-bounce="true"
+                  :is-top-bounce="false"
+                  :doSiteCallback="true"
+                  @pageSite="pullScrollEvent"
+                >
+                  <div>
+                    <div class="swiper-div theme_bg_white">
+                      <swiper :options="swiperOption">
+                        <swiper-slide v-if="videoUrl != ''">
+                          <video-player
+                            class="video-player vjs-custom-skin"
+                            ref="videoPlayer"
+                            :playsinline="true"
+                            @ready="playerReadied"
+                            :options="playerOptions"
+                          ></video-player>
+                        </swiper-slide>
+                        <swiper-slide
+                          v-for="(pic, pidx) in detailData.picUrls"
+                          :key="pidx"
+                        >
+                          <div
+                            class="swiper-img-div"
+                            @click="showBigImageEvent(pidx)"
                           >
-                            <div>
-                              <div class="swiper-div theme_bg_white">
-                                <swiper :options="swiperOption">
-                                  <swiper-slide v-if="videoUrl != ''">
-                                    <video-player
-                                      class="video-player vjs-custom-skin"
-                                      ref="videoPlayer"
-                                      :playsinline="true"
-                                      @ready="playerReadied"
-                                      :options="playerOptions"
-                                    ></video-player>
-                                  </swiper-slide>
-                                  <swiper-slide
-                                    v-for="(pic, pidx) in detailData.picUrls"
-                                    :key="pidx"
-                                  >
-                                    <div
-                                      class="swiper-img-div"
-                                      @click="showBigImageEvent(pidx)"
-                                    >
-                                      <img :src="pic+'?x-oss-process=image/format,jpg'" />
-                              </div>
-                  </swiper-slide>
-                  </swiper>
-                  <div class="swiper-index">
-                    <div
-                      class="si-item theme_bg_white_ef"
-                      :class="{
+                            <img
+                              :src="pic + '?x-oss-process=image/format,jpg'"
+                            />
+                          </div>
+                        </swiper-slide>
+                      </swiper>
+                      <div class="swiper-index">
+                        <div
+                          class="si-item theme_bg_white_ef"
+                          :class="{
                             'cus-index': proImgIndex == idx,
-                            theme_bg_red_i: proImgIndex == idx,
+                            theme_bg_red_i: proImgIndex == idx
                           }"
-                      v-for="(d, idx) in arrLen"
-                    ></div>
-                  </div>
-                  <div
-                    class="swiper-tip"
-                    v-if="detailData.productType == 6"
-                  >
-                    <div class="pay-time">
-                      <span>每日下单时间：</span>
-                      <span class="tm">{{ detailData.dailySaleBegin }}
-                      </span>
-                      <span>至</span>
-                      <span class="tm">{{ detailData.dailySaleEnd }}</span>
-                    </div>
-                    </div>
+                          v-for="(d, idx) in arrLen"
+                        ></div>
+                      </div>
+                      <div
+                        class="swiper-tip"
+                        v-if="detailData.productType == 6"
+                      >
+                        <div class="pay-time">
+                          <span>每日下单时间：</span>
+                          <span class="tm"
+                            >{{ detailData.dailySaleBegin }}
+                          </span>
+                          <span>至</span>
+                          <span class="tm">{{ detailData.dailySaleEnd }}</span>
+                        </div>
+                      </div>
                     </div>
                     <div class="base-info theme_bg_white">
                       <!-- 添加到心愿单 -->
@@ -232,7 +224,7 @@
                         @click="addWishLish"
                         v-if="
                           $store.state.globalConfig.isEnabledWishOrder == 1 &&
-                          detailData.deliveryType == 2
+                            detailData.deliveryType == 2
                         "
                       >
                         <img
@@ -245,1454 +237,1348 @@
                           alt=""
                           v-else
                         />
-                    </div>
-                    <!-- 添加到心愿单end -->
-
-                    <!--秒杀-->
-                    <div
-                      class="seconds-kill"
-                      v-if="
-                          detailData.mktActivityPriceLevel == 3 ||
-                          (showActivityTime == '1' &&
-                            detailData.mktActivityPriceLevel != '')
-                        "
-                    >
-                      <div class="left-div">
-                        <div
-                          class="sk-row"
-                          v-if="showActivityTime != '1'"
-                        >
-                          <div class="price theme_font_white">
-                            <span>￥</span>
-                            <span class="price-z">{{ detailData.dpedData.integer }}
-                            </span>
-                            <span>.{{ detailData.dpedData.decimals }}</span>
-                          </div>
-                          <!-- <div class="share-img">-->
-                          <!--   <img src="../../../../static/image/mall2/share.png" alt="">-->
-                          <!-- </div>-->
-                          <div class="progress">
-                            <mt-progress
-                              :value="detailData.soldNum || 0"
-                              :bar-height="16"
-                            ></mt-progress>
-                          </div>
-                          <div
-                            class="progress-text theme_font_white"
-                            v-if="detailData.soldNum < 100"
-                          >
-                            已抢{{ detailData.soldNum || 0 }}%
                       </div>
+                      <!-- 添加到心愿单end -->
+
+                      <!--秒杀-->
                       <div
-                        class="progress-text theme_font_white"
-                        v-else
+                        class="seconds-kill"
+                        v-if="
+                          detailData.mktActivityPriceLevel == 3 ||
+                            (showActivityTime == '1' &&
+                              detailData.mktActivityPriceLevel != '')
+                        "
                       >
-                        已抢光
-                        </div>
-                        </div>
-                        <div
-                          class="sk-row"
-                          v-else
-                        >
-                          <div class="price theme_font_white">
-                            <PriceOrder
-                              :showLevelImg="false"
-                              :detailColor="'white'"
-                              :detailitem="detailData"
-                            ></PriceOrder>
+                        <div class="left-div">
+                          <div class="sk-row" v-if="showActivityTime != '1'">
+                            <div class="price theme_font_white">
+                              <span>￥</span>
+                              <span class="price-z"
+                                >{{ detailData.dpedData.integer }}
+                              </span>
+                              <span>.{{ detailData.dpedData.decimals }}</span>
+                            </div>
+                            <!-- <div class="share-img">-->
+                            <!--   <img src="../../../../static/image/mall2/share.png" alt="">-->
+                            <!-- </div>-->
+                            <div class="progress">
+                              <mt-progress
+                                :value="detailData.soldNum || 0"
+                                :bar-height="16"
+                              ></mt-progress>
+                            </div>
+                            <div
+                              class="progress-text theme_font_white"
+                              v-if="detailData.soldNum < 100"
+                            >
+                              已抢{{ detailData.soldNum || 0 }}%
+                            </div>
+                            <div class="progress-text theme_font_white" v-else>
+                              已抢光
+                            </div>
                           </div>
+                          <div class="sk-row" v-else>
+                            <div class="price theme_font_white">
+                              <PriceOrder
+                                :showLevelImg="false"
+                                :detailColor="'white'"
+                                :detailitem="detailData"
+                              ></PriceOrder>
+                            </div>
                           </div>
                           <div class="sk-row">
                             <div class="sk-icon">
-                              <i class="iconfont mall-icon-test theme_bg_white theme_font_red"></i>
+                              <i
+                                class="iconfont mall-icon-test theme_bg_white theme_font_red"
+                              ></i>
                               <span class="theme_font_white">秒杀价</span>
                             </div>
                             <div
                               class="o-price theme_font_white"
                               :class="{
                                 'line-through':
-                                  $store.state.globalConfig.priceShowType == 2,
+                                  $store.state.globalConfig.priceShowType == 2
                               }"
                               v-if="
                                 detailData.activityPrice < detailData.salePrice
                               "
                             >
-                              <span v-if="
+                              <span
+                                v-if="
                                   $store.state.globalConfig.priceShowType == 1
-                                ">原价:</span>￥{{ $util.toDecimal2( $util.toDecimal2( detailData.dpedData.linePrice ) ) }}
-                          </div>
-                          </div>
-                          </div>
-                          <div class="right-div theme_bg_light_red">
-                            <div class="skr-row theme_font_red">
-                              <!--距离结束还剩:-->
-                              {{ getTimeTitle() }}
-                            </div>
-                            <div class="skr-row">
-                              <Countdown :endTime="getCountdownTime"></Countdown>
+                                "
+                                >原价:</span
+                              >￥{{
+                                $util.toDecimal2(
+                                  $util.toDecimal2(
+                                    detailData.dpedData.linePrice
+                                  )
+                                )
+                              }}
                             </div>
                           </div>
+                        </div>
+                        <div class="right-div theme_bg_light_red">
+                          <div class="skr-row theme_font_red">
+                            <!--距离结束还剩:-->
+                            {{ getTimeTitle() }}
                           </div>
-                          <!--团购返现-->
-                          <div
-                            class="seconds-kill tgfx"
-                            v-else-if="
+                          <div class="skr-row">
+                            <Countdown :endTime="getCountdownTime"></Countdown>
+                          </div>
+                        </div>
+                      </div>
+                      <!--团购返现-->
+                      <div
+                        class="seconds-kill tgfx"
+                        v-else-if="
                           detailData.mktActivityPriceLevel === 0 && tgfxData
                         "
-                          >
-                            <div class="left-div">
-                              <div class="sk-row">
-                                <div class="price theme_font_white">
-                                  <PriceOrder
-                                    :showLevelImg="false"
-                                    :detailColor="'white'"
-                                    :detailitem="detailData"
-                                  ></PriceOrder>
-                                </div>
-                              </div>
-                              <div class="sk-row">
-                                <div class="theme_font_white">
-                                  已售{{ tgfxData.totalNumber }}件
-                                </div>
-                                <div class="tgfx-gz theme_font_white">
-                                  满{{ tgfxData.returnRules[ tgfxData.returnRules.length - 1 ].number }}件，返{{ tgfxData.returnRules[ tgfxData.returnRules.length - 1 ].returnValue }}{{ getFxUnit(tgfxData.returnType) }}；
-                                </div>
-                              </div>
+                      >
+                        <div class="left-div">
+                          <div class="sk-row">
+                            <div class="price theme_font_white">
+                              <PriceOrder
+                                :showLevelImg="false"
+                                :detailColor="'white'"
+                                :detailitem="detailData"
+                              ></PriceOrder>
                             </div>
-                            <div class="right-div theme_bg_light_red">
-                              <div class="skr-row theme_font_red">
-                                <!--距离结束还剩:-->
-                                {{ getTimeTitle() }}
-                              </div>
-                              <div class="skr-row">
-                                <Countdown :endTime="getCountdownTime"></Countdown>
-                              </div>
+                          </div>
+                          <div class="sk-row">
+                            <div class="theme_font_white">
+                              已售{{ tgfxData.totalNumber }}件
                             </div>
+                            <div class="tgfx-gz theme_font_white">
+                              满{{
+                                tgfxData.returnRules[
+                                  tgfxData.returnRules.length - 1
+                                ].number
+                              }}件，返{{
+                                tgfxData.returnRules[
+                                  tgfxData.returnRules.length - 1
+                                ].returnValue
+                              }}{{ getFxUnit(tgfxData.returnType) }}；
                             </div>
-                            <!--限时特价-->
-                            <div
-                              class="seconds-kill xstj"
-                              v-else-if="detailData.mktActivityPriceLevel === 1"
-                            >
-                              <div class="left-div">
-                                <div class="icon-img">
-                                  <img src="./img/xstj.png" />
-                                </div>
-                                <div class="price">
-                                  <p class="activity-price">
-                                    活动价：¥
-                                    <span>{{ detailData.dpedData.integer }}
-                                    </span>.{{ detailData.dpedData.decimals }}
-                                  </p>
-                                  <p class="orgin-price">
-                                    原价：¥{{ $util.toDecimal2(detailData.dpedData.linePrice) }}
-                                  </p>
-                                </div>
-                              </div>
-                              <div class="right-div">
-                                <div class="skr-row theme_font_red">
-                                  <!--距离结束还剩:-->
-                                  {{ getTimeTitle() }}
-                                </div>
-                                <div class="skr-row">
-                                  <Countdown :endTime="getCountdownTime"></Countdown>
-                                </div>
-                              </div>
-                              </div>
-                              <!--贵州预售-->
-                              <div
-                                class="seconds-kill ys"
-                                v-else-if="
+                          </div>
+                        </div>
+                        <div class="right-div theme_bg_light_red">
+                          <div class="skr-row theme_font_red">
+                            <!--距离结束还剩:-->
+                            {{ getTimeTitle() }}
+                          </div>
+                          <div class="skr-row">
+                            <Countdown :endTime="getCountdownTime"></Countdown>
+                          </div>
+                        </div>
+                      </div>
+                      <!--限时特价-->
+                      <div
+                        class="seconds-kill xstj"
+                        v-else-if="detailData.mktActivityPriceLevel === 1"
+                      >
+                        <div class="left-div">
+                          <div class="icon-img">
+                            <img src="./img/xstj.png" />
+                          </div>
+                          <div class="price">
+                            <p class="activity-price">
+                              活动价：¥
+                              <span>{{ detailData.dpedData.integer }} </span>.{{
+                                detailData.dpedData.decimals
+                              }}
+                            </p>
+                            <p class="orgin-price">
+                              原价：¥{{
+                                $util.toDecimal2(detailData.dpedData.linePrice)
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="right-div">
+                          <div class="skr-row theme_font_red">
+                            <!--距离结束还剩:-->
+                            {{ getTimeTitle() }}
+                          </div>
+                          <div class="skr-row">
+                            <Countdown :endTime="getCountdownTime"></Countdown>
+                          </div>
+                        </div>
+                      </div>
+                      <!--贵州预售-->
+                      <div
+                        class="seconds-kill ys"
+                        v-else-if="
                           detailData.supportPreSale == 1 &&
-                          $store.state.globalConfig.presaleType == 2
+                            $store.state.globalConfig.presaleType == 2
                         "
-                              >
-                                <div class="left-div">
-                                  <div class="theme_font_white">
-                                    <span class="big-title">预售金额：</span>
-                                    <PriceOrder
-                                      :showLevelImg="false"
-                                      :detailColor="'white'"
-                                      :detailitem="detailData"
-                                    ></PriceOrder>
-                                  </div>
-                                </div>
-                                <div class="right-div theme_bg_light_red">
-                                  <div class="skr-row theme_font_red">
-                                    <!--距离结束还剩:-->
-                                    {{ getTimeTitle() }}
-                                  </div>
-                                  <div class="skr-row">
-                                    <Countdown :endTime="getCountdownTime"></Countdown>
-                                  </div>
-                                </div>
-                                </div>
-                                <div
-                                  class="price"
-                                  v-else
-                                >
-                                  <PriceOrder :detailitem="detailData"></PriceOrder>
-                                  <span
-                                    class="price-small theme_font_tint left-m-8"
-                                    v-if="
+                      >
+                        <div class="left-div">
+                          <div class="theme_font_white">
+                            <span class="big-title">预售金额：</span>
+                            <PriceOrder
+                              :showLevelImg="false"
+                              :detailColor="'white'"
+                              :detailitem="detailData"
+                            ></PriceOrder>
+                          </div>
+                        </div>
+                        <div class="right-div theme_bg_light_red">
+                          <div class="skr-row theme_font_red">
+                            <!--距离结束还剩:-->
+                            {{ getTimeTitle() }}
+                          </div>
+                          <div class="skr-row">
+                            <Countdown :endTime="getCountdownTime"></Countdown>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="price" v-else>
+                        <PriceOrder :detailitem="detailData"></PriceOrder>
+                        <span
+                          class="price-small theme_font_tint left-m-8"
+                          v-if="
                             detailData.dpedData.linePrice &&
-                            detailData.activityPrice < detailData.salePrice
+                              detailData.activityPrice < detailData.salePrice
                           "
-                                    :class="{
+                          :class="{
                             'line-through':
-                              $store.state.globalConfig.priceShowType == 2,
+                              $store.state.globalConfig.priceShowType == 2
                           }"
-                                  >
-                                    <span v-if="$store.state.globalConfig.priceShowType == 1">原价:</span>￥{{ $util.toDecimal2( $util.toDecimal2(detailData.dpedData.linePrice) ) }}
-                                    </span>
-                                    </div>
-                                    <div
-                                      class="row"
-                                      v-if="
+                        >
+                          <span
+                            v-if="$store.state.globalConfig.priceShowType == 1"
+                            >原价:</span
+                          >￥{{
+                            $util.toDecimal2(
+                              $util.toDecimal2(detailData.dpedData.linePrice)
+                            )
+                          }}
+                        </span>
+                      </div>
+                      <div
+                        class="row"
+                        v-if="
                           detailData.packageStartTime && getPackageStartTime()
                         "
-                                    >
-                                      <div class="activity-notice">
-                                        <div class="sk-icon">
-                                          <i class="iconfont mall-icon-test theme_bg_red theme_font_white"></i>
-                                          <span class="theme_font_red">距离售卖</span>
-                                        </div>
-                                        <div class="notice-price">
-                                          <Countdown :endTime="getPackageStartTime()"></Countdown>
-                                        </div>
-                                      </div>
-                                      </div>
-                                      <div
-                                        class="row"
-                                        v-if="noticeIsShow()"
-                                      >
-                                        <div class="activity-notice">
-                                          <div class="sk-icon">
-                                            <i class="iconfont mall-icon-test theme_bg_red theme_font_white"></i>
-                                            <span class="theme_font_red">{{ detailData.noticeActivityDetail.activityType }}预告
-                                            </span>
-                                          </div>
-                                          <div class="notice-price theme_font_red">
-                                            {{ getNoticeTime() + " " + getNoticePrice() }}
-                                          </div>
-                                        </div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="content">
-                                            <div
-                                              class="title theme_font_black"
-                                              v-html="getSkuNameStr(detailData)"
-                                            ></div>
-                                          <div
-                                            class="share_button"
-                                            @click="onShare"
-                                          >
-                                            <img
-                                              src="static/image/mall2/share_icon.png"
-                                              alt=""
-                                            >
-                                              <div>分享</div>
-                                        </div>
-                                        </div>
-                                        </div>
-                                        <div
-                                          class="row"
-                                          v-if="
+                      >
+                        <div class="activity-notice">
+                          <div class="sk-icon">
+                            <i
+                              class="iconfont mall-icon-test theme_bg_red theme_font_white"
+                            ></i>
+                            <span class="theme_font_red">距离售卖</span>
+                          </div>
+                          <div class="notice-price">
+                            <Countdown
+                              :endTime="getPackageStartTime()"
+                            ></Countdown>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" v-if="noticeIsShow()">
+                        <div class="activity-notice">
+                          <div class="sk-icon">
+                            <i
+                              class="iconfont mall-icon-test theme_bg_red theme_font_white"
+                            ></i>
+                            <span class="theme_font_red"
+                              >{{
+                                detailData.noticeActivityDetail.activityType
+                              }}预告
+                            </span>
+                          </div>
+                          <div class="notice-price theme_font_red">
+                            {{ getNoticeTime() + " " + getNoticePrice() }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="content">
+                          <div
+                            class="title theme_font_black"
+                            v-html="getSkuNameStr(detailData)"
+                          ></div>
+                          <div class="share_button" @click="onShare">
+                            <img
+                              src="static/image/mall2/share_icon.png"
+                              alt=""
+                            />
+                            <div>分享</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="row"
+                        v-if="
                           detailData.mktActivityPriceLevel === 0 && tgfxData
                         "
-                                        >
-                                          <div class="font-small theme_font_tint">
-                                            <span v-for="rule in tgfxData.returnRules">满{{ rule.number }}件，每件返{{ rule.returnValue }}{{ getFxUnit(tgfxData.returnType) }}</span>
-                                          </div>
-                                          </div>
-                                          <div
-                                            class="row"
-                                            v-if="
+                      >
+                        <div class="font-small theme_font_tint">
+                          <span v-for="rule in tgfxData.returnRules"
+                            >满{{ rule.number }}件，每件返{{ rule.returnValue
+                            }}{{ getFxUnit(tgfxData.returnType) }}</span
+                          >
+                        </div>
+                      </div>
+                      <div
+                        class="row"
+                        v-if="
                           detailData.mktActivityPriceLevel === 0 && tgfxData
                         "
-                                          >
-                                            <div class="theme_font_black font-small">
-                                              <span class="theme_font_red">温馨提示：</span>
-                                              <span>{{ tgfxData.groupBuyCashDesc }}</span>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            <!--券和优惠活动-->
-                                            <div
-                                              class="cou_and_act theme_bg_white"
-                                              v-if="
+                      >
+                        <div class="theme_font_black font-small">
+                          <span class="theme_font_red">温馨提示：</span>
+                          <span>{{ tgfxData.groupBuyCashDesc }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!--券和优惠活动-->
+                    <div
+                      class="cou_and_act theme_bg_white"
+                      v-if="
                         (!cardType || (cardType && cardType == 551)) &&
-                        orderCategory != '1'
+                          orderCategory != '1'
                       "
-                                            >
-                                              <CouponAndActivity
-                                                :detailData="detailData"
-                                                @openEvent="couponEvent"
-                                              ></CouponAndActivity>
-                                                </div>
-                                                <!--<div class="block-div theme_bg_white">-->
-                                                <!--<div class="flex-row" @click="couponEvent">-->
-                                                <!--<div class="label-middle theme_font_gray">领券</div>-->
-                                                <!--&lt;!&ndash;                        <div class="font-small theme_font_tint" v-if="detailData.couponModels == '' && jfhqList == ''">&ndash;&gt;-->
-                                                <!--<div class="font-small theme_font_tint" v-if="couFlag.length==0 && jfhqList == ''">-->
-                                                <!--暂无可用优惠券-->
-                                                <!--</div>-->
-                                                <!--<div class="act-item-full theme_standard_bg theme_font_white"-->
-                                                <!--v-if="couFlag.length>0 && cidx < 2"-->
-                                                <!--v-for="(couponModel, cidx) in couFlag">{{couponModel.couTypeTitle}}-->
-                                                <!--</div>-->
-                                                <!--<div class="act-item-full theme_standard_bg theme_font_white"-->
-                                                <!--v-if="jfhqList != '' && cidx < 2"-->
-                                                <!--v-for="(couponModel, cidx) in jfhqList">{{couponModel.couTypeTitle}}-->
-                                                <!--</div>-->
-                                                <!--<div class="full"></div>-->
-                                                <!--<div>-->
-                                                <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-                                                <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<div class="flex-row" v-for="(aactivity, aidx) in detailData.activityList"-->
-                                                <!--@click="showActivity = true">-->
-                                                <!--<div class="label-middle theme_font_gray">{{ aidx == 0 ? '促销' : '' }}</div>-->
-                                                <!--<div class="act-item-empty line_circle theme_standard_font theme_standard_bdr single-line">-->
-                                                <!--{{aactivity.type}}-->
-                                                <!--</div>-->
-                                                <!--<div class="activity-text theme_font_common full single-line">{{aactivity.title}}</div>-->
-                                                <!--<div v-if="aidx == 0">-->
-                                                <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-                                                <!--</div>-->
-                                                <!--</div>-->
-                                                <!--</div>-->
-                                                <!--商品包信息-->
-                                                <div
-                                                  class="block-div theme_bg_white"
-                                                  v-if="productType == 4"
-                                                >
-                                                  <div class="flex-row">
-                                                    <div class="title theme_font_black">套装明细</div>
-                                                  </div>
-                                                  <div
-                                                    class="pro-row"
-                                                    v-for="pro in detailData.packageSkuList"
-                                                  >
-                                                    <div class="img-div">
-                                                      <img :src="pro.phMainUrl" />
-                                                    </div>
-                                                    <div class="info-div">
-                                                      <div
-                                                        class="title pro-title-height double-line theme_font_black"
-                                                        v-html="getSkuNameStr(pro)"
-                                                      ></div>
-                                                    <div class="feature-names double-line theme_font_tint">
-                                                      {{ pro.featureNames }}
-                                                    </div>
-                                                    <div class="price">
-                                                      <span
-                                                        class="font-small theme_font_tint"
-                                                        style="float: right"
-                                                      >x {{ pro.skuNum }} {{ pro.metric }}</span>
-                                                        <span class="font-small theme_font_red">￥</span>
-                                                        <span class="price-mid theme_font_red full">{{ pro.salePrice }}
-                                                        </span>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    <!--预售信息-->
-                                                    <div
-                                                      class="block-div theme_bg_white"
-                                                      v-if="
+                    >
+                      <CouponAndActivity
+                        :detailData="detailData"
+                        @openEvent="couponEvent"
+                      ></CouponAndActivity>
+                    </div>
+                    <!--<div class="block-div theme_bg_white">-->
+                    <!--<div class="flex-row" @click="couponEvent">-->
+                    <!--<div class="label-middle theme_font_gray">领券</div>-->
+                    <!--&lt;!&ndash;                        <div class="font-small theme_font_tint" v-if="detailData.couponModels == '' && jfhqList == ''">&ndash;&gt;-->
+                    <!--<div class="font-small theme_font_tint" v-if="couFlag.length==0 && jfhqList == ''">-->
+                    <!--暂无可用优惠券-->
+                    <!--</div>-->
+                    <!--<div class="act-item-full theme_standard_bg theme_font_white"-->
+                    <!--v-if="couFlag.length>0 && cidx < 2"-->
+                    <!--v-for="(couponModel, cidx) in couFlag">{{couponModel.couTypeTitle}}-->
+                    <!--</div>-->
+                    <!--<div class="act-item-full theme_standard_bg theme_font_white"-->
+                    <!--v-if="jfhqList != '' && cidx < 2"-->
+                    <!--v-for="(couponModel, cidx) in jfhqList">{{couponModel.couTypeTitle}}-->
+                    <!--</div>-->
+                    <!--<div class="full"></div>-->
+                    <!--<div>-->
+                    <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="flex-row" v-for="(aactivity, aidx) in detailData.activityList"-->
+                    <!--@click="showActivity = true">-->
+                    <!--<div class="label-middle theme_font_gray">{{ aidx == 0 ? '促销' : '' }}</div>-->
+                    <!--<div class="act-item-empty line_circle theme_standard_font theme_standard_bdr single-line">-->
+                    <!--{{aactivity.type}}-->
+                    <!--</div>-->
+                    <!--<div class="activity-text theme_font_common full single-line">{{aactivity.title}}</div>-->
+                    <!--<div v-if="aidx == 0">-->
+                    <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--商品包信息-->
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="productType == 4"
+                    >
+                      <div class="flex-row">
+                        <div class="title theme_font_black">套装明细</div>
+                      </div>
+                      <div
+                        class="pro-row"
+                        v-for="pro in detailData.packageSkuList"
+                      >
+                        <div class="img-div">
+                          <img :src="pro.phMainUrl" />
+                        </div>
+                        <div class="info-div">
+                          <div
+                            class="title pro-title-height double-line theme_font_black"
+                            v-html="getSkuNameStr(pro)"
+                          ></div>
+                          <div
+                            class="feature-names double-line theme_font_tint"
+                          >
+                            {{ pro.featureNames }}
+                          </div>
+                          <div class="price">
+                            <span
+                              class="font-small theme_font_tint"
+                              style="float: right"
+                              >x {{ pro.skuNum }} {{ pro.metric }}</span
+                            >
+                            <span class="font-small theme_font_red">￥</span>
+                            <span class="price-mid theme_font_red full"
+                              >{{ pro.salePrice }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--预售信息-->
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="
                         detailData.supportPreSale == 1 &&
-                        $store.state.globalConfig.presaleType == 2
+                          $store.state.globalConfig.presaleType == 2
                       "
-                                                    >
-                                                      <div class="flex-row">
-                                                        <div class="theme_font_black">
-                                                          {{ $store.state.globalConfig.presaleDescription }}
-                                                        </div>
-                                                      </div>
-                                                      <div class="flex-row">
-                                                        <div class="theme_font_black">
-                                                          提货时间：{{ detailData.beginPickUpTime }}
-                                                        </div>
-                                                      </div>
-                                                      </div>
-                                                      <!--可参与的单品活动-->
-                                                      <div v-if="
+                    >
+                      <div class="flex-row">
+                        <div class="theme_font_black">
+                          {{ $store.state.globalConfig.presaleDescription }}
+                        </div>
+                      </div>
+                      <div class="flex-row">
+                        <div class="theme_font_black">
+                          提货时间：{{ detailData.beginPickUpTime }}
+                        </div>
+                      </div>
+                    </div>
+                    <!--可参与的单品活动-->
+                    <div
+                      v-if="
                         singleActivities_2.length > 0 && orderCategory != '1'
-                      ">
-                                                        <div
-                                                          class="block-div theme_bg_white"
-                                                          v-if="curSingleActivity != null"
-                                                        >
-                                                          <div class="flex-row">
-                                                            <p class="sl-tag line_circle theme_border_red_i theme_font_red">
-                                                              {{ curSingleActivity.activityType }}
-                                                            </p>
-                                                            <p class="sl-title single-line">
-                                                              {{ curSingleActivity.activityTitle }}
-                                                              <span class="theme_standard_font">{{ getActivityStr(curSingleActivity) }} ¥{{ $util.toDecimal2( curSingleActivity.activityPrice ) }}
-                                                              </span>
-                                                            </p>
-                                                            <p
-                                                              class="good-salespro-right"
-                                                              v-if="singleActivities_2.length > 1"
-                                                              @click="reviseSingleActivity()"
-                                                            >
-                                                              修改
-                                                              </p>
-                                                              <p
-                                                                class="good-salespro-right"
-                                                                v-if="singleActivities_2.length == 1"
-                                                                @click="removeSingleActivity()"
-                                                              >
-                                                                不参加
-                                                                </p>
-                                                          </div>
-                                                      </div>
-                                                      <div
-                                                        class="block-div theme_bg_white"
-                                                        v-else
-                                                      >
-                                                        <div
-                                                          class="flex-row"
-                                                          v-for="saitem in singleActivities_2"
-                                                        >
-                                                          <p class="sl-tag line_circle theme_standard_bdr_i theme_standard_font">
-                                                            {{ saitem.activityType }}
-                                                          </p>
-                                                          <p class="sl-title single-line">
-                                                            {{ saitem.activityTitle }}
-                                                            <span class="theme_standard_font">{{ getActivityPrice(saitem) }} + ¥{{ $util.toDecimal2(saitem.activityPrice) }}
-                                                            </span>
-                                                          </p>
-                                                          <p
-                                                            class="good-salespro-right"
-                                                            @click="joinSingleActivity(saitem)"
-                                                          >
-                                                            参加
-                                                            </p>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            <!--可用券-->
-                                                            <div
-                                                              class="block-div theme_bg_white"
-                                                              v-if="
-                        detailData.proCanUseCouList &&
-                        detailData.proCanUseCouList.length > 0
                       "
-                                                              @click="kyCouponEvent"
-                                                            >
-                                                              <div class="flex-row">
-                                                                <div class="label-middle theme_font_gray">可用券</div>
-                                                                <div
-                                                                  class="act-item-full theme_standard_bg theme_font_white"
-                                                                  v-if="cidx < 2"
-                                                                  v-for="(
-                            couponModel, cidx
-                          ) in detailData.proCanUseCouList"
-                                                                >
-                                                                  {{ couponModel.couTypeTitle }}
-                                                              </div>
-                                                              <div class="full"></div>
-                                                              <div>
-                                                                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-                                                              </div>
-                                                              </div>
-                                                              </div>
-                                                              <!--已选-->
-                                                              <div class="block-div theme_bg_white">
-                                                                <div
-                                                                  class="flex-row"
-                                                                  @click="proSelectEvent"
-                                                                >
-                                                                  <div class="label-middle theme_font_gray">已选</div>
-                                                                  <div
-                                                                    class="theme_font_black"
-                                                                    style="font-weight: 500"
-                                                                  >
-                                                                    {{ selectedText }}
-                                                              </div>
-                                                              <!--<div class="theme_font_black">1件</div>-->
-                                                              <div class="full"></div>
-                                                              <div>
-                                                                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-                                                              </div>
-                                                              </div>
-                                                              </div>
-                                                              <div
-                                                                class="block-div no-padding-bottom theme_bg_white"
-                                                                v-if="detailData.productType != 5"
-                                                              >
-                                                                <!--<div class="flex-row" @click="selectDeliveryType" v-if="detailData.orginDeliveryType != detailData.deliveryType">-->
-                                                                <!--<div class="label-middle theme_font_gray">配送方式</div>-->
-                                                                <!--<div class="theme_font_black full">-->
-                                                                <!--{{detailData.deliveryType == '1' ? '自提' : '配送'}}-->
-                                                                <!--</div>-->
-                                                                <!--<div>-->
-                                                                <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-                                                                <!--</div>-->
-                                                                <!--</div>-->
-                                                                <div
-                                                                  class="flex-row"
-                                                                  style="align-items: flex-start"
-                                                                  @click="selectArea"
-                                                                  v-if="detailData.deliveryType == '2'"
-                                                                >
-                                                                  <div class="label-middle theme_font_gray">送至</div>
-                                                                  <div
-                                                                    class="theme_font_black full address-div defaultStyle"
-                                                                    v-if="$store.state.mall2.selectAddress.id == -1"
-                                                                  >
-                                                                    {{ regionText }}
-                                                                    </div>
-                                                                    <!-- <div>{{$store.state.mall2.selectAddress}}</div> -->
-                                                                    <div
-                                                                      class="theme_font_black full address-div"
-                                                                      v-if="$store.state.mall2.selectAddress.id != -1"
-                                                                    >
-                                                                      {{ $store.state.mall2.selectAddress.addressFull }}
-                                                                      </div>
-                                                                      <div>
-                                                                        <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-                                                                      </div>
-                                                                      </div>
-                                                                      <!--<div class="flex-row" v-if="detailData.deliveryType == '2'">-->
-                                                                      <!--<div class="label-middle theme_font_gray">配送方式</div>-->
-                                                                      <!--<div class="theme_font_black">{{detailData.distriParty}}</div>-->
-                                                                      <!--</div>-->
-                                                                      <div
-                                                                        class="flex-row"
-                                                                        v-if="detailData.deliveryType == '1'"
-                                                                        @click="selectPickUpAddress"
-                                                                      >
-                                                                        <div class="label-middle theme_font_gray">自提点</div>
-                                                                        <div class="theme_font_black">
-                                                                          {{ $store.state.mall2.zitiAddress.storeName }}
-                                                                        </div>
-                                                                        <div class="full"></div>
-                                                                        <div>
-                                                                          <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-                                                                        </div>
-                                                                        </div>
-                                                                        <!--<div class="flex-row" v-if="detailData.deliveryType == '1'">-->
-                                                                        <!--<div class="label-middle theme_font_gray">配送方式</div>-->
-                                                                        <!--<div class="theme_font_black">上门自提</div>-->
-                                                                        <!--</div>-->
-                                                                        <div
-                                                                          class="color-row theme_bg_dark"
-                                                                          @click="serversEvent"
-                                                                          v-if="
+                    >
+                      <div
+                        class="block-div theme_bg_white"
+                        v-if="curSingleActivity != null"
+                      >
+                        <div class="flex-row">
+                          <p
+                            class="sl-tag line_circle theme_border_red_i theme_font_red"
+                          >
+                            {{ curSingleActivity.activityType }}
+                          </p>
+                          <p class="sl-title single-line">
+                            {{ curSingleActivity.activityTitle }}
+                            <span class="theme_standard_font"
+                              >{{ getActivityStr(curSingleActivity) }} ¥{{
+                                $util.toDecimal2(
+                                  curSingleActivity.activityPrice
+                                )
+                              }}
+                            </span>
+                          </p>
+                          <p
+                            class="good-salespro-right"
+                            v-if="singleActivities_2.length > 1"
+                            @click="reviseSingleActivity()"
+                          >
+                            修改
+                          </p>
+                          <p
+                            class="good-salespro-right"
+                            v-if="singleActivities_2.length == 1"
+                            @click="removeSingleActivity()"
+                          >
+                            不参加
+                          </p>
+                        </div>
+                      </div>
+                      <div class="block-div theme_bg_white" v-else>
+                        <div
+                          class="flex-row"
+                          v-for="saitem in singleActivities_2"
+                        >
+                          <p
+                            class="sl-tag line_circle theme_standard_bdr_i theme_standard_font"
+                          >
+                            {{ saitem.activityType }}
+                          </p>
+                          <p class="sl-title single-line">
+                            {{ saitem.activityTitle }}
+                            <span class="theme_standard_font"
+                              >{{ getActivityPrice(saitem) }} + ¥{{
+                                $util.toDecimal2(saitem.activityPrice)
+                              }}
+                            </span>
+                          </p>
+                          <p
+                            class="good-salespro-right"
+                            @click="joinSingleActivity(saitem)"
+                          >
+                            参加
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <!--可用券-->
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="
+                        detailData.proCanUseCouList &&
+                          detailData.proCanUseCouList.length > 0
+                      "
+                      @click="kyCouponEvent"
+                    >
+                      <div class="flex-row">
+                        <div class="label-middle theme_font_gray">可用券</div>
+                        <div
+                          class="act-item-full theme_standard_bg theme_font_white"
+                          v-if="cidx < 2"
+                          v-for="(couponModel,
+                          cidx) in detailData.proCanUseCouList"
+                        >
+                          {{ couponModel.couTypeTitle }}
+                        </div>
+                        <div class="full"></div>
+                        <div>
+                          <i
+                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!--已选-->
+                    <div class="block-div theme_bg_white">
+                      <div class="flex-row" @click="proSelectEvent">
+                        <div class="label-middle theme_font_gray">已选</div>
+                        <div class="theme_font_black" style="font-weight: 500">
+                          {{ selectedText }}
+                        </div>
+                        <!--<div class="theme_font_black">1件</div>-->
+                        <div class="full"></div>
+                        <div>
+                          <i
+                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="block-div no-padding-bottom theme_bg_white"
+                      v-if="detailData.productType != 5"
+                    >
+                      <!--<div class="flex-row" @click="selectDeliveryType" v-if="detailData.orginDeliveryType != detailData.deliveryType">-->
+                      <!--<div class="label-middle theme_font_gray">配送方式</div>-->
+                      <!--<div class="theme_font_black full">-->
+                      <!--{{detailData.deliveryType == '1' ? '自提' : '配送'}}-->
+                      <!--</div>-->
+                      <!--<div>-->
+                      <!--<i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
+                      <!--</div>-->
+                      <!--</div>-->
+                      <div
+                        class="flex-row"
+                        style="align-items: flex-start"
+                        @click="selectArea"
+                        v-if="detailData.deliveryType == '2'"
+                      >
+                        <div class="label-middle theme_font_gray">送至</div>
+                        <div
+                          class="theme_font_black full address-div defaultStyle"
+                          v-if="$store.state.mall2.selectAddress.id == -1"
+                        >
+                          {{ regionText }}
+                        </div>
+                        <!-- <div>{{$store.state.mall2.selectAddress}}</div> -->
+                        <div
+                          class="theme_font_black full address-div"
+                          v-if="$store.state.mall2.selectAddress.id != -1"
+                        >
+                          {{ $store.state.mall2.selectAddress.addressFull }}
+                        </div>
+                        <div>
+                          <i
+                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                          ></i>
+                        </div>
+                      </div>
+                      <!--<div class="flex-row" v-if="detailData.deliveryType == '2'">-->
+                      <!--<div class="label-middle theme_font_gray">配送方式</div>-->
+                      <!--<div class="theme_font_black">{{detailData.distriParty}}</div>-->
+                      <!--</div>-->
+                      <div
+                        class="flex-row"
+                        v-if="detailData.deliveryType == '1'"
+                        @click="selectPickUpAddress"
+                      >
+                        <div class="label-middle theme_font_gray">自提点</div>
+                        <div class="theme_font_black">
+                          {{ $store.state.mall2.zitiAddress.storeName }}
+                        </div>
+                        <div class="full"></div>
+                        <div>
+                          <i
+                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                          ></i>
+                        </div>
+                      </div>
+                      <!--<div class="flex-row" v-if="detailData.deliveryType == '1'">-->
+                      <!--<div class="label-middle theme_font_gray">配送方式</div>-->
+                      <!--<div class="theme_font_black">上门自提</div>-->
+                      <!--</div>-->
+                      <div
+                        class="color-row theme_bg_dark"
+                        @click="serversEvent"
+                        v-if="
                           $store.state.globalConfig
                             .product_services_show_type != '0' &&
-                          detailData.isShowAfterSale != 0
+                            detailData.isShowAfterSale != 0
                         "
-                                                                        >
-                                                                          <div
-                                                                            class="server-item"
-                                                                            v-for="server in detailData.saleServices"
-                                                                            v-if="parseInt(server.days) > 0"
-                                                                          >
-                                                                            <i class="iconfont mall-dui theme_standard_font icon-font"></i>
-                                                                            <span>{{ getServerText(server) }}</span>
-                                                                            </div>
-                                                                            <div
-                                                                              class="server-item"
-                                                                              v-for="server in detailData.serviceInfoJson"
-                                                                            >
-                                                                              <i class="iconfont mall-dui theme_standard_font icon-font"></i>
-                                                                              <span>{{ server.name }}</span>
-                                                                              </div>
-                                                                              </div>
-                                                                              </div>
-                                                                              <div
-                                                                                class="block-div theme_bg_white"
-                                                                                v-if="detailComment && detailComment.evaluateCount > 0"
-                                                                              >
-                                                                                <div
-                                                                                  class="flex-row"
-                                                                                  @click="allCommentEvent"
-                                                                                >
-                                                                                  <div
-                                                                                    class="title theme_font_black"
-                                                                                    v-if="detailComment.evaluateCount == 0"
-                                                                                  >
-                                                                                    暂无评价
-                                                                                    </div>
-                                                                                    <div
-                                                                                      class="title theme_font_black"
-                                                                                      v-if="detailComment.evaluateCount > 0"
-                                                                                    >
-                                                                                      评价（{{ detailComment.evaluateCount }}）
-                                                                                      </div>
-                                                                                      <div class="full"></div>
-                                                                                      <div
-                                                                                        class="font-small right-margin theme_font_common"
-                                                                                        v-if="detailComment.evaluateCount > 0"
-                                                                                      >
-                                                                                        <span>好评率</span>
-                                                                                        <span class="theme_standard_font">{{ detailComment.evaluateGoodRate }}
-                                                                                        </span>
-                                                                                        </div>
-                                                                                        <div>
-                                                                                          <i class="iconfont mall-gengduojiantou icon-font theme_font_common"></i>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        <div
-                                                                                          class="comment-div"
-                                                                                          v-for="comment in detailComment.evaluateList"
-                                                                                        >
-                                                                                          <div class="flex-row comment-row theme_font_common">
-                                                                                            <div class="header-img right-margin">
-                                                                                              <img :src="
+                      >
+                        <div
+                          class="server-item"
+                          v-for="server in detailData.saleServices"
+                          v-if="parseInt(server.days) > 0"
+                        >
+                          <i
+                            class="iconfont mall-dui theme_standard_font icon-font"
+                          ></i>
+                          <span>{{ getServerText(server) }}</span>
+                        </div>
+                        <div
+                          class="server-item"
+                          v-for="server in detailData.serviceInfoJson"
+                        >
+                          <i
+                            class="iconfont mall-dui theme_standard_font icon-font"
+                          ></i>
+                          <span>{{ server.name }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="detailComment && detailComment.evaluateCount > 0"
+                    >
+                      <div class="flex-row" @click="allCommentEvent">
+                        <div
+                          class="title theme_font_black"
+                          v-if="detailComment.evaluateCount == 0"
+                        >
+                          暂无评价
+                        </div>
+                        <div
+                          class="title theme_font_black"
+                          v-if="detailComment.evaluateCount > 0"
+                        >
+                          评价（{{ detailComment.evaluateCount }}）
+                        </div>
+                        <div class="full"></div>
+                        <div
+                          class="font-small right-margin theme_font_common"
+                          v-if="detailComment.evaluateCount > 0"
+                        >
+                          <span>好评率</span>
+                          <span class="theme_standard_font"
+                            >{{ detailComment.evaluateGoodRate }}
+                          </span>
+                        </div>
+                        <div>
+                          <i
+                            class="iconfont mall-gengduojiantou icon-font theme_font_common"
+                          ></i>
+                        </div>
+                      </div>
+                      <div
+                        class="comment-div"
+                        v-for="comment in detailComment.evaluateList"
+                      >
+                        <div class="flex-row comment-row theme_font_common">
+                          <div class="header-img right-margin">
+                            <img
+                              :src="
                                 comment.userAvtUrl != ''
                                   ? comment.userAvtUrl
                                   : 'static/image/mall2/header.png'
-                              " />
-                                                                                            </div>
-                                                                                            <div class="right-margin full">
-                                                                                              {{ getCommentUserStr(comment) }}
-                                                                                            </div>
-                                                                                            <div class="">
-                                                                                              <i
-                                                                                                class="iconfont mall-xingxing icon-level theme_font_tint"
-                                                                                                :class="{
-                                theme_standard_font_i: comment.score >= lv,
+                              "
+                            />
+                          </div>
+                          <div class="right-margin full">
+                            {{ getCommentUserStr(comment) }}
+                          </div>
+                          <div class="">
+                            <i
+                              class="iconfont mall-xingxing icon-level theme_font_tint"
+                              :class="{
+                                theme_standard_font_i: comment.score >= lv
                               }"
-                                                                                                v-for="lv in 5"
-                                                                                              ></i>
-                                                                                            </div>
-                                                                                          </div>
-                                                                                          <div class="flex-row comment-row theme_font_gray">
-                                                                                            <div style="line-height: 1.4">
-                                                                                              {{ comment.evaluateContent }}
-                                                                                            </div>
-                                                                                          </div>
-                                                                                          <div
-                                                                                            class="imgs"
-                                                                                            v-if="comment.evaluateImages != ''"
-                                                                                          >
-                                                                                            <div
-                                                                                              class="s-img-div"
-                                                                                              v-for="(pic, idx) in getCommentImgs(
+                              v-for="lv in 5"
+                            ></i>
+                          </div>
+                        </div>
+                        <div class="flex-row comment-row theme_font_gray">
+                          <div style="line-height: 1.4">
+                            {{ comment.evaluateContent }}
+                          </div>
+                        </div>
+                        <div class="imgs" v-if="comment.evaluateImages != ''">
+                          <div
+                            class="s-img-div"
+                            v-for="(pic, idx) in getCommentImgs(
                               comment.evaluateImages
                             )"
-                                                                                              v-if="idx < 4"
-                                                                                            >
-                                                                                              <img :src="pic" />
-                                                                                              </div>
-                                                                                              </div>
-                                                                                              </div>
-                                                                                              </div>
-                                                                                              <div
-                                                                                                class="block-div theme_bg_white"
-                                                                                                v-if="
+                            v-if="idx < 4"
+                          >
+                            <img :src="pic" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="
                         $store.state.globalConfig.proDetailStoreDisabled != 1
                       "
-                                                                                              >
-                                                                                                <div
-                                                                                                  class="flex-row"
-                                                                                                  @click="toShop"
-                                                                                                >
-                                                                                                  <!--<div class="logo">-->
-                                                                                                  <!--<img src="static/testImg/shop-logo.png"/>-->
-                                                                                                  <!--</div>-->
-                                                                                                  <div class="shop-title">
-                                                                                                    <i class="iconfont mall-dianpu dianpu-icon theme_standard_font"></i>{{ detailData.storeOuName }}
-                                                                                                  </div>
-                                                                                                  <div
-                                                                                                    class="act-item-full theme_standard_bg theme_font_white"
-                                                                                                    v-if="detailData.storeType == '0'"
-                                                                                                  >
-                                                                                                    自营
-                                                                                                    </div>
-                                                                                                    <div class="full"></div>
-                                                                                                    <div>
-                                                                                                      <i class="iconfont mall-gengduojiantou icon-font"></i>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                    <!--<div class="flex-row">-->
-                                                                                                    <!--<div class="full shop-info">-->
-                                                                                                    <!--<p class="theme_font_common">2000</p>-->
-                                                                                                    <!--<p class="theme_font_gray">关注人数</p>-->
-                                                                                                    <!--</div>-->
-                                                                                                    <!--<div class="full shop-info">-->
-                                                                                                    <!--<p class="theme_font_common">80</p>-->
-                                                                                                    <!--<p class="theme_font_gray">全部商品</p>-->
-                                                                                                    <!--</div>-->
-                                                                                                    <!--</div>-->
-                                                                                                    </div>
-                                                                                                    <div
-                                                                                                      class="block-div theme_bg_white"
-                                                                                                      v-if="detailData.packageList.length > 0"
-                                                                                                    >
-                                                                                                      <div class="flex-row">
-                                                                                                        <div class="title theme_font_black">组合套装</div>
-                                                                                                      </div>
-                                                                                                      <div class="recommend-div padding-bottom-8">
-                                                                                                        <div
-                                                                                                          class="pro-div"
-                                                                                                          v-for="item in detailData.packageList"
-                                                                                                          @click="productPickageEvent(item)"
-                                                                                                        >
-                                                                                                          {{ dataProcessing(item) }}
-                                                                                                          <div class="img-div">
-                                                                                                            <img :src="item.phMainUrl" />
-                                                                                                          </div>
-                                                                                                          <div class="title single-line theme_font_black">
-                                                                                                            {{ item.skuName }}
-                                                                                                          </div>
-                                                                                                          <div class="price single-line">
-                                                                                                            <span class="font-small theme_font_red">￥</span>
-                                                                                                            <span class="left-no-space price-z theme_font_red">{{ item.dpedData.integer }}</span>
-                                                                                                            <span class="left-no-space font-small theme_font_red">.{{ item.dpedData.decimals }}</span>
-                                                                                                            <span
-                                                                                                              class="font-small theme_font_tint left-m-8"
-                                                                                                              v-if="
+                    >
+                      <div class="flex-row" @click="toShop">
+                        <!--<div class="logo">-->
+                        <!--<img src="static/testImg/shop-logo.png"/>-->
+                        <!--</div>-->
+                        <div class="shop-title">
+                          <i
+                            class="iconfont mall-dianpu dianpu-icon theme_standard_font"
+                          ></i
+                          >{{ detailData.storeOuName }}
+                        </div>
+                        <div
+                          class="act-item-full theme_standard_bg theme_font_white"
+                          v-if="detailData.storeType == '0'"
+                        >
+                          自营
+                        </div>
+                        <div class="full"></div>
+                        <div>
+                          <i class="iconfont mall-gengduojiantou icon-font"></i>
+                        </div>
+                      </div>
+                      <!--<div class="flex-row">-->
+                      <!--<div class="full shop-info">-->
+                      <!--<p class="theme_font_common">2000</p>-->
+                      <!--<p class="theme_font_gray">关注人数</p>-->
+                      <!--</div>-->
+                      <!--<div class="full shop-info">-->
+                      <!--<p class="theme_font_common">80</p>-->
+                      <!--<p class="theme_font_gray">全部商品</p>-->
+                      <!--</div>-->
+                      <!--</div>-->
+                    </div>
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="detailData.packageList.length > 0"
+                    >
+                      <div class="flex-row">
+                        <div class="title theme_font_black">组合套装</div>
+                      </div>
+                      <div class="recommend-div padding-bottom-8">
+                        <div
+                          class="pro-div"
+                          v-for="item in detailData.packageList"
+                          @click="productPickageEvent(item)"
+                        >
+                          {{ dataProcessing(item) }}
+                          <div class="img-div">
+                            <img :src="item.phMainUrl" />
+                          </div>
+                          <div class="title single-line theme_font_black">
+                            {{ item.skuName }}
+                          </div>
+                          <div class="price single-line">
+                            <span class="font-small theme_font_red">￥</span>
+                            <span
+                              class="left-no-space price-z theme_font_red"
+                              >{{ item.dpedData.integer }}</span
+                            >
+                            <span
+                              class="left-no-space font-small theme_font_red"
+                              >.{{ item.dpedData.decimals }}</span
+                            >
+                            <span
+                              class="font-small theme_font_tint left-m-8"
+                              v-if="
                                 item.dpedData.linePrice &&
-                                item.activityPrice < item.salePrice
+                                  item.activityPrice < item.salePrice
                               "
-                                                                                                              :class="{
+                              :class="{
                                 'line-through':
-                                  $store.state.globalConfig.priceShowType == 2,
+                                  $store.state.globalConfig.priceShowType == 2
                               }"
-                                                                                                            >
-                                                                                                              <span v-if="
+                            >
+                              <span
+                                v-if="
                                   $store.state.globalConfig.priceShowType == 1
-                                ">原价:</span>￥{{ $util.toDecimal2(item.dpedData.linePrice) }}
-                                                                                                              </span>
-                                                                                                          </div>
-                                                                                                      </div>
-                                                                                                      </div>
-                                                                                                      </div>
-                                                                                                      <div
-                                                                                                        class="block-div theme_bg_white"
-                                                                                                        v-if="
+                                "
+                                >原价:</span
+                              >￥{{ $util.toDecimal2(item.dpedData.linePrice) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="block-div theme_bg_white"
+                      v-if="
                         detailData.recommendSkuList &&
-                        detailData.recommendSkuList.length > 0 &&
-                        (!cardType || (cardType && cardType == 551))
+                          detailData.recommendSkuList.length > 0 &&
+                          (!cardType || (cardType && cardType == 551))
                       "
-                                                                                                      >
-                                                                                                        <div class="flex-row">
-                                                                                                          <div class="title theme_font_black">为你推荐</div>
-                                                                                                        </div>
-                                                                                                        <div class="recommend-div">
-                                                                                                          <div
-                                                                                                            class="pro-div"
-                                                                                                            v-for="item in detailData.recommendSkuList"
-                                                                                                            @click="productEvent(item)"
-                                                                                                          >
-                                                                                                            {{ dataProcessing(item) }}
-                                                                                                            <div class="img-div">
-                                                                                                              <img :src="item.phMainUrl" />
-                                                                                                            </div>
-                                                                                                            <div class="title single-line theme_font_black">
-                                                                                                              {{ item.skuName }}
-                                                                                                            </div>
-                                                                                                            <div class="price single-line">
-                                                                                                              <PriceOrder :listitem="item"></PriceOrder>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        </div>
-                                                                                                        <div class="more-btn">
-                                                                                                          <label
-                                                                                                            class="act-item-empty line_circle theme_standard_font theme_standard_bdr"
-                                                                                                            @click="moreRecommend"
-                                                                                                          >更多推荐</label>
-                                                                                                        </div>
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                          class="load-next theme_bg_white"
-                                                                                                          @click="proView = 2"
-                                                                                                        >
-                                                                                                          <img src="static/image/mall2/load-next.png" />
-                                                                                                          <span class="theme_font_tint">上拉加载图文详情</span>
-                                                                                                          </div>
-                                                                                                          </div>
-                                                                                                          </pull-to>
-                                                                                                          </div>
-                                                                                                          </transition>
-                                                                                                          <transition name="transition2">
-                                                                                                            <div
-                                                                                                              class="main-swiper"
-                                                                                                              style="position: absolute; top: 15px"
-                                                                                                              v-show="proView == 2"
-                                                                                                            >
-                                                                                                              <div class="btns-flex theme_bg_white">
-                                                                                                                <div
-                                                                                                                  class="back_proView"
-                                                                                                                  @click="backEvent"
-                                                                                                                >
-                                                                                                                  <img
-                                                                                                                    src="static/image/mall2/backIcon.png"
-                                                                                                                    alt=""
-                                                                                                                  >
-                                                                                                              </div>
-                                                                                                              <div
-                                                                                                                class="btns_flex_item theme_font_gray"
-                                                                                                                :class="{ standard: introductionIndex == 1 }"
-                                                                                                                @click="introductionSelected(1)"
-                                                                                                              >
-                                                                                                                商品介绍
-                                                                                                                <div
-                                                                                                                  class="line"
-                                                                                                                  v-show="introductionIndex == 1"
-                                                                                                                ></div>
-                                                                                                                  </div>
-                                                                                                                  <div
-                                                                                                                    class="btns_flex_item theme_font_gray"
-                                                                                                                    :class="{ standard: introductionIndex == 2 }"
-                                                                                                                    @click="introductionSelected(2)"
-                                                                                                                  >
-                                                                                                                    规格参数
-                                                                                                                    <div
-                                                                                                                      class="line"
-                                                                                                                      v-show="introductionIndex == 2"
-                                                                                                                    ></div>
-                                                                                                                      </div>
-                                                                                                                      <div
-                                                                                                                        class="btns_flex_item theme_font_gray"
-                                                                                                                        :class="{ standard: introductionIndex == 3 }"
-                                                                                                                        @click="introductionSelected(3)"
-                                                                                                                        v-if="detailData.isShowAfterSale != 0"
-                                                                                                                      >
-                                                                                                                        售后包装
-                                                                                                                        <div
-                                                                                                                          class="line"
-                                                                                                                          v-show="introductionIndex == 3"
-                                                                                                                        ></div>
-                                                                                                                          </div>
-                                                                                                                          </div>
-                                                                                                                          <div class="detail-div detail-div-1">
-                                                                                                                            <pull-to
-                                                                                                                              ref="pullTo2"
-                                                                                                                              :topConfig="{
-                      pullText: '',
-                      triggerText: '释放显示商品介绍',
-                      loadingText: '加载中...',
-                      doneText: '加载完成',
-                      failText: '加载失败',
-                      loadedStayTime: 400,
-                      stayDistance: 40,
-                      triggerDistance: 50,
-                    }"
-                                                                                                                              :top-load-method="topPull"
-                                                                                                                              :is-bottom-bounce="false"
-                                                                                                                              :is-top-bounce="true"
-                                                                                                                            >
-                                                                                                                              <!--<div class="introduction-div">-->
-                                                                                                                              <!--<img src="static/testImg/detail.png"/>-->
-                                                                                                                              <!--</div>-->
-                                                                                                                              <div class="detail-content detail-bottom">
-                                                                                                                                <!-- <div class="tip" v-if="introductionIndex == 1">
-                        <span class="line"></span>
-                        <span class="text">商品信息</span>
-                        <span class="line"></span>
-                      </div> -->
-                                                                                                                                <div
-                                                                                                                                  v-html="introduction1"
-                                                                                                                                  class="introduction-div"
-                                                                                                                                  style="padding: 0"
-                                                                                                                                  id="picMedia"
-                                                                                                                                  v-if="introductionIndex == 1"
-                                                                                                                                ></div>
-                                                                                                                              <div
-                                                                                                                                v-html="introduction2"
-                                                                                                                                class="introduction-div"
-                                                                                                                                v-if="introductionIndex == 2"
-                                                                                                                              ></div>
-                                                                                                                          <div
-                                                                                                                            v-html="introduction3"
-                                                                                                                            class="introduction-div"
-                                                                                                                            v-if="introductionIndex == 3"
-                                                                                                                          ></div>
-                                                                                                                            </div>
-                                                                                                                            </pull-to>
-                                                                                                                            </div>
-                                                                                                                            </div>
-                                                                                                          </transition>
-                                                                                                          </div>
-                                                                                                          </swiper-slide>
-                                                                                                          <swiper-slide>
-                                                                                                            <div
-                                                                                                              class="main-swiper"
-                                                                                                              style="position: relative"
-                                                                                                            >
-                                                                                                              <div
-                                                                                                                ref="scrollView2"
-                                                                                                                class="main-swiper-scroll-content enable-scroll"
-                                                                                                                style="top: 64px"
-                                                                                                              >
-                                                                                                                <div class="detail-div">
-                                                                                                                  <div class="btns-div theme_bg_white">
-                                                                                                                    <div
-                                                                                                                      class="btn-item theme_font_gray"
-                                                                                                                      :class="{ theme_standard_font_i: introductionIndex == 1 }"
-                                                                                                                      @click="introductionSelected(1)"
-                                                                                                                    >
-                                                                                                                      商品介绍
-                                                                                                                  </div>
-                                                                                                                  <div
-                                                                                                                    class="btn-item theme_font_gray"
-                                                                                                                    :class="{ theme_standard_font_i: introductionIndex == 2 }"
-                                                                                                                    @click="introductionSelected(2)"
-                                                                                                                  >
-                                                                                                                    规格参数
-                                                                                                                </div>
-                                                                                                                <div
-                                                                                                                  class="btn-item theme_font_gray"
-                                                                                                                  :class="{ theme_standard_font_i: introductionIndex == 3 }"
-                                                                                                                  @click="introductionSelected(3)"
-                                                                                                                  v-if="detailData.isShowAfterSale != 0"
-                                                                                                                >
-                                                                                                                  售后包装
-                                                                                                                  </div>
-                                                                                                                  </div>
-                                                                                                                  <!--<div class="introduction-div">-->
-                                                                                                                  <!--<img src="static/testImg/detail.png"/>-->
-                                                                                                                  <!--</div>-->
-                                                                                                                  <div class="detail-content">
-                                                                                                                    <div
-                                                                                                                      class="tip"
-                                                                                                                      v-if="introductionIndex == 1"
-                                                                                                                    >
-                                                                                                                      <span class="line"></span>
-                                                                                                                      <span class="text">商品信息</span>
-                                                                                                                      <span class="line"></span>
-                                                                                                                  </div>
-                                                                                                                  <div
-                                                                                                                    v-html="introduction1"
-                                                                                                                    class="introduction-div"
-                                                                                                                    v-if="introductionIndex == 1"
-                                                                                                                  ></div>
-                                                                                                                    <div
-                                                                                                                      v-html="introduction2"
-                                                                                                                      class="introduction-div"
-                                                                                                                      v-if="introductionIndex == 2"
-                                                                                                                    ></div>
-                                                                                                                      <div
-                                                                                                                        v-html="introduction3"
-                                                                                                                        class="introduction-div"
-                                                                                                                        v-if="introductionIndex == 3"
-                                                                                                                      ></div>
-                                                                                                                        </div>
-                                                                                                                        </div>
-                                                                                                                        </div>
-                                                                                                                        </div>
-                                                                                                          </swiper-slide>
-                                                                                                          <swiper-slide>
-                                                                                                            <div
-                                                                                                              class="main-swiper"
-                                                                                                              style="position: relative"
-                                                                                                            >
-                                                                                                              <div
-                                                                                                                ref="scrollView3"
-                                                                                                                class="main-swiper-scroll-content enable-scroll"
-                                                                                                                style="top: 44px"
-                                                                                                              >
-                                                                                                                <Judgement
-                                                                                                                  :skuId="this.skuId"
-                                                                                                                  v-show="toptab == 3"
-                                                                                                                  v-if="load3"
-                                                                                                                  @showBigImgs="showBigImgsEvent"
-                                                                                                                ></Judgement>
-                                                                                                                  </div>
-                                                                                                                  </div>
-                                                                                                          </swiper-slide>
-                                                                                                          <swiper-slide>
-                                                                                                            <div
-                                                                                                              class="main-swiper"
-                                                                                                              style="position: relative"
-                                                                                                            >
-                                                                                                              <div
-                                                                                                                class="main-swiper-scroll-content"
-                                                                                                                style="top: 44px"
-                                                                                                              >
-                                                                                                                <Recommend
-                                                                                                                  ref="scrollView4"
-                                                                                                                  :deliveryType="this.deliveryType"
-                                                                                                                  :skuId="this.skuId"
-                                                                                                                  v-show="toptab == 4"
-                                                                                                                  v-if="load4"
-                                                                                                                ></Recommend>
-                                                                                                                  </div>
-                                                                                                                  </div>
-                                                                                                          </swiper-slide>
-                                                                                                          </swiper>
-                                                                                                          </div>
-                                                                                                          <div
-                                                                                                            class="bottom-tip theme_bg_yl theme_standard_font_i"
-                                                                                                            v-if="canSale == false"
-                                                                                                          >
-                                                                                                            该商品在该地区暂不支持购买，非常抱歉！
-                                                                                                            </div>
-                                                                                                            <div
-                                                                                                              class="bottom-tip theme_bg_yl theme_standard_font_i"
-                                                                                                              v-else-if="
+                    >
+                      <div class="flex-row">
+                        <div class="title theme_font_black">为你推荐</div>
+                      </div>
+                      <div class="recommend-div">
+                        <div
+                          class="pro-div"
+                          v-for="item in detailData.recommendSkuList"
+                          @click="productEvent(item)"
+                        >
+                          {{ dataProcessing(item) }}
+                          <div class="img-div">
+                            <img :src="item.phMainUrl" />
+                          </div>
+                          <div class="title single-line theme_font_black">
+                            {{ item.skuName }}
+                          </div>
+                          <div class="price single-line">
+                            <PriceOrder :listitem="item"></PriceOrder>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="more-btn">
+                        <label
+                          class="act-item-empty line_circle theme_standard_font theme_standard_bdr"
+                          @click="moreRecommend"
+                          >更多推荐</label
+                        >
+                      </div>
+                    </div>
+                    <div
+                      v-html="introduction1"
+                      class="introduction-div"
+                      style="padding: 0"
+                      id="picMedia"
+                    ></div>
+                    <!-- <div class="load-next theme_bg_white" @click="proView = 2">
+                      <img src="static/image/mall2/load-next.png" />
+                      <span class="theme_font_tint">上拉加载图文详情</span>
+                    </div> -->
+                  </div>
+                </pull-to>
+              </div>
+            </transition>
+            <div class="main-swiper"></div>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="main-swiper" style="position: relative">
+            <div
+              ref="scrollView2"
+              class="main-swiper-scroll-content enable-scroll"
+              style="top: 64px"
+            >
+              <div class="detail-div">
+                <div class="btns-div theme_bg_white">
+                  <div
+                    class="btn-item theme_font_gray"
+                    :class="{ theme_standard_font_i: introductionIndex == 1 }"
+                    @click="introductionSelected(1)"
+                  >
+                    商品介绍
+                  </div>
+                  <div
+                    class="btn-item theme_font_gray"
+                    :class="{ theme_standard_font_i: introductionIndex == 2 }"
+                    @click="introductionSelected(2)"
+                  >
+                    规格参数
+                  </div>
+                  <div
+                    class="btn-item theme_font_gray"
+                    :class="{ theme_standard_font_i: introductionIndex == 3 }"
+                    @click="introductionSelected(3)"
+                    v-if="detailData.isShowAfterSale != 0"
+                  >
+                    售后包装
+                  </div>
+                </div>
+                <!--<div class="introduction-div">-->
+                <!--<img src="static/testImg/detail.png"/>-->
+                <!--</div>-->
+                <div class="detail-content">
+                  <div class="tip" v-if="introductionIndex == 1">
+                    <span class="line"></span>
+                    <span class="text">商品信息</span>
+                    <span class="line"></span>
+                  </div>
+                  <div
+                    v-html="introduction1"
+                    class="introduction-div"
+                    v-if="introductionIndex == 1"
+                  ></div>
+                  <div
+                    v-html="introduction2"
+                    class="introduction-div"
+                    v-if="introductionIndex == 2"
+                  ></div>
+                  <div
+                    v-html="introduction3"
+                    class="introduction-div"
+                    v-if="introductionIndex == 3"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="main-swiper" style="position: relative">
+            <div
+              ref="scrollView3"
+              class="main-swiper-scroll-content enable-scroll"
+              style="top: 44px"
+            >
+              <Judgement
+                :skuId="this.skuId"
+                v-show="toptab == 3"
+                v-if="load3"
+                @showBigImgs="showBigImgsEvent"
+              ></Judgement>
+            </div>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="main-swiper" style="position: relative">
+            <div class="main-swiper-scroll-content" style="top: 44px">
+              <Recommend
+                ref="scrollView4"
+                :deliveryType="this.deliveryType"
+                :skuId="this.skuId"
+                v-show="toptab == 4"
+                v-if="load4"
+              ></Recommend>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <div
+      class="bottom-tip theme_bg_yl theme_standard_font_i"
+      v-if="canSale == false"
+    >
+      该商品在该地区暂不支持购买，非常抱歉！
+    </div>
+    <div
+      class="bottom-tip theme_bg_yl theme_standard_font_i"
+      v-else-if="
         detailData.interfaceType == '2' || detailData.interfaceType == '1'
       "
-                                                                                                            >
-                                                                                                              说明：图片中如显示价格仅做参考，以实际售价为准。
-                                                                                                              </div>
-                                                                                                              <div
-                                                                                                                class="bottom-btns yj-card"
-                                                                                                                v-if="productType == 8 || (easyCardId && !recommendCommodity)"
-                                                                                                              >
-                                                                                                                <div
-                                                                                                                  class="btn theme_bg_red theme_font_white"
-                                                                                                                  :class="{
-          theme_bg_dark_d_i: canSale == false || detailData.status == 0,
+    >
+      说明：图片中如显示价格仅做参考，以实际售价为准。
+    </div>
+    <div
+      class="bottom-btns yj-card"
+      v-if="productType == 8 || (easyCardId && !recommendCommodity)"
+    >
+      <div
+        class="btn theme_bg_red theme_font_white"
+        :class="{
+          theme_bg_dark_d_i: canSale == false || detailData.status == 0
         }"
-                                                                                                                  @click="buyNowEvent"
-                                                                                                                >
-                                                                                                                  <p class="title">立即购买</p>
-                                                                                                                  </div>
-                                                                                                                  </div>
-                                                                                                                  <div
-                                                                                                                    class="bottom-box"
-                                                                                                                    v-else-if="!easyCardId && detailShow && !recommendCommodity"
-                                                                                                                  >
-                                                                                                                    <div class="bottom-box-btns bottom_btns_padding">
-                                                                                                                      <div
-                                                                                                                        class="btn full"
-                                                                                                                        ref="gouwuche"
-                                                                                                                        @click="toCart"
-                                                                                                                      >
-                                                                                                                        <template v-if="
+        @click="buyNowEvent"
+      >
+        <p class="title">立即购买</p>
+      </div>
+    </div>
+    <div
+      class="bottom-box"
+      v-else-if="!easyCardId && detailShow && !recommendCommodity"
+    >
+      <div class="bottom-box-btns bottom_btns_padding">
+        <div class="btn full" ref="gouwuche" @click="toCart">
+          <template
+            v-if="
               detailData.supportPreSale == 1 &&
-              $store.state.globalConfig.presaleType == 2
-            ">
-                                                                                                                          <p
-                                                                                                                            class="cart-num theme_bg_red theme_font_white"
-                                                                                                                            v-if="cartNum > 0"
-                                                                                                                          >
-                                                                                                                            {{ cartNum }}
-                                                                                                                            </p>
-                                                                                                                        </template>
-                                                                                                                        <template v-else>
-                                                                                                                          <p
-                                                                                                                            class="cart-num theme_bg_red theme_font_white"
-                                                                                                                            v-if="$store.state.mall2.cartNum > 0"
-                                                                                                                          >
-                                                                                                                            {{ $store.state.mall2.cartNum }}
-                                                                                                                            </p>
-                                                                                                                        </template>
-                                                                                                                        <!-- <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i> -->
-                                                                                                                        <img src="static/image/mall2/cart.png" alt="" class="btn-img">
-                                                                                                                        <p class="text">购物车</p>
-                                                                                                                    </div>
-                                                                                                                    <div
-                                                                                                                      class="btn full"
-                                                                                                                      @click="toShop"
-                                                                                                                      v-if="$store.state.globalConfig.proDetailStoreDisabled != 1"
-                                                                                                                    >
-                                                                                                                      <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
-                                                                                                                      <p class="text">店铺</p>
-                                                                                                                      </div>
-                                                                                                                      <div
-                                                                                                                        class="btn full"
-                                                                                                                        @click="collectEvent"
-                                                                                                                      >
-                                                                                                                        <!-- <i
+                $store.state.globalConfig.presaleType == 2
+            "
+          >
+            <p
+              class="cart-num theme_bg_red theme_font_white"
+              v-if="cartNum > 0"
+            >
+              {{ cartNum }}
+            </p>
+          </template>
+          <template v-else>
+            <p
+              class="cart-num theme_bg_red theme_font_white"
+              v-if="$store.state.mall2.cartNum > 0"
+            >
+              {{ $store.state.mall2.cartNum }}
+            </p>
+          </template>
+          <!-- <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i> -->
+          <img src="static/image/mall2/cart.png" alt="" class="btn-img" />
+          <p class="text">购物车</p>
+        </div>
+        <div
+          class="btn full"
+          @click="toShop"
+          v-if="$store.state.globalConfig.proDetailStoreDisabled != 1"
+        >
+          <i class="iconfont mall-dianpu btn-icon theme_font_gray"></i>
+          <p class="text">店铺</p>
+        </div>
+        <div class="btn full" @click="collectEvent">
+          <!-- <i
                                                                                                                           class="iconfont mall-shoucang btn-icon theme_font_gray"
                                                                                                                           v-if="isCollect == false"
                                                                                                                         ></i> -->
-                                                                                                                        <img src="static/image/mall2/cancelCollect.png" alt="" class="btn-img" v-show="isCollect == false">
-                                                                                                                          <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
-                                                                                                                          <!-- <transition :name="collectName">
+          <img
+            src="static/image/mall2/cancelCollect.png"
+            alt=""
+            class="btn-img"
+            v-show="isCollect == false"
+          />
+          <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
+          <!-- <transition :name="collectName">
                                                                                                                           </transition> -->
-                                                                                                                        <img
-                                                                                                                          class="btn-img"
-                                                                                                                          src="static/image/mall2/collect.png"
-                                                                                                                          v-show="isCollect == true"
-                                                                                                                        />
-                                                                                                                        <p class="text">收藏</p>
-                                                                                                                      </div>
-                                                                                                                          <div class="btn full" @click="handleCustomer">
+          <img
+            class="btn-img"
+            src="static/image/mall2/collect.png"
+            v-show="isCollect == true"
+          />
+          <p class="text">收藏</p>
+        </div>
+        <div class="btn full" @click="handleCustomer">
           <!-- <i class="iconfont service btn-icon theme_font_gray">
           </i> -->
-          <img src="static/images/card-provincial/customer_service_black.png" alt="" class="btn-img">
+          <img
+            src="static/images/card-provincial/customer_service_black.png"
+            alt=""
+            class="btn-img"
+          />
           <p class="text">客服</p>
         </div>
-                                                                                                                          <div
-                                                                                                                            class="btn full"
-                                                                                                                            @click="songliEvent"
-                                                                                                                            v-if="
+        <div
+          class="btn full"
+          @click="songliEvent"
+          v-if="
             $store.state.globalConfig.send_gift_enable == '1' &&
-            stockNum != 0 &&
-            canSale == true &&
-            detailData.status != '0' &&
-            isPayTime()
+              stockNum != 0 &&
+              canSale == true &&
+              detailData.status != '0' &&
+              isPayTime()
           "
-                                                                                                                          >
-                                                                                                                            <img
-                                                                                                                              class="btn-sl-img"
-                                                                                                                              src="./img/sl.png"
-                                                                                                                            />
-                                                                                                                            <p class="text">送礼</p>
-                                                                                                                            </div>
-                                                                                                                            <div
-                                                                                                                              class="btn theme_standard_bg theme_font_white radius"
-                                                                                                                              @click="addToCart"
-                                                                                                                              v-if="
+        >
+          <img class="btn-sl-img" src="./img/sl.png" />
+          <p class="text">送礼</p>
+        </div>
+        <div
+          class="btn theme_standard_bg theme_font_white radius"
+          @click="addToCart"
+          v-if="
             stockNum != 0 &&
-            canSale == true &&
-            detailData.status != '0' &&
-            productType != 511 &&
-            (detailData.supportPreSale != '1' ||
-              $store.state.globalConfig.presaleType == 2)
+              canSale == true &&
+              detailData.status != '0' &&
+              productType != 511 &&
+              (detailData.supportPreSale != '1' ||
+                $store.state.globalConfig.presaleType == 2)
           "
-                                                                                                                            >
-                                                                                                                              <p class="title">加入购物车</p>
-                                                                                                                              </div>
-                                                                                                                              <div
-                                                                                                                                class="btn theme_bg_y theme_font_white radius"
-                                                                                                                                @click="buyNowEvent"
-                                                                                                                                v-if="
+        >
+          <p class="title">加入购物车</p>
+        </div>
+        <div
+          class="btn theme_bg_y theme_font_white radius"
+          @click="buyNowEvent"
+          v-if="
             stockNum != 0 &&
-            canSale == true &&
-            detailData.status != '0' &&
-            isPayTime() &&
-            detailData.supportPreSale != '1'
+              canSale == true &&
+              detailData.status != '0' &&
+              isPayTime() &&
+              detailData.supportPreSale != '1'
           "
-                                                                                                                              >
-                                                                                                                                <p class="title">立即购买</p>
-                                                                                                                                </div>
-                                                                                                                                <div
-                                                                                                                                  class="btn theme_bg_y theme_font_white radius"
-                                                                                                                                  :class="{ 'big-btn': $store.state.globalConfig.presaleType != 2 }"
-                                                                                                                                  @click="preSaleEvent"
-                                                                                                                                  v-if="
+        >
+          <p class="title">立即购买</p>
+        </div>
+        <div
+          class="btn theme_bg_y theme_font_white radius"
+          :class="{ 'big-btn': $store.state.globalConfig.presaleType != 2 }"
+          @click="preSaleEvent"
+          v-if="
             stockNum != 0 &&
-            canSale == true &&
-            detailData.status != '0' &&
-            isPayTime() &&
-            detailData.supportPreSale == '1'
+              canSale == true &&
+              detailData.status != '0' &&
+              isPayTime() &&
+              detailData.supportPreSale == '1'
           "
-                                                                                                                                >
-                                                                                                                                  <p class="title">预购下单</p>
-                                                                                                                                  </div>
-                                                                                                                                  <!--<div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent" v-if="detailData.status">-->
-                                                                                                                                  <!--<p class="title">'商品已下架'</p>-->
-                                                                                                                                  <!--</div>-->
-                                                                                                                                  <div
-                                                                                                                                    class="btn big-btn theme_bg_y theme_font_white radius nogoods"
-                                                                                                                                    @click="noStockEvent"
-                                                                                                                                    v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
-                                                                                                                                  >
-                                                                                                                                    <p class="title">商品缺货</p>
-                                                                                                                                    </div>
-                                                                                                                                    <div
-                                                                                                                                      class="btn big-btn theme_bg_y theme_font_white radius nogoods"
-                                                                                                                                      @click="canNotSaleEvent"
-                                                                                                                                      v-if="canSale == true && detailData.status == '0'"
-                                                                                                                                    >
-                                                                                                                                      <p class="title">商品已下架</p>
-                                                                                                                                      </div>
-                                                                                                                                      <div
-                                                                                                                                        class="btn big-btn theme_bg_y theme_font_white radius nogoods"
-                                                                                                                                        @click="canNotSaleEvent"
-                                                                                                                                        v-if="canSale == false"
-                                                                                                                                      >
-                                                                                                                                        <p class="title">不在可售区域</p>
-                                                                                                                                        </div>
-                                                                                                                                        </div>
-                                                                                                                                        <div
-                                                                                                                                          class="adapter-iphoneX"
-                                                                                                                                          v-if="this.$util.getIsIphoneX_X()"
-                                                                                                                                        ></div>
-                                                                                                                                          </div>
-                                                                                                                                          <pop-view
-                                                                                                                                            v-if="showPop"
-                                                                                                                                            @closeEvent="popClose"
-                                                                                                                                          >
-                                                                                                                                            <div class="pop-body">
-                                                                                                                                              <div class="pro-row">
-                                                                                                                                                <div class="img-div">
-                                                                                                                                                  <img :src="detailData.phMainUrl" />
-                                                                                                                                                </div>
-                                                                                                                                                <div class="info-div">
-                                                                                                                                                  <div
-                                                                                                                                                    class="title theme_font_black"
-                                                                                                                                                    v-html="getSkuNameStr(detailData)"
-                                                                                                                                                  ></div>
-                                                                                                                                                <div class="price">
-                                                                                                                                                  <PriceOrder :listitem="detailData"></PriceOrder>
-                                                                                                                                                </div>
-                                                                                                                                              </div>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="pop-scroll-div">
-                                                                                                                                              <div
-                                                                                                                                                class="items-div"
-                                                                                                                                                v-for="(feature, fidx) in detailData.featureList"
-                                                                                                                                                v-if="featureRefresh"
-                                                                                                                                              >
-                                                                                                                                                <div class="title theme_font_common">{{ feature.featureName }}</div>
-                                                                                                                                                <div
-                                                                                                                                                  class="item theme_font_tint theme_font_common theme_bg_white_ef"
-                                                                                                                                                  :class="{
+        >
+          <p class="title">预购下单</p>
+        </div>
+        <!--<div class="btn big-btn theme_bg_y theme_font_white" @click="noStockEvent" v-if="detailData.status">-->
+        <!--<p class="title">'商品已下架'</p>-->
+        <!--</div>-->
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
+          @click="noStockEvent"
+          v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
+        >
+          <p class="title">商品缺货</p>
+        </div>
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
+          @click="canNotSaleEvent"
+          v-if="canSale == true && detailData.status == '0'"
+        >
+          <p class="title">商品已下架</p>
+        </div>
+        <div
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
+          @click="canNotSaleEvent"
+          v-if="canSale == false"
+        >
+          <p class="title">不在可售区域</p>
+        </div>
+      </div>
+      <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
+    </div>
+    <pop-view v-if="showPop" @closeEvent="popClose">
+      <div class="pop-body">
+        <div class="pro-row">
+          <div class="img-div">
+            <img :src="detailData.phMainUrl" />
+          </div>
+          <div class="info-div">
+            <div
+              class="title theme_font_black"
+              v-html="getSkuNameStr(detailData)"
+            ></div>
+            <div class="price">
+              <PriceOrder :listitem="detailData"></PriceOrder>
+            </div>
+          </div>
+        </div>
+        <div class="pop-scroll-div">
+          <div
+            class="items-div"
+            v-for="(feature, fidx) in detailData.featureList"
+            v-if="featureRefresh"
+          >
+            <div class="title theme_font_common">{{ feature.featureName }}</div>
+            <div
+              class="item theme_font_tint theme_font_common theme_bg_white_ef"
+              :class="{
                 'theme_light_bg_i theme_standard_font_i theme_standard_bdr_i':
-                  subFeature.selected,
+                  subFeature.selected
               }"
-                                                                                                                                                  v-for="subFeature in feature.featureValueList"
-                                                                                                                                                  @click="subFeatureEvent(subFeature, fidx)"
-                                                                                                                                                >
-                                                                                                                                                  {{ subFeature.featureValue }}
-                                                                                                                                            </div>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="count-line">
-                                                                                                                                              <div class="full theme_font_common">
-                                                                                                                                                购买数量
-                                                                                                                                                <span v-if="$store.state.globalConfig.detailShowStockNum != 'false'">（库存 {{ stockNum
-                                                                                                                                                  <
-                                                                                                                                                    1000
-                                                                                                                                                    ?
-                                                                                                                                                    stockNum
-                                                                                                                                                    :
-                                                                                                                                                    "充足"
-                                                                                                                                                    }}）</span
-                                                                                                                                                  >
-                                                                                                                                              </div>
-                                                                                                                                              <!--<Counter v-model="selectedNum" :minValue="minNum" :stepNum="stepNum" :maxValue="maxNum"-->
-                                                                                                                                              <!--@numChange="numChange"></Counter>-->
-                                                                                                                                              <van-stepper
-                                                                                                                                                v-model="selectedNum"
-                                                                                                                                                :min="minNum"
-                                                                                                                                                :max="maxNum"
-                                                                                                                                                :step="stepNum"
-                                                                                                                                                @blur="numChange"
-                                                                                                                                                @change="generateSelectedText"
-                                                                                                                                                integer
-                                                                                                                                              />
-                                                                                                                                            </div>
-                                                                                                                                            </div>
-                                                                                                                                            <div
-                                                                                                                                              class="bottom-btn theme_font_white theme_bg_red"
-                                                                                                                                              @click="popSureEvent"
-                                                                                                                                              v-if="
+              v-for="subFeature in feature.featureValueList"
+              @click="subFeatureEvent(subFeature, fidx)"
+            >
+              {{ subFeature.featureValue }}
+            </div>
+          </div>
+          <div class="count-line">
+            <div class="full theme_font_common">
+              购买数量
+              <span
+                v-if="$store.state.globalConfig.detailShowStockNum != 'false'"
+                >（库存 {{ stockNum < 1000 ? stockNum : "充足" }}）</span
+              >
+            </div>
+            <!--<Counter v-model="selectedNum" :minValue="minNum" :stepNum="stepNum" :maxValue="maxNum"-->
+            <!--@numChange="numChange"></Counter>-->
+            <van-stepper
+              v-model="selectedNum"
+              :min="minNum"
+              :max="maxNum"
+              :step="stepNum"
+              @blur="numChange"
+              @change="generateSelectedText"
+              integer
+            />
+          </div>
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_red"
+          @click="popSureEvent"
+          v-if="
             popFlag == 'addToCart' &&
-            stockNum != 0 &&
-            canSale == true &&
-            detailData.status != '0' &&
-            (detailData.supportPreSale != '1' ||
-              $store.state.globalConfig.presaleType == 2) &&
-            detailData.productType != 8
+              stockNum != 0 &&
+              canSale == true &&
+              detailData.status != '0' &&
+              (detailData.supportPreSale != '1' ||
+                $store.state.globalConfig.presaleType == 2) &&
+              detailData.productType != 8
           "
-                                                                                                                                            >
-                                                                                                                                              加入购物车
-                                                                                                                                              </div>
-                                                                                                                                              <div
-                                                                                                                                                class="bottom-btn theme_font_white theme_bg_y"
-                                                                                                                                                @click="noStockEvent"
-                                                                                                                                                v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
-                                                                                                                                              >
-                                                                                                                                                <p class="title">商品缺货</p>
-                                                                                                                                                </div>
-                                                                                                                                                <div
-                                                                                                                                                  class="bottom-btn theme_font_white theme_bg_y"
-                                                                                                                                                  @click="canNotSaleEvent"
-                                                                                                                                                  v-if="canSale == true && detailData.status == '0'"
-                                                                                                                                                >
-                                                                                                                                                  <p class="title">商品已下架</p>
-                                                                                                                                                  </div>
-                                                                                                                                                  <div
-                                                                                                                                                    class="bottom-btn theme_font_white theme_bg_y"
-                                                                                                                                                    @click="canNotSaleEvent"
-                                                                                                                                                    v-if="canSale == false"
-                                                                                                                                                  >
-                                                                                                                                                    <p class="title">不在可售区域</p>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div
-                                                                                                                                                      class="bottom-btn theme_font_white theme_bg_red"
-                                                                                                                                                      @click="popSureEvent"
-                                                                                                                                                      v-if="popFlag == 'buyNow'"
-                                                                                                                                                    >
-                                                                                                                                                      立即购买
-                                                                                                                                                      </div>
-                                                                                                                                                      <div
-                                                                                                                                                        class="bottom-btn theme_font_white theme_bg_red"
-                                                                                                                                                        @click="popSureEvent"
-                                                                                                                                                        v-if="popFlag == 'songli'"
-                                                                                                                                                      >
-                                                                                                                                                        送礼
-                                                                                                                                                        </div>
-                                                                                                                                                        <div
-                                                                                                                                                          class="bottom-btn theme_font_white theme_bg_red"
-                                                                                                                                                          @click="popSureEvent"
-                                                                                                                                                          v-if="popFlag == 'preSale'"
-                                                                                                                                                        >
-                                                                                                                                                          预购下单
-                                                                                                                                                          </div>
-                                                                                                                                                          <div
-                                                                                                                                                            class="adapter-iphoneX"
-                                                                                                                                                            v-if="this.$util.getIsIphoneX_X()"
-                                                                                                                                                          ></div>
-                                                                                                                                                            </div>
-                                                                                                                                                            </pop-view>
-                                                                                                                                                            <pop-view
-                                                                                                                                                              v-if="showActivity"
-                                                                                                                                                              @closeEvent="showActivity = false"
-                                                                                                                                                            >
-                                                                                                                                                              <div class="pop-body">
-                                                                                                                                                                <div class="pop-title theme_font_common">促销</div>
-                                                                                                                                                                <div class="pop-scroll-div">
-                                                                                                                                                                  <div
-                                                                                                                                                                    class="activity-div"
-                                                                                                                                                                    v-for="(aactivity, aidx) in detailData.activityList"
-                                                                                                                                                                    @click="activityProducts(aactivity)"
-                                                                                                                                                                  >
-                                                                                                                                                                    <div class="act-item-empty line_circle theme_border_red theme_font_red">
-                                                                                                                                                                      {{ aactivity.type }}
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <div class="activity-text theme_font_common full">
-                                                                                                                                                                      {{ aactivity.title }}
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <i class="iconfont mall-gengduojiantou more-icon theme_font_tint"></i>
-                                                                                                                                                                </div>
-                                                                                                                                                              </div>
-                                                                                                                                                              </div>
-                                                                                                                                                              </pop-view>
-                                                                                                                                                              <pop-view
-                                                                                                                                                                v-if="showSelectDeliveryType"
-                                                                                                                                                                @closeEvent="showSelectDeliveryType = false"
-                                                                                                                                                              >
-                                                                                                                                                                <div class="pop-body">
-                                                                                                                                                                  <div class="pop-title theme_font_common">切换配送方式</div>
-                                                                                                                                                                  <div class="pop-scroll-div">
-                                                                                                                                                                    <div
-                                                                                                                                                                      class="activity-div"
-                                                                                                                                                                      @click="changeDelivery('1')"
-                                                                                                                                                                    >
-                                                                                                                                                                      <div class="act-item-empty line_circle theme_border_red theme_font_red">
-                                                                                                                                                                        自提
-                                                                                                                                                                      </div>
-                                                                                                                                                                      <div class="activity-text theme_font_common full">
-                                                                                                                                                                        您需要到选中的自提点提货
-                                                                                                                                                                      </div>
-                                                                                                                                                                      <i
-                                                                                                                                                                        class="iconfont more-icon"
-                                                                                                                                                                        :class="
+        >
+          加入购物车
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_y"
+          @click="noStockEvent"
+          v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
+        >
+          <p class="title">商品缺货</p>
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_y"
+          @click="canNotSaleEvent"
+          v-if="canSale == true && detailData.status == '0'"
+        >
+          <p class="title">商品已下架</p>
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_y"
+          @click="canNotSaleEvent"
+          v-if="canSale == false"
+        >
+          <p class="title">不在可售区域</p>
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_red"
+          @click="popSureEvent"
+          v-if="popFlag == 'buyNow'"
+        >
+          立即购买
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_red"
+          @click="popSureEvent"
+          v-if="popFlag == 'songli'"
+        >
+          送礼
+        </div>
+        <div
+          class="bottom-btn theme_font_white theme_bg_red"
+          @click="popSureEvent"
+          v-if="popFlag == 'preSale'"
+        >
+          预购下单
+        </div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
+      </div>
+    </pop-view>
+    <pop-view v-if="showActivity" @closeEvent="showActivity = false">
+      <div class="pop-body">
+        <div class="pop-title theme_font_common">促销</div>
+        <div class="pop-scroll-div">
+          <div
+            class="activity-div"
+            v-for="(aactivity, aidx) in detailData.activityList"
+            @click="activityProducts(aactivity)"
+          >
+            <div
+              class="act-item-empty line_circle theme_border_red theme_font_red"
+            >
+              {{ aactivity.type }}
+            </div>
+            <div class="activity-text theme_font_common full">
+              {{ aactivity.title }}
+            </div>
+            <i
+              class="iconfont mall-gengduojiantou more-icon theme_font_tint"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </pop-view>
+    <pop-view
+      v-if="showSelectDeliveryType"
+      @closeEvent="showSelectDeliveryType = false"
+    >
+      <div class="pop-body">
+        <div class="pop-title theme_font_common">切换配送方式</div>
+        <div class="pop-scroll-div">
+          <div class="activity-div" @click="changeDelivery('1')">
+            <div
+              class="act-item-empty line_circle theme_border_red theme_font_red"
+            >
+              自提
+            </div>
+            <div class="activity-text theme_font_common full">
+              您需要到选中的自提点提货
+            </div>
+            <i
+              class="iconfont more-icon"
+              :class="
                 detailData.deliveryType == '1'
                   ? ['mall-xuanzhong', 'theme_font_red']
                   : ['mall-weixuanzhong', 'theme_font_tint']
               "
-                                                                                                                                                                      ></i>
-                                                                                                                                                                  </div>
-                                                                                                                                                                  <div
-                                                                                                                                                                    class="activity-div"
-                                                                                                                                                                    @click="changeDelivery('2')"
-                                                                                                                                                                  >
-                                                                                                                                                                    <div class="act-item-empty line_circle theme_border_red theme_font_red">
-                                                                                                                                                                      配送
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <div class="activity-text theme_font_common full">
-                                                                                                                                                                      将会送至您指定的位置
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <i
-                                                                                                                                                                      class="iconfont more-icon"
-                                                                                                                                                                      :class="
+            ></i>
+          </div>
+          <div class="activity-div" @click="changeDelivery('2')">
+            <div
+              class="act-item-empty line_circle theme_border_red theme_font_red"
+            >
+              配送
+            </div>
+            <div class="activity-text theme_font_common full">
+              将会送至您指定的位置
+            </div>
+            <i
+              class="iconfont more-icon"
+              :class="
                 detailData.deliveryType == '2'
                   ? ['mall-xuanzhong', 'theme_font_red']
                   : ['mall-weixuanzhong', theme_font_tint]
               "
-                                                                                                                                                                    ></i>
-                                                                                                                                                                </div>
-                                                                                                                                                                </div>
-                                                                                                                                                                </div>
-                                                                                                                                                                </pop-view>
-                                                                                                                                                                <RegionSelect
-                                                                                                                                                                  v-if="showSelect"
-                                                                                                                                                                  ref="regionselect"
-                                                                                                                                                                  :initData="initData"
-                                                                                                                                                                  @selectedItemsEvent="selectedItemsEvent"
-                                                                                                                                                                  @closeEvent="regionCloseEvent"
-                                                                                                                                                                ></RegionSelect>
-                                                                                                                                                                  <transition
-                                                                                                                                                                    name="bounce"
-                                                                                                                                                                    @afterEnter="productImgAfterEnter"
-                                                                                                                                                                  >
-                                                                                                                                                                    <img
-                                                                                                                                                                      :src="this.detailData.phMainUrl"
-                                                                                                                                                                      alt=""
-                                                                                                                                                                      class="productImg"
-                                                                                                                                                                      v-if="showProductImg"
-                                                                                                                                                                    />
-                                                                                                                                                                    </transition>
-                                                                                                                                                                    <transition
-                                                                                                                                                                      @after-enter="afterEnter"
-                                                                                                                                                                      @before-enter="beforeEnter"
-                                                                                                                                                                    >
-                                                                                                                                                                      <div
-                                                                                                                                                                        class="anProductImg"
-                                                                                                                                                                        v-if="showAddCartAn"
-                                                                                                                                                                      >
-                                                                                                                                                                        <img
-                                                                                                                                                                          :src="this.detailData.phMainUrl"
-                                                                                                                                                                          alt=""
-                                                                                                                                                                        />
-                                                                                                                                                                        </div>
-                                                                                                                                                                        </transition>
-                                                                                                                                                                        <BigImage
-                                                                                                                                                                          :initIndex="videoUrl != '' ? proImgIndex - 1 : proImgIndex"
-                                                                                                                                                                          :picUrls="detailData.picUrls"
-                                                                                                                                                                          v-if="showBigImage"
-                                                                                                                                                                          @closeEvent="closeBigImage"
-                                                                                                                                                                        ></BigImage>
-                                                                                                                                                                          <BigImage
-                                                                                                                                                                            :picUrls="picUrls"
-                                                                                                                                                                            v-if="showPicUrls"
-                                                                                                                                                                            @closeEvent="closeBigImage"
-                                                                                                                                                                          ></BigImage>
-                                                                                                                                                                            <van-popup
-                                                                                                                                                                              v-model="showSharePopup"
-                                                                                                                                                                              round
-                                                                                                                                                                              position="bottom"
-                                                                                                                                                                              :style="{ height: '35%' }"
-                                                                                                                                                                            >
-                                                                                                                                                                              <div class="share_popup">
-                                                                                                                                                                                <div class="share_botton">
-                                                                                                                                                                                  <div
-                                                                                                                                                                                    class="share_botton_item"
-                                                                                                                                                                                    @click="shareWechatFriends"
-                                                                                                                                                                                  >
-                                                                                                                                                                                    <img
-                                                                                                                                                                                      src="static/image/mall2/share_wechat.png"
-                                                                                                                                                                                      alt=""
-                                                                                                                                                                                    >
-                                                                                                                                                                                      <div>微信好友</div>
-                                                                                                                                                                                </div>
-                                                                                                                                                                                <div
-                                                                                                                                                                                  class="share_botton_item"
-                                                                                                                                                                                  @click="shareImg"
-                                                                                                                                                                                  v-show="false"
-                                                                                                                                                                                >
-                                                                                                                                                                                  <img
-                                                                                                                                                                                    src="static/image/mall2/share_img.png"
-                                                                                                                                                                                    alt=""
-                                                                                                                                                                                  >
-                                                                                                                                                                                    <div>图片分享</div>
-                                                                                                                                                                              </div>
-                                                                                                                                                                              <div
-                                                                                                                                                                                class="share_botton_item"
-                                                                                                                                                                                @click="shareLink"
-                                                                                                                                                                                v-show="true"
-                                                                                                                                                                              >
-                                                                                                                                                                                <img
-                                                                                                                                                                                  src="static/image/mall2/share_link.png"
-                                                                                                                                                                                  alt=""
-                                                                                                                                                                                >
-                                                                                                                                                                                  <div>链接分享</div>
-                                                                                                                                                                                  </div>
-                                                                                                                                                                                  </div>
-                                                                                                                                                                                  <div
-                                                                                                                                                                                    class="cancel"
-                                                                                                                                                                                    @click="showSharePopup = false"
-                                                                                                                                                                                  >
-                                                                                                                                                                                    取消
-                                                                                                                                                                                    </div>
-                                                                                                                                                                                    </div>
-                                                                                                                                                                                    </van-popup>
-                                                                                                                                                                                    </div>
+            ></i>
+          </div>
+        </div>
+      </div>
+    </pop-view>
+    <RegionSelect
+      v-if="showSelect"
+      ref="regionselect"
+      :initData="initData"
+      @selectedItemsEvent="selectedItemsEvent"
+      @closeEvent="regionCloseEvent"
+    ></RegionSelect>
+    <transition name="bounce" @afterEnter="productImgAfterEnter">
+      <img
+        :src="this.detailData.phMainUrl"
+        alt=""
+        class="productImg"
+        v-if="showProductImg"
+      />
+    </transition>
+    <transition @after-enter="afterEnter" @before-enter="beforeEnter">
+      <div class="anProductImg" v-if="showAddCartAn">
+        <img :src="this.detailData.phMainUrl" alt="" />
+      </div>
+    </transition>
+    <BigImage
+      :initIndex="videoUrl != '' ? proImgIndex - 1 : proImgIndex"
+      :picUrls="detailData.picUrls"
+      v-if="showBigImage"
+      @closeEvent="closeBigImage"
+    ></BigImage>
+    <BigImage
+      :picUrls="picUrls"
+      v-if="showPicUrls"
+      @closeEvent="closeBigImage"
+    ></BigImage>
+    <van-popup
+      v-model="showSharePopup"
+      round
+      position="bottom"
+      :style="{ height: '35%' }"
+    >
+      <div class="share_popup">
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg" v-show="false">
+            <img src="static/image/mall2/share_img.png" alt="" />
+            <div>图片分享</div>
+          </div>
+          <div class="share_botton_item" @click="shareLink" v-show="false">
+            <img src="static/image/mall2/share_link.png" alt="" />
+            <div>链接分享</div>
+          </div>
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>
+    </van-popup>
+  </div>
 </template>
 
 <script>
@@ -1966,6 +1852,9 @@ export default {
     console.log("商品详情路径", window.location);
   },
   watch: {
+    introduction1(val) {
+      console.log("---------introduction1---->", val);
+    },
     "$store.state.mall2.zitiAddress.id": function(val, oldVal) {
       if (this.deliveryType == 1) {
         this.getDatas();
@@ -2013,14 +1902,14 @@ export default {
           } else {
             if (this.detailScrollTop == 1 || this.detailScrollTop == 0) {
               viewpoint_radio =
-                this.detailClientHeight /
-                  (this.detailScrollHeight - this.detailScrollTop) *
+                (this.detailClientHeight /
+                  (this.detailScrollHeight - this.detailScrollTop)) *
                   0.5 +
                 0.5;
             } else {
               viewpoint_radio =
-                this.detailScrollTop /
-                  (this.detailScrollHeight - this.detailClientHeight) *
+                (this.detailScrollTop /
+                  (this.detailScrollHeight - this.detailClientHeight)) *
                   0.5 +
                 0.5;
             }
@@ -2054,9 +1943,12 @@ export default {
         share_type: share_type
       });
     },
-    onShare(){
-      console.log(this.detailData.picUrls[0]+'?x-oss-process=image/format,jpg/quality,Q_25')
-      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+    onShare() {
+      console.log(
+        this.detailData.picUrls[0] +
+          "?x-oss-process=image/format,jpg/quality,Q_25"
+      );
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
         this.showShare();
       } else {
         this.showSharePopup = true;
@@ -2534,7 +2426,7 @@ export default {
       this.showPicUrls = false;
     },
     showBigImageEvent: function(index) {
-      this.proImgIndex = index
+      this.proImgIndex = index;
       this.showBigImage = true;
     },
     productEvent: function(product) {
@@ -2586,7 +2478,10 @@ export default {
         token: this.$store.state.login.token,
         selfId: id
       };
-      this.$http.post(url, params1).then(res => {}, error => {});
+      this.$http.post(url, params1).then(
+        res => {},
+        error => {}
+      );
     },
     selectPickUpAddress: function() {
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
@@ -2734,8 +2629,8 @@ export default {
           this.$store.state.inToDetail == "common"
             ? "商城臻选专场"
             : this.$store.state.inToDetail == "list"
-              ? "商城商品列表页"
-              : "商城搜索列表",
+            ? "商城商品列表页"
+            : "商城搜索列表",
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
@@ -3415,7 +3310,9 @@ export default {
       if (deliverType == 1 || deliverType == "") {
         pickupStoreOuCode = this.$store.state.mall2.zitiAddress.storeCode
           ? this.$store.state.mall2.zitiAddress.storeCode
-          : this.$route.query.storeOuCode ? this.$route.query.storeOuCode : "1";
+          : this.$route.query.storeOuCode
+          ? this.$route.query.storeOuCode
+          : "1";
       }
 
       let url = "/appcontent/js/product/productDetail.js";
@@ -3627,8 +3524,8 @@ export default {
               this.$store.state.inToDetail == "common"
                 ? "商城臻选专场"
                 : this.$store.state.inToDetail == "list"
-                  ? "商城商品列表页"
-                  : "商城搜索列表",
+                ? "商城商品列表页"
+                : "商城搜索列表",
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
@@ -4422,6 +4319,7 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #FFFFFF;
+    padding: 11px 5px;
     // line-height: 21px;
   }
 }
