@@ -33,14 +33,56 @@ export default {
       loading: false,
       finished: false,
       error: false,
+      currentPage: 0,
+      maxPage: 0,
     };
   },
   components: {
     AfterSalesItem,
   },
+  created() {
+    this.getMallOrder();
+    this.getServiceMallOrder();
+  },
   methods: {
     onLoad() {},
     onRefresh() {},
+    getMallOrder() {
+      let url = "/app/json/app_order_after_sale/queryProcessingOrder";
+      this.currentPage += 1;
+      let parmas = {
+        page: { index: this.currentPage, pageSize: 10 },
+      };
+      return new Promise((resolve, reject) => {
+        this.$http.post(url, { ...parmas }).then(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    },
+    getServiceMallOrder() {
+      let url =
+        "https://mall-uat-api-linli.timesgroup.cn:1443/times-center-trade/mall/after/sale/list";
+      this.currentPage += 1;
+      let parmas = {
+        pageNum: 1,
+        pageSize: 10,
+      };
+      return new Promise((resolve, reject) => {
+        this.$http.post(url, parmas).then(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    },
   },
 };
 </script>
