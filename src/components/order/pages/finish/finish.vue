@@ -1,6 +1,16 @@
 <template>
-  <div class="finish">
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+  <div
+    class="finish"
+    :class="{
+      'finish-x': this.$util.getIsIphoneX_X(),
+      'empty-page': showEmpty
+    }"
+  >
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      class="refresh-page"
+    >
       <van-list
         v-model="loading"
         :finished="finished"
@@ -56,6 +66,7 @@ export default {
       errorText: "请求失败，点击重新加载",
       properWorng: false,
       refreshing: false,
+      refresh: false,
       orderList: [],
       currentPage: 1,
       totalPage: 0,
@@ -92,17 +103,14 @@ export default {
         .get({ key: "LLBUserRoomId", isPublic: true })
         .then(res => {
           if (res.hasOwnProperty("result")) {
-            console.log("我的订单人房id获取成功", res);
             this.userRoomId = res.result;
           } else {
-            console.log("我的订单人房id获取失败", res);
             this.userRoomId = "";
           }
         });
     },
     //获取物业账单列表
     propertyFn() {
-      // this.getRoomId();
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
@@ -298,7 +306,7 @@ export default {
         }
 
         //判断是否为下拉刷新操作，如果是，刷新成功后要将状态关掉
-        if (this.refreshing && !this.error) {
+        if (this.refresh && !this.error) {
           this.$toast("刷新成功");
           this.refreshing = false;
         }
@@ -311,7 +319,9 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
       this.finished = false; //将没有更多的状态改成false
-      this.refreshing = true;
+      // this.refreshing = true;
+      this.refreshing = false;
+      this.refresh = true;
       this.onLoad();
     },
     // 初始化数据
@@ -420,5 +430,14 @@ export default {
   height 100%;
   overflow-y auto;
   padding-bottom: 130px;
+  &.finish-x {
+    padding-bottom: 150px;
+  }
+  &.empty-page {
+    overflow-y: hidden;
+  }
+  .refresh-page {
+    min-height: 100%;
+  }
 }
 </style>

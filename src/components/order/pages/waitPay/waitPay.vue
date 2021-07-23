@@ -1,6 +1,16 @@
 <template>
-  <div class="waitPay">
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+  <div
+    class="waitPay"
+    :class="{
+      'wait-pay-x': this.$util.getIsIphoneX_X(),
+      'empty-page': showEmpty
+    }"
+  >
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      class="refresh-page"
+    >
       <van-list
         v-model="loading"
         :finished="finished"
@@ -11,12 +21,12 @@
         :immediate-check="false"
       >
         <property-bill
+          v-show="isLoadPropertyBill"
           pageName="waitPay"
           ref="propertyOrder"
           :isDisAll="isDisAll"
           :isDis="isDis"
           :results="billResults"
-          v-show="isLoadPropertyBill"
           @checkEvent="checkEvent"
         >
           <div v-for="(item, index) in billResults" :key="index" class="scroll">
@@ -109,6 +119,7 @@ export default {
       errorText: "请求失败，点击重新加载",
       properWorng: false,
       refreshing: false,
+      refresh: false,
       orderList: [],
       currentPage: 1,
       totalPage: 0,
@@ -154,7 +165,6 @@ export default {
   },
   created() {
     this.getRoomId();
-    // this.onLoad();
   },
   mounted() {
     this.onLoad();
@@ -167,10 +177,9 @@ export default {
         .get({ key: "LLBUserRoomId", isPublic: true })
         .then(res => {
           if (res.hasOwnProperty("result")) {
-            console.log("我的订单人房id获取成功", res);
             this.userRoomId = res.result;
+            console.log(`获取原生人房`, res);
           } else {
-            console.log("我的订单人房id获取失败", res);
             this.userRoomId = "";
           }
         });
@@ -304,8 +313,6 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      // this.getRoomId();
-      console.log(`propertyFn userRoomId`, this.userRoomId);
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
@@ -343,7 +350,6 @@ export default {
       if (this.$store.state.environment == "development") {
         this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
       }
-
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
@@ -382,7 +388,6 @@ export default {
 
       Promise.allSettled(promiseArr)
         .then(res => {
-          console.log(`onload then`, res);
           let propertyRes = "";
           let orderRes = "";
           if (res.length == 2) {
@@ -412,12 +417,13 @@ export default {
               propertyError = true;
               this.properWorng = true;
             }
-            if (this.billResults.length) {
-              this.isLoadPropertyBill = true;
-            } else {
-              //如果没有物业账单数据，则不显示物业账单标题
-              this.isLoadPropertyBill = false;
-            }
+
+            // if (this.billResults.length) {
+            //   this.isLoadPropertyBill = true;
+            // } else {
+            //   //如果没有物业账单数据，则不显示物业账单标题
+            //   this.isLoadPropertyBill = false;
+            // }
           } else {
             if (propertyRes) {
               this.loading = false;
@@ -484,21 +490,33 @@ export default {
             this.finished = false;
             this.errorText = "物业账单和订单请求失败，点击重新加载";
             this.$toast("物业账单和订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (propertyError && !orderError) {
             this.finished = false;
             this.errorText = "物业账单请求失败，点击重新加载";
             this.$toast("物业账单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (!propertyError && orderError) {
             this.finished = false;
             this.errorText = "订单请求失败，点击重新加载";
             this.$toast("订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = true;
+          } else {
+            //人房为空（游客）,隐藏物业缴费组件。应显示empty空页面
+            if (this.userRoomId == "") {
+              this.isLoadPropertyBill = false;
+            } else {
+              this.isLoadPropertyBill = true;
+            }
+            // this.isLoadPropertyBill = true; //本地测试
           }
 
-          //如果物业账单列表和电商订单列表都为空,并且请求不出错的情况下，则显示页面显示空状态
+          //如果物业账单列表和电商订单列表都为空,人房id为空（游客）,并且请求不出错的情况下，则显示空状态
           if (
             this.billResults.length === 0 &&
             this.currentOrderList.length === 0 &&
-            !this.error
+            !this.error &&
+            this.userRoomId == ""
           ) {
             this.showEmpty = true;
           } else {
@@ -506,7 +524,7 @@ export default {
           }
 
           //判断是否为下拉刷新操作，如果是，刷新成功后要将状态关掉
-          if (this.refreshing && !this.error) {
+          if (this.refresh && !this.error) {
             this.$toast("刷新成功");
             this.refreshing = false;
           }
@@ -535,7 +553,9 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
       this.finished = false; //将没有更多的状态改成false
-      this.refreshing = true;
+      // this.refreshing = true;
+      this.refreshing = false;
+      this.refresh = true;
       this.onLoad();
     },
     initData() {
@@ -845,8 +865,16 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-  // padding-bottom: 182px;
-  padding-bottom: 220px;
+  padding-bottom: 182px;
+  &.wait-pay-x {
+    padding-bottom: 220px;
+  }
+  &.empty-page {
+    overflow-y: hidden;
+  }
+  .refresh-page {
+    min-height: 100%;
+  }
 }
 
 .tipsText {
@@ -903,7 +931,8 @@ export default {
       .btn-box {
         // width: 100%;
         height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;

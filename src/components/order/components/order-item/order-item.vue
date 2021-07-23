@@ -74,11 +74,7 @@
       <div class="btn-box">
         <!-- v-if="isChangeOrder && !isBulk" -->
         <!-- 不允许修改订单 -->
-        <div
-          class="btn"
-          v-if="false"
-          @click="modifyAddress(dataList[0])"
-        >
+        <div class="btn" v-if="false" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
         <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
@@ -454,11 +450,7 @@ export default {
         this.billType == 11
       ) {
         //团购订单
-        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${
-          this.billDetailObj.groupBuyId
-        }&mktGroupBuyId=${
-          this.billDetailObj.groupBuyActivityId
-        }&formPaySuccess='1'&ret={ret}`;
+        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
         this.enginePay(payInfo, callbackUrl);
       } else if (this.billType == 11) {
         this.initPayInfo(payInfo, "mall");
@@ -660,8 +652,8 @@ export default {
           let data = res.data;
           if (data.status == 0) {
             /*
-             * 如果商品已经下架或者不存在了，需要终止操作 
-            */
+             * 如果商品已经下架或者不存在了，需要终止操作
+             */
             if (data.data.invalidCart !== "" || data.data.occur.length <= 0) {
               this.$MessageBox
                 .confirm(
