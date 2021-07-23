@@ -4422,6 +4422,7 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #FFFFFF;
+    padding: 11px 5px;
     // line-height: 21px;
   }
 }
