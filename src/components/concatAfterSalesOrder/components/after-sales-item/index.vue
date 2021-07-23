@@ -8,7 +8,7 @@
       <div class="type">受理中</div>
     </div>
     <div class="cardContent">
-      <img src="../../img/afterSales.png" alt="" class="orderImg" />
+      <img src="../../img/test.jpg" alt="" class="orderImg" />
       <div class="content">
         <div class="goodsName">兰舟水果利口青梅酒VOL8% 350ML（一瓶装）件</div>
         <div class="sku">
@@ -22,8 +22,8 @@
       <div class="payPrice">
         <div class="title">已付款：</div>
         <div class="cunt">¥</div>
-        <div class="priceBig">35</div>
-        <div class="priceSmall">.90</div>
+        <div class="priceBig">35.</div>
+        <div class="priceSmall">90</div>
       </div>
     </div>
     <div class="cardBtn">
@@ -116,7 +116,90 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: 11px;
+
+        .price {
+          font-size: 13px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #8D8D8D;
+          line-height: 18px;
+        }
+
+        .num {
+          font-size: 13px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #8D8D8D;
+          line-height: 18px;
+        }
       }
+    }
+  }
+
+  .cardFoot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 19px;
+
+    .date {
+      font-size: 13px;
+      font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+      font-weight: 400;
+      color: #999999;
+      line-height: 14px;
+    }
+
+    .payPrice {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .title {
+        font-size: 13px;
+        font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+        font-weight: 400;
+        color: #999999;
+        line-height: 14px;
+      }
+
+      .cunt {
+        font-size: 12px;
+        font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+        font-weight: 400;
+        color: #121212;
+        line-height: 18px;
+      }
+
+      .priceBig {
+        font-size: 16px;
+        font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+        font-weight: 500;
+        color: #121212;
+        line-height: 24px;
+      }
+
+      .priceSmall {
+        font-size: 12px;
+        font-family: SourceHanSansCN-Medium, SourceHanSansCN;
+        font-weight: 500;
+        color: #121212;
+        line-height: 24px;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .cardBtn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 18px;
+
+    img {
+      width: 108px;
+      height: 32px;
     }
   }
 }
