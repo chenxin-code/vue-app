@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== 'production'
  */
 
 const config = {
-  baseURL: baseUrl,
+  baseURL: baseUrl || process.env.VUE_APP_BASE_API,
   mapak: 'oWbRPSoypx6ojPTEYQXNZ1qEWQAxinbX',
   //微信分享的文件夹路径  47是app-vue  139是system-vue
   // shareUrl:'/app-vue/app/index.html#',
