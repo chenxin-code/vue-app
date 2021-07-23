@@ -2,24 +2,30 @@
 
 <template>
   <div class="cart">
-    <nav-top :noTitle="true" :noBack="!hasBack" @backEvent="backEvent" :showBackBtn="showBackBtn">
+    <nav-top
+      :noTitle="true"
+      :noBack="!hasBack"
+      @backEvent="backEvent"
+      :showBackBtn="showBackBtn"
+    >
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
-          <span class="title theme_font_black">购物车({{ goodsCount }})</span>
+          <span class="title theme_font_black" :style="goodsCount > 0?{marginLeft:'40px'}:{marginRight:'20px'}">购物车({{ $store.state.mall2.cartNum }})</span>
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>
-        <p class="cart-edit theme_font_gray" 
-          v-if="goodsCount > 0"
+        <p
+          class="cart-edit theme_font_gray"
+          v-show="goodsCount > 0"
           @click="setEdit"
         >
           {{ isEditing ? "完成" : "编辑" }}
-        </p>
+          </p>
       </div>
-    </nav-top>
-    <nav-content>
-           <!-- <div class="row"
+      </nav-top>
+      <nav-content>
+        <!-- <div class="row"
                 v-if="$store.state.globalConfig.delivertype_default != '1' && $store.state.globalConfig.delivertype_default != '2'">
              <div class="type-btn" v-for="(item,index) in topArr"
                   :class="{theme_light_bg: deliverType == item.type, theme_standard_bdr_i: deliverType == item.type}"
@@ -34,15 +40,15 @@
                      v-if="zitiNum > 0 && item.type == 1">({{zitiNum}})</span>
              </div>
            </div> -->
-      <div
-        class="list-content"
-        :class="{
+        <div
+          class="list-content"
+          :class="{
           notop:
             $store.state.globalConfig.delivertype_default == '1' ||
             $store.state.globalConfig.delivertype_default == '2',
         }"
-      >
-               <!-- <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">
+        >
+          <!-- <div class="presale-cart-div" v-if="$store.state.globalConfig.presaleType == 2 && deliverType == 1">
                  <div class="content" @click="toPresaleCart">
                    <div class="icon">
                      <i class="iconfont mall-gouwuche theme_font_red"></i>
@@ -56,22 +62,22 @@
                    </div>
                  </div>
                </div> -->
-        <CartList
-          v-for="(item, index) in topArr"
-          :ref="getCartRef(item.type)"
-          v-if="item.hasShow"
-          v-show="deliverType == item.type"
-          :deliverType="item.type"
-          :key="index"
-          :isEditing="isEditing"
-          :orderCategory="orderCategory"
-          :vipUnitUserCode="vipUnitUserCode"
-          @updateEdit="setEdit"
-        >
-        </CartList>
-      </div>
-    </nav-content>
-    <AdPage :pageAdKeywords="'AD_Key_Cart'"></AdPage>
+          <CartList
+            v-for="(item, index) in topArr"
+            :ref="getCartRef(item.type)"
+            v-if="item.hasShow"
+            v-show="deliverType == item.type"
+            :deliverType="item.type"
+            :key="index"
+            :isEditing="isEditing"
+            :orderCategory="orderCategory"
+            :vipUnitUserCode="vipUnitUserCode"
+            @updateEdit="setEdit"
+          >
+            </CartList>
+  </div>
+  </nav-content>
+  <AdPage :pageAdKeywords="'AD_Key_Cart'"></AdPage>
   </div>
 </template>
 
@@ -86,18 +92,18 @@ export default {
   name: "cart",
   components: {
     CartList,
-    AdPage,
+    AdPage
   },
   props: {
     hasBack: {
       type: Boolean,
-      default: true,
+      default: true
     },
     //当有底部导航的时候 是否是当前显示的
     commonShow: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
@@ -114,24 +120,24 @@ export default {
       vipUnitUserCode: undefined,
       lastPath: "",
       cartNum: 0,
-      showBackBtn:true,
+      showBackBtn: true,
+      entrance: ""
     };
   },
   methods: {
-
-    toPresaleCart: function () {
+    toPresaleCart: function() {
       this.$router.push({
-        path: "/mall2/presalecart",
+        path: "/mall2/presalecart"
       });
     },
-    backEvent: function () {
+    backEvent: function() {
       this.$router.go(-1);
       this.$keepaliveHelper.deleteCache(this);
     },
-    setEdit: function () {
+    setEdit: function() {
       this.isEditing = !this.isEditing;
     },
-    getAddressName: function () {
+    getAddressName: function() {
       let name = null;
 
       if (this.deliverType == 2) {
@@ -150,21 +156,21 @@ export default {
 
       return name;
     },
-    chooseAddress: function (type) {
+    chooseAddress: function(type) {
       if (type == 2) {
         this.$router.push({
-          path: "/mall2/addresslist",
+          path: "/mall2/addresslist"
         });
       } else {
         if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
           return;
         }
         this.$router.push({
-          path: "/mall2/mypickupaddress",
+          path: "/mall2/mypickupaddress"
         });
       }
     },
-    deliverTypeEvent: function (item) {
+    deliverTypeEvent: function(item) {
       if (item.type == 2) {
         this.saveItemSel(item);
         this.getData();
@@ -182,20 +188,20 @@ export default {
         this.firstZiti = false;
       }
     },
-    saveItemSel: function (item) {
+    saveItemSel: function(item) {
       item.hasShow = true;
       this.deliverType = item.type;
       this.$store.state.mall2.staticDeliverType = this.deliverType;
       this.$bridgefunc.vuexStorage();
     },
 
-    pageShow: function () {
+    pageShow: function() {
       this.deliverType = this.$store.state.mall2.staticDeliverType;
       this.getData();
     },
-    getData: function () {
+    getData: function() {
       if (this.deliverType == 1) {
-        InitialLoadPickupAny.checkIsInitialLoad((address) => {
+        InitialLoadPickupAny.checkIsInitialLoad(address => {
           if (address) {
             this.getData();
           } else {
@@ -228,10 +234,10 @@ export default {
         });
       }
     },
-    getCartRef: function (index) {
+    getCartRef: function(index) {
       return "cart" + index;
     },
-    getItemByType: function (type) {
+    getItemByType: function(type) {
       for (let i = 0; i < this.topArr.length; i++) {
         let item = this.topArr[i];
         if (item.type == type) {
@@ -240,21 +246,26 @@ export default {
       }
       return null;
     },
-    _getCartCount: function (deliverType) {
+    _getCartCount: function(deliverType) {
       let url = "/app/json/app_cart/getCartCount";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: deliverType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
             this.goodsCount = data.data;
 
-            // this.$store.state.mall2.cartNum = data.data
+            this.$store.state.mall2.cartNum = data.data;
+            console.log(
+              "this.$store.state.mall2.cartNum",
+              "cart",
+              this.$store.state.mall2.cartNum
+            );
             if (deliverType == 1) {
               this.zitiNum = data.data;
             } else {
@@ -264,12 +275,12 @@ export default {
             // this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           // this.$Loading.close();
           // this.$Toast('请求数据失败！')
         }
       );
-    },
+    }
   },
   activated() {
     if (this.$store.state.globalConfig.presaleType == 2) {
@@ -322,6 +333,25 @@ export default {
         this._getCartCount(1);
       }
     }
+    let entrance = "";
+    switch (this.$store.state.cartEntrance) {
+      case "common":
+        entrance = "首页";
+        break;
+      case "goodsDetail":
+        entrance = "商品详情";
+        break;
+      case "goodsList":
+        entrance = "商品列表";
+        break;
+      case "wechatBottomNav":
+        entrance = "小程序底部栏";
+        break;
+    }
+    console.log("entrance", entrance);
+    this.$sensors.track("shoppingcart_view", {
+      entrance: entrance
+    });
   },
   created() {
     this.lastPath = this.$route.query.lastPath
@@ -331,7 +361,7 @@ export default {
     if (this.$route.query.pickupId) {
       this.$mallCommon.getSysStoreById(
         this.$route.query.pickupId,
-        (pickupAddress) => {
+        pickupAddress => {
           this.$store.state.mall2.zitiAddress = pickupAddress;
           sessionStorage.setItem(
             "RHY_Pickup_Address",
@@ -353,15 +383,18 @@ export default {
     this.cartAddress = this.$store.state.mall2.selectAddress;
     this.orderCategory = this.$route.query.orderCategory;
     this.vipUnitUserCode = this.$route.query.vipUnitUserCode;
-    console.log('this.$store.state.webtype',this.$store.state.webtype)
-    if((this.$store.state.webtype == 2 || this.$store.state.webtype == 3) && this.$route.path =="/common"){
-      this.showBackBtn = false
-    }else{
-      this.showBackBtn = true
+    console.log("this.$store.state.webtype", this.$store.state.webtype);
+    if (
+      (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) &&
+      this.$route.path == "/common"
+    ) {
+      this.showBackBtn = false;
+    } else {
+      this.showBackBtn = true;
     }
   },
   watch: {
-    "$store.state.mall2.cartNum": function (val, oldVal) {
+    "$store.state.mall2.cartNum": function(val, oldVal) {
       if (val == 0) {
         this.isEditing = false;
       }
@@ -370,14 +403,14 @@ export default {
       } else {
         this.peisongNum = val;
       }
-    },
+    }
   },
-  computed:{
-    goodsCount:{
-      get(){
-        return this.$store.state.mall2.cartNum
+  computed: {
+    goodsCount: {
+      get() {
+        return this.$store.state.mall2.cartNum;
       },
-      set(){},
+      set() {}
     }
   }
 };
@@ -394,7 +427,7 @@ export default {
   overflow: hidden;
 
   .cart-top {
-    margin-left: 40px;
+    // margin-left: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -405,7 +438,8 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-
+      // text-indent: 25px;
+      // margin-left 15px;
       .title {
         font-size: $font-size-large;
       }

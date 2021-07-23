@@ -36,7 +36,7 @@ module.exports = [
     name: '新首页',
     component: () => import('@/components/product/index/common'),
     meta: {
-      keepAlive: false
+      keepAlive: true
     }
   },
   // 子集配置页面

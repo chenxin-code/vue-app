@@ -2,7 +2,7 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-22 09:19:11
+ * @LastEditTime: 2021-07-20 10:07:47
 -->
 <template>
   <!-- v-if="isShowPropertyBill" -->
@@ -86,7 +86,7 @@ export default {
       isDisabledItem: false,
       isChecked: false,
       activeNames: ["1"],
-      isOpen: true,
+      isOpen: false,
       query: this.$route.query //获取路由信息
     };
   },
@@ -118,11 +118,11 @@ export default {
      * 2.从个人中心“我的订单”进入,则物业缴费类型是展开样式。
      * 3.默认关闭。
      */
-    if (this.query.orderPage == "true" || this.query.orderPage == undefined) {
-      this.isOpen = false;
-    } else {
-      this.isOpen = true;
-    }
+    // if (this.query.orderPage == "true" || this.query.orderPage == undefined) {
+    //   this.isOpen = false;
+    // } else {
+    //   this.isOpen = true;
+    // }
   },
   methods: {
     checkEvent(event, data) {
@@ -132,7 +132,6 @@ export default {
     },
     onClickBill(type) {
       this.isOpen = !type;
-      console.log(`this.isOpen`, this.isOpen);
     },
     titleIcon(e) {
       let iconClass = "";

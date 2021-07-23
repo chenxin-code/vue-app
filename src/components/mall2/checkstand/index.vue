@@ -14,7 +14,7 @@
                 payInfo.dpedData.integer
               }}</span>
               <span
-                class="left-no-space font-small theme_font_red"
+                class="price-z theme_font_red"
                 v-if="!isBulk"
                 >.{{ payInfo.dpedData.decimals }}</span
               >
@@ -107,7 +107,7 @@
         >
           找人代付￥{{ $util.toDecimal2(payInfo.payAmount) }}元
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </nav-content>
     <div class="copy-div" v-show="showCopyBtn">
@@ -167,7 +167,6 @@ export default {
       lsProductName: "",
       isBulk: false,
       bulkData: {},
-      isX:false,
     };
   },
   methods: {
@@ -211,6 +210,10 @@ export default {
       } else {
         this.$router.go(-1);
       }
+      this.$sensors.track('pay_order_quit',{
+        order_id:this.payInfo.orderId,
+        trade_no:this.payInfo.tradeNo,
+      })
     },
     payWaySelected: function (item) {
       if (item.payModeSub == "") {
@@ -543,7 +546,6 @@ export default {
             "deviceCode": this.$route.query.deviceCode,
             "storeOuCode": this.$route.query.storeOuCode,
             "stationName": this.$route.query.stationName,
-
         }
         console.log(currentOrderDetails)
         localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
@@ -560,7 +562,7 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/mall2/paysuccess?selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+            `/app-vue/app/index.html#/mall2/paysuccess?token=${this.$store.state.login.token}&orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
         )}`;
         // this.$router.replace({
         //   path: "/mall2/paysuccess",
@@ -703,16 +705,6 @@ export default {
     this.setPayWays();
     // this.payment = this.$route.query.payment
     // this.tradeNo = this.$route.query.tradeNo
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   mounted() {
     //从后台进前台的协议

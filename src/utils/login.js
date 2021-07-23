@@ -5,6 +5,7 @@ import userCenter from "@/components/usercenter/js/userCenter";
 
 export const getUserInfo = (updataToken = true) => {
   let token = store.state.login.token
+  console.log('获取个人信息token',token)
   http.post('/app/json/user/getUserInfo', {token}).then(res => {
       let data = res.data;
       if (data.status == 0) {

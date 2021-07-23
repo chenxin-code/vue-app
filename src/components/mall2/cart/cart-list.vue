@@ -96,6 +96,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -115,6 +117,8 @@
                   :vipUnitUserCode="vipUnitUserCode"
                   @updateCart="updateCart"
                   @deleteCart="deleteCart"
+                  @plusNum="plusNum"
+                  @minusNum="minusNum"
                 >
                 </CartItem>
               </div>
@@ -189,7 +193,7 @@
           :key="index"
         >
         </PayDiv>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </div>
     <div
@@ -218,6 +222,15 @@
         ></Recommend>
       </div>
     </div>
+    <van-popup v-model="showDelectPopup" round closeable :style="{ height: '196px' }">
+      <div class="delectPopup">
+        <div class="tipsText">确认将这{{deleteCartNum}}个商品删除？</div>
+        <div class="btns">
+          <div class="cancel" @click="showDelectPopup = false">取消</div>
+          <div class="delect" @click="deleteCartItem">删除</div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -232,6 +245,7 @@ import Recommend from "../list/recommend/index";
 import BScroll from "better-scroll";
 import PayDiv from "./pay-div";
 import cartEvent from "../../../utils/presale/cart";
+import cart from './js/cart';
 
 export default {
   name: "cart-list",
@@ -258,7 +272,12 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
-      isX:false,
+      showDelectPopup:false,
+      deleteItem:[],
+      deleteCartNum:0,
+      detItem:[],
+      checkedDelectItem:[],
+      deleteType:"checked"
     };
   },
   methods: {
@@ -459,13 +478,15 @@ export default {
       }
 
       if (this.deliverType == 2) {
-        if (
-          this.$store.state.mall2.selectAddress.id == "" ||
-          this.$store.state.mall2.selectAddress.id == "undefined"
-        ) {
-          this.$Toast("请先选择配送区域！");
-          return;
-        } else if (this.$store.state.mall2.selectAddress.id != "-1") {
+        
+        // if (
+        //   this.$store.state.mall2.selectAddress.id == "" ||
+        //   this.$store.state.mall2.selectAddress.id == "undefined"
+        // ) {
+        //   this.$Toast("请先选择配送区域！--------》");
+        //   return;
+        // } else 
+        if (this.$store.state.mall2.selectAddress.id != "-1") {
           paramsData.userAddressId = this.$store.state.mall2.selectAddress.id;
         } else {
           paramsData.userAddress = {};
@@ -547,6 +568,9 @@ export default {
     toDelete: function (occuritem) {
       let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
       this.deleteCart(carts);
+      this.detItem = cartJS.getSelOccur(occuritem, true, "buried");
+      console.log('carts',cartJS.getSelOccur(occuritem, true, "buried"))
+      console.log('detItem',this.detItem)
     },
 
     setCommonPara: function (paramsData) {
@@ -564,7 +588,7 @@ export default {
       return true;
     },
     getDataList: function () {
-      this.$Loading.open();
+      // this.$Loading.open();
       let url = "/app/json/app_cart/getCart";
       let paramsData = {
         token: this.$store.state.login.token,
@@ -600,6 +624,23 @@ export default {
             });
 
             //新增商品种类数量
+
+            // let num = 0;
+            // let occur = 0;
+            // data.data.occur.forEach((o)=>{
+            //   o.store.forEach((s)=>{
+            //     s.activity.forEach((a)=>{
+            //       occur += a.cart.length
+            //     })
+            //   })
+            // })
+            // if(data.data.invalidCart !== ''){
+            //   num = data.data.invalidCart.length + occur;
+            // }else{
+            //   num = occur
+            // }
+            // console.log('occur',num)
+            // this.$store.state.mall2.cartNum = num;
 
           } else {
             this.$Toast(data.info);
@@ -702,6 +743,7 @@ export default {
 
           if (data.status == 0) {
             this.$store.state.mall2.cartNum = data.data;
+            console.log('this.$store.state.mall2.cartNum','cart-list',this.$store.state.mall2.cartNum)
           } else {
             this.$Toast(data.info);
           }
@@ -725,13 +767,39 @@ export default {
       ];
       this.updateCart(carts);
     },
+    plusNum(itemInfo){
+      this.sensorsEdit('增加',itemInfo);
+    },
+    minusNum(itemInfo){
+      this.sensorsEdit('减少',itemInfo);
+    },
+    sensorsEdit(behavior,itemInfo){
+      console.log('itemInfo',itemInfo)
+      let categoryList = itemInfo.categoryName.split('_')
+      this.$sensors.track('shoppingcart_edit', {
+        goods_id:itemInfo.skuId,
+        goods_name:itemInfo.productName,
+        // tag:this.tagList,
+        goods_cls1:categoryList[0],
+        goods_cls2:categoryList[1],
+        goods_cls3:categoryList[2],
+        // org_price:this.detailData.activityPrice,
+        price:itemInfo.price,
+        goods_quantity:1,
+        store_id:itemInfo.storeOuCode,
+        store_name:itemInfo.storeName,
+        // merchant_id:this.occuritem.ouCode,
+        // merchant_name:this.occuritem.ouName,
+        behavior:behavior,
+      });
+    },
     updateCart: function (carts, callBack) {
       if (this.isPresale == true) {
         cartEvent.updateCart(carts);
         this.getDataList();
         return;
       }
-      this.$Loading.open();
+      // this.$Loading.open();
       let url = "/app/json/app_cart/updateCart";
       let paramsData = {
         token: this.$store.state.login.token,
@@ -765,7 +833,42 @@ export default {
         }
       );
     },
-    deleteCart: function (carts) {
+    sensorsDelete(){
+      let item = [];
+      if(this.deleteType == 'checked'){
+        this.detItem.forEach(e=>{
+          this.checkedDelectItem.forEach(i=>{
+            if(e.goods_id == i.skuId){
+              item.push(e)
+            }
+          })
+        })
+      }else{
+        item = this.detItem;
+      }
+      console.log('item',this.detItem)
+      console.log('item',this.checkedDelectItem)
+      item.forEach(e=>{
+        let categoryList = e.categoryName.split('_');
+        this.$sensors.track('shoppingcart_edit', {
+          goods_id:e.goods_id,
+          goods_name:e.goods_name,
+          // tag:this.tagList,
+          goods_cls1:categoryList[0],
+          goods_cls2:categoryList[1],
+          goods_cls3:categoryList[2],
+          // org_price:this.detailData.activityPrice,
+          price:e.price,
+          goods_quantity:e.goods_quantity,
+          store_id:e.store_id,
+          store_name:e.store_name,
+          // merchant_id:this.occuritem.ouCode,
+          // merchant_name:this.occuritem.ouName,
+          behavior:'删除',
+        });
+      })
+    },
+    deleteCart: function (carts,type) {
       if (this.isPresale == true) {
         cartEvent.deleteCart(carts);
         this.getDataList();
@@ -775,12 +878,36 @@ export default {
         this.$Toast("请选择要删除的商品");
         return;
       }
+      this.deleteCartNum = carts.length;
+      this.showDelectPopup = true;
+      this.deleteItem = carts;
+      if(type == 'spreads'){
+        let item = [];
+        let obj = {
+          goods_id:carts[0].skuId,
+          goods_name:carts[0].productName,
+          categoryName:carts[0].categoryName,
+          price:carts[0].salePrice,
+          goods_quantity:1,
+          store_id:carts[0].storeOuCode,
+          store_name:carts[0].storeName,
+        };
+        item.push(obj)
+        this.detItem = item;
+        this.deleteType = 'spreads'
+      }else{
+        this.checkedDelectItem = carts;
+        this.deleteType = 'checked'
+        console.log('cartsasdasdadadas',this.checkedDelectItem)
+      }
+    },
+    deleteCartItem(){
       this.$Loading.open();
       let url = "/app/json/app_cart/deleteCart";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: this.deliverType,
-        carts: carts,
+        carts: this.deleteItem,
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
       };
@@ -789,9 +916,12 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this._getCartCount()
+            this.showDelectPopup = false;
             this.$Toast("删除成功");
             this.getDataList();
+            this._getCartCount()
+            console.log('this.detItem',this.detItem)
+            this.sensorsDelete();
           } else {
             this.$Toast(data.info);
           }
@@ -801,7 +931,7 @@ export default {
           this.$Toast("请求数据失败！");
         }
       );
-    },
+    }
   },
   watch: {
     isEditing: function (val, oldVal) {
@@ -811,16 +941,7 @@ export default {
     },
   },
   created() {
-    console.log(this.$store.state.mall2.selectAddress);
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
+    console.log('$store.state.isX',this.$store.state.isX)
   },
 };
 </script>
@@ -830,6 +951,48 @@ export default {
 @import '~@/common/stylus/variable.styl';
 
 $mar-top = 10px;
+
+.delectPopup{
+  width: 271px;
+  height: 196px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  .tipsText{
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333;
+    margin: 70px auto 46px;
+    text-align: center;
+  }
+  .btns{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 27px;
+    .cancel{
+      width: 104px;
+      height: 39px;
+      border: 1px solid #999999;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #666666;
+      text-align: center;
+      line-height: 39px;
+    }
+    .delect{
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #F4F4F4;
+      text-align: center;
+      line-height: 39px;
+    }
+  }
+}
 
 .cart-list {
   flex: 1;

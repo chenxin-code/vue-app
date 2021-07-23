@@ -110,17 +110,21 @@
     },
     data() {
       return {
-        tabs: [{
-          text: '售后申请',
-          tag: '1'
-        }, {
-          text: '处理中',
-          tag: '2'
-        }, {
-          text: '申请记录',
-          tag: '3'
-        }],
-        tabSelected: '1',
+        tabs: [
+          // {
+          //   text: '售后申请',
+          //   tag: '1'
+          // }, 
+          {
+            text: '处理中',
+            tag: '2'
+          }, 
+          {
+            text: '申请记录',
+            tag: '3'
+          }
+        ],
+        tabSelected: '2',
         aftersalesList: [],
         processingOrderList: [],
         recordList: [],

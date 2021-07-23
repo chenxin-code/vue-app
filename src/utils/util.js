@@ -21,6 +21,16 @@ const dev = process.env.NODE_ENV !== 'production'
 
 
 var utils = {
+
+  //手机号码校验
+  checkPhone: function(num) {
+    if(!(/^[1][3-8]\d{9}$|^([6|9])\d{7}$|^[0][9]\d{8}$|^[6]([8|6])\d{5}$/.test(num))){ 
+        return false; 
+    } else {
+      return true;
+    }
+  },
+
   getUrlParam: function (url, name) {
     let reg = new RegExp('([?]|&)' + name + "=([^&]*)(&|$)");
     let r = url.substr(1).match(reg);
@@ -559,6 +569,8 @@ var utils = {
     let isIPhoneXSMax = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 414 && window.screen.height === 896;
     // iPhone XR
     let isIPhoneXR = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
+    console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR)
+
     if (isIPhoneX || isIPhoneXSMax || isIPhoneXR) {
       return true
     }

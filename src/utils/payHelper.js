@@ -17,9 +17,9 @@ var payHelper = {
     // app 1 h5 2 mp 3 mnp 4 offline 5 IS_FJSH 6
     let payScene = 1 // 这里本来为2的，为了调试方便写成1
     payScene = payHelper.queryOrderScene()
-    if (dev) {
-      payScene = 1
-    }
+    // if (dev) {
+    //   payScene = 1
+    // }
     let url = '/app/json/app_pay/queryPayModeList';
     let paramsData = {
       token: store.state.login.token,
@@ -364,7 +364,9 @@ var payHelper = {
       } else if (payway.payModeSub == 260003) {
         //时代微信小程序支付
         let info = JSON.parse(JSON.parse(payInfo))
+        console.log('info-info-info',info)
         let wxPayInfo = JSON.parse(info.payData)
+        console.log('wxPayInfo-wxPayInfo-wxPayInfo',wxPayInfo)
 
         
         let redirectUrl = "";
@@ -375,7 +377,7 @@ var payHelper = {
         //   redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
         // }
 
-        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = "/app-vue/app/index.html#/mall2/paysuccess";
+        isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = `/app-vue/app/index.html#/mall2/paysuccess?tradeNo=${tradeNo}&orderId=${orderId}`;
 
         let params = {
           package: wxPayInfo.package,
@@ -390,9 +392,11 @@ var payHelper = {
           // wxOrderInfoKey: wxOrderInfoKey,
           // isGroup: isGroup
         }
+        console.log('params-params-params',params)
         wx.miniProgram.navigateTo({
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
+        console.log('跳转小程序')
 
       } else {
         console.log(payway)

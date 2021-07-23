@@ -10,14 +10,18 @@
         <span>提货人姓名：</span>
         <input v-model="consigneeName" disabled />
       </div>
-      <div class="info" style="margin-top: 12px">
+      <div class="line"></div>
+      <div class="info">
         <span>联系人电话：</span>
         <input v-model="consigneePhoneNumber" disabled />
       </div>
     </div>
     <div class="pick_up_address">
       <div class="addres_title">
-        <div class="addres_title_text">团购提货地点</div>
+        <div class="addres_title_text">
+          <span></span>
+          团购提货地点
+        </div>
         <!-- <div class="change" @click="$router.push('/selectAddress')">
           切换提货地址
         </div> -->
@@ -30,9 +34,15 @@
             <div class="adders-key">提货联系人：</div>
             <div class="adders-val">{{ orderInfo.headName }} {{ orderInfo.headContactTel }}</div>
           </div>
-          <div class="addres" style="margin-top: 10px">
-            <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{ orderInfo.pickupAddress }}</div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">提货小区：</div>
+            <div class="adders-val">{{ orderInfo.pickupCityName }}{{ orderInfo.pickupDistrictName }}{{ orderInfo.communityName }}</div>
+          </div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">详细地址：</div>
+            <div class="adders-val">
+              {{orderInfo.pickupAddress}}
+          </div>
           </div>
         </div>
       </div>
@@ -46,15 +56,16 @@
         <textarea placeholder="" />
       </div>
     </div> -->
-    <div class="goods_info">
+    <div class="goods_info" v-for="(item, index) in orderInfo.skuModelList" :key="index">
       <div class="goods_title">
-        <div class="goods_title_text">商品信息</div>
+        <div class="goods_title_text">
+          <span></span>
+          商品信息
+        </div>
         <div class="line"></div>
       </div>
       <div
         class="goods_item"
-        v-for="(item, index) in orderInfo.skuModelList"
-        :key="index"
       >
         <div class="goods_info_item">
           <img :src="item.groupbuySkuPicurl.split(',')[0]" alt="" />
@@ -76,9 +87,11 @@
             v-model.number="item.buyNumber"
             @change="buyChange($event, resouce.groupbuyBuyerPrice)"
             disabled
+            theme="round"
+            button-size="0.64rem"
           />
         </div>
-        <div class="line"></div>
+        <!-- <div class="line"></div> -->
       </div>
       <!-- <div class="goods_detail">
         <div class="sell_price_statistics">¥{{ resouce.groupbuyLinePrice }}</div>
@@ -86,7 +99,7 @@
       </div> -->
     </div>
     <div class="remark">
-      <span>订单备注：</span>
+      <span>备注：</span>
       <textarea
         ref="textarea"
         :style="{ height: textareaHeight }"
@@ -96,14 +109,17 @@
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now" v-show="this.pageType == 'waitPay'">
-      <div class="pay_price">¥{{ total }}</div>
+    <div class="pay_now" v-show="this.pageType == 'waitPay'" :style="{paddingBottom:this.$store.state.isX?'0.98667rem':'0.64rem'}">
+      <div class="pay_price">
+        <div class="pay_title">应付金额：</div>
+        <div class="pay_value">¥{{ total }}</div>
+      </div>
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
 
-    <!-- <div class="customerService" @click="handleCustomer">
+    <div class="customerService" @click="handleCustomer">
       <img :src="customerService" alt="">
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -171,7 +187,7 @@ export default {
         this.navTopTitle = titleData[this.pageType][this.state];
     }else{
         this.navTopTitle = titleData[this.pageType];
-    }
+    };
   },
 //   activated() {
 //     if (this.pageAvtive) {
@@ -232,8 +248,13 @@ export default {
             this.orderInfo = res.data.data;
             this.consigneeName = this.orderInfo.receiptName;
             this.consigneePhoneNumber = this.orderInfo.receiptTel;
-            this.textareaValue = this.orderInfo.orderRemark;
             this.total = this.orderInfo.totalPrice;
+            this.textareaValue = this.orderInfo.orderRemark;
+            if(this.textareaValue !== ''){
+              this.$nextTick(()=>{
+                this.getHeight();
+              })
+            }
           }
         });
     },
@@ -358,6 +379,9 @@ export default {
     }
   }
 
+.router_class{
+  background-color: #f6f6f6 !important;
+}
 .body {
   width: 100%;
   height: 100%;
@@ -366,7 +390,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
-  padding: 10px;
+  padding: 12px;
   // overflow: auto;
   overflow-y: auto;
   bottom: 49px !important;
@@ -387,9 +411,10 @@ export default {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin: 70px auto 0;
-    padding: 12px 20px;
+    padding: 22px 24px 22px 28px;
+    border-radius: 12px;
 
     .info {
       display: flex;
@@ -399,25 +424,22 @@ export default {
 
       span {
         font-size: 14px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 600;
-        color: #424242;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #121212;
+        line-height: 15px;
       }
 
       input {
-        width: 220px;
-        border-right: 1px solid #D8D7D7;
+        width: 190px;
         font-size: 14px;
         font-weight: 400;
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
         margin-left: 10px;
-        background: #fff;
-      }
-
-      input:last-child {
-        border: none;
+        text-align: right;
+        background-color: #fff;
       }
 
       input::-webkit-input-placeholder {
@@ -425,7 +447,14 @@ export default {
         font-weight: 400;
         color: #999999;
         line-height: 20px;
+        text-align: right;
       }
+    }
+    .line{
+      width: 100%;
+      height 1px;
+      background: #F0F0F0;
+      margin: 20px 0;
     }
 
     .pick_up_way {
@@ -474,28 +503,64 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 20px 25px 20px 18px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-image:url('./activity/images/card_line_default.png');
+    background-repeat: no-repeat;
+    background-size :100% 3px;
+    background-position: 0 0;
 
     .addres_title {
       display: flex;
+      // padding-bottom: 17px;
 
       .addres_title_text {
         flex: 1;
-        padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 600;
-        color: #424242;
-        line-height: 20px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #666666;
+        line-height: 16px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        span {
+          display: inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right:7px;
+        }
       }
 
       .change {
-        line-height: 20px;
-        color: #a9a9a9;
+        font-size: 13px;
+        font-family: PingFang SC;
+        font-weight: 300;
+        color: #999999;
+        display: flex;
+        justify-content :flex-start;
+        align-items :center;
+        img{
+          width :6px;
+          height :10px;
+          margin-left: 6px;
+        }
       }
+    }
+
+    .line {
+      width: 315px;
+      height: 1px;
+      background-color: #EEEDED;
+      margin:17px 0;
     }
 
     .addres_info {
@@ -521,10 +586,10 @@ export default {
       }
 
       .addres_info_detail {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding-top: 12px;
 
         .colonel_name {
           font-size: 14px;
@@ -536,20 +601,36 @@ export default {
         }
 
         .addres {
+          width: 100%;
           font-size: 14px;
           font-weight: 500;
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
           display: flex;
+          justify-content: space-between;
 
           .adders-key {
-            width: 90px;
-            font-weight: bolder;
+            width: 84px;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: 300;
+            color: #666666;
+            text-align: right;
+            white-space: nowrap;
+            flex-wrap: nowrap;
           }
 
           .adders-val {
-            width: 230px;
+            // width: 220px;
+            flex: 1;
+            text-align: left;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #121212;
+            // white-space :nowrap;
+            // flex-wrap :nowrap;
           }
         }
       }
@@ -560,28 +641,44 @@ export default {
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
-    border-radius: 10px;
-    padding: 10px 7px 10px 20px;
-    margin-top: 10px;
+    padding: 17px 19px;
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border-radius: 12px;
 
     .goods_title {
       .goods_title_text {
-        padding-bottom: 9.5px;
         font-size: 14px;
         font-weight: 700;
         color: #424242;
         line-height: 20px;
+        display :flex;
+        justify-content :flex-start;
+        align-items: center;
+
+        span {
+          display :inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right :7px;
+        }
       }
+    }
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #EEEDED;
+      margin: 17px 0 14px;
     }
 
     .goods_item {
-      padding-top: 9.5px;
 
       .stepper {
-        height: 40px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -590,12 +687,13 @@ export default {
       .goods_info_item {
         display: flex;
         justify-content: flex-start;
-        padding-bottom: 9.5px;
+        padding-left:12px;
 
         img {
-          width: 105px;
-          height: 105px;
-          margin-right: 10px;
+          width: 70px;
+          height: 70px;
+          margin-right: 14px;
+          object-fit: cover;
         }
 
         .goods_info_detail {
@@ -603,25 +701,24 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
-          padding-top: 12px;
 
           .goods_name {
             font-size: 14px;
-            font-weight: 400;
-            color: #424242;
-            line-height: 20px;
-            letter-spacing: 1px;
-            margin-bottom: 24.5px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #333333;
+            line-height: 16px;
           }
 
           .sell_price {
-            font-size: 13px;
-            font-weight: 400;
-            color: #666666;
-            line-height: 18.5px;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: bold;
             text-decoration: line-through;
+            color: #999999;
+            line-height: 15px;
+            text-decoration: line-through;
+            margin:11px 0 9px;
           }
 
           .count_price {
@@ -631,10 +728,11 @@ export default {
             align-items: center;
 
             .bulk_price {
-              font-size: 14px;
-              font-weight: 600;
-              color: #424242;
-              line-height: 20px;
+              font-size: 13px;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #F00000;
+              line-height: 15px;
               letter-spacing: 1px;
             }
 
@@ -686,13 +784,14 @@ export default {
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
-    border-radius: 10px;
     display: flex;
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom: 50px;
-    padding: 14.5px 20px 14.5px 20px;
+    margin-bottom: 94px;
+    padding: 22px 22px 22px 28px;
+    width: 351px;
+    border-radius: 12px;
 
     span {
       font-size: 14px;
@@ -714,43 +813,54 @@ export default {
       resize: none;
       // height: 143px;
       border: none;
-      background: #fff;
+      background-color: #fff;
     }
   }
 
   .pay_now {
     width: 100%;
-    height: 49px;
+    // height: 49px;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 11px 20px 10.5px 0;
+    padding: 8px 22px 24px 30px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 
     .pay_price {
-      font-size: 16px;
-      font-weight: 600;
-      color: #000000;
-      line-height: 22.5px;
-      letter-spacing: 1px;
-      margin-right: 15px;
+      display :flex;
+      justify-content: flex-start;
+      align-items: center;
+      .pay_title{
+        font-size: 15px;
+        font-weight: 400;
+        font-family: PingFang SC;
+        color: #121212;
+        line-height: 27.5px;
+      }
+      .pay_value{
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #F00000;
+      }
     }
 
     .pay {
-      width: 86px;
-      height: 27.5px;
-      background: #B52232;
-      border-radius: 14px;
-      font-size: 13px;
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%);
+      border-radius: 20px;
+      font-size: 14px;
+      font-family: PingFang SC;
       font-weight: 400;
-      color: #FFFFFF;
-      line-height: 27.5px;
-      letter-spacing: 1px;
+      color: #F4F4F4;
       text-align: center;
+      line-height :39px;
     }
   }
+  
 }
 </style>

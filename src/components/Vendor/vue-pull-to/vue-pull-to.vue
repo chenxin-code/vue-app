@@ -16,34 +16,42 @@
       </div>
 
     </div>
-    <div class="scroll-container">
+    <div class="scroll-container" :style="{paddingBottom:`${bottomBlockHeight}px`}">
       <slot></slot>
-      <div v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS"
-           :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+      <!-- v-if="bottomLoadMethod && isBottomBounce && isBottomAutoS" -->
+      <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+      <!-- 商品详情不需要显示loading -->
+      <div 
+          v-if="$route.matched[0].path != '/mall2/detail/:id'" 
+           :style="{ height: `${bottomBlockHeight}px`}"
            class="action-block">
         <div class="bottom-load-wrapper">
-          <img class="refresh-icon"
+          <!-- <img class="refresh-icon"
                v-if="bottomIconSrc && bottomIconSrc != 'undefined'"
                :class="{
                'icon-loading': state === 'loading'
              }"
                :src="bottomIconSrc"
-               alt="">
+               alt=""> -->
           <span class="refresh-span">{{ bottomText }}</span>
         </div>
       </div>
     </div>
-    <div v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS"
-         :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }"
+    <!-- v-if="bottomLoadMethod && isBottomBounce && !isBottomAutoS" -->
+    <!-- :style="{ height: `${bottomBlockHeight}px`, marginBottom: `${-bottomBlockHeight}px` }" -->
+    <!-- 商品详情不需要显示加载完成 -->
+    <div 
+        v-if="$route.matched[0].path != '/mall2/detail/:id'"
+         :style="{ height: `${bottomBlockHeight}px`}"
          class="action-block">
       <div class="bottom-load-wrapper">
-        <img class="refresh-icon"
+        <!-- <img class="refresh-icon"
              v-if="bottomIconSrc && bottomIconSrc != 'undefined'"
              :class="{
                'icon-loading': state === 'loading'
              }"
              :src="bottomIconSrc"
-             alt="">
+             alt=""> -->
         <span class="refresh-span">{{ bottomText }}</span>
       </div>
     </div>
@@ -427,6 +435,7 @@
     },
     mounted() {
       this.init();
+      console.log(this.bottomLoadMethod,this.isBottomBounce,this.isBottomAutoS)
     }
   };
 </script>

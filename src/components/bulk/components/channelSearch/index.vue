@@ -12,6 +12,7 @@
         @search="onSearch"
         shape="round"
         background="transparent"
+        left-icon=""
       >
       </van-search>
     </div>
@@ -35,15 +36,19 @@ export default {
 <style scoped>
   .van-search{
     width: 100%;
+    padding: 0;
   }
 .component-channelsearch {
   width: 100%;
-  height: 56px;
+  height: 90px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  /* padding-top: 14px; */
+  padding-top: 29px;
   position: relative;
+  background-image: url("./main_bg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .transparent_back_botton{
@@ -57,19 +62,19 @@ export default {
 .back-icon-area {
   width: 42px;
   height: 28px;
-  border-radius: 0px 23px 23px 0px;
+  /* border-radius: 0px 23px 23px 0px; */
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 .back-icon-area img {
-  width: 7px;
-  height: 12px;
+  width: 9px;
+  height: 16px;
   margin-right: 12px;
 }
 .back-icon-area:after {
-  content: "";
+  /* content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -77,7 +82,7 @@ export default {
   height: 100%;
   opacity: 0.27;
   background: #ffffff;
-  border-radius: 0px 23px 23px 0px;
+  border-radius: 0px 23px 23px 0px; */
 }
 .channel-name {
   font-size: 18px;
@@ -99,7 +104,7 @@ export default {
   flex-shrink: 0;
   height: 100%;
   width: 100%;
-  margin: 0px 10px;
+  margin: 0px 30px 0 19px;
   display: flex;
   align-items: center;
   position: relative;

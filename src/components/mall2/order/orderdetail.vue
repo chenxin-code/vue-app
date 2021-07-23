@@ -10,12 +10,12 @@
           :top-load-method="topRefresh"
           :is-top-bounce="true"
         >
-          <div :class="isX?'scroll-box':''">
+          <div :class="$store.state.isX?'scroll-box':''">
             <div class="top-div">
               <!--待支付-->
               <div class="order-info" v-if="tag == '1'">
                 <div class="row theme_font_white">
-                  <div class="title">等待买家付款</div>
+                  <div class="title lineHeight">等待买家付款</div>
                   <div class="tip">剩余{{timeString}}自动关闭订单</div>
                 </div>
                 <div class="row theme_font_white">
@@ -508,7 +508,7 @@
                 </div>
               </div>
               <div v-for="product in detailData.orderItemList_C">
-                <div class="pro-row">
+                <div class="pro-row" @click="navToDetail(product)">
                   <div class="img-div">
                     <img :src="product.phPictureUrl">
                   </div>
@@ -527,7 +527,7 @@
                         <span class="line-price">¥{{$util.toDecimal2(product.realPrice)}}</span>
                       </div>
                       <PriceOrder :orderdetailp="product" v-else></PriceOrder>
-                      <div class="row-btn line_circle theme_font_common theme_border_gray" @click.stop="toService(product)" v-if="tag == '9' && product.productType != 5 && product.isGift != 1 && product.productType != 8&&$store.state.globalConfig.cut_price_strict!= 1">
+                      <div class="row-btn line_circle theme_font_common " @click.stop="toService(product)" v-if="tag == '9' && product.productType != 5 && product.isGift != 1 && product.productType != 8&&$store.state.globalConfig.cut_price_strict!= 1">
                         申请售后
                       </div>
                     </div>
@@ -634,10 +634,10 @@
                 <div class="label theme_font_tint">下单时间</div>
                 <div>{{detailData.submitTime}}</div>
               </div>
-              <div class="flex-row" v-if="detailData.payMode != ''">
+              <!-- <div class="flex-row" v-if="detailData.payMode != ''">
                 <div class="label theme_font_tint">支付方式</div>
                 <div>{{getPayWayText}}</div>
-              </div>
+              </div> -->
               <div class="flex-row" v-if="detailData.paidTime != ''">
                 <div class="label theme_font_tint">支付完成时间</div>
                 <div>{{detailData.paidTime}}</div>
@@ -657,6 +657,14 @@
                 <div class="label theme_font_tint">配送方式</div>
                 <div>{{getPeisongString(detailData.interfaceType)}}</div>
               </div>
+
+              <div
+                class="flex-row"
+              >
+                <div class="label theme_font_tint">备注</div>
+                <div>{{detailData.remark}}</div>
+              </div>
+
               <div
                 class="flex-row"
                 v-if="pivotalProductType != 8 && detailData.deliveryTime != '' && !hasDateProduct(detailData.orderItemList)"
@@ -893,44 +901,46 @@
           <div class="tip" v-if="detailData.orderMode == 8 && isShowCancelOrder">申请退款剩余时间：{{timeString}}</div>
           <div class="full"></div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             v-if="$store.state.deployType == 4"
             @click.stop="consultingService(detailData)"
           >咨询客服</div>
+          <!-- v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500" -->
+          <!-- 不允许修改订单 -->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="modifyAddress(detailData)"
-            v-if="tag == '16' && detailData.deliverType == 2 && getProductType(detailData) != 2 && detailData.orderType != '200117' && detailData.interfaceType == 0 && detailData.payMode != 500"
+            v-if="false"
           >修改订单</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="cancelOrder('clickCancel')"
             v-if="tag == '1' && detailData.orderPayType != 1"
           >取消订单</div>
           <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="applyOrder"
             v-if="isShowCancelOrder">申请退款</div>
           <div
-            class="row-btn line_circle row-btn-big-space theme_font_common theme_border_gray"
+            class="row-btn line_circle row-btn-big-space theme_font_common pay"
             @click="payEvent"
             v-if="tag == '1' && detailData.orderPayType != 1"
           >付款</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="expressType"
             v-if="pivotalProductType != 8 && tag == '4' && detailData.deliverType == 2 && isShowExpress"
           >查看物流</div>
           <!--  如果选择“用提货码确认订单”把确认收货按钮前台隐藏掉
                     配送订单时, 如果  deliveryConfirmType 为null 或者为0 展示确认收货按钮, 如果为 1 隐藏确认收货按钮-->
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="confirmProduct"
             v-if="tag == '4' && (detailData.deliverType == 2) && (detailData.interfaceType == '0' || (detailData.interfaceType == '1' && detailData.interfaceOrderType == '5')) && detailData.deliveryConfirmType != 1"
           >确认收货</div>
           <div
-            class="row-btn line_circle theme_font_common theme_border_gray"
+            class="row-btn line_circle theme_font_common "
             @click="toComment"
             v-if="tag == '9' && detailData.state != 6 && detailData.orderPayType != 1"
           >晒单评价</div>
@@ -941,12 +951,12 @@
             v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2 && detailData.orderPayType != 1 && pivotalProductType != 550"
           >再次购买</div>
         </div>
-        <div class="adapter-iphoneX" v-if="isX"></div>
+        <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
 
-      <!-- <div class="customerService" @click="handleCustomer">
+      <div class="customerService" @click="handleCustomer">
         <img :src="customerService" alt="">
-      </div> -->
+      </div>
 
       <van-popup v-model="vityFlag" >
       <div class="vity-title">请输入短信验证码</div>
@@ -1044,7 +1054,6 @@ export default {
       pivotalProductType: '',
       errorInfo: '',
       showKeyboard: true,
-      isX:false,
       time:null,
     }
   },
@@ -1124,11 +1133,14 @@ export default {
             if (this.detailData.orderMode == 8 && this.timeValue <= 0) {
               return false
             }
+            if(this.detailData.state !== 17){
+              return false
+            }
             return true;
           }
         }
       }
-      return false
+      // return false
     },
     isShowExpress() {
       if (this.detailData.deliverType == 3) {
@@ -1194,6 +1206,16 @@ export default {
           // handle error
         }
       })
+    },
+    navToDetail(product){
+      let path = "/mall2/detail/" + this.$util.getDataString();
+      this.$router.push({
+        path: path,
+        query: {
+          skuId: product.skuId,
+          productType: product.productType
+        }
+      });
     },
     //获取短信验证码
     getMsgCode:function(imgVerifyCode,uuid){
@@ -2009,6 +2031,23 @@ export default {
             if (myData.orderExtendData) {
               this.orderExtendData = JSON.parse(decodeURIComponent(myData.orderExtendData))
             }
+            try{
+                //在此运行代码
+              let remark = "";
+              remark = JSON.parse(this.detailData.remark)[0].remark;
+              if(remark == null){
+                remark = "";
+              }
+              this.detailData.remark = remark;
+              console.log('this.detailData.remark',this.detailData.remark)
+            }
+            catch(err)
+            {
+              //在此处理错误
+              this.detailData.remark = this.detailData.remark;
+              console.log('err',err)
+            }
+            console.log('detailData.remark',this.detailData.remark)
           } else {
             this.$Toast(data.info);
           }
@@ -2068,16 +2107,6 @@ export default {
     // 代付相关end
 
     this._getOrderDetail()
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   beforeRouteLeave(to, from, next) {
     this.$keepaliveHelper.deleteCache(this)
@@ -2102,6 +2131,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+  .line_circle{
+    border: 1px solid #EF2D30;
+    border-radius: 17px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .line_circle:before{
+    border:none;
+  }
 
   .customerService{
     position: fixed;
@@ -2216,6 +2255,10 @@ export default {
         top: 12px;
         overflow: hidden;
 
+        .lineHeight{
+          line-height:24px;
+        }
+
         .row {
           padding-bottom: 5px;
           overflow: hidden;
@@ -2303,7 +2346,7 @@ export default {
     .place {
       position: relative;
       z-index: 1;
-      margin-top: -40px;
+      margin-top: -30px;
 
       i {
         font-size: 16px;
@@ -2374,7 +2417,7 @@ export default {
   }
 
   .bottom-btns-box{
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     // height: 48px;
     z-index: 1;
@@ -2415,10 +2458,17 @@ export default {
     .row-btn {
       margin-left: 8px;
       font-size: $font-size-medium;
-      padding: 6px 8px;
+      padding: 10px 20px;
       /*border-radius: 16px;
       border-width: 0.5px;
       border-style: solid;*/
+      color: #EF3034;
+    }
+    .pay{
+      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      font-size: 14px;
+      font-weight: bold;
+      color: #F4F4F4;
     }
   }
   .copy-btn{

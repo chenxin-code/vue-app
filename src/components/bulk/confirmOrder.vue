@@ -10,16 +10,21 @@
         <span>提货人姓名：</span>
         <input placeholder="请输入姓名" v-model="consigneeName" />
       </div>
-      <div class="info" style="margin-top: 12px;">
+      <div class="line"></div>
+      <div class="info">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" />
+        <input placeholder="请输入联系人电话" v-model="consigneePhoneNumber" type="number" />
       </div>
     </div>
     <div class="pick_up_address">
       <div class="addres_title">
-        <div class="addres_title_text">团购提货地点</div>
+        <div class="addres_title_text">
+          <span></span>
+          团购提货地点
+        </div>
         <div class="change" @click="$router.push('/selectAddress')">
           切换提货地址
+          <img :src="require('./activity/images/button_next_default.png')" alt="">
         </div>
       </div>
       <div class="line"></div>
@@ -28,11 +33,23 @@
         <div class="addres_info_detail">
           <div class="addres">
             <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ placelist[0].teamLeaderName }} {{ placelist[0].teamLeaderPhoneNumber }}</div>
+            <div class="adders-val">
+              {{ placelist[0].teamLeaderName }}
+              {{ placelist[0].teamLeaderPhoneNumber }}
+            </div>
           </div>
-          <div class="addres" style="margin-top: 10px;">
-            <div class="adders-key">提货地址：</div>
-            <div class="adders-val">{{ placelist[0].cucName }}{{ placelist[0].cudName}}{{ placelist[0].cuName }}</div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">提货小区：</div>
+            <div class="adders-val">
+              {{ placelist[0].cucName }}{{ placelist[0].cudName
+              }}{{ placelist[0].cuName }}
+            </div>
+          </div>
+          <div class="addres" style="margin-top: 0.42667rem">
+            <div class="adders-key">详细地址：</div>
+            <div class="adders-val">
+              {{placelist[0].teamLeaderAddress}}
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +65,10 @@
     </div>
     <div class="goods_info">
       <div class="goods_title">
-        <div class="goods_title_text">商品信息</div>
+        <div class="goods_title_text">
+          <span></span>
+          商品信息
+        </div>
         <div class="line"></div>
       </div>
       <div class="goods_item">
@@ -71,9 +91,10 @@
           <van-stepper
             v-model.number="buyNumber"
             @change="buyChange($event, resouce.groupbuyBuyerPrice)"
+            theme="round"
+            button-size="0.64rem"
           />
         </div>
-        <div class="line"></div>
       </div>
       <!-- <div class="goods_detail">
         <div class="sell_price_statistics">¥{{ resouce.groupbuyLinePrice }}</div>
@@ -81,18 +102,22 @@
       </div> -->
     </div>
     <div class="remark">
-      <span>订单备注：</span>
+      <span>备注：</span>
       <textarea
         ref="textarea"
         :style="{ height: textareaHeight }"
         v-model="textareaValue"
         placeholder="请输入备注"
+        @input="vaidateEmoji"
       ></textarea>
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now">
-      <div class="pay_price">¥{{ total }}</div>
+    <div class="pay_now" :style="{paddingBottom:this.$store.state.isX?'0.98667rem':'0.64rem'}">
+      <div class="pay_price">
+        <div class="pay_title">应付金额：</div>
+        <div class="pay_value">¥{{ total }}</div>
+      </div>
       <div class="pay" @click="confirmOrder">立即支付</div>
     </div>
   </div>
@@ -128,32 +153,44 @@ export default {
         { text: "送货上门", value: 2 },
       ],
       takeWay: 1,
-      pageAvtive: false
+      pageAvtive: false,
     };
   },
   activated() {
-    if(this.pageAvtive){
-      console.log("sss")
+    this.getUser();
+    if (this.pageAvtive) {
+      console.log("sss");
       this.placelist = [this.$store.state.CharseInfo.masterPlace];
-    }else{
-      console.log("xxx")
+      this.getPlaceList();
+    } else {
+      console.log("xxx");
       this.getPlaceList();
       this.resouce = this.$store.state.CharseInfo;
       this.total = BigNumber(this.buyNumber)
         .multipliedBy(this.$store.state.CharseInfo.groupbuyBuyerPrice)
         .toFixed(2);
     }
+
   },
-  beforeRouteLeave(to,form,next){
-    if(to.path == '/mall2/checkstand'){
-      console.log("aaa")
+  beforeRouteLeave(to, form, next) {
+    if (to.path == "/mall2/checkstand") {
+      console.log("aaa");
       this.pageAvtive = true;
-    }else{
+    } else {
       this.pageAvtive = false;
     }
     next();
   },
   methods: {
+    getUser(){
+      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
+        if(res.data.status == 0){
+          let data = res.data.data;
+          this.consigneePhoneNumber = data.mobile == '' ? this.$store.state.ythUserInfo.phone : data.mobile;
+          this.consigneeName = data.name == '' ? this.$store.state.ythUserInfo.userName : data.name;
+        }
+      })
+    },
     //实现文本域自适应大小
     getHeight() {
       this.textareaHeight = calcTextareaHeight(
@@ -164,14 +201,38 @@ export default {
       //浏览器随着内容大小滚动
       this.$refs.confirmOrder.scrollTop = this.$refs.nullBox.offsetTop;
     },
+    vaidateEmoji(e) {
+      let value = e.target.value
+      //禁止输入emoji表情，兼容大部分手机
+      value = value.replace(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig, '')
+      value = value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""); 
+      value = value.replace(/[\uE000-\uF8FF]/g, '');
+      this.textareaValue = value;
+      console.log("textareaValue",this.textareaValue)
+    },
     confirmOrder() {
+      console.log("提交订单", {
+        activityNo: this.$store.state.CharseInfo.activityId,
+        teamLeaderNo: this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
+        deliveryMode: 0, //0自提1送货上门
+        consigneeName: this.consigneeName,
+        consigneePhoneNumber: this.consigneePhoneNumber,
+        preProductSkuInfoList: [
+          {
+            skuId: this.$store.state.CharseInfo.skuid,
+            buyNumber: this.buyNumber,
+          },
+        ],
+        remark: this.textareaValue,
+      });
       if (this.consigneeName !== "") {
         if (util.checkMobile(this.consigneePhoneNumber)) {
+          this.$Loading.open();
           this.$http
             .post("/app/json/group_buying_order/createGroupBuyingOrder", {
               activityNo: this.$store.state.CharseInfo.activityId,
-              teamLeaderNo: this.$store.state.CharseInfo.masterPlace
-                .teamLeaderNo,
+              teamLeaderNo:
+                this.$store.state.CharseInfo.masterPlace.teamLeaderNo,
               deliveryMode: 0, //0自提1送货上门
               consigneeName: this.consigneeName,
               consigneePhoneNumber: this.consigneePhoneNumber,
@@ -184,6 +245,7 @@ export default {
               remark: this.textareaValue,
             })
             .then((res) => {
+              this.$Loading.close();
               if (res.data.result == "success") {
                 this.$router.push({
                   path: "/mall2/checkstand",
@@ -211,7 +273,7 @@ export default {
       }
     },
     getPlaceList() {
-      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}`;
+      let url = `/app/json/group_buying_head_info/findHeadInfoByList?validState=true&sortBy:headWeight_DESC&activityId=${this.$store.state.CharseInfo.activityId}&cuNo=${this.$store.state.communityId}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -252,6 +314,9 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
+.router_class{
+  background-color: #f6f6f6 !important;
+}
 .body {
   width: 100%;
   height: 100%;
@@ -260,7 +325,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
-  padding: 10px;
+  padding: 12px;
   // overflow: auto;
   overflow-y: auto;
   bottom: 49px !important;
@@ -281,9 +346,10 @@ export default {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin: 70px auto 0;
-    padding: 12px 20px;
+    padding: 22px 24px 22px 28px;
+    border-radius: 12px;
 
     .info {
       display: flex;
@@ -293,24 +359,21 @@ export default {
 
       span {
         font-size: 14px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 600;
-        color: #424242;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #121212;
+        line-height: 15px;
       }
 
       input {
         width: 190px;
-        border-right: 1px solid #D8D7D7;
         font-size: 14px;
         font-weight: 400;
         color: #424242;
         line-height: 20px;
         letter-spacing: 1px;
-        margin-left 10px;
-      }
-
-      input:last-child {
-        border: none;
+        margin-left: 10px;
+        text-align: right;
       }
 
       input::-webkit-input-placeholder {
@@ -318,7 +381,14 @@ export default {
         font-weight: 400;
         color: #999999;
         line-height: 20px;
+        text-align: right;
       }
+    }
+    .line{
+      width: 100%;
+      height 1px;
+      background: #F0F0F0;
+      margin: 20px 0;
     }
 
     .pick_up_way {
@@ -367,28 +437,62 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 20px 25px 20px 18px;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-image:url('./activity/images/card_line_default.png');
+    background-repeat: no-repeat;
+    background-size :100% 3px;
+    background-position: 0 0;
 
     .addres_title {
       display: flex;
+      // padding-bottom: 17px;
 
       .addres_title_text {
         flex: 1;
-        padding-bottom: 9.5px;
         font-size: 14px;
-        font-weight: 600;
-        color: #424242;
-        line-height: 20px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #666666;
+        line-height: 16px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        span {
+          display: inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right:7px;
+        }
       }
 
       .change {
-        line-height: 20px;
-        color: #a9a9a9;
+        font-size: 13px;
+        font-family: PingFang SC;
+        font-weight: 300;
+        color: #999999;
+        display: flex;
+        justify-content :flex-start;
+        align-items :center;
+        img{
+          width :6px;
+          height :10px;
+          margin-left: 6px;
+        }
       }
+    }
+
+    .line {
+      width: 315px;
+      height: 1px;
+      background-color: #EEEDED;
+      margin:17px 0;
     }
 
     .addres_info {
@@ -414,10 +518,10 @@ export default {
       }
 
       .addres_info_detail {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding-top: 12px;
 
         .colonel_name {
           font-size: 14px;
@@ -429,18 +533,36 @@ export default {
         }
 
         .addres {
+          width: 100%;
           font-size: 14px;
           font-weight: 500;
           color: #424242;
           line-height: 20px;
           letter-spacing: 1px;
-          display flex;
-          .adders-key{
-            width: 96px;
-            font-weight: bolder;
+          display: flex;
+          justify-content: space-between;
+
+          .adders-key {
+            width :84px;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: 300;
+            color: #666666;
+            text-align: right;
+            white-space :nowrap;
+            flex-wrap :nowrap;
           }
-          .adders-val{
-            width: 220px;
+
+          .adders-val {
+            // width: 220px;
+            flex: 1;
+            text-align:left;
+            font-size: 13px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #121212;
+            // white-space :nowrap;
+            // flex-wrap :nowrap;
           }
         }
       }
@@ -451,28 +573,44 @@ export default {
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0 1px 11px 3px rgba(231, 230, 230, 0.5);
-    border-radius: 10px;
-    padding: 10px 7px 10px 20px;
-    margin-top: 10px;
+    padding: 17px 19px;
+    margin-top: 27px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border-radius: 12px;
 
     .goods_title {
       .goods_title_text {
-        padding-bottom: 9.5px;
         font-size: 14px;
         font-weight: 700;
         color: #424242;
         line-height: 20px;
+        display :flex;
+        justify-content :flex-start;
+        align-items: center;
+
+        span {
+          display :inline-block;
+          width: 4px;
+          height: 4px;
+          background: #FE4886;
+          border-radius: 50%;
+          margin-right :7px;
+        }
       }
+    }
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #EEEDED;
+      margin: 17px 0 14px;
     }
 
     .goods_item {
-      padding-top: 9.5px;
 
       .stepper {
-        height: 40px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -481,12 +619,12 @@ export default {
       .goods_info_item {
         display: flex;
         justify-content: flex-start;
-        padding-bottom: 9.5px;
+        padding-left:12px;
 
         img {
-          width: 105px;
-          height: 105px;
-          margin-right: 10px;
+          width: 70px;
+          height: 70px;
+          margin-right: 14px;
           object-fit: cover;
         }
 
@@ -495,25 +633,24 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
-          padding-top: 12px;
 
           .goods_name {
             font-size: 14px;
-            font-weight: 400;
-            color: #424242;
-            line-height: 20px;
-            letter-spacing: 1px;
-            margin-bottom: 24.5px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #333333;
+            line-height: 16px;
           }
 
           .sell_price {
-            font-size: 13px;
-            font-weight: 400;
-            color: #666666;
-            line-height: 18.5px;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: bold;
             text-decoration: line-through;
+            color: #999999;
+            line-height: 15px;
+            text-decoration: line-through;
+            margin:11px 0 9px;
           }
 
           .count_price {
@@ -523,10 +660,11 @@ export default {
             align-items: center;
 
             .bulk_price {
-              font-size: 14px;
-              font-weight: 600;
-              color: #424242;
-              line-height: 20px;
+              font-size: 13px;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #F00000;
+              line-height: 15px;
               letter-spacing: 1px;
             }
 
@@ -578,13 +716,14 @@ export default {
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0px 2px 11px 3px rgba(210, 207, 207, 0.5);
-    border-radius: 10px;
     display: flex;
     justify-content: flex-start;
     // align-items: center;
     margin-top: 10px;
-    margin-bottom 50px;
-    padding: 14.5px 20px 14.5px 20px;
+    margin-bottom: 74px;
+    padding: 22px 22px 22px 28px;
+    width: 351px;
+    border-radius: 12px;
 
     span {
       font-size: 14px;
@@ -611,36 +750,46 @@ export default {
 
   .pay_now {
     width: 100%;
-    height: 49px;
+    // height: 49px;
     background: #FFFFFF;
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 11px 20px 10.5px 0;
+    padding: 8px 22px 24px 30px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 
     .pay_price {
-      font-size: 16px;
-      font-weight: 600;
-      color: #000000;
-      line-height: 22.5px;
-      letter-spacing: 1px;
-      margin-right: 15px;
+      display :flex;
+      justify-content: flex-start;
+      align-items: center;
+      .pay_title{
+        font-size: 15px;
+        font-weight: 400;
+        font-family: PingFang SC;
+        color: #121212;
+        line-height: 27.5px;
+      }
+      .pay_value{
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #F00000;
+      }
     }
 
     .pay {
-      width: 86px;
-      height: 27.5px;
-      background: #B52232;
-      border-radius: 14px;
-      font-size: 13px;
+      width: 104px;
+      height: 39px;
+      background: linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%);
+      border-radius: 20px;
+      font-size: 14px;
+      font-family: PingFang SC;
       font-weight: 400;
-      color: #FFFFFF;
-      line-height: 27.5px;
-      letter-spacing: 1px;
+      color: #F4F4F4;
       text-align: center;
+      line-height :39px;
     }
   }
 }

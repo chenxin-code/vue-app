@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="row" v-for="(activity, idx) in detailData.activityList">
-      <div class="title-label theme_bg_red">{{activity.type}}</div>
+      <!-- <div class="title-label theme_bg_red">{{activity.type}}</div> -->
       <div class="black-font">{{activity.title}}</div>
       <div class="right-more" v-if="showCoupons.length == 0 && idx == 0">
         <i class="iconfont mall-gengduo theme_font_tint"></i>
@@ -99,6 +99,16 @@
 
       .black-font {
         font-weight 500;
+        padding 4px 8px;
+        font-size 10px;
+        border-radius 4px;
+        border-width 0.5px
+        // border-style solid
+        margin-right 4px;
+        background-color #FFEEED;
+        font-weight: 400;
+        color: #E3352A;
+        line-height: 11px;
       }
 
       .title-label {

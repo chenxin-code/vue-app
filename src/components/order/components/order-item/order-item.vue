@@ -72,9 +72,11 @@
         >
       </div>
       <div class="btn-box">
+        <!-- v-if="isChangeOrder && !isBulk" -->
+        <!-- 不允许修改订单 -->
         <div
           class="btn"
-          v-if="isChangeOrder && !isBulk"
+          v-if="false"
           @click="modifyAddress(dataList[0])"
         >
           <p>修改订单</p>
@@ -373,6 +375,9 @@ export default {
           break;
         case 14:
           billName = "维修服务费";
+          break;
+        case 15:
+          billName = "租售";
           break;
       }
       return billName;

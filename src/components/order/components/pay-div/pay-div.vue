@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="adapter-iphoneX" v-if="isX"></div>
+    <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
   </div>
 </template>
 
@@ -45,25 +45,10 @@ export default {
       amount: {
         integer: "0",
         decimal: "00"
-      },
-      isX: false
+      }
     };
   },
-  created() {
-    if (
-      /iphone/gi.test(navigator.userAgent) &&
-      screen.height == 812 &&
-      screen.width == 375
-    ) {
-      //是iphoneX
-      console.log("是iphonex");
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log("不是iphonex");
-      this.isX = false;
-    }
-  },
+  created() {},
   computed: {
     billTypeName() {
       let billName = "";
@@ -107,6 +92,9 @@ export default {
         case 14:
           billName = "维修服务费";
           break;
+        case 15:
+          billName = "租售";
+          break;
       }
       return billName;
     }
@@ -138,7 +126,7 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
-
+$color = #E5165A;
 .pay-content{
   position: fixed;
   bottom: 0;

@@ -2,17 +2,21 @@
 
 <template>
   <div class="list">
-    <div class="pickup-yd" v-if="pickuYD" @click.stop="pickuYD = false">
-      <img src="static/image/mall2/pickup-yd.png" />
-    </div>
-    <nav-top
-      :noTitle="true"
-      @backEvent="backEvent"
-      v-if="componentName != 'AXJFShop'"
+    <div
+      class="pickup-yd"
+      v-if="pickuYD"
+      @click.stop="pickuYD = false"
     >
-      <div
-        class="search-div theme_bg_white_f5"
-        style="
+      <img src="static/image/mall2/pickup-yd.png" />
+  </div>
+  <nav-top
+    :noTitle="true"
+    @backEvent="backEvent"
+    v-if="componentName != 'AXJFShop'"
+  >
+    <div
+      class="search-div theme_bg_white_f5"
+      style="
           left: 50px;
           right: 50px;
           height: 30px;
@@ -20,91 +24,90 @@
           padding: 0 15px;
           border-radius: 15px;
         "
-        @click="toSearchEvent"
-      >
-        <i
-          class="iconfont mall-sousuo theme_font_tint"
-          style="font-size: 16px"
-        ></i>
+      @click="toSearchEvent"
+    >
+      <i
+        class="iconfont mall-sousuo theme_font_tint"
+        style="font-size: 16px"
+      ></i>
         <span
           class="theme_font_tint single-line"
           style="font-size: 14px; margin-left: 10px"
-          >{{ searchKey ? searchKey : "搜你想要的商品" }}</span
-        >
-      </div>
-      <div
-        class="right-btn"
-        style="right: 0px; height: 44px; top: 0px; padding-right: 10px"
-        @click="listStyleEvent"
-        v-if="pageType == ''"
-      >
-        <i
-          class="iconfont mall-datubiao theme_font_common"
-          style="font-size: 24px"
-          v-if="listStyle == 2"
-        ></i>
-        <i
-          class="iconfont mall-qiehuan theme_font_common"
-          style="font-size: 24px"
-          v-if="listStyle == 1"
-        ></i>
-      </div>
-    </nav-top>
-    <nav-content>
-      <!-- 优化新增类目 -->
-      <NewCategory
-        @toggle="toggle"
-        :NoCategory="NoCategory"
-        v-show="showNewCategory"
-        :domIndex="domIndex"
-        v-if="isProgram"
-        :category="category"
-      ></NewCategory>
-      <div class="all-content">
-        <div
-          class="row axjf-tip line_bottom"
-          v-if="componentName == 'AXJFShop'"
-          @click="axPointsDetail"
-        >
-          <div class="label">当前爱心积分</div>
-          <div class="value">{{ axPoints }}</div>
-          <i class="iconfont mall-gengduojiantou"></i>
-        </div>
-        <!--        <div class="row">-->
-        <!--          <div class="type-btn line_circle"-->
-        <!--               :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"-->
-        <!--               @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">-->
-        <!--            <i class="iconfont theme_font_common icon-size"-->
-        <!--               :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>-->
-        <!--            <span class="theme_font_common"-->
-        <!--                  :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>-->
-        <!--          </div>-->
-        <!--          <div class="space"></div>-->
-        <!--          <div class="local-div" @click="selectAddressClick()">-->
-        <!--            <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>-->
-        <!--            <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>-->
-        <!--            <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <div
-          class="row row-channel"
-          v-if="dataType != '' && channels.length > 1"
-        >
-          <div
-            class="channel-btn theme_font_black"
-            @click="channelEvent(channel)"
-            v-for="channel in channels"
-          >
-            <div
-              class="text"
-              :class="{ active: selectedChannel.id == channel.id }"
-            >
-              {{ channel.name }}
-            </div>
+        >{{ searchKey ? searchKey : "搜你想要的商品" }}</span>
           </div>
-        </div>
-        <div class="row row-filter top-showdow">
-          <!-- <div
+          <div
+            class="right-btn"
+            style="right: 0px; height: 44px; top: 0px; padding-right: 10px"
+            @click="listStyleEvent"
+            v-if="pageType == ''"
+          >
+            <i
+              class="iconfont mall-datubiao theme_font_common"
+              style="font-size: 24px"
+              v-if="listStyle == 2"
+            ></i>
+              <i
+                class="iconfont mall-qiehuan theme_font_common"
+                style="font-size: 24px"
+                v-if="listStyle == 1"
+              ></i>
+                </div>
+                </nav-top>
+                <nav-content>
+                  <!-- 优化新增类目 -->
+                  <NewCategory
+                    @toggle="toggle"
+                    :NoCategory="NoCategory"
+                    v-show="showNewCategory"
+                    :domIndex="domIndex"
+                    v-if="isProgram"
+                    :category="category"
+                  ></NewCategory>
+                    <div class="all-content">
+                      <div
+                        class="row axjf-tip line_bottom"
+                        v-if="componentName == 'AXJFShop'"
+                        @click="axPointsDetail"
+                      >
+                        <div class="label">当前爱心积分</div>
+                        <div class="value">{{ axPoints }}</div>
+                        <i class="iconfont mall-gengduojiantou"></i>
+                    </div>
+                    <!--        <div class="row">-->
+                    <!--          <div class="type-btn line_circle"-->
+                    <!--               :class="{theme_light_bg: selectedType == item.tag, theme_standard_bdr_i: selectedType == item.tag}"-->
+                    <!--               @click="selectedTypeEvent(item.tag)" v-for="item in deliveryTypes">-->
+                    <!--            <i class="iconfont theme_font_common icon-size"-->
+                    <!--               :class="[item.fontclass, {theme_standard_font_i: selectedType == item.tag}]"></i>-->
+                    <!--            <span class="theme_font_common"-->
+                    <!--                  :class="{theme_standard_font_i: selectedType == item.tag}">{{item.text}}</span>-->
+                    <!--          </div>-->
+                    <!--          <div class="space"></div>-->
+                    <!--          <div class="local-div" @click="selectAddressClick()">-->
+                    <!--            <span class="theme_font_gray single-line" v-if="selectedType == 2">{{$store.state.mall2.selectAddress.addressFull}}</span>-->
+                    <!--            <span class="theme_font_gray single-line" v-if="selectedType == 1">{{$store.state.mall2.zitiAddress.storeName}}</span>-->
+                    <!--            <i class="iconfont mall-dingwei icon-size theme_font_gray"></i>-->
+                    <!--          </div>-->
+                    <!--        </div>-->
+                    <div
+                      class="row row-channel"
+                      v-if="dataType != '' && channels.length > 1"
+                    >
+                      <div
+                        class="channel-btn theme_font_black"
+                        @click="channelEvent(channel)"
+                        v-for="channel in channels"
+                      >
+                        <div
+                          class="text"
+                          :class="{ active: selectedChannel.id == channel.id }"
+                        >
+                          {{ channel.name }}
+                          </div>
+                          </div>
+                          </div>
+                          <div class="row row-filter top-showdow">
+                            <!-- <div
             class="filter-btn theme_font_black"
             @click="categoryEvent"
             v-if="categoryIdList == '' && dataType == ''"
@@ -114,62 +117,73 @@
             ></i>
             <span class="cate single-line">{{ cateText }}</span>
           </div> -->
-          <div class="filter-btn theme_font_black" @click="filterEvent(0)">
-            <span
-              class="single-line"
-              :class="{ theme_standard_font_i: filterType == 0 }"
-              >综合排序</span
-            >
-          </div>
-          <div class="filter-btn theme_font_black" @click="filterEvent(1)">
-            <span
-              class="single-line"
-              :class="{
+                            <div
+                              class="filter-btn theme_font_black"
+                              @click="filterEvent(0)"
+                            >
+                              <span
+                                class="single-line"
+                                :class="{ theme_standard_font_i: filterType == 0 }"
+                              >综合排序</span>
+                          </div>
+                          <div
+                            class="filter-btn theme_font_black"
+                            @click="filterEvent(1)"
+                          >
+                            <span
+                              class="single-line"
+                              :class="{
                 theme_standard_font_i: filterType == 1 || filterType == 2,
               }"
-              >销量</span
-            >
-          </div>
-          <div class="filter-btn theme_font_black" @click="filterEvent(2)">
-            <span
-              class="single-line"
-              :class="{
+                            >销量</span>
+                              </div>
+                              <div
+                                class="filter-btn theme_font_black"
+                                @click="filterEvent(2)"
+                              >
+                                <span
+                                  class="single-line"
+                                  :class="{
                 theme_standard_font_i: filterType == 3 || filterType == 4,
               }"
-              >价格</span
-            >
-            <div v-show="filterType == 3 || filterType == 4">
-              <i
-                class="iconfont mall-sanjiaoxiabiao arrow-icon theme_font_tint"
-                :class="{ theme_standard_font_i: filterType == 3 }"
-              ></i>
-              <i
-                class="iconfont mall-xiala arrow-icon theme_font_tint"
-                :class="{ theme_standard_font_i: filterType == 4 }"
-              ></i>
-            </div>
-          </div>
-          <div
-            class="filter-btn theme_font_black"
-            @click="filterEvent(3)"
-            v-if="$store.state.globalConfig.pro_sku_view == '1'"
-          >
-            <span
-              class="single-line"
-              :class="{ theme_standard_font_i: filterType == 5 }"
-              >人气</span
-            >
-          </div>
-          <div class="filter-btn theme_font_black" @click="superFilter">
-            <span class="single-line">筛选</span>
-            <i class="iconfont mall-shaixuan filter-size theme_font_tint"></i>
-          </div>
-        </div>
-        <div class="list-content">
-          <div class="list-pull-to">
-            <pull-to
-              ref="listContent"
-              :bottomConfig="{
+                                >价格</span>
+                                  <div v-show="filterType == 3 || filterType == 4">
+                                    <i
+                                      class="iconfont mall-sanjiaoxiabiao arrow-icon theme_font_tint"
+                                      :class="{ theme_standard_font_i: filterType == 3 }"
+                                    ></i>
+                                      <i
+                                        class="iconfont mall-xiala arrow-icon theme_font_tint"
+                                        :class="{ theme_standard_font_i: filterType == 4 }"
+                                      ></i>
+                                  </div>
+                                  </div>
+                                  <div
+                                    class="filter-btn theme_font_black"
+                                    @click="filterEvent(3)"
+                                    v-if="$store.state.globalConfig.pro_sku_view == '1'"
+                                  >
+                                    <span
+                                      class="single-line"
+                                      :class="{ theme_standard_font_i: filterType == 5 }"
+                                    >人气</span>
+                                      </div>
+                                      <div
+                                        class="filter-btn theme_font_black"
+                                        @click="superFilter"
+                                      >
+                                        <span
+                                          class="single-line"
+                                          :class="{ theme_standard_font_i: isStress }"
+                                        >筛选</span>
+                                          <i class="iconfont mall-shaixuan filter-size theme_font_tint"></i>
+                                          </div>
+                                          </div>
+                                          <div class="list-content">
+                                            <div class="list-pull-to">
+                                              <pull-to
+                                                ref="listContent"
+                                                :bottomConfig="{
                 pullText: '',
                 triggerText: '释放更新',
                 loadingText: '加载中...',
@@ -179,185 +193,215 @@
                 stayDistance: 40,
                 triggerDistance: 50,
               }"
-              :bottom-load-method="_loadProList"
-              :isBottomAutoS="true"
-              :isBottomBounce="isCanLoadMore"
-            >
-              <div>
-                <div
-                  class="list-tip theme_bg_yl theme_font_red"
-                  v-if="pageType != '' && endTime != ''"
-                >
-                  <p>限时促销： {{ tipText }}</p>
-                  <p>
-                    距离结束：
-                    <countdown :endTime="endTime"></countdown>
-                  </p>
-                </div>
-                <CardList
-                  @productEvent="productEvent"
-                  @addToCart="addToCart"
-                  :listData="listData"
-                  v-if="listData.length > 0 && listStyle == 1"
-                ></CardList>
-                <DetailList
-                  @productEvent="productEvent"
-                  @addToCart="addToCart"
-                  :listData="listData"
-                  v-if="listData.length > 0 && listStyle == 2"
-                ></DetailList>
-              </div>
-            </pull-to>
-          </div>
-          <div class="no-list" v-if="isNoList && pageType == ''">
-            <div class="img-div">
-              <img src="static/image/mall2/no-data-img.png" />
-            </div>
-            <div
-              class="tip theme_font_gray"
-              v-if="selectedType == 1 && pageType == 'coupon'"
-            >
-              当前门店无可用商品，请切换自提点查看可用商品
-            </div>
-            <div class="tip theme_font_gray" v-else-if="selectedType == 1">
-              抱歉没有找到相应商品，请切换自提点试试吧
-            </div>
-            <div class="tip theme_font_gray" v-else>抱歉没有找到相应商品~</div>
-            <Recommend v-if="selectedType == '2'"></Recommend>
-            <PickupRecommend
-              v-if="selectedType == '1' && searchKey != ''"
-              :searchKey="searchKey"
-            ></PickupRecommend>
-          </div>
-        </div>
-        <div
-          class="activity-btns"
-          v-if="pageType != '' && pageType != 'activity_nocart'"
-        >
-          <div class="subtotal-div" v-if="pageType == 'activity'">
-            <p>
-              <span>小计：</span>
-              <span class="theme_font_red"
-                >￥{{ $util.toDecimal2(activityInfo.amount) }}</span
-              >
-            </p>
-            <p class="font-small theme_font_tint">
-              <span>{{ activityInfo.activityDiscountDesc }}</span>
-            </p>
-          </div>
-          <div class="subtotal-div" v-if="pageType == 'coupon'">
-            <p>
-              <span>小计：</span>
-              <span class="theme_font_red"
-                >￥{{ $util.toDecimal2(this.cartCanUseCouponAmount) }}</span
-              >
-            </p>
-            <p class="font-small theme_font_tint">
-              <span>{{ getCouponTip() }}</span>
-            </p>
-          </div>
-          <div
-            class="btn theme_bg_y theme_font_white"
-            v-if="
+                                                :bottom-load-method="_loadProList"
+                                                :isBottomAutoS="true"
+                                                :isBottomBounce="isCanLoadMore"
+                                              >
+                                                <div>
+                                                  <div
+                                                    class="list-tip theme_bg_yl theme_font_red"
+                                                    v-if="pageType != '' && endTime != ''"
+                                                  >
+                                                    <p>限时促销： {{ tipText }}</p>
+                                                    <p>
+                                                      距离结束：
+                                                      <countdown :endTime="endTime"></countdown>
+                                                    </p>
+                                                </div>
+                                                <CardList
+                                                  @productEvent="productEvent"
+                                                  @addToCart="addToCart"
+                                                  :listData="listData"
+                                                  v-if="listData.length > 0 && listStyle == 1"
+                                                ></CardList>
+                                                  <DetailList
+                                                    @productEvent="productEvent"
+                                                    @addToCart="addToCart"
+                                                    :listData="listData"
+                                                    v-if="listData.length > 0 && listStyle == 2"
+                                                  ></DetailList>
+                                            </div>
+                                            </pull-to>
+                                          </div>
+                                          <div
+                                            class="no-list"
+                                            v-if="isNoList && pageType == ''"
+                                          >
+                                            <div class="img-div">
+                                              <img src="static/image/mall2/no-data-img.png" />
+                                            </div>
+                                            <div
+                                              class="tip theme_font_gray"
+                                              v-if="selectedType == 1 && pageType == 'coupon'"
+                                            >
+                                              当前门店无可用商品，请切换自提点查看可用商品
+                                              </div>
+                                              <div
+                                                class="tip theme_font_gray"
+                                                v-else-if="selectedType == 1"
+                                              >
+                                                抱歉没有找到相应商品，请切换自提点试试吧
+                                                </div>
+                                                <div
+                                                  class="tip theme_font_gray"
+                                                  v-else
+                                                >抱歉没有找到相应商品~</div>
+                                                  <Recommend v-if="selectedType == '2'"></Recommend>
+                                                  <PickupRecommend
+                                                    v-if="selectedType == '1' && searchKey != ''"
+                                                    :searchKey="searchKey"
+                                                  ></PickupRecommend>
+                                                    </div>
+                                                    </div>
+                                                    <div
+                                                      class="activity-btns"
+                                                      v-if="pageType != '' && pageType != 'activity_nocart'"
+                                                    >
+                                                      <div
+                                                        class="subtotal-div"
+                                                        v-if="pageType == 'activity'"
+                                                      >
+                                                        <p>
+                                                          <span>小计：</span>
+                                                          <span class="theme_font_red">￥{{ $util.toDecimal2(activityInfo.amount) }}</span>
+                                                        </p>
+                                                        <p class="font-small theme_font_tint">
+                                                          <span>{{ activityInfo.activityDiscountDesc }}</span>
+                                                        </p>
+                                                        </div>
+                                                        <div
+                                                          class="subtotal-div"
+                                                          v-if="pageType == 'coupon'"
+                                                        >
+                                                          <p>
+                                                            <span>小计：</span>
+                                                            <span class="theme_font_red">￥{{ $util.toDecimal2(this.cartCanUseCouponAmount) }}</span>
+                                                          </p>
+                                                          <p class="font-small theme_font_tint">
+                                                            <span>{{ getCouponTip() }}</span>
+                                                          </p>
+                                                          </div>
+                                                          <div
+                                                            class="btn theme_bg_y theme_font_white"
+                                                            v-if="
               activityInfo.linkType == 3 ||
               activityInfo.linkType == 4 ||
               activityInfo.linkType == 5 ||
               activityInfo.linkType == 6
             "
-            @click="goGift"
-          >
-            {{ getGiftText() }}
-          </div>
-          <div class="btn theme_bg_red theme_font_white" @click="goCart">
-            去购物车
-          </div>
-        </div>
-        <div
-          ref="gouwuche"
-          class="cart-div theme_bg_dark_d"
-          :class="{ gouwucheani: addCartBtnAn }"
-          v-if="!cardType || cardType != 552"
-          @click.stop="goCart"
-        >
-          <img
-            src="../wish-list/images/wish-icon-car.png"
-            alt=""
-            v-if="$route.query.entryType === 'wish'"
-            class="wish-icon"
-            @click.stop="$router.go(-1)"
-          />
-          <div v-else>
-            <p
-              class="cart-num theme_bg_red theme_font_white"
-              v-if="$store.state.mall2.cartNum > 0"
-            >
-              {{ $store.state.mall2.cartNum }}
-            </p>
-            <i class="iconfont mall-gouwuche theme_font_white"></i>
-          </div>
-        </div>
+                                                            @click="goGift"
+                                                          >
+                                                            {{ getGiftText() }}
+                                                            </div>
+                                                            <div
+                                                              class="btn theme_bg_red theme_font_white"
+                                                              @click="goCart"
+                                                            >
+                                                              去购物车
+                                                              </div>
+                                                              </div>
+                                                              <div
+                                                                ref="gouwuche"
+                                                                class="cart-div theme_bg_dark_d"
+                                                                :class="{ gouwucheani: addCartBtnAn }"
+                                                                v-if="!cardType || cardType != 552"
+                                                                @click.stop="goCart"
+                                                              >
+                                                                <img
+                                                                  src="../wish-list/images/wish-icon-car.png"
+                                                                  alt=""
+                                                                  v-if="$route.query.entryType === 'wish'"
+                                                                  class="wish-icon"
+                                                                  @click.stop="$router.go(-1)"
+                                                                />
+                                                                <div v-else>
+                                                                  <p
+                                                                    class="cart-num theme_bg_red theme_font_white"
+                                                                    v-if="$store.state.mall2.cartNum > 0"
+                                                                  >
+                                                                    {{ $store.state.mall2.cartNum }}
+                                                                    </p>
+                                                                    <i class="iconfont mall-gouwuche theme_font_white"></i>
+                                                                </div>
+                                                                </div>
 
-        <div
-          class="category-div"
-          v-show="showCategory"
-          v-if="cateList.length > 0"
-        >
-          <Category
-            :cateList="cateList"
-            @closeEvent="showCategory = false"
-            @cateEvent="cateEvent"
-          ></Category>
-        </div>
-      </div>
-    </nav-content>
-    <!-- showGuide  去除遮罩层 -->
-    <div class="guide-div" v-if="false">
-      <img
-        class="guide-img-1"
-        @click="showGuide = false"
-        src="static/image/mall2/guides/list-guide-1.png"
-      />
-      <img
-        class="guide-img-2"
-        :style="{ top: $store.state.barHeight + $market.getNavHeight() + 'px' }"
-        src="static/image/mall2/guides/list-guide-2.png"
-      />
-      <img
-        class="guide-img-3"
-        :style="{ top: $store.state.barHeight + $market.getNavHeight() + 'px' }"
-        src="static/image/mall2/guides/list-guide-3.png"
-      />
-    </div>
-    <transition name="bounce" @afterEnter="productImgAfterEnter">
-      <img
-        :src="this.addToCartItem.phMainUrl"
-        alt=""
-        class="productImg"
-        v-if="showProductImg && addToCartItem"
-      />
-    </transition>
-    <transition @after-enter="afterEnter" @before-enter="beforeEnter">
-      <div class="anProductImg" v-if="showAddCartAn && addToCartItem">
-        <img :src="this.addToCartItem.phMainUrl" alt="" />
-      </div>
-    </transition>
-    <AllCategory
-      :barHeight="$store.state.barHeight"
-      v-show="showAllCategory"
-      @closeEvent="showAllCategory = false"
-      @cateEvent="cateEvent"
-    ></AllCategory>
-    <Filtrate
-      :cateText="cateText"
-      @filtrateEvent="filtrateEvent"
-      @closeEvent="filtrateCloseEvent"
-      :category="category"
-      :cateLevel="cateLevel"
-      v-if="showCreated"
-      v-show="showFiltrate"
-    ></Filtrate>
-    <AdPage :pageAdKeywords="'AD_Key_ProductList'"></AdPage>
-  </div>
+                                                                <div
+                                                                  class="category-div"
+                                                                  v-show="showCategory"
+                                                                  v-if="cateList.length > 0"
+                                                                >
+                                                                  <Category
+                                                                    :cateList="cateList"
+                                                                    @closeEvent="showCategory = false"
+                                                                    @cateEvent="cateEvent"
+                                                                  ></Category>
+                                                                    </div>
+
+                                                                    </div>
+                </nav-content>
+                <!-- showGuide  去除遮罩层 -->
+                <div
+                  class="guide-div"
+                  v-if="false"
+                >
+                  <img
+                    class="guide-img-1"
+                    @click="showGuide = false"
+                    src="static/image/mall2/guides/list-guide-1.png"
+                  />
+                  <img
+                    class="guide-img-2"
+                    :style="{ top: $store.state.barHeight + $market.getNavHeight() + 'px' }"
+                    src="static/image/mall2/guides/list-guide-2.png"
+                  />
+                  <img
+                    class="guide-img-3"
+                    :style="{ top: $store.state.barHeight + $market.getNavHeight() + 'px' }"
+                    src="static/image/mall2/guides/list-guide-3.png"
+                  />
+                  </div>
+                  <transition
+                    name="bounce"
+                    @afterEnter="productImgAfterEnter"
+                  >
+                    <img
+                      :src="this.addToCartItem.phMainUrl"
+                      alt=""
+                      class="productImg"
+                      v-if="showProductImg && addToCartItem"
+                    />
+                    </transition>
+                    <transition
+                      @after-enter="afterEnter"
+                      @before-enter="beforeEnter"
+                    >
+                      <div
+                        class="anProductImg"
+                        v-if="showAddCartAn && addToCartItem"
+                      >
+                        <img
+                          :src="this.addToCartItem.phMainUrl"
+                          alt=""
+                        />
+                        </div>
+                        </transition>
+                        <AllCategory
+                          :barHeight="$store.state.barHeight"
+                          v-show="showAllCategory"
+                          @closeEvent="showAllCategory = false"
+                          @cateEvent="cateEvent"
+                        ></AllCategory>
+                          <Filtrate
+                            :cateText="cateText"
+                            @filtrateEvent="filtrateEvent"
+                            @closeEvent="filtrateCloseEvent"
+                            :category="category"
+                            :cateLevel="cateLevel"
+                            v-if="showCreated"
+                            v-show="showFiltrate"
+                          ></Filtrate>
+                            <AdPage :pageAdKeywords="'AD_Key_ProductList'"></AdPage>
+                            </div>
 </template>
 
 <script>
@@ -377,7 +421,7 @@ import InitialLoadPickupAny from "@/utils/initialLoadPickupAny.js";
 import AdPage from "@/components/product/index/subpage/adpage";
 import NewCategory from "@/components/product/index/category/index";
 import { mapMutations } from "vuex";
-import appNav from '@zkty-team/x-engine-module-nav';
+import appNav from "@zkty-team/x-engine-module-nav";
 
 export default {
   name: "list",
@@ -393,7 +437,7 @@ export default {
     PickupRecommend,
     AllCategory,
     AdPage,
-    NewCategory,
+    NewCategory
   },
   props: ["componentName", "orderCategory", "vipUnitUserCode", "axPoints"],
   data() {
@@ -405,13 +449,13 @@ export default {
         {
           text: "配送",
           fontclass: "mall-peisong",
-          tag: "2",
+          tag: "2"
         },
         {
           text: "自提",
           fontclass: "mall-ziti",
-          tag: "1",
-        },
+          tag: "1"
+        }
       ],
       selectedType: 2,
       listZitiId: "",
@@ -478,15 +522,21 @@ export default {
       //新类目dom下标
       domIndex: 0,
       isProgram: false,
+      isStress: false // 筛选按钮是否高亮
     };
   },
   mounted() {
     this.easyCardId = this.$route.query.easyCardId;
     this.cardType = this.$route.query.cardType;
   },
+  watch:{
+    showFiltrate(a){
+      this.setShowBackTop(!a)
+    }
+  },
   methods: {
     //新增类目分类切换方法
-    ...mapMutations(["setShowCategory"]),
+    ...mapMutations(["setShowCategory","setShowBackTop"]),
     toggle(category) {
       this.category = category;
       this.cateLevel = 1;
@@ -495,15 +545,15 @@ export default {
       this._loadProList();
     },
 
-    axPointsDetail: function () {
+    axPointsDetail: function() {
       this.$emit("axPointsDetail");
     },
-    channelEvent: function (channel) {
+    channelEvent: function(channel) {
       this.selectedChannel = channel;
       this.nowPage = 0;
       this._loadProList();
     },
-    getCouponTip: function () {
+    getCouponTip: function() {
       let amount =
         this.cartCanUseCouponAmount != "" ? this.cartCanUseCouponAmount : "0";
       if (parseFloat(amount) > parseFloat(this.couThresholdAmount)) {
@@ -515,7 +565,7 @@ export default {
         return "还差" + num + "元可以优惠" + this.couFaceValue + "元";
       }
     },
-    cateEvent: function (item) {
+    cateEvent: function(item) {
       // 更换分类之后 清空筛选属性信息
       this.showCreated = false;
       this.filterBrands = [];
@@ -530,7 +580,7 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    categoryEvent: function () {
+    categoryEvent: function() {
       if (this.pageType != "") {
         this.showCategory = !this.showCategory;
       } else {
@@ -538,7 +588,7 @@ export default {
       }
     },
     // linkType  1去凑单  2再逛逛 3领赠品 4去换购  5赠品未满足  6换购未满足
-    getGiftText: function () {
+    getGiftText: function() {
       if (this.activityInfo.linkType == 3) {
         return "选择赠品";
       } else if (this.activityInfo.linkType == 4) {
@@ -549,7 +599,7 @@ export default {
         return "查看换购";
       }
     },
-    goCart: function () {
+    goCart: function() {
       if (this.$route.query.fromCart == 1) {
         this.$router.go(-1);
       } else {
@@ -557,12 +607,13 @@ export default {
           path: "/mall2/cart",
           query: {
             orderCategory: this.orderCategory,
-            vipUnitUserCode: this.vipUnitUserCode,
-          },
+            vipUnitUserCode: this.vipUnitUserCode
+          }
         });
+        this.$store.state.cartEntrance = "goodsList";
       }
     },
-    goGift: function () {
+    goGift: function() {
       let isScan = cartJS.getGiftIsOnlyScan(this.activityInfo);
       let giftType = cartJS.getGiftType(this.activityInfo);
 
@@ -571,10 +622,11 @@ export default {
         activityId: this.activityInfo.mktActivityId,
         sureFunc: this.sureFunc,
         isScan: isScan,
-        giftType: giftType,
+        giftType: giftType
       });
     },
-    sureFunc: function (carts) {
+    sureFunc: function(carts) {
+      console.log(123123);
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -582,10 +634,10 @@ export default {
         carts: carts,
         deliveryType: this.selectedType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -596,31 +648,31 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    backEvent: function () {
+    backEvent: function() {
       if (this.$route.query.backApp) {
-        appNav.navigatorBack({ url: '0' }).then( res => {
-          console.log(res)
-        })
+        appNav.navigatorBack({ url: "0" }).then(res => {
+          console.log(res);
+        });
       } else {
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
     },
-    toSearchEvent: function () {
+    toSearchEvent: function() {
       Search.open({
         initData: {
           barHeight: this.$store.state.barHeight,
-          searchHistory: this.$store.state.mall2.searchHistory,
+          searchHistory: this.$store.state.mall2.searchHistory
         },
         clearSearchHistory: () => {
           this.$store.state.mall2.searchHistory = [];
         },
-        searchEvent: (searchStr) => {
+        searchEvent: searchStr => {
           this.category = "";
           this.cateLevel = "";
           this.setShowCategory(false);
@@ -631,27 +683,27 @@ export default {
           this.searchKey = searchStr;
           this.nowPage = 0;
           this._loadProList();
-        },
+        }
       });
     },
-    listStyleEvent: function () {
+    listStyleEvent: function() {
       if (this.listStyle == 1) {
         this.listStyle = 2;
       } else {
         this.listStyle = 1;
       }
     },
-    filtrateCloseEvent: function () {
+    filtrateCloseEvent: function() {
       this.showFiltrate = false;
     },
-    selectedTypeEvent: function (tag) {
+    selectedTypeEvent: function(tag) {
       this.$store.state.mall2.staticDeliverType = tag;
       this.$bridgefunc.vuexStorage();
       this.selectedType = tag;
       if (tag == 1 && this.$store.state.mall2.zitiAddress.id == "") {
         this.backRefresh = true;
         this.$router.push({
-          path: "/mall2/mypickupaddress",
+          path: "/mall2/mypickupaddress"
         });
       } else {
         this.nowPage = 0;
@@ -661,7 +713,7 @@ export default {
         // this.deductionCart();
       }
     },
-    filterEvent: function (type) {
+    filterEvent: function(type) {
       this.showCategory = false;
       if (type == 0) {
         // 综合排序
@@ -691,7 +743,9 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    filtrateEvent: function (filtrateData) {
+    filtrateEvent: function(filtrateData) {
+      
+      this.isStress = Object.keys(filtrateData).filter(item => filtrateData[item].length > 0).length > 0 // 如果有筛选内容，高亮筛选按钮
       this.showFiltrate = false;
       this.filterBrands = [];
       this.filterFeatureies = [];
@@ -699,7 +753,7 @@ export default {
         // this.filterFeatureies.push(filtrateData.featureies[i].id)
         this.filterFeatureies.push({
           id: filtrateData.featureies[i].id,
-          featureType: filtrateData.featureies[i].featureType,
+          featureType: filtrateData.featureies[i].featureType
         });
       }
       this.maxPrice = filtrateData.maxPrice;
@@ -709,15 +763,15 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    superFilter: function () {
+    superFilter: function() {
       this.showCategory = false;
       this.showFiltrate = true;
       this.showCreated = true;
     },
     // 获取普通商品列表
-    _loadProList: function (loaded) {
+    _loadProList: function(loaded) {
       if (this.selectedType == "1") {
-        InitialLoadPickupAny.checkIsInitialLoad((address) => {
+        InitialLoadPickupAny.checkIsInitialLoad(address => {
           if (address) {
             this._loadProList();
           }
@@ -729,7 +783,7 @@ export default {
       if (this.nowPage == 0) {
         this.listData = [];
       }
-      this.$Loading.open();
+      // this.$Loading.open();
       let paramsData = {
         page: page,
         rows: 20,
@@ -755,7 +809,7 @@ export default {
         proSkuHasStock: this.proSkuHasStock,
         easyCardId: this.$route.query.easyCardId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       let url = "/app/json/product/getAppProSearchList";
       if (this.componentName == "BeanShop") {
@@ -801,7 +855,7 @@ export default {
           provinceId: sad.provinceId,
           cityId: sad.cityId,
           countryId: sad.countryId,
-          townId: sad.townId,
+          townId: sad.townId
         };
       }
       if (this.productType && this.productType != "") {
@@ -818,7 +872,7 @@ export default {
       }
 
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -862,10 +916,10 @@ export default {
                     childList: [
                       {
                         name: "全部分类",
-                        id: "",
-                      },
-                    ],
-                  },
+                        id: ""
+                      }
+                    ]
+                  }
                 ];
                 for (let i = 0; i < cList.length; i++) {
                   let subArr = cList[i].childList;
@@ -886,7 +940,7 @@ export default {
             loaded("done");
           }
         },
-        (error) => {
+        error => {
           if (loaded) {
             loaded("done");
           }
@@ -895,7 +949,7 @@ export default {
         }
       );
     },
-    productEvent: function (product) {
+    productEvent: function(product) {
       let path = "/mall2/detail/" + this.$util.getDataString();
       if (product.productType == 2) {
         path = "/mall2/ticketdetail";
@@ -921,12 +975,17 @@ export default {
           skuCode: product.skuCode, // 商品编码
           storeOuCode: product.storeOuCode, // 店铺编码
           cardType: this.cardType, // 区分充值卡 计次卡
-          cardName: this.$route.query.cardName, // 计次卡名称
-        },
+          cardName: this.$route.query.cardName // 计次卡名称
+        }
       });
+      if (this.searchKey !== "") {
+        this.$store.state.inToDetail = "search";
+      } else {
+        this.$store.state.inToDetail = "list";
+      }
     },
     // 获取购物车数量
-    _getCartCount: function () {
+    _getCartCount: function() {
       if (this.$store.state.login.token == "") {
         return;
       }
@@ -935,10 +994,10 @@ export default {
         token: this.$store.state.login.token,
         deliveryType: this.selectedType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
             this.$store.state.mall2.cartNum = data.data;
@@ -946,13 +1005,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    addToCart: function (item) {
+    addToCart: function(item) {
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -964,15 +1023,15 @@ export default {
             activityId: this.activityId,
             selfActivityId: item.activityId,
             deliveryType: this.selectedType,
-            number: 1,
-          },
+            number: 1
+          }
         ],
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
-        deliveryType: item.deliverType,
+        deliveryType: item.deliverType
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -995,13 +1054,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    deductionCart: function () {
+    deductionCart: function() {
       if (this.pageType == "" || this.pageType == "activity_nocart") {
         return;
       }
@@ -1013,7 +1072,7 @@ export default {
         skuId: this.deductionSkuId,
         storeOuCode: this.storeOuCode,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       if (this.selectedType == 2) {
         paramsData.provinceId = this.$store.state.mall2.selectAddress.provinceId;
@@ -1028,7 +1087,7 @@ export default {
         paramsData.activityId = this.activityId;
       }
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -1072,14 +1131,14 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
     // getProduct
-    selectAddressClick: function () {
+    selectAddressClick: function() {
       //选择地址
 
       let path = "";
@@ -1101,11 +1160,11 @@ export default {
       this.$router.push({
         path: path,
         query: {
-          productType: this.productType,
-        },
+          productType: this.productType
+        }
       });
     },
-    productImgAfterEnter: function (el) {
+    productImgAfterEnter: function(el) {
       this.showProductImg = false;
       this.showAddCartAn = true;
     },
@@ -1132,14 +1191,14 @@ export default {
         });
       });
     },
-    queryChannelList: function () {
+    queryChannelList: function() {
       let url = "/app/json/product/getAppProChannelList";
       let paramsData = {
-        channelGroupId: this.channelGroupId,
+        channelGroupId: this.channelGroupId
       };
       this.$Loading.open();
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -1157,12 +1216,12 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
-    },
+    }
   },
   created() {
     this.domIndex = this.$route.query.domIndex ? this.$route.query.domIndex : 1;
@@ -1190,16 +1249,16 @@ export default {
         {
           text: "自提",
           fontclass: "mall-ziti",
-          tag: "1",
-        },
+          tag: "1"
+        }
       ];
     } else if (this.$store.state.globalConfig.delivertype_default == "2") {
       this.deliveryTypes = [
         {
           text: "配送",
           fontclass: "mall-peisong",
-          tag: "2",
-        },
+          tag: "2"
+        }
       ];
     }
 
@@ -1236,8 +1295,8 @@ export default {
           {
             text: "自提",
             fontclass: "mall-ziti",
-            tag: "1",
-          },
+            tag: "1"
+          }
         ];
       } else if (this.$route.query.deliveryType == 2) {
         this.$store.state.mall2.staticDeliverType = 2;
@@ -1245,8 +1304,8 @@ export default {
           {
             text: "配送",
             fontclass: "mall-peisong",
-            tag: "2",
-          },
+            tag: "2"
+          }
         ];
       }
     }
@@ -1352,7 +1411,7 @@ export default {
       this.$keepaliveHelper.deleteCache(this);
     }
     next();
-  },
+  }
 };
 </script>
 
@@ -1537,6 +1596,10 @@ export default {
       overflow: hidden;
       /* -webkit-overflow-scrolling touch; */
       position: relative;
+
+      /deep/.scroll-container {
+        padding-bottom: 100px !important;
+      }
 
       .list-tip {
         padding: 4px 12px;

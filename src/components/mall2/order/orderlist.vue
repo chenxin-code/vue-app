@@ -127,9 +127,11 @@
                   v-if="$store.state.globalConfig.order_delivery_remind == 1 && dealPushDeliveryBtn(item.paidTime) == -1 "
                   @click.stop="pushDelivery(item)"
                 >催促发货</div>
+                <!-- v-if="item.deliverType == '2' && item.interfaceType == 0 && item.orderType == '200017' && item.payMode != 500 && item.orderMode != 12" -->
+                <!-- 不允许修改订单 -->
                 <div
                   class="row-btn line_circle theme_font_common theme_border_gray"
-                  v-if="item.deliverType == '2' && item.interfaceType == 0 && item.orderType == '200017' && item.payMode != 500 && item.orderMode != 12"
+                  v-if="false"
                   @click.stop="modifyAddress(item)"
                 >修改订单</div>
                 <div

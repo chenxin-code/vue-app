@@ -67,6 +67,8 @@
         payResult: '',
         wxOrderInfoKey:"",
         wxOrderInfo:{},
+        tradeNo:"",
+        orderId:"",
       }
     },
     methods: {
@@ -134,7 +136,7 @@
                   path: '/common'
                 })
               } else {
-                appNav.changeBottomToIndex({selectIndex: 0,}).then(res=>{
+                appNav.changeBottomToIndex({selectIndex: 2,}).then(res=>{
                   console.log('跳转',res)
                 });
               }
@@ -206,6 +208,7 @@
     },
     created() {
       const ret = JSON.parse(decodeURI(this.$route.query.ret));
+      console.log('支付信息ret',ret)
       if (ret) {
         if (!ret.isCancel) {
           if (ret.billRetStatus == 1) {
@@ -229,6 +232,20 @@
       })
       this.$store.state.microSho.carts = cartsNew
       this.wxOrderInfoKey = this.$route.query.wxOrderInfoKey || '';
+      this.tradeNo = this.$route.query.tradeNo;
+      this.orderId = this.$route.query.orderId;
+      console.log('payInfo',this.tradeNo,this.orderId)
+    },
+    mounted(){
+      console.log('this.icbcFailed',this.payResult)
+      if(this.payResult == 'icbcFailed'){
+        console.log('埋点前',this.payResult)
+        this.$sensors.track('pay_order_fail', {
+          order_id:this.orderId,
+          trade_no:this.tradeNo,
+        });
+        console.log('埋点后',this.payResult)
+      }
     }
   }
 </script>

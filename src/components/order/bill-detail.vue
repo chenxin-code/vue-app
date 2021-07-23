@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-06-29 11:41:33
+ * @LastEditTime: 2021-07-20 10:18:23
 -->
 <template>
   <div class="bill-detail">
@@ -39,6 +39,7 @@
                 v-model="billValue"
                 :options="typeOption"
                 @change="onChangeBillType"
+                :disabled="isDisabled"
               />
             </van-dropdown-menu>
           </div>
@@ -207,7 +208,8 @@ export default {
       totalPayableAmount: 0,
       checkPcs: false,
       errorMsg: "",
-      showErrorMsg: false
+      showErrorMsg: false,
+      isDisabled: true
     };
   },
 
@@ -312,6 +314,12 @@ export default {
                   (pageLength && pageLength === this.currentPage) ||
                   pageLength === 1
                 ) {
+                  if (pageLength !== 1) {
+                    let list = data.finish[0].records;
+                    let re = this.results.records.concat(list);
+                    this.results.records = re;
+                  }
+
                   this.finished = true;
                   this.showFinishText = true;
                 } else {
@@ -328,12 +336,14 @@ export default {
           console.log(`this.results`, this.results);
 
           this.loading = false; //清除loading
+          this.isDisabled = false;
           this.isLoading = false;
           if (this.results.length === 0) {
             this.showEmpty = true;
             this.finished = true;
             this.showFinishText = false;
           } else {
+            this.showEmpty = false;
             this.isMonthPay =
               this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
           }
@@ -544,6 +554,7 @@ export default {
       this.results = [];
       this.showFinishText = false;
       this.loading = true;
+      this.isDisabled = true;
       this.finished = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
@@ -564,7 +575,9 @@ export default {
       this.results = [];
       this.showFinishText = false;
       this.loading = true;
+      this.isDisabled = true;
       this.finished = false;
+      this.showEmpty = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
       this.isShowPayDiv = false;
@@ -615,11 +628,7 @@ export default {
           if (res.data.code == "0000") {
             let arr = res.data.data;
             for (let index = 0; index < arr.length; index++) {
-              if (
-                arr[index].status == 1 ||
-                arr[index].status == 2 ||
-                arr[index].status == 3
-              ) {
+              if (arr[index].status == 1 || arr[index].status == 2) {
                 checkStatus.push(arr[index].status);
               }
             }
@@ -670,6 +679,7 @@ export default {
                     );
                     console.log(res);
                     if (res.billRetStatus == "1") {
+                      Toast.clear(); //关闭页面loading
                       //支付成功
                       this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
                     } else {

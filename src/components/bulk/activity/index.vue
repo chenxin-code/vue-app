@@ -8,26 +8,24 @@
       </van-tab>
     </van-tabs> -->
     <van-sticky>
-      <div class="heard">
-        <div class="tab">
-          <div class="tab_back" @click="goBack()">
-            <van-icon
-              name="arrow-left"
-              class="arrow_left"
-              color="#000000"
-              size="0.471467rem"
-            />
+      <div class="nav">
+        <div class="nav_top">
+          <div class="back" @click="$router.go(-1)">
+            <img :src="require('./images/button_back.png')" alt="" />
           </div>
-          <div class="tab_item_box">
-            <div
-              class="tab_item"
-              v-for="(item, index) in tabTitle"
-              :key="index"
-              @click="changesTab(index)"
-              :class="currentTab == index ? 'current_tab' : ''"
-            >
-              {{ item.title }}
-            </div>
+          <div class="title">我的活动</div>
+          <div class="no"></div>
+        </div>
+        <div class="nav_tabs">
+          <div
+            class="tab_item"
+            v-for="(item, index) in tabTitle"
+            :key="index"
+            @click="changesTab(index)"
+            :class="currentTab == index ? 'current_tab' : ''"
+            v-show="index !== 0"
+          >
+            {{ item.title }}
           </div>
         </div>
       </div>
@@ -48,46 +46,77 @@
       >
         <div
           class="box"
-          @click="goToDeatil(item.id)"
+          @click="goToDeatil(item.id, item.groupbuyActivityName)"
           v-for="(item, index) in allList"
           :key="index"
         >
-          <div class="div1">
+          <div
+            class="type"
+            :style="{
+              backgroundImage:
+                item.groupbuyActivityStatus == 1
+                  ? `url(${require('./images/tips_on_default.png')})`
+                  : `url(${require('./images/tips_over_default.png')})`,
+            }"
+          >
+            {{
+              item.groupbuyActivityStatus == 0
+                ? "未开始"
+                : item.groupbuyActivityStatus == 1
+                ? "进行中"
+                : "已结束"
+            }}
+          </div>
+          <!-- <div class="div1">
             <div>
               <span>{{ item.groupbuyActivityName }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="div2">
             <img :src="item.groupbuyActivityPicurl" alt="" />
-            <div>
-              <p>截止日期：{{ item.groupbuyEndDatetime }}</p>
-              <p>
-                <span>{{
+            <div class="activity_detail">
+              <div class="activity_name">{{ item.groupbuyActivityName }}</div>
+              <div class="date">
+                <span></span>
+                截止日期：{{ item.groupbuyEndDatetime }}
+              </div>
+              <div class="goods_count">
+                <!-- <span>{{
                   item.groupbuyActivityStatus == 0
                     ? "未开始"
                     : item.groupbuyActivityStatus == 1
                     ? "进行中"
                     : "已结束"
-                }}</span>
+                }}</span> -->
                 <!-- <span>已团{{ item.orderCount }}单</span> -->
-                <span>共{{ item.productCount }}件商品</span>
-                <span><van-icon name="arrow" /></span>
-              </p>
-              <p>
+                <span></span>
+                {{ item.productCount }}件商品
+              </div>
+              <!-- <p>
                 <span
                   @click.stop="share(item)"
                   v-show="item.groupbuyActivityStatus == 1"
                   >分享</span
                 >
                 <span @click.stop="navToDetail(item.id)">本团订单</span>
-              </p>
+              </p> -->
             </div>
+          </div>
+          <div class="btns">
+            <div
+              class="share"
+              @click.stop="share(item)"
+              v-show="item.groupbuyActivityStatus == 1"
+            >
+              分享活动
+            </div>
+            <div class="order" @click.stop="navToDetail(item.id)">本团订单</div>
           </div>
         </div>
       </van-list>
       <!-- <div v-if="allList.length == 0 && getDataOk" class="not-data">暂无数据</div> -->
     </van-pull-refresh>
-
+    <!-- 
     <van-share-sheet
       class="copyData"
       v-model="showShare"
@@ -95,7 +124,27 @@
       :options="options"
       cancel-text=""
       @select="onShare"
-    />
+    /> -->
+    <van-overlay :show="showShare" @click="showShare = false">
+      <div class="share">
+        <div class="share_box">
+          <img
+            :src="require('./images/button_close_default.png')"
+            alt=""
+            class="close"
+            @click.stop="showShare = false"
+          />
+          <div class="share_title">分享至</div>
+          <img
+            :src="require('./images/icon_default_wechat.png')"
+            alt=""
+            @click.stop="onShare('wechat')"
+            class="wechat"
+          />
+          <div class="share_tips">发送至好友</div>
+        </div>
+      </div>
+    </van-overlay>
     <!-- <button
       v-show="false"
       ref="copybtn"
@@ -111,6 +160,7 @@
 import Qs from "qs";
 import ClipboardJS from "clipboard";
 import appShare from "@zkty-team/x-engine-module-share";
+import { getLocation } from "../utils";
 export default {
   name: "activity",
   // mixins: [api],
@@ -129,7 +179,7 @@ export default {
         { title: "未开始" },
         { title: "已结束" },
       ],
-      currentTab: 0,
+      currentTab: 1,
       allList: [],
       loading: false, //是否处于加载状态，加载过程中不触发load事件
       finished: false, //是否已加载完成，加载完成后不再触发load事件
@@ -154,6 +204,7 @@ export default {
         }
       });
     this.getlist();
+    console.log("getLocation---->", getLocation());
   },
   methods: {
     // 切换tab
@@ -177,7 +228,7 @@ export default {
       this.refreshing = false;
 
       let obj = {
-        pageIndex: this.page,
+        pageIndex: this.currentPage,
         groupbuyActivityStatus:
           this.currentTab == 0
             ? undefined
@@ -224,14 +275,38 @@ export default {
       this.allList = [];
       this.finished = false;
       this.page = 1;
+      this.currentPage = 0;
       this.getlist();
     },
     share(item) {
       this.shareItemData = item;
       this.showShare = true;
     },
-    onShare: function (option) {
-      if (option.icon == "wechat") {
+    //加密参数
+    addCode(url = "") {
+      return new Promise((resolve, reject) => {
+        this.$request
+          .post("/app/json/short_address/makeShortAddress", {
+            longAddress: url,
+          })
+          .then((res) => {
+            if (res.status == 0) {
+              resolve(new URL(res.data).pathname);
+            } else {
+              reject();
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    onShare: async function (option) {
+      ///app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}
+      // const sence = await this.addCode(
+      //   `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+      // );
+      if (option == "wechat") {
         if (this.$store.state.webtype == 3 || this.$store.state.webtype == 2) {
           console.log("当前是小程序~~~");
           //判断小程序
@@ -240,17 +315,26 @@ export default {
           this.$store.state.webtype == 0 ||
           this.$store.state.webtype == 1
         ) {
+          console.log(
+            this.shareItemData.id,
+            this.userData.teamLeaderNo,
+            this.userData.userNo,
+            this.shareItemData.groupbuyActivityName
+          );
           appShare
             .shareForOpenWXMiniProgram({
               // userName: "gh_2a45a4d38d81",
               userName: "gh_28d617271c97",
+              // path: `pages/common/home/index?sence=${sence}`,
               path: `pages/common/home/index?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
               )}`,
-              title: "微信分享商品",
-              desc: "test",
-              link: "https://www.baidu.com",
-              imageurl: this.shareItemData.groupbuyActivityPicurl,
+              title: this.shareItemData.groupbuyActivityName,
+              desc: this.shareItemData.groupbuyActivityName,
+              link: getLocation(window.location.href),
+              imageurl:
+                this.shareItemData.groupbuyActivityPicurl +
+                "?x-oss-process=image/format,jpg/quality,Q_10",
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
                 this.$store.state.environment == "production" ? 0 : 2,
@@ -272,17 +356,17 @@ export default {
           //   },
           // });
         }
-      } else if (option.icon == "link") {
+      } else if (option == "link") {
         this.$http
           .post("/app/json/app_group_buying_share_home/generateShareLink", {
             path: "/pages/homePage/temporaryCapture",
             query: `redirect=${encodeURIComponent(
-              `/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
+              `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
             )}`,
           })
           .then((res) => {
             if (res.data.data.errcode == 0) {
-              this.link = res.data.data.openlink;
+              this.link = getLocation(res.data.data.openlink);
               // weixin://dl/business/?t=lzjYaPnRpgo
               new ClipboardJS(".btn", {
                 text: function (trigger) {
@@ -303,11 +387,12 @@ export default {
         },
       });
     },
-    goToDeatil(id) {
+    goToDeatil(id, groupbuyActivityName) {
       this.$router.push({
         path: "/bulkDetails",
         query: {
           activityNo: JSON.stringify(id),
+          groupbuyActivityName: JSON.stringify(groupbuyActivityName),
         },
       });
     },
@@ -325,66 +410,72 @@ export default {
   width: 100%;
   height: 100%;
 
-  .heard {
-    background: #fff;
-    padding-top: 10px;
-  }
-
-  .not-data {
-    width: 100%;
-    font-size: 15px;
-    font-family: Source Han Sans CN;
-    font-weight: 400;
-    color: #999999;
-    text-align: center;
-    margin-top: 240px;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .tab {
-    width: 100%;
-    height: 44px;
-    padding: 0px 20px 0px 0px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  .nav {
     background-color: #fff;
+    width: 100%;
+    height: 128px;
 
-    .tab_back {
-      width: 75px;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-right: 21px;
-    }
-
-    .tab_item_box {
-      width: 80%;
-      height: 100%;
+    .nav_top {
+      width: 100%;
+      height: 44px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      // margin-left: 21px;
+      padding-top: 56px;
+      padding-bottom: 21px;
+
+      .back {
+        width: 75px;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 9px;
+          height: 16px;
+        }
+      }
+
+      .title {
+        font-size: 17px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #000000;
+      }
+
+      .no {
+        width: 75px;
+        height: 44px;
+      }
     }
 
-    .tab_item {
-      font-size: 14px;
-      font-weight: 400;
-      color: #333333;
-      // line-height: 20px;
+    .nav_tabs {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding-bottom: 6.5px;
-    }
+      padding: 21px 39px 12px;
 
-    .current_tab {
-      color: #C61606;
-      border-bottom: 1px solid #C61606;
+      .tab_item {
+        width: 49px;
+        height: 22px;
+        background: #fff;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 22px;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #666666;
+      }
+
+      .current_tab {
+        background: #E9306D;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #FFFFFF;
+      }
     }
   }
 
@@ -393,11 +484,29 @@ export default {
   }
 
   .box {
-    border-radius: 8px;
-    padding: 15px;
+    padding: 17px 15px 16px 17px;
     background: white;
-    margin: 15px 12px;
+    margin: 12px 12px;
     font-size: 14px;
+    border-radius: 12px;
+    position: relative;
+
+    .type {
+      width: 43px;
+      height: 21px;
+      position: absolute;
+      left: 17px;
+      top: 17px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      font-size: 12px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #FFFFFF;
+      line-height: 16px;
+      text-align: center;
+      line-height: 21px;
+    }
 
     .div1 {
       display: flex;
@@ -433,77 +542,162 @@ export default {
     }
 
     .div2 {
-      margin-top: 15px;
+      // margin-top: 15px;
       display: flex;
       justify-content: start;
+      padding-bottom: 17px;
+      border-bottom: 1px solid #F0F0F0;
+      margin-bottom: 15px;
 
       img {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
         object-fit: cover;
-        border-radius: 6px;
-        margin-right: 15px;
+        border-radius: 12px;
+        margin-right: 14px;
       }
 
-      div {
-        width: 250px;
+      .activity_detail {
         display: flex;
         flex-direction: column;
-        font-size: 14px;
+        justify-content: flex-start;
 
-        p:nth-child(1) {
-          margin-top: 5px;
-          margin-bottom: 10px;
-          color: #424242;
+        .activity_name {
+          font-size: 16px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #333333;
+          line-height: 16px;
         }
 
-        p:nth-child(2) {
+        .date {
+          font-size: 13px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #666666;
+          line-height: 16px;
           display: flex;
           justify-content: flex-start;
-          color: #999999;
-
-          span:nth-child(1) {
-            color: #C61606;
-          }
+          align-items: center;
+          margin: 16px 0 12px;
 
           span {
-            flex: 1;
-          }
-
-          span:nth-child(4) {
-            max-width: 5px;
-            color: #333333;
-            font-size: 14px;
+            width: 5px;
+            height: 5px;
+            background: #E9306D;
+            border-radius: 50%;
+            margin-right: 8px;
           }
         }
 
-        p:nth-child(3) {
-          margin-top: 20px;
-          text-align: right;
+        .goods_count {
+          font-size: 13px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #666666;
+          line-height: 16px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
 
           span {
-            padding: 4px 15px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin: 0 5px;
-          }
-
-          span:nth-child(1) {
-            border: 1px solid #FF9E4F;
-            color: #FF9E4F;
-          }
-
-          span:nth-child(2) {
-            border: 1px solid #DDDDDD;
-            color: #333333;
+            width: 5px;
+            height: 5px;
+            background: #E9306D;
+            border-radius: 50%;
+            margin-right: 8px;
           }
         }
+      }
+    }
+
+    .btns {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .share {
+        width: 94px;
+        height: 35px;
+        border: 1px solid #F39800;
+        border-radius: 18px;
+        text-align: center;
+        line-height: 35px;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #F39800;
+        margin-right: 12px;
+      }
+
+      .order {
+        width: 94px;
+        height: 35px;
+        border: 1px solid #E9306D;
+        border-radius: 18px;
+        text-align: center;
+        line-height: 35px;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #E9306D;
       }
     }
   }
 
   /deep/.van-pull-refresh__track {
     min-height: 400px;
+  }
+
+  .share {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .share_box {
+      width: 265px;
+      height: 170px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      .close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .share_title {
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #333333;
+        line-height: 16px;
+        margin: 27px 0 28px;
+      }
+
+      .wechat {
+        width: 51px;
+        height: 51px;
+        margin-bottom: 10px;
+      }
+
+      .share_tips {
+        font-size: 12px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #121212;
+        line-height: 15px;
+      }
+    }
   }
 }
 

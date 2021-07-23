@@ -8,7 +8,7 @@
           <div v-show="isOpen || index < 1" style="height: 100%;">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
@@ -45,7 +45,7 @@
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
@@ -80,7 +80,7 @@
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
-                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg'">
+                <img v-lazy="item.phMainUrl+'?x-oss-process=image/format,jpg/quality,Q_25'">
                 <div class="presale" v-if="item.supportPreSale == 1">预售</div>
               </div>
               <div class="title theme_font_black double-line" v-html="getSkuNameStr(item)"></div>
@@ -329,12 +329,16 @@
           align-items center;
           /*padding 0px 0;*/
           .act-item {
-            padding 2px 8px;
+            padding 4px 8px;
             font-size 10px;
-            border-radius 10px;
+            border-radius 4px;
             border-width 0.5px
-            border-style solid
+            // border-style solid
             margin-right 4px;
+            background-color #FFEEED;
+            font-weight: 400;
+            color: #E3352A;
+            line-height: 11px;
           }
         }
         .num-info {

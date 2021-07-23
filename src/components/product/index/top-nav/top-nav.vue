@@ -60,7 +60,7 @@
         </div>
         <!-- v-if="myData.isShowBack && $store.state.webtype != 2 && $store.state.webtype != 3" 修复app配置专题页有返回，小程序无返回 -->
         <div
-          class="img-btn-pading space-margin"
+          class="img-btn-pading space-margin flex-icon"
           :class="{
             'img-btn-bg': myData.isFloat == true && scrollSite < 60,
             ...hotareaClass({ idCode: myData.idCode + 'backNav' }, true),
@@ -125,7 +125,8 @@
           @click="navToCar"
           v-if="isCommon && $store.state.webtype !== '3'"
         >
-          <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i>
+          <!-- <i v-show="shoppingCartCount > 0">{{ shoppingCartCount }}</i> -->
+          <i v-show="shoppingCartCount > 0">{{numChange(shoppingCartCount)}}</i>
           <img src="static/images/card-provincial/shopping_cart.png" />
         </span>
         <!-- <van-icon
@@ -556,6 +557,14 @@ export default {
     this._getCartCount();
   },
   methods: {
+    numChange: function(nums) {
+     let num = parseInt(nums);
+      if(num > 99){
+        return "···";
+      } else {
+        return num;
+      }
+    },
     // 唤起客服
     // handleCustomer: function() {
     //   ysf('config', {
@@ -707,6 +716,7 @@ export default {
           vipUnitUserCode: "",
         },
       });
+      this.$store.state.cartEntrance = 'common';
     },
     /**
      * @description 热力统计事件
@@ -868,8 +878,8 @@ export default {
   position: relative;
 
   i {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     position: absolute;
     border: 1px solid #fff;
     text-align: center;
@@ -940,6 +950,12 @@ export default {
       .other-full {
         flex: 1;
       }
+      
+      .flex-icon{
+        display:flex;
+        justify-content :flex-start;
+        align-items :flex-end;
+      }
 
       .space-margin {
         margin-left: 8px;
@@ -952,11 +968,14 @@ export default {
       .img-btn-pading {
         position: relative;
         // padding: 12px;
-        padding-right: 55px;
-        padding-bottom: 24px;
+        // padding-right: 55px;
+        // padding-bottom: 24px;
+        width:75px;
+        height:44px;
 
         img {
           display: block;
+          margin-bottom:8px;
         }
 
         .msg-div {

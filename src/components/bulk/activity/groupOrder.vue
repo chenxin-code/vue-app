@@ -1,7 +1,7 @@
 <template>
   <!-- // created by hjc 本团订单 -->
   <div class="orderList">
-    <van-sticky>
+    <!-- <van-sticky>
       <navbar :title="'本团订单'"></navbar>
 
       <div class="tab">
@@ -13,6 +13,28 @@
           :class="currentTab == index ? 'current_tab' : ''"
         >
           {{ item.name }}
+        </div>
+      </div>
+    </van-sticky> -->
+    <van-sticky>
+      <div class="nav">
+        <div class="nav_top">
+          <div class="back" @click="$router.go(-1)">
+            <img :src="require('../activity/images/button_back.png')" alt="" />
+          </div>
+          <div class="title">本团订单</div>
+          <div class="no"></div>
+        </div>
+        <div class="nav_tabs">
+          <div
+            class="tab_item"
+            v-for="(item, index) in tab"
+            :key="index"
+            @click="changesTab(index)"
+            :class="currentTab == index ? 'current_tab' : ''"
+          >
+            {{ item.name }}
+          </div>
         </div>
       </div>
     </van-sticky>
@@ -422,6 +444,75 @@ export default {
   letter-spacing: 1px;
   background: #F6F6F6;
 
+  .nav {
+    background-color: #fff;
+    width: 100%;
+    height: 128px;
+
+    .nav_top {
+      width: 100%;
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 56px;
+      padding-bottom: 21px;
+
+      .back {
+        width: 75px;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 9px;
+          height: 16px;
+        }
+      }
+
+      .title {
+        font-size: 17px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #000000;
+      }
+
+      .no {
+        width: 75px;
+        height: 44px;
+      }
+    }
+
+    .nav_tabs {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 21px 39px 12px;
+
+      .tab_item {
+        width: 59px;
+        height: 22px;
+        background: #fff;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 22px;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #666666;
+      }
+
+      .current_tab {
+        background: #E9306D;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #FFFFFF;
+      }
+    }
+  }
+
   .tab {
     width: 100%;
     height: 36.5px;
@@ -477,7 +568,7 @@ export default {
         .goods_type {
           font-size: 14px;
           font-weight: 600;
-          color: #C82010;
+          color: #e9306d;
           line-height: 20px;
         }
       }
@@ -572,16 +663,16 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 80px;
-          height: 28px;
-          background: #C61606;
-          border-radius: 15px;
           text-align: center;
-          line-height: 28px;
-          width: 114px;
+          width: 94px;
+          height: 35px;
+          border: 1px solid #FF7BA6;
+          // border-image: linear-gradient(0deg, #FF7BA6, #E9306D) 10 10;
+          border-radius: 18px;
+          font-size: 14px;
+          font-family: PingFang SC;
           font-weight: 400;
-          color: #FFFFFF;
-          line-height: 18.5px;
+          color: #E9306D;
         }
       }
     }
@@ -627,7 +718,7 @@ export default {
       .confirm_btn {
         width: 80px;
         height: 28px;
-        background: #C61606;
+        background: #e9306d;
         border-radius: 15px;
         text-align: center;
         line-height: 28px;

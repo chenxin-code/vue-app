@@ -6,12 +6,19 @@
       title="活动详情"
     ></nav-top>
     <nav-content>
+      <div class="btn-from" @click="navToDetail">本团订单</div>
       <div class="listBox">
-        <div
-          class="listColumn"
-          v-for="(item, index) in skuList"
-          :key="index"
-        >
+        <div class="groupbuyActivityName">{{ groupbuyActivityName }}</div>
+        <div class="endTime">
+          <span></span>
+          {{ groupData.endTime }}
+        </div>
+        <div class="goodsTotal">
+          <span></span>
+          {{ skuList.length }}件商品
+        </div>
+        <div class="line"></div>
+        <div class="listColumn" v-for="(item, index) in skuList" :key="index">
           <div class="leftBox">
             <img :src="item.skuPictureUrl.split(',')[0]" alt="" />
           </div>
@@ -46,7 +53,7 @@
                 <div class="rule_detail_item">
                   <div class="rule_detail_item_box">
                     <div>最低参团人数</div>
-                    <div>{{ groupData.allMinTotalPeopleNumber  }}</div>
+                    <div>{{ groupData.allMinTotalPeopleNumber }}</div>
                   </div>
                   <div class="rule_detail_item_box">
                     <div>最低订单数量</div>
@@ -109,10 +116,14 @@ export default {
       skuList: [],
       isShowMore: false,
       groupData: {},
+      groupbuyActivityName: "",
     };
   },
   created() {
     this.activityNo = JSON.parse(this.$route.query.activityNo);
+    this.groupbuyActivityName = JSON.parse(
+      this.$route.query.groupbuyActivityName
+    );
     this.$http
       .post("/app/json/groupbuying_activity_app/getById", {
         id: this.activityNo,
@@ -143,6 +154,15 @@ export default {
         path: "/bulk_goods_deatil",
       });
     },
+    navToDetail(id) {
+      //本团订单
+      this.$router.push({
+        path: "/groupOrder",
+        query: {
+          id: JSON.stringify(this.activityNo),
+        },
+      });
+    },
   },
 };
 </script>
@@ -164,13 +184,78 @@ export default {
   .nav-content {
     overflow-y: scroll;
     padding-bottom: 79px;
+
+    .btn-from {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #FFF;
+    }
   }
 
   .listBox {
     background-color: #fff;
-    margin: 15px 10px;
-    padding: 10px;
-    border-radius: 15px 15px 0 0;
+    margin: 12px;
+    padding: 22px 18px 18px;
+    background: #FFFFFF;
+    border-radius: 12px;
+
+    .groupbuyActivityName {
+      font-size: 16px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #333333;
+      line-height: 16px;
+    }
+
+    .endTime {
+      font-size: 13px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      color: #666666;
+      line-height: 16px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin: 16px 0 12px;
+
+      span {
+        width: 5px;
+        height: 5px;
+        background: #E9306D;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+    }
+
+    .goodsTotal {
+      font-size: 13px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      color: #666666;
+      line-height: 16px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      span {
+        width: 5px;
+        height: 5px;
+        background: #E9306D;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+    }
+
+    .line {
+      width: 320px;
+      height: 1px;
+      background: #F0F0F0;
+      margin: 0 auto;
+      margin: 17px 0 0;
+    }
 
     .show_more {
       width: 100%;
@@ -184,66 +269,45 @@ export default {
   }
 
   .listColumn {
-    &:after {
-      content: ' ';
-      box-sizing: border-box;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      height: 1px;
-      border-top: 1px solid $color-line-gray-l;
-      color: $color-line-gray-l;
-      transform-origin: 0 0;
-      transform: scaleY(0.5);
-      z-index: 2;
-    }
-
-    &:last-child:after {
-      content: none;
-    }
-
-    &:first-child {
-      padding-top: 0;
-    }
-
-    &:last-child {
-      padding-bottom: 0;
-    }
-
     position: relative;
-    padding: 10px 0;
+    padding: 17px 0 17px;
     display: flex;
 
     .leftBox {
-      margin-right: 10px;
+      margin-right: 15px;
 
       img {
-        width: 110px;
-        height: 110px;
+        width: 70px;
+        height: 70px;
         object-fit: cover;
       }
     }
 
     .rightBox {
       .title {
-        color: #3C3F43;
-        font-size: 15px;
+        font-size: 14px;
+        font-family: PingFang SC;
         font-weight: bold;
-        line-height: 20px;
+        color: #333333;
+        line-height: 16px;
       }
 
       .price {
-        margin: 8px 0;
-        color: #E0483F;
-        font-size: 18px;
+        font-size: 12px;
+        font-family: PingFang SC;
         font-weight: bold;
+        text-decoration: line-through;
+        color: #999999;
+        line-height: 15px;
+        margin: 11px 0 9px;
       }
 
       .salePrice {
-        color: #999999;
-        font-size: 14px;
-        margin-bottom: 8px;
+        font-size: 13px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #F00000;
+        line-height: 15px;
       }
 
       .quantity {
@@ -257,9 +321,10 @@ export default {
   }
 
   .collapse {
-    border-radius: 10px;
-    margin: 0 10px;
+    margin: 0 12px;
     overflow: hidden;
+    background: #FFFFFF;
+    border-radius: 12px;
   }
 
   /deep/.van-collapse-item__content {

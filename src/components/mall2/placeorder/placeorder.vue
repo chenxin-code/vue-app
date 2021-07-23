@@ -13,9 +13,9 @@
                 deliveryType == 2 &&
                 occurData.needAddress == 1 &&
                 $route.params.productType != 514) ||
-              (deliveryType == 1 &&
-                $route.query.entryType != 'wish' &&
-                $route.params.productType != 514)
+                (deliveryType == 1 &&
+                  $route.query.entryType != 'wish' &&
+                  $route.params.productType != 514)
             "
           >
             <div
@@ -52,8 +52,8 @@
             <div
               v-if="
                 !($store.state.mall2.selectAddress.id > 0) &&
-                deliveryType == 2 &&
-                $route.params.productType != 514
+                  deliveryType == 2 &&
+                  $route.params.productType != 514
               "
               @click="toSelectAddress"
             >
@@ -62,8 +62,8 @@
             <div
               v-if="
                 $store.state.mall2.zitiAddress.id > 0 &&
-                deliveryType == 1 &&
-                $route.params.productType != 514
+                  deliveryType == 1 &&
+                  $route.params.productType != 514
               "
               @click="toSelectZitiAddress"
             >
@@ -137,8 +137,8 @@
               @click="openPicker"
               v-if="
                 hasShengxian == false &&
-                $store.state.globalConfig.order_pickup_time_selecter_show !=
-                  'false'
+                  $store.state.globalConfig.order_pickup_time_selecter_show !=
+                    'false'
               "
             >
               <!--没有生鲜的时候才能选时间-->
@@ -165,7 +165,7 @@
                 }}，超过自提时间后系统将自动取消订单<span
                   v-if="
                     $store.state.globalConfig.order_fresh_pickup_cancel_type !=
-                    '0'
+                      '0'
                   "
                   >并退款</span
                 ><span
@@ -290,7 +290,7 @@
                     {{ prodata.productName }}
                   </div>
                   <div class="title theme_font_black">
-                    <span>{{ prodata.specs }}</span>
+                    <span style="font-size:11px; color:#696969">{{ prodata.specs }}</span>
                   </div>
                   <div class="price">
                     <PriceOrder :productData="prodata"></PriceOrder>
@@ -310,7 +310,7 @@
                   <div
                     v-if="
                       prodata.currentSelfActivity &&
-                      prodata.currentSelfActivity.mktActivityType != ''
+                        prodata.currentSelfActivity.mktActivityType != ''
                     "
                     class="activity-type theme_bg_red"
                   >
@@ -432,8 +432,8 @@
             class="block-div"
             v-if="
               (!cardType || (cardType && cardType == 551)) &&
-              paramsData.orderCategory != 1 &&
-              $route.query.entryType !== 'wish'
+                paramsData.orderCategory != 1 &&
+                $route.query.entryType !== 'wish'
             "
           >
             <div class="flex-row" @click="couponEvent">
@@ -498,8 +498,8 @@
             class="block-div"
             v-if="
               cardList.length != 0 &&
-              paramsData.orderCategory != 1 &&
-              limitType == 'true'
+                paramsData.orderCategory != 1 &&
+                limitType == 'true'
             "
           >
             <!--<div class="table-view yj-card">-->
@@ -552,8 +552,8 @@
             class="block-div"
             v-if="
               cardType == '552' &&
-              paramsData.orderCategory != 1 &&
-              limitType == 'true'
+                paramsData.orderCategory != 1 &&
+                limitType == 'true'
             "
           >
             <div class="table-view yj-card">
@@ -601,7 +601,7 @@
               class="flex-row"
               v-if="
                 paramsData.orderCategory != 1 &&
-                $route.query.entryType != 'wish'
+                  $route.query.entryType != 'wish'
               "
             >
               <div class="label-middle full theme_font_common">优惠券</div>
@@ -613,9 +613,9 @@
               class="flex-row"
               v-if="
                 limitType == 'true' &&
-                cardList.length != 0 &&
-                (cardDetails.cardName || $route.params.cardName) &&
-                radio != 'a'
+                  cardList.length != 0 &&
+                  (cardDetails.cardName || $route.params.cardName) &&
+                  radio != 'a'
               "
             >
               <div class="label-middle full theme_font_common">
@@ -645,7 +645,7 @@
               v-for="digital in occurData.digitalList"
               v-if="
                 digital.payDigital > digital.fixedDigital &&
-                digital.acctType != 'LimitWallet'
+                  digital.acctType != 'LimitWallet'
               "
             >
               <!--去掉易捷卡的展示-->
@@ -676,12 +676,12 @@
         </div>
 
         <div class="bottom-btns">
-          <div
+          <!-- <div
             class="tip theme_bg_yl theme_standard_font theme_light_bg"
             v-if="deliveryType == 2 && occurData.needAddress == 1"
           >
-            {{ $store.state.mall2.selectAddress.addressFull }}
-          </div>
+            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
+          </div> -->
           <div
             class="btn theme_standard_bg theme_font_white"
             v-if="buyType == 'songli'"
@@ -699,7 +699,7 @@
           <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
           <div class="price">
             <div class="rmb-div" v-if="Object.keys(occurData).length">
-              <span class="count">共{{count}}件</span>
+              <span class="count">共{{ count }}件</span>
 
               <span
                 class="theme_font_red"
@@ -726,7 +726,7 @@
                   v-if="
                     digitalindex !=
                       $mallCommon.getFirstVartualIndex(occurData) ||
-                    $mallCommon.getOccurShowPrice(occurData)
+                      $mallCommon.getOccurShowPrice(occurData)
                   "
                   >+</span
                 >
@@ -739,7 +739,7 @@
               </div>
             </div>
           </div>
-          <div class="adapter-iphoneX" v-if="isX"></div>
+          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
         </div>
         <!--          易捷卡弹框（充值卡）-->
         <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
@@ -802,7 +802,7 @@
             :class="{
               theme_light_bg: payWaySelected == payway.tag,
               theme_standard_font_i: payWaySelected == payway.tag,
-              theme_standard_bdr_i: payWaySelected == payway.tag,
+              theme_standard_bdr_i: payWaySelected == payway.tag
             }"
             @click="payWayEvent(payway)"
             v-for="payway in payWays"
@@ -828,7 +828,7 @@
             :class="{
               theme_light_bg: payWaySelected == index,
               theme_standard_font_i: payWaySelected == index,
-              theme_standard_bdr_i: payWaySelected == index,
+              theme_standard_bdr_i: payWaySelected == index
             }"
             @click="payWayEvent1(payway, index)"
             v-for="(payway, index) in payWays1"
@@ -992,7 +992,7 @@ export default {
   name: "placeorder",
   components: {
     PriceOrder,
-    Agreement,
+    Agreement
   },
   data() {
     return {
@@ -1003,8 +1003,8 @@ export default {
       payWays: [
         {
           text: "在线支付",
-          tag: "1",
-        },
+          tag: "1"
+        }
         // {
         //   text: "货到付款",
         //   tag: "0",
@@ -1017,8 +1017,8 @@ export default {
       payWays1: [
         {
           text: "在线支付",
-          tag: "1",
-        },
+          tag: "1"
+        }
         // {
         //   text: "货到付款",
         //   tag: "0",
@@ -1082,7 +1082,7 @@ export default {
       overFlag: false,
       wishData: {
         payNiceName: "",
-        payMsg: "",
+        payMsg: ""
       },
       buyType: "",
       lbId: "",
@@ -1095,8 +1095,7 @@ export default {
       microStoreCode: "",
       proSkuDistributionId: "",
       pickupStartTime: new Date(),
-      count: 0,
-      isX:false,
+      count: 0
     };
   },
   computed: {
@@ -1150,7 +1149,7 @@ export default {
         this.$store.state.globalConfig.appCanEditReferrer == 1 ||
         !this.recommend
       );
-    },
+    }
   },
   created() {
     console.log(this.$route.params.cutPrice);
@@ -1169,7 +1168,7 @@ export default {
     // 获取LimitWallet的limitType
     let acctList = this.$store.state.globalConfig.acctList || [];
     let startUsing = "";
-    acctList.forEach((item) => {
+    acctList.forEach(item => {
       if (item.acctType == "LimitWallet") {
         startUsing = item.startUsing;
       }
@@ -1210,12 +1209,12 @@ export default {
           userAddress: this.$store.state.mall2.selectAddress,
           pickupId: this.$route.query.pickupId,
           userAddressId: this.$store.state.mall2.selectAddress.id,
-          deliveryType: this.deliveryType,
+          deliveryType: this.deliveryType
         };
         if (this.$route.query.pickupId) {
           this.$mallCommon.getSysStoreById(
             this.$route.query.pickupId,
-            (pickupAddress) => {
+            pickupAddress => {
               this.$store.state.mall2.zitiAddress = pickupAddress;
               sessionStorage.setItem(
                 "RHY_Pickup_Address",
@@ -1250,7 +1249,7 @@ export default {
           } else {
             this.$MessageBox
               .alert("当前状态不支持刷新！", "提示")
-              .then((action) => {
+              .then(action => {
                 this.$router.go(-1);
               });
           }
@@ -1290,17 +1289,6 @@ export default {
     if (this.$route.query.entryType == "wish") {
       this.getWishMsg(1);
     }
-
-
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375)) {
-      //是iphoneX
-      console.log('是iphonex')
-      this.isX = true;
-    } else {
-      //不是iphoneX
-      console.log('不是iphonex')
-      this.isX = false;
-    }
   },
   mounted() {
     this.pageType = this.$route.query.pageType;
@@ -1329,7 +1317,7 @@ export default {
   },
   methods: {
     // 家政服务，选中服务时间
-    openServiceTimePicker: function () {
+    openServiceTimePicker: function() {
       let curDate = new Date();
       let nextDay = new Date(curDate.getTime() + 24 * 60 * 60 * 1000);
       DatetimePicker.open({
@@ -1340,10 +1328,10 @@ export default {
           console.log(date, time);
           this.selectedServiceTime = {
             date: date,
-            time: time,
+            time: time
           };
           // this.serviceDateTime = this.selectedServiceTime.date.dateStr + ' ' + this.selectedServiceTime.time.label
-        },
+        }
       });
     },
     // 去认证
@@ -1352,13 +1340,13 @@ export default {
       if (type == 1) {
         this.$router.push({
           path: "/authentication/index",
-          query: {},
+          query: {}
         });
         //个人实名认证
       } else {
         this.$router.push({
           path: "/authentication/index",
-          query: {},
+          query: {}
         });
       }
     },
@@ -1372,11 +1360,11 @@ export default {
         this.contratWayText = "个人";
       }
     },
-    getAuthInfo: function () {
+    getAuthInfo: function() {
       let params = {};
       this.$http
         .post("/app/json/app_purchase_order/getAuthInfo", params)
-        .then((res) => {
+        .then(res => {
           let data = res.data;
           console.log(res);
           if (data.status == 0) {
@@ -1386,16 +1374,16 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$Toast(err);
         });
     },
-    toServiceEvent: function (item) {
+    toServiceEvent: function(item) {
       let url = "/app/json/product/getThirdServeDetail";
       let paramsData = {
-        id: item.thirdServeId,
+        id: item.thirdServeId
       };
-      this.$http.post(url, paramsData).then((res) => {
+      this.$http.post(url, paramsData).then(res => {
         let data = res.data;
         if (data.status == 0) {
           let pageUrl = data.data.pageUrl;
@@ -1425,7 +1413,7 @@ export default {
         }
       });
     },
-    getSelectReceiveTime: function () {
+    getSelectReceiveTime: function() {
       // order.fresh.pickup.timeout.startday";             // 生鲜提货时间开始天数
       // order.fresh.pickup.timeout.starttime";            // 生鲜提货时间开始时间
       let sd =
@@ -1446,7 +1434,7 @@ export default {
 
       return str;
     },
-    getReceiveEndTime: function () {
+    getReceiveEndTime: function() {
       // "order.fresh.pickup.timeout.endtime";                // 生鲜提货时间截止时间
       // order.fresh.pickup.timeout.endday";                 // 生鲜提货时间截止天数
       let ed =
@@ -1471,9 +1459,9 @@ export default {
       // 大屏扫码购  获取长码 结算信息
       this.$request
         .post("/app/json/short_address/getShortAddress", {
-          code: code,
+          code: code
         })
-        .then((res) => {
+        .then(res => {
           if (res.status == 0) {
             let data = JSON.parse(res.data.addressData);
             this.deliveryType = data.deliveryType;
@@ -1486,7 +1474,7 @@ export default {
           }
         });
     },
-    getTotalPriceDuan: function (index) {
+    getTotalPriceDuan: function(index) {
       let str = this.$util.toDecimal2(this.occurData.payAmount);
       let arr = str.split(".");
       return arr[index];
@@ -1508,17 +1496,17 @@ export default {
       }
       // 获取我的卡包列表
       let proSkus = [];
-      this.occurData.store.forEach((item) => {
-        item.noActivityCart.forEach((item2) => {
+      this.occurData.store.forEach(item => {
+        item.noActivityCart.forEach(item2 => {
           proSkus.push({ skuId: item2.skuId, storeOuCode: item2.storeOuCode });
         });
       });
 
       this.$request
         .post("/app/json/app_user_easy_card/getCardList", {
-          proSkus: proSkus,
+          proSkus: proSkus
         })
-        .then((res) => {
+        .then(res => {
           if (res.status == 0) {
             this.cardList = res.data || [];
             if (this.cardList.length) {
@@ -1544,7 +1532,7 @@ export default {
         this.cardDetails = "";
       }
     },
-    getCanNotUseStr: function (state) {
+    getCanNotUseStr: function(state) {
       if (state == 1 || state == 3) {
         return "余额不足";
       } else if (state == 1) {
@@ -1556,13 +1544,13 @@ export default {
     // 虚拟支付
     // 字典匹配
     // 1.先从字典库查询所有的值存在本地
-    getDictByAlias: function () {
+    getDictByAlias: function() {
       let Url = "/app/json/app_dict/getDictByAlias";
       let paramsData = {
         token: this.$store.state.login.token,
-        alias: "rewards_group",
+        alias: "rewards_group"
       };
-      this.$http.post(Url, paramsData).then((res) => {
+      this.$http.post(Url, paramsData).then(res => {
         let data = res.data;
         if (data.status == 0 && data.data.length != 0) {
           this.dictByAlias = data.data;
@@ -1590,13 +1578,13 @@ export default {
     //   }
     // },
     // 3. 匹配公共的虚拟支付名称
-    getDigitalDisplayName: function (acctType) {
+    getDigitalDisplayName: function(acctType) {
       return this.$mallCommon.accTypeToName(acctType, "200001");
     },
-    pointsRuleEvent: function () {
+    pointsRuleEvent: function() {
       this.showPointsRule = true;
     },
-    getEndDate: function () {
+    getEndDate: function() {
       let cancelTime =
         this.$store.state.globalConfig.order_timeout_pickup_cancel || 0;
       let dd = new Date(this.pickupStartTime.getTime());
@@ -1607,17 +1595,17 @@ export default {
       }
       return dd;
     },
-    scanCodeFunc: function () {
-      this.$bridgefunc.scanCode((dic) => {
+    scanCodeFunc: function() {
+      this.$bridgefunc.scanCode(dic => {
         this.scanCode = dic.code;
         this.referrer = dic.code;
       });
     },
 
-    getTotalPrice: function () {
+    getTotalPrice: function() {
       return this.$util.toDecimal2(this.occurData.payAmount);
     },
-    getImgArrs: function (store) {
+    getImgArrs: function(store) {
       let arr = [];
       for (let i = 0; i < store.activity.length; i++) {
         let a1 = store.activity[i].cart;
@@ -1635,7 +1623,7 @@ export default {
       }
       return arr;
     },
-    getNoStockImgArrs: function (store) {
+    getNoStockImgArrs: function(store) {
       let noStockArr = [];
       let canBuyArr = [];
       for (let i = 0; i < store.activity.length; i++) {
@@ -1661,7 +1649,7 @@ export default {
               proSkuDistributionId: item.proSkuDistributionId || "",
               checked: item.checked,
               isGift: item.isGift,
-              spCode: item.spCode,
+              spCode: item.spCode
               //selfActivityId: item.currentSelfActivity != '' ? item.currentSelfActivity.mktActivityId : '',
             };
             if (
@@ -1715,7 +1703,7 @@ export default {
             proSkuDistributionId: item.proSkuDistributionId || "",
             checked: item.checked,
             isGift: item.isGift,
-            spCode: item.spCode,
+            spCode: item.spCode
           };
           if (
             item.currentSelfActivity != "" &&
@@ -1750,7 +1738,7 @@ export default {
     //   console.log(number)
     //   console.log('我是number')
     // },
-    showFreightDetail: function () {
+    showFreightDetail: function() {
       let storeArr = [];
       for (let i = 0; i < this.occurData.store.length; i++) {
         let store = this.occurData.store[i];
@@ -1764,14 +1752,14 @@ export default {
 
       Freight.open({
         initData: {
-          listData: storeArr,
+          listData: storeArr
         },
         sureEvent: () => {
           Freight.close();
-        },
+        }
       });
     },
-    pickerConfirm: function (value) {
+    pickerConfirm: function(value) {
       // let nowTime = this.$util.getDataString(value)
       // let orderTime = this.$store.state.globalConfig.order_timeout_pickup_cancel * 60 * 60 * 1000
       // let time = parseInt(nowTime) + parseInt(orderTime)
@@ -1784,11 +1772,11 @@ export default {
     openPicker() {
       this.$refs.dateDom.open();
     },
-    showProsDetailEvent: function (store) {
+    showProsDetailEvent: function(store) {
       this.currentStore = store;
       this.showProsDetail = true;
     },
-    getPeisongString: function (type) {
+    getPeisongString: function(type) {
       if (type == "0") {
         return "快递配送";
       } else if (type == "1") {
@@ -1796,7 +1784,7 @@ export default {
       }
       return "第三方配送";
     },
-    toSelectZitiAddress: function () {
+    toSelectZitiAddress: function() {
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
         return;
       }
@@ -1810,26 +1798,26 @@ export default {
       this.$router.push({
         path: "/mall2/mypickupaddress",
         query: {
-          skuIds: JSON.stringify(skuIds),
-        },
+          skuIds: JSON.stringify(skuIds)
+        }
       });
     },
-    toSelectAddress: function () {
+    toSelectAddress: function() {
       this.$router.push({
-        path: "/mall2/addresslist",
+        path: "/mall2/addresslist"
       });
     },
     // 获取前面已填写的发票
-    useInvoiceEvent: function () {
+    useInvoiceEvent: function() {
       this.useInvoice = !this.useInvoice;
       if (this.useInvoice && this.invoiceData == null) {
         this.$Loading.open();
         let url = "/app/json/order_invoice/loadTwoTypeDefaultUserInvoiceHead";
         let paramsData = {
-          token: this.$store.state.login.token,
+          token: this.$store.state.login.token
         };
         this.$http.post(url, paramsData).then(
-          (res) => {
+          res => {
             this.$Loading.close();
             let data = res.data;
             if (data.status == 0) {
@@ -1852,20 +1840,20 @@ export default {
               this.$Toast(data.info);
             }
           },
-          (error) => {
+          error => {
             this.$Loading.close();
             this.$Toast("请求数据失败！");
           }
         );
       }
     },
-    changeInvoice: function () {
+    changeInvoice: function() {
       Invoice.open({
         initData: {
           ...this.invoiceData,
-          token: this.$store.state.login.token,
+          token: this.$store.state.login.token
         },
-        selectedInvoice: (invoice) => {
+        selectedInvoice: invoice => {
           console.log(invoice);
           this.currentInvoice = invoice;
           if (invoice.type == 0) {
@@ -1888,10 +1876,10 @@ export default {
         },
         invoiceInformation: () => {
           this.showAgreement = true;
-        },
+        }
       });
     },
-    reloadSelectedCoupon: function () {
+    reloadSelectedCoupon: function() {
       if (this.backReloadCoupon == false) {
         return;
       }
@@ -1901,7 +1889,7 @@ export default {
       if (couNo.length > 0) {
         for (let i = 0; i < couNo.length; i++) {
           this.usedCoupons.push({
-            couNo: couNo[i],
+            couNo: couNo[i]
           });
         }
       }
@@ -1925,7 +1913,7 @@ export default {
         this.occurData.userCanUseWhenNotSelectCoupon
       );
     },
-    couponEvent: function () {
+    couponEvent: function() {
       let canCoupons = [];
       for (let i = 0; i < this.occurData.userCanUseCoupon.length; i++) {
         let couNo1 = this.occurData.userCanUseCoupon[i].couNo;
@@ -1954,17 +1942,17 @@ export default {
           payAmount: this.$util.toDecimal2(
             parseFloat(this.occurData.payAmount) +
               parseFloat(this.occurData.couponAmount)
-          ),
+          )
         },
-        selectedCoupon: (couponArr) => {
+        selectedCoupon: couponArr => {
           this.usedCoupons = couponArr;
           this.backReloadCoupon = true;
           this._reSettleCart(null);
           //Coupon.close();
-        },
+        }
       });
     },
-    useDigitalEvent: function (digital) {
+    useDigitalEvent: function(digital) {
       if (digital.userCanUseDigital <= 0) {
         let str = this.getCanNotUseStr(digital.deductionState);
         this.$Toast(
@@ -1988,7 +1976,7 @@ export default {
 
         this.payDigitals.push({
           acctType: acctType,
-          payDigital: digital.userCanUseDigital + digital.fixedDigital,
+          payDigital: digital.userCanUseDigital + digital.fixedDigital
         });
       } else {
         let arr = [];
@@ -1998,7 +1986,7 @@ export default {
           } else {
             arr.push({
               acctType: acctType,
-              payDigital: digital.fixedDigital,
+              payDigital: digital.fixedDigital
             });
           }
         }
@@ -2006,7 +1994,7 @@ export default {
       }
       this._reSettleCart(null);
     },
-    usePointsEvent: function () {
+    usePointsEvent: function() {
       if (this.occurData.userCanUsePoints == 0) {
         this.$Toast("您没有当前订单可用积分！");
         return;
@@ -2015,18 +2003,18 @@ export default {
         this._reSettleCart(null);
       }
     },
-    payWayShow: function () {
+    payWayShow: function() {
       //企业团购
       if (this.pageType == 2) {
-        this.payWayPopShow1 = true;
+        // this.payWayPopShow1 = true;
       } else {
-        this.payWayPopShow = true;
+        // this.payWayPopShow = true;
       }
     },
-    contratWayShow: function () {
+    contratWayShow: function() {
       this.getAuthInfo();
     },
-    payWayEvent: function (payway) {
+    payWayEvent: function(payway) {
       if (payway.tag == 0) {
         this.$Toast("暂不支持！");
         return;
@@ -2034,7 +2022,7 @@ export default {
       this.payWaySelected = payway.tag;
       this.payWayText = payway.text;
     },
-    payWayEvent1: function (payway, index) {
+    payWayEvent1: function(payway, index) {
       if (payway.tag == 0) {
         this.$Toast("暂不支持！");
         return;
@@ -2042,26 +2030,26 @@ export default {
       this.payWaySelected = index;
       this.payWayText = payway.text;
     },
-    popSureEvent: function () {
+    popSureEvent: function() {
       this.payWayPopShow = false;
     },
-    popSureEvent1: function () {
+    popSureEvent1: function() {
       this.contratWayPopShow = false;
     },
-    popSureEvent2: function () {
+    popSureEvent2: function() {
       this.payWayPopShow1 = false;
     },
-    popClose: function () {
+    popClose: function() {
       this.payWayPopShow = false;
     },
-    popClose2: function () {
+    popClose2: function() {
       this.payWayPopShow1 = false;
     },
-    popClose1: function () {
+    popClose1: function() {
       this.contratWayPopShow = false;
     },
     // 重新结算
-    _reSettleCart: function (carts, cardNo) {
+    _reSettleCart: function(carts, cardNo) {
       console.log(333);
       this.$Loading.open();
       let url = "/app/json/app_cart/SettleCart";
@@ -2103,7 +2091,7 @@ export default {
       paramsData.payDigital = arr;
 
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           this.complete = true;
@@ -2121,14 +2109,14 @@ export default {
             this.reloadSelectedCoupon();
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
           this.reloadSelectedCoupon();
         }
       );
     },
-    checkProductStock: function () {
+    checkProductStock: function() {
       if (this.pageType == 2) {
         if (!this.selectItem.realName) {
           this.$Toast("请选择预约单联系方式！");
@@ -2232,7 +2220,7 @@ export default {
       if (hasNoStockItem) {
         NoStock.open({
           initData: {
-            listData: storeArr,
+            listData: storeArr
           },
           cancelEvent: () => {
             NoStock.close();
@@ -2240,7 +2228,7 @@ export default {
           submitEvent: () => {
             NoStock.close();
             this._reSettleCart(carts);
-          },
+          }
         });
       } else {
         if (this.pageType == 2) {
@@ -2273,7 +2261,7 @@ export default {
           className: "price-con",
           getContainer: ".placeorder",
           cancelButtonText: "算了吧~",
-          message: `您的订单金额已到达改价金额${this.$store.state.globalConfig.bulkpurchase_modifyprice}元，可选择联系管理员进行改价后进行支付`,
+          message: `您的订单金额已到达改价金额${this.$store.state.globalConfig.bulkpurchase_modifyprice}元，可选择联系管理员进行改价后进行支付`
         })
           .then(() => {
             that.checkCouponPrice(carts);
@@ -2287,23 +2275,23 @@ export default {
         that.checkCouponPrice(carts);
       }
     },
-    checkCouponPrice: function (carts) {
+    checkCouponPrice: function(carts) {
       if (
         this.occurData.cashCouponFaceValue > this.occurData.cashCouponAmount
       ) {
         this.$MessageBox
           .confirm("您的优惠券金额比订单金额大，确定使用吗？", "提示", {
-            confirmButtonText: "确定",
+            confirmButtonText: "确定"
           })
-          .then((action) => {
+          .then(action => {
             this.checkNeedPwd(carts);
           })
-          .catch((action) => {});
+          .catch(action => {});
       } else {
         this.checkNeedPwd(carts);
       }
     },
-    checkNeedPwd: function (carts) {
+    checkNeedPwd: function(carts) {
       // needPayPwd: false, // 是否需要支付密码
       // payPwdState: 0, // 支付密码状态 0 未设置支付密码 1 支付密码已锁定 2 已设置支付密码
       this.digitalPWD = "";
@@ -2325,22 +2313,22 @@ export default {
           }
           DigitalPwd.open({
             initData: {
-              payPwdState: this.occurData.payPwdState,
+              payPwdState: this.occurData.payPwdState
             },
             toSettingPwd: () => {
               this.$router.push({
                 path: "/usercenter/nosetpwd",
                 query: {
-                  isSet: 0,
-                },
+                  isSet: 0
+                }
               });
               DigitalPwd.close();
             },
-            inputFinished: (value) => {
+            inputFinished: value => {
               this.digitalPWD = value;
               this._submitOrder(carts);
               DigitalPwd.close();
-            },
+            }
           });
         } else {
           this._submitOrder(carts);
@@ -2349,40 +2337,40 @@ export default {
         this._submitOrder(carts);
       }
     },
-    pustLiveStreamMsg: function () {
+    pustLiveStreamMsg: function() {
       if (this.lbId == "") {
         return;
       }
       let url = "/app/json/live_broadcast/comment";
       let params = {
         lbId: this.lbId,
-        content: "【下单】成功下单 " + this.lsProductName + " 🎉🎉🎉",
+        content: "【下单】成功下单 " + this.lsProductName + " 🎉🎉🎉"
       };
 
       this.$http.post(url, params).then(
-        (res) => {
+        res => {
           let data = res.data;
           if (data.status == 0) {
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           console.log(error);
         }
       );
     },
-    updateBargainPayInfo: function (item) {
+    updateBargainPayInfo: function(item) {
       let url = "/app/json/user_bargain/updateBargainPayInfo";
       let params = {
         id: item.id,
-        orderId: item.orderId,
+        orderId: item.orderId
       };
-      this.$http.post(url, params).then((res) => {
+      this.$http.post(url, params).then(res => {
         // 砍价 前端不进行任何操作
       });
     },
-    _submitOrder: function (carts) {
+    _submitOrder: function(carts) {
       let url = "/app/json/app_shopping_order/submit";
       let paramsData = this.$util.deepClone(this.paramsData);
       if (this.deliveryType == 1) {
@@ -2420,7 +2408,7 @@ export default {
         let astore = this.occurData.store[i];
         let rm = {
           storeOuCode: astore.storeOuCode,
-          remark: astore.remark,
+          remark: astore.remark
         };
         paramsData.remark.push(rm);
       }
@@ -2500,15 +2488,16 @@ export default {
         paramsData.microStoreCode = this.microStoreCode;
       }
       this.$Loading.open();
+      console.log(paramsData);
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
             if (paramsData.bargainOrderId) {
               this.updateBargainPayInfo({
                 id: paramsData.bargainOrderId,
-                orderId: data.data.orderId,
+                orderId: data.data.orderId
               });
             }
             sessionStorage.removeItem("RHY_Pickup_Address");
@@ -2523,8 +2512,8 @@ export default {
                   query: {
                     payInfo: JSON.stringify(data.data),
                     carts: JSON.stringify(carts),
-                    deliveryType: this.deliveryType,
-                  },
+                    deliveryType: this.deliveryType
+                  }
                 });
               } else {
                 this.$router.replace({
@@ -2533,8 +2522,8 @@ export default {
                     selectedIndex: 1,
                     orderCategory: this.paramsData.orderCategory,
                     vipUnitUserCode: this.paramsData.vipUnitUserCode,
-                    name: this.$route.params.name,
-                  },
+                    name: this.$route.params.name
+                  }
                 });
               }
             } else {
@@ -2549,8 +2538,8 @@ export default {
                     buyType: this.buyType, // songli
                     giftCards: JSON.stringify(carts),
                     deliveryType: this.deliveryType,
-                    lbId: this.lbId,
-                  },
+                    lbId: this.lbId
+                  }
                 });
               } else {
                 this.$router.replace({
@@ -2565,8 +2554,8 @@ export default {
                     deliveryType: this.deliveryType,
                     name: this.$route.params.name,
                     lbId: this.lbId,
-                    cutPrice: true, // 砍价
-                  },
+                    cutPrice: true // 砍价
+                  }
                 });
               }
             }
@@ -2574,13 +2563,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    returnStoreProducts: function (store) {
+    returnStoreProducts: function(store) {
       let num = 0;
       let num1 = 0; // 商品个数总数
       let proArr = [];
@@ -2622,13 +2611,13 @@ export default {
         num: num,
         proNum: num1,
         proArr: proArr,
-        serviceArr: serviceArr,
+        serviceArr: serviceArr
       };
       store.storeProData = storeProData;
 
       this.count = store.storeProData.proNum;
     },
-    initData: function () {
+    initData: function() {
       this.pointsGain = this.lastRes.pointsGain;
       this.occurData = this.lastRes.occur[0];
       let beginPickupTime = this.occurData.beginPickupTime;
@@ -2655,7 +2644,7 @@ export default {
       if (couNo && couNo.length > 0) {
         for (let i = 0; i < couNo.length; i++) {
           this.usedCoupons.push({
-            couNo: couNo[i],
+            couNo: couNo[i]
           });
         }
       }
@@ -2670,39 +2659,57 @@ export default {
           this.payDigitals.push({
             acctType: dItem.acctType,
             userBalanceDigital: dItem.userBalanceDigital,
-            payDigital: dItem.userCanUseDigital + dItem.fixedDigital,
+            payDigital: dItem.userCanUseDigital + dItem.fixedDigital
           });
         } else {
           this.payDigitals.push({
             acctType: dItem.acctType,
             userBalanceDigital: dItem.userBalanceDigital,
-            payDigital: dItem.fixedDigital,
+            payDigital: dItem.fixedDigital
           });
         }
       }
 
       this.reloadSelectedCoupon();
     },
-    noMath: function () {
+    noMath: function() {
       let noMatch = this.$route.params.noMatch
         ? this.$route.params.noMatch
         : false;
       if (noMatch) {
         this.$MessageBox
           .confirm("没有相关区域的收货地址，是否要添加？", "提示", {
-            confirmButtonText: "确定",
+            confirmButtonText: "确定"
           })
-          .then((action) => {
+          .then(action => {
             this.$router.push({
               path: "addaddress",
               query: {
                 type: 1,
                 isSave: true,
-                direct: "direct",
-              },
+                direct: "direct"
+              }
             });
           })
-          .catch((action) => {});
+          .catch(action => {});
+      }else {
+        if(this.$store.state.mall2.selectAddress.id == "" || this.$store.state.mall2.selectAddress.id == "undefined") {
+          this.$MessageBox
+            .confirm("没有相关区域的收货地址，是否要添加？", "提示", {
+              confirmButtonText: "确定"
+            })
+            .then(action => {
+              this.$router.push({
+                path: "addaddress",
+                query: {
+                  type: 1,
+                    isSave: true,
+                  direct: "direct"
+                }
+              });
+            })
+          .catch(action => {});
+        }
       }
     },
 
@@ -2711,9 +2718,9 @@ export default {
       this.$http
         .post("/app/json/wish_order/getRandomWishOrderConfig", {
           type: 2,
-          isDefault,
+          isDefault
         })
-        .then((res) => {
+        .then(res => {
           let data = res.data;
           if (data.status == 0) {
             this.wishData = data.data;
@@ -2721,17 +2728,17 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$Toast(err);
         });
     },
-    getContentTop: function () {
+    getContentTop: function() {
       if (this.noNavTop) {
         return "top: 0px;";
       }
       return "";
     },
-    ...mapActions(["rfrCodeMapAction"]),
+    ...mapActions(["rfrCodeMapAction"])
   },
   activated() {
     if (this.isFirst) {
@@ -2752,7 +2759,7 @@ export default {
       this.$keepaliveHelper.deleteCache(this);
     }
     next();
-  },
+  }
 };
 </script>
 
@@ -2949,7 +2956,7 @@ export default {
           text-align: end;
 
           .count{
-            margin-right:10px;  
+            margin-right:10px;
           }
         }
 
