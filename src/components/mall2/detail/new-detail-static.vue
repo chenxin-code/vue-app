@@ -4313,12 +4313,16 @@ export default {
   height: 39px;
   background: linear-gradient(270deg, #FFC360 0%, #FFA500 100%);
   border-radius: 20px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  
   .title{
     font-size: 15px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #FFFFFF;
-    padding: 11px 5px;
+    padding: 0 !important;
     // line-height: 21px;
   }
 }
