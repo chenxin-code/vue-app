@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-23 17:32:28
+ * @LastEditTime: 2021-07-23 18:28:27
 -->
 <template>
   <div class="bill-detail">
@@ -65,7 +65,10 @@
           >
             <van-list
               class="tab-list-box"
-              :class="[showEmpty ? 'empty' : '', !isFinishBill && !showEmpty ? 'not-pay-bill' : '']"
+              :class="[
+                showEmpty ? 'empty' : '',
+                !isFinishBill && !showEmpty ? 'not-pay-bill' : ''
+              ]"
               v-model="loading"
               :finished="finished"
               :finished-text="showFinishText ? '- 亲, 没有更多账单了 -' : ''"
@@ -576,6 +579,7 @@ export default {
     //下拉刷新
     onRefresh() {
       this.$refs.payDiv.isShow = false; //隐藏底部支付全选按钮
+      this.$refs.payDiv.isChecked = false; //取消勾选全选按钮
       this.checkData = new Set();
       this.mergeAmount = 0; //合计选中的账单总金额
       this.payTotal = 0;
