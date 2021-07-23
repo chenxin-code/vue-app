@@ -8,13 +8,27 @@
       <div class="type">受理中</div>
     </div>
     <div class="cardContent">
-      <img src="../../img/test.jpg" alt="" class="orderImg" />
-      <div class="content">
-        <div class="goodsName">兰舟水果利口青梅酒VOL8% 350ML（一瓶装）件</div>
-        <div class="sku">
-          <div class="price">¥35.9</div>
-          <div class="num">x1</div>
+      <div v-if="goodsDeatilList.length == 1" class="alone">
+        <img src="../../img/test.jpg" alt="" class="orderImg" />
+        <div class="content">
+          <div class="goodsName">兰舟水果利口青梅酒VOL8% 350ML（一瓶装）件</div>
+          <div class="sku">
+            <div class="price">¥35.9</div>
+            <div class="num">x1</div>
+          </div>
         </div>
+      </div>
+      <div v-else class="more">
+        <div class="moreOrderImg">
+          <img
+            :src="item"
+            alt=""
+            class="orderImg"
+            v-for="(item, index) in moreGoodsList"
+            :key="index"
+          />
+        </div>
+        <div class="moreTotal">共4件</div>
       </div>
     </div>
     <div class="cardFoot">
@@ -36,7 +50,14 @@
 export default {
   name: "afterSalesItem",
   data() {
-    return {};
+    return {
+      goodsDeatilList: [1, 1],
+      moreGoodsList: [
+        require("../../img/test.jpg"),
+        require("../../img/test.jpg"),
+        require("../../img/test.jpg"),
+      ],
+    };
   },
 };
 </script>
@@ -92,47 +113,83 @@ export default {
     justify-content: flex-start;
     margin-top: 17px;
 
-    .orderImg {
-      display: block;
-      width: 90px;
-      height: 90px;
-      margin-right: 13px;
-    }
-
-    .content {
+    .alone {
       display: flex;
-      flex-direction: column;
       justify-content: flex-start;
 
-      .goodsName {
-        font-size: 16px;
-        font-family: PingFangSC-Semibold, PingFang SC;
-        font-weight: 600;
-        color: #121212;
-        line-height: 22px;
+      .orderImg {
+        display: block;
+        width: 90px;
+        height: 90px;
+        margin-right: 13px;
       }
 
-      .sku {
+      .content {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        .goodsName {
+          font-size: 16px;
+          font-family: PingFangSC-Semibold, PingFang SC;
+          font-weight: 600;
+          color: #121212;
+          line-height: 22px;
+        }
+
+        .sku {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 11px;
+
+          .price {
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #8D8D8D;
+            line-height: 18px;
+          }
+
+          .num {
+            font-size: 13px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #8D8D8D;
+            line-height: 18px;
+          }
+        }
+      }
+    }
+
+    .more {
+      display: flex;
+      justify-content: space-between;
+
+      .moreOrderImg {
+        display: flex;
+        justify-content: flex-start;
+
+        .orderImg {
+          display: block;
+          width: 90px;
+          height: 90px;
+          margin-right: 6px;
+        }
+      }
+
+      .moreTotal {
+        display: flex;
+        justify-content: center;
         align-items: center;
-        margin-top: 11px;
-
-        .price {
-          font-size: 13px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #8D8D8D;
-          line-height: 18px;
-        }
-
-        .num {
-          font-size: 13px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #8D8D8D;
-          line-height: 18px;
-        }
+        margin-left: 7px;
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #8D8D8D;
+        line-height: 18px;
+        white-space: nowrap;
+        flex-wrap: nowrap;
       }
     }
   }
