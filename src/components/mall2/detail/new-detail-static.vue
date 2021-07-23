@@ -1277,7 +1277,8 @@
                                                                                                                             {{ $store.state.mall2.cartNum }}
                                                                                                                             </p>
                                                                                                                         </template>
-                                                                                                                        <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i>
+                                                                                                                        <!-- <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i> -->
+                                                                                                                        <img src="static/image/mall2/cart.png" alt="" class="btn-img">
                                                                                                                         <p class="text">购物车</p>
                                                                                                                     </div>
                                                                                                                     <div
@@ -1292,24 +1293,25 @@
                                                                                                                         class="btn full"
                                                                                                                         @click="collectEvent"
                                                                                                                       >
-                                                                                                                        <i
+                                                                                                                        <!-- <i
                                                                                                                           class="iconfont mall-shoucang btn-icon theme_font_gray"
                                                                                                                           v-if="isCollect == false"
-                                                                                                                        ></i>
+                                                                                                                        ></i> -->
+                                                                                                                        <img src="static/image/mall2/cancelCollect.png" alt="" class="btn-img" v-show="isCollect == false">
                                                                                                                           <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
-                                                                                                                          <transition :name="collectName">
-                                                                                                                            <img
-                                                                                                                              class="btn-img"
-                                                                                                                              src="static/image/mall2/collect.png"
-                                                                                                                              v-if="isCollect == true"
-                                                                                                                            />
-                                                                                                                          </transition>
-                                                                                                                          <p class="text">收藏</p>
-                                                                                                                          </div>
+                                                                                                                          <!-- <transition :name="collectName">
+                                                                                                                          </transition> -->
+                                                                                                                        <img
+                                                                                                                          class="btn-img"
+                                                                                                                          src="static/image/mall2/collect.png"
+                                                                                                                          v-show="isCollect == true"
+                                                                                                                        />
+                                                                                                                        <p class="text">收藏</p>
+                                                                                                                      </div>
                                                                                                                           <div class="btn full" @click="handleCustomer">
-          <i class="iconfont service btn-icon theme_font_gray">
-            <img src="static/images/card-provincial/customer_service_black.png" alt="">
-          </i>
+          <!-- <i class="iconfont service btn-icon theme_font_gray">
+          </i> -->
+          <img src="static/images/card-provincial/customer_service_black.png" alt="" class="btn-img">
           <p class="text">客服</p>
         </div>
                                                                                                                           <div
@@ -1374,21 +1376,21 @@
                                                                                                                                   <!--<p class="title">'商品已下架'</p>-->
                                                                                                                                   <!--</div>-->
                                                                                                                                   <div
-                                                                                                                                    class="btn big-btn theme_bg_y theme_font_white radius"
+                                                                                                                                    class="btn big-btn theme_bg_y theme_font_white radius nogoods"
                                                                                                                                     @click="noStockEvent"
                                                                                                                                     v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
                                                                                                                                   >
                                                                                                                                     <p class="title">商品缺货</p>
                                                                                                                                     </div>
                                                                                                                                     <div
-                                                                                                                                      class="btn big-btn theme_bg_y theme_font_white radius"
+                                                                                                                                      class="btn big-btn theme_bg_y theme_font_white radius nogoods"
                                                                                                                                       @click="canNotSaleEvent"
                                                                                                                                       v-if="canSale == true && detailData.status == '0'"
                                                                                                                                     >
                                                                                                                                       <p class="title">商品已下架</p>
                                                                                                                                       </div>
                                                                                                                                       <div
-                                                                                                                                        class="btn big-btn theme_bg_y theme_font_white radius"
+                                                                                                                                        class="btn big-btn theme_bg_y theme_font_white radius nogoods"
                                                                                                                                         @click="canNotSaleEvent"
                                                                                                                                         v-if="canSale == false"
                                                                                                                                       >
@@ -1752,7 +1754,7 @@ export default {
       proView: 1,
       page1ScrollTop: 0,
       deliveryType: 2,
-      collectName: "",
+      // collectName: "",
       mainSwiper: {
         autoHeight: false, //enable auto height
         spaceBetween: 0,
@@ -3673,9 +3675,9 @@ export default {
             this.$store.state.mall2.cartNum = data.data.cartCount;
             // 是否收藏
             this.isCollect = data.data.isFavorites;
-            this.$nextTick(() => {
-              this.collectName = "collectName";
-            });
+            // this.$nextTick(() => {
+            //   this.collectName = "collectName";
+            // });
             // 库存
             this.stockNum =
               data.data.skuStock.stockCurrentNumber > 0
@@ -3961,12 +3963,12 @@ export default {
           let data = res.data;
           if (data.status == 0) {
             this.isCollect = data.data;
-            this.$nextTick(() => {
-              this.collectName = "collectName";
-            });
+            // this.$nextTick(() => {
+            //   this.collectName = "collectName";
+            // });
           } else {
             this.$Toast(data.info);
-            this.collectName = "collectName";
+            // this.collectName = "collectName";
           }
         },
         error => {
@@ -4409,6 +4411,37 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.theme_standard_bg{
+  width: 102px;
+  height: 39px;
+  background: linear-gradient(270deg, #FFC360 0%, #FFA500 100%);
+  border-radius: 20px;
+  .title{
+    font-size: 15px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    // line-height: 21px;
+  }
+}
+.theme_bg_y{
+  width: 102px;
+  height: 39px;
+  background: linear-gradient(270deg, #FF6094 0%, #E5165A 100%);
+  border-radius: 20px;
+}
+.nogoods{
+  width: 214px !important;
+  height: 39px;
+  background: #F1F1F1;
+  border-radius: 20px;
+  font-size: 15px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #8D8D8D;
+  line-height: 21px;
+}
 
 .btns-flex {
   display: flex;
@@ -5210,9 +5243,9 @@ export default {
           position: absolute;
           top: 6px;
           left: 50%;
-          margin-left: -13px;
-          width: 26px;
-          height: 26px;
+          margin-left: -10px;
+          width: 20px;
+          height: 20px;
         }
 
         .btn-sl-img {
@@ -5303,9 +5336,9 @@ export default {
         position: absolute;
         top: 6px;
         left: 50%;
-        margin-left: -13px;
-        width: 26px;
-        height: 26px;
+        margin-left: -10px;
+        width: 20px;
+        height: 20px;
       }
 
       .btn-sl-img {
@@ -5380,23 +5413,23 @@ export default {
   }
 }
 
-.collectName-enter-active {
-  transition: all 0.2s ease;
-}
+// .collectName-enter-active {
+//   transition: all 0.2s ease;
+// }
 
-.collectName-leave-active {
-  transition: all 0.2s ease-in;
-}
+// .collectName-leave-active {
+//   transition: all 0.2s ease-in;
+// }
 
-.collectName-enter {
-  transform: translateY(-500%);
-  transform: scale(10);
-}
+// .collectName-enter {
+//   transform: translateY(-500%);
+//   transform: scale(10);
+// }
 
-.collectName-leave-to {
-  transform: translateY(-500%);
-  transform: scale(10);
-}
+// .collectName-leave-to {
+//   transform: translateY(-500%);
+//   transform: scale(10);
+// }
 
 .transition1-enter-active, .transition1-leave-active, .transition2-enter-active, .transition2-leave-active {
   transition: all 0.5s;

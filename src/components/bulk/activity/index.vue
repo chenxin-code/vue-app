@@ -457,16 +457,15 @@ export default {
       padding: 21px 39px 12px;
 
       .tab_item {
-        width: 49px;
-        height: 22px;
         background: #fff;
-        border-radius: 10px;
+        border-radius: 15px;
         text-align: center;
         line-height: 22px;
         font-size: 14px;
         font-family: PingFang SC;
         font-weight: 400;
         color: #666666;
+        padding: 0 7px;
       }
 
       .current_tab {
@@ -475,6 +474,7 @@ export default {
         font-family: PingFang SC;
         font-weight: 400;
         color: #FFFFFF;
+        padding: 0 7px;
       }
     }
   }
@@ -496,7 +496,7 @@ export default {
       height: 21px;
       position: absolute;
       left: 17px;
-      top: 16px;
+      top: 17px;
       background-size: 100% 100%;
       background-repeat: no-repeat;
       font-size: 12px;
