@@ -496,7 +496,7 @@ export default {
       height: 21px;
       position: absolute;
       left: 17px;
-      top: 17px;
+      top: 16px;
       background-size: 100% 100%;
       background-repeat: no-repeat;
       font-size: 12px;
