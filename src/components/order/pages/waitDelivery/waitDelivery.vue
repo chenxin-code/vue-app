@@ -135,18 +135,10 @@ export default {
         if (code == 200) {
           if (tmpage < pages || tmpage == pages) {
             if (records.length > 0) {
-              let list = [];
-              records.map((item) => {
-                item["billType"] = 13;
-                item.orderItemList.map((tab) => {
-                  tab["billType"] = 13;
-                });
-              });
-              data.records = records;
               let lists = this.formatOrderList(data);
               lists.map((item) => {
                 let init = {
-                  billType: item.billType, //清单列表
+                  billType: 13, //清单列表
                   amount: item.amountPay, //实付金额
                   submitTime: item.orderTime, //下单时间
                   deliverType: item.deliverType, //配送方式
@@ -214,6 +206,7 @@ export default {
                 init.dataList = dataList;
                 list.push(init);
               });
+              //   this.massList = this.massList.concat(list);
               this.currentOrderList = this.currentOrderList.concat(list);
             }
             this.tmpage++;
@@ -269,8 +262,7 @@ export default {
           this.error = true;
         });
     },
-
-    // 格式化数据
+    /*服务商城的数据格式化*/
     formatOrderList(data) {
       console.log(data, "data");
       //交易单
