@@ -1673,7 +1673,7 @@
                                                                                                                                                                               <div
                                                                                                                                                                                 class="share_botton_item"
                                                                                                                                                                                 @click="shareLink"
-                                                                                                                                                                                v-show="false"
+                                                                                                                                                                                v-show="true"
                                                                                                                                                                               >
                                                                                                                                                                                 <img
                                                                                                                                                                                   src="static/image/mall2/share_link.png"
@@ -2101,7 +2101,7 @@ export default {
         path: "/mall2/shareTextLink",
         query: {
           price: this.detailData.activityPrice,
-          link: window.location.href,
+          skuId: this.skuId,
           goodsTitle: this.getSkuNameStr(this.detailData),
           goods_share_data: JSON.stringify({
             goods_id: this.skuId,
