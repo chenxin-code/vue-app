@@ -78,7 +78,7 @@ Axios.interceptors.request.use(
     if(/times\-center\-trade/.test(config.url)){
       config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3MTQ0Njk1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiYzI1MjU1ZjItOTE0MC00MWFhLWFmOGYtMjQ2M2I0ZGViYTg3IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.JFGdIV1wy94UOQ5Q-9M6zkgvHbnCSaKcCMpbNE1C-WfMR7_g0UR-uaBrfe9LwMF38Ipak1YMiEw_yIkWw-D3vtVx_9jvhFeq20qfpQTV6nXdQ2P7XsHJ4JPheV0tfmKdPiPMVqhsjq0AB1cBhlAgb1knJLOFodqBZlAYjIaPjUjl6_L2xr5TF_e3EjAsDjIJlg0vrRCTH90KjBD8A1lhBWwbZyY5bUFCP9VfQ40rIM35oq2eUS_ShypQdwpnvZB_lqXGWUtXhwQ2DfAv2PrMTOxI142eiYtqY4AjpLh-hKGvSAiBWqjVyoSoV__Q5lGASHZT1J91WQZDMsHx_IPbmg"
       config.headers.access_channel = 'mall'
-      config.headers["Content-Type"] = "application/json;charset=UTF-8"
+      config.headers["Content-Type"] = "application/json"
     }
 
     //中台接口要带一体化token
@@ -88,7 +88,7 @@ Axios.interceptors.request.use(
     */
 
     if (/pcs\/bill-center\/check-bill/.test(config.url)) {
-      config.headers["Content-Type"] = "application/json"
+      config.headers["Content-Type"] = "application/json;charset=UTF-8"
     }
 
     var time = new Date().getTime();
@@ -189,19 +189,24 @@ Axios.interceptors.request.use(
                   }
                 })
               } else {
-                if (/pcs\/bill-center\/check-bill/.test(config.url) || /times\-center\-trade/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
+                if (/pcs\/bill-center\/check-bill/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
                   dic = config.data
-                } else {
+                }else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
                 }
 
-                let d = Qs.stringify(dic, {
-                  arrayFormat: 'repeat'
-                });
-                config.data = d;
+                if(/times\-center\-trade/.test(config.url)){ //服务商城接口不需要转Qs,直接传JSON
+                  dic = JSON.stringify(config.data)
+                  config.data = dic
+                }else{
+                  let d = Qs.stringify(dic, {
+                    arrayFormat: 'repeat'
+                  });
+                  config.data = d;
+                }
                 resolve(config);
               }
             }
