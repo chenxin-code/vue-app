@@ -160,7 +160,6 @@
                     stayDistance: 40,
                     triggerDistance: 50
                   }"
-                  :bottom-load-method="bottomPull"
                   :top-load-method="topPull"
                   :is-bottom-bounce="true"
                   :is-top-bounce="false"
