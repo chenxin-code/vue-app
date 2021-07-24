@@ -2654,6 +2654,12 @@ export default {
             console.log(res);
           });
           return;
+        }else{
+          if (window.history.length === 1) {
+            this.$router.replace("/common");
+          } else {
+            this.$router.go(-1);
+          }
         }
       }
       // if (this.proView == 2) {
