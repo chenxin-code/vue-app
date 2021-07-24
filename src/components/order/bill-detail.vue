@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-23 18:28:27
+ * @LastEditTime: 2021-07-24 14:19:02
 -->
 <template>
   <div class="bill-detail">
@@ -360,7 +360,19 @@ export default {
                   }
                 }
               } else {
-                this.results = [];
+                //某些年份没有数据时的处理逻辑
+                if (this.currentPage === 1) {
+                  this.results = [];
+                } else {
+                  let list = data.finish[0].records;
+                  let re = this.results.records.concat(list);
+                  this.results.records = re;
+                  if (_.split(this.pageTimes, ",").length == this.currentPage) {
+                    this.finished = true;
+                    this.showFinishText = true;
+                  }
+                }
+                
               }
             }
             this.loading = false; //清除loading
