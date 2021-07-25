@@ -10,7 +10,11 @@
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
       >
-        <div v-for="(item, index) in currentOrderList" :key="index" class="scroll">
+        <div
+          v-for="(item, index) in currentOrderList"
+          :key="index"
+          class="scroll"
+        >
           <OrderItem
             :dataList="item.dataList"
             :params="item.params"
@@ -36,6 +40,7 @@
 <script>
 import OrderItem from "../../components/order-item/order-item";
 import Empty from "../../components/empty/empty.vue";
+import { fetchMethod } from "@/utils/tmHttp.js";
 export default {
   name: "waitTakeDelivery",
 
@@ -46,11 +51,14 @@ export default {
       error: false,
       refreshing: false,
       orderList: [],
-      currentPage: 0,
-      totalPage: 0,
-      page: 0,
-      showEmpty: false,
+      massList: [],
+      ownList: [],
       currentOrderList: [],
+      currentPage: 1,
+      tmpage: 1,
+      tmfinished: false,
+      allFinish: false,
+      showEmpty: false,
       params: {},
       tabs: {
         // text: '待收(提)货',
@@ -58,7 +66,6 @@ export default {
         tag: "4",
         type: ["200017"],
       },
-      currentOrderList: [],
       deliveryType: "",
     };
   },
@@ -70,31 +77,157 @@ export default {
     this.deliveryType = this.$store.state.mall2.staticDeliverType
       ? this.$store.state.mall2.staticDeliverType
       : "2";
-    this.onLoad();
+    this.commFn();
   },
-  watch:{
-    currentOrderList:function(newVal,oldVal){
-      if(newVal.length !== 0){
+  watch: {
+    currentOrderList: function (newVal, oldVal) {
+      if (newVal.length !== 0) {
         this.showEmpty = false;
-      }else{
+      } else {
         this.showEmpty = true;
       }
-    }
+    },
   },
   methods: {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
-      // "orderType":"200017","orderTypeList":["200017"],"state":"4","page":{"index":1,"pageSize":10},"deliverType":"2","deliverTypeList":[2,3]
-      this.loading = true;
-      let page = this.currentPage;
-      page = page + 1;
-      this.currentPage = page;
       this.refreshing = false;
+      if (!this.allFinish) {
+        this.commFn();
+      }
+    },
+    async commFn() {
+      this.tmerror = false;
+      this.error = false;
+      this.loading = true;
+      if (!this.tmfinished) {
+        // console.log("服务商城");
+        await this.tMallFn();
+      }
+      if (!this.finished) {
+        // console.log("自建商城");
+        await this.ownMallFn();
+      }
+      await this.allLoadingFn();
+    },
+    /*服务商城的接口 --billType(物业清单) = 13*/
+    tMallFn() {
+      let list = [],
+        { tmpage } = this;
+      let param = {
+        orderStateList: ["ON_GOING"],
+        pageNum: tmpage,
+        pageSize: 15,
+      };
+      let seriveAPI = "/times-center-trade/mall/order/v1/shop/list";
+      fetchMethod("POST", seriveAPI, param).then((res) => {
+        let { code } = res;
+        this.loading = false;
+        if (code == 200) {
+          let { data } = res,
+            { records, pages, total } = data;
+          if (tmpage <= pages) {
+            if (tmpage == pages) {
+              this.tmfinished = true;
+            }
+            if (records.length > 0) {
+              let lists = this.formatOrderList(data);
+              lists.map((item) => {
+                let init = {
+                  billType: 13, //清单列表
+                  amount: item.amountPay, //实付金额
+                  submitTime: item.orderTime, //下单时间
+                  deliverType: item.deliverType, //配送方式
+                  orderId: item.id, //店铺订单主键
+                  orderCategory: "", // item.orderCategory,
+                  orderMode: "", // item.orderMode, //
+                  shoppingOrderId: "", // item.shoppingOrderId,
+                  bulkOrderType: item.orderType, //订单类型
+                  id: item.id,
+                  tradeNo: item.tradeNo, //交易单号
+                  orderState: item.orderState,
+                  orderType: item.orderType, //订单类型
+                  shopOrderNo: item.shopOrderNo,
+                  params: {
+                    deliverType: "", //配送方式
+                    orderId: item.id,
+                    orderType: item.orderType, //订单类型
+                    orderCategory: "", //item.orderCategory,
+                    orderStateType: "", // item.orderStateType,
+                    state: item.orderState, //订单状态
+                    tradeNo: item.tradeNo, //交易单号
+                  },
+                  billDetailObj: {
+                    groupBuyActivityId: "", //item.groupBuyActivityId
+                    groupBuyId: "",
+                    payMode: "", // item.payType,//是否是支付方式
+                    tradeNo: item.tradeNo, //交易单号
+                    shoppingOrderId: "", //item.shoppingOrderId
+                    orderPayType: "", //item.payType,//是否是支付方式
+                    id: item.id,
+                    tag: "4",
+                    tabIndex: 4,
+                    awardActivityList: item.awardActivityList,
+                  },
+                };
+                let dataList = [];
+                dataList.push({
+                  billType: 13,
+                  billImg: item.orderItemData.itemImg, //商品图片
+                  billName: item.orderItemData.itemName,
+                  billAmount: item.orderItemData.itemPrice,
+                  billNum: item.orderItemData.buyNum,
+                  skuId: item.orderItemData.skuId,
+                  id: item.orderItemData.id,
+                  storeOuCode: "",
+                  expressNo: "",
+                  expressName: "",
+                  interfaceType: "",
+                  deliverType: "",
+                  address: item.projectName,
+                  cityId: "",
+                  countryId: "",
+                  countryName: "",
+                  provinceId: "",
+                  provinceName: "",
+                  townId: "",
+                  townName: "",
+                  receiver: item.receiverName,
+                  mobile: item.receiverPhone,
+                  orderState: item.orderState,
+                  tradeNo: item.tradeNo,
+                  orderType: item.orderType,
+                  shopOrderNo: item.shopOrderNo,
+                });
+                init.dataList = dataList;
+                list.push(init);
+              });
+              this.concatFn(list);
+            } else {
+              this.tmfinished = true;
+            }
+
+            this.tmpage++;
+          } else {
+            this.tmfinished = true;
+          }
+        } else {
+          this.tmfinished = true;
+          this.massList = [];
+          this.tmerror = true; //大家错误状态
+          this.loading = false;
+        }
+      });
+    },
+    /*自建商城的接口--billType(物业清单) = 11*/
+    ownMallFn() {
+      let { currentPage } = this,
+        ownlist = [];
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-        page: { index: page, pageSize: 10 },
+        page: { index: currentPage, pageSize: 15 },
       };
       if (this.tabs.tag == 4) {
         obj.deliverType = this.deliveryType;
@@ -106,36 +239,93 @@ export default {
         .post("/app/json/app_shopping_order/queryOrder", obj)
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          if (
-            page < res.data.data.page.totalPages ||
-            page == res.data.data.page.totalPages
-          ) {
-            if (res.data.data.page.totalPages == page) {
-              this.finished = true;
-            }
-            if (res.data.status == 0) {
-              var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
-              this.orderList = this.orderList.concat(indexList);
-              if (this.orderList.length > 0) {
-                this.orderList.forEach((item) => {
-                  item["billType"] = 11;
-                  item.itemAbstractList.forEach((tab) => {
-                    tab["billType"] = 11;
-                  });
-                });
-                this.initData();
-              }else{
-                this.currentOrderList = [];
+          let { status, data } = res.data,
+            { page, orderList } = data,
+            { totalPages } = page;
+          this.loading = false;
+          if (status == 0) {
+            if (currentPage <= totalPages) {
+              if (totalPages == currentPage) {
+                this.finished = true;
               }
-              this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              // 加载状态结束
-              this.loading = false;
+              if (orderList.length > 0) {
+                orderList.map((item) => {
+                  let list = {
+                    billType: 11,
+                    amount: item.realAmount,
+                    submitTime: item.submitTime,
+                    deliverType: item.deliverType,
+                    orderId: item.id,
+                    orderType: item.orderType,
+                    orderCategory: item.orderCategory,
+                    orderMode: item.orderMode,
+                    shoppingOrderId: item.shoppingOrderId,
+                    bulkOrderType: item.orderType,
+                    id: item.id,
+                    tradeNo: item.tradeNo,
+                    params: {
+                      deliverType: item.deliverType,
+                      orderId: item.id,
+                      orderType: item.orderType,
+                      orderCategory: item.orderCategory,
+                      orderStateType: item.orderStateType,
+                      state: item.state,
+                      tradeNo: item.tradeNo,
+                    },
+                    billDetailObj: {
+                      groupBuyActivityId: item.groupBuyActivityId,
+                      groupBuyId: item.groupBuyId,
+                      payMode: item.payMode,
+                      tradeNo: item.tradeNo,
+                      shoppingOrderId: item.shoppingOrderId,
+                      orderPayType: item.orderPayType,
+                      id: item.id,
+                      tag: "4",
+                      tabIndex: 4,
+                      awardActivityList: item.awardActivityList,
+                    },
+                    dataList: item.itemAbstractList.map((sub) => {
+                      return {
+                        billType: 11,
+                        billImg: sub.phPictureUrl,
+                        billName: sub.skuName,
+                        billAmount: sub.salePrice,
+                        billNum: sub.number,
+                        skuId: sub.skuId,
+                        id: sub.id,
+                        storeOuCode: item.storeOuCode,
+                        expressNo: item.expressNo,
+                        expressName: item.expressName,
+                        interfaceType: item.interfaceType,
+                        deliverType: item.deliverType,
+                        address: item.address,
+                        cityId: item.cityId,
+                        countryId: item.countryId,
+                        countryName: item.countryName,
+                        provinceId: item.provinceId,
+                        provinceName: item.provinceName,
+                        townId: item.townId,
+                        townName: item.townName,
+                        receiver: item.receiver,
+                        mobile: item.mobile,
+                      };
+                    }),
+                  };
+
+                  ownlist.push(list);
+                });
+                console.log(ownlist, "ownlist");
+                this.concatFn(ownlist);
+              } else {
+                ownlist = [];
+                this.finished = true;
+              }
+              this.currentPage++;
             } else {
-              this.loading = false; //将加载状态关掉
-              this.error = true; //大家错误状态
+              this.finished = true; //如果超过总页数就显示没有更多内容了
             }
           } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
+            this.error = true; //大家错误状态
           }
         })
         .catch((err) => {
@@ -144,48 +334,69 @@ export default {
           this.error = true;
         });
     },
+    allLoadingFn() {
+      setTimeout((res) => {
+        if (this.tmfinished && this.finished) {
+          this.loading = false;
+          this.allFinish = true;
+          this.loading = false;
+        } else {
+          this.allFinish = false;
+        }
+        if (this.tmerror && this.error) {
+          this.error = true;
+          this.loading = false;
+        } else {
+          this.error = false;
+        }
+      }, 500);
+    },
+    concatFn(list) {
+      this.currentOrderList = this.currentOrderList.concat(list);
+      /*按时间排序*/
+      this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+    },
+    /*按时间排序*/
+    sortKey(array, key) {
+      return array.sort(function (a, b) {
+        var x = a[key];
+        var y = b[key];
+        return x > y ? -1 : x < y ? 1 : 0;
+      });
+    },
     // 下拉刷新时触发
     onRefresh() {
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
       this.finished = false; //将没有更多的状态改成false
-      this.loading = true; //将下拉刷新状态改为true开始刷新
       this.currentPage = 1;
-      let obj = {
-        orderType: this.tabs.type[0],
-        orderTypeList: this.tabs.type,
-        state: this.tabs.tag,
-        page: { index: page, pageSize: 10 },
-      };
-      if (this.tabs.tag == 4) {
-        obj.deliverType = this.deliveryType;
-        if (this.deliveryType == 2) {
-          obj.deliverTypeList = [2, 3];
-        }
+      this.allFinish = false;
+      this.tmfinished = false; //服务商的加载
+      this.tmpage = 1;
+      this.currentOrderList = [];
+      this.commFn();
+    },
+    /*服务商城的数据格式化*/
+    formatOrderList(data) {
+      console.log(data, "data");
+      //交易单
+      let records = data.records;
+      let recordsArray = [];
+      for (let index = 0; index < records.length; index++) {
+        let recordDataNew = {};
+        let recordData = records[index];
+        //店铺订单列表
+        let orderItemList = recordData.orderItemList;
+        //店铺订单列表第一个数据
+        const orderItemData = (orderItemList && orderItemList[0]) || {};
+        console.log("orderItemData--->", orderItemData);
+        //商品订单详情
+        recordDataNew = {
+          ...recordData,
+          orderItemData: orderItemData,
+        };
+        delete recordDataNew.orderItemList;
+        recordsArray.push(recordDataNew);
       }
-      this.$http
-        .post("/app/json/app_shopping_order/queryOrder", obj)
-        .then((res) => {
-          if (res.data.status == 0) {
-            this.orderList = res.data.data.orderList;
-            if (this.orderList.length > 0) {
-              this.orderList.forEach((item) => {
-                item["billType"] = 11;
-                item.itemAbstractList.forEach((tab) => {
-                  tab["billType"] = 11;
-                });
-              });
-              this.initData();
-            } 
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
-            this.$toast("刷新成功");
-            this.loading = false;
-            this.refreshing = false; //刷新成功后将状态关掉
-          }
-        })
-        .catch((res) => {
-          this.$toast("网络繁忙,请稍后再试~");
-        });
+      return recordsArray;
     },
     // 初始化数据
     initData() {
@@ -198,11 +409,11 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: item.orderCategory,
-          orderMode:item.orderMode,
-          shoppingOrderId:item.shoppingOrderId,
-          bulkOrderType:item.orderType,
-          id:item.id,
-          tradeNo:item.tradeNo,
+          orderMode: item.orderMode,
+          shoppingOrderId: item.shoppingOrderId,
+          bulkOrderType: item.orderType,
+          id: item.id,
+          tradeNo: item.tradeNo,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -249,11 +460,11 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 // .scroll {
-//   padding-top: 10px;
+// padding-top: 10px;
 // }
-.waitTakeDelivery{
-  height 100%;
-  overflow-y auto; 
-  padding-bottom: 130px; 
+.waitTakeDelivery {
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 130px;
 }
 </style>

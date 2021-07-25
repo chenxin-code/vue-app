@@ -60,16 +60,21 @@
           }}<span class="decimal">.{{ goodsAmount.decimal }}</span>
         </p>
       </div>
-      <div class="total" v-if="billType == 11">
-        <span class="to"
-          >共<i>{{ amountTotal }}</i
-          >件商品</span
-        >
-        <span class="pr"
-          ><i>{{ moneyText }}:</i><span class="smallRMB">￥</span
-          >{{ goodsAmount.integer
-          }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span
-        >
+      <div class="total need-pay" v-if="billType == 11">
+        <p class="time row">
+          {{ submitTime }}
+        </p>
+        <div>
+          <span class="to"
+            >共<i>{{ amountTotal }}</i
+            >件商品</span
+          >
+          <span class="pr"
+            ><i>{{ moneyText }}:</i><span class="smallRMB">￥</span
+            >{{ goodsAmount.integer
+            }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span
+          >
+        </div>
       </div>
       <div class="btn-box">
         <!-- v-if="isChangeOrder && !isBulk" -->
@@ -968,6 +973,14 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-item: center;
+  height:27px;
+}
 
 .order-item {
   box-sizing: border-box;
