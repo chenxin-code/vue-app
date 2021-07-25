@@ -70,7 +70,7 @@ export default {
           {
             title: "退换/售后",
             icon: require("./images/afterSales.png"),
-            url: "/mall2/serviceindex",
+            url: `/concatAfterSalesOrder/1?backUpPage=${true}`,
             imgWidth: "0.626667rem",
             imgHeight: "0.546667rem",
             isShowTip: false,

@@ -36,7 +36,8 @@ export default {
         { text: "发票查询", className: "invoice" }
       ],
       moreIcon: require("../../img/more.png"),
-      backIndex: false
+      backIndex: false,
+      backIndex: false,
     };
   },
   created() {
@@ -52,6 +53,9 @@ export default {
     }
     if (this.$route.query.backIndex) {
       this.backIndex = true;
+    }
+    if (this.$route.query.backUpPage) {
+      this.backUpPage = true;
     }
   },
   methods: {
@@ -70,6 +74,8 @@ export default {
         this.$router.replace({
           path: "/common"
         });
+      }else if(this.backUpPage){
+        this.$router.go(-1)
       } else {
         appLocalstorage
           .get({

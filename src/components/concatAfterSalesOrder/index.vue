@@ -19,10 +19,7 @@
         </van-tab>
       </van-tabs>
     </van-sticky>
-    <component
-      v-bind:is="active"
-      :key="$route.path + $route.query.time"
-    ></component>
+    <component :is="active" :key="$route.path + $route.query.time"></component>
   </div>
 </template>
 
@@ -42,7 +39,7 @@ export default {
         { title: "处理完成", components: "FigureOut", id: 2 },
         { title: "处理关闭", components: "CloseProcess", id: 3 },
       ],
-      offsetTop: "0rem"
+      offsetTop: "0rem",
     };
   },
   components: {
@@ -59,25 +56,6 @@ export default {
       this.offsetTop = padding;
     }
   },
-  activated() {
-    // nav.setNavLeftBtn({
-    //   title: "我的订单",
-    //   titleColor: "#000000",
-    //   titleSize: 24,
-    //   titleFontName: "PingFangSC-Medium",
-    //   titleBig: "500"
-    // });
-    // nav.setNavRightBtn({
-    //   title: "历史缴费记录",
-    //   titleColor: "#000000",
-    //   titleSize: 18,
-    //   icon: "",
-    //   iconSize: ["20", "20"],
-    //   __event__: () => {
-    //     this.navToHistory();
-    //   }
-    // });
-  },
   methods: {
     //跳到历史欠缴记录页面
     navToHistory() {
@@ -85,21 +63,21 @@ export default {
         type: "microapp",
         uri: "com.times.microapp.AppcPrepay", // 微应用包名
         path: "/bill/index", // 微应用具体路由
-        hideNavbar: false
+        hideNavbar: false,
       });
     },
     navTo(name, title) {
       this.active = name;
     },
     initPage(id) {
-      let component = this.cancatAfterSalesOrderList.filter(e => {
+      let component = this.cancatAfterSalesOrderList.filter((e) => {
         return e.id == id;
       });
       if (component.length != 0) {
         this.active = component[0].components;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">

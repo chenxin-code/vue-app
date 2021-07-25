@@ -76,7 +76,16 @@ Axios.interceptors.request.use(
     }
 
     if(/times\-center\-trade/.test(config.url)){
-      config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3MTQ0Njk1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiYzI1MjU1ZjItOTE0MC00MWFhLWFmOGYtMjQ2M2I0ZGViYTg3IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.JFGdIV1wy94UOQ5Q-9M6zkgvHbnCSaKcCMpbNE1C-WfMR7_g0UR-uaBrfe9LwMF38Ipak1YMiEw_yIkWw-D3vtVx_9jvhFeq20qfpQTV6nXdQ2P7XsHJ4JPheV0tfmKdPiPMVqhsjq0AB1cBhlAgb1knJLOFodqBZlAYjIaPjUjl6_L2xr5TF_e3EjAsDjIJlg0vrRCTH90KjBD8A1lhBWwbZyY5bUFCP9VfQ40rIM35oq2eUS_ShypQdwpnvZB_lqXGWUtXhwQ2DfAv2PrMTOxI142eiYtqY4AjpLh-hKGvSAiBWqjVyoSoV__Q5lGASHZT1J91WQZDMsHx_IPbmg"
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyMjIzNzQ0MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjI0Mjc0ODg0MDU0NzgzNSwiZXhwIjoxNjI3MjA2NDU1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6ImVjZjEwYjczLTZmYzQtNGEwNi1iMTg2LWUwMmNiYTI0MzMyNiIsImNsaWVudF9pZCI6ImFwcF9jIn0.OOBkArhxZiW6YL044J3x_i_L2gGxAPsAZXYlLeHr8pXGnWhSogt73E2fuvNHqJyZxutjM7m-RkpuYMVHKSQhxfBDUNOQ8xCRD5aR3k2GtUfkNPygBkMBb9oShFdc4U2vDrwPtIUTz80ZFpkRHPnzzLguvooeAY1v1bqf3G7M16xHT-CGJloGyahqen925jxfWT12H6NYCbuUNmGPrrV0lKckzsdpMGY1G_zmaZ4to1ACvaMDNlAhskRENw-34wVtZDsRP021oB7lvpPaCbfMYn5GDaDO1zF-hRnV5j2p_9dPpuPbo8_oyGOgko01awb-QNpgvHF6p2fF9PRFu8L8Jg"
+      if(store.state.webtype == "2" || store.state.webtype == "3"){
+        config.headers.Authorization = localStorage.getItem('ythToken')
+      }else{
+        let ythToken = '';
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          ythToken = res.result;
+        });
+        config.headers.Authorization = ythToken
+      }
       config.headers.access_channel = 'mall'
       config.headers["Content-Type"] = "application/json"
     }

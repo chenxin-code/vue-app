@@ -3,44 +3,49 @@
     <div class="cardHead">
       <div class="no">
         <img src="../../img/afterSales.png" alt="" />
-        <div class="orderNo">单号: 432145689012344</div>
+        <div class="orderNo">单号: {{ orderItem.orderNo }}</div>
       </div>
-      <div class="type">受理中</div>
+      <!-- <div class="type">{{orderItem.state}}</div> -->
     </div>
     <div class="cardContent">
-      <div v-if="goodsDeatilList.length == 1" class="alone">
-        <img src="../../img/test.jpg" alt="" class="orderImg" />
-        <div class="content">
-          <div class="goodsName">兰舟水果利口青梅酒VOL8% 350ML（一瓶装）件</div>
-          <div class="sku">
-            <div class="price">¥35.9</div>
-            <div class="num">x1</div>
+      <div
+        v-for="(item, index) in orderItem.goodsItem"
+        :key="index"
+        class="goodsDetail"
+        :style="{ width: orderItem.goodsItem.length == 1 ? '100%' : '2.56rem' }"
+      >
+        <div v-show="orderItem.goodsItem.length == 1" class="alone">
+          <img :src="item.goodsPic" alt="" class="orderImg" />
+          <div class="content">
+            <div class="goodsName">
+              {{ item.goodsName }}
+            </div>
+            <div class="sku">
+              <div class="price">¥{{ item.goodsPrice }}</div>
+              <div class="num">x{{ item.goodsNumber }}</div>
+            </div>
+          </div>
+        </div>
+        <div v-show="orderItem.goodsItem.length > 1" class="more">
+          <div class="moreOrderImg" v-if="index < 3">
+            <img :src="item.goodsPic" class="orderImg" />
           </div>
         </div>
       </div>
-      <div v-else class="more">
-        <div class="moreOrderImg">
-          <img
-            :src="item"
-            alt=""
-            class="orderImg"
-            v-for="(item, index) in moreGoodsList"
-            :key="index"
-          />
-        </div>
-        <div class="moreTotal">共4件</div>
+      <div class="moreTotal" v-show="orderItem.goodsItem.length > 1">
+        共{{ orderItem.goodsItem.length }}件
       </div>
     </div>
     <div class="cardFoot">
-      <div class="date">2020-07-22 22:08:09</div>
+      <div class="date">{{ orderItem.createTime }}</div>
       <div class="payPrice">
         <div class="title">已付款：</div>
         <div class="cunt">¥</div>
-        <div class="priceBig">35.</div>
-        <div class="priceSmall">90</div>
+        <div class="priceBig">{{ goodsAmount.integer }}.</div>
+        <div class="priceSmall">{{ goodsAmount.decimal }}</div>
       </div>
     </div>
-    <div class="cardBtn">
+    <div class="cardBtn" @click="navToDetail">
       <img src="../../img/detailBtn.png" alt="" />
     </div>
   </div>
@@ -51,13 +56,55 @@ export default {
   name: "afterSalesItem",
   data() {
     return {
-      goodsDeatilList: [1, 1],
-      moreGoodsList: [
-        require("../../img/test.jpg"),
-        require("../../img/test.jpg"),
-        require("../../img/test.jpg"),
-      ],
+      itemAmount: 0,
+      goodsAmount: {
+        integer: "0",
+        decimal: "00",
+      },
     };
+  },
+  props: ["orderItem"],
+  created() {
+    this.itemAmount = this.orderItem.price;
+  },
+  watch: {
+    itemAmount: function (newVal, oldVal) {
+      let amountArr = this.$util.toDecimal2(newVal).toString().split(".");
+      if (amountArr.length !== 0) {
+        this.goodsAmount.integer = amountArr[0];
+        this.goodsAmount.decimal = amountArr[1];
+      }
+    },
+  },
+  methods: {
+    navToDetail() {
+      // /mall2/detailservice?id=134
+      if (this.orderItem.orderType == "mall") {
+        this.$router.push({
+          path: "/mall2/detailservice",
+          query: {
+            id: this.orderItem.orderNo,
+          },
+        });
+      } else {
+        let url = "";
+        let Authorization = "";
+        this.$store.state.environment == "development"
+          ? (url =
+              "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleDetails")
+          : (url =
+              "https://mall-prod-app-linli.timesgroup.cn:9001/order/afterSaleDetails");
+        if (
+          this.$store.state.webtype == "2" ||
+          this.$store.state.webtype == "3"
+        ) {
+          Authorization = localStorage.getItem("ythToken");
+        } else {
+          Authorization = this.$store.state.ythToken;
+        }
+        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
+      }
+    },
   },
 };
 </script>
@@ -81,7 +128,7 @@ export default {
     .no {
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-end;
 
       img {
         width: 22px;
@@ -89,7 +136,7 @@ export default {
       }
 
       .orderNo {
-        font-size: 16px;
+        font-size: 14px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #121212;
@@ -104,14 +151,19 @@ export default {
       font-weight: 400;
       color: #E8374A;
       line-height: 20px;
-      margin-top: 2px;
+      // margin-top: 2px;
     }
   }
 
   .cardContent {
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     margin-top: 17px;
+
+    .goodsDetail {
+      width: 100%;
+    }
 
     .alone {
       display: flex;
@@ -125,9 +177,10 @@ export default {
       }
 
       .content {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: space-between;
 
         .goodsName {
           font-size: 16px;
@@ -141,8 +194,8 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 11px;
 
+          // margin-top: 11px;
           .price {
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
@@ -164,7 +217,9 @@ export default {
 
     .more {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      width: 90px;
+      height: 90px;
 
       .moreOrderImg {
         display: flex;
@@ -177,20 +232,21 @@ export default {
           margin-right: 6px;
         }
       }
+    }
 
-      .moreTotal {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 7px;
-        font-size: 13px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #8D8D8D;
-        line-height: 18px;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-      }
+    .moreTotal {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-left: 7px;
+      font-size: 13px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #8D8D8D;
+      line-height: 18px;
+      white-space: nowrap;
+      flex-wrap: nowrap;
     }
   }
 
