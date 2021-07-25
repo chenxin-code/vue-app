@@ -33,11 +33,12 @@ export default {
       showPopover: false,
       actions: [
         { text: "历史缴费记录", className: "history" },
-        { text: "发票查询", className: "invoice" }
+        { text: "发票查询", className: "invoice" },
       ],
       moreIcon: require("../../img/more.png"),
       backIndex: false,
-      backIndex: false,
+      backUpPage: false,
+      backApp: false,
     };
   },
   created() {
@@ -57,6 +58,9 @@ export default {
     if (this.$route.query.backUpPage) {
       this.backUpPage = true;
     }
+    if (this.$route.query.backApp) {
+      this.backApp = true;
+    }
   },
   methods: {
     onSelect(action) {
@@ -69,20 +73,25 @@ export default {
       action.className == "invoice" &&
         this.navToMicroapp("com.times.microapp.AppcInvoice", "/", true);
     },
-    goBack: function() {
+    goBack: function () {
       if (this.backIndex) {
         this.$router.replace({
-          path: "/common"
+          path: "/common",
         });
-      }else if(this.backUpPage){
-        this.$router.go(-1)
+      } else if (this.backUpPage) {
+        this.$router.go(-1);
+      } else if (this.backApp) {
+        appNav.navigatorBack({ url: "0" }).then((res) => {
+          console.log(res);
+        });
+        return;
       } else {
         appLocalstorage
           .get({
             key: "LLBIsHomeView",
-            isPublic: true
+            isPublic: true,
           })
-          .then(res => {
+          .then((res) => {
             let _result = res.result;
             console.log("appLocalstorage_result", _result);
             if (
@@ -92,21 +101,21 @@ export default {
               _result == undefined
             ) {
               console.log("appLocalstorage_result", _result);
-              appNav.navigatorBack({ url: "0" }).then(res => {
+              appNav.navigatorBack({ url: "0" }).then((res) => {
                 console.log(res);
               });
               return;
             }
             if (_result == "1") {
               this.$router.replace({
-                path: "/common"
+                path: "/common",
               });
             } else if (_result == "0") {
-              appNav.navigatorBack({ url: "0" }).then(res => {
+              appNav.navigatorBack({ url: "0" }).then((res) => {
                 console.log(res);
               });
             } else if (_result == "2") {
-              appNav.navigatorBack({ url: "0" }).then(res => {
+              appNav.navigatorBack({ url: "0" }).then((res) => {
                 console.log(res);
               });
             }
@@ -119,7 +128,7 @@ export default {
         type: "microapp",
         uri: microappUri, // 微应用包名
         path: microappPath, // 微应用具体路由
-        hideNavbar: isHideNavbar
+        hideNavbar: isHideNavbar,
       });
 
       // 发票
@@ -135,8 +144,8 @@ export default {
     navToHistory() {
       this.navToMicroapp("com.times.microapp.AppcPrepay", "/bill/index", false);
       console.log(`跳到历史欠缴记录页面`);
-    }
-  }
+    },
+  },
 };
 </script>
 
