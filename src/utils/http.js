@@ -75,6 +75,21 @@ Axios.interceptors.request.use(
       config.headers.Authorization = store.state.login.token;
     }
 
+    if(/times\-center\-trade/.test(config.url)){
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyMjIzNzQ0MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjI0Mjc0ODg0MDU0NzgzNSwiZXhwIjoxNjI3MjA2NDU1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6ImVjZjEwYjczLTZmYzQtNGEwNi1iMTg2LWUwMmNiYTI0MzMyNiIsImNsaWVudF9pZCI6ImFwcF9jIn0.OOBkArhxZiW6YL044J3x_i_L2gGxAPsAZXYlLeHr8pXGnWhSogt73E2fuvNHqJyZxutjM7m-RkpuYMVHKSQhxfBDUNOQ8xCRD5aR3k2GtUfkNPygBkMBb9oShFdc4U2vDrwPtIUTz80ZFpkRHPnzzLguvooeAY1v1bqf3G7M16xHT-CGJloGyahqen925jxfWT12H6NYCbuUNmGPrrV0lKckzsdpMGY1G_zmaZ4to1ACvaMDNlAhskRENw-34wVtZDsRP021oB7lvpPaCbfMYn5GDaDO1zF-hRnV5j2p_9dPpuPbo8_oyGOgko01awb-QNpgvHF6p2fF9PRFu8L8Jg"
+      if(store.state.webtype == "2" || store.state.webtype == "3"){
+        config.headers.Authorization = localStorage.getItem('ythToken')
+      }else{
+        let ythToken = '';
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          ythToken = res.result;
+        });
+        config.headers.Authorization = ythToken
+      }
+      config.headers.access_channel = 'mall'
+      config.headers["Content-Type"] = "application/json"
+    }
+
     //中台接口要带一体化token
 
     /*物业系统请求处理逻辑
@@ -185,17 +200,22 @@ Axios.interceptors.request.use(
               } else {
                 if (/pcs\/bill-center\/check-bill/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
                   dic = config.data
-                } else {
+                }else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
                 }
 
-                let d = Qs.stringify(dic, {
-                  arrayFormat: 'repeat'
-                });
-                config.data = d;
+                if(/times\-center\-trade/.test(config.url)){ //服务商城接口不需要转Qs,直接传JSON
+                  dic = JSON.stringify(config.data)
+                  config.data = dic
+                }else{
+                  let d = Qs.stringify(dic, {
+                    arrayFormat: 'repeat'
+                  });
+                  config.data = d;
+                }
                 resolve(config);
               }
             }

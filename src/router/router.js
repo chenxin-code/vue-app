@@ -15,6 +15,12 @@ let routerArr = [
   },
 ];
 
+// concatAfterSalesOrder
+
+import concatAfterSalesOrder from './modules/concatAfterSalesOrder.js'
+
+routerArr = routerArr.concat(concatAfterSalesOrder);
+
 // error
 
 import error from './modules/error'
