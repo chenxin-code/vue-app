@@ -193,7 +193,7 @@ const vueConfig = {
   devServer: {
     // open: true, // 是否自动打开浏览器页面
     // development server port 8080
-    port: 8082,
+    port: 8081,
     // port: 80,
     // host:'mall-uat-app-linli.timesgroup.cn',
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
@@ -242,7 +242,11 @@ const vueConfig = {
       "/pcs": {
         target: "http://times-pcs.linli580.com.cn:8888", //收费系统
         changeOrigin: true
-      }
+      },
+      '/times-center-trade/mall/':{//服务商城的接口
+        target:'https://mall-uat-api-linli.timesgroup.cn:1443',
+        changeOrigin: true,
+    }
     }
   },
   // disable source map in production
