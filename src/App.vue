@@ -155,6 +155,9 @@ export default {
         .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
+      if(initObj.ythToken == '' || initObj.ythToken == undefined){
+        initObj.ythToken = window.localStorage.getItem('ythToken')
+      }
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;

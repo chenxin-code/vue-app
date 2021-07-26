@@ -55,6 +55,14 @@ export default {
     if (padding !== "") {
       this.offsetTop = padding;
     }
+    if (this.$store.state.webtpye != 2 || this.$store.state.webtpye != 3) {
+      appNav
+        .setNavBarHidden({
+          isHidden: true,
+          isAnimation: false,
+        })
+        .then((res) => {});
+    }
   },
   methods: {
     //跳到历史欠缴记录页面

@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import appNav from "@zkty-team/x-engine-module-nav";
 export default {
   name: "afterSalesItem",
   data() {
@@ -102,6 +103,14 @@ export default {
         } else {
           Authorization = this.$store.state.ythToken;
         }
+        appNav
+          .setNavBarHidden({
+            isHidden: false,
+            isAnimation: true,
+          })
+          .then((res) => {
+            
+          });
         window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
       }
     },

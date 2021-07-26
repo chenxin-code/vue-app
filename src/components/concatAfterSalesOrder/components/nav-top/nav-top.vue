@@ -29,7 +29,7 @@ import navToMicroApplication from "@zkty-team/x-engine-module-router";
 export default {
   data() {
     return {
-      adapterTop: "0.426667rem",
+      adapterTop: "0",
       showPopover: false,
       actions: [
         { text: "历史缴费记录", className: "history" },
