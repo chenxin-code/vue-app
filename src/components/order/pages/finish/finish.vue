@@ -350,7 +350,7 @@ export default {
           tradeNo: item.tradeNo,
           orderState: item.orderStateType,
           orderType: item.orderType, //订单类型
-          shopOrderNo: sub.storeOuCode,
+          shopOrderNo: item.orderFormItemList[0].storeOuCode,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -443,14 +443,6 @@ export default {
   height: 100%;
   overflow-y: auto;
   padding-bottom: 130px;
-<<<<<<< HEAD
-  &.finish-x {
-    padding-bottom: 150px;
-  }
-  &.empty-page {
-    overflow-y: hidden;
-  }
-=======
 
   &.finish-x {
     padding-bottom: 150px;
@@ -460,7 +452,6 @@ export default {
     overflow-y: hidden;
   }
 
->>>>>>> feater_fix_order
   .refresh-page {
     min-height: 100%;
   }

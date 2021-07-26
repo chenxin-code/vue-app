@@ -449,7 +449,7 @@ export default {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-        page: { index: page, pageSize: 10 },
+        page: { index: page, pageSize: 15 },
       };
       this.$http
         .post("/app/json/app_shopping_order/queryOrder", obj)
