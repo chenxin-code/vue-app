@@ -109,9 +109,8 @@ export default {
             isAnimation: true,
           })
           .then((res) => {
-            
+            window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
           });
-        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
       }
     },
   },

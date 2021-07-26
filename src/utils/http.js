@@ -78,16 +78,16 @@ Axios.interceptors.request.use(
     }
 
     if(/times\-center\-trade/.test(config.url)){
-      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyMjIzNzQ0MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjI0Mjc0ODg0MDU0NzgzNSwiZXhwIjoxNjI3MjA2NDU1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6ImVjZjEwYjczLTZmYzQtNGEwNi1iMTg2LWUwMmNiYTI0MzMyNiIsImNsaWVudF9pZCI6ImFwcF9jIn0.OOBkArhxZiW6YL044J3x_i_L2gGxAPsAZXYlLeHr8pXGnWhSogt73E2fuvNHqJyZxutjM7m-RkpuYMVHKSQhxfBDUNOQ8xCRD5aR3k2GtUfkNPygBkMBb9oShFdc4U2vDrwPtIUTz80ZFpkRHPnzzLguvooeAY1v1bqf3G7M16xHT-CGJloGyahqen925jxfWT12H6NYCbuUNmGPrrV0lKckzsdpMGY1G_zmaZ4to1ACvaMDNlAhskRENw-34wVtZDsRP021oB7lvpPaCbfMYn5GDaDO1zF-hRnV5j2p_9dPpuPbo8_oyGOgko01awb-QNpgvHF6p2fF9PRFu8L8Jg"
-      if(store.state.webtype == "2" || store.state.webtype == "3"){
-        config.headers.Authorization = localStorage.getItem('ythToken')
-      }else{
-        let ythToken = '';
-        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-          ythToken = res.result;
-        });
-        config.headers.Authorization = ythToken
-      }
+      config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
+      // if(store.state.webtype == "2" || store.state.webtype == "3"){
+      //   config.headers.Authorization = localStorage.getItem('ythToken')
+      // }else{
+      //   let ythToken = '';
+      //   await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+      //     ythToken = res.result;
+      //   });
+      //   config.headers.Authorization = ythToken
+      // }
       config.headers.access_channel = 'mall'
       config.headers["Content-Type"] = "application/json"
     }

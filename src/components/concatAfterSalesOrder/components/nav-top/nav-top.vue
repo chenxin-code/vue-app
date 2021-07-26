@@ -29,7 +29,7 @@ import navToMicroApplication from "@zkty-team/x-engine-module-router";
 export default {
   data() {
     return {
-      adapterTop: "0",
+      adapterTop: "0rem",
       showPopover: false,
       actions: [
         { text: "历史缴费记录", className: "history" },
@@ -42,7 +42,9 @@ export default {
     };
   },
   created() {
-    if (this.$store.state.webtpye != 2 || this.$store.state.webtpye != 3) {
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      this.adapterTop = "0rem";
+    } else {
       // 判断是否是刘海屏
       const rate = window.screen.height / window.screen.width;
       let limit =
