@@ -42,15 +42,18 @@ export default {
     };
   },
   created() {
-    // 判断是否是刘海屏
-    const rate = window.screen.height / window.screen.width;
-    let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-    // window.screen.height为屏幕高度
-    //  window.screen.availHeight 为浏览器 可用高度
-    if (rate > limit) {
-      this.adapterTop = "1.173333rem";
-    } else {
-      this.adapterTop = "0.426667rem";
+    if (this.$store.state.webtpye != 2 || this.$store.state.webtpye != 3) {
+      // 判断是否是刘海屏
+      const rate = window.screen.height / window.screen.width;
+      let limit =
+        window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+      // window.screen.height为屏幕高度
+      //  window.screen.availHeight 为浏览器 可用高度
+      if (rate > limit) {
+        this.adapterTop = "1.173333rem";
+      } else {
+        this.adapterTop = "0.426667rem";
+      }
     }
     if (this.$route.query.backIndex) {
       this.backIndex = true;
