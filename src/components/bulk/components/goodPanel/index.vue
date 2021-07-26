@@ -147,7 +147,7 @@ export default {
 }
 
 .remain-times {
-  margin-left: 10.5px;
+  margin-left: 20px;
 }
 
 .colon {

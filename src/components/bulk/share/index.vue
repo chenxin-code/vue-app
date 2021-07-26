@@ -81,7 +81,7 @@
           <img class="product-pic" :src="item.skuImg[0]" />
           <div class="product-desc">
             <div style="display: flex;flex-direction: column;">
-              <div class="product-title">产品名称：{{ item.skuName }}</div>
+              <div class="product-title">{{ item.skuName }}</div>
               <div class="product-prize-old">
                 销售价格：￥{{ item.crossedPrice }}
               </div>
@@ -194,7 +194,6 @@ export default {
       purchaseId: "",
       chiefId: "",
       userId: "",
-      activityName: "",
       groupStatus: "start"
     };
   },
@@ -202,12 +201,10 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = this.$route.query.activityName;
 
     // this.purchaseId = 53;
     // this.chiefId = '4';
     // this.userId = '2337237484980666802';
-    // this.activityName = '山楂团购活动';
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach(e => {
@@ -269,6 +266,16 @@ export default {
             this.groupStatus = "notAtThe";
             this.shareData.remainingTime = 0;
           }
+          this.$sensors.track("group_buying_view", {
+            group_buying_id:this.purchaseId,
+            group_buying_name: this.shareData.actName,
+            head_id: this.chiefId,
+            head_name: this.shareData.headUser,
+            take_goods_address: this.shareData.communityName+this.shareData.place,
+            group_buying_describe: this.shareData.groupDescriptionRichTxt,
+            group_buying_rule_descibe: this.shareData.ruleDescription,
+            group_buying_end_time: this.shareData.actEndTime,
+          });
         }
       });
   },
@@ -431,7 +438,6 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            activityName: JSON.stringify(this.activityName),
             checkList:JSON.stringify(this.checkList)
           },
         });

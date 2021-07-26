@@ -2,7 +2,6 @@
   <!-- // created by hjc 分享确认订单 -->
   <div class="confirm_order" ref="confirmOrder">
     <div class="user_info">
-
       <div class="info">
         <span>提货人姓名：</span>
         <input placeholder="请输入姓名" v-model="userName" />
@@ -10,7 +9,11 @@
       <div class="line"></div>
       <div class="info">
         <span>联系人电话：</span>
-        <input placeholder="请输入联系人电话" v-model.number="userPhone" type="number" />
+        <input
+          placeholder="请输入联系人电话"
+          v-model.number="userPhone"
+          type="number"
+        />
       </div>
       <!-- <div class="pick_up_way">
         <span> 提货方式：</span>
@@ -37,7 +40,11 @@
           </div>
           <div class="addres" style="margin-top: 0.42667rem">
             <div class="adders-key">提货小区：</div>
-            <div class="adders-val">{{ shareData. communityCityName }}{{shareData.communityDistrictName}}{{ shareData.communityName }}</div>
+            <div class="adders-val">
+              {{ shareData.communityCityName
+              }}{{ shareData.communityDistrictName
+              }}{{ shareData.communityName }}
+            </div>
           </div>
           <div class="addres" style="margin-top: 0.42667rem">
             <div class="adders-key">详细地址：</div>
@@ -46,7 +53,7 @@
         </div>
       </div>
     </div>
-    <div class="goods_info"  v-for="(item, index) in goodsList" :key="index">
+    <div class="goods_info" v-for="(item, index) in goodsList" :key="index">
       <div class="goods_title">
         <div class="goods_title_text">
           <span></span>
@@ -92,7 +99,12 @@
     </div>
     <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
     <div ref="nullBox"></div>
-    <div class="pay_now" :style="{paddingBottom:this.$store.state.isX?'0.98667rem':'0.64rem'}">
+    <div
+      class="pay_now"
+      :style="{
+        paddingBottom: this.$store.state.isX ? '0.98667rem' : '0.64rem',
+      }"
+    >
       <div class="pay_price">
         <div class="pay_title">应付金额：</div>
         <div class="pay_value">¥{{ totalPrice }}</div>
@@ -104,7 +116,7 @@
 
 <script>
 import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
-import { Toast } from 'vant';
+import { Toast } from "vant";
 import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
@@ -130,7 +142,6 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    this.activityName = JSON.parse(this.$route.query.activityName);
     if (this.checkList.length > 3) {
       this.goodsList.push(this.checkList[0]);
       this.goodsList.push(this.checkList[1]);
@@ -144,27 +155,38 @@ export default {
     this.getUser();
   },
   methods: {
-      getUser(){
-      this.$http.post("/app/json/group_buying_areas/findByRecentUseAddress").then(res=>{
-        if(res.data.status == 0){
-          let data = res.data.data;
-          this.userPhone = data.mobile == '' ? this.$store.state.ythUserInfo.phone : data.mobile;
-          this.userName = data.name == '' ? this.$store.state.ythUserInfo.userName : data.name;
-        }
-      })
+    getUser() {
+      this.$http
+        .post("/app/json/group_buying_areas/findByRecentUseAddress")
+        .then((res) => {
+          if (res.data.status == 0) {
+            let data = res.data.data;
+            this.userPhone =
+              data.mobile == ""
+                ? this.$store.state.ythUserInfo.phone
+                : data.mobile;
+            this.userName =
+              data.name == ""
+                ? this.$store.state.ythUserInfo.userName
+                : data.name;
+          }
+        });
     },
     showMore() {
       this.goodsList = this.checkList;
       this.isShowMore = false;
     },
     vaidateEmoji(e) {
-      let value = e.target.value
+      let value = e.target.value;
       //禁止输入emoji表情，兼容大部分手机
-      value = value.replace(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig, '')
-      value = value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""); 
-      value = value.replace(/[\uE000-\uF8FF]/g, '');
+      value = value.replace(
+        /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi,
+        ""
+      );
+      value = value.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+      value = value.replace(/[\uE000-\uF8FF]/g, "");
       this.textareaValue = value;
-      console.log("textareaValue",this.textareaValue)
+      console.log("textareaValue", this.textareaValue);
     },
     //实现文本域自适应大小
     getHeight() {
@@ -252,7 +274,10 @@ export default {
     },
     checkList: {
       get() {
-        console.log('this.$route.query.checkList',JSON.parse(this.$route.query.checkList))
+        console.log(
+          "this.$route.query.checkList",
+          JSON.parse(this.$route.query.checkList)
+        );
         return JSON.parse(this.$route.query.checkList);
       },
       set() {},
@@ -265,9 +290,10 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
-.router_class{
+.router_class {
   background-color: #f6f6f6 !important;
 }
+
 .confirm_order {
   width: 100%;
   height: 100%;
@@ -335,9 +361,10 @@ export default {
         text-align: right;
       }
     }
-    .line{
+
+    .line {
       width: 100%;
-      height 1px;
+      height: 1px;
       background: #F0F0F0;
       margin: 20px 0;
     }
@@ -393,15 +420,15 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    background-image:url('../../activity/images/card_line_default.png');
+    background-image: url('../../activity/images/card_line_default.png');
     background-repeat: no-repeat;
-    background-size :100% 3px;
+    background-size: 100% 3px;
     background-position: 0 0;
 
     .addres_title {
       display: flex;
-      // padding-bottom: 17px;
 
+      // padding-bottom: 17px;
       .addres_title_text {
         flex: 1;
         font-size: 14px;
@@ -421,7 +448,7 @@ export default {
           height: 4px;
           background: #FE4886;
           border-radius: 50%;
-          margin-right:7px;
+          margin-right: 7px;
         }
       }
 
@@ -431,11 +458,12 @@ export default {
         font-weight: 300;
         color: #999999;
         display: flex;
-        justify-content :flex-start;
-        align-items :center;
-        img{
-          width :6px;
-          height :10px;
+        justify-content: flex-start;
+        align-items: center;
+
+        img {
+          width: 6px;
+          height: 10px;
           margin-left: 6px;
         }
       }
@@ -445,7 +473,7 @@ export default {
       width: 315px;
       height: 1px;
       background-color: #EEEDED;
-      margin:17px 0;
+      margin: 17px 0;
     }
 
     .addres_info {
@@ -496,25 +524,23 @@ export default {
           justify-content: space-between;
 
           .adders-key {
-            width :100px;
+            width: 84px;
             font-size: 13px;
             font-family: PingFang SC;
             font-weight: 300;
             color: #666666;
             text-align: right;
+            white-space: nowrap;
             flex-wrap: nowrap;
-            white-space :nowrap;
           }
 
           .adders-val {
             // width: 220px;
             flex: 1;
-            text-align:right;
-            flex-wrap: nowrap;
-            white-space :nowrap;
+            text-align: left;
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: 300;
+            font-weight: bold;
             color: #121212;
             // white-space :nowrap;
             // flex-wrap :nowrap;
@@ -541,20 +567,21 @@ export default {
         font-weight: 700;
         color: #424242;
         line-height: 20px;
-        display :flex;
-        justify-content :flex-start;
+        display: flex;
+        justify-content: flex-start;
         align-items: center;
 
         span {
-          display :inline-block;
+          display: inline-block;
           width: 4px;
           height: 4px;
           background: #FE4886;
           border-radius: 50%;
-          margin-right :7px;
+          margin-right: 7px;
         }
       }
     }
+
     .line {
       width: 100%;
       height: 1px;
@@ -563,7 +590,6 @@ export default {
     }
 
     .goods_item {
-
       .stepper {
         height: 24px;
         display: flex;
@@ -574,7 +600,7 @@ export default {
       .goods_info_item {
         display: flex;
         justify-content: flex-start;
-        padding-left:12px;
+        padding-left: 12px;
 
         img {
           width: 70px;
@@ -605,7 +631,7 @@ export default {
             color: #999999;
             line-height: 15px;
             text-decoration: line-through;
-            margin:11px 0 9px;
+            margin: 11px 0 9px;
           }
 
           .count_price {
@@ -716,17 +742,19 @@ export default {
     align-items: center;
 
     .pay_price {
-      display :flex;
+      display: flex;
       justify-content: flex-start;
       align-items: center;
-      .pay_title{
+
+      .pay_title {
         font-size: 15px;
         font-weight: 400;
         font-family: PingFang SC;
         color: #121212;
         line-height: 27.5px;
       }
-      .pay_value{
+
+      .pay_value {
         font-size: 15px;
         font-family: PingFang SC;
         font-weight: 400;
@@ -744,7 +772,7 @@ export default {
       font-weight: 400;
       color: #F4F4F4;
       text-align: center;
-      line-height :39px;
+      line-height: 39px;
     }
   }
 }

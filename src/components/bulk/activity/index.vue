@@ -327,7 +327,7 @@ export default {
               userName: "gh_28d617271c97",
               // path: `pages/common/home/index?sence=${sence}`,
               path: `pages/common/home/index?redirect=${encodeURIComponent(
-                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
+                `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
               )}`,
               title: this.shareItemData.groupbuyActivityName,
               desc: this.shareItemData.groupbuyActivityName,
@@ -457,16 +457,15 @@ export default {
       padding: 21px 39px 12px;
 
       .tab_item {
-        width: 49px;
-        height: 22px;
         background: #fff;
-        border-radius: 10px;
+        border-radius: 15px;
         text-align: center;
         line-height: 22px;
         font-size: 14px;
         font-family: PingFang SC;
         font-weight: 400;
         color: #666666;
+        padding: 0 7px;
       }
 
       .current_tab {
@@ -475,6 +474,7 @@ export default {
         font-family: PingFang SC;
         font-weight: 400;
         color: #FFFFFF;
+        padding: 0 7px;
       }
     }
   }
