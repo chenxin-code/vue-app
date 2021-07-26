@@ -1915,12 +1915,12 @@ export default {
           }
         }
         this.viewpoint_radio = this.$util.toDecimal2(viewpoint_radio);
-        console.log(
-          "viewpoint_radio",
-          this.viewpoint_radio,
-          this.detailScrollHeight,
-          this.detailClientHeight
-        );
+        // console.log(
+        //   "viewpoint_radio",
+        //   this.viewpoint_radio,
+        //   this.detailScrollHeight,
+        //   this.detailClientHeight
+        // );
       });
     },
     shareSensors(share_type) {
