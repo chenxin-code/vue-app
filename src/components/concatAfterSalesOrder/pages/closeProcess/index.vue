@@ -59,7 +59,7 @@ export default {
       } else if (this.currentPage > this.serviceMallMaxPage) {
         promiseList = [this.getMallOrder()];
       } else {
-        promiseList = [this.getMallOrder(), this.getServiceMallOrder()];
+        promiseList = [this.getServiceMallOrder(), this.getMallOrder()];
       }
 
       console.log("promiseList", promiseList);
