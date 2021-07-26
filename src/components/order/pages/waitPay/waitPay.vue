@@ -354,7 +354,7 @@ export default {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
         state: "1",
-        page: { index: this.currentPage, pageSize: 30 },
+        page: { index: this.currentPage, pageSize: 5 },
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,

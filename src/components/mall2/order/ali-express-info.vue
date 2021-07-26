@@ -39,6 +39,7 @@
             </van-step>
           </van-steps>
         </div>
+        <img src="./img/no-data.png">
         <div class="no-data" v-if="expressDetails.length == 0">
           暂未查询到物流信息
         </div>
@@ -55,6 +56,7 @@
           <p>{{ item.recordTime }}</p>
         </van-step>
       </van-steps>
+      <img src="./img/no-data.png">
       <div class="no-data" v-if="expressinfoList.length == 0">
         暂未查询到物流信息
       </div>
@@ -174,6 +176,12 @@ export default {
 
   .expressinfoStep {
     overflow-y: auto;
+    .no-data {
+      margin-top: 100px;
+    }
+    img {
+      width: 100%;
+    }
   }
 
   .scroll-order {
