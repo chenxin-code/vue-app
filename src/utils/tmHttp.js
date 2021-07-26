@@ -27,7 +27,7 @@ ythToken = store.state.ythToken? store.state.ythToken:localStorage.getItem("ythT
 
 // ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDA4NjkyNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTYyMDM5MDg5OTQ4MjY4MSwiZXhwIjoxNjI1NDQ3ODY0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjNlNzM2YjE4LTQzMmEtNGY1OS04Njk5LWUxMjJkY2ZiMDQwOSIsImNsaWVudF9pZCI6ImFwcF9jIn0.UGhQDskBQJMfooam0Xe8dixTms2fxnGe9wYsKaysO_ipRNEX8OutF0SzyQalvYfINdV2iNzVYsclOHgO9TpA2Q2n4i-fPcCds7m6QC4Wcyi14uLcCdQrnlh01L5hlsJfaiRXwBr7PpCoX1iaY7UtJW9D6eO1nNKM8rQ9BiA2QFd-uPRZPkSF3_S9RCeNBMEDqAJ0nQhApvUUJ3HFmu6hao00FJUnA-0Sdaihpv5d7BbKsUGPg6gV04N5uKOnNzMFSbkFX_SO1oPFM-UDooVFW7MZYrsbhx9e41jTSdENNUWejgo86ywbujHUXHZOlNIEDy1iEjw5pFygaZfuafKlwg";
 /*思维的token*/
-// ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODgyNjEzOTY2OSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA0MjkwMjc2NjE5NywiZXhwIjoxNjI3Mjg2ODA4LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiZTY4NmE5NjAtNjYwNS00NDAwLTkxYjQtMjQxZWZlZTJmOGNhIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.OziYiLe6-i-VkAvCuGdkykfnbNIygW4Wpv9UbVJxvjq8LhsKQUyJ2FUTCcK4LvP52CGwSqP7Y9YA2TOFjPCPA955mR5-AlYDNS49P3orjMglZQRIEaBKMWjvbE_Q0UX2rEl58MqLehDxg9Vc4HUaWaYxHst8OmgDcfTw5k-NyAOqWUzncsYGDzf9PM398P6gCnwE3xbYwQWwAa24kwLmWdVrs3SRfzStIC11Sz3IBjZhrGjhdVH5xu-SbhAxx4zsuiZkA3YzWwDWpXBXOPT-QWgGDR7Oy3V1cThGbUvJAGcuwbFmruY8JULWb-Dh6CRmDfjMDtDThaeUhR2sa0c7qg"
+ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDA4NjkyNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTYyMDM5MDg5OTQ4MjY4MSwiZXhwIjoxNjI1NDQ3ODY0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjNlNzM2YjE4LTQzMmEtNGY1OS04Njk5LWUxMjJkY2ZiMDQwOSIsImNsaWVudF9pZCI6ImFwcF9jIn0.UGhQDskBQJMfooam0Xe8dixTms2fxnGe9wYsKaysO_ipRNEX8OutF0SzyQalvYfINdV2iNzVYsclOHgO9TpA2Q2n4i-fPcCds7m6QC4Wcyi14uLcCdQrnlh01L5hlsJfaiRXwBr7PpCoX1iaY7UtJW9D6eO1nNKM8rQ9BiA2QFd-uPRZPkSF3_S9RCeNBMEDqAJ0nQhApvUUJ3HFmu6hao00FJUnA-0Sdaihpv5d7BbKsUGPg6gV04N5uKOnNzMFSbkFX_SO1oPFM-UDooVFW7MZYrsbhx9e41jTSdENNUWejgo86ywbujHUXHZOlNIEDy1iEjw5pFygaZfuafKlwg"
 if (ythToken) {
     config.headers.Authorization = "Bearer " + ythToken;
 }
@@ -113,11 +113,11 @@ export const fetchMethod = async (
 ) => {
   return handleParams(api, rawData, method, headers, params).then(options => {
     if (!params.hideToast) {
-      Toast.loading({
-        message: "加载中...",
-        duration: "toast",
-        forbidClick: true
-      });
+    //   Toast.loading({
+    //     message: "加载中...",
+    //     duration: "toast",
+    //     forbidClick: true
+    //   });
     }
     return new Promise((resolve, reject) => {
       HTTP({
