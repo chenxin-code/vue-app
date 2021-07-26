@@ -3,7 +3,7 @@
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         v-model="loading"
-        :finished="finished"
+        :finished="allFinish"
         :finished-text="showEmpty ? '' : '- 亲, 没有更多订单了 -'"
         @load="onLoad"
         :error.sync="error"
