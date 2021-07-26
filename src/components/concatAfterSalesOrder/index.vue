@@ -30,6 +30,7 @@ import FigureOut from "./pages/figureOut/index";
 import CloseProcess from "./pages/closeProcess/index";
 import navToMicroApplication from "@zkty-team/x-engine-module-router";
 // import nav from "@zkty-team/x-engine-module-nav";
+import appNav from "@zkty-team/x-engine-module-nav";
 export default {
   data() {
     return {
