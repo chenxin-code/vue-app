@@ -29,9 +29,12 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :orderState="item.orderState ? item.orderState : ''"
+            :shopOrderNo="item.shopOrderNo ? item.shopOrderNo : ''"
+            :tag="item.tag"
           ></OrderItem>
         </div>
-        <Empty v-show="showEmpty"></Empty>
+        <Empty v-show="currentOrderList.length <= 0"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -77,7 +80,7 @@ export default {
     this.deliveryType = this.$store.state.mall2.staticDeliverType
       ? this.$store.state.mall2.staticDeliverType
       : "2";
-    this.commFn();
+    this.onLoad();
   },
   watch: {
     currentOrderList: function (newVal, oldVal) {
@@ -135,6 +138,7 @@ export default {
               lists.map((item) => {
                 let init = {
                   billType: 13, //清单列表
+                  tag: 4, //状态订单
                   amount: item.amountPay, //实付金额
                   submitTime: item.orderTime, //下单时间
                   deliverType: item.deliverType, //配送方式
@@ -252,6 +256,7 @@ export default {
                 orderList.map((item) => {
                   let list = {
                     billType: 11,
+                    tag: 4, //状态订单
                     amount: item.realAmount,
                     submitTime: item.submitTime,
                     deliverType: item.deliverType,
@@ -314,7 +319,6 @@ export default {
 
                   ownlist.push(list);
                 });
-                console.log(ownlist, "ownlist");
                 this.concatFn(ownlist);
               } else {
                 ownlist = [];
@@ -352,9 +356,11 @@ export default {
       }, 500);
     },
     concatFn(list) {
-      this.currentOrderList = this.currentOrderList.concat(list);
+      this.orderList = this.orderList.concat(list);
       /*按时间排序*/
-      this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+      this.currentOrderList = this.sortKey(this.orderList, "submitTime");
+      console.log(this.currentOrderList, "this.currentOrderList-concat");
+      //   this.$forceUpdate();
     },
     /*按时间排序*/
     sortKey(array, key) {

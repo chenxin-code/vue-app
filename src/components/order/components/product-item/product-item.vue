@@ -93,7 +93,7 @@ export default {
   methods: {
     gotoProductDetail: function (product) {
       /*billType == 13 服务商城的清单类型*/
-      if (productItem.billType == 13) {
+      if (this.productItem.billType == 13) {
         let token = this.$store.state.ythToken
           ? this.$store.state.ythToken
           : localStorage.getItem("ythToken");
