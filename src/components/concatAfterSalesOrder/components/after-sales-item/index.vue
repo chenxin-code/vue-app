@@ -108,9 +108,8 @@ export default {
             isHidden: false,
             isAnimation: true,
           })
-          .then((res) => {
-            window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
-          });
+          .then((res) => {});
+        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&Authorization=${Authorization}`;
       }
     },
   },
