@@ -9,6 +9,7 @@
         :error.sync="error"
         :error-text="errorText"
         :immediate-check="true"
+        offset="10"
       >
         <property-bill v-show="isLoadPropertyBill" :results="billResults" />
         <div
@@ -222,6 +223,7 @@ export default {
 
         //这里是电商订单接口返回的数据处理逻辑
         if (orderRes && orderRes.status === "fulfilled") {
+          // debugger
           let orderResult = orderRes.value.data;
           let { data } = orderResult;
           // 判断当前页数是否超过总页数或者等于总页数
@@ -244,6 +246,11 @@ export default {
                   item.billType != 11 ||
                   (item.orderStateType == "200017" && item.state == 9)
               );
+              if(this.orderList.length == 0 && data.records.length !== 0 && indexList.length == 0){ // 如果第一页开始没有过滤到已完成的订单就一直请求
+                this.currentPage++;
+                this.onLoad();
+                return
+              }
               this.orderList =
                 this.currentPage == 1
                   ? indexList
@@ -251,7 +258,7 @@ export default {
               this.page = data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
-              } else {
+              }else {
                 this.currentOrderList = [];
                 this.finished = true;
               }
@@ -317,95 +324,95 @@ export default {
     // 初始化数据
     initData() {
       this.currentOrderList = this.orderList.map(item => {
-        return {
-          billType: item.billType,
-          billId: item.billId,
-          amount: item.totalPrice,
-          submitTime: item.submitTime,
-          deliverType: item.deliverType,
-          orderId: item.id,
-          orderType: item.orderStateType,
-          orderCategory: item.orderCategory,
-          orderCanEvaluate: item.orderCanEvaluate,
-          state: item.state,
-          bulkOrderType: item.orderType,
-          shoppingOrderId: item.shoppingOrderId,
-          id: item.id,
-          tradeNo: item.tradeNo,
-          params: {
+          return {
+            billType: item.billType,
+            billId: item.billId,
+            amount: item.totalPrice,
+            submitTime: item.submitTime,
             deliverType: item.deliverType,
             orderId: item.id,
             orderType: item.orderStateType,
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
-            orderStateType: item.orderStateType,
             state: item.state,
-            shoppingOrderId: item.shoppingOrderId
-          },
-          // case 17:
-          //   return "支付已完成 · 待发货";
-          // case 4:
-          //   return "支付已完成 · 待收货";
-          // case 9:
-          //   return "订单已完成";
-          // case 12:
-          //   return "订单已取消";
-          billDetailObj: {
-            businessCstNo: item.loginUserPhone,
-            groupBuyActivityId: item.groupBuyActivityId,
-            groupBuyId: item.groupBuyId,
-            payMode: item.payMode,
-            tradeNo: item.tradeNo,
+            bulkOrderType: item.orderType,
             shoppingOrderId: item.shoppingOrderId,
-            orderPayType: item.orderPayType,
             id: item.id,
-            tag:
-              item.state == 17
-                ? "16"
-                : item.state == 16
-                ? "16"
-                : item.state == 4
-                ? "4"
-                : item.state == 9
-                ? "9"
-                : item.state == 12
-                ? "7"
-                : item.state,
-            tabIndex: 5,
-            awardActivityList: item.awardActivityList,
-            isRefund: item.isRefund
-          },
-          dataList: item.orderFormItemList.map(sub => {
-            return {
-              billType: item.billType,
-              billImg: sub.iconUrl,
-              billName: sub.name,
-              billAmount: sub.unitPrice,
-              billNum: sub.quantity,
-              skuId: sub.itemId,
-              id: sub.itemId,
-              storeOuCode: sub.storeOuCode,
-              expressNo: item.expressNo,
-              expressName: item.expressName,
-              interfaceType: item.interfaceType,
+            tradeNo: item.tradeNo,
+            params: {
               deliverType: item.deliverType,
-              itemTypeName: sub.itemTypeName,
-              snapshotTime: sub.snapshotTime,
-              info: sub.info,
-              address: item.address,
-              cityId: item.cityId,
-              countryId: item.countryId,
-              countryName: item.countryName,
-              provinceId: item.provinceId,
-              provinceName: item.provinceName,
-              townId: item.townId,
-              townName: item.townName,
-              receiver: item.receiver,
-              mobile: item.mobile,
-              itemOrderId: sub.itemOrderId
-            };
-          })
-        };
+              orderId: item.id,
+              orderType: item.orderStateType,
+              orderCategory: item.orderCategory,
+              orderCanEvaluate: item.orderCanEvaluate,
+              orderStateType: item.orderStateType,
+              state: item.state,
+              shoppingOrderId: item.shoppingOrderId
+            },
+            // case 17:
+            //   return "支付已完成 · 待发货";
+            // case 4:
+            //   return "支付已完成 · 待收货";
+            // case 9:
+            //   return "订单已完成";
+            // case 12:
+            //   return "订单已取消";
+            billDetailObj: {
+              businessCstNo: item.loginUserPhone,
+              groupBuyActivityId: item.groupBuyActivityId,
+              groupBuyId: item.groupBuyId,
+              payMode: item.payMode,
+              tradeNo: item.tradeNo,
+              shoppingOrderId: item.shoppingOrderId,
+              orderPayType: item.orderPayType,
+              id: item.id,
+              tag:
+                item.state == 17
+                  ? "16"
+                  : item.state == 16
+                  ? "16"
+                  : item.state == 4
+                  ? "4"
+                  : item.state == 9
+                  ? "9"
+                  : item.state == 12
+                  ? "7"
+                  : item.state,
+              tabIndex: 5,
+              awardActivityList: item.awardActivityList,
+              isRefund: item.isRefund
+            },
+            dataList: item.orderFormItemList.map(sub => {
+              return {
+                billType: item.billType,
+                billImg: sub.iconUrl,
+                billName: sub.name,
+                billAmount: sub.unitPrice,
+                billNum: sub.quantity,
+                skuId: sub.itemId,
+                id: sub.itemId,
+                storeOuCode: sub.storeOuCode,
+                expressNo: item.expressNo,
+                expressName: item.expressName,
+                interfaceType: item.interfaceType,
+                deliverType: item.deliverType,
+                itemTypeName: sub.itemTypeName,
+                snapshotTime: sub.snapshotTime,
+                info: sub.info,
+                address: item.address,
+                cityId: item.cityId,
+                countryId: item.countryId,
+                countryName: item.countryName,
+                provinceId: item.provinceId,
+                provinceName: item.provinceName,
+                townId: item.townId,
+                townName: item.townName,
+                receiver: item.receiver,
+                mobile: item.mobile,
+                itemOrderId: sub.itemOrderId
+              };
+            })
+          };
       });
     }
   }
