@@ -319,6 +319,8 @@ export default {
       this.currentPage = 1;
       this.finished = false; //将没有更多的状态改成false
       this.refreshing = true;
+      this.orderList = [];
+      this.currentOrderList = [];
       this.onLoad();
     },
     // 初始化数据
