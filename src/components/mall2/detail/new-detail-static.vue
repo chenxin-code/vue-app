@@ -2657,14 +2657,14 @@ export default {
         }else{
           if (window.history.length === 1) {
             appNav.navigatorBack({ url: "0" }).then(res => {
-              appNav
-              .setNavBarHidden({
-                isHidden: true,
-                isAnimation: false
-              })
-              .then(res => {});
-              nav.changeBottomToIndex({ selectIndex: 2})
+              // nav.changeBottomToIndex({ selectIndex: 2})
             });
+            appNav
+            .setNavBarHidden({
+              isHidden: true,
+              isAnimation: false
+            })
+            .then(res => {});
             this.$router.replace("/common");
           } else {
             this.$router.go(-1);
