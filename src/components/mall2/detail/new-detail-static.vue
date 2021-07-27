@@ -91,7 +91,6 @@
             >
               详情
             </div>
-<<<<<<< HEAD
             <div
               class="btn-div"
               :style="getSelectedTabStyle(3)"
@@ -101,17 +100,6 @@
             </div>
             <div
               class="btn-div"
-=======
-            <div
-              class="btn-div"
-              :style="getSelectedTabStyle(3)"
-              @click="toptabEvent(3)"
-            >
-              评价
-            </div>
-            <div
-              class="btn-div"
->>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
               :style="getSelectedTabStyle(4)"
               @click="toptabEvent(4)"
             >
@@ -172,10 +160,6 @@
                     stayDistance: 40,
                     triggerDistance: 50
                   }"
-<<<<<<< HEAD
-                  :bottom-load-method="bottomPull"
-=======
->>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
                   :top-load-method="topPull"
                   :is-bottom-bounce="true"
                   :is-top-bounce="false"
@@ -1579,19 +1563,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-<<<<<<< HEAD
-          <div class="share_botton_item" @click="shareImg" v-show="false">
-            <img src="static/image/mall2/share_img.png" alt="" />
-            <div>图片分享</div>
-          </div>
-          <div class="share_botton_item" @click="shareLink" v-show="false">
-=======
           <div class="share_botton_item" @click="shareImg">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
           <div class="share_botton_item" @click="shareLink">
->>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>链接分享</div>
           </div>
