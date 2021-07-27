@@ -76,6 +76,7 @@ Axios.interceptors.request.use(
     }
 
     if(/times\-center\-trade/.test(config.url)){
+      
       // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
       if(store.state.webtype == "2" || store.state.webtype == "3"){
         config.headers.Authorization = localStorage.getItem('ythToken')
