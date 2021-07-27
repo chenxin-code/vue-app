@@ -227,11 +227,7 @@ export default {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-<<<<<<< HEAD
         page: { index: currentPage, pageSize: 15 },
-=======
-        page: { index: page, pageSize: 5 },
->>>>>>> fix-branch2
       };
       if (this.tabs.tag == 4) {
         obj.deliverType = this.deliveryType;
@@ -372,7 +368,6 @@ export default {
     onRefresh() {
       this.finished = false; //将没有更多的状态改成false
       this.currentPage = 1;
-<<<<<<< HEAD
       this.allFinish = false;
       this.tmfinished = false; //服务商的加载
       this.tmpage = 1;
@@ -400,19 +395,6 @@ export default {
         };
         delete recordDataNew.orderItemList;
         recordsArray.push(recordDataNew);
-=======
-      let obj = {
-        orderType: this.tabs.type[0],
-        orderTypeList: this.tabs.type,
-        state: this.tabs.tag,
-        page: { index: page, pageSize: 5 },
-      };
-      if (this.tabs.tag == 4) {
-        obj.deliverType = this.deliveryType;
-        if (this.deliveryType == 2) {
-          obj.deliverTypeList = [2, 3];
-        }
->>>>>>> fix-branch2
       }
       return recordsArray;
     },
