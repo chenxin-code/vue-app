@@ -58,11 +58,11 @@
             !isFinishBill && !showEmpty ? 'not-pay-bill' : '',
           ]"
         >
-          <van-pull-refresh
+          <!-- <van-pull-refresh
             v-model="isLoading"
             @refresh="onRefresh"
             class="refresh-page"
-          >
+          > -->
             <van-list
               class="tab-list-box"
               :class="[
@@ -160,7 +160,7 @@
                 "
               ></Empty>
             </van-list>
-          </van-pull-refresh>
+          <!-- </van-pull-refresh> -->
         </div>
       </div>
     </div>
@@ -1074,6 +1074,20 @@ $color = #8D8D8D;
             &.not-pay-bill {
               padding-bottom: 400px;
             }
+          }
+        }
+        .tab-list-box {
+          max-height: 100vh;
+          width: 100%;
+          overflow-y: scroll;
+          padding-bottom: 320px;
+
+          &.empty {
+            padding-bottom: 0;
+          }
+
+          &.not-pay-bill {
+            padding-bottom: 400px;
           }
         }
 
