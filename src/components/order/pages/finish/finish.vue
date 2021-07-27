@@ -26,6 +26,7 @@
           :key="index"
           class="scroll"
         >
+        <template v-if='item.billType == 13 && item.dataList.length>0'>
           <OrderItem
             :dataList="item.dataList"
             :params="item.params"
@@ -45,6 +46,28 @@
             :orderItem="item"
             :tag="item.tag"
           ></OrderItem>
+        </template>
+        <template v-if='item.billType!= 13'>
+          <OrderItem
+            :dataList="item.dataList"
+            :params="item.params"
+            :billType="item.billType"
+            :amount="item.amount"
+            :submitTime="item.submitTime"
+            :billDetailObj="item.billDetailObj"
+            :orderType="item.orderType"
+            :billId="item.billId"
+            pageType="finish"
+            :state="item.state"
+            :orderCanEvaluate="item.orderCanEvaluate"
+            :shoppingOrderId="item.shoppingOrderId"
+            :bulkOrderType="item.bulkOrderType"
+            :id="item.id"
+            :tradeNo="item.tradeNo"
+            :orderItem="item"
+            :tag="item.tag"
+          ></OrderItem>
+        </template>
         </div>
         <Empty v-show="showEmpty"></Empty>
       </van-list>
@@ -57,6 +80,7 @@ import propertyBill from "@/components/order/components/bill-item2/bill-item";
 import OrderItem from "../../components/order-item/order-item";
 import Empty from "../../components/empty/empty.vue";
 import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
+import { fetchMethod } from "@/utils/tmHttp.js";
 export default {
   name: "finish",
   data() {
@@ -75,6 +99,8 @@ export default {
       queryBadge: {},
       page: 0,
       index: 0,
+      pageSize:8,
+      tmpage:1,
       showEmpty: false,
       currentOrderList: [],
       tabs: {
@@ -155,13 +181,12 @@ export default {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
-        page: { index: this.currentPage, pageSize: 30 },
+        page: { index: this.currentPage, pageSize:this.pageSize},
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,
         billType: this.reqBillType,
       };
-
       return new Promise((resolve, reject) => {
         this.$http
           .post("/app/json/app_shopping_order/findOrderFormList", obj)
@@ -175,7 +200,6 @@ export default {
           );
       });
     },
-
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       this.loading = true;
@@ -320,8 +344,8 @@ export default {
       let page = 1; //从第一页开始
       this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
+      this.tmpage = 1;
       this.finished = false; //将没有更多的状态改成false
-      // this.refreshing = true;
       this.refreshing = false;
       this.refresh = true;
       this.onLoad();

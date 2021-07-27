@@ -60,6 +60,7 @@ export default {
       currentOrderList: [],
       currentPage: 1,
       tmpage: 1,
+      pageSize: 8,
       tmfinished: false,
       allFinish: false,
       showEmpty: false,
@@ -81,7 +82,7 @@ export default {
     this.deliveryType = this.$store.state.mall2.staticDeliverType
       ? this.$store.state.mall2.staticDeliverType
       : "2";
-    this.onLoad();
+    this.commFn();
   },
   watch: {
     currentOrderList: function (newVal, oldVal) {
@@ -96,7 +97,7 @@ export default {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       this.refreshing = false;
-      if (!this.allFinish) {
+      if (!this.allFinish && (this.currentPage > 1 || this.tmpage > 1)) {
         this.commFn();
       }
     },
@@ -117,11 +118,11 @@ export default {
     /*服务商城的接口 --billType(物业清单) = 13*/
     tMallFn() {
       let list = [],
-        { tmpage } = this;
+        { tmpage, pageSize } = this;
       let param = {
         orderStateList: ["ON_GOING"],
         pageNum: tmpage,
-        pageSize: 15,
+        pageSize: pageSize,
       };
       let seriveAPI = "/times-center-trade/mall/order/v1/shop/list";
       fetchMethod("POST", seriveAPI, param).then((res) => {
@@ -227,13 +228,13 @@ export default {
     },
     /*自建商城的接口--billType(物业清单) = 11*/
     ownMallFn() {
-      let { currentPage } = this,
+      let { currentPage, pageSize } = this,
         ownlist = [];
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-        page: { index: currentPage, pageSize: 15 },
+        page: { index: currentPage, pageSize: pageSize },
       };
       if (this.tabs.tag == 4) {
         obj.deliverType = this.deliveryType;
