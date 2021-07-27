@@ -2622,8 +2622,9 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
+      console.log('----backEvent->>>>----this.$route.query', this.$route.query);
       if (this.$route.query.channel == "fromApp") {
-        window.location.href = `x-engine-json://yjzdbill/webToApp?callback=${encodeURIComponent(
+        window.location.href = `x-engine-json://yjzdbill/webToApp?args=&callback=${encodeURIComponent(
           // location.origin
           'https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common'
         )}`;
