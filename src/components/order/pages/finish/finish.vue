@@ -3,7 +3,7 @@
     class="finish"
     :class="{
       'finish-x': this.$util.getIsIphoneX_X(),
-      'empty-page': showEmpty
+      'empty-page': showEmpty,
     }"
   >
     <van-pull-refresh
@@ -42,6 +42,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :tag="item.tag"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -78,17 +79,17 @@ export default {
       tabs: {
         text: "已完成",
         tag: "9",
-        type: ["200017"]
+        type: ["200017"],
       },
       isLoadPropertyBill: false, //是否加载物业缴费账单组件
       billResults: [], //物业缴费数据
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14" //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,13,14", //账单类型 1-物业收费账单,2-月保续费账单,3-停车费账单,4-临时收费账单,5-零售,6-预缴费,7-旅游,8-家政,9-拎包,10-押金,11-新零售,12-美居,13-服务商城,14-维修服务费
     };
   },
   components: {
     propertyBill,
     OrderItem,
-    Empty
+    Empty,
   },
   created() {
     this.getRoomId();
@@ -101,7 +102,7 @@ export default {
     getRoomId() {
       appLocalstorage
         .get({ key: "LLBUserRoomId", isPublic: true })
-        .then(res => {
+        .then((res) => {
           if (res.hasOwnProperty("result")) {
             this.userRoomId = res.result;
           } else {
@@ -123,7 +124,7 @@ export default {
         status: 90, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
         pageNo: "",
-        pageTimes: ""
+        pageTimes: "",
       };
       let url = "";
       this.$store.state.environment == "development"
@@ -133,10 +134,10 @@ export default {
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       return new Promise((resolve, reject) => {
         this.$http.get(url, { params: propertyObj }).then(
-          res => {
+          (res) => {
             resolve(res);
           },
-          err => {
+          (err) => {
             reject(err);
           }
         );
@@ -146,28 +147,28 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
 
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         // state: this.tabs.tag,
-        page: { index: this.currentPage, pageSize: 5 },
+        page: { index: this.currentPage, pageSize: 30 },
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,
-        billType: this.reqBillType
+        billType: this.reqBillType,
       };
 
       return new Promise((resolve, reject) => {
         this.$http
           .post("/app/json/app_shopping_order/findOrderFormList", obj)
           .then(
-            res => {
+            (res) => {
               resolve(res);
             },
-            err => {
+            (err) => {
               reject(err);
             }
           );
@@ -187,7 +188,7 @@ export default {
       } else {
         promiseArr = [this.propertyFn(), this.orderFn()];
       }
-      Promise.allSettled(promiseArr).then(res => {
+      Promise.allSettled(promiseArr).then((res) => {
         let propertyRes = "";
         let orderRes = "";
         if (res.length == 2) {
@@ -248,7 +249,7 @@ export default {
             if (orderResult.status == 0) {
               // var indexList = data.records; //将请求到的内容赋值给一个变量
               var indexList = data.records.filter(
-                item =>
+                (item) =>
                   item.billType != 11 ||
                   (item.orderStateType == "200017" && item.state == 9)
               );
@@ -326,9 +327,10 @@ export default {
     },
     // 初始化数据
     initData() {
-      this.currentOrderList = this.orderList.map(item => {
+      this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
+          tag: 9, //订单状态
           billId: item.billId,
           amount: item.totalPrice,
           submitTime: item.submitTime,
@@ -342,6 +344,9 @@ export default {
           shoppingOrderId: item.shoppingOrderId,
           id: item.id,
           tradeNo: item.tradeNo,
+          orderState: item.orderStateType,
+          orderType: item.orderType, //订单类型
+          shopOrderNo: item.orderFormItemList[0].storeOuCode,
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
@@ -350,7 +355,7 @@ export default {
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
             state: item.state,
-            shoppingOrderId: item.shoppingOrderId
+            shoppingOrderId: item.shoppingOrderId,
           },
           // case 17:
           //   return "支付已完成 · 待发货";
@@ -383,9 +388,9 @@ export default {
                 : item.state,
             tabIndex: 5,
             awardActivityList: item.awardActivityList,
-            isRefund: item.isRefund
+            isRefund: item.isRefund,
           },
-          dataList: item.orderFormItemList.map(sub => {
+          dataList: item.orderFormItemList.map((sub) => {
             return {
               billType: item.billType,
               billImg: sub.iconUrl,
@@ -412,30 +417,37 @@ export default {
               townName: item.townName,
               receiver: item.receiver,
               mobile: item.mobile,
-              itemOrderId: sub.itemOrderId
+              itemOrderId: sub.itemOrderId,
+              orderState: item.orderStateType,
+              orderType: item.orderType, //订单类型
+              shopOrderNo: sub.storeOuCode,
+              tradeNo: item.tradeNo,
             };
-          })
+          }),
         };
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 // .scroll {
-//   padding-top: 10px;
+// padding-top: 10px;
 // }
-.finish{
-  height 100%;
-  overflow-y auto;
+.finish {
+  height: 100%;
+  overflow-y: auto;
   padding-bottom: 130px;
+
   &.finish-x {
     padding-bottom: 150px;
   }
+
   &.empty-page {
     overflow-y: hidden;
   }
+
   .refresh-page {
     min-height: 100%;
   }

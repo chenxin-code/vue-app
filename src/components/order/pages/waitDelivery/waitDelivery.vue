@@ -31,9 +31,10 @@
             :tradeNo="item.tradeNo"
             :orderState="item.orderState ? item.orderState : ''"
             :shopOrderNo="item.shopOrderNo ? item.shopOrderNo : ''"
+            :tag="item.tag"
           ></OrderItem>
         </div>
-        <Empty v-show="showEmpty"></Empty>
+        <Empty v-show="currentOrderList.length <= 0"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -55,12 +56,12 @@ export default {
       massList: [],
       ownList: [],
       currentOrderList: [],
+      orderList: [],
       currentPage: 1,
       tmpage: 1,
       tmfinished: false,
       allFinish: false,
       showEmpty: false,
-      currentOrderList: [],
       params: {},
       tabs: {
         text: "待发货",
@@ -74,7 +75,7 @@ export default {
     Empty,
   },
   created() {
-    this.commFn();
+    this.onLoad();
   },
   watch: {
     currentOrderList: function (newVal, oldVal) {
@@ -88,14 +89,16 @@ export default {
   methods: {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
-      this.loading = true;
       this.refreshing = false;
-      this.tmerror = false;
       if (!this.allFinish) {
         this.commFn();
       }
     },
     async commFn() {
+      this.tmerror = false;
+      this.error = false;
+      this.refreshing = false;
+      this.loading = true;
       if (!this.tmfinished) {
         await this.tMallFn();
       }
@@ -112,18 +115,17 @@ export default {
         } else {
           this.allFinish = false;
         }
-
         if (this.tmerror && this.error) {
           this.error = true;
         } else {
           this.error = false;
         }
-      }, 500);
+      }, 1000);
     },
     concatFn(list) {
-      this.currentOrderList = this.currentOrderList.concat(list);
+      this.orderList = this.orderList.concat(list);
       /*按时间排序*/
-      this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+      this.currentOrderList = this.sortKey(this.orderList, "submitTime");
     },
     /*按时间排序*/
     sortKey(array, key) {
@@ -159,6 +161,7 @@ export default {
                 lists.map((item) => {
                   let init = {
                     billType: 13, //清单列表
+                    tag: 16, //状态订单
                     amount: item.amountPay, //实付金额
                     submitTime: item.orderTime, //下单时间
                     deliverType: "", //配送方式
@@ -177,8 +180,8 @@ export default {
                       orderId: item.id,
                       orderType: item.orderType, //订单类型
                       orderCategory: "", //item.orderCategory,
-                      orderStateType: "", // item.orderStateType,
-                      state: item.orderState, //订单状态
+                      orderStateType: "200017", // item.orderStateType,
+                      state: 17, //订单状态
                       tradeNo: item.tradeNo, //交易单号
                     },
                     billDetailObj: {
@@ -197,6 +200,7 @@ export default {
                   let dataList = [];
                   dataList.push({
                     billType: 13,
+                    tag: 16, //状态订单
                     billImg: item.orderItemData.itemImg, //商品图片
                     billName: item.orderItemData.itemName,
                     billAmount: item.orderItemData.itemPrice,
@@ -236,18 +240,15 @@ export default {
               this.tmfinished = true;
             }
           } else {
-            console.log(code, "code");
-            this.tmfinished = true;
-            this.massList = [];
+            this.tmfinished = false;
             this.tmerror = true; //大家错误状态
-            this.loading = false;
+            this.tmfinished = true;
           }
         })
         .catch((err) => {
-          console.log(err, "errcode");
           this.loading = false;
           this.tmerror = true; //大家错误状态
-          this.tmfinished = true;
+          this.tmfinished = false;
           return false;
         });
     },
@@ -265,19 +266,17 @@ export default {
         .post("/app/json/app_shopping_order/queryOrder", obj)
         .then((res) => {
           // 判断当前页数是否超过总页数或者等于总页数
-          let { status, data } = res.data,
-            { page, orderList } = data,
-            { totalPages } = page;
+          let { status, data } = res.data;
           this.loading = false;
           if (status == 0) {
-            if (currentPage <= totalPages) {
-              if (totalPages == currentPage) {
-                this.finished = true;
-              }
+            let { page, orderList } = data,
+              { totalPages } = page;
+            if (currentPage < totalPages || currentPage == totalPages) {
               if (orderList.length > 0) {
                 orderList.map((item) => {
                   let list = {
                     billType: 11,
+                    tag: 16, //状态订单
                     amount: item.realAmount,
                     submitTime: item.submitTime,
                     deliverType: item.deliverType,
@@ -294,7 +293,9 @@ export default {
                       orderId: item.id,
                       orderType: item.orderType,
                       orderCategory: item.orderCategory,
-                      orderStateType: item.orderStateType,
+                      orderStateType: item.orderStateType
+                        ? item.orderStateType
+                        : item.orderType,
                       state: item.state,
                       tradeNo: item.tradeNo,
                     },
@@ -340,17 +341,20 @@ export default {
 
                   ownlist.push(list);
                 });
-                this.concatFn(ownlist);
               } else {
-                ownlist = [];
                 this.finished = true;
               }
-              this.currentPage++;
+              this.concatFn(ownlist);
+              if (currentPage == totalPages) {
+                this.finished = true;
+              }
             } else {
               this.finished = true; //如果超过总页数就显示没有更多内容了
             }
+            this.currentPage++;
           } else {
             this.error = true; //大家错误状态
+            this.finished = true;
           }
         })
         .catch((err) => {
@@ -371,7 +375,7 @@ export default {
         let orderItemList = recordData.orderItemList;
         //店铺订单列表第一个数据
         const orderItemData = (orderItemList && orderItemList[0]) || {};
-        console.log("orderItemData--->", orderItemData);
+        // console.log("orderItemData--->", orderItemData);
         //商品订单详情
         recordDataNew = {
           ...recordData,
@@ -384,13 +388,13 @@ export default {
     },
     // 下拉刷新时触发
     onRefresh() {
-      this.loading = true; //将下拉刷新状态改为true开始刷新
-      this.currentPage = 1;
       this.finished = false; //将没有更多的状态改成false
       this.allFinish = false;
       this.tmfinished = false; //服务商的加载
       this.tmpage = 1;
+      this.currentPage = 1;
       this.currentOrderList = [];
+      this.orderList = [];
       this.commFn();
       return;
     },

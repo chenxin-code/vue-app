@@ -85,10 +85,18 @@
         <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
           <p>立即评价</p>
         </div>
-        <div class="btn" v-if="isBuyAgain && !isBulk" @click.stop="buyAgain">
+        <div
+          class="btn"
+          v-if="isBuyAgain && !isBulk && billType != 13"
+          @click.stop="buyAgain"
+        >
           <p>再次购买</p>
         </div>
-        <div class="btn" v-if="billType == 13" @click.stop="goTMDetail">
+        <div
+          class="btn"
+          v-if="billType == 13 && tag != 1"
+          @click.stop="goTMDetail"
+        >
           <p>查看详情</p>
         </div>
         <div
@@ -105,7 +113,7 @@
         >
           <p>确认收货</p>
         </div>
-        <div class="btn" v-if="isFinish"><p>已完成</p></div>
+        <div class="btn" v-if="isFinish && billType != 13"><p>已完成</p></div>
         <div class="btn" v-if="isPayAtOnce" @click="payAtOnce(payInfo)">
           <p>立即付款</p>
         </div>
@@ -165,6 +173,7 @@ export default {
     "tradeNo",
     "orderState",
     "shopOrderNo",
+    "tag",
   ],
   data() {
     return {
@@ -193,6 +202,7 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
+    // console.log(this.smallDataList, "this.smallDataList");
     this.itemAmount = this.amount;
     if (this.orderMode == "12" || this.bulkOrderType == "200501") {
       this.isBulk = true;
@@ -464,6 +474,7 @@ export default {
         this.enginePay(payInfo, callbackUrl);
       } else if (this.billType == 11) {
         this.initPayInfo(payInfo, "mall");
+      } else if (this.billType == 13) {
       } else {
         this.initPayInfo(payInfo, "bill");
       }
@@ -579,7 +590,7 @@ export default {
           : localStorage.getItem("ythToken");
         if (this.billType == 13) {
           let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-          let query = `orderState=${this.orderState}&tradeNo=${this.tradeNo}&orderType=${this.orderType}&shopOrderNo=${this.shopOrderNo}&Authorization=${token}`;
+          let query = `orderState=${this.orderState}&tradeNo=${this.tradeNo}&orderType=${this.tradeNo}&shopOrderNo=${this.shopOrderNo}&Authorization=${token}`;
           location.href = path + query;
         }
       } else {
@@ -762,9 +773,9 @@ export default {
 
         this.formItem = this.$util.deepClone(obj);
         let expressArr = [];
-        console.log(this.formItem);
-        console.log(this.formItem.expressNo);
-        console.log(typeof this.formItem.expressNo);
+        // console.log(this.formItem);
+        // console.log(this.formItem.expressNo);
+        // console.log(typeof this.formItem.expressNo);
         if (
           this.formItem.expressNo &&
           typeof this.formItem.expressNo == "string"
@@ -979,7 +990,7 @@ export default {
   flex-direction: row;
   justify-content: start;
   align-item: center;
-  height:27px;
+  height: 27px;
 }
 
 .order-item {

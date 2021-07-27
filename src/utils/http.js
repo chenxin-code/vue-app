@@ -77,21 +77,6 @@ Axios.interceptors.request.use(
     //   config.headers.Authorization = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDA4NjkyNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTYyMDM5MDg5OTQ4MjY4MSwiZXhwIjoxNjI1NDQ3ODY0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjNlNzM2YjE4LTQzMmEtNGY1OS04Njk5LWUxMjJkY2ZiMDQwOSIsImNsaWVudF9pZCI6ImFwcF9jIn0.UGhQDskBQJMfooam0Xe8dixTms2fxnGe9wYsKaysO_ipRNEX8OutF0SzyQalvYfINdV2iNzVYsclOHgO9TpA2Q2n4i-fPcCds7m6QC4Wcyi14uLcCdQrnlh01L5hlsJfaiRXwBr7PpCoX1iaY7UtJW9D6eO1nNKM8rQ9BiA2QFd-uPRZPkSF3_S9RCeNBMEDqAJ0nQhApvUUJ3HFmu6hao00FJUnA-0Sdaihpv5d7BbKsUGPg6gV04N5uKOnNzMFSbkFX_SO1oPFM-UDooVFW7MZYrsbhx9e41jTSdENNUWejgo86ywbujHUXHZOlNIEDy1iEjw5pFygaZfuafKlwg';
     }
 
-    if(/times\-center\-trade/.test(config.url)){
-      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
-      if(store.state.webtype == "2" || store.state.webtype == "3"){
-        config.headers.Authorization = localStorage.getItem('ythToken')
-      }else{
-        let ythToken = '';
-        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-          ythToken = res.result;
-        });
-        config.headers.Authorization = ythToken
-      }
-      config.headers.access_channel = 'mall'
-      config.headers["Content-Type"] = "application/json"
-    }
-
     //中台接口要带一体化token
 
     /*物业系统请求处理逻辑
@@ -202,22 +187,17 @@ Axios.interceptors.request.use(
               } else {
                 if (/pcs\/bill-center\/check-bill/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
                   dic = config.data
-                }else {
+                } else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
                 }
 
-                if(/times\-center\-trade/.test(config.url)){ //服务商城接口不需要转Qs,直接传JSON
-                  dic = JSON.stringify(config.data)
-                  config.data = dic
-                }else{
-                  let d = Qs.stringify(dic, {
-                    arrayFormat: 'repeat'
-                  });
-                  config.data = d;
-                }
+                let d = Qs.stringify(dic, {
+                  arrayFormat: 'repeat'
+                });
+                config.data = d;
                 resolve(config);
               }
             }

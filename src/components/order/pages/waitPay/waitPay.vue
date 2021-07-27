@@ -3,7 +3,7 @@
     class="waitPay"
     :class="{
       'wait-pay-x': this.$util.getIsIphoneX_X(),
-      'empty-page': showEmpty
+      'empty-page': showEmpty,
     }"
   >
     <van-pull-refresh
@@ -66,6 +66,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :tag="1"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -151,9 +152,9 @@ export default {
        * 14-维修服务费
        * 15-租售
        */
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,13,14",
       isShowErrorMsg: false,
-      errorMsg: ""
+      errorMsg: "",
     };
   },
   components: {
@@ -161,7 +162,7 @@ export default {
     payDiv,
     OrderItem,
     OrderItem2,
-    Empty
+    Empty,
   },
   created() {
     this.getRoomId();
@@ -175,7 +176,7 @@ export default {
     getRoomId() {
       appLocalstorage
         .get({ key: "LLBUserRoomId", isPublic: true })
-        .then(res => {
+        .then((res) => {
           if (res.hasOwnProperty("result")) {
             this.userRoomId = res.result;
             console.log(`获取原生人房`, res);
@@ -192,7 +193,7 @@ export default {
       console.log("payInfoList", payInfoList);
       let payType = "";
       let projectList = [];
-      payInfoList.forEach(e => {
+      payInfoList.forEach((e) => {
         if (e.billType == 1) {
           payType = "property";
           projectList.push(e.projectId.toString());
@@ -206,7 +207,7 @@ export default {
         let billNo = "";
         let billList = [];
         if (projectList.length > 1) {
-          if (!projectList.every(e => e === projectList[0])) {
+          if (!projectList.every((e) => e === projectList[0])) {
             Toast.clear(); //关闭页面loading
             this.isShowErrorMsg = true;
             this.errorMsg =
@@ -218,15 +219,15 @@ export default {
             });
             return;
           } else {
-            payInfoList.forEach(e => {
-              e.billNos.forEach(i => {
+            payInfoList.forEach((e) => {
+              e.billNos.forEach((i) => {
                 billNo += i + ",";
                 billList.push(i.toString());
               });
             });
           }
         } else {
-          payInfoList[0].billNos.forEach(e => {
+          payInfoList[0].billNos.forEach((e) => {
             billNo += e + ",";
             billList.push(e.toString());
           });
@@ -234,7 +235,7 @@ export default {
         let payInfo = {
           businessCstNo: this.$store.state.userInfo.phone,
           platMerCstNo: payInfoList[0].platMerCstNo,
-          tradeMerCstNo: payInfoList[0].tradeMerCstNo
+          tradeMerCstNo: payInfoList[0].tradeMerCstNo,
         };
         this.checkedPayStatus(billList, payInfo, billNo, payInfoList);
       } else {
@@ -274,13 +275,13 @@ export default {
           : "", //shuimei
         deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
         storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-        stationName: this.$route.query.stationName //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
       };
       localStorage.setItem(
         "currentOrderDetails",
         JSON.stringify(currentOrderDetails)
       );
-      payInfoList.forEach(e => {
+      payInfoList.forEach((e) => {
         billNo += e.payInfo.billNo + ",";
       });
       //vipUnitUserCode type  为空  待保留
@@ -306,7 +307,7 @@ export default {
           tradeMerCstNo: payInfo.tradeMerCstNo,
           billNo: billNo,
           appScheme: "x-engine-c",
-          payType: false
+          payType: false,
         })
       )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
@@ -325,7 +326,7 @@ export default {
         status: 10, //账单状态 10-待支付 90-成功
         type: 1, //type 1、列表 2、详情
         pageNo: "",
-        pageTimes: ""
+        pageTimes: "",
       };
       let url = "";
       this.$store.state.environment == "development"
@@ -335,10 +336,10 @@ export default {
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       return new Promise((resolve, reject) => {
         this.$http.get(url, { params: propertyObj }).then(
-          res => {
+          (res) => {
             resolve(res);
           },
-          err => {
+          (err) => {
             reject(err);
           }
         );
@@ -348,7 +349,7 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
       let obj1 = {
         orderType: "200015",
@@ -358,16 +359,16 @@ export default {
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,
-        billType: this.reqBillType
+        billType: this.reqBillType,
       };
       return new Promise((resolve, reject) => {
         this.$http
           .post("/app/json/app_shopping_order/findOrderFormList", obj1)
           .then(
-            res => {
+            (res) => {
               resolve(res);
             },
-            err => {
+            (err) => {
               reject(err);
             }
           );
@@ -387,7 +388,7 @@ export default {
       }
 
       Promise.allSettled(promiseArr)
-        .then(res => {
+        .then((res) => {
           let propertyRes = "";
           let orderRes = "";
           if (res.length == 2) {
@@ -405,7 +406,7 @@ export default {
             //接口发送请求成功
             if (results.code === 200) {
               this.billResults = results.data.notpay;
-              this.billResults.forEach(item => {
+              this.billResults.forEach((item) => {
                 item.totalPrice = item.totalPayableAmount;
                 item.billId = item.spaceId;
                 item.billType = 1;
@@ -529,7 +530,7 @@ export default {
             this.refreshing = false;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // this.$toast("请求失败，请稍后重试");
           console.log(`onload catch`, err);
         });
@@ -559,9 +560,10 @@ export default {
       this.onLoad();
     },
     initData() {
-      this.currentOrderList = this.orderList.map(item => {
+      this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
+          tag: "1",
           amount: item.totalPrice,
           submitTime: item.submitTime,
           orderType: item.orderType,
@@ -574,6 +576,9 @@ export default {
           bulkOrderType: item.orderType,
           id: item.id,
           tradeNo: item.tradeNo,
+          orderState: item.orderStateType,
+          orderType: item.orderType, //订单类型
+          shopOrderNo: item.orderFormItemList[0].storeOuCode,
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -584,7 +589,7 @@ export default {
             orderType: item.orderStateType,
             tradeNo: item.tradeNo,
             deliverCheckcode: item.deliverCheckcode,
-            isRefund: item.isRefund
+            isRefund: item.isRefund,
           },
           params: {
             deliverType: item.deliverType,
@@ -593,7 +598,7 @@ export default {
             orderCategory: item.orderCategory,
             orderCanEvaluate: item.orderCanEvaluate,
             orderStateType: item.orderStateType,
-            state: item.state
+            state: item.state,
           },
           billDetailObj: {
             businessCstNo: item.loginUserPhone,
@@ -607,11 +612,12 @@ export default {
             tag: "1",
             tabIndex: 2,
             awardActivityList: item.awardActivityList,
-            isRefund: item.isRefund
+            isRefund: item.isRefund,
           },
-          dataList: item.orderFormItemList.map(sub => {
+          dataList: item.orderFormItemList.map((sub) => {
             return {
               billType: item.billType,
+              tag: "1",
               billImg: sub.iconUrl,
               billName: sub.name,
               billAmount: sub.unitPrice,
@@ -620,16 +626,20 @@ export default {
               storeOuCode: sub.storeOuCode,
               info: sub.info,
               itemTypeName: sub.itemTypeName,
-              snapshotTime: sub.snapshotTime
+              snapshotTime: sub.snapshotTime,
+              tradeNo: item.tradeNo,
+              orderState: item.orderStateType,
+              orderType: item.orderType, //订单类型
+              shopOrderNo: sub.storeOuCode,
             };
-          })
+          }),
         };
       });
     },
     checkEvent(data) {
       // 从全选checkbox进来
       if (data.checkAll || data.checkAllBillType1) {
-        let refs = this.$refs.order.filter(item => {
+        let refs = this.$refs.order.filter((item) => {
           // 找出全选的类型并保存起来
           return item.billType == data.billType;
         });
@@ -642,7 +652,7 @@ export default {
         }
         console.log(this.currentOrderList, "++++");
         console.log(this.billResults, "----");
-        let checkData = currentOrderList.filter(item => {
+        let checkData = currentOrderList.filter((item) => {
           return item.billType == data.billType;
         });
         console.log(checkData + "----------");
@@ -661,7 +671,7 @@ export default {
         } else {
           // 全部取消
           this.checkData.clear(); //清空checkData
-          refs.forEach(item => {
+          refs.forEach((item) => {
             item.isChecked = false; // 设置每个checkbox为没选中状态
           });
           this.$refs.payDiv.isShow = false; //隐藏全选按钮
@@ -670,11 +680,11 @@ export default {
         return;
       }
       // 选中或取消当个checkbox
-      let refs = this.$refs.order.filter(item => {
+      let refs = this.$refs.order.filter((item) => {
         // 找到不能选的checkbox
         return item.billType != data.billType;
       });
-      refs.forEach(item => {
+      refs.forEach((item) => {
         // 并设置不能选择属性
         if (item.billType != data.billType) {
           item.isDisabled = true;
@@ -705,7 +715,7 @@ export default {
         }
       } else {
         // 取消
-        this.checkData.forEach(item => {
+        this.checkData.forEach((item) => {
           if (item.billId == data.billId) {
             this.checkData.delete(item); // 删除数据中取消选中的数据
             this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
@@ -717,7 +727,7 @@ export default {
         });
         if (this.checkData.size == 0) {
           // 个数为0，全部取消选中
-          this.$refs.order.forEach(item => {
+          this.$refs.order.forEach((item) => {
             item.isDisabled = false; // 所有checkbox变成可选
           });
           this.$refs.propertyOrder.isDisabled = false;
@@ -738,7 +748,7 @@ export default {
         duration: 0,
         type: "loading",
         message: "加载中...",
-        forbidClick: true
+        forbidClick: true,
       });
     },
     //结算支付时，请求物业系统接口校验账单是否能够支付
@@ -751,102 +761,141 @@ export default {
             "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
         : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
       let paramsObj = {
-        list: list
+        list: list,
       };
-      this.$http.post(url, JSON.stringify(paramsObj)).then(res => {
-        if (res.data.code == "0000") {
-          // Toast.clear(); //关闭页面loading
-          let arr = res.data.data;
-          for (let index = 0; index < arr.length; index++) {
-            if (arr[index].status == 1 || arr[index].status == 2) {
-              check = false;
-              checkStatus.push(arr[index].status);
-            } else {
-              check = true;
+      this.$http
+        .post(url, JSON.stringify(paramsObj))
+        .then((res) => {
+          if (res.data.code == "0000") {
+            // Toast.clear(); //关闭页面loading
+            let arr = res.data.data;
+            for (let index = 0; index < arr.length; index++) {
+              if (arr[index].status == 1 || arr[index].status == 2) {
+                check = false;
+                checkStatus.push(arr[index].status);
+              } else {
+                check = true;
+              }
             }
-          }
 
-          if (_.uniq(checkStatus).includes(2)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else if (_.uniq(checkStatus).includes(1)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else {
-            let payStr = [];
-            payInfoList.forEach((item, index) => {
-              // isPay=1：支付中；isPay=0：待支付
-              payStr.push(item.isPay);
-            });
-            console.log(`待支付-是否有支付中账单`, payStr);
-
-            if (payStr.includes(1)) {
+            if (_.uniq(checkStatus).includes(2)) {
               Toast.clear(); //关闭页面loading
               this.isShowErrorMsg = true;
               this.errorMsg =
-                "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+              //动态修改van-sticky样式，让弹窗铺满整个屏幕
+              this.$nextTick(() => {
+                this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+                this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+              });
+            } else if (_.uniq(checkStatus).includes(1)) {
+              Toast.clear(); //关闭页面loading
+              this.isShowErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
               //动态修改van-sticky样式，让弹窗铺满整个屏幕
               this.$nextTick(() => {
                 this.$parent.$refs.stickyIndex.$el.style.position = "relative";
                 this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
               });
             } else {
-              console.log(`提交账单中心参数`, {
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false
+              let payStr = [];
+              payInfoList.forEach((item, index) => {
+                // isPay=1：支付中；isPay=0：待支付
+                payStr.push(item.isPay);
               });
+              console.log(`待支付-是否有支付中账单`, payStr);
 
-              yjzdbill.YJBillPayment({
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
-                __ret__: res => {
-                  console.log(
-                    "---------------开始支付提交记录---------------------"
-                  );
-                  console.log(res);
-                  if (res.billRetStatus != "1") {
-                    Toast.clear(); //关闭页面loading
-                    this.isShowErrorMsg = true;
-                    this.errorMsg = res.billRetStatusMessage
-                      ? res.billRetStatusMessage
-                      : "支付失败";
-                    //动态修改van-sticky样式，让弹窗铺满整个屏幕
-                    this.$nextTick(() => {
-                      this.$parent.$refs.stickyIndex.$el.style.position =
-                        "relative";
-                      this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-                    });
-                  } else {
-                    Toast.clear(); //关闭页面loading
-                  }
-                }
-              });
+              if (payStr.includes(1)) {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                });
+
+                yjzdbill.YJBillPayment({
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: (res) => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus != "1") {
+                      Toast.clear(); //关闭页面loading
+                      this.isShowErrorMsg = true;
+                      this.errorMsg = res.billRetStatusMessage
+                        ? res.billRetStatusMessage
+                        : "支付失败";
+                      //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                      this.$nextTick(() => {
+                        this.$parent.$refs.stickyIndex.$el.style.position =
+                          "relative";
+                        this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                      });
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                    }
+                  },
+                });
+              }
             }
           }
-        }
-      });
+        })
+        .catch(() => {
+          console.log(`提交账单中心参数catch`, {
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+          });
+
+          yjzdbill.YJBillPayment({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+            __ret__: (res) => {
+              if (res.billRetStatus != "1") {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg = res.billRetStatusMessage
+                  ? res.billRetStatusMessage
+                  : "支付失败";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                Toast.clear(); //关闭页面loading
+              }
+            },
+          });
+        });
     },
     //关闭弹窗
     closeTanC() {
@@ -856,8 +905,8 @@ export default {
         this.$parent.$refs.stickyIndex.$el.style.position = "";
         this.$parent.$refs.stickyIndex.$el.style.zIndex = "";
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -866,12 +915,15 @@ export default {
   height: 100%;
   overflow-y: auto;
   padding-bottom: 182px;
+
   &.wait-pay-x {
     padding-bottom: 220px;
   }
+
   &.empty-page {
     overflow-y: hidden;
   }
+
   .refresh-page {
     min-height: 100%;
   }
@@ -885,73 +937,78 @@ export default {
 }
 
 .content {
-  .scroll:not(:last-child)  {
+  .scroll:not(:last-child) {
     .content-list {
       margin-bottom: 28px;
-      border-bottom:1px dashed #cccccc;
+      border-bottom: 1px dashed #cccccc;
     }
   }
 }
 
 .tanc-message-box {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 51;
-    background-color: rgba(18, 18, 18, 0.8);
-    .content {
-      height: auto;
-      width: calc(100% - 84px);
-      margin-left: 42px;
-      margin-top: 50%;
-      background-color: #ffff;
-      border-radius: 16px;
-      min-height: 215px;
-      padding-bottom: 1px;
-      text-align: center;
-      .bg-box {
-        width: 100%;
-        height: 70px;
-        background-image: url('../../img/tanc-bg.png');
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-      }
-      .message-box {
-        margin-top: 22px;
-        padding: 0 20px;
-        font-size: 16px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #333333;
-        line-height: 24px;
-      }
-      .btn-box {
-        // width: 100%;
-        height: 38px;
-        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
-        background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
-        border-radius: 8px;
-        font-size: 16px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
-        color: #FFFFFF;
-        line-height: 38px;
-        padding: 0 20px
-        text-align: center;
-        margin: 28px 20px;
-      }
-    }
-    .close-btn {
-      width: 34px;
-      height: 34px;
-      background-image: url('../../img/close-icon.png');
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 51;
+  background-color: rgba(18, 18, 18, 0.8);
+
+  .content {
+    height: auto;
+    width: calc(100% - 84px);
+    margin-left: 42px;
+    margin-top: 50%;
+    background-color: #ffff;
+    border-radius: 16px;
+    min-height: 215px;
+    padding-bottom: 1px;
+    text-align: center;
+
+    .bg-box {
+      width: 100%;
+      height: 70px;
+      background-image: url('../../img/tanc-bg.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
-      margin-top: 30px;
-      margin-left: calc(50% - 17px);
+    }
+
+    .message-box {
+      margin-top: 22px;
+      padding: 0 20px;
+      font-size: 16px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #333333;
+      line-height: 24px;
+    }
+
+    .btn-box {
+      // width: 100%;
+      height: 38px;
+      // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+      background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 38px;
+      padding: 0 20px;
+      text-align: center;
+      margin: 28px 20px;
     }
   }
+
+  .close-btn {
+    width: 34px;
+    height: 34px;
+    background-image: url('../../img/close-icon.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    margin-top: 30px;
+    margin-left: calc(50% - 17px);
+  }
+}
 </style>
