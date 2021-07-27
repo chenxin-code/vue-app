@@ -18,11 +18,11 @@
     <div class="order-item">
       <div class="title">
         <van-checkbox
-          v-if="isWaitPay"
+          v-if="isWaitPay && billType != 13"
           v-model="isChecked"
           :disabled="isDisabled"
           @change="checkEvent($event, orderItem)"
-          checked-color="#f80f16"
+          checked-color="#e5165a"
           icon-size="18px"
         ></van-checkbox>
         <i class="icon" :class="iconClass"></i>
@@ -475,6 +475,8 @@ export default {
       } else if (this.billType == 11) {
         this.initPayInfo(payInfo, "mall");
       } else if (this.billType == 13) {
+        /*去服务商城详情页*/
+        this.goTMDetail();
       } else {
         this.initPayInfo(payInfo, "bill");
       }
@@ -526,6 +528,7 @@ export default {
       this.isShow = !this.isShow;
       this.showMore = !this.showMore;
     },
+    /*去服务商城详情页*/
     gotoBillDetail() {
       console.log("billId------------------", this.billId);
       // 跳转订单详情
@@ -585,14 +588,7 @@ export default {
         }
       } else if (this.billType == "13") {
         /*去服务商城详情页*/
-        let token = this.$store.state.ythToken
-          ? this.$store.state.ythToken
-          : localStorage.getItem("ythToken");
-        if (this.billType == 13) {
-          let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-          let query = `orderState=${this.orderState}&tradeNo=${this.tradeNo}&orderType=${this.tradeNo}&shopOrderNo=${this.shopOrderNo}&Authorization=${token}`;
-          location.href = path + query;
-        }
+        this.goTMDetail();
       } else {
         console.log(
           "--------------------跳转账单中心详情----------------------"
@@ -615,7 +611,15 @@ export default {
     },
     /*去服务商城详情页*/
     goTMDetail() {
-      this.gotoBillDetail();
+      let { orderItem } = this;
+      let token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
+      if (this.billType == 13) {
+        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&Authorization=${token}`;
+        location.href = path + query;
+      }
     },
     checkEvent(event, data) {
       // console.log(event, data);
@@ -1226,10 +1230,10 @@ export default {
       height: 32px;
       font-size: 15px;
       font-weight: bold;
-      color: #8d8d8d;
+      color: #e5165a;
       text-align: center;
       line-height: 33px;
-      border: 1px solid #8d8d8d;
+      border: 1px solid #e5165a;
       border-radius: 20px;
       margin-left: 4px;
 

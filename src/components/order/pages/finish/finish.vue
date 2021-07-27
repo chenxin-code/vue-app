@@ -42,6 +42,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :orderItem="item"
             :tag="item.tag"
           ></OrderItem>
         </div>
@@ -346,7 +347,9 @@ export default {
           tradeNo: item.tradeNo,
           orderState: item.orderStateType,
           orderType: item.orderType, //订单类型
-          shopOrderNo: item.orderFormItemList[0].storeOuCode,
+          shopOrderNo: item.orderFormItemList[0]
+            ? item.orderFormItemList[0].storeOuCode
+            : "",
           params: {
             deliverType: item.deliverType,
             orderId: item.id,
