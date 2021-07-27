@@ -2665,7 +2665,10 @@ export default {
               isAnimation: false
             })
             .then(res => {});
-            this.$router.replace("/common");
+            appNav.changeBottomToIndex({selectIndex: 2,}).then(res=>{
+              console.log('跳转',res)
+            });
+            // this.$router.replace("/common");
           } else {
             this.$router.go(-1);
           }
