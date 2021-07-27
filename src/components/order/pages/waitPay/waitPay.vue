@@ -349,7 +349,7 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
+         this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
       let obj1 = {
         orderType: "200015",
