@@ -30,7 +30,7 @@ import FigureOut from "./pages/figureOut/index";
 import CloseProcess from "./pages/closeProcess/index";
 import navToMicroApplication from "@zkty-team/x-engine-module-router";
 // import nav from "@zkty-team/x-engine-module-nav";
-import appNav from "@zkty-team/x-engine-module-nav";
+// import appNav from "@zkty-team/x-engine-module-nav";
 export default {
   data() {
     return {
@@ -56,14 +56,14 @@ export default {
     if (padding !== "") {
       this.offsetTop = padding;
     }
-    if (this.$store.state.webtpye != 2 || this.$store.state.webtpye != 3) {
-      appNav
-        .setNavBarHidden({
-          isHidden: true,
-          isAnimation: false,
-        })
-        .then((res) => {});
-    }
+    // if (this.$store.state.webtpye != 2 || this.$store.state.webtpye != 3) {
+    //   appNav
+    //     .setNavBarHidden({
+    //       isHidden: true,
+    //       isAnimation: false,
+    //     })
+    //     .then((res) => {});
+    // }
   },
   methods: {
     //跳到历史欠缴记录页面
