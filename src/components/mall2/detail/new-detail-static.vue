@@ -1563,11 +1563,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="false">
+          <div class="share_botton_item" @click="shareImg">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink" v-show="false">
+          <div class="share_botton_item" @click="shareLink">
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>链接分享</div>
           </div>
@@ -1947,11 +1947,13 @@ export default {
         this.detailData.picUrls[0] +
           "?x-oss-process=image/format,jpg/quality,Q_25"
       );
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        this.showShare();
-      } else {
-        this.showSharePopup = true;
-      }
+      this.showSharePopup = true;
+      
+      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      //   this.showShare();
+      // } else {
+      //   this.showSharePopup = true;
+      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
@@ -1987,7 +1989,11 @@ export default {
       this.shareSensors("微信");
     },
     shareImg() {
-      this.showShare();
+      // this.showShare();
+      let { picUrls, salePrice, skuName } = this.detailData;
+      wx.miniProgram.navigateTo({
+        url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+      });
     },
     shareLink() {
       this.$router.push({
