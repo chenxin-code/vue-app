@@ -349,7 +349,7 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-         this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
       let obj1 = {
         orderType: "200015",
@@ -577,7 +577,9 @@ export default {
           tradeNo: item.tradeNo,
           orderState: item.orderStateType,
           orderType: item.orderType, //订单类型
-          shopOrderNo: item.orderFormItemList[0].storeOuCode,
+          shopOrderNo: item.orderFormItemList[0]
+            ? item.orderFormItemList[0].storeOuCode
+            : "",
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -642,7 +644,7 @@ export default {
           : localStorage.getItem("ythToken");
         if (this.billType == 13) {
           let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-          let query = `orderState=${this.orderState}&tradeNo=${this.tradeNo}&orderType=${this.tradeNo}&shopOrderNo=${this.shopOrderNo}&Authorization=${token}`;
+          let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&Authorization=${token}`;
           location.href = path + query;
         }
       } else {
