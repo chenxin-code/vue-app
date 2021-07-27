@@ -91,6 +91,7 @@
             >
               详情
             </div>
+<<<<<<< HEAD
             <div
               class="btn-div"
               :style="getSelectedTabStyle(3)"
@@ -100,6 +101,17 @@
             </div>
             <div
               class="btn-div"
+=======
+            <div
+              class="btn-div"
+              :style="getSelectedTabStyle(3)"
+              @click="toptabEvent(3)"
+            >
+              评价
+            </div>
+            <div
+              class="btn-div"
+>>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
               :style="getSelectedTabStyle(4)"
               @click="toptabEvent(4)"
             >
@@ -160,7 +172,10 @@
                     stayDistance: 40,
                     triggerDistance: 50
                   }"
+<<<<<<< HEAD
                   :bottom-load-method="bottomPull"
+=======
+>>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
                   :top-load-method="topPull"
                   :is-bottom-bounce="true"
                   :is-top-bounce="false"
@@ -1046,98 +1061,21 @@
                         >
                       </div>
                     </div>
-                    <div class="load-next theme_bg_white" @click="proView = 2">
+                    <div
+                      v-html="introduction1"
+                      class="introduction-div"
+                      style="padding: 0"
+                      id="picMedia"
+                    ></div>
+                    <!-- <div class="load-next theme_bg_white" @click="proView = 2">
                       <img src="static/image/mall2/load-next.png" />
                       <span class="theme_font_tint">上拉加载图文详情</span>
-                    </div>
+                    </div> -->
                   </div>
                 </pull-to>
               </div>
             </transition>
-            <transition name="transition2">
-              <div
-                class="main-swiper"
-                style="position: absolute; top: 15px"
-                v-show="proView == 2"
-              >
-                <div class="btns-flex theme_bg_white">
-                  <div class="back_proView" @click="backEvent">
-                    <img src="static/image/mall2/backIcon.png" alt="" />
-                  </div>
-                  <div
-                    class="btns_flex_item theme_font_gray"
-                    :class="{ standard: introductionIndex == 1 }"
-                    @click="introductionSelected(1)"
-                  >
-                    商品介绍
-                    <div class="line" v-show="introductionIndex == 1"></div>
-                  </div>
-                  <div
-                    class="btns_flex_item theme_font_gray"
-                    :class="{ standard: introductionIndex == 2 }"
-                    @click="introductionSelected(2)"
-                  >
-                    规格参数
-                    <div class="line" v-show="introductionIndex == 2"></div>
-                  </div>
-                  <div
-                    class="btns_flex_item theme_font_gray"
-                    :class="{ standard: introductionIndex == 3 }"
-                    @click="introductionSelected(3)"
-                    v-if="detailData.isShowAfterSale != 0"
-                  >
-                    售后包装
-                    <div class="line" v-show="introductionIndex == 3"></div>
-                  </div>
-                </div>
-                <div class="detail-div detail-div-1">
-                  <pull-to
-                    ref="pullTo2"
-                    :topConfig="{
-                      pullText: '',
-                      triggerText: '释放显示商品介绍',
-                      loadingText: '加载中...',
-                      doneText: '加载完成',
-                      failText: '加载失败',
-                      loadedStayTime: 400,
-                      stayDistance: 40,
-                      triggerDistance: 50
-                    }"
-                    :top-load-method="topPull"
-                    :is-bottom-bounce="false"
-                    :is-top-bounce="true"
-                  >
-                    <!--<div class="introduction-div">-->
-                    <!--<img src="static/testImg/detail.png"/>-->
-                    <!--</div>-->
-                    <div class="detail-content detail-bottom">
-                      <!-- <div class="tip" v-if="introductionIndex == 1">
-                        <span class="line"></span>
-                        <span class="text">商品信息</span>
-                        <span class="line"></span>
-                      </div> -->
-                      <div
-                        v-html="introduction1"
-                        class="introduction-div"
-                        style="padding: 0"
-                        id="picMedia"
-                        v-if="introductionIndex == 1"
-                      ></div>
-                      <div
-                        v-html="introduction2"
-                        class="introduction-div"
-                        v-if="introductionIndex == 2"
-                      ></div>
-                      <div
-                        v-html="introduction3"
-                        class="introduction-div"
-                        v-if="introductionIndex == 3"
-                      ></div>
-                    </div>
-                  </pull-to>
-                </div>
-              </div>
-            </transition>
+            <div class="main-swiper"></div>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -1287,7 +1225,8 @@
               {{ $store.state.mall2.cartNum }}
             </p>
           </template>
-          <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i>
+          <!-- <i class="iconfont mall-gouwuche btn-icon theme_font_gray"></i> -->
+          <img src="static/image/mall2/cart.png" alt="" class="btn-img" />
           <p class="text">购物车</p>
         </div>
         <div
@@ -1299,27 +1238,34 @@
           <p class="text">店铺</p>
         </div>
         <div class="btn full" @click="collectEvent">
-          <i
-            class="iconfont mall-shoucang btn-icon theme_font_gray"
-            v-if="isCollect == false"
-          ></i>
+          <!-- <i
+                                                                                                                          class="iconfont mall-shoucang btn-icon theme_font_gray"
+                                                                                                                          v-if="isCollect == false"
+                                                                                                                        ></i> -->
+          <img
+            src="static/image/mall2/cancelCollect.png"
+            alt=""
+            class="btn-img"
+            v-show="isCollect == false"
+          />
           <!--<i class="iconfont mall-shoucang btn-icon theme_font_red" v-if="isCollect == 'true'"></i>-->
-          <transition :name="collectName">
-            <img
-              class="btn-img"
-              src="static/image/mall2/collect.png"
-              v-if="isCollect == true"
-            />
-          </transition>
+          <!-- <transition :name="collectName">
+                                                                                                                          </transition> -->
+          <img
+            class="btn-img"
+            src="static/image/mall2/collect.png"
+            v-show="isCollect == true"
+          />
           <p class="text">收藏</p>
         </div>
         <div class="btn full" @click="handleCustomer">
-          <i class="iconfont service btn-icon theme_font_gray">
-            <img
-              src="static/images/card-provincial/customer_service_black.png"
-              alt=""
-            />
-          </i>
+          <!-- <i class="iconfont service btn-icon theme_font_gray">
+          </i> -->
+          <img
+            src="static/images/card-provincial/customer_service_black.png"
+            alt=""
+            class="btn-img"
+          />
           <p class="text">客服</p>
         </div>
         <div
@@ -1381,21 +1327,21 @@
         <!--<p class="title">'商品已下架'</p>-->
         <!--</div>-->
         <div
-          class="btn big-btn theme_bg_y theme_font_white radius"
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
           @click="noStockEvent"
           v-if="stockNum == 0 && canSale == true && detailData.status != '0'"
         >
           <p class="title">商品缺货</p>
         </div>
         <div
-          class="btn big-btn theme_bg_y theme_font_white radius"
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
           @click="canNotSaleEvent"
           v-if="canSale == true && detailData.status == '0'"
         >
           <p class="title">商品已下架</p>
         </div>
         <div
-          class="btn big-btn theme_bg_y theme_font_white radius"
+          class="btn big-btn theme_bg_y theme_font_white radius nogoods"
           @click="canNotSaleEvent"
           v-if="canSale == false"
         >
@@ -1633,11 +1579,19 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
+<<<<<<< HEAD
           <div class="share_botton_item" @click="shareImg" v-show="false">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
           <div class="share_botton_item" @click="shareLink" v-show="false">
+=======
+          <div class="share_botton_item" @click="shareImg">
+            <img src="static/image/mall2/share_img.png" alt="" />
+            <div>图片分享</div>
+          </div>
+          <div class="share_botton_item" @click="shareLink">
+>>>>>>> 48c0c5957f9bbe88d77043137f49d39f89f676fc
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>链接分享</div>
           </div>
@@ -1709,7 +1663,7 @@ export default {
       proView: 1,
       page1ScrollTop: 0,
       deliveryType: 2,
-      collectName: "",
+      // collectName: "",
       mainSwiper: {
         autoHeight: false, //enable auto height
         spaceBetween: 0,
@@ -1921,6 +1875,9 @@ export default {
     console.log("商品详情路径", window.location);
   },
   watch: {
+    introduction1(val) {
+      console.log("---------introduction1---->", val);
+    },
     "$store.state.mall2.zitiAddress.id": function(val, oldVal) {
       if (this.deliveryType == 1) {
         this.getDatas();
@@ -2721,6 +2678,21 @@ export default {
             console.log(res);
           });
           return;
+        }else{
+          if (window.history.length === 1) {
+            appNav.navigatorBack({ url: "0" }).then(res => {
+              // nav.changeBottomToIndex({ selectIndex: 2})
+            });
+            appNav
+            .setNavBarHidden({
+              isHidden: true,
+              isAnimation: false
+            })
+            .then(res => {});
+            this.$router.replace("/common");
+          } else {
+            this.$router.go(-1);
+          }
         }
       }
       // if (this.proView == 2) {
@@ -3638,9 +3610,9 @@ export default {
             this.$store.state.mall2.cartNum = data.data.cartCount;
             // 是否收藏
             this.isCollect = data.data.isFavorites;
-            this.$nextTick(() => {
-              this.collectName = "collectName";
-            });
+            // this.$nextTick(() => {
+            //   this.collectName = "collectName";
+            // });
             // 库存
             this.stockNum =
               data.data.skuStock.stockCurrentNumber > 0
@@ -3926,12 +3898,12 @@ export default {
           let data = res.data;
           if (data.status == 0) {
             this.isCollect = data.data;
-            this.$nextTick(() => {
-              this.collectName = "collectName";
-            });
+            // this.$nextTick(() => {
+            //   this.collectName = "collectName";
+            // });
           } else {
             this.$Toast(data.info);
-            this.collectName = "collectName";
+            // this.collectName = "collectName";
           }
         },
         error => {
@@ -4374,6 +4346,42 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.theme_standard_bg{
+  width: 102px;
+  height: 39px;
+  background: linear-gradient(270deg, #FFC360 0%, #FFA500 100%);
+  border-radius: 20px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  
+  .title{
+    font-size: 15px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    padding: 0 !important;
+    // line-height: 21px;
+  }
+}
+.theme_bg_y{
+  width: 102px;
+  height: 39px;
+  background: linear-gradient(270deg, #FF6094 0%, #E5165A 100%);
+  border-radius: 20px;
+}
+.nogoods{
+  width: 214px !important;
+  height: 39px;
+  background: #F1F1F1;
+  border-radius: 20px;
+  font-size: 15px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #8D8D8D;
+  line-height: 21px;
+}
 
 .btns-flex {
   display: flex;
@@ -5175,9 +5183,9 @@ export default {
           position: absolute;
           top: 6px;
           left: 50%;
-          margin-left: -13px;
-          width: 26px;
-          height: 26px;
+          margin-left: -10px;
+          width: 20px;
+          height: 20px;
         }
 
         .btn-sl-img {
@@ -5268,9 +5276,9 @@ export default {
         position: absolute;
         top: 6px;
         left: 50%;
-        margin-left: -13px;
-        width: 26px;
-        height: 26px;
+        margin-left: -10px;
+        width: 20px;
+        height: 20px;
       }
 
       .btn-sl-img {
@@ -5345,23 +5353,23 @@ export default {
   }
 }
 
-.collectName-enter-active {
-  transition: all 0.2s ease;
-}
+// .collectName-enter-active {
+//   transition: all 0.2s ease;
+// }
 
-.collectName-leave-active {
-  transition: all 0.2s ease-in;
-}
+// .collectName-leave-active {
+//   transition: all 0.2s ease-in;
+// }
 
-.collectName-enter {
-  transform: translateY(-500%);
-  transform: scale(10);
-}
+// .collectName-enter {
+//   transform: translateY(-500%);
+//   transform: scale(10);
+// }
 
-.collectName-leave-to {
-  transform: translateY(-500%);
-  transform: scale(10);
-}
+// .collectName-leave-to {
+//   transform: translateY(-500%);
+//   transform: scale(10);
+// }
 
 .transition1-enter-active, .transition1-leave-active, .transition2-enter-active, .transition2-leave-active {
   transition: all 0.5s;
