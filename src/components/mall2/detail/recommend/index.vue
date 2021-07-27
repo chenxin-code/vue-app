@@ -3,7 +3,7 @@
 <template>
   <div class="index">
     <div class="recommend-row">
-      <div class="title theme_border_red">同店好货</div>
+      <!-- <div class="title theme_border_red">同店好货</div> -->
     </div>
     <div ref="sroll_list" class="list">
       <CardList @productEvent="productEvent" :listData="listData" @addToCart="addToCart"></CardList>
@@ -131,6 +131,7 @@
       background-color white;
       display flex;
       padding 10px 8px;
+      margin-top: 20px;
       .title {
         font-size 14px;
         padding-left 6px;
