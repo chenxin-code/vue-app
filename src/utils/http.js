@@ -206,10 +206,15 @@ Axios.interceptors.request.use(
                   }
                 }
 
-                let d = Qs.stringify(dic, {
-                  arrayFormat: 'repeat'
-                });
-                config.data = d;
+                if(/times\-center\-trade/.test(config.url)){  //服务商城接口不需要转Qs,直接传JSON
+                  dic = JSON.stringify(config.data)
+                  config.data = dic
+                }else{
+                  let d = Qs.stringify(dic, {
+                    arrayFormat: 'repeat'
+                  });
+                  config.data = d;
+                }
                 resolve(config);
               }
             }
