@@ -2622,72 +2622,74 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      console.log("this.viewpoint_radio", this.viewpoint_radio);
-      this.$sensors.track("goods_detail_quit", {
-        module_source:
-          this.$store.state.inToDetail == "common"
-            ? "商城臻选专场"
-            : this.$store.state.inToDetail == "list"
-            ? "商城商品列表页"
-            : "商城搜索列表",
-        goods_id: this.skuId,
-        goods_name: this.detailData.skuName,
-        tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
-        org_price: this.detailData.activityPrice,
-        price: this.detailData.salePrice,
-        store_id: this.detailData.storeOuCode,
-        store_name: this.detailData.storeOuName,
-        merchant_id: this.detailData.ouCode,
-        merchant_name: this.detailData.ouName,
-        viewpoint_radio: this.viewpoint_radio
-      });
-
-      if (
-        this.$store.state.webtype != "2" ||
-        this.$store.state.webtype != "3"
-      ) {
-        if (this.backApp) {
-          appNav.navigatorBack({ url: "0" }).then(res => {
-            console.log(res);
-          });
-          return;
-        }else{
-          if (window.history.length === 1) {
+      if (this.$route.query.channel == "fromapp") {
+        window.location.href = `x-engine-json://yjzdbil/webToApp?callback=${encodeURIComponent(
+          // location.origin
+          'https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common'
+        )}`;
+      } else {
+        console.log("this.viewpoint_radio", this.viewpoint_radio);
+        this.$sensors.track("goods_detail_quit", {
+          module_source:
+            this.$store.state.inToDetail == "common"
+              ? "商城臻选专场"
+              : this.$store.state.inToDetail == "list"
+              ? "商城商品列表页"
+              : "商城搜索列表",
+          goods_id: this.skuId,
+          goods_name: this.detailData.skuName,
+          tag: this.tagList,
+          goods_cls1: this.categoryList[0],
+          goods_cls2: this.categoryList[1],
+          goods_cls3: this.categoryList[2],
+          org_price: this.detailData.activityPrice,
+          price: this.detailData.salePrice,
+          store_id: this.detailData.storeOuCode,
+          store_name: this.detailData.storeOuName,
+          merchant_id: this.detailData.ouCode,
+          merchant_name: this.detailData.ouName,
+          viewpoint_radio: this.viewpoint_radio
+        });
+        if (
+          this.$store.state.webtype != "2" ||
+          this.$store.state.webtype != "3"
+        ) {
+          if (this.backApp) {
             appNav.navigatorBack({ url: "0" }).then(res => {
-              // nav.changeBottomToIndex({ selectIndex: 2})
+              console.log(res);
             });
-            appNav
-            .setNavBarHidden({
-              isHidden: true,
-              isAnimation: false
-            })
-            .then(res => {});
-            appNav.changeBottomToIndex({selectIndex: 2,}).then(res=>{
-              console.log('跳转',res)
+            return;
+          }
+        }
+
+        if (
+          this.$store.state.webtype != "2" ||
+          this.$store.state.webtype != "3"
+        ) {
+          if (this.backApp) {
+            appNav.navigatorBack({ url: "0" }).then(res => {
+              console.log(res);
             });
-            // this.$router.replace("/common");
+            return;
+          }
+        }
+
+        if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+          if (window.history.length === 1) {
+            this.$router.replace("/common");
           } else {
             this.$router.go(-1);
           }
+        } else {
+          this.$router.go(-1);
+          this.$keepaliveHelper.deleteCache(this);
         }
       }
+
       // if (this.proView == 2) {
       //   this.proView = 1;
       //   return;
       // }
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        if (window.history.length === 1) {
-          this.$router.replace("/common");
-        } else {
-          this.$router.go(-1);
-        }
-      } else {
-        this.$router.go(-1);
-        this.$keepaliveHelper.deleteCache(this);
-      }
     },
     activityProducts: function(activity) {
       this.$store.state.showCategory = false;
@@ -4334,7 +4336,7 @@ export default {
   display:flex;
   justify-content: center;
   align-items: center;
-  
+
   .title{
     font-size: 15px;
     font-family: PingFangSC-Regular, PingFang SC;
