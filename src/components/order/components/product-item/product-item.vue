@@ -98,7 +98,7 @@ export default {
           ? this.$store.state.ythToken
           : localStorage.getItem("ythToken");
         let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-        let query = `orderState=${product.orderState}&tradeNo=${product.tradeNo}&orderType=${product.orderType}&shopOrderNo=${product.shopOrderNo}&Authorization=${token}`;
+        let query = `orderState=${product.orderState}&tradeNo=${product.tradeNo}&orderType=${product.orderType}&shopOrderNo=${product.shopOrderNo}&tabShow=true&Authorization=${token}`;
         location.href = path + query;
       } else {
         // 砍价订单禁止进入详情

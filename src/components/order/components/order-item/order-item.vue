@@ -617,7 +617,7 @@ export default {
         : localStorage.getItem("ythToken");
       if (this.billType == 13) {
         let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&Authorization=${token}`;
+        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&tabShow=true&Authorization=${token}`;
         location.href = path + query;
       }
     },
