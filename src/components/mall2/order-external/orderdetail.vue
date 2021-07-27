@@ -1136,17 +1136,6 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            if (data.data.invalidCart !== "" || data.data.occur.length <= 0) {
-              this.$MessageBox
-                .confirm(
-                  "抱歉，订单中的商品已经下架啦！再看看其他商品吧~",
-                  "提示",
-                  { confirmButtonText: "确定", showCancelButton: false }
-                )
-                .then(action => {})
-                .catch(action => {});
-              return;
-            }
             this.$store.state.mall2.staticDeliverType = this.detailData.deliverType;
             this.$store.state.mall2.cartNum = data.data;
             this.$router.push({
