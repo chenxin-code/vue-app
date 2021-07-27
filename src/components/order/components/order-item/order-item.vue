@@ -61,7 +61,7 @@
         </p>
       </div>
       <div class="total need-pay" v-if="billType == 11">
-        <p class="time row">
+        <p class="time row" style="height: 25px; line-height: 25px">
           {{ submitTime }}
         </p>
         <div>

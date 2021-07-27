@@ -54,9 +54,7 @@ export default {
       error: false,
       refreshing: false,
       orderList: [],
-      totalPage: 0,
       queryBadge: {},
-      page: 0,
       showEmpty: false,
       tabs: {
         text: "已取消",
@@ -66,6 +64,7 @@ export default {
       currentOrderList: [],
       currentPage: 1,
       tmpage: 1,
+      pageSize: 8,
       tmfinished: false,
       allFinish: false,
       tmerror: false,
@@ -75,8 +74,9 @@ export default {
     OrderItem,
     Empty,
   },
-  created() {
-    this.onLoad();
+  created() {},
+  mounted() {
+    this.commFn();
   },
   watch: {
     currentOrderList: function (newVal, oldVal) {
@@ -91,52 +91,9 @@ export default {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       this.refreshing = false;
-      console.log(11111);
-      if (!this.allFinish) {
+      if (!this.allFinish && (this.currentPage > 1 || this.tmpage > 1)) {
         this.commFn();
       }
-      return;
-      this.$http
-        .post("/app/json/app_shopping_order/queryOrder", obj)
-        .then((res) => {
-          // 判断当前页数是否超过总页数或者等于总页数
-          if (
-            page < res.data.data.page.totalPages ||
-            page == res.data.data.page.totalPages
-          ) {
-            if (res.data.data.page.totalPages == page) {
-              this.finished = true;
-            }
-            if (res.data.status == 0) {
-              var indexList = res.data.data.orderList; //将请求到的内容赋值给一个变量
-              this.orderList = this.orderList.concat(indexList);
-              if (this.orderList.length > 0) {
-                this.orderList.forEach((item) => {
-                  item["billType"] = 11;
-                  item.itemAbstractList.forEach((tab) => {
-                    tab["billType"] = 11;
-                  });
-                });
-                this.initData();
-              } else {
-                this.currentOrderList = [];
-              }
-              this.page = res.data.data.page.totalPages; //将总页数赋值给this
-              // 加载状态结束
-              this.loading = false;
-            } else {
-              this.loading = false; //将加载状态关掉
-              this.error = true; //大家错误状态
-            }
-          } else {
-            this.finished = true; //如果超过总页数就显示没有更多内容了
-          }
-        })
-        .catch((err) => {
-          this.$toast("请求失败，点击重新加载");
-          this.loading = false;
-          this.error = true;
-        });
     },
     async commFn() {
       this.tmerror = false;
@@ -181,17 +138,18 @@ export default {
     },
     /*服务商城的接口 --billType(物业清单) = 13*/
     tMallFn() {
-      let list = [],
-        { tmpage } = this;
       let param = {
         orderStateList: ["CANCELED", "CLOSE"],
-        pageNum: tmpage,
-        pageSize: 15,
+        pageNum: this.tmpage,
+        pageSize: this.pageSize,
       };
+      console.log(this.tmpage, "this.tmpage1");
+      let list = [];
       let seriveAPI = "/times-center-trade/mall/order/v1/shop/list";
       fetchMethod("POST", seriveAPI, param)
         .then((res) => {
-          let { code } = res;
+          let { code } = res,
+            { tmpage } = this;
           this.loading = false;
           if (code == 200) {
             let { data } = res,
@@ -278,11 +236,11 @@ export default {
               } else {
                 this.tmfinished = true;
               }
-
-              this.tmpage++;
             } else {
               this.tmfinished = true;
             }
+            this.tmpage++;
+            console.log(this.tmpage, "this.tmpage2");
           } else {
             this.tmfinished = false;
             this.tmerror = true; //大家错误状态
@@ -298,14 +256,15 @@ export default {
     },
     /*自建商城的接口--billType(物业清单) = 11*/
     ownMallFn() {
-      let { currentPage } = this,
+      let { currentPage, pageSize } = this,
         ownlist = [];
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-        page: { index: currentPage, pageSize: 15 },
+        page: { index: currentPage, pageSize: pageSize },
       };
+      console.log(currentPage, "currentPage1");
       this.$http
         .post("/app/json/app_shopping_order/queryOrder", obj)
         .then((res) => {
@@ -396,6 +355,7 @@ export default {
               this.finished = true; //如果超过总页数就显示没有更多内容了
             }
             this.currentPage++;
+            console.log(this.currentPage, "currentPage2");
           } else {
             this.error = true; //大家错误状态
             this.finished = true;
@@ -441,41 +401,6 @@ export default {
       this.orderList = [];
       this.currentOrderList = [];
       this.commFn();
-      return;
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
-      this.finished = false; //将没有更多的状态改成false
-      this.loading = true; //将下拉刷新状态改为true开始刷新
-      this.currentPage = 1;
-      let obj = {
-        orderType: this.tabs.type[0],
-        orderTypeList: this.tabs.type,
-        state: this.tabs.tag,
-        page: { index: page, pageSize: 15 },
-      };
-      this.$http
-        .post("/app/json/app_shopping_order/queryOrder", obj)
-        .then((res) => {
-          if (res.data.status == 0) {
-            this.orderList = res.data.data.orderList;
-            if (this.orderList.length > 0) {
-              this.orderList.forEach((item) => {
-                item["billType"] = 11;
-                item.itemAbstractList.forEach((tab) => {
-                  tab["billType"] = 11;
-                });
-              });
-              this.initData();
-            }
-            this.totalPage = res.data.totalPages; //将总页数赋值上去
-            this.$toast("刷新成功");
-            this.loading = false;
-            this.refreshing = false; //刷新成功后将状态关掉
-          }
-        })
-        .catch((res) => {
-          this.$toast("网络繁忙,请稍后再试~");
-        });
     },
     // 初始化数据
     initData() {
