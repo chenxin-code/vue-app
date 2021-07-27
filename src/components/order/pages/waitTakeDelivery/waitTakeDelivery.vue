@@ -177,6 +177,7 @@ export default {
                 let dataList = [];
                 dataList.push({
                   billType: 13,
+                  tag: "4",
                   billImg: item.orderItemData.itemImg, //商品图片
                   billName: item.orderItemData.itemName,
                   billAmount: item.orderItemData.itemPrice,

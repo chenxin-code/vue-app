@@ -93,13 +93,6 @@ export default {
       if (!this.allFinish) {
         this.commFn();
       }
-
-      let data = {
-        tradeNo: tradeNo, //交易单
-        orderType: orderType, //业态(家政，旅游)
-        shoppingOrderId: shopeOrderNo, //交易单
-        orderPayType: orderState, //交易单
-      };
     },
     async commFn() {
       this.tmerror = false;
@@ -168,6 +161,7 @@ export default {
                 lists.map((item) => {
                   let init = {
                     billType: 13, //清单列表
+                    tag: 16, //状态订单
                     amount: item.amountPay, //实付金额
                     submitTime: item.orderTime, //下单时间
                     deliverType: "", //配送方式

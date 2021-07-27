@@ -204,6 +204,7 @@ export default {
                 lists.map((item) => {
                   let init = {
                     billType: 13, //清单列表
+                    tag: 7, //状态订单
                     amount: item.amountPay, //实付金额
                     submitTime: item.orderTime, //下单时间
                     deliverType: "", //配送方式
@@ -234,15 +235,15 @@ export default {
                       shoppingOrderId: "", //item.shoppingOrderId
                       orderPayType: "", //item.payType,//是否是支付方式
                       id: item.id,
-                      tag: "16",
-                      tabIndex: 3,
+                      tag: "7",
+                      tabIndex: 6,
                       awardActivityList: item.awardActivityList,
                     },
                   };
                   let dataList = [];
                   dataList.push({
                     billType: 13,
-                    tag: 16, //状态订单
+                    tag: 7, //状态订单
                     billImg: item.orderItemData.itemImg, //商品图片
                     billName: item.orderItemData.itemName,
                     billAmount: item.orderItemData.itemPrice,

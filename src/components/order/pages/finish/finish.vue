@@ -3,11 +3,7 @@
     class="finish"
     :class="{
       'finish-x': this.$util.getIsIphoneX_X(),
-<<<<<<< HEAD
-      'empty-page': showEmpty
-=======
       'empty-page': showEmpty,
->>>>>>> feater_fix_order
     }"
   >
     <van-pull-refresh

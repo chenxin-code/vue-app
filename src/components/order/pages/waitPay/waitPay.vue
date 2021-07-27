@@ -66,6 +66,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :tag="1"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -151,7 +152,7 @@ export default {
        * 14-维修服务费
        * 15-租售
        */
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,13,14",
       isShowErrorMsg: false,
       errorMsg: "",
     };
@@ -348,7 +349,7 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
       let obj1 = {
         orderType: "200015",
@@ -562,6 +563,7 @@ export default {
       this.currentOrderList = this.orderList.map((item) => {
         return {
           billType: item.billType,
+          tag: "1",
           amount: item.totalPrice,
           submitTime: item.submitTime,
           orderType: item.orderType,
@@ -615,6 +617,7 @@ export default {
           dataList: item.orderFormItemList.map((sub) => {
             return {
               billType: item.billType,
+              tag: "1",
               billImg: sub.iconUrl,
               billName: sub.name,
               billAmount: sub.unitPrice,
@@ -624,10 +627,10 @@ export default {
               info: sub.info,
               itemTypeName: sub.itemTypeName,
               snapshotTime: sub.snapshotTime,
-               tradeNo: item.tradeNo,
-                orderState: item.orderStateType,
-                orderType: item.orderType, //订单类型
-                shopOrderNo: sub.storeOuCode,
+              tradeNo: item.tradeNo,
+              orderState: item.orderStateType,
+              orderType: item.orderType, //订单类型
+              shopOrderNo: sub.storeOuCode,
             };
           }),
         };
@@ -760,100 +763,139 @@ export default {
       let paramsObj = {
         list: list,
       };
-      this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
-        if (res.data.code == "0000") {
-          // Toast.clear(); //关闭页面loading
-          let arr = res.data.data;
-          for (let index = 0; index < arr.length; index++) {
-            if (arr[index].status == 1 || arr[index].status == 2) {
-              check = false;
-              checkStatus.push(arr[index].status);
-            } else {
-              check = true;
+      this.$http
+        .post(url, JSON.stringify(paramsObj))
+        .then((res) => {
+          if (res.data.code == "0000") {
+            // Toast.clear(); //关闭页面loading
+            let arr = res.data.data;
+            for (let index = 0; index < arr.length; index++) {
+              if (arr[index].status == 1 || arr[index].status == 2) {
+                check = false;
+                checkStatus.push(arr[index].status);
+              } else {
+                check = true;
+              }
             }
-          }
 
-          if (_.uniq(checkStatus).includes(2)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else if (_.uniq(checkStatus).includes(1)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else {
-            let payStr = [];
-            payInfoList.forEach((item, index) => {
-              // isPay=1：支付中；isPay=0：待支付
-              payStr.push(item.isPay);
-            });
-            console.log(`待支付-是否有支付中账单`, payStr);
-
-            if (payStr.includes(1)) {
+            if (_.uniq(checkStatus).includes(2)) {
               Toast.clear(); //关闭页面loading
               this.isShowErrorMsg = true;
               this.errorMsg =
-                "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+              //动态修改van-sticky样式，让弹窗铺满整个屏幕
+              this.$nextTick(() => {
+                this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+                this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+              });
+            } else if (_.uniq(checkStatus).includes(1)) {
+              Toast.clear(); //关闭页面loading
+              this.isShowErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
               //动态修改van-sticky样式，让弹窗铺满整个屏幕
               this.$nextTick(() => {
                 this.$parent.$refs.stickyIndex.$el.style.position = "relative";
                 this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
               });
             } else {
-              console.log(`提交账单中心参数`, {
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
+              let payStr = [];
+              payInfoList.forEach((item, index) => {
+                // isPay=1：支付中；isPay=0：待支付
+                payStr.push(item.isPay);
               });
+              console.log(`待支付-是否有支付中账单`, payStr);
 
-              yjzdbill.YJBillPayment({
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
-                __ret__: (res) => {
-                  console.log(
-                    "---------------开始支付提交记录---------------------"
-                  );
-                  console.log(res);
-                  if (res.billRetStatus != "1") {
-                    Toast.clear(); //关闭页面loading
-                    this.isShowErrorMsg = true;
-                    this.errorMsg = res.billRetStatusMessage
-                      ? res.billRetStatusMessage
-                      : "支付失败";
-                    //动态修改van-sticky样式，让弹窗铺满整个屏幕
-                    this.$nextTick(() => {
-                      this.$parent.$refs.stickyIndex.$el.style.position =
-                        "relative";
-                      this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-                    });
-                  } else {
-                    Toast.clear(); //关闭页面loading
-                  }
-                },
-              });
+              if (payStr.includes(1)) {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                });
+
+                yjzdbill.YJBillPayment({
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: (res) => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus != "1") {
+                      Toast.clear(); //关闭页面loading
+                      this.isShowErrorMsg = true;
+                      this.errorMsg = res.billRetStatusMessage
+                        ? res.billRetStatusMessage
+                        : "支付失败";
+                      //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                      this.$nextTick(() => {
+                        this.$parent.$refs.stickyIndex.$el.style.position =
+                          "relative";
+                        this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                      });
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                    }
+                  },
+                });
+              }
             }
           }
-        }
-      });
+        })
+        .catch(() => {
+          console.log(`提交账单中心参数catch`, {
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+          });
+
+          yjzdbill.YJBillPayment({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+            __ret__: (res) => {
+              if (res.billRetStatus != "1") {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg = res.billRetStatusMessage
+                  ? res.billRetStatusMessage
+                  : "支付失败";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                Toast.clear(); //关闭页面loading
+              }
+            },
+          });
+        });
     },
     //关闭弹窗
     closeTanC() {
