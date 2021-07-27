@@ -130,6 +130,7 @@ export default {
       params: [],
       mergeAmount: 0,
       total: 0,
+      pageSize:8,
       isLoadPropertyBill: false, //是否加载物业缴费账单组件
       isDisAll: false,
       isDis: false,
@@ -355,7 +356,7 @@ export default {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
         state: "1",
-        page: { index: this.currentPage, pageSize: 30 },
+        page: { index: this.currentPage, pageSize:this.pageSize },
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,

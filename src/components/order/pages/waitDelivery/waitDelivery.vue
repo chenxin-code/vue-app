@@ -60,6 +60,7 @@ export default {
       orderList: [],
       currentPage: 1,
       tmpage: 1,
+      pageSize: 8,
       tmfinished: false,
       allFinish: false,
       showEmpty: false,
@@ -76,7 +77,7 @@ export default {
     Empty,
   },
   created() {
-    this.onLoad();
+    this.commFn();
   },
   watch: {
     currentOrderList: function (newVal, oldVal) {
@@ -91,7 +92,7 @@ export default {
     //滚动条与底部距离小于 offset 时触发
     onLoad() {
       this.refreshing = false;
-      if (!this.allFinish) {
+      if (!this.allFinish && (this.currentPage > 1 || this.tmpage > 1)) {
         this.commFn();
       }
     },
@@ -139,11 +140,11 @@ export default {
     /*服务商城的接口 --billType(物业清单) = 13*/
     tMallFn() {
       let list = [],
-        { tmpage } = this;
+        { tmpage, pageSize } = this;
       let param = {
         orderStateList: ["PAID"],
         pageNum: tmpage,
-        pageSize: 15,
+        pageSize: pageSize,
       };
       let seriveAPI = "/times-center-trade/mall/order/v1/shop/list";
       fetchMethod("POST", seriveAPI, param)
@@ -254,13 +255,13 @@ export default {
     },
     /*自建商城的接口--billType(物业清单) = 11*/
     ownMallFn() {
-      let { currentPage } = this,
+      let { currentPage, pageSize } = this,
         ownlist = [];
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
         state: this.tabs.tag,
-        page: { index: currentPage, pageSize: 15 },
+        page: { index: currentPage, pageSize: pageSize },
       };
       this.$http
         .post("/app/json/app_shopping_order/queryOrder", obj)
