@@ -4,6 +4,7 @@
     class="theme_sys_base"
     :class="theme"
   >
+  <van-nav-bar safe-area-inset-top />
     <!-- APP -->
     <!--@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"-->
     <!--<div id="app" class="theme_sys_base">-->
@@ -69,6 +70,7 @@
         </div> -->
           </transition-group>
           </div>
+          <van-number-keyboard safe-area-inset-bottom />
           <!--    <BindOilCard :showPopup="showPopup" :messagePopup="messagePopup" :giftList="giftList" :cardList="cardList" :haveCard="haveCard" :phone="phone"></BindOilCard>-->
           </div>
 </template>
