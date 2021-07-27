@@ -875,6 +875,7 @@ export default {
 
       .main-swiper-scroll-content {
         position: absolute;
+        top: 20px;
         bottom: 0px;
         left: 0px;
         right: 0px;
