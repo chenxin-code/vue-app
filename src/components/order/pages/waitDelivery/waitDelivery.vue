@@ -94,13 +94,6 @@ export default {
       if (!this.allFinish) {
         this.commFn();
       }
-
-      let data = {
-        tradeNo: tradeNo, //交易单
-        orderType: orderType, //业态(家政，旅游)
-        shoppingOrderId: shopeOrderNo, //交易单
-        orderPayType: orderState, //交易单
-      };
     },
     async commFn() {
       this.tmerror = false;
