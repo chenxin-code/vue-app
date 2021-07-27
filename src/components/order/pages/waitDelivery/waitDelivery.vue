@@ -31,6 +31,7 @@
             :tradeNo="item.tradeNo"
             :orderState="item.orderState ? item.orderState : ''"
             :shopOrderNo="item.shopOrderNo ? item.shopOrderNo : ''"
+            :orderItem="item"
             :tag="item.tag"
           ></OrderItem>
         </div>

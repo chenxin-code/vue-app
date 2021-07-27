@@ -32,6 +32,7 @@
             :orderState="item.orderState ? item.orderState : ''"
             :shopOrderNo="item.shopOrderNo ? item.shopOrderNo : ''"
             :tag="item.tag"
+            :orderItem="item"
           ></OrderItem>
         </div>
         <Empty v-show="currentOrderList.length == 0"></Empty>

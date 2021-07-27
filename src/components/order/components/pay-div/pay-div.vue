@@ -5,7 +5,7 @@
         <div class="pay-box" v-show="isShow">
           <van-checkbox
             v-model="isChecked"
-            checked-color="#f80f16"
+            checked-color="#E5165A"
             @click="checkEvent($event)"
             icon-size="18px"
           ></van-checkbox>
@@ -44,8 +44,8 @@ export default {
       billType: "",
       amount: {
         integer: "0",
-        decimal: "00"
-      }
+        decimal: "00",
+      },
     };
   },
   created() {},
@@ -89,6 +89,9 @@ export default {
         case 12:
           billName = "美居";
           break;
+        case 13:
+          billName = "服务商城";
+          break;
         case 14:
           billName = "维修服务费";
           break;
@@ -97,7 +100,7 @@ export default {
           break;
       }
       return billName;
-    }
+    },
   },
   methods: {
     checkEvent(event) {
@@ -111,34 +114,38 @@ export default {
     },
     mergePay() {
       this.$emit("mergePay");
-    }
+    },
   },
   watch: {
-    mergeAmount: function(newVal, oldVal) {
+    mergeAmount: function (newVal, oldVal) {
       let totalPrice = this.$util.toDecimal2(newVal);
       let totalArr = totalPrice.toString().split(".");
       this.amount.integer = totalArr[0];
       this.amount.decimal = totalArr[1];
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
 $color = #E5165A;
-.pay-content{
+
+.pay-content {
   position: fixed;
   bottom: 0;
   left: 0;
   z-index: 2;
   width: 100%;
-  .adapter-iphoneX{
+
+  .adapter-iphoneX {
     width: 100%;
     height: 34px;
     background-color: #fff;
   }
 }
+
 .pay-div {
   display: flex;
   justify-content: space-between;
@@ -146,7 +153,7 @@ $color = #E5165A;
   width: 100%;
   height: 52px;
   background: #fff;
-  padding: 0 23.375px ;
+  padding: 0 23.375px;
   box-shadow: 0px -3px 10px 0px #F1F1F1;
 
   .pr {
@@ -178,7 +185,8 @@ $color = #E5165A;
 
     .text {
       display: flex;
-      align-items :center;
+      align-items: center;
+
       p {
         padding-left: 4px;
       }
@@ -200,10 +208,10 @@ $color = #E5165A;
         white-space: nowrap;
       }
 
-      .checkAll{
+      .checkAll {
         margin-left: 10px;
 
-        .all{
+        .all {
           font-size: 14px;
           font-family: SourceHanSansCN-Normal, SourceHanSansCN;
           font-weight: 400;
@@ -213,15 +221,16 @@ $color = #E5165A;
             font-size: 16px;
             font-family: SourceHanSansCN-Medium, SourceHanSansCN;
             font-weight: 500;
-            color: #FD3A3A;
+            color: $color;
             line-height: 16px;
           }
-          .decimal{
+
+          .decimal {
             font-size: 12px;
           }
         }
 
-        .onlyCheck{
+        .onlyCheck {
           font-size: 10px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
@@ -262,19 +271,20 @@ $color = #E5165A;
       height: 40px;
       text-align: center;
       line-height: 45px;
-      background: linear-gradient(270deg, #FD3A3A 0%, #FF755B 100%);
+      background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
       border-radius: 20px;
       margin-left: 6px;
 
-      div{
+      div {
         font-weight: 500;
         color: #FFFFFF;
         font-size: 15px;
         position: relative;
         top: 0px;
       }
-      .total{
-        top :-1px;
+
+      .total {
+        top: -1px;
       }
     }
   }

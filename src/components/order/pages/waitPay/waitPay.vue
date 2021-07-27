@@ -509,7 +509,7 @@ export default {
             } else {
               this.isLoadPropertyBill = true;
             }
-            // this.isLoadPropertyBill = true; //本地测试
+            this.isLoadPropertyBill = true; //本地测试
           }
 
           //如果物业账单列表和电商订单列表都为空,人房id为空（游客）,并且请求不出错的情况下，则显示空状态
@@ -566,7 +566,6 @@ export default {
           tag: 1,
           amount: item.totalPrice,
           submitTime: item.submitTime,
-          orderType: item.orderType,
           orderId: item.shoppingOrderId,
           state: item.state,
           totalPrice: item.totalPrice,
@@ -636,109 +635,121 @@ export default {
       });
     },
     checkEvent(data) {
-      // 从全选checkbox进来
-      if (data.checkAll || data.checkAllBillType1) {
-        let refs = this.$refs.order.filter((item) => {
-          // 找出全选的类型并保存起来
-          return item.billType == data.billType;
-        });
-        console.log(refs);
-        let currentOrderList = [];
-        if (refs[0] && refs[0].billType == 1) {
-          currentOrderList = this.billResults;
-        } else {
-          currentOrderList = this.currentOrderList;
-        }
-        console.log(this.currentOrderList, "++++");
-        console.log(this.billResults, "----");
-        let checkData = currentOrderList.filter((item) => {
-          return item.billType == data.billType;
-        });
-        console.log(checkData + "----------");
-
-        if (data.checked) {
-          //全部选中
-          this.checkData.clear(); //清空checkData
-          refs.forEach((item, index) => {
-            //保存选中数据并设置每个checkbox选中状态
-            this.checkData.add(checkData[index]);
-            item.isChecked = true;
-          });
-          if (refs[0] && refs[0].billType == 1) {
-            this.$refs.propertyOrder.isChecked = true;
-          }
-        } else {
-          // 全部取消
-          this.checkData.clear(); //清空checkData
-          refs.forEach((item) => {
-            item.isChecked = false; // 设置每个checkbox为没选中状态
-          });
-          this.$refs.payDiv.isShow = false; //隐藏全选按钮
-          this.$refs.propertyOrder.isChecked = false;
-        }
-        return;
-      }
-      // 选中或取消当个checkbox
-      let refs = this.$refs.order.filter((item) => {
-        // 找到不能选的checkbox
-        return item.billType != data.billType;
-      });
-      refs.forEach((item) => {
-        // 并设置不能选择属性
-        if (item.billType != data.billType) {
-          item.isDisabled = true;
-        }
-      });
-      if (data.billType != 1) {
-        this.$refs.propertyOrder.isDisabled = true;
-      }
-
-      let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
-
-      if (data.checked) {
-        // 选中
-        this.checkData.add(data);
-        this.$refs.payDiv.billType = data.billType;
-        this.$refs.payDiv.isShow = true; // 显示全选按钮
-        if (this.checkData.size == checkedTotal) {
-          //checkData数量跟可选checkbox数量相等 =>全选
-          this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
-          if (data.billType == 1) {
-            this.$refs.propertyOrder.isChecked = true;
-          }
-        } else {
-          this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
-          if (data.billType == 1) {
-            this.$refs.propertyOrder.isChecked = false;
-          }
+      if (data.billType == 13) {
+        /*去服务商城详情页*/
+        let token = this.$store.state.ythToken
+          ? this.$store.state.ythToken
+          : localStorage.getItem("ythToken");
+        if (this.billType == 13) {
+          let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+          let query = `orderState=${this.orderState}&tradeNo=${this.tradeNo}&orderType=${this.tradeNo}&shopOrderNo=${this.shopOrderNo}&Authorization=${token}`;
+          location.href = path + query;
         }
       } else {
-        // 取消
-        this.checkData.forEach((item) => {
-          if (item.billId == data.billId) {
-            this.checkData.delete(item); // 删除数据中取消选中的数据
-            this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-            if (data.billType == 1) {
-              this.$refs.propertyOrder.isChecked = false;
-              this.$refs.propertyOrder.isDisabled = false;
+        // 从全选checkbox进来
+        if (data.checkAll || data.checkAllBillType1) {
+          let refs = this.$refs.order.filter((item) => {
+            // 找出全选的类型并保存起来
+            return item.billType == data.billType;
+          });
+          console.log(refs);
+          let currentOrderList = [];
+          if (refs[0] && refs[0].billType == 1) {
+            currentOrderList = this.billResults;
+          } else {
+            currentOrderList = this.currentOrderList;
+          }
+          console.log(this.currentOrderList, "++++");
+          console.log(this.billResults, "----");
+          let checkData = currentOrderList.filter((item) => {
+            return item.billType == data.billType;
+          });
+          console.log(checkData + "----------");
+
+          if (data.checked) {
+            //全部选中
+            this.checkData.clear(); //清空checkData
+            refs.forEach((item, index) => {
+              //保存选中数据并设置每个checkbox选中状态
+              this.checkData.add(checkData[index]);
+              item.isChecked = true;
+            });
+            if (refs[0] && refs[0].billType == 1) {
+              this.$refs.propertyOrder.isChecked = true;
             }
+          } else {
+            // 全部取消
+            this.checkData.clear(); //清空checkData
+            refs.forEach((item) => {
+              item.isChecked = false; // 设置每个checkbox为没选中状态
+            });
+            this.$refs.payDiv.isShow = false; //隐藏全选按钮
+            this.$refs.propertyOrder.isChecked = false;
+          }
+          return;
+        }
+        // 选中或取消当个checkbox
+        let refs = this.$refs.order.filter((item) => {
+          // 找到不能选的checkbox
+          return item.billType != data.billType;
+        });
+        refs.forEach((item) => {
+          // 并设置不能选择属性
+          if (item.billType != data.billType) {
+            item.isDisabled = true;
           }
         });
-        if (this.checkData.size == 0) {
-          // 个数为0，全部取消选中
-          this.$refs.order.forEach((item) => {
-            item.isDisabled = false; // 所有checkbox变成可选
-          });
-          this.$refs.propertyOrder.isDisabled = false;
-          this.$refs.payDiv.isShow = false; //隐藏全选
+        if (data.billType != 1) {
+          this.$refs.propertyOrder.isDisabled = true;
         }
+
+        let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
+
+        if (data.checked) {
+          // 选中
+          this.checkData.add(data);
+          this.$refs.payDiv.billType = data.billType;
+          this.$refs.payDiv.isShow = true; // 显示全选按钮
+          if (this.checkData.size == checkedTotal) {
+            //checkData数量跟可选checkbox数量相等 =>全选
+            this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = true;
+            }
+          } else {
+            this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = false;
+            }
+          }
+        } else {
+          // 取消
+          this.checkData.forEach((item) => {
+            if (item.billId == data.billId) {
+              this.checkData.delete(item); // 删除数据中取消选中的数据
+              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+              if (data.billType == 1) {
+                this.$refs.propertyOrder.isChecked = false;
+                this.$refs.propertyOrder.isDisabled = false;
+              }
+            }
+          });
+          if (this.checkData.size == 0) {
+            // 个数为0，全部取消选中
+            this.$refs.order.forEach((item) => {
+              item.isDisabled = false; // 所有checkbox变成可选
+            });
+            this.$refs.propertyOrder.isDisabled = false;
+            this.$refs.payDiv.isShow = false; //隐藏全选
+          }
+        }
+        // console.log(this.checkData)
+        let mergeList = Array.from(this.checkData);
+        let num = mergeList.reduce((total, e) => {
+          return BigNumber(total).plus(e.totalPrice);
+        }, 0);
+        this.mergeAmount = num;
       }
-      // console.log(this.checkData)
-      let mergeList = Array.from(this.checkData);
-      let num = mergeList.reduce((total, e) => {
-        return BigNumber(total).plus(e.totalPrice);
-      }, 0);
-      this.mergeAmount = num;
     },
 
     //toast
@@ -762,100 +773,143 @@ export default {
       let paramsObj = {
         list: list,
       };
-      this.$http.post(url, JSON.stringify(paramsObj)).then((res) => {
-        if (res.data.code == "0000") {
-          // Toast.clear(); //关闭页面loading
-          let arr = res.data.data;
-          for (let index = 0; index < arr.length; index++) {
-            if (arr[index].status == 1 || arr[index].status == 2) {
-              check = false;
-              checkStatus.push(arr[index].status);
-            } else {
-              check = true;
+      this.$http
+        .post(url, JSON.stringify(paramsObj))
+        .then((res) => {
+          if (res.data.code == "0000") {
+            // Toast.clear(); //关闭页面loading
+            let arr = res.data.data;
+            for (let index = 0; index < arr.length; index++) {
+              if (arr[index].status == 1 || arr[index].status == 2) {
+                check = false;
+                checkStatus.push(arr[index].status);
+              } else {
+                check = true;
+              }
             }
-          }
 
-          if (_.uniq(checkStatus).includes(2)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else if (_.uniq(checkStatus).includes(1)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else {
-            let payStr = [];
-            payInfoList.forEach((item, index) => {
-              // isPay=1：支付中；isPay=0：待支付
-              payStr.push(item.isPay);
-            });
-            console.log(`待支付-是否有支付中账单`, payStr);
-
-            if (payStr.includes(1)) {
+            if (_.uniq(checkStatus).includes(2)) {
               Toast.clear(); //关闭页面loading
               this.isShowErrorMsg = true;
               this.errorMsg =
-                "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+              //动态修改van-sticky样式，让弹窗铺满整个屏幕
+              this.$nextTick(() => {
+                this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+                this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+              });
+            } else if (_.uniq(checkStatus).includes(1)) {
+              Toast.clear(); //关闭页面loading
+              this.isShowErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
               //动态修改van-sticky样式，让弹窗铺满整个屏幕
               this.$nextTick(() => {
                 this.$parent.$refs.stickyIndex.$el.style.position = "relative";
                 this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
               });
             } else {
-              console.log(`提交账单中心参数`, {
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
+              let payStr = [];
+              payInfoList.forEach((item, index) => {
+                // isPay=1：支付中；isPay=0：待支付
+                payStr.push(item.isPay);
               });
+              console.log(`待支付-是否有支付中账单`, payStr);
 
-              yjzdbill.YJBillPayment({
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
-                __ret__: (res) => {
-                  console.log(
-                    "---------------开始支付提交记录---------------------"
-                  );
-                  console.log(res);
-                  if (res.billRetStatus != "1") {
-                    Toast.clear(); //关闭页面loading
-                    this.isShowErrorMsg = true;
-                    this.errorMsg = res.billRetStatusMessage
-                      ? res.billRetStatusMessage
-                      : "支付失败";
-                    //动态修改van-sticky样式，让弹窗铺满整个屏幕
-                    this.$nextTick(() => {
-                      this.$parent.$refs.stickyIndex.$el.style.position =
-                        "relative";
-                      this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-                    });
-                  } else {
-                    Toast.clear(); //关闭页面loading
-                  }
-                },
-              });
+              if (payStr.includes(1)) {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                });
+
+                yjzdbill.YJBillPayment({
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: (res) => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus != "1") {
+                      Toast.clear(); //关闭页面loading
+                      this.isShowErrorMsg = true;
+                      this.errorMsg = res.billRetStatusMessage
+                        ? res.billRetStatusMessage
+                        : "支付失败";
+                      //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                      this.$nextTick(() => {
+                        this.$parent.$refs.stickyIndex.$el.style.position =
+                          "relative";
+                        this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                      });
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                    }
+                  },
+                });
+              }
             }
           }
-        }
-      });
+        })
+        .catch(() => {
+          console.log(`catch提交账单中心参数`, {
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+          });
+
+          yjzdbill.YJBillPayment({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+            __ret__: (res) => {
+              console.log(
+                "---------------catch开始支付提交记录---------------------"
+              );
+              console.log(res);
+              if (res.billRetStatus != "1") {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg = res.billRetStatusMessage
+                  ? res.billRetStatusMessage
+                  : "支付失败";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                Toast.clear(); //关闭页面loading
+              }
+            },
+          });
+        });
     },
     //关闭弹窗
     closeTanC() {
