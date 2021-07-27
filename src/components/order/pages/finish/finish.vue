@@ -19,6 +19,7 @@
         :error.sync="error"
         :error-text="errorText"
         :immediate-check="true"
+        offset="10"
       >
         <property-bill v-show="isLoadPropertyBill" :results="billResults" />
         <div
@@ -256,6 +257,7 @@ export default {
 
         //这里是电商订单接口返回的数据处理逻辑
         if (orderRes && orderRes.status === "fulfilled") {
+          // debugger
           let orderResult = orderRes.value.data;
           let { data } = orderResult;
           // 判断当前页数是否超过总页数或者等于总页数
@@ -278,6 +280,11 @@ export default {
                   item.billType != 11 ||
                   (item.orderStateType == "200017" && item.state == 9)
               );
+              if(this.orderList.length == 0 && data.records.length !== 0 && indexList.length == 0){ // 如果第一页开始没有过滤到已完成的订单就一直请求
+                this.currentPage++;
+                this.onLoad();
+                return
+              }
               this.orderList =
                 this.currentPage == 1
                   ? indexList
@@ -285,7 +292,7 @@ export default {
               this.page = data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
-              } else {
+              }else {
                 this.currentOrderList = [];
                 this.finished = true;
               }
@@ -346,8 +353,9 @@ export default {
       this.currentPage = 1;
       this.tmpage = 1;
       this.finished = false; //将没有更多的状态改成false
-      this.refreshing = false;
-      this.refresh = true;
+      this.refreshing = true;
+      this.orderList = [];
+      this.currentOrderList = [];
       this.onLoad();
     },
     // 初始化数据
