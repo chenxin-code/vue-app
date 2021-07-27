@@ -29,7 +29,8 @@
         </div>
       </div>
     </div>
-    <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
+    <div class="adapter-iphoneX"></div>
+    <!-- <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div> -->
   </div>
 </template>
 
