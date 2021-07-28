@@ -73,6 +73,7 @@
               :tradeNo="item.tradeNo"
               :orderItem="item"
               :tag="item.tag"
+              :orderStateType="item.orderStateType"
             ></OrderItem>
           </template>
         </div>
@@ -386,6 +387,7 @@ export default {
           tradeNo: item.tradeNo,
           orderState: item.orderStateType,
           orderType: item.orderType, //订单类型
+          orderStateType: item.orderStateType,
           shopOrderNo: item.orderFormItemList[0]
             ? item.orderFormItemList[0].storeOuCode
             : "",
