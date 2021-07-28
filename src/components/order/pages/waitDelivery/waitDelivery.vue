@@ -341,13 +341,12 @@ export default {
                   };
                 })
               };
-
               ownlist.push(list);
             });
+            this.concatFn(ownlist);
           } else {
             this.finished = true;
           }
-          this.concatFn(ownlist);
         } else {
           this.finished = true; //如果超过总页数就显示没有更多内容了
         }
