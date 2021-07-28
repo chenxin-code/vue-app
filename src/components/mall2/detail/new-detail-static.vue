@@ -2655,6 +2655,7 @@ export default {
           });
           return;
         }else{
+          
           if (window.history.length === 1) {
             appNav.navigatorBack({ url: "0" }).then(res => {
               // nav.changeBottomToIndex({ selectIndex: 2})
