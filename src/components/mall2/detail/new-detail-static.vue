@@ -2727,7 +2727,6 @@ export default {
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
       console.log("this.viewpoint_radio", this.viewpoint_radio);
-      window.removeEventListener("scroll", this.handleScroll, true);
       this.$sensors.track("goods_detail_quit", {
         module_source:
           this.$store.state.inToDetail == "common"
