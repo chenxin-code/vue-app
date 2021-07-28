@@ -9,6 +9,7 @@
         :error.sync="error"
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
+        offset="10"
       >
         <div
           v-for="(item, index) in currentOrderList"
@@ -404,20 +405,18 @@ export default {
       this.currentOrderList = this.sortKey(this.orderList, "submitTime");
     },
     allLoadingFn() {
-      setTimeout(res => {
-        if (this.tmfinished && this.finished) {
-          this.loading = false;
-          this.allFinish = true;
-        } else {
-          this.allFinish = false;
-        }
-        if (this.tmerror && this.error) {
-          this.error = true;
-        } else {
-          this.error = false;
-        }
-        console.log(this.allFinish, "allFinishl--loading2");
-      }, 500);
+      if (this.tmfinished && this.finished) {
+        this.loading = false;
+        this.allFinish = true;
+      } else {
+        this.allFinish = false;
+      }
+      if (this.tmerror && this.error) {
+        this.error = true;
+      } else {
+        this.error = false;
+      }
+      console.log(this.allFinish, "allFinishl--loading2");
     },
 
     // 初始化数据--暂时不用
