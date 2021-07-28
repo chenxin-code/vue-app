@@ -247,7 +247,7 @@ export default {
             this.billResults = [];
           }
           if (this.billResults.length) {
-            // this.isLoadPropertyBill = true;
+            this.isLoadPropertyBill = true;
           } else {
             //如果没有物业账单数据，则不显示物业账单标题
             this.isLoadPropertyBill = false;
