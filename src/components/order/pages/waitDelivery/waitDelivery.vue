@@ -35,7 +35,7 @@
             :tag="item.tag"
           ></OrderItem>
         </div>
-        <Empty v-show="currentOrderList.length <= 0"></Empty>
+        <Empty v-show="currentOrderList.length <= 0 && !loading"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -131,6 +131,7 @@ export default {
           })
           .catch(err => {
             reject(err);
+            this.loading = false;
             //   this.loading = false;
             //   this.tmerror = true; //大家错误状态
             //   this.tmfinished = false;
@@ -142,6 +143,7 @@ export default {
     tmallDataFn(res) {
       let { code, data } = res,
         { tmpage } = this;
+      this.loading = false;
       if (code == 200) {
         let { records, pages } = data;
         this.tmpage++;
@@ -253,6 +255,7 @@ export default {
           })
           .catch(error => {
             reject(error);
+            this.loading = false;
           });
       });
     },
@@ -352,7 +355,6 @@ export default {
         this.finished = true;
       }
     },
-
     /*服务商城的数据格式化*/
     formatOrderList(data) {
       //交易单

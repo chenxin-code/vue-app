@@ -445,7 +445,8 @@ export default {
           sClass = "icon4";
           break;
         case 13:
-          sClass = "icon3";
+          sClass = "icon2";
+          break;
         case 14:
           sClass = "icon14";
           break;

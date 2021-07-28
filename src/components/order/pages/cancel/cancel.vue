@@ -129,10 +129,8 @@ export default {
           })
           .catch(err => {
             reject(err);
-            //   this.loading = false;
-            //   this.tmerror = true; //大家错误状态
-            //   this.tmfinished = false;
-            //   return false;
+            this.loading = false;
+            this.tmerror = true; //大家错误状态
           });
       });
     },
@@ -140,6 +138,7 @@ export default {
     tmallDataFn(res) {
       let { code, data } = res,
         { tmpage } = this;
+      this.loading = false;
       if (code == 200) {
         let { records, pages } = data;
         this.tmpage++;
@@ -252,6 +251,7 @@ export default {
           })
           .catch(error => {
             reject(error);
+            this.loading = false;
           });
       });
     },

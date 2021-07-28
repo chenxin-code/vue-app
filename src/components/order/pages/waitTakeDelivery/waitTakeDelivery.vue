@@ -35,7 +35,7 @@
             :tag="item.tag"
           ></OrderItem>
         </div>
-        <Empty v-show="currentOrderList.length <= 0"></Empty>
+        <Empty v-show="currentOrderList.length <= 0 && !loading"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -108,7 +108,6 @@ export default {
           tmallData = "";
         tmallData = res[0];
         ownData = res[1];
-        this.loading = false;
         if (tmallData && tmallData.status == "fulfilled") {
           this.tmallDataFn(tmallData.value);
         }
@@ -135,6 +134,7 @@ export default {
           })
           .catch(err => {
             reject(err);
+            this.loading = false;
           });
       });
     },
@@ -142,6 +142,7 @@ export default {
     tmallDataFn(res) {
       let { code, data } = res,
         { tmpage } = this;
+      this.loading = false;
       if (code == 200) {
         let { records, pages } = data;
         this.tmpage++;
@@ -259,6 +260,7 @@ export default {
           })
           .catch(error => {
             reject(error);
+            this.loading = false;
           });
       });
     },
@@ -267,6 +269,7 @@ export default {
       // 判断当前页数是否超过总页数或者等于总页数
       let { status, data } = res.data;
       let { currentPage } = this;
+      this.loading = false;
       this.loading = false;
       if (status == 0) {
         let ownlist = [];
