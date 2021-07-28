@@ -211,6 +211,7 @@ export default {
         let propertyRes = "";
         let orderRes = "";
         let tmRes = "";
+        
         if (res.length > 2) {
           //如果是初始化或者是下拉刷新，会请求两个接口，此时res的长度就是2。所以物业账单和电商订单都要根据对应下标拿数据
           propertyRes = res[0];
