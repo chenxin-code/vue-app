@@ -55,8 +55,6 @@ export default {
       error: false,
       refreshing: false,
       orderList: [],
-      massList: [],
-      ownList: [],
       currentOrderList: [],
       currentPage: 1,
       tmpage: 1,

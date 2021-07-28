@@ -36,7 +36,7 @@
             :orderItem="item"
           ></OrderItem>
         </div>
-        <Empty v-show="currentOrderList.length == 0"></Empty>
+        <Empty v-show="currentOrderList.length == 0 && !loading"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
