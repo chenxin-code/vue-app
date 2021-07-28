@@ -26,7 +26,13 @@
           :key="index"
           class="scroll"
         >
-          <template v-if="item.billType == 13 && item.dataList.length > 0">
+          <template
+            v-if="
+              item.billType == 13 &&
+                item.orderStateType == 'COMPLETED' &&
+                item.dataList.length > 0
+            "
+          >
             <OrderItem
               :dataList="item.dataList"
               :params="item.params"
