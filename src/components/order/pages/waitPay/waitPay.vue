@@ -19,6 +19,7 @@
         :error.sync="error"
         :error-text="errorText"
         :immediate-check="false"
+        offset="10"
       >
         <property-bill
           v-show="isLoadPropertyBill"
@@ -130,7 +131,7 @@ export default {
       params: [],
       mergeAmount: 0,
       total: 0,
-      pageSize: 8,
+      pageSize: 5,
       isLoadPropertyBill: false, //是否加载物业缴费账单组件
       isDisAll: false,
       isDis: false,

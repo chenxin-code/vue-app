@@ -2699,6 +2699,7 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
+      window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
       if (this.$route.query.channel == "fromApp") {
@@ -4398,6 +4399,7 @@ export default {
       if (this.$refs.scrollView4)
         this.scrollTopValue5 = this.$refs.scrollView4.getScrollSite();
     }
+    window.removeEventListener("scroll", this.handleScroll, true);
     next();
   },
 };
