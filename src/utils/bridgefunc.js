@@ -1039,9 +1039,9 @@ var bridgefunc = {
       if (nTV < time + 5 * 60 * 1000) {
         let ipAddress = webtype != 3 ? tools.getRemoteIP() : ''
         store.state.commonArgs.data.ipAddress = ipAddress
-        if (store.state.channel) {
-          store.state.commonArgs.data.channel = store.state.channel
-        }
+        // if (store.state.channel) {
+        //   store.state.commonArgs.data.channel = store.state.channel
+        // }
         callback(store.state.commonArgs.data);
         return;
       }
@@ -1085,9 +1085,9 @@ var bridgefunc = {
 
       jsonData.city = store.state.indexData.city ? store.state.indexData.city : ''
       jsonData.province = store.state.indexData.province ? store.state.indexData.province : ''
-      if (store.state.channel) {
-        jsonData.channel = store.state.channel
-      }
+      // if (store.state.channel) {
+      //   jsonData.channel = store.state.channel
+      // }
 
       let ipAddress = webtype != 3 ? tools.getRemoteIP() : ''
       jsonData.ipAddress = ipAddress
