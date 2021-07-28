@@ -27,7 +27,13 @@
           :key="index"
           class="scroll"
         >
-          <template v-if="item.billType == 13 && item.dataList.length > 0">
+          <template
+            v-if="
+              item.billType == 13 &&
+                item.orderStateType == 'COMPLETED' &&
+                item.dataList.length > 0
+            "
+          >
             <OrderItem
               :dataList="item.dataList"
               :params="item.params"
@@ -283,13 +289,18 @@ export default {
               // var indexList = data.records; //将请求到的内容赋值给一个变量
               var indexList = data.records.filter(
                 item =>
-                  (item.billType != 11 && item.billType != 13) ||
+                  item.billType != 11 ||
                   (item.orderStateType == "200017" && item.state == 9)
               );
-              if(this.orderList.length == 0 && data.records.length !== 0 && indexList.length == 0){ // 如果第一页开始没有过滤到已完成的订单就一直请求
+              if (
+                this.orderList.length == 0 &&
+                data.records.length !== 0 &&
+                indexList.length == 0
+              ) {
+                // 如果第一页开始没有过滤到已完成的订单就一直请求
                 this.currentPage++;
                 this.onLoad();
-                return
+                return;
               }
               this.orderList =
                 this.currentPage == 1
@@ -298,7 +309,7 @@ export default {
               this.page = data.pages; //将总页数赋值给this
               if (this.orderList.length !== 0) {
                 this.initData();
-              }else {
+              } else {
                 this.currentOrderList = [];
                 this.finished = true;
               }
