@@ -892,15 +892,7 @@ export default {
             billNo: billNo,
             appScheme: "x-engine",
             payType: false,
-<<<<<<< HEAD
             __ret__: (res) => {
-=======
-            __ret__: res => {
-              console.log(
-                "---------------catch开始支付提交记录---------------------"
-              );
-              console.log(res);
->>>>>>> feater_fix_order
               if (res.billRetStatus != "1") {
                 Toast.clear(); //关闭页面loading
                 this.isShowErrorMsg = true;
