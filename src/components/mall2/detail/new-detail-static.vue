@@ -2705,7 +2705,9 @@ export default {
         if (this.$util.isAndroid()) {
           window.location.href = `x-engine-json://yjzdbill/webToApp?args=&callback=${encodeURIComponent(
             // location.origin
-            "https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common"
+            this.$store.state.environment !== 'production'?
+            "https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common":
+            "https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/common"
           )}`;
         } else {
           appNav.navigatorBack({ url: "0" }).then((res) => {
