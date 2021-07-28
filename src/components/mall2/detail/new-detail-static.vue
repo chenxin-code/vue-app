@@ -2660,18 +2660,25 @@ export default {
               console.log(res);
             });
             return;
-          }
-        }
-
-        if (
-          this.$store.state.webtype != "2" ||
-          this.$store.state.webtype != "3"
-        ) {
-          if (this.backApp) {
-            appNav.navigatorBack({ url: "0" }).then(res => {
-              console.log(res);
-            });
-            return;
+          }else{
+            
+            if (window.history.length === 1) {
+              appNav.navigatorBack({ url: "0" }).then(res => {
+                // nav.changeBottomToIndex({ selectIndex: 2})
+              });
+              appNav
+              .setNavBarHidden({
+                isHidden: true,
+                isAnimation: false
+              })
+              .then(res => {});
+              appNav.changeBottomToIndex({selectIndex: 2,}).then(res=>{
+                console.log('跳转',res)
+              });
+              // this.$router.replace("/common");
+            } else {
+              this.$router.go(-1);
+            }
           }
         }
 
