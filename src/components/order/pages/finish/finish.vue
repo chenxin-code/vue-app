@@ -441,8 +441,8 @@ export default {
                 })
               };
               ownlist.push(list);
-              this.concatFn(ownlist);
             });
+              this.concatFn(ownlist);
           } else {
             this.ownfinished = true;
           }
