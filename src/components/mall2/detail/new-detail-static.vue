@@ -1563,7 +1563,7 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="false">
+          <div class="share_botton_item" @click="shareImg" v-show="true">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
