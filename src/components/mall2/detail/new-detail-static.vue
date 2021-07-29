@@ -1878,6 +1878,31 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    distributionMessage() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
+        : (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
+      let parmas = {
+        afterSaleStateList: ["REJECT", "CANCEL", "FAIL"],
+        afterSaleType: "REFUND",
+        pageNum: this.currentPage,
+        pageSize: 30,
+      };
+      return new Promise((resolve, reject) => {
+        this.$http.get(url, parmas).then(
+          (res) => {
+            console.log('-----test---distributionMessage->>>', res);
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -4271,6 +4296,7 @@ export default {
     } else {
       this.getDatas();
     }
+    this.distributionMessage();
   },
   activated() {
     if (
