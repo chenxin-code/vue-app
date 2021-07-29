@@ -4318,6 +4318,7 @@ export default {
       if (this.$refs.scrollView4)
         this.scrollTopValue5 = this.$refs.scrollView4.getScrollSite();
     }
+    window.removeEventListener("scroll", this.handleScroll, true);
     next();
   }
 };

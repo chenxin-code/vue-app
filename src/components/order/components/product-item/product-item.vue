@@ -12,25 +12,31 @@
       <div class="img">
         <img
           :src="productItem.billImg"
-          v-if="productItem.billType == 11"
+          v-if="productItem.billType == 11 || productItem.billType == 13"
           @click.stop="gotoProductDetail(productItem)"
         />
         <div
           class="billImg"
-          v-if="productItem.billType != 11"
+          v-if="productItem.billType != 11 && productItem.billType != 13"
           @click.stop="gotoProductDetail(productItem)"
           :style="{
             width: '2.4rem',
             height: '2.4rem',
             'background-image': 'url(' + billCenterImg + ')',
             'background-size': '2.4rem 2.4rem',
-            'background-repeat': 'no-repeat'
+            'background-repeat': 'no-repeat',
           }"
         ></div>
-        <p class="text" v-if="productItem.billType == 11">
+        <p
+          class="text"
+          v-if="productItem.billType == 11 || productItem.billType == 13"
+        >
           {{ productItem.billName }}
         </p>
-        <div class="desc" v-if="productItem.billType != 11">
+        <div
+          class="desc"
+          v-if="productItem.billType != 11 && productItem.billType != 13"
+        >
           <!-- <strong>{{ productItem.itemTypeName }}</strong> -->
           <strong> {{ billTypeName }}</strong>
           <p>{{ productItem.billName }}</p>
@@ -42,8 +48,9 @@
         class="price"
         v-if="
           productItem.billType == 11 ||
-            productItem.billType == 7 ||
-            productItem.billType == 8
+          productItem.billType == 7 ||
+          productItem.billType == 8 ||
+          productItem.billType == 13
         "
       >
         <p class="pr">
@@ -76,55 +83,65 @@ export default {
       goodsAmount: "0.00",
       amount: {
         integer: "0",
-        decimal: "00"
-      }
+        decimal: "00",
+      },
     };
   },
   created() {
     this.goodsAmount = this.productItem.billAmount;
   },
   methods: {
-    gotoProductDetail: function(product) {
-      // 砍价订单禁止进入详情
-      if (this.$store.state.globalConfig.cut_price_strict == 1) {
-        return;
-      }
-      if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
-        return;
-      }
-      if (this.watermark == 1) {
-        // 蜂鸟配送无法查看详情
-        return;
-      }
-      let path = "/mall2/detail/" + this.$util.getDataString();
-      if (this.billType == "11") {
-        this.$router.push({
-          path: path,
-          query: {
-            storeOuCode: product.storeOuCode,
-            skuId: product.skuId,
-            lastPath: "/order/3",
-            productType: product.productType
-          }
-        });
+    gotoProductDetail: function (product) {
+      /*billType == 13 服务商城的清单类型*/
+      if (this.productItem.billType == 13) {
+        let token = this.$store.state.ythToken
+          ? this.$store.state.ythToken
+          : localStorage.getItem("ythToken");
+        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+        let query = `orderState=${product.orderState}&tradeNo=${product.tradeNo}&orderType=${product.orderType}&shopOrderNo=${product.shopOrderNo}&tabShow=true&Authorization=${token}`;
+        location.href = path + query;
       } else {
-        window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
-          JSON.stringify({
-            billId: this.billId,
-            payType: "no",
-            isRefund: "no"
-          })
-        )}`;
+        // 砍价订单禁止进入详情
+        if (this.$store.state.globalConfig.cut_price_strict == 1) {
+          return;
+        }
+        if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
+          return;
+        }
+        if (this.watermark == 1) {
+          // 蜂鸟配送无法查看详情
+          return;
+        }
+        let path = "/mall2/detail/" + this.$util.getDataString();
+        if (this.billType == "11") {
+          this.$router.push({
+            path: path,
+            query: {
+              storeOuCode: product.storeOuCode,
+              skuId: product.skuId,
+              lastPath: "/order/3",
+              productType: product.productType,
+            },
+          });
+        } else {
+          window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
+            JSON.stringify({
+              billId: this.billId,
+              payType: "no",
+              isRefund: "no",
+            })
+          )}`;
+        }
       }
-    }
+    },
   },
   watch: {
-    goodsAmount: function(newVal, oldVal) {
+    goodsAmount: function (newVal, oldVal) {
       let totalPrice = this.$util.toDecimal2(newVal);
       let totalArr = totalPrice.toString().split(".");
       this.amount.integer = totalArr[0];
       this.amount.decimal = totalArr[1];
-    }
+    },
   },
   computed: {
     billCenterImg: {
@@ -157,7 +174,7 @@ export default {
             return require("../../img/property.png");
         }
       },
-      set() {}
+      set() {},
     },
     billTypeName() {
       let billName = "";
@@ -203,8 +220,8 @@ export default {
           break;
       }
       return billName;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -278,7 +295,7 @@ export default {
         }
 
         .info {
-          width : 100%;
+          width: 100%;
           // flex: 1;
           height: 42px;
           font-size: 13px;
