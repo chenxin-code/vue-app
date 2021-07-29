@@ -83,6 +83,7 @@
       background-color white;
       display flex;
       padding 10px 8px 10px;
+      margin-top: 20px;
       .title {
         font-size 14px;
         padding-left 6px;
