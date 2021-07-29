@@ -49,7 +49,7 @@
           ></OrderItem>
         </div>
         <Empty
-          v-show="
+          v-if="
             billResults.length == 0 && currentOrderList.length == 0 && !loading
           "
         ></Empty>
@@ -196,7 +196,7 @@ export default {
       this.commFn();
     },
     //滚动条与底部距离小于 offset 时触发
-    onLoad() {
+    commFn() {
       let orderError = false;
       let propertyError = false;
       let promiseArr = "";
@@ -222,7 +222,6 @@ export default {
           orderRes = res[0];
           tmRes = res[1];
         }
-        console.log(tmRes, orderRes, "list");
         //这里是物业账单接口返回的数据处理逻辑
         if (propertyRes && propertyRes.status === "fulfilled") {
           let results = propertyRes.value.data;
@@ -296,51 +295,39 @@ export default {
           this.showEmpty = false;
         }
         this.allLoadingFn();
-        //判断是否为下拉刷新操作，如果是，刷新成功后要将状态关掉
-        // if (this.refresh && !this.error) {
-        //   this.$toast("刷新成功");
-        //   this.refreshing = false;
-        // }
       });
     },
 
     // 下拉刷新时触发
     onRefresh() {
-      let page = 1; //从第一页开始
-      this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
       this.tmpage = 1;
       this.finished = false; //将没有更多的状态改成false
       this.refreshing = false;
-      this.refresh = false;
       this.billResults = []; //清空物业账单数据
       this.currentOrderList = []; //清空订单数据
       this.orderList = [];
+      this.allFinish = false;
       this.onLoad();
     },
     /*自建商城的数据*/
     ownFn(res) {
       let { status, data } = res.data,
         { pages, records } = data;
-      let { currentPage } = this;
+      let { currentPage } = this,
+        totalPage = Number(pages);
       this.loading = false;
-      // 判断当前页数是否超过总页数或者等于总页数
-      //   let dataPages = 0;
-      //   if (data.pages == 0) {
-      //     dataPages = 1;
-      //   } else {
-      //     dataPages = data.pages;
-      //   }
       this.currentPage++;
       if (status == 0) {
-        if (currentPage <= pages) {
+        if (currentPage < totalPage || currentPage == totalPage) {
           //如果当前页数等于接口返回的页数，那么finished为true，否则会一直加载接口
-          if (pages == currentPage) {
-            this.finished = true;
+          if (currentPage == totalPage) {
+            this.ownfinished = true;
           }
           // var indexList = data.records; //将请求到的内容赋值给一个变量
-          let ownlist = [];
-          var indexList = data.records.filter(
+          let ownlist = [],
+            indexList = [];
+          indexList = data.records.filter(
             item =>
               item.billType != 11 ||
               (item.orderStateType == "200017" && item.state == 9)
@@ -457,7 +444,7 @@ export default {
               this.concatFn(ownlist);
             });
           } else {
-            this.finished = true;
+            this.ownfinished = true;
           }
           // 加载状态结束
           this.loading = false;
@@ -629,7 +616,7 @@ export default {
       this.currentOrderList = this.sortKey(this.orderList, "submitTime");
     },
     allLoadingFn() {
-      if (this.tmfinished && this.finished) {
+      if (this.tmfinished && this.ownfinished) {
         this.loading = false;
         this.allFinish = true;
       } else {
