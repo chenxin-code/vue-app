@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-29 09:58:48
+ * @LastEditTime: 2021-07-29 19:44:19
 -->
 <template>
   <div class="get-coupons-page">
@@ -16,17 +16,28 @@
             height="70"
             round
             fit="cover"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="imgSrc"
           />
         </div>
-        <div class="user-name">你亲爱的老豆</div>
+        <div class="user-name">{{ userInfo.distributorName }}</div>
         <div class="title">送你一张优惠券</div>
         <div class="line"></div>
-        <div class="money"><span>￥</span>100元</div>
+
+        <div class="money" v-if="couponDetail.couponType === 40">
+          8<span>折</span>
+        </div>
+        <div class="money" v-else>
+          <span>￥</span>{{ delPoint(couponDetail.voucherAmount) }}
+        </div>
         <div class="line line-item"></div>
-        <div class="desc">部分商品满3399元使用</div>
+        <div class="desc">{{ couponType(couponDetail) }}</div>
         <div class="btn">
-          <van-button class="van-btn">立即使用</van-button>
+          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
+            >立即领取</van-button
+          >
+          <van-button class="van-btn" @click="goToShopping" v-else
+            >立即使用</van-button
+          >
         </div>
       </div>
     </div>
@@ -34,26 +45,171 @@
 </template>
 <script>
 import { Image as VanImage } from "vant";
+import { Toast } from "vant";
+import { bffHttp } from "@/utils/memberBffHttp.js";
+import _ from "lodash";
+const imgSrc = require("./img/coupon-default.png");
 export default {
   data() {
     return {
-      shareCode: "", //分销码
-      query: this.$route.query
+      imgSrc: imgSrc,
+      shareCode: "", //分销码 lec5bn
+      query: this.$route.query,
+      userInfo: {},
+      couponDetail: {},
+      couNoList: "", //优惠劵id
+      isReceive: false //是否领取
     };
   },
   components: {
     [VanImage.name]: VanImage
   },
   created() {
+    // get_distr_coupon?shareCode=lec5bn&memberId=2331048196588962398&couActivitiesId=2632817580967985166&couTypeCode=10SC000173
     this.shareCode = this.query.shareCode;
+    this.toast();
+    this.getDisCenterBaseInfo();
+    this.getDetail();
   },
   methods: {
+    toast() {
+      Toast.loading({
+        duration: 0,
+        type: "loading",
+        message: "加载中...",
+        forbidClick: true
+      });
+    },
     //返回首页
     backEvent() {
       this.$router.push({
         path: "/common"
       });
-    }
+    },
+    //获取分销员头像、名称、手机号等信息
+    getDisCenterBaseInfo() {
+      const host = process.env.VUE_APP_DISTR_APP;
+      const url =
+        host +
+        "/times/distr-service/distributor/api/v1/distr/getDisCenterBaseInfo";
+      const obj = {
+        shareCode: this.shareCode
+      };
+      this.$http
+        .get(url, { params: obj })
+        .then(res => {
+          if (res.data.code === 200) {
+            this.userInfo = res.data.data;
+            this.imgSrc = this.userInfo.headerPic;
+            this.$forceUpdate();
+          } else {
+            this.$toast(res.data.message);
+          }
+        })
+        .catch(err => {
+          this.$toast("请求失败");
+        });
+    },
+    //获取优惠券详情
+    getDetail() {
+      const centerHost = process.env.VUE_APP_CENTER_APP;
+      const url =
+        centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
+      const obj = {
+        couTypeCode: this.query.couTypeCode
+      };
+      this.$http
+        .get(url, { params: obj })
+        .then(res => {
+          if (res.data.code === 200) {
+            this.couponDetail = res.data.data;
+          } else {
+            this.$toast(res.data.message);
+          }
+        })
+        .finally(() => {
+          Toast.clear(); //关闭页面loading
+        })
+        .catch(err => {
+          this.$toast("请求失败");
+        });
+    },
+    //立即领取
+    receiveCoupon: _.debounce(function() {
+      this.toast();
+      const centerHost = process.env.VUE_APP_CENTER_APP;
+      const url =
+        centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
+      const obj = {
+        couActivitiesId: this.query.couActivitiesId,
+        memberId: this.query.memberId
+      };
+      bffHttp("POST", url, obj)
+        .then(res => {
+          if (res.code === 200) {
+            if (res.data.result) {
+              this.couNoList = res.data.couNoList;
+              this.isReceive = true;
+              this.save();
+              Toast.success({
+                duration: 2000,
+                type: "success",
+                message: "领取成功",
+                forbidClick: true
+              });
+            } else {
+              Toast.fail({
+                duration: 2000,
+                type: "fail",
+                message: "库存不足",
+                forbidClick: true
+              });
+              this.isReceive = false;
+            }
+          }
+        })
+        .finally(() => {})
+        .catch(err => {});
+    }),
+    delPoint(num) {
+      const regexp = /(?:\.0*|(\.\d+?)0+)$/;
+      num = `${num}`;
+      return num.replace(regexp, "$1");
+    },
+    couponType(item) {
+      //10:代金券 20：满减券 40：折扣券
+      if (item.couponType === 10) {
+        return `无门槛立减`;
+      } else if (item.couponType === 20 || item.couponType === 40) {
+        const num = this.delPoint(item.satisfyAmount);
+        return `满${num}元可用`;
+      }
+    },
+    //保存
+    save() {
+      const host = process.env.VUE_APP_DISTR_APP;
+      const api = host + "/times/distr-service/coupon_distr_distributor/save";
+      const params = {
+        couNoList: this.couNoList, //优惠劵id
+        parentShareCode: this.shareCode //分享码
+      };
+      bffHttp("POST", api, params).then(res => {
+        console.log(`save`, res);
+      });
+    },
+    //立即使用
+    goToShopping: _.debounce(function() {
+      Toast.loading({
+        duration: 0,
+        type: "loading",
+        message: "正在跳转",
+        forbidClick: true
+      });
+      this.$router.push({
+        path: "/common"
+      });
+      Toast.clear(); //关闭页面loading
+    })
   }
 };
 </script>
@@ -122,18 +278,21 @@ $fontColor = #FFFFFF;
         }
       }
       .money {
-        font-size: 52px;
+        font-size: 38px;
         font-family: PingFangSC-Semibold, PingFang SC;
         font-weight: 600;
         color: $fontColor;
-        line-height: 73px;
+        line-height: 38px;
         background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        span {
+          font-size: 26px;
+        }
       }
       .btn {
         position: absolute;
-        bottom: 39px;
+        bottom: 0
         width: 100%;
         left: 0;
         .van-btn {
