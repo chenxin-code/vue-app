@@ -1991,8 +1991,16 @@ export default {
     shareImg() {
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
+      let params = {
+        picUrls,
+        salePrice,
+        skuName,
+        userImage: this.$store.state.userLable.userImage || 'https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/7323854496261_1626944580519.jpg',
+        userName: this.$store.state.userLable.userName || '13570434851'
+      }
       wx.miniProgram.navigateTo({
-        url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+        // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+        url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
       });
     },
     shareLink() {
