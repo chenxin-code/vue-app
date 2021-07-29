@@ -75,6 +75,22 @@ Axios.interceptors.request.use(
       config.headers.Authorization = store.state.login.token;
     }
 
+    if(/times\-center\-trade/.test(config.url)){
+      
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
+      if(store.state.webtype == "2" || store.state.webtype == "3"){
+        config.headers.Authorization = localStorage.getItem('ythToken')
+      }else{
+        let ythToken = '';
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          ythToken = res.result;
+        });
+        config.headers.Authorization = ythToken
+      }
+      config.headers.access_channel = 'mall'
+      config.headers["Content-Type"] = "application/json"
+    }
+
     //中台接口要带一体化token
 
     /*物业系统请求处理逻辑
@@ -185,17 +201,22 @@ Axios.interceptors.request.use(
               } else {
                 if (/pcs\/bill-center\/check-bill/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
                   dic = config.data
-                } else {
+                }else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
                 }
 
-                let d = Qs.stringify(dic, {
-                  arrayFormat: 'repeat'
-                });
-                config.data = d;
+                if(/times\-center\-trade/.test(config.url)){  //服务商城接口不需要转Qs,直接传JSON
+                  dic = JSON.stringify(config.data)
+                  config.data = dic
+                }else{
+                  let d = Qs.stringify(dic, {
+                    arrayFormat: 'repeat'
+                  });
+                  config.data = d;
+                }
                 resolve(config);
               }
             }

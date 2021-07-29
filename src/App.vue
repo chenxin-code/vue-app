@@ -157,6 +157,9 @@ export default {
         .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
+      if(initObj.ythToken == '' || initObj.ythToken == undefined){
+        initObj.ythToken = window.localStorage.getItem('ythToken')
+      }
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
@@ -621,10 +624,6 @@ export default {
         } else {
           document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
-        console.log(
-          "valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue",
-          value
-        );
         if (
           (value[0].path == "/common" || value[0].path == "/mall2/list/:id") &&
           this.$store.state.isShowBackTop
