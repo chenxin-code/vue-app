@@ -31,12 +31,8 @@
                 <div class="row theme_font_white">
                   <div class="price">
                     <span>需付款： ￥</span>
-                    <span class="price-z">{{
-                      detailData.dpedData.integer
-                    }}</span>
-                    <span class="left-no-space"
-                      >.{{ detailData.dpedData.decimals }}</span
-                    >
+                    <span class="price-z left-no-space">{{detailData.dpedData.integer}}</span>
+                    <span class="left-no-space">.{{detailData.dpedData.decimals}}</span>
                     <span>元</span>
                   </div>
                 </div>
