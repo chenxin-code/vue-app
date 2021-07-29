@@ -1955,6 +1955,31 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    distributionMessage() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
+        : (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
+      let parmas = {
+        afterSaleStateList: ["REJECT", "CANCEL", "FAIL"],
+        afterSaleType: "REFUND",
+        pageNum: this.currentPage,
+        pageSize: 30,
+      };
+      return new Promise((resolve, reject) => {
+        this.$http.get(url, parmas).then(
+          (res) => {
+            console.log('-----test---distributionMessage->>>', res);
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -2024,11 +2049,13 @@ export default {
         this.detailData.picUrls[0] +
           "?x-oss-process=image/format,jpg/quality,Q_25"
       );
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        this.showShare();
-      } else {
-        this.showSharePopup = true;
-      }
+      this.showSharePopup = true;
+      
+      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      //   this.showShare();
+      // } else {
+      //   this.showSharePopup = true;
+      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
@@ -2064,7 +2091,19 @@ export default {
       this.shareSensors("微信");
     },
     shareImg() {
-      this.showShare();
+      // this.showShare();
+      let { picUrls, salePrice, skuName } = this.detailData;
+      let params = {
+        picUrls,
+        salePrice,
+        skuName,
+        userImage: this.$store.state.userLable.userImage || 'https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/7323854496261_1626944580519.jpg',
+        userName: this.$store.state.userLable.userName || '13570434851'
+      }
+      wx.miniProgram.navigateTo({
+        // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+        url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
+      });
     },
     shareLink() {
       this.$router.push({
@@ -4357,6 +4396,7 @@ export default {
     } else {
       this.getDatas();
     }
+    this.distributionMessage();
   },
   activated() {
     if (
