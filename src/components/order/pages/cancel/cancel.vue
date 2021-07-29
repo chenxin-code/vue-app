@@ -184,7 +184,7 @@ export default {
                   shoppingOrderId: "", //item.shoppingOrderId
                   orderPayType: "", //item.payType,//是否是支付方式
                   id: item.id,
-                  tag: "16",
+                  tag: "7",
                   tabIndex: 3,
                   awardActivityList: item.awardActivityList
                 }
@@ -306,7 +306,7 @@ export default {
                   shoppingOrderId: item.shoppingOrderId,
                   orderPayType: item.orderPayType,
                   id: item.id,
-                  tag: "16",
+                  tag: "7",
                   tabIndex: 3,
                   awardActivityList: item.awardActivityList
                 },
