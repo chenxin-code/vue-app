@@ -67,7 +67,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
-            :tag="item.tag"
+            :tag="1"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -565,7 +565,7 @@ export default {
       this.currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
-          tag: 1,
+          tag: "1",
           amount: item.totalPrice,
           submitTime: item.submitTime,
           orderId: item.shoppingOrderId,
@@ -620,6 +620,7 @@ export default {
           dataList: item.orderFormItemList.map(sub => {
             return {
               billType: item.billType,
+              tag: "1",
               billImg: sub.iconUrl,
               billName: sub.name,
               billAmount: sub.unitPrice,
@@ -629,6 +630,7 @@ export default {
               info: sub.info,
               itemTypeName: sub.itemTypeName,
               snapshotTime: sub.snapshotTime,
+              tradeNo: item.tradeNo,
               orderState: item.orderStateType,
               orderType: item.orderType, //订单类型
               shopOrderNo: sub.storeOuCode,
@@ -873,7 +875,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log(`catch提交账单中心参数`, {
+          console.log(`提交账单中心参数catch`, {
             businessCstNo: payInfo.businessCstNo,
             platMerCstNo: payInfo.platMerCstNo,
             tradeMerCstNo: payInfo.tradeMerCstNo,
@@ -890,10 +892,6 @@ export default {
             appScheme: "x-engine",
             payType: false,
             __ret__: res => {
-              console.log(
-                "---------------catch开始支付提交记录---------------------"
-              );
-              console.log(res);
               if (res.billRetStatus != "1") {
                 Toast.clear(); //关闭页面loading
                 this.isShowErrorMsg = true;
