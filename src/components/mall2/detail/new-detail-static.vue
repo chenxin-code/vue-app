@@ -1563,11 +1563,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('imageText')">
+          <div class="share_botton_item" @click="shareImg('imageText')" v-if="isDistributionProduct && referrerCode">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图文分享</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('poster')">
+          <div class="share_botton_item" @click="shareImg('poster')" v-if="isDistributionProduct && referrerCode">
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>海报分享</div>
           </div>
@@ -1608,6 +1608,7 @@ import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
+import { fetchMethod } from "@/utils/tmHttp.js";
 
 export default {
   name: "detail",
@@ -1626,6 +1627,8 @@ export default {
   data() {
     let that = this;
     return {
+      estimatedCommission: '', //预计佣金
+      isDistributionProduct: false, //是否是分销商品
       referrerCode: '', // 分销码
       directWeChatShare: "0",
       backApp: false,
@@ -1903,16 +1906,25 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId")
+            `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
         : (url =
             "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId");
-        this.$http.post(url, { skuId: this.skuId  }).then(
-          (res) => {
-            console.log('-----test---distributionMessage->>>', res.data);
-          },
-          (err) => {
-          }
-        );
+        // this.$http.post(url, { skuId: this.skuId  }).then(
+        //   (res) => {
+        //     console.log('-----test---distributionMessage->>>', res.data);
+        //   },
+        //   (err) => {
+        //   }
+        // );
+        fetchMethod("POST", url)
+          .then(res => {
+            console.log('------fetchMethod--->>>', res);
+            if(res.code == 200 && res.data) {
+              this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
+              this.isDistributionProduct = true; //是否是分销商品
+            }
+          })
+
     },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
