@@ -2119,7 +2119,7 @@ export default {
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
         estimatedCommission: this.estimatedCommission,
-        link: `https://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+        link: `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
       }
       this.showSharePopup = false;
       let ua = window.navigator.userAgent.toLowerCase()
