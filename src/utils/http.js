@@ -62,13 +62,13 @@ Axios.interceptors.request.use(
         tokenStr1 = "Bearer " + res.result;
       });
       config.headers.Authorization = tokenStr1
-      config.headers.Authorization = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyNTE4MjUzNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjMzNjk0NDQzMDc3MjEzMDkyOSwiZXhwIjoxNjI3NDM3MTI2LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiYzM2ODQ5OTEtZGFjYy00MGY2LTlhZTYtZjE0ZGI3NDBhYTljIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.KFv08wWwQZtNpOVIWAejCgwp-sV9kcHtcPwdawrd_k7Z9THyqNT7FLT-e0l5Sdsoq7H35blqp2UWZypobL2BPwSWp2bLKE3eAxJnEi4fsU4cDZ1amuajqdgq7K8hpU_3iU86svPbBcbMMEkYBlI8hXZSc52YFkIJsVb_ftAB9PQDZ5HkOktxal5lwsrN-Be1tqqvrikKQLDiEltlIe4oQY1jTF0omhSXLrKtvKC-wEu310tGgjJdFi8NWVLvevRRkYZuQgafdVVIyru_v8uXB2JPShFWgnw9LalJkbxNig4LuoTmbRqttN_IMX2gxm0Cuepa6YWe20tR2KYuItC-3A'
       console.log(`一体化token`, config.headers.Authorization);
+    // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
     }else{
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
-    //   config.headers.token ='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyNTE4MjUzNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjMzNjk0NDQzMDc3MjEzMDkyOSwiZXhwIjoxNjI3NDM3MTI2LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiYzM2ODQ5OTEtZGFjYy00MGY2LTlhZTYtZjE0ZGI3NDBhYTljIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.KFv08wWwQZtNpOVIWAejCgwp-sV9kcHtcPwdawrd_k7Z9THyqNT7FLT-e0l5Sdsoq7H35blqp2UWZypobL2BPwSWp2bLKE3eAxJnEi4fsU4cDZ1amuajqdgq7K8hpU_3iU86svPbBcbMMEkYBlI8hXZSc52YFkIJsVb_ftAB9PQDZ5HkOktxal5lwsrN-Be1tqqvrikKQLDiEltlIe4oQY1jTF0omhSXLrKtvKC-wEu310tGgjJdFi8NWVLvevRRkYZuQgafdVVIyru_v8uXB2JPShFWgnw9LalJkbxNig4LuoTmbRqttN_IMX2gxm0Cuepa6YWe20tR2KYuItC-3A';
-    //   config.headers.Authorization = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDA4NjkyNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTYyMDM5MDg5OTQ4MjY4MSwiZXhwIjoxNjI1NDQ3ODY0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjNlNzM2YjE4LTQzMmEtNGY1OS04Njk5LWUxMjJkY2ZiMDQwOSIsImNsaWVudF9pZCI6ImFwcF9jIn0.UGhQDskBQJMfooam0Xe8dixTms2fxnGe9wYsKaysO_ipRNEX8OutF0SzyQalvYfINdV2iNzVYsclOHgO9TpA2Q2n4i-fPcCds7m6QC4Wcyi14uLcCdQrnlh01L5hlsJfaiRXwBr7PpCoX1iaY7UtJW9D6eO1nNKM8rQ9BiA2QFd-uPRZPkSF3_S9RCeNBMEDqAJ0nQhApvUUJ3HFmu6hao00FJUnA-0Sdaihpv5d7BbKsUGPg6gV04N5uKOnNzMFSbkFX_SO1oPFM-UDooVFW7MZYrsbhx9e41jTSdENNUWejgo86ywbujHUXHZOlNIEDy1iEjw5pFygaZfuafKlwg'
+    //   config.headers.token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
+    //   config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
     }
 
     if (bulkApi.indexOf(config.url) !== -1) {
@@ -77,7 +77,8 @@ Axios.interceptors.request.use(
     }
 
     if(/times\-center\-trade/.test(config.url)){
-      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzkyMjIzNzQ0MiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNjI0Mjc0ODg0MDU0NzgzNSwiZXhwIjoxNjI3MjA2NDU1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6ImVjZjEwYjczLTZmYzQtNGEwNi1iMTg2LWUwMmNiYTI0MzMyNiIsImNsaWVudF9pZCI6ImFwcF9jIn0.OOBkArhxZiW6YL044J3x_i_L2gGxAPsAZXYlLeHr8pXGnWhSogt73E2fuvNHqJyZxutjM7m-RkpuYMVHKSQhxfBDUNOQ8xCRD5aR3k2GtUfkNPygBkMBb9oShFdc4U2vDrwPtIUTz80ZFpkRHPnzzLguvooeAY1v1bqf3G7M16xHT-CGJloGyahqen925jxfWT12H6NYCbuUNmGPrrV0lKckzsdpMGY1G_zmaZ4to1ACvaMDNlAhskRENw-34wVtZDsRP021oB7lvpPaCbfMYn5GDaDO1zF-hRnV5j2p_9dPpuPbo8_oyGOgko01awb-QNpgvHF6p2fF9PRFu8L8Jg"
+      
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
       if(store.state.webtype == "2" || store.state.webtype == "3"){
         config.headers.Authorization = localStorage.getItem('ythToken')
       }else{
@@ -201,14 +202,14 @@ Axios.interceptors.request.use(
               } else {
                 if (/pcs\/bill-center\/check-bill/.test(config.url)) { //物业系统接口处理逻辑，请求参数不带nArgs的数据
                   dic = config.data
-                }else {
+                } else {
                   dic = {
                     jsonData: JSON.stringify(nArgs),
                     hbsy_web_tag_type: nArgs.hbsy_web_tag_type
                   }
                 }
 
-                if(/times\-center\-trade/.test(config.url)){ //服务商城接口不需要转Qs,直接传JSON
+                if(/times\-center\-trade/.test(config.url)){  //服务商城接口不需要转Qs,直接传JSON
                   dic = JSON.stringify(config.data)
                   config.data = dic
                 }else{

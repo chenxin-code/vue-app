@@ -2,22 +2,23 @@
  * @Description: 这是物业缴费子组件
  * @Date: 2021-06-13 17:23:10
  * @Author: shuimei
- * @LastEditTime: 2021-06-21 17:43:27
+ * @LastEditTime: 2021-07-19 10:47:49
 -->
 <template>
-  <div class="property-bill" v-if="results">
+  <!--  v-if="results" -->
+  <div class="property-bill">
     <div class="property-box" :class="{ isactive: isOpen }">
       <van-checkbox
-        v-show="pageName === 'waitPay'"
+        v-show="pageName === 'waitPay' && results.length"
         v-model="isChecked"
         :disabled="isDisabled"
         @click="checkEvent($event)"
-        checked-color="#f80f16"
+        checked-color="#E5165A"
         icon-size="18px"
       ></van-checkbox>
       <div
         class="property-title"
-        :class="{ finish: pageName !== 'waitPay' }"
+        :class="{ finish: pageName !== 'waitPay', empty: results.length === 0 }"
         @click="onClickBill(isOpen)"
       >
         您的物业缴费账单
@@ -27,7 +28,11 @@
     </div>
     <transition name="sub-comments"
       ><div class="list" v-show="isOpen">
-        <div class="content">
+        <div class="content" :class="{ 'empty-content': results.length === 0 }">
+          <div v-if="results.length === 0">
+            <img src="../../img/finish-icon.png" />
+            <div class="empty-text">当前物业账单已缴清</div>
+          </div>
           <slot></slot>
         </div></div
     ></transition>
@@ -124,6 +129,8 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+$title-color = #E5165A;
+$color = #8D8D8D
 .property-bill {
   margin-top: 10px;
   .property-box {
@@ -144,10 +151,11 @@ export default {
       font-size: 16px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
-      color: #E8374A;
+      color: $title-color;
       line-height: 40px;
       margin-left: 25px;
       width: 80%;
+      &.empty,
       &.finish {
         margin-left: 45px;
       }
@@ -178,6 +186,23 @@ export default {
     .content {
       padding-bottom: 1px;
       padding-top: 17px;
+      &.empty-content {
+        height: 141px;
+      }
+      img {
+        width: 43px;
+        height: 46px;
+        margin-left: calc(50% - 16px);
+      }
+      .empty-text {
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: $color;
+        line-height: 20px;
+        margin-top: 16px;
+        text-align: center;
+      }
       .content-list {
         padding: 0 14px 0 14px;
         .title {
@@ -247,7 +272,7 @@ export default {
               font-size: 13px;
               font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
-              color: #8D8D8D;
+              color: $color;
               line-height: 18px;
             }
           }
@@ -255,7 +280,7 @@ export default {
             font-size: 13px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #E8374A;
+            color: $title-color;
             line-height: 18px;
             width: 65px;
             right: 16px;

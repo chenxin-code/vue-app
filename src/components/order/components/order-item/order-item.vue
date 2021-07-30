@@ -173,7 +173,7 @@ export default {
     "tradeNo",
     "orderState",
     "shopOrderNo",
-    "tag",
+    "tag"
   ],
   data() {
     return {
@@ -190,9 +190,9 @@ export default {
       itemAmount: "0",
       goodsAmount: {
         integer: "0",
-        decimal: "00",
+        decimal: "00"
       },
-      isBulk: false,
+      isBulk: false
     };
   },
   created() {
@@ -213,8 +213,11 @@ export default {
   computed: {
     stateText() {
       if (this.pageType == "finish") {
-        if (this.billType != "11") {
+        if (this.billType != "11" && this.billType != "13") {
           return "支付已完成";
+        }
+        if (this.billType == "13") {
+          return "订单已完成";
         } else {
           switch (this.state) {
             case 16:
@@ -253,7 +256,7 @@ export default {
     },
     amountTotal() {
       let amount = 0;
-      this.dataList.forEach((item) => {
+      this.dataList.forEach(item => {
         amount += item.billNum;
       });
       return amount;
@@ -393,7 +396,7 @@ export default {
           billName = "维修服务费";
           break;
         case 13:
-          billName = "服务商城";
+          billName = "生活服务";
           break;
         case 15:
           billName = "租售";
@@ -436,28 +439,35 @@ export default {
           break;
         case 9:
           sClass = "icon3";
+
           break;
         case 10:
           sClass = "icon4";
+          break;
+        case 13:
+          sClass = "icon2";
           break;
         case 14:
           sClass = "icon14";
           break;
       }
       return sClass;
-    },
+    }
   },
   watch: {
-    itemAmount: function (newVal, oldVal) {
-      let amountArr = this.$util.toDecimal2(newVal).toString().split(".");
+    itemAmount: function(newVal, oldVal) {
+      let amountArr = this.$util
+        .toDecimal2(newVal)
+        .toString()
+        .split(".");
       if (amountArr.length !== 0) {
         this.goodsAmount.integer = amountArr[0];
         this.goodsAmount.decimal = amountArr[1];
       }
-    },
+    }
   },
   components: {
-    productItem,
+    productItem
   },
   methods: {
     //立即支付
@@ -492,7 +502,7 @@ export default {
         deliverCheckcode: payInfo.deliverCheckcode,
         deviceCode: this.$route.query.deviceCode, //正常流程支付也为空 待保留
         storeOuCode: this.$route.query.storeOuCode, //正常流程支付也为空 待保留
-        stationName: this.$route.query.stationName, //正常流程支付也为空 待保留
+        stationName: this.$route.query.stationName //正常流程支付也为空 待保留
       };
       localStorage.setItem(
         "currentOrderDetails",
@@ -519,7 +529,7 @@ export default {
           tradeMerCstNo: payInfo.tradeMerCstNo,
           billNo: payInfo.billNo,
           appScheme: "x-engine-c",
-          payType: false,
+          payType: false
         })
       )}&callback=${encodeURIComponent(location.origin + callbackUrl)}`;
     },
@@ -547,8 +557,8 @@ export default {
             path: "/group_detail",
             query: {
               orderId: this.billDetailObj.groupBuyId,
-              mktGroupBuyId: this.billDetailObj.groupBuyActivityId,
-            },
+              mktGroupBuyId: this.billDetailObj.groupBuyActivityId
+            }
           });
         } else if (this.bulkOrderType == "200501" || this.orderMode == "12") {
           this.$router.push({
@@ -557,11 +567,11 @@ export default {
               info: JSON.stringify({
                 shoppingOrderId: this.shoppingOrderId,
                 id: this.id,
-                tradeNo: this.tradeNo,
+                tradeNo: this.tradeNo
               }),
               pageType: this.pageType,
-              state: this.state ? this.state : "",
-            },
+              state: this.state ? this.state : ""
+            }
           });
         } else {
           let awardActivity =
@@ -582,8 +592,8 @@ export default {
                 ? this.orderStateType
                 : this.orderType,
               orderIndex: this.billDetailObj.tabIndex,
-              awardActivity: JSON.stringify(awardActivity),
-            },
+              awardActivity: JSON.stringify(awardActivity)
+            }
           });
         }
       } else if (this.billType == "13") {
@@ -604,7 +614,7 @@ export default {
             billId: this.billId,
             payType: "0",
             isRefund: this.billDetailObj.isRefund,
-            businessCstNo: this.billDetailObj.businessCstNo,
+            businessCstNo: this.billDetailObj.businessCstNo
           })
         )}`;
       }
@@ -617,7 +627,7 @@ export default {
         : localStorage.getItem("ythToken");
       if (this.billType == 13) {
         let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&Authorization=${token}`;
+        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&tabShow=true&Authorization=${token}`;
         location.href = path + query;
       }
     },
@@ -644,14 +654,14 @@ export default {
             let cd = {
               skuId: product.skuId,
               storeOuCode: product.storeOuCode,
-              number: product.billNum,
+              number: product.billNum
             };
             arr.push(cd);
           }
         }
         sessionStorage.setItem("MDPS_Carts", JSON.stringify(arr));
         this.$router.push({
-          path: "/mall2/store-delivery/list",
+          path: "/mall2/store-delivery/list"
         });
         return;
       }
@@ -665,7 +675,7 @@ export default {
         vipUnitUserCode: "", // 路由传递，旧订单为空可不传
         userAddress: this.$store.state.mall2.selectAddress,
         pickupId: this.$store.state.mall2.zitiAddress.id,
-        userAddressId: "",
+        userAddressId: ""
       };
       if (paramsData.deliveryType == 2) {
         if (this.$store.state.mall2.selectAddress.id > 0) {
@@ -678,14 +688,14 @@ export default {
         let cd = {
           skuId: product.skuId,
           storeOuCode: product.storeOuCode,
-          number: product.billNum,
+          number: product.billNum
         };
         arr.push(cd);
       }
       paramsData.carts = arr;
 
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -699,14 +709,14 @@ export default {
                   "提示",
                   { confirmButtonText: "确定", showCancelButton: false }
                 )
-                .then((action) => {})
-                .catch((action) => {});
+                .then(action => {})
+                .catch(action => {});
               return;
             }
             let params = {
               res: data.data,
               paramsData: paramsData,
-              deliveryType: paramsData.deliveryType,
+              deliveryType: paramsData.deliveryType
             };
 
             if (
@@ -730,24 +740,24 @@ export default {
                   "提示",
                   { confirmButtonText: "确定" }
                 )
-                .then((action) => {
+                .then(action => {
                   this.$router.push({
                     name: "填写订单",
-                    params: params,
+                    params: params
                   });
                 })
-                .catch((action) => {});
+                .catch(action => {});
             } else {
               this.$router.push({
                 name: "填写订单",
-                params: params,
+                params: params
               });
             }
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
@@ -761,7 +771,7 @@ export default {
         orderType: this.orderType,
         orderId: this.params.orderId,
         orderCategory: this.params.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       if (this.$route.query.payUserId) {
         paramsData.payUserId = this.$route.query.payUserId;
@@ -806,7 +816,7 @@ export default {
       // 弹窗确认方法
       this.showExpress(this.formItem);
     },
-    showExpress: function (item) {
+    showExpress: function(item) {
       console.log(item, "item");
       //京东快递
       if (item.interfaceType == 2 || item.interfaceType == 1) {
@@ -818,10 +828,10 @@ export default {
           orderId: item.id,
           orderType: item.orderType,
           orderCategory: this.params.orderCategory,
-          vipUnitUserCode: this.vipUnitUserCode,
+          vipUnitUserCode: this.vipUnitUserCode
         };
         this.$http.post(url, paramsData).then(
-          (res) => {
+          res => {
             this.$Loading.close();
             let data = res.data;
             if (data.status == 0) {
@@ -830,14 +840,14 @@ export default {
                 params: {
                   expressinfo: encodeURIComponent(
                     JSON.stringify(data.data.tracksList)
-                  ),
-                },
+                  )
+                }
               });
             } else {
               this.$Toast(data.info);
             }
           },
-          (error) => {
+          error => {
             this.$Loading.close();
             this.$Toast("请求数据失败！");
           }
@@ -851,8 +861,8 @@ export default {
         this.$router.push({
           path: "/mall2/orderlogistics",
           query: {
-            traceNo: item.expressNo,
-          },
+            traceNo: item.expressNo
+          }
         });
       } else if (
         // 阿里物流
@@ -865,8 +875,8 @@ export default {
           query: {
             orderType: item.orderType,
             orderId: item.id,
-            logisticsOrderNo: item.expressNo,
-          },
+            logisticsOrderNo: item.expressNo
+          }
         });
       } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
         // 快递100API版本
@@ -874,8 +884,8 @@ export default {
           path: "/mall2/100expressinfo",
           query: {
             expressNo: item.expressNo,
-            expressName: item.expressName,
-          },
+            expressName: item.expressName
+          }
         });
       } else {
         // 快递100web版本
@@ -887,20 +897,20 @@ export default {
         this.$bridgefunc.customPush({
           path: url,
           isnativetop: "1",
-          isVuePage: false,
+          isVuePage: false
         });
       }
     },
-    confirmProduct: function () {
+    confirmProduct: function() {
       // 确认收货
       this.$MessageBox
         .confirm("您确定已经收到商品了吗？", "提示")
-        .then((action) => {
+        .then(action => {
           this._confirmProductApi();
         })
-        .catch((action) => {});
+        .catch(action => {});
     },
-    _confirmProductApi: function () {
+    _confirmProductApi: function() {
       this.$Loading.open();
       let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
@@ -908,41 +918,41 @@ export default {
         orderId: this.params.orderId,
         orderType: this.params.orderType,
         orderCategory: this.params.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
             this.$router.push({
               name: "我的订单",
               params: {
-                id: 5,
+                id: 5
               },
               query: {
-                time: Date.now(),
-              },
+                time: Date.now()
+              }
             });
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    toComment: function (item) {
+    toComment: function(item) {
       // 评价晒单
       if (this.dataList.length > 0) {
         if (this.dataList.length > 1) {
           this.$router.push({
             path: "/mall2/comment2",
             query: {
-              orderId: this.params.orderId,
-            },
+              orderId: this.params.orderId
+            }
           });
         } else {
           this.$router.push({
@@ -951,13 +961,13 @@ export default {
               skuId: this.dataList[0].skuId,
               orderId: this.dataList[0].itemOrderId,
               phPictureUrl: this.dataList[0].billImg,
-              skuName: this.dataList[0].billName,
-            },
+              skuName: this.dataList[0].billName
+            }
           });
         }
       }
     },
-    modifyAddress: function (item) {
+    modifyAddress: function(item) {
       console.log("params", this.params);
       this.$router.push({
         path: "/mall2/modifyorderaddress",
@@ -974,15 +984,15 @@ export default {
             townId: item.townId || "",
             townName: item.townName || "",
             receiver: item.receiver || "",
-            mobile: item.mobile || "",
+            mobile: item.mobile || ""
           }),
           orderId: this.params.orderId,
           tradeNo: this.params.tradeNo,
-          orderType: this.params.orderType,
-        },
+          orderType: this.params.orderType
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
