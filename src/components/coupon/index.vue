@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-30 18:29:12
+ * @LastEditTime: 2021-07-30 22:41:21
 -->
 <template>
   <div class="get-coupons-page">
@@ -112,9 +112,10 @@ export default {
     },
     //获取优惠券详情
     getDetail() {
-      const centerHost = process.env.VUE_APP_CENTER_APP;
-      const url =
-        centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
+      // const centerHost = process.env.VUE_APP_CENTER_APP;
+      // const url =
+      //   centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
+      const url = "/times/member-bff/coupon/api/v1/coupon/code-detail";
       const obj = {
         couTypeCode: this.query.couTypeCode
       };
@@ -137,9 +138,10 @@ export default {
     //立即领取
     receiveCoupon: _.debounce(function() {
       this.toast();
-      const centerHost = process.env.VUE_APP_CENTER_APP;
-      const url =
-        centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
+      // const centerHost = process.env.VUE_APP_CENTER_APP;
+      // const url =
+      //   centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
+      const url = "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
       const obj = {
         couActivitiesId: this.query.couActivitiesId,
         memberId: this.query.memberId
