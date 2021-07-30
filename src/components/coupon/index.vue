@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-29 20:23:14
+ * @LastEditTime: 2021-07-30 18:29:12
 -->
 <template>
   <div class="get-coupons-page">
@@ -264,10 +264,12 @@ $fontColor = #FFFFFF;
       }
       .user-name {
         font-family: PingFangSC-Regular, PingFang SC;
+        min-height: 40px;
       }
       .desc,
       .title {
         font-weight: 600;
+        min-height: 40px;
       }
       .line {
         border-top: 2px dashed #F1F1F1;
@@ -286,7 +288,7 @@ $fontColor = #FFFFFF;
         background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 1px 1px rgb(252 236 217 / 30%);
+        // text-shadow: 1px 1px rgb(252 236 217 / 30%);
         span {
           font-size: 26px;
         }
