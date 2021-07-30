@@ -21,7 +21,7 @@ export const HTTP = axios.create({
 
 //请求拦截
 HTTP.interceptors.request.use(async config => {
-  config.headers.access_channel = "mall";
+  // config.headers.access_channel = "mall";
   let ythToken;
   ythToken = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken");
 
@@ -121,7 +121,7 @@ export const bffHttp = async (
     }
     return new Promise((resolve, reject) => {
       HTTP({
-        baseURL: process.env.VUE_APP_TMASS_API,
+        baseURL: process.env.VUE_APP_CENTER_APP,
         withCredentials: false,
         url: options.url,
         method: options.method,
