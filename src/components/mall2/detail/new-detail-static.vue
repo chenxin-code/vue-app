@@ -1887,6 +1887,7 @@ export default {
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
         : (url =
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
+        console.log('-----------distributionMessage----------');
         this.$http.get(url).then(
           (res) => {
             console.log('-----test---distributionMessage->>>', res);
@@ -1950,12 +1951,12 @@ export default {
           }
         }
         this.viewpoint_radio = this.$util.toDecimal2(viewpoint_radio);
-        console.log(
-          "viewpoint_radio",
-          this.viewpoint_radio,
-          this.detailScrollHeight,
-          this.detailClientHeight
-        );
+        // console.log(
+        //   "viewpoint_radio",
+        //   this.viewpoint_radio,
+        //   this.detailScrollHeight,
+        //   this.detailClientHeight
+        // );
       });
     },
     shareSensors(share_type) {
@@ -2038,11 +2039,15 @@ export default {
         link: `https://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
       }
       this.showSharePopup = false;
-      console.log('----------share---->', `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`)
-      wx.miniProgram.navigateTo({
-        // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
-        url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
-      });
+      let ua = window.navigator.userAgent.toLowerCase()
+      let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
+      if(isWX) {
+        wx.miniProgram.navigateTo({
+          // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
+        });
+      }else {}
+
     },
     shareLink() {
       this.$router.push({
@@ -2677,7 +2682,7 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      console.log("this.viewpoint_radio", this.viewpoint_radio);
+      // console.log("this.viewpoint_radio", this.viewpoint_radio);
       this.$sensors.track("goods_detail_quit", {
         module_source:
           this.$store.state.inToDetail == "common"
