@@ -1644,13 +1644,13 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg">
+          <div class="share_botton_item" @click="shareImg('imageText')">
             <img src="static/image/mall2/share_img.png" alt="" />
-            <div>图片分享</div>
+            <div>图文分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink" v-if="false">
+          <div class="share_botton_item" @click="shareImg('poster')">
             <img src="static/image/mall2/share_link.png" alt="" />
-            <div>链接分享</div>
+            <div>海报分享</div>
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
@@ -1705,6 +1705,7 @@ export default {
   data() {
     let that = this;
     return {
+      referrerCode: '', // 分销码
       directWeChatShare: "0",
       backApp: false,
       couFlag: [],
@@ -1955,6 +1956,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    // 分销员信息
     distributionMessage() {
       let url = "";
       this.$store.state.environment == "development"
@@ -1962,23 +1964,31 @@ export default {
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
         : (url =
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
-      let parmas = {
-        afterSaleStateList: ["REJECT", "CANCEL", "FAIL"],
-        afterSaleType: "REFUND",
-        pageNum: this.currentPage,
-        pageSize: 30,
-      };
-      return new Promise((resolve, reject) => {
-        this.$http.get(url, parmas).then(
+        this.$http.get(url).then(
           (res) => {
             console.log('-----test---distributionMessage->>>', res);
-            resolve(res);
+            this.referrerCode = res.data.data.shareCode;
+            this.qrCode = res.data.data.qrCode;
           },
           (err) => {
-            reject(err);
           }
         );
-      });
+    },
+    // 商品信息 是否是分销商品
+    distributionProduct() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId")
+        : (url =
+            "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId");
+        this.$http.get(url, { skuId: this.skuId  }).then(
+          (res) => {
+            console.log('-----test---distributionMessage->>>', res.data);
+          },
+          (err) => {
+          }
+        );
     },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
@@ -2090,16 +2100,22 @@ export default {
       this.showSharePopup = false;
       this.shareSensors("微信");
     },
-    shareImg() {
+    shareImg(type) {
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
       let params = {
+        type,
         picUrls,
         salePrice,
         skuName,
-        userImage: this.$store.state.userLable.userImage || 'https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/7323854496261_1626944580519.jpg',
-        userName: this.$store.state.userLable.userName || '13570434851'
+        userImage: this.$store.state.userLable.userImage,
+        userName: this.$store.state.userLable.userName,
+        referrerCode: this.referrerCode,
+        qrCode: this.qrCode,
+        link: `https://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
       }
+      this.showSharePopup = false;
+      console.log('----------share---->', `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`)
       wx.miniProgram.navigateTo({
         // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
         url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
@@ -4397,6 +4413,7 @@ export default {
       this.getDatas();
     }
     this.distributionMessage();
+    this.distributionProduct();
   },
   activated() {
     if (
