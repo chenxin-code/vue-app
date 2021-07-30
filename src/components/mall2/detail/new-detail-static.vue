@@ -1906,7 +1906,7 @@ export default {
             "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId")
         : (url =
             "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId");
-        this.$http.get(url, { skuId: this.skuId  }).then(
+        this.$http.post(url, { skuId: this.skuId  }).then(
           (res) => {
             console.log('-----test---distributionMessage->>>', res.data);
           },
@@ -2041,12 +2041,17 @@ export default {
       this.showSharePopup = false;
       let ua = window.navigator.userAgent.toLowerCase()
       let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
-      if(isWX) {
+      if(!isWX) {
         wx.miniProgram.navigateTo({
           // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
           url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
         });
-      }else {}
+      }else {
+        this.$router.push({
+          path: 'mall2/savePicture',
+          query: params
+        })
+      }
 
     },
     shareLink() {
