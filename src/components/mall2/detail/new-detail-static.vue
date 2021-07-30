@@ -1908,14 +1908,7 @@ export default {
         ? (url =
             `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
         : (url =
-            "http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId");
-        // this.$http.post(url, { skuId: this.skuId  }).then(
-        //   (res) => {
-        //     console.log('-----test---distributionMessage->>>', res.data);
-        //   },
-        //   (err) => {
-        //   }
-        // );
+            `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
         fetchMethod("POST", url)
           .then(res => {
             console.log('------fetchMethod--->>>', res);
@@ -2048,12 +2041,13 @@ export default {
         userName: this.$store.state.userLable.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
+        estimatedCommission: this.estimatedCommission,
         link: `https://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
       }
       this.showSharePopup = false;
       let ua = window.navigator.userAgent.toLowerCase()
       let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
-      if(!isWX) {
+      if(isWX) {
         wx.miniProgram.navigateTo({
           // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
           url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,

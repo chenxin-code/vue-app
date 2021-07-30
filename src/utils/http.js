@@ -90,24 +90,6 @@ Axios.interceptors.request.use(
       }
     }
 
-    if(/times\/distr-service\/good\/api\/v1\/distr\/getShoppingGoodBySkuId/.test(config.url)) {
-      let ua = window.navigator.userAgent.toLowerCase()
-      let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
-      console.log('ythtttttttttttt--store----->', store.state.ythToken)
-      console.log('---getItem---->', localStorage.getItem('ythToken'))
-      config.headers.Authorization = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNzcwMTIyNTU0MSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjI1NzMwODU3MzA5ODg0NDA4MSwiZXhwIjoxNjE1OTAyMzM2LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjE3ZWM4MjBhLTZiOTQtNDZkOC1hZThiLTM3ZmQxNGE5MGJhZCIsImNsaWVudF9pZCI6ImFwcF9jIn0.UqyexgUDm1hPibrewkABp0kcWT2ejfGCQktYRAE0bhF39f2QMFrJ_X9GXa-Zqp0lMxM7s-SZudaP8AnYp9MTRNXUW3wcT1To2ZJzJjwG0QrfIWsW4yd80GBDfNhpUKn_d43sQRQrc12c7WxKZAEG_bduw1Acv5zSDVa5qcbYOTQ9ay9p29hHGmL57ZbfeC-6EhOF3GYU3SI-_oE9tGtLK2Cn0bHkYPuz_lAmhzRNbJEHBgFeAhQqKZaXsbFMVy-LGH4eWZV0-3iEq5kDY2QqxFv8X0NHM-sx4IdHiI-iGyLmYRp01H5UD1rykBZsYi-uFEGQYo_jn7b8PQ_8s_ThSA';
-
-      // if(isWX) {
-      //   config.headers.Authorization = store.state.ythToken || localStorage.getItem('ythToken');
-      // } else {
-      //   let tokenStr1;
-      //   await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
-      //     tokenStr1 = "Bearer " + res.result;
-      //   });
-      //   config.headers.Authorization = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNzcwMTIyNTU0MSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjI1NzMwODU3MzA5ODg0NDA4MSwiZXhwIjoxNjE1OTAyMzM2LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjE3ZWM4MjBhLTZiOTQtNDZkOC1hZThiLTM3ZmQxNGE5MGJhZCIsImNsaWVudF9pZCI6ImFwcF9jIn0.UqyexgUDm1hPibrewkABp0kcWT2ejfGCQktYRAE0bhF39f2QMFrJ_X9GXa-Zqp0lMxM7s-SZudaP8AnYp9MTRNXUW3wcT1To2ZJzJjwG0QrfIWsW4yd80GBDfNhpUKn_d43sQRQrc12c7WxKZAEG_bduw1Acv5zSDVa5qcbYOTQ9ay9p29hHGmL57ZbfeC-6EhOF3GYU3SI-_oE9tGtLK2Cn0bHkYPuz_lAmhzRNbJEHBgFeAhQqKZaXsbFMVy-LGH4eWZV0-3iEq5kDY2QqxFv8X0NHM-sx4IdHiI-iGyLmYRp01H5UD1rykBZsYi-uFEGQYo_jn7b8PQ_8s_ThSA';
-      // }
-    }
-
 
     //中台接口要带一体化token
 
