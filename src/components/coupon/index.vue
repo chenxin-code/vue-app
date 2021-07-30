@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-30 22:41:21
+ * @LastEditTime: 2021-07-31 01:02:38
 -->
 <template>
   <div class="get-coupons-page">
@@ -112,20 +112,20 @@ export default {
     },
     //获取优惠券详情
     getDetail() {
-      // const centerHost = process.env.VUE_APP_CENTER_APP;
-      // const url =
-      //   centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
-      const url = "/times/member-bff/coupon/api/v1/coupon/code-detail";
+      const centerHost = process.env.VUE_APP_CENTER_APP;
+      const url =
+        centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
       const obj = {
         couTypeCode: this.query.couTypeCode
       };
-      this.$http
-        .get(url, { params: obj })
+      // this.$http
+      //   .get(url, { params: obj })
+      bffHttp("GET", url, obj)
         .then(res => {
-          if (res.data.code === 200) {
-            this.couponDetail = res.data.data;
+          if (res.code === 200) {
+            this.couponDetail = res.data;
           } else {
-            this.$toast(res.data.message);
+            this.$toast(res.message);
           }
         })
         .finally(() => {
@@ -138,10 +138,9 @@ export default {
     //立即领取
     receiveCoupon: _.debounce(function() {
       this.toast();
-      // const centerHost = process.env.VUE_APP_CENTER_APP;
-      // const url =
-      //   centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
-      const url = "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
+      const centerHost = process.env.VUE_APP_CENTER_APP;
+      const url =
+        centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
       const obj = {
         couActivitiesId: this.query.couActivitiesId,
         memberId: this.query.memberId

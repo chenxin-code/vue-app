@@ -250,7 +250,7 @@ const vueConfig = {
         changeOrigin: true
       },
       "/times/": {
-        target: "http://m-center-uat.linli.timesgroup.cn", //中台系统
+        target: "https://m-center-uat-linli.timesgroup.cn", //中台系统
         changeOrigin: true
       },
       "/pcs": {
