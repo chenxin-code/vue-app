@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 12:40:31
+ * @LastEditTime: 2021-07-31 13:31:15
 -->
 <template>
   <div class="get-coupons-page">
@@ -117,9 +117,12 @@ export default {
     },
     //获取优惠券详情
     getDetail() {
-      let centerHost = process.env.VUE_APP_CENTER_APP;
+      // let centerHost = process.env.VUE_APP_CENTER_APP;
+      // let url =
+      //   centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
       let url =
-        centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
+        "https://m-center-uat-linli.timesgroup.cn/times/member-bff/coupon/api/v1/coupon/code-detail";
+
       let obj = {
         couTypeCode: this.query.couTypeCode
       };
