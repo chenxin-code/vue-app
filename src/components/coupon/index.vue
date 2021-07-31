@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 13:31:15
+ * @LastEditTime: 2021-07-31 14:07:06
 -->
 <template>
   <div class="get-coupons-page">
@@ -164,6 +164,8 @@ export default {
       const centerHost = process.env.VUE_APP_CENTER_APP;
       const url =
         centerHost + "/times/member-bff/coupon/api/v1/member-id/receiveCoupon";
+      console.log(`receiveCoupon`, url);
+
       const obj = {
         couActivitiesId: this.query.couActivitiesId,
         memberId: this.query.memberId
