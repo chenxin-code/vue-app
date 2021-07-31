@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 01:02:38
+ * @LastEditTime: 2021-07-31 11:38:33
 -->
 <template>
   <div class="get-coupons-page">
@@ -27,7 +27,12 @@
           8<span>折</span>
         </div>
         <div class="money" v-else>
-          <span>￥</span>{{ delPoint(couponDetail.voucherAmount) }}
+          <span>￥</span
+          >{{
+            couponDetail.voucherAmount
+              ? delPoint(couponDetail.voucherAmount)
+              : ""
+          }}
         </div>
         <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
@@ -112,12 +117,13 @@ export default {
     },
     //获取优惠券详情
     getDetail() {
-      const centerHost = process.env.VUE_APP_CENTER_APP;
-      const url =
+      let centerHost = process.env.VUE_APP_CENTER_APP;
+      let url =
         centerHost + "/times/member-bff/coupon/api/v1/coupon/code-detail";
-      const obj = {
+      let obj = {
         couTypeCode: this.query.couTypeCode
       };
+
       // this.$http
       //   .get(url, { params: obj })
       bffHttp("GET", url, obj)
@@ -146,6 +152,8 @@ export default {
         memberId: this.query.memberId
       };
       bffHttp("POST", url, obj)
+        // this.$http
+        //   .post(url, JSON.stringify(obj))
         .then(res => {
           if (res.code === 200) {
             if (res.data.result) {
@@ -195,6 +203,7 @@ export default {
         parentShareCode: this.shareCode //分享码
       };
       bffHttp("POST", api, params).then(res => {
+        // this.$http.post(api, JSON.stringify(params)).then(res => {
         console.log(`save`, res);
       });
     },
