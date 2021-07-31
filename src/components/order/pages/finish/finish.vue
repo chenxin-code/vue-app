@@ -118,7 +118,7 @@ export default {
     this.getRoomId();
   },
   mounted() {
-    // this.onLoad();
+    this.onLoad();
   },
   methods: {
     //获取原生人房
