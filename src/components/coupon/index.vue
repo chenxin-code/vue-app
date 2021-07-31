@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 11:38:33
+ * @LastEditTime: 2021-07-31 12:40:31
 -->
 <template>
   <div class="get-coupons-page">
@@ -124,12 +124,12 @@ export default {
         couTypeCode: this.query.couTypeCode
       };
 
-      // this.$http
-      //   .get(url, { params: obj })
-      bffHttp("GET", url, obj)
+      this.$http
+        .get(url, { params: obj })
+        // bffHttp("GET", url, obj)
         .then(res => {
-          if (res.code === 200) {
-            this.couponDetail = res.data;
+          if (res.data.code === 200) {
+            this.couponDetail = res.data.data;
           } else {
             this.$toast(res.message);
           }
@@ -141,6 +141,20 @@ export default {
           this.$toast("请求失败");
         });
     },
+    delPoint(num) {
+      const regexp = /(?:\.0*|(\.\d+?)0+)$/;
+      num = `${num}`;
+      return num.replace(regexp, "$1");
+    },
+    couponType(item) {
+      //10:代金券 20：满减券 40：折扣券
+      if (item.couponType === 10) {
+        return `无门槛立减`;
+      } else if (item.couponType === 20 || item.couponType === 40) {
+        const num = this.delPoint(item.satisfyAmount);
+        return `满${num}元可用`;
+      }
+    },
     //立即领取
     receiveCoupon: _.debounce(function() {
       this.toast();
@@ -151,13 +165,13 @@ export default {
         couActivitiesId: this.query.couActivitiesId,
         memberId: this.query.memberId
       };
-      bffHttp("POST", url, obj)
-        // this.$http
-        //   .post(url, JSON.stringify(obj))
+      // bffHttp("POST", url, obj)
+      this.$http
+        .post(url, JSON.stringify(obj))
         .then(res => {
-          if (res.code === 200) {
-            if (res.data.result) {
-              this.couNoList = res.data.couNoList;
+          if (res.data.code === 200) {
+            if (res.data.data.result) {
+              this.couNoList = res.data.data.couNoList;
               this.isReceive = true;
               this.save();
               Toast.success({
@@ -180,20 +194,6 @@ export default {
         .finally(() => {})
         .catch(err => {});
     }),
-    delPoint(num) {
-      const regexp = /(?:\.0*|(\.\d+?)0+)$/;
-      num = `${num}`;
-      return num.replace(regexp, "$1");
-    },
-    couponType(item) {
-      //10:代金券 20：满减券 40：折扣券
-      if (item.couponType === 10) {
-        return `无门槛立减`;
-      } else if (item.couponType === 20 || item.couponType === 40) {
-        const num = this.delPoint(item.satisfyAmount);
-        return `满${num}元可用`;
-      }
-    },
     //保存
     save() {
       const host = process.env.VUE_APP_DISTR_APP;
