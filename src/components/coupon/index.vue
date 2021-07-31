@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 14:26:42
+ * @LastEditTime: 2021-07-31 15:20:47
 -->
 <template>
   <div class="get-coupons-page">
@@ -128,8 +128,10 @@ export default {
         .get(url, { params: obj })
         // bffHttp("GET", url, obj)
         .then(res => {
+          console.log(`获取优惠券详情`, res);
           if (res.data.code === 200) {
             this.couponDetail = res.data.data;
+            this.$forceUpdate();
           } else {
             this.$toast(res.message);
           }
