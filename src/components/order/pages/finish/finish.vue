@@ -536,16 +536,20 @@ export default {
       console.log("服务商城请求完成",this.serviceRequestDone);
       if(this.mallRequestDone && this.serviceRequestDone){
         if(this.mallOrderFormList){
-          console.log("自建商城合并数据",this.mallOrderFormList);
-          this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
-          this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
-          this.mallOrderFormList = [];
+          this.$nextTick(()=>{
+            console.log("自建商城合并数据",this.mallOrderFormList);
+            this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
+            this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+            this.mallOrderFormList = [];
+          })
         }
         if(this.serviceMallOrderFormList){
-          console.log("服务商城合并数据",this.serviceMallOrderFormList);
-          this.currentOrderList = this.currentOrderList.concat(this.serviceMallOrderFormList);
-          this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
-          this.serviceMallOrderFormList = [];
+          this.$nextTick(()=>{
+            console.log("服务商城合并数据",this.serviceMallOrderFormList);
+            this.currentOrderList = this.currentOrderList.concat(this.serviceMallOrderFormList);
+            this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+            this.serviceMallOrderFormList = [];
+          })
         }
       }
       /*按时间排序*/
