@@ -12,8 +12,8 @@
         offset="10"
       >
         <div
-          v-for="item in currentOrderList"
-          :key="item"
+          v-for="(item,index) in currentOrderList"
+          :key="item.id +'_'+index"
           class="scroll"
         >
           <OrderItem
