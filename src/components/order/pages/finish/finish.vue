@@ -175,6 +175,10 @@ export default {
       if (this.$store.state.environment == "development") {
         this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
       }
+      this.loading = true;
+
+      this.mallNowPage++;
+
       let obj = {
         orderType: this.tabs.type[0],
         orderTypeList: this.tabs.type,
@@ -185,9 +189,7 @@ export default {
           : this.$store.state.userRoomId,
         billType: this.reqBillType
       };
-      this.loading = true;
 
-      this.mallNowPage++;
       console.log("自建商城开始请求",this.mallNowPage);
       if(this.mallTotalPage != null && this.mallNowPage == this.mallTotalPage){
         this.loading = false;
@@ -536,20 +538,20 @@ export default {
       console.log("服务商城请求完成",this.serviceRequestDone);
       if(this.mallRequestDone && this.serviceRequestDone){
         if(this.mallOrderFormList){
-          this.$nextTick(()=>{
             console.log("自建商城合并数据",this.mallOrderFormList);
             this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
             this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
             this.mallOrderFormList = [];
-          })
         }
         if(this.serviceMallOrderFormList){
-          this.$nextTick(()=>{
             console.log("服务商城合并数据",this.serviceMallOrderFormList);
             this.currentOrderList = this.currentOrderList.concat(this.serviceMallOrderFormList);
             this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
             this.serviceMallOrderFormList = [];
-          })
+        }
+        if(this.currentOrderList.length <= 2){
+          this.onLoad();
+          console.log("currentOrderList.length",this.currentOrderList);
         }
       }
       /*按时间排序*/

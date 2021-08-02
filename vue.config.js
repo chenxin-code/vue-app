@@ -249,6 +249,10 @@ const vueConfig = {
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true
       },
+      '/times-center-trade/mall/':{//服务商城的接口
+        target:'https://mall-uat-api-linli.timesgroup.cn:1443',
+        changeOrigin: true,
+      },
       "/times/": {
         target: "https://m-center-uat-linli.timesgroup.cn", //中台系统
         changeOrigin: true
@@ -257,10 +261,6 @@ const vueConfig = {
         target: "http://times-pcs.linli580.com.cn:8888", //收费系统
         changeOrigin: true
       },
-      '/times-center-trade/mall/':{//服务商城的接口
-        target:'https://mall-uat-api-linli.timesgroup.cn:1443',
-        changeOrigin: true,
-    }
     }
   },
   // disable source map in production
