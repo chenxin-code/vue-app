@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-02 11:20:18
+ * @LastEditTime: 2021-08-02 12:39:16
 -->
 <template>
   <div class="get-coupons-page">
@@ -112,7 +112,7 @@ export default {
           }
         })
         .catch(err => {
-          this.$toast("请求失败");
+          // this.$toast("请求失败");
         });
     },
     //获取优惠券详情
@@ -147,7 +147,7 @@ export default {
           Toast.clear(); //关闭页面loading
         })
         .catch(err => {
-          this.$toast("请求失败");
+          // this.$toast("请求失败");
         });
     },
     delPoint(num) {
@@ -199,6 +199,11 @@ export default {
               });
               this.isReceive = false;
             }
+          } else {
+            this.$toast(res.data.message);
+            setTimeout(() => {
+              Toast.clear(); //关闭页面loading
+            }, 500);
           }
         })
         .finally(() => {})
@@ -306,11 +311,11 @@ $fontColor = #FFFFFF;
         font-weight: 600;
         color: $fontColor;
         line-height: 38px;
-        // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
+        background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: -3px 0px 1px #fac88b;
-        background-color: #6666667a;
+        // text-shadow: -3px 0px 1px #fac88b;
+        // background-color: #6666667a;
         span {
           font-size: 26px;
         }
