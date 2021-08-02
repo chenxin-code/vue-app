@@ -23,8 +23,8 @@
       >
         <property-bill v-show="isLoadPropertyBill" :results="billResults" />
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item) in currentOrderList"
+          :key="item.id"
           class="scroll"
         >
           <OrderItem

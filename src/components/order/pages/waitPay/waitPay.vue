@@ -43,8 +43,8 @@
           </div>
         </property-bill>
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item) in currentOrderList"
+          :key="item.id"
           class="scroll"
         >
           <OrderItem
