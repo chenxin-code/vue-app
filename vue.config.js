@@ -227,11 +227,7 @@ const vueConfig = {
       //   }
       // },
       "/api": {
-<<<<<<< HEAD
-        target: 'https://mall-uat-app-linli.timesgroup.cn',
-=======
         // target: 'https://mall-prod-app-linli.timesgroup.cn',
->>>>>>> d6495b909a83ef0d521a84a1d6fc188c40872bb0
         // target: 'http://192.168.31.118:18807',
         // target: 'http://39.105.84.126:28807',
         // target: "http://mall-uat-app-linli.timesgroup.cn/",
@@ -249,13 +245,8 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com',
         // target: 'http://39.105.84.126:28807',
         // target: 'http://192.168.31.118:18807',
-<<<<<<< HEAD
-        target: 'https://mall-uat-app-linli.timesgroup.cn',
-        // target: process.env.VUE_APP_BASE_API,
-=======
         // target: 'https://mall-prod-app-linli.timesgroup.cn',
         target: process.env.VUE_APP_BASE_API,
->>>>>>> d6495b909a83ef0d521a84a1d6fc188c40872bb0
         changeOrigin: true
       },
       "/times/": {
