@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-31 15:20:47
+ * @LastEditTime: 2021-08-02 11:20:18
 -->
 <template>
   <div class="get-coupons-page">
@@ -131,10 +131,17 @@ export default {
           console.log(`获取优惠券详情`, res);
           if (res.data.code === 200) {
             this.couponDetail = res.data.data;
+            console.log(`couponDetail1`, couponDetail);
+            console.log(
+              `couponDetail.voucherAmount`,
+              couponDetail.voucherAmount
+            );
+
             this.$forceUpdate();
           } else {
             this.$toast(res.message);
           }
+          console.log(`couponDetail`, couponDetail);
         })
         .finally(() => {
           Toast.clear(); //关闭页面loading
@@ -273,6 +280,7 @@ $fontColor = #FFFFFF;
         margin-bottom: 0;
         .avatar-img {
           margin-bottom: 0;
+          border: 2px solid #facb94;
         }
       }
       .user-name {
@@ -298,10 +306,11 @@ $fontColor = #FFFFFF;
         font-weight: 600;
         color: $fontColor;
         line-height: 38px;
-        background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
+        // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        // text-shadow: 1px 1px rgb(252 236 217 / 30%);
+        text-shadow: -3px 0px 1px #fac88b;
+        background-color: #6666667a;
         span {
           font-size: 26px;
         }
