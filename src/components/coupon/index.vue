@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-02 14:58:57
+ * @LastEditTime: 2021-08-02 20:15:20
 -->
 <template>
   <div class="get-coupons-page">
@@ -60,7 +60,9 @@ export default {
       imgSrc: imgSrc,
       shareCode: "", //分销码 lec5bn
       query: this.$route.query,
+      memberId: "",
       userInfo: {},
+      userSummary: {},
       couponDetail: {},
       couNoList: "", //优惠劵id
       isReceive: false //是否领取
@@ -70,6 +72,10 @@ export default {
     [VanImage.name]: VanImage
   },
   created() {
+    this.userSummary = this.$store.state;
+    this.memberId = this.userSummary.userInfo.userCode;
+    console.log(`this.userSummary`, this.userSummary.userInfo);
+
     // get_distr_coupon?shareCode=lec5bn&memberId=2331048196588962398&couActivitiesId=2632817580967985166&couTypeCode=10SC000173
     this.shareCode = this.query.shareCode;
     this.toast();
@@ -173,7 +179,7 @@ export default {
 
       const obj = {
         couActivitiesId: this.query.couActivitiesId,
-        memberId: this.query.memberId
+        memberId: this.memberId
       };
       // bffHttp("POST", url, obj)
       this.$http
