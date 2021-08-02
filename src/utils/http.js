@@ -169,11 +169,11 @@ Axios.interceptors.request.use(
               // }
             }
 
-            if (store.state.webtype == '8') {
-              if (store.state.etpAppId) {
-                nArgs.channel = store.state.etpAppId
-              }
-            }
+            // if (store.state.webtype == '8') {
+            //   if (store.state.etpAppId) {
+            //     nArgs.channel = store.state.etpAppId
+            //   }
+            // }
 
             for (let key in postData) {
               nArgs[key] = postData[key]
@@ -248,9 +248,9 @@ Axios.interceptors.request.use(
       if (cToken) {
         params.cToken = cToken
       }
-      if (store.state.globalConfig.channel) {
-        params.channel = store.state.globalConfig.channel
-      }
+      // if (store.state.globalConfig.channel) {
+      //   params.channel = store.state.globalConfig.channel
+      // }
       config.params = Object.assign(config.params || {}, params)
 
       return config;
