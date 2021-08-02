@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-02 12:39:16
+ * @LastEditTime: 2021-08-02 14:58:57
 -->
 <template>
   <div class="get-coupons-page">
@@ -131,24 +131,24 @@ export default {
           console.log(`获取优惠券详情`, res);
           if (res.data.code === 200) {
             this.couponDetail = res.data.data;
-            console.log(`couponDetail1`, couponDetail);
+            console.log(`couponDetail1`, this.couponDetail);
             console.log(
               `couponDetail.voucherAmount`,
-              couponDetail.voucherAmount
+              this.couponDetail.voucherAmount
             );
 
             this.$forceUpdate();
           } else {
             this.$toast(res.message);
           }
-          console.log(`couponDetail`, couponDetail);
+          console.log(`couponDetail`, this.couponDetail);
         })
         .finally(() => {
           Toast.clear(); //关闭页面loading
-        })
-        .catch(err => {
-          // this.$toast("请求失败");
         });
+      // .catch(err => {
+      // this.$toast("请求失败");
+      // });
     },
     delPoint(num) {
       const regexp = /(?:\.0*|(\.\d+?)0+)$/;
