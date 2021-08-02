@@ -1211,7 +1211,7 @@ export default {
 }
 .top_bg {
   height: 0.933333rem;
-  background-color:  #f74440;
+  background-color:  #f44981;
 }
 
 .mobile-preview {

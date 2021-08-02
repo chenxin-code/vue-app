@@ -1155,7 +1155,7 @@ export default {
   }
 
   .default-div-bg {
-    background-color: #F96702;
+    background-color: #f44981;
   }
 
   .add-wechat-favorites {
@@ -1231,5 +1231,6 @@ export default {
   // position absolute;
   // top 0px
   // z-index 99;
+  
 }
 </style>
