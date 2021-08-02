@@ -47,7 +47,7 @@
           <div class="poster-product-message">
             <div class="poster-product-message-left">
               <div class="poster-product-prize">
-                {{ shareParams.salePrice }}
+                ¥ {{ shareParams.salePrice }}
               </div>
               <div class="poster-product-desc">{{ shareParams.skuName }}</div>
             </div>
@@ -68,13 +68,22 @@
           <div class="finger-save-text">长按图片保存到相册</div>
         </div>
       </div>
+
+      <div class="overlay-result" v-if="showResult">
+        <div class="overlay-block">文案/链接已复制</div>
+        <div style="text-align: center;">图片已保存到相册</div>
+        <div class="result-line"></div>
+        <div class="overlay-btn" @click="backPage">我知道了</div>
+      </div>
     </div>
   </van-overlay>
 </template>
 
 <script>
+import ClipboardJS from "clipboard";
 import appCamera from "@zkty-team/x-engine-module-camera";
 import html2canvas from "html2canvas";
+
 export default {
   props: {
     shareParams: {
@@ -111,7 +120,23 @@ export default {
     });
   },
   methods: {
-    saveData() {},
+    saveData() {
+      this.shareParams.picUrls.forEach(item => {
+        appCamera.saveImageToAlbum({
+          type: "url",
+          imageData: item
+        });
+      });
+      const that = this;
+      new ClipboardJS(".save-btn", {
+        text: function(trigger) {
+          return `${that.shareParams.skuName}
+购买链接：${that.shareParams.link}
+          `;
+        }
+      });
+      this.showResult = true;
+    },
     savePoster() {
       console.log("-----savePoster");
       //   window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
@@ -161,6 +186,11 @@ export default {
   }
 };
 </script>
+<style>
+.van-overlay {
+  z-index: 999;
+}
+</style>
 
 <style lang="stylus" scoped type="text/stylus">
   .overlay-content {
@@ -285,7 +315,7 @@ export default {
   .save-pic-text {
     padding: 10px 15px;
     .share-desc {
-
+        font-size: 13px;
 
     }
   }

@@ -1644,7 +1644,7 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('imageText')" >
+          <div class="share_botton_item" @click="shareImg('imageText')">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图文分享</div>
           </div>
@@ -1656,11 +1656,11 @@
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
     </van-popup>
-    <sharePoster 
-      v-if="showPoster" 
+    <sharePoster
+      v-if="showPoster"
       :shareParams="shareParams"
       @hide="showPoster = false"
-      ></sharePoster>
+    ></sharePoster>
   </div>
 </template>
 
@@ -1693,7 +1693,7 @@ import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
-import sharePoster from './shareImage/share-poster.vue';
+import sharePoster from "./shareImage/share-poster.vue";
 
 export default {
   name: "detail",
@@ -1713,11 +1713,13 @@ export default {
   data() {
     let that = this;
     return {
+      personShareCode: "", // 人分销码
+      qrCode: "", //商品分销码
       shareParams: {},
       showPoster: false,
-      estimatedCommission: '', //预计佣金
+      estimatedCommission: "", //预计佣金
       isDistributionProduct: false, //是否是分销商品
-      referrerCode: '', // 分销码
+      referrerCode: "", // 分销码
       directWeChatShare: "0",
       backApp: false,
       couFlag: [],
@@ -1968,6 +1970,10 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    distributionInit() {
+      this.distributionMessage();
+      this.distributionProduct();
+    },
     // 分销员信息
     distributionMessage() {
       let url = "";
@@ -1976,34 +1982,45 @@ export default {
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
         : (url =
             "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
-        console.log('-----------distributionMessage----------');
-        this.$http.get(url).then(
-          (res) => {
-            console.log('-----test---distributionMessage->>>', res);
-            this.referrerCode = res.data.data.shareCode;
-            this.qrCode = res.data.data.qrCode;
-          },
-          (err) => {
-          }
-        );
+      console.log("----distributionMessage------");
+      this.$http.get(url).then(
+        res => {
+          console.log("----distributionMessage------", res);
+
+          this.referrerCode = res.data.data.shareCode;
+          this.personShareCode = res.data.data.shareCode;
+          this.distributionMessageCode();
+        },
+        err => {}
+      );
     },
+    // 分销商品分享码
+    distributionMessageCode() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url =
+            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+
+      fetchMethod("GET", url).then(res => {
+        console.log("----distributionMessageCode--->>-", res);
+        this.qrCode = res.data;
+      });
+    },
+
     // 商品信息 是否是分销商品
     distributionProduct() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url =
-            `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
-        : (url =
-            `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
-        fetchMethod("POST", url)
-          .then(res => {
-            console.log('------fetchMethod--->>>', res);
-            if(res.code == 200 && res.data) {
-              this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
-              this.isDistributionProduct = true; //是否是分销商品
-            }
-          })
-
+        ? (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
+        : (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+      fetchMethod("POST", url).then(res => {
+        if (res.code == 200 && res.data) {
+          this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
+          this.isDistributionProduct = true; //是否是分销商品
+        }
+      });
     },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
@@ -2075,7 +2092,7 @@ export default {
           "?x-oss-process=image/format,jpg/quality,Q_25"
       );
       this.showSharePopup = true;
-      
+
       // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       //   this.showShare();
       // } else {
@@ -2123,23 +2140,29 @@ export default {
         picUrls,
         salePrice,
         skuName,
-        userImage: this.$store.state.userLable.userImage || 'https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/9921587590161_1610957853575.jpg',
-        userName: this.$store.state.userLable.userName || '13570434851',
+        userImage:
+          this.$store.state.userLable.userImage ||
+          "https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/9921587590161_1610957853575.jpg",
+        userName: this.$store.state.userLable.userName || "13570434851",
         referrerCode: this.referrerCode,
-        qrCode: this.qrCode || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAABuklEQVR42u2YMY6EMAxFjShScoTchLkYEkhcDG6SI1CmQPH+7wA7mtWWY1arSYFCHsVXYn87iP425EP+OplEpJtTWLrdvkt4b13JrFq6KepSsSa1NU+SpMciFeEBkiHVn+wivUgM69beRKYozdZqWFVvIDyfQ5vqNr6cnAM5YjT35+M1et9OjmFHA5U/M/jtZFYLT0uVAKkx91eeOpFEWaqLjIgVLGaR0ZVA0UJtK4IjU2W+Ts6J7BGLg+jKmWIWijNhZMoQc7ONGgot89stfQjCU+18kKz2TbBAdSSIUb7Dq8ZaMcJTljgReCT84cE90Q2mvVxu6UOwO4WRyQTBDKO5PMSHUBaCAyuDLZpluhJoY55m1qxauBZvQm1tIlZW8Iiqqa5kqiFRm7hS24fRmVhkguyCjKVnnD2sE6l5KkxRFgs4hRmHJ0nUJlqAM/uop6rpQyYuYnfoFDVPH1f35ENszJofLFw26zt1JbV/O0zb6rY3Oe4ywJPko3dpfYndZVg1a74IjeMGArfkTNhGFrmBKDtIK96I1t6b8Hxo2nBuyLLq5UvOe32ptylcbJuXPwvvJp+/OP+MfAHFBFzKqJvZYAAAAABJRU5ErkJggg==',
+        qrCode:
+          this.qrCode ||
+          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAABuklEQVR42u2YMY6EMAxFjShScoTchLkYEkhcDG6SI1CmQPH+7wA7mtWWY1arSYFCHsVXYn87iP425EP+OplEpJtTWLrdvkt4b13JrFq6KepSsSa1NU+SpMciFeEBkiHVn+wivUgM69beRKYozdZqWFVvIDyfQ5vqNr6cnAM5YjT35+M1et9OjmFHA5U/M/jtZFYLT0uVAKkx91eeOpFEWaqLjIgVLGaR0ZVA0UJtK4IjU2W+Ts6J7BGLg+jKmWIWijNhZMoQc7ONGgot89stfQjCU+18kKz2TbBAdSSIUb7Dq8ZaMcJTljgReCT84cE90Q2mvVxu6UOwO4WRyQTBDKO5PMSHUBaCAyuDLZpluhJoY55m1qxauBZvQm1tIlZW8Iiqqa5kqiFRm7hS24fRmVhkguyCjKVnnD2sE6l5KkxRFgs4hRmHJ0nUJlqAM/uop6rpQyYuYnfoFDVPH1f35ENszJofLFw26zt1JbV/O0zb6rY3Oe4ywJPko3dpfYndZVg1a74IjeMGArfkTNhGFrmBKDtIK96I1t6b8Hxo2nBuyLLq5UvOe32ptylcbJuXPwvvJp+/OP+MfAHFBFzKqJvZYAAAAABJRU5ErkJggg==",
         estimatedCommission: this.estimatedCommission,
         link: `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-      }
+      };
       this.showSharePopup = false;
-      let ua = window.navigator.userAgent.toLowerCase()
-      let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
-      console.log('------isWX', isWX);
-      if(isWX) {
+      let ua = window.navigator.userAgent.toLowerCase();
+      let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+      console.log("------isWX", isWX);
+      if (isWX) {
         wx.miniProgram.navigateTo({
           // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
-          url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`
         });
-      }else {
+      } else {
         this.shareParams = params;
         this.showPoster = true;
         // this.$router.push({
@@ -2147,7 +2170,6 @@ export default {
         //   query: params
         // })
       }
-
     },
     shareLink() {
       this.$router.push({
@@ -4440,8 +4462,7 @@ export default {
     } else {
       this.getDatas();
     }
-    this.distributionMessage();
-    this.distributionProduct();
+    this.distributionInit();
   },
   activated() {
     if (
