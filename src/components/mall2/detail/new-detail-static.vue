@@ -1563,11 +1563,11 @@
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('imageText')" v-if="isDistributionProduct && referrerCode">
+          <div class="share_botton_item" @click="shareImg('imageText')" >
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图文分享</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('poster')" v-if="isDistributionProduct && referrerCode">
+          <div class="share_botton_item" @click="shareImg('poster')">
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>海报分享</div>
           </div>
@@ -1577,6 +1577,11 @@
         </div>
       </div>
     </van-popup>
+    <sharePoster 
+      v-if="showPoster" 
+      :shareParams="shareParams"
+      @hide="showPoster = false"
+      ></sharePoster>
   </div>
 </template>
 
@@ -1609,6 +1614,7 @@ import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
+import sharePoster from './shareImage/share-poster.vue';
 
 export default {
   name: "detail",
@@ -1622,11 +1628,14 @@ export default {
     BigImage,
     PriceOrder,
     videoPlayer,
-    CouponAndActivity
+    CouponAndActivity,
+    sharePoster
   },
   data() {
     let that = this;
     return {
+      shareParams: {},
+      showPoster: false,
       estimatedCommission: '', //预计佣金
       isDistributionProduct: false, //是否是分销商品
       referrerCode: '', // 分销码
@@ -2037,26 +2046,29 @@ export default {
         picUrls,
         salePrice,
         skuName,
-        userImage: this.$store.state.userLable.userImage,
-        userName: this.$store.state.userLable.userName,
+        userImage: this.$store.state.userLable.userImage || 'https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/9921587590161_1610957853575.jpg',
+        userName: this.$store.state.userLable.userName || '13570434851',
         referrerCode: this.referrerCode,
-        qrCode: this.qrCode,
+        qrCode: this.qrCode || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAABuklEQVR42u2YMY6EMAxFjShScoTchLkYEkhcDG6SI1CmQPH+7wA7mtWWY1arSYFCHsVXYn87iP425EP+OplEpJtTWLrdvkt4b13JrFq6KepSsSa1NU+SpMciFeEBkiHVn+wivUgM69beRKYozdZqWFVvIDyfQ5vqNr6cnAM5YjT35+M1et9OjmFHA5U/M/jtZFYLT0uVAKkx91eeOpFEWaqLjIgVLGaR0ZVA0UJtK4IjU2W+Ts6J7BGLg+jKmWIWijNhZMoQc7ONGgot89stfQjCU+18kKz2TbBAdSSIUb7Dq8ZaMcJTljgReCT84cE90Q2mvVxu6UOwO4WRyQTBDKO5PMSHUBaCAyuDLZpluhJoY55m1qxauBZvQm1tIlZW8Iiqqa5kqiFRm7hS24fRmVhkguyCjKVnnD2sE6l5KkxRFgs4hRmHJ0nUJlqAM/uop6rpQyYuYnfoFDVPH1f35ENszJofLFw26zt1JbV/O0zb6rY3Oe4ywJPko3dpfYndZVg1a74IjeMGArfkTNhGFrmBKDtIK96I1t6b8Hxo2nBuyLLq5UvOe32ptylcbJuXPwvvJp+/OP+MfAHFBFzKqJvZYAAAAABJRU5ErkJggg==',
         estimatedCommission: this.estimatedCommission,
         link: `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
       }
       this.showSharePopup = false;
       let ua = window.navigator.userAgent.toLowerCase()
       let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
+      console.log('------isWX', isWX);
       if(isWX) {
         wx.miniProgram.navigateTo({
           // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
           url: `/pages/common/savePicture/index?params=${encodeURIComponent(JSON.stringify(params))}`,
         });
       }else {
-        this.$router.push({
-          path: 'mall2/savePicture',
-          query: params
-        })
+        this.shareParams = params;
+        this.showPoster = true;
+        // this.$router.push({
+        //   path: 'mall2/savePicture',
+        //   query: params
+        // })
       }
 
     },
