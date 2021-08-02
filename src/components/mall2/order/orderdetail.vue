@@ -2503,7 +2503,8 @@ export default {
         orderType: this.orderType,
         orderId: this.orderId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
+        tradeNo:this.tradeNo,
       };
 
       this.$http.post(url, paramsData).then(
