@@ -202,7 +202,7 @@ export default {
         background-color: #fff;
         border: 1px solid #f44;
         padding: 0 7px;
-        color: #f96702;
+        color: #f44981;
       }
     }
   }

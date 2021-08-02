@@ -61,7 +61,7 @@ export default {
       },
 			color: '',
       defaultColorList: [
-        '#F96702',
+        '#f44981',
         '#328967',
         ''
       ],
