@@ -227,7 +227,7 @@ const vueConfig = {
       //   }
       // },
       "/api": {
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
+        target: 'https://mall-uat-app-linli.timesgroup.cn',
         // target: 'http://192.168.31.118:18807',
         // target: 'http://39.105.84.126:28807',
         // target: "http://mall-uat-app-linli.timesgroup.cn/",
@@ -245,7 +245,7 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com',
         // target: 'http://39.105.84.126:28807',
         // target: 'http://192.168.31.118:18807',
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
+        target: 'https://mall-uat-app-linli.timesgroup.cn',
         // target: process.env.VUE_APP_BASE_API,
         changeOrigin: true
       },
