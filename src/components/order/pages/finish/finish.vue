@@ -554,12 +554,17 @@ export default {
           console.log("currentOrderList.length",this.currentOrderList);
         }
         this.$nextTick(()=>{
-          this.currentOrderList = this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[]);
-          console.log('this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[])',this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[]))
+          let obj = {}
+          this.currentOrderList = this.currentOrderList.reduce((cur,next) => {
+            console.log(next)
+              obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
+              return cur;
+          },[])
+          console.log('去重',this.currentOrderList)
+          /*按时间排序*/
+          console.log("合并完成",this.currentOrderList);
         })
       }
-      /*按时间排序*/
-      console.log("合并完成",this.currentOrderList);
     },
     /**
      * 控制显示提示
