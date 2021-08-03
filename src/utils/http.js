@@ -74,7 +74,7 @@ Axios.interceptors.request.use(
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
     }
-    if(/times\/distr-service\/index\/api-c\/v1\/get\/my\/info/.test(config.url)) {
+    if(/distr-service\/index\/api-c\/v1\/get\/my\/info/.test(config.url)) {
       let ua = window.navigator.userAgent.toLowerCase()
       let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
       console.log('ythtttttttttttt--store----->', store.state.ythToken)
