@@ -1669,7 +1669,7 @@
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
-          <div class="share_botton_item" @click="shareLink" v-if="false">
+          <div class="share_botton_item" @click="shareLink">
             <img src="static/image/mall2/share_link.png" alt="" />
             <div>链接分享</div>
           </div>
