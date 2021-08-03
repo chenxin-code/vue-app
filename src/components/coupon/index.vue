@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-03 18:07:33
+ * @LastEditTime: 2021-08-03 18:24:37
 -->
 <template>
   <div class="get-coupons-page">
@@ -318,9 +318,10 @@ $fontColor = #FFFFFF;
         font-weight: 600;
         color: $fontColor;
         line-height: 38px;
-        background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #FAC88B;
+        // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
         // text-shadow: -3px 0px 1px #fac88b;
         // background-color: #6666667a;
         span {
