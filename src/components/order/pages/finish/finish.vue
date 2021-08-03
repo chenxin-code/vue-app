@@ -554,8 +554,8 @@ export default {
           console.log("currentOrderList.length",this.currentOrderList);
         }
         this.$nextTick(()=>{
-          this.currentOrderList = [...new Set(this.currentOrderList)]
-          console.log('[...new Set(this.currentOrderList)]',[...new Set(this.currentOrderList)])
+          this.currentOrderList = this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[]);
+          console.log('this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[])',this.currentOrderList.reduce((prev,cur) => prev.includes(cur) ? prev : [...prev,cur],[]))
         })
       }
       /*按时间排序*/
