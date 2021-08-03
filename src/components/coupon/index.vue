@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-02 20:15:20
+ * @LastEditTime: 2021-08-03 17:32:18
 -->
 <template>
   <div class="get-coupons-page">
@@ -24,15 +24,17 @@
         <div class="line"></div>
 
         <div class="money" v-if="couponDetail.couponType === 40">
-          8<span>折</span>
+          {{ +couponDetail.discountRatio * 10 }}
+          <span>折</span>
         </div>
-        <div class="money" v-else>
-          <span>￥</span
-          >{{
+        <!-- {{
             couponDetail.voucherAmount
               ? delPoint(couponDetail.voucherAmount)
               : ""
-          }}
+          }} -->
+        <div class="money" v-else>
+          <span>￥</span>
+          {{ couponDetail.voucherAmount }}
         </div>
         <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
