@@ -549,7 +549,7 @@ export default {
             this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
             this.serviceMallOrderFormList = [];
         }
-        if(this.currentOrderList.length <= 2){
+        if(this.currentOrderList.length != 0 && this.currentOrderList.length <= 2 && this.currentOrderList){
           this.onLoad();
           console.log("currentOrderList.length",this.currentOrderList);
         }
