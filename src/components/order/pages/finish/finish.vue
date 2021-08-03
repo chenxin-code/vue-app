@@ -24,7 +24,7 @@
         <property-bill v-show="isLoadPropertyBill" :results="billResults" />
         <div
           v-for="(item,index) in currentOrderList"
-          :key="item.id +'_'+index"
+          :key="item.billId+'_'+index?item.billId:item.id+'_'+index"
           class="scroll"
         >
           <OrderItem
@@ -553,17 +553,17 @@ export default {
           this.onLoad();
           console.log("currentOrderList.length",this.currentOrderList);
         }
-        this.$nextTick(()=>{
-          let obj = {}
-          this.currentOrderList = this.currentOrderList.reduce((cur,next) => {
-            console.log(next)
-              obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
-              return cur;
-          },[])
-          console.log('去重',this.currentOrderList)
-          /*按时间排序*/
+        // this.$nextTick(()=>{
+        //   let obj = {}
+        //   this.currentOrderList = this.currentOrderList.reduce((cur,next) => {
+        //     console.log(next)
+        //       obj[next.id] ? "" : obj[next.id] = true && cur.push(next);
+        //       return cur;
+        //   },[])
+        //   console.log('去重',this.currentOrderList)
+        //   /*按时间排序*/
+        // })
           console.log("合并完成",this.currentOrderList);
-        })
       }
     },
     /**
