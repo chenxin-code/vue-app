@@ -1568,7 +1568,7 @@
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/picText.png" alt="" />
+            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
             <div>图文推广</div>
           </div>
 
@@ -1924,9 +1924,9 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
+            "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
         : (url =
-            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
+            "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
       console.log("----distributionMessage------");
       this.$http.get(url).then(
         res => {
@@ -1944,9 +1944,10 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+            `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
         : (url =
-            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+            `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+
 
       fetchMethod("GET", url).then(res => {
         console.log("----distributionMessageCode--->>-", res);
@@ -1958,8 +1959,8 @@ export default {
     distributionProduct() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
-        : (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
+        : (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
       fetchMethod("POST", url).then(res => {
         if (res.code == 200 && res.data) {
           this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
