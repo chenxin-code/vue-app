@@ -115,7 +115,7 @@ export default {
           title: "分享有礼",
           icon: require("./images/share.png"),
           devUrl:
-            "https://mall-uat-app-linli.timesgroup.cn:8001/applyDistribution?token=",
+            "https://mall-uat-app-linli.timesgroup.cn:8001/wxApplyDistribution?token=",
           prodUrl:
             "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
           externalLinks: true,

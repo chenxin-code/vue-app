@@ -9,10 +9,11 @@
         :error.sync="error"
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
+        offset="10"
       >
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item,index) in currentOrderList"
+          :key="item.id +'_'+index"
           class="scroll"
         >
           <OrderItem
@@ -35,7 +36,7 @@
             :orderItem="item"
           ></OrderItem>
         </div>
-        <Empty v-show="currentOrderList.length == 0"></Empty>
+        <Empty v-show="currentOrderList.length == 0 && !loading"></Empty>
       </van-list>
     </van-pull-refresh>
   </div>
@@ -183,7 +184,7 @@ export default {
                   shoppingOrderId: "", //item.shoppingOrderId
                   orderPayType: "", //item.payType,//是否是支付方式
                   id: item.id,
-                  tag: "16",
+                  tag: "7",
                   tabIndex: 3,
                   awardActivityList: item.awardActivityList
                 }
@@ -305,7 +306,7 @@ export default {
                   shoppingOrderId: item.shoppingOrderId,
                   orderPayType: item.orderPayType,
                   id: item.id,
-                  tag: "16",
+                  tag: "7",
                   tabIndex: 3,
                   awardActivityList: item.awardActivityList
                 },
@@ -352,20 +353,18 @@ export default {
       }
     },
     allLoadingFn() {
-      setTimeout(res => {
-        if (this.tmfinished && this.finished) {
-          this.loading = false;
-          this.allFinish = true;
-        } else {
-          this.allFinish = false;
-        }
-        if (this.tmerror && this.error) {
-          this.error = true;
-        } else {
-          this.error = false;
-        }
-        console.log(this.allFinish, "allFinishl--loading2");
-      }, 500);
+      if (this.tmfinished && this.finished) {
+        this.loading = false;
+        this.allFinish = true;
+      } else {
+        this.allFinish = false;
+      }
+      if (this.tmerror && this.error) {
+        this.error = true;
+      } else {
+        this.error = false;
+      }
+      console.log(this.allFinish, "allFinishl--loading2");
     },
     concatFn(list) {
       this.orderList = this.orderList.concat(list);
@@ -375,9 +374,7 @@ export default {
     /*按时间排序*/
     sortKey(array, key) {
       return array.sort(function(a, b) {
-        var x = a[key];
-        var y = b[key];
-        return x > y ? -1 : x < y ? 1 : 0;
+          return Date.parse(b[key]) - Date.parse(a[key]);
       });
     },
     /*服务商城的数据格式化*/

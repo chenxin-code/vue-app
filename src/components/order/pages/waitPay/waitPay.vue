@@ -19,6 +19,7 @@
         :error.sync="error"
         :error-text="errorText"
         :immediate-check="false"
+        offset="10"
       >
         <property-bill
           v-show="isLoadPropertyBill"
@@ -42,8 +43,8 @@
           </div>
         </property-bill>
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item,index) in currentOrderList"
+          :key="item.id +'_'+index"
           class="scroll"
         >
           <OrderItem
@@ -130,7 +131,7 @@ export default {
       params: [],
       mergeAmount: 0,
       total: 0,
-      pageSize: 8,
+      pageSize: 5,
       isLoadPropertyBill: false, //是否加载物业缴费账单组件
       isDisAll: false,
       isDis: false,
@@ -332,7 +333,7 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "https://m-center-uat-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       return new Promise((resolve, reject) => {
@@ -927,7 +928,8 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 182px;
+//   padding-bottom: 182px;
+padding-bottom: 220px;
 
   &.wait-pay-x {
     padding-bottom: 220px;

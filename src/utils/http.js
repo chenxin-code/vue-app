@@ -63,22 +63,41 @@ Axios.interceptors.request.use(
       });
       config.headers.Authorization = tokenStr1
       console.log(`一体化token`, config.headers.Authorization);
-    }else{
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
+    } else {
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
+      //   config.headers.token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
+      //   config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
     }
 
     if (bulkApi.indexOf(config.url) !== -1) {
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
     }
+    if (/times\/distr-service\/index\/api-c\/v1\/get\/my\/info/.test(config.url)) {
+      let ua = window.navigator.userAgent.toLowerCase()
+      let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
+      console.log('ythtttttttttttt--store----->', store.state.ythToken)
+      console.log('---getItem---->', localStorage.getItem('ythToken'))
+      if (isWX) {
+        config.headers.Authorization = store.state.ythToken || localStorage.getItem('ythToken');
+      } else {
+        let tokenStr1;
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          tokenStr1 = "Bearer " + res.result;
+        });
+        config.headers.Authorization = tokenStr1;
+      }
+    }
 
-    if(/times\-center\-trade/.test(config.url)){
-      
+
+    if (/times\-center\-trade/.test(config.url)) {
+
       // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
-      if(store.state.webtype == "2" || store.state.webtype == "3"){
+      if (store.state.webtype == "2" || store.state.webtype == "3") {
         config.headers.Authorization = localStorage.getItem('ythToken')
-      }else{
+      } else {
         let ythToken = '';
         await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
           ythToken = res.result;
@@ -94,8 +113,9 @@ Axios.interceptors.request.use(
     /*物业系统请求处理逻辑
     Content-Type方式是: application/json;charset=UTF-8
     */
-
-    if (/pcs\/bill-center\/check-bill/.test(config.url)) {
+    let memberPatt = /times\/member-bff/g; //会员
+    let pcsPatt = /pcs\/bill-center\/check-bill/g; //物业
+    if (pcsPatt.test(config.url) || memberPatt.test(config.url)) {
       config.headers["Content-Type"] = "application/json;charset=UTF-8"
     }
 
@@ -149,11 +169,11 @@ Axios.interceptors.request.use(
               // }
             }
 
-            if (store.state.webtype == '8') {
-              if (store.state.etpAppId) {
-                nArgs.channel = store.state.etpAppId
-              }
-            }
+            // if (store.state.webtype == '8') {
+            //   if (store.state.etpAppId) {
+            //     nArgs.channel = store.state.etpAppId
+            //   }
+            // }
 
             for (let key in postData) {
               nArgs[key] = postData[key]
@@ -206,10 +226,10 @@ Axios.interceptors.request.use(
                   }
                 }
 
-                if(/times\-center\-trade/.test(config.url)){  //服务商城接口不需要转Qs,直接传JSON
+                if (/times\-center\-trade/.test(config.url)) {  //服务商城接口不需要转Qs,直接传JSON
                   dic = JSON.stringify(config.data)
                   config.data = dic
-                }else{
+                } else {
                   let d = Qs.stringify(dic, {
                     arrayFormat: 'repeat'
                   });
@@ -228,9 +248,9 @@ Axios.interceptors.request.use(
       if (cToken) {
         params.cToken = cToken
       }
-      if (store.state.globalConfig.channel) {
-        params.channel = store.state.globalConfig.channel
-      }
+      // if (store.state.globalConfig.channel) {
+      //   params.channel = store.state.globalConfig.channel
+      // }
       config.params = Object.assign(config.params || {}, params)
 
       return config;

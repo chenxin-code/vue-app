@@ -1638,13 +1638,34 @@
       position="bottom"
       :style="{ height: '35%' }"
     >
-      <div class="share_popup">
+      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="true">
+          <div class="share_botton_item" @click="shareImg('poster')">
+            <img src="static/image/mall2/share_link.png" alt="" />
+            <div>推广海报</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('imageText')">
+            <img src="./shareImage/image/picText.png" alt="" />
+            <div>图文推广</div>
+          </div>
+
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>
+
+      <div class="share_popup" v-else>
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="defaultShareImg">
             <img src="static/image/mall2/share_img.png" alt="" />
             <div>图片分享</div>
           </div>
@@ -1655,7 +1676,13 @@
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
+
     </van-popup>
+    <sharePoster
+      v-if="showPoster"
+      :shareParams="shareParams"
+      @hide="showPoster = false"
+    ></sharePoster>
   </div>
 </template>
 
@@ -1687,6 +1714,8 @@ import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
+import { fetchMethod } from "@/utils/tmHttp.js";
+import sharePoster from "./shareImage/share-poster.vue";
 
 export default {
   name: "detail",
@@ -1701,10 +1730,18 @@ export default {
     PriceOrder,
     videoPlayer,
     CouponAndActivity,
+    sharePoster
   },
   data() {
     let that = this;
     return {
+      personShareCode: "", // 人分销码
+      qrCode: "", //商品分销码
+      shareParams: {},
+      showPoster: false,
+      estimatedCommission: "", //预计佣金
+      isDistributionProduct: false, //是否是分销商品
+      referrerCode: "", // 分销码
       directWeChatShare: "0",
       backApp: false,
       couFlag: [],
@@ -1955,6 +1992,58 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    distributionInit() {
+      this.distributionMessage();
+      this.distributionProduct();
+    },
+    // 分销员信息
+    distributionMessage() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info")
+        : (url =
+            "http://47.112.249.207:7001/times/distr-service/index/api-c/v1/get/my/info");
+      console.log("----distributionMessage------");
+      this.$http.get(url).then(
+        res => {
+          console.log("----distributionMessage------", res);
+
+          this.referrerCode = res.data.data.shareCode;
+          this.personShareCode = res.data.data.shareCode;
+          this.distributionMessageCode();
+        },
+        err => {}
+      );
+    },
+    // 分销商品分享码
+    distributionMessageCode() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url =
+            `http://47.112.249.207:7001/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+
+      fetchMethod("GET", url).then(res => {
+        console.log("----distributionMessageCode--->>-", res);
+        this.qrCode = res.data;
+      });
+    },
+
+    // 商品信息 是否是分销商品
+    distributionProduct() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
+        : (url = `http://47.112.249.207:7001/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+      fetchMethod("POST", url).then(res => {
+        if (res.code == 200 && res.data) {
+          this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
+          this.isDistributionProduct = true; //是否是分销商品
+        }
+      });
+    },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -2024,11 +2113,13 @@ export default {
         this.detailData.picUrls[0] +
           "?x-oss-process=image/format,jpg/quality,Q_25"
       );
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        this.showShare();
-      } else {
-        this.showSharePopup = true;
-      }
+      this.showSharePopup = true;
+
+      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      //   this.showShare();
+      // } else {
+      //   this.showSharePopup = true;
+      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
@@ -2063,7 +2154,46 @@ export default {
       this.showSharePopup = false;
       this.shareSensors("微信");
     },
-    shareImg() {
+    shareImg(type) {
+      // this.showShare();
+      let { picUrls, salePrice, skuName } = this.detailData;
+      let params = {
+        type,
+        picUrls,
+        salePrice,
+        skuName,
+        userImage:
+          this.$store.state.userLable.userImage ||
+          "https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/9921587590161_1610957853575.jpg",
+        userName: this.$store.state.userLable.userName || "13570434851",
+        referrerCode: this.referrerCode,
+        qrCode:
+          this.qrCode ||
+          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAABuklEQVR42u2YMY6EMAxFjShScoTchLkYEkhcDG6SI1CmQPH+7wA7mtWWY1arSYFCHsVXYn87iP425EP+OplEpJtTWLrdvkt4b13JrFq6KepSsSa1NU+SpMciFeEBkiHVn+wivUgM69beRKYozdZqWFVvIDyfQ5vqNr6cnAM5YjT35+M1et9OjmFHA5U/M/jtZFYLT0uVAKkx91eeOpFEWaqLjIgVLGaR0ZVA0UJtK4IjU2W+Ts6J7BGLg+jKmWIWijNhZMoQc7ONGgot89stfQjCU+18kKz2TbBAdSSIUb7Dq8ZaMcJTljgReCT84cE90Q2mvVxu6UOwO4WRyQTBDKO5PMSHUBaCAyuDLZpluhJoY55m1qxauBZvQm1tIlZW8Iiqqa5kqiFRm7hS24fRmVhkguyCjKVnnD2sE6l5KkxRFgs4hRmHJ0nUJlqAM/uop6rpQyYuYnfoFDVPH1f35ENszJofLFw26zt1JbV/O0zb6rY3Oe4ywJPko3dpfYndZVg1a74IjeMGArfkTNhGFrmBKDtIK96I1t6b8Hxo2nBuyLLq5UvOe32ptylcbJuXPwvvJp+/OP+MfAHFBFzKqJvZYAAAAABJRU5ErkJggg==",
+        estimatedCommission: this.estimatedCommission,
+        link: `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+      };
+      this.showSharePopup = false;
+      let ua = window.navigator.userAgent.toLowerCase();
+      let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+      console.log("------isWX", isWX);
+      if (isWX) {
+        wx.miniProgram.navigateTo({
+          // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`
+        });
+      } else {
+        this.shareParams = params;
+        this.showPoster = true;
+        // this.$router.push({
+        //   path: 'mall2/savePicture',
+        //   query: params
+        // })
+      }
+    },
+    defaultShareImg() {
       this.showShare();
     },
     shareLink() {
@@ -2699,6 +2829,7 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
+      window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
       if (this.$route.query.channel == "fromApp") {
@@ -4356,6 +4487,7 @@ export default {
     } else {
       this.getDatas();
     }
+    this.distributionInit();
   },
   activated() {
     if (
@@ -4398,6 +4530,7 @@ export default {
       if (this.$refs.scrollView4)
         this.scrollTopValue5 = this.$refs.scrollView4.getScrollSite();
     }
+    window.removeEventListener("scroll", this.handleScroll, true);
     next();
   },
 };

@@ -22,20 +22,18 @@ export const HTTP = axios.create({
 //请求拦截
 HTTP.interceptors.request.use(async config => {
   config.headers.access_channel = "mall";
-let ythToken;
-ythToken = store.state.ythToken? store.state.ythToken:localStorage.getItem("ythToken");
+  let ythToken;
+  ythToken = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken");
 
-// ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDA4NjkyNSIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTYyMDM5MDg5OTQ4MjY4MSwiZXhwIjoxNjI1NDQ3ODY0LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIl0sImp0aSI6IjNlNzM2YjE4LTQzMmEtNGY1OS04Njk5LWUxMjJkY2ZiMDQwOSIsImNsaWVudF9pZCI6ImFwcF9jIn0.UGhQDskBQJMfooam0Xe8dixTms2fxnGe9wYsKaysO_ipRNEX8OutF0SzyQalvYfINdV2iNzVYsclOHgO9TpA2Q2n4i-fPcCds7m6QC4Wcyi14uLcCdQrnlh01L5hlsJfaiRXwBr7PpCoX1iaY7UtJW9D6eO1nNKM8rQ9BiA2QFd-uPRZPkSF3_S9RCeNBMEDqAJ0nQhApvUUJ3HFmu6hao00FJUnA-0Sdaihpv5d7BbKsUGPg6gV04N5uKOnNzMFSbkFX_SO1oPFM-UDooVFW7MZYrsbhx9e41jTSdENNUWejgo86ywbujHUXHZOlNIEDy1iEjw5pFygaZfuafKlwg";
-/*思维的token*/
-// ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3OTkyNzk1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiNmRlMmU5ZTQtY2JmNy00MWY1LWEzMjctMDcyNDUxMDE0YzFlIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.ZNwTNbh63s1XTCkSS1J0iDs6XhOocjSDm14kbA6UVJRQ0zUJHaXiVlXAeFnsZIAdzSIeGUC1DZ8tRcCVE8rwUFVJA5yemUguisf84-t8-gTs9lha9BookJ2tAA8m_51hmRSPIEF_r1_dS1vvstr6-JO2kIwjl832mxkuC81dw3aaIpYJIWB7L1sw35SEQId4beDXdGAkF3lbfrzbqsSHhpeQKQX27tayaoEmaZM721yGSohdrk9EIT8vFqLR_ZPNf0b7RoAqjm6lzHTbxNygJ36J95pLwe9ua3T3fbXGw5uONao_vCnWLlUfl5YxIyXjiYZhi9_u8xe9OVlliOxq2w"
-if (ythToken) {
+  // ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg3OTI5MTczNyIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjUzNzk3ODkzMDYzNjI1OTcyNSwiZXhwIjoxNjI3NTcwMTg1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiMWFhNmQ0ZTctMzdhMi00YjcyLThmMzktODNkZDVlNjZjNDhkIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.ZLpUW6xVnUwwcHVMJDCfLE5aM2QvgErRTdA6uX2soApQhlgXULczWpMP2sHx7eUGq59h-htFKrXsAo6HCd7dgrG5xrCcLabS15-ZK7EfhlxExfXxzrhTBi155_w0k07_KGIof5t6AOUVhRDtskD-vDwwndTXLv489KuuDa8rx3zem6h7XXh6kFPYFvhNPmfVdgSbQ1wjQFEXg2hbm9-AUbIFeSpGrE6xktN-rWBdisVBy0UmK5Nfkty-z3CAdramDYsmW-cVtmz4EP7DThklkAESadxkvSUohszGdqVP_qB520YS-KUK1XoxJweSPlDulTydjWwV48C4ngfwEZjDpA"
+  if (ythToken) {
     config.headers.Authorization = "Bearer " + ythToken;
-}
+  }
   return config;
 });
 
 //处理参数
-function handleParams(url, rawData, rawMethod) {
+function handleParams (url, rawData, rawMethod) {
   const method = rawMethod.toUpperCase();
   let data = {};
   if (method === "GET") {
@@ -71,7 +69,7 @@ function handleParams(url, rawData, rawMethod) {
 }
 
 //处理失败
-async function handleFail(option) {
+async function handleFail (option) {
   console.log(option);
   const { error, reject } = option;
   const { response } = error;
@@ -101,10 +99,10 @@ let defaultHeader = {
 };
 
 let refresh = false;
-
+let baseURL = ""
 //定义白名单
 var WXList = ["/oauth2/accessToken", "/api/wechat/js_sdk_signature"];
-export const fetchMethod = async (
+export const bffHttp = async (
   method = "GET",
   api,
   rawData = {},
@@ -113,15 +111,15 @@ export const fetchMethod = async (
 ) => {
   return handleParams(api, rawData, method, headers, params).then(options => {
     if (!params.hideToast) {
-    //   Toast.loading({
-    //     message: "加载中...",
-    //     duration: "toast",
-    //     forbidClick: true
-    //   });
+      //   Toast.loading({
+      //     message: "加载中...",
+      //     duration: "toast",
+      //     forbidClick: true
+      //   });
     }
     return new Promise((resolve, reject) => {
       HTTP({
-        baseURL: process.env.VUE_APP_TMASS_API,
+        baseURL: baseURL,
         withCredentials: false,
         url: options.url,
         method: options.method,
@@ -135,11 +133,11 @@ export const fetchMethod = async (
           console.log("HTTP--->", resp);
           Toast.clear();
           const res = resp.data;
-          //如果接口返回了token就设置vuex
-          const Authorization = res.Authorization;
-          if (Authorization) {
-            store.dispatch("user/setToken", Authorization);
-          }
+          // //如果接口返回了token就设置vuex
+          // const Authorization = res.Authorization;
+          // if (Authorization) {
+          //   store.dispatch("user/setToken", Authorization);
+          // }
           //处理特殊接口（无返回code时）
           var isWX = false;
           for (let i = 0; i < WXList.length; i++) {

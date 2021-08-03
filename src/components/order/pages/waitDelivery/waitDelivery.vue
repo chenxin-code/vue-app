@@ -9,10 +9,11 @@
         :error.sync="error"
         error-text="请求失败，点击重新加载"
         :immediate-check="false"
+        offset="10"
       >
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item,index) in currentOrderList"
+          :key="item.id +'_'+index"
           class="scroll"
         >
           <OrderItem
@@ -340,13 +341,12 @@ export default {
                   };
                 })
               };
-
               ownlist.push(list);
             });
+            this.concatFn(ownlist);
           } else {
             this.finished = true;
           }
-          this.concatFn(ownlist);
         } else {
           this.finished = true; //如果超过总页数就显示没有更多内容了
         }
@@ -404,20 +404,18 @@ export default {
       this.currentOrderList = this.sortKey(this.orderList, "submitTime");
     },
     allLoadingFn() {
-      setTimeout(res => {
-        if (this.tmfinished && this.finished) {
-          this.loading = false;
-          this.allFinish = true;
-        } else {
-          this.allFinish = false;
-        }
-        if (this.tmerror && this.error) {
-          this.error = true;
-        } else {
-          this.error = false;
-        }
-        console.log(this.allFinish, "allFinishl--loading2");
-      }, 500);
+      if (this.tmfinished && this.finished) {
+        this.loading = false;
+        this.allFinish = true;
+      } else {
+        this.allFinish = false;
+      }
+      if (this.tmerror && this.error) {
+        this.error = true;
+      } else {
+        this.error = false;
+      }
+      console.log(this.allFinish, "allFinishl--loading2");
     },
 
     // 初始化数据--暂时不用
