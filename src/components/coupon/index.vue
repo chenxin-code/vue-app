@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-03 17:32:18
+ * @LastEditTime: 2021-08-03 18:07:33
 -->
 <template>
   <div class="get-coupons-page">
@@ -145,11 +145,10 @@ export default {
               this.couponDetail.voucherAmount
             );
 
-            this.$forceUpdate();
+            // this.$forceUpdate();
           } else {
             this.$toast(res.message);
           }
-          console.log(`couponDetail`, this.couponDetail);
         })
         .finally(() => {
           Toast.clear(); //关闭页面loading
