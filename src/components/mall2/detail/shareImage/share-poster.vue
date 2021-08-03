@@ -309,6 +309,8 @@ export default {
     padding: 10px 15px;
     .share-desc {
         font-size: 13px;
+        margin-top 5px;
+        line-height: 20px;
 
     }
   }
