@@ -4488,7 +4488,7 @@ export default {
     } else {
       this.getDatas();
     }
-    this.distributionInit();
+    // this.distributionInit();
   },
   activated() {
     if (
@@ -4656,10 +4656,11 @@ export default {
 
   .share_botton {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 
     .share_botton_item {
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
