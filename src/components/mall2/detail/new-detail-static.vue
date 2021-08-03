@@ -1638,23 +1638,45 @@
       position="bottom"
       :style="{ height: '35%' }"
     >
-      <div class="share_popup">
+      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="static/image/mall2/share_img.png" alt="" />
-            <div>图文分享</div>
-          </div>
           <div class="share_botton_item" @click="shareImg('poster')">
             <img src="static/image/mall2/share_link.png" alt="" />
-            <div>海报分享</div>
+            <div>推广海报</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('imageText')">
+            <img src="./shareImage/image/picText.png" alt="" />
+            <div>图文推广</div>
+          </div>
+
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>
+
+      <div class="share_popup" v-else>
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="defaultShareImg">
+            <img src="static/image/mall2/share_img.png" alt="" />
+            <div>图片分享</div>
+          </div>
+          <div class="share_botton_item" @click="shareLink">
+            <img src="static/image/mall2/share_link.png" alt="" />
+            <div>链接分享</div>
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
+
     </van-popup>
     <sharePoster
       v-if="showPoster"
@@ -2170,6 +2192,9 @@ export default {
         //   query: params
         // })
       }
+    },
+    defaultShareImg() {
+      this.showShare();
     },
     shareLink() {
       this.$router.push({
