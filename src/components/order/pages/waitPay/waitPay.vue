@@ -506,7 +506,7 @@ export default {
             this.isLoadPropertyBill = true;
           } else {
             //人房为空（游客）,隐藏物业缴费组件。应显示empty空页面
-            if (this.userRoomId == "") {
+            if (this.userRoomId == "" && this.billResults.length == 0) {
               this.isLoadPropertyBill = false;
             } else {
               this.isLoadPropertyBill = true;
