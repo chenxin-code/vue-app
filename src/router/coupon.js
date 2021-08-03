@@ -97,5 +97,14 @@ module.exports = [
     meta: {
       keepAlive: false
     }
+  },
+  {
+    path: '/get_distr_coupon', // 分销-领取优惠券
+    name: '领取优惠券',
+    component: () => import('@/components/coupon/index'),
+    meta: {
+      keepAlive: false,
+      title: '领取优惠券'
+    }
   }
 ]

@@ -616,8 +616,13 @@ export default {
               this.$store.state.webtype !== "3" &&
               this.$store.state.webtype !== "2"
             ) {
-              document.getElementsByTagName("body")[0].style.paddingTop =
+              if(value[0].path == '/mall2/detail/:id'){
+                document.getElementsByTagName("body")[0].style.paddingTop =
+                "1.17333rem";
+              }else{
+                document.getElementsByTagName("body")[0].style.paddingTop =
                 "0.4rem";
+              }
               this.$store.state.notIndexIsX = true;
             }
           }

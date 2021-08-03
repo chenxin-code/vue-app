@@ -21,7 +21,7 @@
             <van-radio-group v-model="proSkuHasStock" direction="horizontal" icon-size='16px' checked-color='#f80f16'>
               <van-radio name="">全部</van-radio>
               <van-radio name="1">有库存</van-radio>
-              <van-radio name="0">无库存</van-radio>
+              <!-- <van-radio name="0">无库存</van-radio> -->
             </van-radio-group>
           </div>
         </div>

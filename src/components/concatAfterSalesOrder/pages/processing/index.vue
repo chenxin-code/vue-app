@@ -11,8 +11,8 @@
         :immediate-check="false"
       >
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="item in currentOrderList"
+          :key="item.id"
           class="scroll"
         >
           <AfterSalesItem :orderItem="item" />
@@ -151,7 +151,7 @@ export default {
         ? (url =
             "https://mall-uat-api-linli.timesgroup.cn:1443/times-center-trade/mall/after/sale/list")
         : (url =
-            "https://mall-prod-app-linli.timesgroup.cn:9001/times-center-trade/mall/after/sale/list");
+            "https://mall-prod-api-linli.timesgroup.cn:8200/times-center-trade/mall/after/sale/list");
       let parmas = {
         afterSaleStateList: ["APPROVING", "APPROVED"],
         afterSaleType: "REFUND",

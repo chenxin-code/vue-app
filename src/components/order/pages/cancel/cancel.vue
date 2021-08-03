@@ -12,8 +12,8 @@
         offset="10"
       >
         <div
-          v-for="(item, index) in currentOrderList"
-          :key="index"
+          v-for="(item,index) in currentOrderList"
+          :key="item.id +'_'+index"
           class="scroll"
         >
           <OrderItem
@@ -374,9 +374,7 @@ export default {
     /*按时间排序*/
     sortKey(array, key) {
       return array.sort(function(a, b) {
-        var x = a[key];
-        var y = b[key];
-        return x > y ? -1 : x < y ? 1 : 0;
+          return Date.parse(b[key]) - Date.parse(a[key]);
       });
     },
     /*服务商城的数据格式化*/

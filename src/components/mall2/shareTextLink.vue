@@ -39,15 +39,24 @@ export default {
     return {
       copyText: "",
       price: "",
-      link: "",
+      skuId: "",
+      link:"",
     };
   },
   created() {
+    console.log('---this.$route.query- shareTextlink--->>', this.$route.query);
     this.price = this.$route.query.price;
+    this.skuId = this.$route.query.skuId;
+    // this.link = this.$route.query.link + "&channel=fromApp";
     this.link = this.$route.query.link;
     this.copyText = this.$route.query.goodsTitle;
     this.goods_share_data = JSON.parse(this.$route.query.goods_share_data);
     console.log({...this.goods_share_data})
+    if(this.$store.state.environment !== 'production'){
+      this.link = `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&channel=fromApp`
+    }else{
+      this.link = `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&channel=fromApp`
+    }
   },
   methods: {
     copy() {

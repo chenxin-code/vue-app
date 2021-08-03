@@ -2,11 +2,11 @@
 
 <template>
   <div class="index theme_bg_white" @click.stop="closeEvent">
-    <div class="index-div">
-      <span class="cindex">{{proImgIndex}}</span>
+    <!-- <div class="index-div">
+      <span class="cindex">{{initIndex}}</span>
       <span>/</span>
       <span class="total">{{picUrls.length}}</span>
-    </div>
+    </div> -->
     <swiper :options="swiperOption1" class="swiper-arr">
       <swiper-slide v-for="(pic, pidx) in picUrls" :key="pidx" class="swiper-arr">
         <div class="swiper-arr-div">

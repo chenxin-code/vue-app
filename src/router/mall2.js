@@ -53,6 +53,15 @@ module.exports = [
     }
   },
   {
+    path: '/mall2/savePicture',
+    name: '商品分享',
+    component: () => import('@/components/mall2/savePicture'),
+    // component: () => import('@/components/mall2/detail/detail'),
+    meta: {
+      keepAlive: false
+    }
+  },
+  {
     path: '/mall2/newdetail/:id',
     name: '商品详情',
     component: () => import('@/components/mall2/detail/new-detail'),

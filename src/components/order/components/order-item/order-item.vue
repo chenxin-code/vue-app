@@ -439,6 +439,7 @@ export default {
           break;
         case 9:
           sClass = "icon3";
+
           break;
         case 10:
           sClass = "icon4";
