@@ -553,6 +553,10 @@ export default {
           this.onLoad();
           console.log("currentOrderList.length",this.currentOrderList);
         }
+        this.$nextTick(()=>{
+          this.currentOrderList = [...new Set(this.currentOrderList)]
+          console.log('[...new Set(this.currentOrderList)]',[...new Set(this.currentOrderList)])
+        })
       }
       /*按时间排序*/
       console.log("合并完成",this.currentOrderList);
