@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-03 18:24:37
+ * @LastEditTime: 2021-08-04 09:33:56
 -->
 <template>
   <div class="get-coupons-page">
@@ -77,7 +77,6 @@ export default {
     this.userSummary = this.$store.state;
     this.memberId = this.userSummary.userInfo.userCode;
     console.log(`this.userSummary`, this.userSummary.userInfo);
-
     // get_distr_coupon?shareCode=lec5bn&memberId=2331048196588962398&couActivitiesId=2632817580967985166&couTypeCode=10SC000173
     this.shareCode = this.query.shareCode;
     this.toast();
@@ -173,6 +172,67 @@ export default {
     },
     //立即领取
     receiveCoupon: _.debounce(function() {
+      if (!this.memberId) {
+        this.$http
+          .post("/app/json/user/getUserSummary", {
+            deliveryType: "2",
+            orderCategory: "0"
+          })
+          .then(res => {
+            let data = res.data;
+            if (data.status == 0) {
+              let d = data.data;
+              this.memberId = d.userInfo.userCode;
+            }
+          })
+          .finally(() => {
+            this.receiveFn();
+          });
+      } else {
+        this.receiveFn();
+      }
+    }),
+    //保存
+    save() {
+      const host = process.env.VUE_APP_DISTR_APP;
+      const api = host + "/times/distr-service/coupon_distr_distributor/save";
+      const params = {
+        couNoList: this.couNoList, //优惠劵id
+        parentShareCode: this.shareCode //分享码
+      };
+      bffHttp("POST", api, params).then(res => {
+        // this.$http.post(api, JSON.stringify(params)).then(res => {
+        console.log(`save`, res);
+      });
+    },
+    //立即使用
+    goToShopping: _.debounce(function() {
+      Toast.loading({
+        duration: 0,
+        type: "loading",
+        message: "正在跳转",
+        forbidClick: true
+      });
+      this.$router.push({
+        path: "/common"
+      });
+      Toast.clear(); //关闭页面loading
+    }),
+    getUserSummary: function() {
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          let data = res.data;
+          if (data.status == 0) {
+            let d = data.data;
+            this.memberId = d.userInfo.userCode;
+          }
+        });
+    },
+    receiveFn() {
       this.toast();
       const centerHost = process.env.VUE_APP_CENTER_APP;
       const url =
@@ -182,7 +242,6 @@ export default {
         couActivitiesId: this.query.couActivitiesId,
         memberId: this.memberId
       };
-      // bffHttp("POST", url, obj)
       this.$http
         .post(url, JSON.stringify(obj))
         .then(res => {
@@ -215,33 +274,7 @@ export default {
         })
         .finally(() => {})
         .catch(err => {});
-    }),
-    //保存
-    save() {
-      const host = process.env.VUE_APP_DISTR_APP;
-      const api = host + "/times/distr-service/coupon_distr_distributor/save";
-      const params = {
-        couNoList: this.couNoList, //优惠劵id
-        parentShareCode: this.shareCode //分享码
-      };
-      bffHttp("POST", api, params).then(res => {
-        // this.$http.post(api, JSON.stringify(params)).then(res => {
-        console.log(`save`, res);
-      });
-    },
-    //立即使用
-    goToShopping: _.debounce(function() {
-      Toast.loading({
-        duration: 0,
-        type: "loading",
-        message: "正在跳转",
-        forbidClick: true
-      });
-      this.$router.push({
-        path: "/common"
-      });
-      Toast.clear(); //关闭页面loading
-    })
+    }
   }
 };
 </script>
