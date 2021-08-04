@@ -43,8 +43,8 @@
           </div>
         </property-bill>
         <div
-          v-for="(item,index) in currentOrderList"
-          :key="item.id +'_'+index"
+          v-for="(item, index) in currentOrderList"
+          :key="item.id + '_' + index"
           class="scroll"
         >
           <OrderItem
@@ -156,7 +156,8 @@ export default {
        */
       reqBillType: "2,3,4,5,6,7,8,9,10,11,13,14",
       isShowErrorMsg: false,
-      errorMsg: ""
+      errorMsg: "",
+      finishBillList: []
     };
   },
   components: {
@@ -408,6 +409,7 @@ export default {
             //接口发送请求成功
             if (results.code === 200) {
               this.billResults = results.data.notpay;
+              this.finishBillList = results.data.finish;
               this.billResults.forEach(item => {
                 item.totalPrice = item.totalPayableAmount;
                 item.billId = item.spaceId;
@@ -506,7 +508,11 @@ export default {
             this.isLoadPropertyBill = true;
           } else {
             //人房为空（游客）,隐藏物业缴费组件。应显示empty空页面
-            if (this.userRoomId == "" && this.billResults.length == 0) {
+            if (
+              this.userRoomId == "" &&
+              this.billResults.length == 0 &&
+              this.finishBillList.length == 0
+            ) {
               this.isLoadPropertyBill = false;
             } else {
               this.isLoadPropertyBill = true;
@@ -544,6 +550,7 @@ export default {
       this.checkData = new Set();
       this.mergeAmount = 0; //合计选中的账单总金额
       this.billResults = []; //清空物业账单数据
+      this.finishBillList = [];
       this.currentOrderList = []; //清空订单数据
       this.$refs.payDiv.isChecked = false; //取消勾选全选按钮
       this.$refs.payDiv.isShow = false; // 隐藏全选按钮
