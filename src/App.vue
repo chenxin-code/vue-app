@@ -192,6 +192,7 @@ export default {
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
     // })
+    initSensors();
   },
   computed: {
     appBackHomeImg() {

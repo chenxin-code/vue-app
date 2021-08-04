@@ -1932,6 +1932,8 @@ export default {
       detailView: 1, //默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
       reachBottom: false, //是否到达底部,
       viewpoint_radio: 0,
+      duration:0,
+      interval:null,
     };
   },
   computed: {
@@ -1965,6 +1967,11 @@ export default {
     window.addEventListener("scroll", this.handleScroll, true); // 监听（绑定）滚轮滚动事件
     console.log("商品详情参数", this.$route.query);
     console.log("商品详情路径", window.location);
+    clearInterval(this.interval)
+    this.interval = setInterval(()=>{
+      this.duration++;
+      console.log(this.duration)
+    },1000)
   },
   watch: {
     introduction1(val) {
@@ -2091,6 +2098,9 @@ export default {
       });
     },
     shareSensors(share_type) {
+      clearInterval(this.interval)
+      console.log('this.duration',this.duration)
+      console.log('this.detailData',this.detailData)
       this.$sensors.track("goods_share", {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
