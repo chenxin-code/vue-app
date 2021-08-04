@@ -31,13 +31,19 @@
 
       <!-- <img :src="canvasData" alt=""> -->
 
-      <div class="overlay-content" v-if="!showResult && isPoster">
+      <div
+        class="overlay-content"
+        v-if="!showResult && isPoster"
+        @click="saveIOS"
+      >
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
+
         <div v-if="!isShowPoster && !isCanvas" ref="poster">
           <img :src="proImgUrl" class="main-poster" />
           <div class="poster-user-message">
             <div>
-              <img :src="proUserUrl" class="user-image" />
+              <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
+              <img src="./image/default-image.jpeg" class="user-image" />
             </div>
             <div class="poster-user-right">
               <div class="poster-user-name">{{ shareParams.userName }}</div>
@@ -56,7 +62,13 @@
             </div>
           </div>
         </div>
-        <img :src="canvasData" alt="" v-if="isCanvas" style="width: 100%" />
+        <img
+          :src="canvasData"
+          alt=""
+          v-if="isCanvas"
+          style="width: 100%"
+          @click="saveIOS"
+        />
         <div class="overlay-content-bottom">
           <div class="share-money">
             分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
@@ -120,6 +132,18 @@ export default {
     });
   },
   methods: {
+    isIOS() {
+      var u = navigator.userAgent;
+      return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    },
+    saveIOS() {
+      if (this.isIOS()) {
+        appCamera.saveImageToAlbum({
+          type: "base64",
+          imageData: this.canvasData
+        });
+      }
+    },
     saveData() {
       this.shareParams.picUrls.forEach(item => {
         appCamera.saveImageToAlbum({
