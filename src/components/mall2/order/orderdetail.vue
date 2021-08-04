@@ -34,7 +34,7 @@
                     <span class="price-z">{{
                       detailData.dpedData.integer
                     }}</span>
-                    <span class="left-no-space"
+                    <span class="left-no-space price-z"
                       >.{{ detailData.dpedData.decimals }}</span
                     >
                     <span>元</span>

@@ -65,8 +65,7 @@
           <CartList
             v-for="(item, index) in topArr"
             :ref="getCartRef(item.type)"
-            v-if="item.hasShow"
-            v-show="deliverType == item.type"
+            v-show="deliverType == item.type && item.hasShow"
             :deliverType="item.type"
             :key="index"
             :isEditing="isEditing"
