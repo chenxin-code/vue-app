@@ -4488,7 +4488,7 @@ export default {
     } else {
       this.getDatas();
     }
-    // this.distributionInit();
+    this.distributionInit();
   },
   activated() {
     if (
