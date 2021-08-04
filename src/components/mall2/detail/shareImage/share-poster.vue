@@ -43,7 +43,7 @@
           <div class="poster-user-message">
             <div>
               <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
-              <img src="./image/default-image.jpeg" class="user-image" />
+              <img src="./image/default-image.jpeg" class="user-image" v-else />
             </div>
             <div class="poster-user-right">
               <div class="poster-user-name">{{ shareParams.userName }}</div>
