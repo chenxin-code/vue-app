@@ -1158,7 +1158,7 @@ export default {
               orderType: item.orderType, //订单类型
               shopOrderNo: sub.storeOuCode,
               tradeNo: item.tradeNo
-            };
+            }
           })
         };
       });

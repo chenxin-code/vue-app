@@ -119,10 +119,10 @@ export default {
           case "新首页":
             this.currentSelect = 0;
             this.setShowCategory(true);
-            return "#f74440";
+            return "#f44981";
 
           default:
-            return "#ffffff";
+            return "#f44981";
         }
       },
       set() {},

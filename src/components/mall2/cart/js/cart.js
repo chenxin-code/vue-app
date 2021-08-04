@@ -390,6 +390,7 @@ let cart = {
         goods_id:cartitem.skuId,
         goods_name:cartitem.productName,
         categoryName:cartitem.categoryName,
+        categoryId:cartitem.categoryId,
         goods_quantity:cartitem.number,
         // tag:this.tagList,
         // goods_cls1:this.categoryList[0],
