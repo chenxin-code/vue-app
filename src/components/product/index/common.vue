@@ -194,7 +194,7 @@ export default {
       pgCode: "",
       pageShow: false,
       payOrderShow: true,
-      pageData: null,
+      pageData: {},
       fullPageData: {},
       tabbarSubDatas: [],
       selectedIndex: -1,
