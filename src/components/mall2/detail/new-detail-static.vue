@@ -2003,7 +2003,7 @@ export default {
         ? (url =
             "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
         : (url =
-            "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
+            "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
       console.log("----distributionMessage------");
       this.$http.get(url).then(
         res => {
@@ -2023,7 +2023,7 @@ export default {
         ? (url =
             `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
         : (url =
-            `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+            `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
 
 
       fetchMethod("GET", url).then(res => {
@@ -2037,7 +2037,7 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
-        : (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
       fetchMethod("POST", url).then(res => {
         if (res.code == 200 && res.data) {
           this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
@@ -2158,23 +2158,26 @@ export default {
     shareImg(type) {
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
+      const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+       : `https://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+
+
       let params = {
         type,
         picUrls,
         salePrice,
         skuName,
         userImage:
-          this.$store.state.userLable.userImage ||
-          "https://times-uat-backend.oss-cn-shenzhen.aliyuncs.com/oss-backend/c-user-center/9921587590161_1610957853575.jpg",
-        userName: this.$store.state.userLable.userName || "13570434851",
+          this.$store.state.ythUserInfo.userImage,
+        userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
-        qrCode:
-          this.qrCode ||
-          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAABuklEQVR42u2YMY6EMAxFjShScoTchLkYEkhcDG6SI1CmQPH+7wA7mtWWY1arSYFCHsVXYn87iP425EP+OplEpJtTWLrdvkt4b13JrFq6KepSsSa1NU+SpMciFeEBkiHVn+wivUgM69beRKYozdZqWFVvIDyfQ5vqNr6cnAM5YjT35+M1et9OjmFHA5U/M/jtZFYLT0uVAKkx91eeOpFEWaqLjIgVLGaR0ZVA0UJtK4IjU2W+Ts6J7BGLg+jKmWIWijNhZMoQc7ONGgot89stfQjCU+18kKz2TbBAdSSIUb7Dq8ZaMcJTljgReCT84cE90Q2mvVxu6UOwO4WRyQTBDKO5PMSHUBaCAyuDLZpluhJoY55m1qxauBZvQm1tIlZW8Iiqqa5kqiFRm7hS24fRmVhkguyCjKVnnD2sE6l5KkxRFgs4hRmHJ0nUJlqAM/uop6rpQyYuYnfoFDVPH1f35ENszJofLFw26zt1JbV/O0zb6rY3Oe4ywJPko3dpfYndZVg1a74IjeMGArfkTNhGFrmBKDtIK96I1t6b8Hxo2nBuyLLq5UvOe32ptylcbJuXPwvvJp+/OP+MfAHFBFzKqJvZYAAAAABJRU5ErkJggg==",
+        qrCode: this.qrCode,
         estimatedCommission: this.estimatedCommission,
-        link: `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+        link
       };
       this.showSharePopup = false;
+      // 判断容器环境，如果是微信小程序跳转到微信小程序原生进行分享操作
+      // 两套
       let ua = window.navigator.userAgent.toLowerCase();
       let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
       console.log("------isWX", isWX);
@@ -4488,7 +4491,7 @@ export default {
     } else {
       this.getDatas();
     }
-    // this.distributionInit();
+    this.distributionInit();
   },
   activated() {
     if (
