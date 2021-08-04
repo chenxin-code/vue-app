@@ -10,8 +10,8 @@
              @click="setCartSel(cartitem,storeitem,occuritem)"></i>
         </div>
         <div class="cell-content">
-          <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
-            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
+          <div class="good-content" >
+            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}" @click.stop="enterGoodDetail(cartitem)">
               <div class="click-div"></div>
               <img :src="cartitem.phPictureUrl" alt="">
               <div class="cart-item-state theme_font_white" v-if="cartitem.state == 1 || cartitem.state == 4">
