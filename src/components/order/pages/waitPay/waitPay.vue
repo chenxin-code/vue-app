@@ -525,7 +525,8 @@ export default {
             this.billResults.length === 0 &&
             this.currentOrderList.length === 0 &&
             !this.error &&
-            this.userRoomId == ""
+            this.userRoomId == "" &&
+            this.finishBillList.length === 0
           ) {
             this.showEmpty = true;
           } else {
