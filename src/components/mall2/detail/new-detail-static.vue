@@ -2168,8 +2168,8 @@ export default {
         salePrice,
         skuName,
         userImage:
-          this.$store.state.userLable.userImage,
-        userName: this.$store.state.userLable.userName,
+          this.$store.state.ythUserInfo.userImage,
+        userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
         estimatedCommission: this.estimatedCommission,
