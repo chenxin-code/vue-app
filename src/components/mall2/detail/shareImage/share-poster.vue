@@ -31,11 +31,7 @@
 
       <!-- <img :src="canvasData" alt=""> -->
 
-      <div
-        class="overlay-content"
-        v-if="!showResult && isPoster"
-        @click="saveIOS"
-      >
+      <div class="overlay-content" v-if="!showResult && isPoster">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
 
         <div v-if="!isShowPoster && !isCanvas" ref="poster">
@@ -67,7 +63,7 @@
           alt=""
           v-if="isCanvas"
           style="width: 100%"
-          @click="saveIOS"
+          ref="posterPicture"
         />
         <div class="overlay-content-bottom">
           <div class="share-money">
@@ -75,7 +71,7 @@
           </div>
           <div class="share-check">佣金可在“分销员中心”里查看</div>
         </div>
-        <div class="finger" @click="savePoster">
+        <div class="finger" ref="fingerSave">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
         </div>
@@ -123,6 +119,9 @@ export default {
     html2canvas(this.$refs.poster).then(canvas => {
       this.canvasData = canvas.toDataURL("image/png");
       this.isCanvas = true;
+      this.getImages('posterPicture');
+      this.getImages('fingerSave');
+
       window.saveImageToAlbum = () => {
         appCamera.saveImageToAlbum({
           type: "base64",
@@ -132,17 +131,31 @@ export default {
     });
   },
   methods: {
+    getImages(ref) {
+      const that = this;
+      window.time = 0;
+      var objs = this.$refs[ref];
+      objs.addEventListener("touchstart", function(e) {
+        e.stopPropagation();
+        time = setTimeout(function() {
+          //这里写需要执行操作的代码
+          console.log("--------2000ms");
+          if (that.isIOS()) {
+            appCamera.saveImageToAlbum({
+              type: "base64",
+              imageData: that.canvasData
+            });
+          }
+        }, 2000); //这里设置长按响应时间
+      });
+      objs.addEventListener("touchend", function(e) {
+        e.stopPropagation();
+        clearTimeout(time);
+      });
+    },
     isIOS() {
       var u = navigator.userAgent;
       return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    },
-    saveIOS() {
-      if (this.isIOS()) {
-        appCamera.saveImageToAlbum({
-          type: "base64",
-          imageData: this.canvasData
-        });
-      }
     },
     saveData() {
       this.shareParams.picUrls.forEach(item => {
@@ -162,7 +175,6 @@ export default {
       this.showResult = true;
     },
     savePoster() {
-      console.log("-----savePoster");
       //   window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
       //     JSON.stringify({
       //       // businessCstNo, //会员标识
