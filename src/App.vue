@@ -192,7 +192,7 @@ export default {
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
     // })
-    appLocalstorage.get({ key: "LLBPhone_encrypt" }).then(res => {
+    appLocalstorage.get({ key: "LLBPhone_encrypt",isPublic: true }).then(res => {
       console.log('加密手机号',res)
     });
   },
