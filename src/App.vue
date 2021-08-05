@@ -195,6 +195,7 @@ export default {
     // appLocalstorage.get({ key: "LLBPhone_encrypt",isPublic: true }).then(res => {
     //   console.log('加密手机号',res)
     // });
+    
   },
   computed: {
     appBackHomeImg() {

@@ -1932,8 +1932,8 @@ export default {
       detailView: 1, //默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
       reachBottom: false, //是否到达底部,
       viewpoint_radio: 0,
-      duration:0,
-      interval:null,
+      // duration:0,
+      // interval:null,
       // distributionPersonDetail:{},
     };
   },
@@ -1968,11 +1968,11 @@ export default {
     window.addEventListener("scroll", this.handleScroll, true); // 监听（绑定）滚轮滚动事件
     console.log("商品详情参数", this.$route.query);
     console.log("商品详情路径", window.location);
-    clearInterval(this.interval)
-    this.interval = setInterval(()=>{
-      this.duration++;
-      console.log(this.duration)
-    },1000)
+    // clearInterval(this.interval)
+    // this.interval = setInterval(()=>{
+    //   this.duration++;
+    //   console.log(this.duration)
+    // },1000)
   },
   watch: {
     introduction1(val) {
@@ -2098,29 +2098,29 @@ export default {
         // );
       });
     },
-    // shareSensors(share_type) {
-    //   clearInterval(this.interval)
-    //   this.$sensors.track("goods_share", {
-    //     referrer_id:this.distributionPersonDetail.distributorId,
-    //     top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-    //     goods_id: this.skuId,
-    //     goods_name: this.detailData.skuName,
-    //     tag: this.tagList,
-    //     goods_cls1: this.categoryList[0],
-    //     goods_cls2: this.categoryList[1],
-    //     goods_cls3: this.categoryList[2],
-    //     goods_cl3_id: this.detailData.categoryId,
-    //     org_price: this.detailData.activityPrice,
-    //     price: this.detailData.salePrice,
-    //     goods_quantity: this.selectedNum,
-    //     store_id: this.detailData.storeOuCode,
-    //     store_name: this.detailData.storeOuName,
-    //     merchant_id: this.detailData.ouCode,
-    //     merchant_name: this.detailData.ouName,
-    //     viewpoint_radio: this.viewpoint_radio,
-    //     share_type: share_type,
-    //   });
-    // },
+    shareSensors(share_type) {
+      // clearInterval(this.interval)
+      this.$sensors.track("goods_share", {
+        // referrer_id:this.distributionPersonDetail.distributorId,
+        // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+        goods_id: this.skuId,
+        goods_name: this.detailData.skuName,
+        tag: this.tagList,
+        goods_cls1: this.categoryList[0],
+        goods_cls2: this.categoryList[1],
+        goods_cls3: this.categoryList[2],
+        // goods_cl3_id: this.detailData.categoryId,
+        org_price: this.detailData.activityPrice,
+        price: this.detailData.salePrice,
+        goods_quantity: this.selectedNum,
+        store_id: this.detailData.storeOuCode,
+        store_name: this.detailData.storeOuName,
+        merchant_id: this.detailData.ouCode,
+        merchant_name: this.detailData.ouName,
+        viewpoint_radio: this.viewpoint_radio,
+        share_type: share_type,
+      });
+    },
     onShare() {
       console.log(
         this.detailData.picUrls[0] +
@@ -3547,7 +3547,7 @@ export default {
       this.showPop = false;
     },
     // 请求详情信息
-    async _getProductDetail () {
+    _getProductDetail :function () {
       this.$Loading.open();
 
       let storeOuCode = this.$route.query.storeOuCode
