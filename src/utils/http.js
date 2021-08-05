@@ -108,6 +108,18 @@ Axios.interceptors.request.use(
       config.headers["Content-Type"] = "application/json"
     }
 
+    if(/\/distr\-service\/customer\/api\/v1\/distr\/get\_simple\_data/.test(config.url)){
+      if (store.state.webtype == "2" || store.state.webtype == "3") {
+        config.headers.Authorization = localStorage.getItem('ythToken')
+      } else {
+        let ythToken = '';
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          ythToken = res.result;
+        });
+        config.headers.Authorization = ythToken
+      }
+    }
+
     //中台接口要带一体化token
 
     /*物业系统请求处理逻辑

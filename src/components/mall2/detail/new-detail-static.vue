@@ -1229,6 +1229,7 @@
                 :skuId="this.skuId"
                 v-show="toptab == 4"
                 v-if="load4"
+                @sensorsDuration="sensorsDuration"
               ></Recommend>
             </div>
           </div>
@@ -1932,6 +1933,9 @@ export default {
       detailView: 1, //默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
       reachBottom: false, //是否到达底部,
       viewpoint_radio: 0,
+      duration:0,
+      interval:null,
+      distributionPersonDetail:{},
     };
   },
   computed: {
@@ -1965,6 +1969,11 @@ export default {
     window.addEventListener("scroll", this.handleScroll, true); // 监听（绑定）滚轮滚动事件
     console.log("商品详情参数", this.$route.query);
     console.log("商品详情路径", window.location);
+    clearInterval(this.interval)
+    this.interval = setInterval(()=>{
+      this.duration++;
+      console.log(this.duration)
+    },1000)
   },
   watch: {
     introduction1(val) {
@@ -2091,13 +2100,17 @@ export default {
       });
     },
     shareSensors(share_type) {
+      clearInterval(this.interval)
       this.$sensors.track("goods_share", {
+        referrer_id:this.distributionPersonDetail.distributorId,
+        top_referrer_id:this.distributionPersonDetail.parentDistributorId,
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
         goods_cls1: this.categoryList[0],
         goods_cls2: this.categoryList[1],
         goods_cls3: this.categoryList[2],
+        goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
         goods_quantity: this.selectedNum,
@@ -2208,6 +2221,9 @@ export default {
           skuId: this.skuId,
           goodsTitle: this.getSkuNameStr(this.detailData),
           goods_share_data: JSON.stringify({
+            referrer_id:this.distributionPersonDetail.distributorId,
+            top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
@@ -2833,10 +2849,15 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
+      let to = {
+        path:"",
+      };
       window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
       if (this.$route.query.channel == "fromApp") {
+        to.path = 'fromApp';
+        this.sensorsDuration(to);
         if (this.$util.isAndroid()) {
           window.location.href = `x-engine-json://yjzdbill/webToApp?args=&callback=${encodeURIComponent(
             // location.origin
@@ -2866,6 +2887,7 @@ export default {
           goods_cls1: this.categoryList[0],
           goods_cls2: this.categoryList[1],
           goods_cls3: this.categoryList[2],
+          goods_cl3_id: this.detailData.categoryId,
           org_price: this.detailData.activityPrice,
           price: this.detailData.salePrice,
           store_id: this.detailData.storeOuCode,
@@ -2879,6 +2901,8 @@ export default {
           this.$store.state.webtype != "3"
         ) {
           if (this.backApp) {
+            to.path = 'fromApp';
+            this.sensorsDuration(to);
             appNav.navigatorBack({ url: "0" }).then((res) => {
               console.log(res);
             });
@@ -2888,11 +2912,27 @@ export default {
 
         if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
           if (window.history.length === 1) {
+            to.path = '/common';
+            this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
+            console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+            to.path = this.$store.state.inToDetail == "search"
+              ? '/search'
+              : this.$store.state.inToDetail == "list"
+              ? '/list'
+              : '/common'
+            this.sensorsDuration(to);
             this.$router.go(-1);
           }
         } else {
+          console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+          to.path = this.$store.state.inToDetail == "search"
+            ? '/search'
+            : this.$store.state.inToDetail == "list"
+            ? '/list'
+            : '/common'
+          this.sensorsDuration(to);
           this.$router.go(-1);
           this.$keepaliveHelper.deleteCache(this);
         }
@@ -3508,7 +3548,7 @@ export default {
       this.showPop = false;
     },
     // 请求详情信息
-    _getProductDetail: function () {
+    async _getProductDetail () {
       this.$Loading.open();
 
       let storeOuCode = this.$route.query.storeOuCode
@@ -3545,6 +3585,8 @@ export default {
           ? this.$route.query.storeOuCode
           : "1";
       }
+
+      this.distributionPersonDetail = await this.getDistributionDetail();
 
       let url = "/appcontent/js/product/productDetail.js";
       let funcName = "productDetail_" + this.skuId;
@@ -3752,6 +3794,9 @@ export default {
           this.categoryList = this.detailData.categoryName.split("_");
           console.log("category", this.detailData.categoryName, this.tagList);
           this.$sensors.track("goods_detail_view", {
+            referrer_id:this.distributionPersonDetail.distributorId,
+            top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
             module_source:
               this.$store.state.inToDetail == "common"
                 ? "商城臻选专场"
@@ -3913,6 +3958,9 @@ export default {
             this.showProductImg = true;
 
             this.$sensors.track("add_to_shoppingcart", {
+              referrer_id:this.distributionPersonDetail.distributorId,
+              top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+              goods_cl3_id: this.detailData.categoryId,
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
@@ -4058,6 +4106,7 @@ export default {
               goods_cls1: this.categoryList[0],
               goods_cls2: this.categoryList[1],
               goods_cls3: this.categoryList[2],
+              goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -4133,6 +4182,9 @@ export default {
               this.isCollect = true;
 
               this.$sensors.track("add_to_favourite", {
+                referrer_id:this.distributionPersonDetail.distributorId,
+                top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+                goods_cl3_id: this.detailData.categoryId,
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
@@ -4446,6 +4498,73 @@ export default {
       }
       return GET;
     },
+    sensorsDuration(to){
+      clearInterval(this.interval)
+      console.log('to.path',to)
+      let jumpPage = "";
+      switch (to.path) {
+        case '/mall2/cart':
+          jumpPage = '购物车'
+          break;
+        case '/common':
+          jumpPage = '商城首页'
+          break;
+        case '/list':
+          jumpPage = '商城商品列表页'
+          break;
+        case '/search':
+          jumpPage = '商品搜索列表页'
+          break;
+        case '/mall2/detail':
+          jumpPage = '推荐商品详情'
+          break;
+        case '/mall2/placeorder':
+          jumpPage = '填写订单'
+          break;
+        case 'fromApp':
+          jumpPage = '返回APP'
+          break;
+      
+        default:
+          jumpPage = ''
+          break;
+      }
+      console.log('jumpPage',jumpPage)
+      this.$sensors.track("goods_detail_view_duration", {
+        referrer_id:this.distributionPersonDetail.distributorId,
+        top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+        goods_id: this.skuId,
+        goods_name: this.detailData.skuName,
+        tag: this.tagList,
+        goods_cls1: this.categoryList[0],
+        goods_cls2: this.categoryList[1],
+        goods_cls3: this.categoryList[2],
+        goods_cl3_id: this.detailData.categoryId,
+        org_price: this.detailData.activityPrice,
+        price: this.detailData.salePrice,
+        store_id: this.detailData.storeOuCode,
+        store_name: this.detailData.storeOuName,
+        merchant_id: this.detailData.ouCode,
+        merchant_name: this.detailData.ouName,
+        jump_page: jumpPage,
+        duration: this.duration,
+      });
+    },
+    getDistributionDetail(){
+      let url = "";
+      // this.$store.state.ythUserInfo.phone
+      this.$store.state.environment == "development" ? url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
+        : url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
+      return new Promise((resolve, reject)=>{
+        this.$http.get(url).then(res=>{
+          if(res.data.code == 200){
+            resolve(res.data.data);
+          }
+        }).catch(err=>{
+          reject(err)
+        })
+      })
+    },
   },
   created() {
     console.log("created");
@@ -4521,6 +4640,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    this.sensorsDuration(to);
     if (to.path == this.lastPath) {
       this.$keepaliveHelper.deleteCache(this);
     } else if (this.lastPath == "" && to.path == "/common") {
