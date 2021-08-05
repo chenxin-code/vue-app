@@ -31,14 +31,10 @@
 
       <!-- <img :src="canvasData" alt=""> -->
 
-      <div
-        class="overlay-content"
-        v-if="!showResult && isPoster"
-        @click="saveIOS"
-      >
+      <div class="overlay-content" v-if="!showResult && isPoster">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
 
-        <div v-if="!isShowPoster && !isCanvas" ref="poster">
+        <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
           <img :src="proImgUrl" class="main-poster" />
           <div class="poster-user-message">
             <div>
