@@ -34,7 +34,7 @@
       <div class="overlay-content" v-if="!showResult && isPoster">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
 
-        <div v-if="!isShowPoster && !isCanvas" ref="poster">
+        <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
           <img :src="proImgUrl" class="main-poster" />
           <div class="poster-user-message">
             <div>
@@ -64,6 +64,7 @@
           v-if="isCanvas"
           style="width: 100%"
           ref="posterPicture"
+          @click="saveIOS"
         />
         <div class="overlay-content-bottom">
           <div class="share-money">
@@ -119,8 +120,8 @@ export default {
     html2canvas(this.$refs.poster).then(canvas => {
       this.canvasData = canvas.toDataURL("image/png");
       this.isCanvas = true;
-      this.getImages('posterPicture');
-      this.getImages('fingerSave');
+      // this.getImages("posterPicture");
+      // this.getImages("fingerSave");
 
       window.saveImageToAlbum = () => {
         appCamera.saveImageToAlbum({
@@ -134,7 +135,9 @@ export default {
     getImages(ref) {
       const that = this;
       window.time = 0;
+      console.log('--getImages--ref-', ref);
       var objs = this.$refs[ref];
+      console.log('--getImages--ref-', objs);
       objs.addEventListener("touchstart", function(e) {
         e.stopPropagation();
         time = setTimeout(function() {
@@ -152,6 +155,14 @@ export default {
         e.stopPropagation();
         clearTimeout(time);
       });
+    },
+    saveIOS() {
+      if (this.isIOS()) {
+        appCamera.saveImageToAlbum({
+          type: "base64",
+          imageData: this.canvasData
+        });
+      }
     },
     isIOS() {
       var u = navigator.userAgent;
