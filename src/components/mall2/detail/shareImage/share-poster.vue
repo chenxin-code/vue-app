@@ -384,7 +384,7 @@ export default {
     display: flex;
     padding: 10px 10px 10px 0;
     height: 90px;
-    width: 250px;
+    // width: 250px;
     overflow: scroll;
 
     .share-image {
