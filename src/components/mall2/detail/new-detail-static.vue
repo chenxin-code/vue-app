@@ -2082,7 +2082,7 @@ export default {
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
       const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-       : `https://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
 
 
       let params = {
