@@ -3792,8 +3792,8 @@ export default {
 
           let distributionUrl = "";
           // this.$store.state.ythUserInfo.phone
-          this.$store.state.environment == "development" ? distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${18825109048}`
-          : distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${18825109048}`;
+          this.$store.state.environment == "development" ? distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
+          : distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
           this.$http.get(distributionUrl).then(res=>{
             if(res.data.code == 200){
               if(res.data.data){
