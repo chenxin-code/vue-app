@@ -106,5 +106,32 @@ module.exports = [
       keepAlive: false,
       title: '领取优惠券'
     }
-  }
+  },
+  {
+    path: '/coupon/get_coupon_list', // 小程序-我的-优惠券
+    name: '我的卡券',
+    component: () => import('@/components/coupon/mine/index'),
+    meta: {
+      keepAlive: false,
+      title: '我的卡券'
+    }
+  },
+  {
+    path: '/coupon/useLog', // 小程序-我的-优惠券使用记录
+    name: '优惠券使用记录',
+    component: () => import('@/components/coupon/useLog/index'),
+    meta: {
+      keepAlive: false,
+      title: '优惠券使用记录'
+    }
+  },
+  {
+    path: '/coupon/exchangeCoupon', // 小程序-我的-优惠券兑换
+    name: '优惠券兑换',
+    component: () => import('@/components/coupon/mine/exchangeCoupon'),
+    meta: {
+      keepAlive: false,
+      title: '优惠券兑换'
+    }
+  },
 ]
