@@ -17,9 +17,8 @@
   <div>
     <div class="order-item">
       <div class="title">
-        <!-- v-if="isWaitPay && billType != 13" -->
         <van-checkbox
-          v-if="isWaitPay"
+          v-if="isWaitPay && billType != 13"
           v-model="isChecked"
           :disabled="isDisabled"
           @change="checkEvent($event, orderItem)"
