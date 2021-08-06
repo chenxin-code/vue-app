@@ -33,7 +33,7 @@
                     <span>需付款： ￥</span>
                     <span class="price-z">{{
                       detailData.dpedData.integer
-                    }}</span>
+                    }}&nbsp;</span>
                     <span class="left-no-space price-z"
                       >.{{ detailData.dpedData.decimals }}</span
                     >
