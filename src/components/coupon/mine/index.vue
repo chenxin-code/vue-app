@@ -107,6 +107,7 @@ const defaultImg = require("../img/coupon-default.jpg");
 export default {
   data() {
     return {
+      memberId: process.env.NODE_ENV === 'development'?'2436937814953168757':this.$store.state.userInfo.userCode,
       pageIndex: 1,
       defaultImg: defaultImg,
       setdefaultAvatar: 'this.src="' + defaultImg + '"',
@@ -116,7 +117,16 @@ export default {
     };
   },
   created() {
-
+    if (!this.memberId) {
+      this.$http.post("/app/json/user/getUserSummary", {
+        deliveryType: "2",
+        orderCategory: "0"
+      }).then(res => {
+        if (res.data.status == 0) {
+          this.memberId = res.data.data.userInfo.userCode;
+        }
+      });
+    }
   },
   methods: {
     //返回上一页
@@ -181,8 +191,7 @@ export default {
       const host = process.env.VUE_APP_CENTER_APP;
       const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
       const params = {
-        // memberId: this.memberId,
-        memberId: "2436937814953168757", //本地测试
+        memberId: this.memberId,
         pageIndex: this.pageIndex,
         businessType: '200001',
         pageSize: 10,

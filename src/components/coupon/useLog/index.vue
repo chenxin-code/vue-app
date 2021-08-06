@@ -136,7 +136,7 @@ export default {
       finished: false,
       showNull: false,
       nullMsg: "",
-      memberId: "",
+      memberId: process.env.NODE_ENV === 'development'?'2436937814953168757':this.$store.state.userInfo.userCode,
       //宠物信息
       petsUpdateList: [],
       busy: false,
@@ -163,7 +163,17 @@ export default {
     }
   },
   created() {
-    this.getList();
+    if (!this.memberId) {
+      this.$http.post("/app/json/user/getUserSummary", {
+        deliveryType: "2",
+        orderCategory: "0"
+      }).then(res => {
+        if (res.data.status == 0) {
+          this.memberId = res.data.data.userInfo.userCode;
+          this.getList();
+        }
+      });
+    }
     //当前屏幕高度
     const clientHeight =
       document.documentElement.clientHeight || document.body.clientHeight;
@@ -209,7 +219,6 @@ export default {
         this.$nextTick(() => {
           const elemetCont = this.$refs[`${ref}Cont`][0];
           const Contheight = elemetCont.offsetHeight;
-
           element.style.height = Contheight + "px";
           this.$refs[`${ref}Icon`][0].style.transform = "rotate(-180deg)";
         });
@@ -228,8 +237,7 @@ export default {
       const host = process.env.VUE_APP_CENTER_APP;
       const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
       const params = {
-        // memberId: this.memberId,
-        memberId: "2436937814953168757", //本地测试
+        memberId: this.memberId,
         pageIndex: this.pageIndex[tabIndex],
         pageSize: 10,
         businessType: 0,
