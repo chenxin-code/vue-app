@@ -64,7 +64,6 @@ export default {
       query: this.$route.query,
       memberId: "",
       userInfo: {},
-      userSummary: {},
       couponDetail: {},
       couNoList: "", //优惠劵id
       isReceive: false //是否领取
@@ -74,9 +73,7 @@ export default {
     [VanImage.name]: VanImage
   },
   created() {
-    this.userSummary = this.$store.state;
-    this.memberId = this.userSummary.userInfo.userCode;
-    console.log(`this.userSummary`, this.userSummary.userInfo);
+    this.memberId = this.$store.state.userInfo.userCode;
     // get_distr_coupon?shareCode=lec5bn&memberId=2331048196588962398&couActivitiesId=2632817580967985166&couTypeCode=10SC000173
     this.shareCode = this.query.shareCode;
     this.toast();
