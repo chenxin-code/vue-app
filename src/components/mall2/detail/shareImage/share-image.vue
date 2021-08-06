@@ -395,10 +395,10 @@ export default {
     background-repeat: no-repeat;
     background-size: 375px 667px;
     width:100%;
-    height:100%
+    height:667px;
     padding: 15px
-    border-top-left-radius 15px
-    border-top-right-radius 15px
+    // border-top-left-radius 15px
+    // border-top-right-radius 15px
     margin-top: -15px;
     .default-poster-header {
       display: flex;
