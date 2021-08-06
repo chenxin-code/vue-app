@@ -1,5 +1,6 @@
 <template>
   <div class="exchange-container">
+    <nav-top title="优惠券使用记录" @backEvent="backEvent"></nav-top>
     <div class="exchange-info">
       <van-tabs v-model="active" :sticky="true" type="card" @click="tabChange">
         <van-tab
@@ -7,104 +8,113 @@
           v-for="(tab, index) in tabList"
           :key="`tab${tab.status}`"
         >
-          <!-- <zk-empty
-            image="coupon"
-            v-if="!loading && !list[index].length"
-            description="暂无优惠券使用"
-          ></zk-empty> -->
-          <div class="bangdou-exchange-wrap">
-            <div class="bangdou-exchange">
-              <div class="bangdou-exchange-body">
-                <div class="exchange-body-item">
-                  <div
-                    class="bangdou-exchange-card"
-                    :class="{ 'row-reverse': item.activity === '4014' }"
-                    v-for="(item, cIndex) in list[index]"
-                    :key="`tab${index}${item.id}`"
-                  >
-                    <div class="exchange-card-item exchange-card-right">
-                      <div class="exchange-card-right-right">
-                        <img
-                          class="goodsimg"
-                          v-if="item.activity !== '4014'"
-                          :src="item.image || defaultImg"
-                        />
-                        <div class="disabled-btn" v-else>
-                          已领取
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            :finished-text="'- 亲, 没有更多了 -'"
+            :immediate-check="false"
+            :offset="10"
+            @load="getList"
+          >
+            <div
+              class="bangdou-exchange-wrap"
+              :style="{
+                height: contentHeight + 'px'
+              }"
+            >
+              <div class="bangdou-exchange">
+                <div class="bangdou-exchange-body">
+                  <div class="exchange-body-item">
+                    <div
+                      class="bangdou-exchange-card"
+                      :class="{ 'row-reverse': item.activity === '4014' }"
+                      v-for="(item, cIndex) in list[index]"
+                      :key="`tab${index}${item.id}`"
+                    >
+                      <div class="exchange-card-item exchange-card-right">
+                        <div class="exchange-card-right-right">
+                          <img
+                            class="goodsimg"
+                            v-if="item.activity !== '4014'"
+                            :src="item.image || defaultImg"
+                          />
+                          <div class="disabled-btn" v-else>
+                            已领取
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="exchange-card-right-left">
-                        <div class="card-right-left-top">
-                          {{ item.couponTitle }}
-                        </div>
-                        <div class="card-right-left-middle">
-                          {{ getTime(item.validityStartTime) }}-{{
-                            getTime(item.validityEndTime)
-                          }}
+                        <div class="exchange-card-right-left">
+                          <div class="card-right-left-top">
+                            {{ item.couponTitle }}
+                          </div>
+                          <div class="card-right-left-middle">
+                            {{ getTime(item.validityStartTime) }}-{{
+                              getTime(item.validityEndTime)
+                            }}
+                          </div>
+                          <div
+                            class="card-right-left-bottom"
+                            @click="collapse(`tab${index}couponDesc${cIndex}`)"
+                          >
+                            使用规则
+                            <van-icon
+                              name="arrow-down"
+                              size="12"
+                              class="icon-arrow-down"
+                              :ref="`tab${index}couponDesc${cIndex}Icon`"
+                            ></van-icon>
+                          </div>
                         </div>
                         <div
-                          class="card-right-left-bottom"
-                          @click="collapse(`tab${index}couponDesc${cIndex}`)"
-                        >
-                          使用规则
-                          <van-icon
-                            name="arrow-down"
-                            size="12"
-                            class="icon-arrow-down"
-                            :ref="`tab${index}couponDesc${cIndex}Icon`"
-                          ></van-icon>
+                          class="card-used"
+                          :class="[
+                            { 'used-img': item.couponStatus === 40 },
+                            { 'expired-img': item.couponStatus === 70 }
+                          ]"
+                        ></div>
+                      </div>
+                      <div class="exchange-card-item exchange-card-left">
+                        <div class="exchange-card-left-top">
+                          <template v-if="item.couponType === 40">
+                            <div class="card-left-top-num">
+                              {{ +item.discountRatio * 10 }}
+                            </div>
+                            <span class="coupon-type">折</span>
+                          </template>
+                          <template v-else>
+                            <div class="card-left-top-type">
+                              ￥
+                            </div>
+                            <div class="card-left-top-num">
+                              {{ item.faceAmount | delPoint }}
+                            </div>
+                          </template>
+                        </div>
+                        <div class="exchange-card-left-bottom">
+                          {{ couponType(item) }}
                         </div>
                       </div>
                       <div
-                        class="card-used"
-                        :class="[
-                          { 'used-img': item.couponStatus === 40 },
-                          { 'expired-img': item.couponStatus === 70 }
-                        ]"
-                      ></div>
-                    </div>
-                    <div class="exchange-card-item exchange-card-left">
-                      <div class="exchange-card-left-top">
-                        <template v-if="item.couponType === 40">
-                          <div class="card-left-top-num">
-                            {{ +item.discountRatio * 10 }}
-                          </div>
-                          <span class="coupon-type">折</span>
-                        </template>
-                        <template v-else>
-                          <div class="card-left-top-type">
-                            ￥
-                          </div>
-                          <div class="card-left-top-num">
-                            {{ item.faceAmount | delPoint }}
-                          </div>
-                        </template>
-                      </div>
-                      <div class="exchange-card-left-bottom">
-                        {{ couponType(item) }}
-                      </div>
-                    </div>
-                    <div
-                      class="coupon-desc-wrap"
-                      :ref="`tab${index}couponDesc${cIndex}`"
-                    >
-                      <div
-                        class="coupon-desc"
-                        :ref="`tab${index}couponDesc${cIndex}Cont`"
+                        class="coupon-desc-wrap"
+                        :ref="`tab${index}couponDesc${cIndex}`"
                       >
-                        <div class="coupon-desc-li" v-html="item.memo"></div>
-                        <div class="coupon-desc-num">
-                          券编号：{{ item.couTypeCode }}
+                        <div
+                          class="coupon-desc"
+                          :ref="`tab${index}couponDesc${cIndex}Cont`"
+                        >
+                          <div class="coupon-desc-li" v-html="item.memo"></div>
+                          <div class="coupon-desc-num">
+                            券编号：{{ item.couTypeCode }}
+                          </div>
                         </div>
                       </div>
+                      <!-- 已使用图片 -->
                     </div>
-                    <!-- 已使用图片 -->
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </van-list>
         </van-tab>
       </van-tabs>
     </div>
@@ -112,14 +122,18 @@
 </template>
 
 <script>
+import moment from "moment";
+import cookie from "js-cookie";
 const defaultImg = require("../img/coupon-default.png");
 export default {
   data() {
     return {
+      contentHeight: "",
       isActive: true,
       active: 0,
       defaultImg: defaultImg,
       loading: false,
+      finished: false,
       showNull: false,
       nullMsg: "",
       memberId: "",
@@ -136,23 +150,82 @@ export default {
           status: "70"
         }
       ],
-      list: [[], []]
+      list: [[], []],
+      pageIndex: []
     };
   },
   components: {},
+  filters: {
+    delPoint(num) {
+      const regexp = /(?:\.0*|(\.\d+?)0+)$/;
+      num = `${num}`;
+      return num.replace(regexp, "$1");
+    }
+  },
   created() {
     this.getList();
+    //当前屏幕高度
+    const clientHeight =
+      document.documentElement.clientHeight || document.body.clientHeight;
+    this.contentHeight =
+      clientHeight -
+      (this.$store.state.barHeight + this.$market.getNavHeight());
   },
   methods: {
+    backEvent() {
+      this.$router.go(-1);
+    },
     getTime(time) {
       const date = new Date(+time);
       return moment(date).format("YYYY.MM.DD");
     },
+    couponType(item) {
+      if (item.couponType === 10) {
+        return `无门槛立减`;
+      } else if (item.couponType === 20 || item.couponType === 40) {
+        const num = this.delPoint(item.satisfyAmount);
+        return `满${num}元可用`;
+      }
+    },
+    delPoint(num) {
+      const regexp = /(?:\.0*|(\.\d+?)0+)$/;
+      num = `${num}`;
+      return num.replace(regexp, "$1");
+    },
     //切换tab
     tabChange(index) {
-      console.log(`切换tab`, index);
+      if (this.list[index].length === 0) {
+        this.pageIndex[index] = 1;
+        this.getList();
+      } else {
+        // this.$refs.scrollContent.scrollTop = 0;
+      }
+    },
+    collapse(ref) {
+      const element = this.$refs[ref][0];
+      const height = element.offsetHeight;
+      if (height === 0) {
+        element.style.display = "block";
+        this.$nextTick(() => {
+          const elemetCont = this.$refs[`${ref}Cont`][0];
+          const Contheight = elemetCont.offsetHeight;
+
+          element.style.height = Contheight + "px";
+          this.$refs[`${ref}Icon`][0].style.transform = "rotate(-180deg)";
+        });
+      } else {
+        element.style.height = 0;
+        const elemetCont = this.$refs[`${ref}Cont`][0];
+        const Contheight = elemetCont.offsetHeight;
+        this.$refs[`${ref}Icon`][0].style.transform = "rotate(0deg)";
+        setTimeout(() => {
+          element.style.display = "none";
+        }, 300);
+      }
     },
     getList() {
+      this.loading = true;
+      const tabIndex = this.active;
       const host = process.env.VUE_APP_CENTER_APP;
       const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
       const params = {
@@ -165,6 +238,13 @@ export default {
       };
       this.$http.get(url, { params: params }).then(res => {
         console.log(`getList`, res);
+        if (res.data.code === 200) {
+          let list = [];
+          res.data.data && (list = res.data.data.records || []);
+          this.list[tabIndex] =
+            params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
+          this.$forceUpdate();
+        }
       });
     }
   }
@@ -183,6 +263,7 @@ export default {
   }
   .exchange-info {
     font-size: 18px;
+    margin-top: 58px;
 
     ::v-deep .van-tabs__wrap {
       height: 42px;
@@ -193,7 +274,7 @@ export default {
       border: none;
       background: #f5f5f7;
       border-radius: 8px;
-      overflow: hidden;
+      // overflow: hidden;
     }
 
     ::v-deep .van-tab {
@@ -216,10 +297,9 @@ export default {
       border-right: none;
     }
 
-    .exchange-tab-wrap {
       .bangdou-exchange-wrap {
-        padding: 20px 16px;
-
+        padding: 20px 16px 103px 16px;
+        overflow-y: scroll;
         .bangdou-exchange {
           .bangdou-exchange-header {
             display: flex;
@@ -253,7 +333,7 @@ export default {
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: stretch;
-                box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.06);
+                box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.12);
                 border-radius: 12px;
                 overflow: hidden;
 
@@ -488,7 +568,6 @@ export default {
           }
         }
       }
-    }
     .card-used {
       width: 49px;
       height: 52px;
