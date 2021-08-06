@@ -11,7 +11,7 @@
           <van-swipe
             style="height: 0.74667rem"
             vertical
-            autoplay="1000"
+            autoplay="2500"
             :show-indicators="false"
             :touchable="false"
           >
@@ -565,8 +565,20 @@ export default {
       padding-right: 12px;
 
       .orderSwiper {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .van-swipe-item {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
         .swipeItem {
-          min-width: 225px;
+          width: 235px;
           height: 28px;
           background: rgba(0, 0, 0, 0.5);
           border-radius: 14px;
@@ -577,15 +589,22 @@ export default {
           text-align: center;
           line-height: 28px;
           display: flex;
-          justify-content: flex-start;
+          justify-content: center;
           align-items: center;
-          padding: 0 13px 0 3px;
+          padding: 0 13px 0 4px;
 
           img {
             width: 22px;
             height: 22px;
             border-radius: 50%;
             margin-right: 9px;
+          }
+
+          .buyerText {
+            flex-wrap: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
 

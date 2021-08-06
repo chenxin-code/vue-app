@@ -298,7 +298,9 @@ export default {
             this.$store.state.ythUserInfo = res.data.data;
             console.log("一体化信息", this.$store.state.ythUserInfo);
             initSensors();
-            this.postAvatar(res.data.data.userImage);
+            if(this.$store.state.webtype != 2 && this.$store.state.webtype != 3){
+              this.postAvatar(res.data.data.userImage);
+            };
             let that = this;
             this.$sensors.quick("isReady", function () {
               console.log(
