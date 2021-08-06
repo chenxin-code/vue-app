@@ -151,7 +151,7 @@ export default {
         }
       ],
       list: [[], []],
-      pageIndex: []
+      pageIndex: [1,1],
     };
   },
   components: {},
@@ -224,26 +224,29 @@ export default {
       }
     },
     getList() {
-      this.loading = true;
       const tabIndex = this.active;
       const host = process.env.VUE_APP_CENTER_APP;
       const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
       const params = {
         // memberId: this.memberId,
-        memberId: "2436937849312908812", //本地测试
-        pageIndex: 1,
-        businessType: 0,
+        memberId: "2436937814953168757", //本地测试
+        pageIndex: this.pageIndex[tabIndex],
         pageSize: 10,
-        state: 70
+        businessType: 0,
+        state: this.tabList[tabIndex].status
       };
+      this.loading = true;
       this.$http.get(url, { params: params }).then(res => {
-        console.log(`getList`, res);
         if (res.data.code === 200) {
           let list = [];
           res.data.data && (list = res.data.data.records || []);
-          this.list[tabIndex] =
-            params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
-          this.$forceUpdate();
+          this.list[tabIndex] = params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
+          this.loading = false;
+          if (this.list.length >= res.data.data.total) {
+            this.finished = true;
+          } else {
+            this.pageIndex[tabIndex]++;
+          }
         }
       });
     }

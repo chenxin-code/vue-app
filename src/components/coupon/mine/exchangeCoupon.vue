@@ -1,7 +1,7 @@
 <template>
   <div class="exchangeCoupon">
     <div class="option">
-      <span class="btn-return" @click="backEvent"></span>
+      <span class="btn-return" @click="$router.go(-1)"></span>
       <span class="nav-title">优惠券兑换</span>
     </div>
     <div class="container">
@@ -40,12 +40,12 @@
         </div>
       </div>
     </div>
-    <!-- <ConfirmPop
+     <ConfirmPop
       :showConfirm="showConfirm"
       :confrimValue="confrimValue"
       :confrimDetail="confrimDetail"
       :confirmTime="confirmTime"
-    /> -->
+    />
     <van-dialog
       class="dialog-success"
       v-model="isSuccessShow"
@@ -68,11 +68,12 @@
 
 <script>
 import moment from "moment";
-
+import ConfirmPop from './../comp/confirmPopDetail';
+import { Toast } from "vant";
 export default {
   name: "exchangeCoupon",
   components: {
-    // ConfirmPop
+    ConfirmPop
   },
   data() {
     return {
@@ -92,22 +93,98 @@ export default {
 
   created() {},
   mounted() {},
-  computed: {},
+  computed: {
+    momentStr() {
+      return param => {
+        if (!param) {
+          return '';
+        } else {
+          return moment(param).format('YYYY/MM/DD');
+        }
+      };
+    }
+  },
   methods: {
-    //返回上一页
-    backEvent() {
-      this.$router.go(-1);
-    },
     moment,
-    toast() {
-      this.$toast.loading({
+    getCamiloExchangeDetail() {
+      const host = process.env.VUE_APP_CENTER_APP;
+      const url = host + "/times/member-bff/member/api-c/v1/member/selectCamilo";
+      const params = {
+        camiloId: this.exchangeCode
+      };
+      Toast.loading({
         duration: 0,
         type: "loading",
         message: "加载中...",
         forbidClick: true
       });
+      this.$http.get(url, {params: params})
+        .finally(() => {
+          Toast.clear();
+        })
+        .then(res => {
+          if (res.data.code === 200) {
+            this.showConfirm = true;
+            this.couponActivityId = res.data.data.id; //活动卡券活动派发id
+            this.couponId = res.data.data.couponId; //卡券id
+            this.confrimValue = res.data.data.couponName; //卡券标题
+
+            if (res.data.data.couponType === 10) {
+              this.confrimDetail = res.data.data.faceAmount + '元代金券'; //卡券面值
+            }
+            if (res.data.data.couponType === 20) {
+              this.confrimDetail = res.data.data.faceAmount + '元满减券'; //卡券面值
+            }
+            if (res.data.data.couponType === 40) {
+              this.confrimDetail = res.data.data.discountRatio * 10 + '折' + '折扣券'; //卡券面值
+            }
+
+            if (res.data.data.expirationType === 1) {
+              this.confirmTime = this.momentStr(res.data.data.startTime) + ' ~ ' + this.momentStr(res.data.data.expirationTime); //卡券有效期
+            }
+            if (res.data.data.expirationType === 3) {
+              this.confirmTime = '相对有效期, ' + res.data.data.valiDays + '天, 领取后' + res.data.data.offsetDays + '天生效'; //卡券有效期
+            }
+          } else if (res.data.code === 500) {
+            Toast(res.data.message);
+          }
+        });
     },
-    exchangeSubmit() {}
+    confirmExchange() {
+      const host = process.env.VUE_APP_CENTER_APP;
+      const url = host + "/times/member-bff/member/api-c/v1/member/exchangeCamilo";
+      const params = {
+        camiloId: this.exchangeCode, //卡密Id
+        couponActivityId: this.couponActivityId, //卡券活动派发id
+        couponId: this.couponId, //卡券id
+        memberId: this.memberId //会员id
+      };
+      Toast.loading({
+        duration: 0,
+        type: "loading",
+        message: "加载中...",
+        forbidClick: true
+      });
+      this.$http.post(url, params)
+        .finally(() => {
+          Toast.clear();
+        })
+        .then(res => {
+          if (res.data.code === 200) {
+            this.showConfirm = false;
+            this.isSuccessShow = true;
+          } else if (res.data.code === 500) {
+            this.showConfirm = false;
+            this.isFailShow = true;
+          }
+        });
+    },
+    exchangeSubmit() {
+      if (!this.exchangeCode) {
+        return;
+      }
+      this.getCamiloExchangeDetail();
+    },
   },
   watch: {
     exchangeCode(newVal) {

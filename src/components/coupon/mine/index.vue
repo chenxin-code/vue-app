@@ -72,10 +72,7 @@
                     <div class="exchange-card-left-bottom">
                       {{ couponType(item) }}
                     </div>
-                    <van-button class="btn-share" @click="clickUse(item)"
-                    >去使用
-                    </van-button
-                    >
+                    <van-button class="btn-share" @click="useCoupon(item)">去使用</van-button>
                   </div>
                   <div class="coupon-desc-wrap" :ref="`couponDesc${cindex}`">
                     <div class="coupon-desc" :ref="`couponDesc${cindex}Cont`">
@@ -97,14 +94,14 @@
       </van-list>
     </div>
     <div class="exchange-footer">
-      <div class="exchange-footer-item" @click="goUseLog">使用记录</div>
-      <div class="exchange-footer-item" @click="exchangeCoupon">兑换优惠券</div>
+      <div class="exchange-footer-item" @click="$router.push('/coupon/useLog')">使用记录</div>
+      <div class="exchange-footer-item" @click="$router.push('/coupon/exchangeCoupon')">兑换优惠券</div>
     </div>
   </div>
 </template>
 <script>
 import moment from "moment";
-
+import { Toast } from "vant";
 const defaultImg = require("../img/coupon-default.jpg");
 export default {
   data() {
@@ -167,13 +164,18 @@ export default {
       });
     },
     //去使用
-    clickUse() {
-    },
-    //使用记录
-    goUseLog() {
-    },
-    //兑换优惠券
-    exchangeCoupon() {
+    useCoupon() {
+      if (!data.effective) {
+        this.Toast('该卡券未在使用期限内～');
+        return false;
+      }
+      let path='/mall2/list/'+this.$util.getDataString()
+      this.$router.push({
+        path:path,
+        query:{
+          skuIds:"123,233,2222"
+        }
+      })
     },
     getList() {
       const host = process.env.VUE_APP_CENTER_APP;
