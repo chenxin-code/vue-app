@@ -1,92 +1,108 @@
 <template>
-  <van-overlay :show="true">
-    <!-- <div class="poster-mask"></div> -->
-    <div class="share-main" style="height: 100vh">
-      <div class="overlay-content" v-if="!showResult && !isPoster">
-        <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
-        <div class="save-pic-text">
-          <div class="share-desc">
-            {{ shareParams.skuName }}
-          </div>
-          <div class="share-desc" style="word-break: break-all;">
-            购买链接: {{ shareParams.link }}
-          </div>
-
-          <div class="share-picture">
-            <img
-              class="share-image"
-              v-for="(item, index) in shareParams.picUrls"
-              :key="index"
-              :src="item"
-            />
-          </div>
-          <div class="save-btn" @click="saveData">保存图文</div>
-        </div>
-        <div class="overlay-content-bottom">
-          <div class="share-money" @click="savePoster">
-            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-          </div>
-          <div class="share-check">佣金可在“分销员中心”里查看</div>
-        </div>
-      </div>
-
-      <!-- <img :src="canvasData" alt=""> -->
-
-      <div class="overlay-content" v-if="!showResult && isPoster">
-        <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
-
-        <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
-          <img :src="proImgUrl" class="main-poster" />
-          <div class="poster-user-message">
-            <div>
-              <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
-              <img src="./image/default-image.jpeg" class="user-image" v-else />
+  <div>
+    <div class="poster-mask"></div>
+    <!-- <van-overlay :show="true"> -->
+      <div class="share-main" style="height: 100vh">
+        <div class="overlay-content" v-if="!showResult && !isPoster">
+          <img
+            src="./image/guanbi@2x.png"
+            class="close-icon"
+            @click="backPage"
+          />
+          <div class="save-pic-text">
+            <div class="share-desc">
+              {{ shareParams.skuName }}
             </div>
-            <div class="poster-user-right">
-              <div class="poster-user-name">{{ shareParams.userName }}</div>
-              <div class="poster-user-text">为你挑选了一个好物</div>
+            <div class="share-desc" style="word-break: break-all;">
+              购买链接: {{ shareParams.link }}
             </div>
+
+            <div class="share-picture">
+              <img
+                class="share-image"
+                v-for="(item, index) in shareParams.picUrls"
+                :key="index"
+                :src="item"
+              />
+            </div>
+            <div class="save-btn" @click="saveData">保存图文</div>
           </div>
-          <div class="poster-product-message">
-            <div class="poster-product-message-left">
-              <div class="poster-product-prize">
-                ¥ {{ shareParams.salePrice }}
+          <div class="overlay-content-bottom">
+            <div class="share-money" @click="savePoster">
+              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+            </div>
+            <div class="share-check">佣金可在“分销员中心”里查看</div>
+          </div>
+        </div>
+
+
+        <div class="overlay-content" v-if="!showResult && isPoster">
+          <img
+            src="./image/guanbi@2x.png"
+            class="close-icon"
+            @click="backPage"
+          />
+
+          <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
+            <img :src="proImgUrl" class="main-poster" />
+            <div class="poster-user-message">
+              <div>
+                <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
+                <img
+                  src="./image/default-image.jpeg"
+                  class="user-image"
+                  v-else
+                />
               </div>
-              <div class="poster-product-desc">{{ shareParams.skuName }}</div>
+              <div class="poster-user-right">
+                <div class="poster-user-name">{{ shareParams.userName }}</div>
+                <div class="poster-user-text">为你挑选了一个好物</div>
+              </div>
             </div>
-            <div class="poster-product-message-right">
-              <img :src="shareParams.qrCode" style="width:60px;height: 60px;" />
+            <div class="poster-product-message">
+              <div class="poster-product-message-left">
+                <div class="poster-product-prize">
+                  ¥ {{ shareParams.salePrice }}
+                </div>
+                <div class="poster-product-desc">{{ shareParams.skuName }}</div>
+              </div>
+              <div class="poster-product-message-right">
+                <img
+                  :src="shareParams.qrCode"
+                  style="width:60px;height: 60px;"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <img
-          :src="canvasData"
-          alt=""
-          v-if="isCanvas"
-          style="width: 100%"
-          ref="posterPicture"
-          @click="saveIOS"
-        />
-        <div class="overlay-content-bottom">
-          <div class="share-money">
-            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+          <img
+            :src="canvasData"
+            alt=""
+            v-if="isCanvas"
+            style="width: 100%"
+            ref="posterPicture"
+            @click="saveIOS"
+          />
+          <div class="overlay-content-bottom">
+            <div class="share-money">
+              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+            </div>
+            <div class="share-check">佣金可在“分销员中心”里查看</div>
           </div>
-          <div class="share-check">佣金可在“分销员中心”里查看</div>
+          <div class="finger" ref="fingerSave">
+            <img class="finger-image" src="./image/finger.png" />
+            <div class="finger-save-text">长按图片保存到相册</div>
+          </div>
         </div>
-        <div class="finger" ref="fingerSave">
-          <img class="finger-image" src="./image/finger.png" />
-          <div class="finger-save-text">长按图片保存到相册</div>
-        </div>
-      </div>
 
-      <div class="overlay-result" v-if="showResult">
-        <div class="overlay-block">文案/链接已复制</div>
-        <div style="text-align: center;">图片已保存到相册</div>
-        <div class="result-line"></div>
-        <div class="overlay-btn" @click="backPage">我知道了</div>
+        <div class="overlay-result" v-if="showResult">
+          <div class="overlay-block">文案/链接已复制</div>
+          <div style="text-align: center;">图片已保存到相册</div>
+          <div class="result-line"></div>
+          <div class="overlay-btn" @click="backPage">我知道了</div>
+        </div>
       </div>
-    </div>
-  </van-overlay>
+    <!-- </van-overlay> -->
+  </div>
 </template>
 
 <script>
@@ -136,9 +152,9 @@ export default {
     getImages(ref) {
       const that = this;
       window.time = 0;
-      console.log('--getImages--ref-', ref);
+      console.log("--getImages--ref-", ref);
       var objs = this.$refs[ref];
-      console.log('--getImages--ref-', objs);
+      console.log("--getImages--ref-", objs);
       objs.addEventListener("touchstart", function(e) {
         e.stopPropagation();
         time = setTimeout(function() {
@@ -242,7 +258,13 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
   .poster-mask {
-
+    position: fixed;
+    top: 0;
+    background: black;
+    opacity: 0.6;
+    width: 100%;
+    height: 100vh;
+    z-index 10;
   }
 
   .overlay-content {
@@ -253,6 +275,7 @@ export default {
     width: 300px;
     background: #ffffff;
     border-radius: 6px;
+    z-index: 11;
 
     .close-icon {
       position: absolute;
