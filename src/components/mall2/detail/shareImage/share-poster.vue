@@ -1,5 +1,6 @@
 <template>
   <van-overlay :show="true">
+    <!-- <div class="poster-mask"></div> -->
     <div class="share-main" style="height: 100vh">
       <div class="overlay-content" v-if="!showResult && !isPoster">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
@@ -240,6 +241,10 @@ export default {
 </style>
 
 <style lang="stylus" scoped type="text/stylus">
+  .poster-mask {
+
+  }
+
   .overlay-content {
     position: relative;
     left: 50%;
