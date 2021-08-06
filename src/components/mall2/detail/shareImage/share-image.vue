@@ -169,7 +169,7 @@ export default {
     canvasPage() {
       let that = this;
       setTimeout(() => {
-        let _canvas = document.querySelector(".share-content");
+        let _canvas = document.querySelector(".default-share-poster");
         let w = parseInt(window.getComputedStyle(_canvas).width);
         let h = parseInt(window.getComputedStyle(_canvas).height);
         let canvas = document.createElement("canvas");
@@ -481,7 +481,7 @@ export default {
           font-family: PingFang SC;
           // font-weight: bold;
           color: #333333;
-          line-height: 22px;
+          line-height: 25px;
         }
         .default-poster-qrcode {
           width: 92px;
