@@ -422,6 +422,7 @@ import AdPage from "@/components/product/index/subpage/adpage";
 import NewCategory from "@/components/product/index/category/index";
 import { mapMutations } from "vuex";
 import appNav from "@zkty-team/x-engine-module-nav";
+import _ from "lodash";
 
 export default {
   name: "list",
@@ -522,12 +523,16 @@ export default {
       //新类目dom下标
       domIndex: 0,
       isProgram: false,
-      isStress: false // 筛选按钮是否高亮
+      isStress: false, // 筛选按钮是否高亮
+      skuIds: [] //sku搜索
     };
   },
   mounted() {
     this.easyCardId = this.$route.query.easyCardId;
     this.cardType = this.$route.query.cardType;
+    if(this.$route.query.skuIds) {
+      this.skuIds = _.split(this.$route.query.skuIds, ",")
+    }
   },
   watch:{
     showFiltrate(a){
@@ -809,7 +814,9 @@ export default {
         proSkuHasStock: this.proSkuHasStock,
         easyCardId: this.$route.query.easyCardId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
+        //搜索sku
+        skuIds: this.skuIds
       };
       let url = "/app/json/product/getAppProSearchList";
       if (this.componentName == "BeanShop") {
