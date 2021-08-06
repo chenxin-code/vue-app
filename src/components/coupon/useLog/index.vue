@@ -333,7 +333,7 @@ export default {
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: stretch;
-                box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.06);
+                box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.12);
                 border-radius: 12px;
                 overflow: hidden;
 
