@@ -29,7 +29,7 @@
       </div>
     </van-popup>
     <!--  页面-->
-    <div class="share-content" ref="shareContent" id="shareContent">
+    <div class="share-content">
       <!-- <div class="share-image-content">
         <div class="title">{{proData.showTitle}}</div>
         <div class="price">￥<span class="num">{{proData.activityPrice}}&nbsp;<span class="sale-price" v-if="proData.salePrice > proData.activityPrice">￥{{proData.salePrice}}<p class="line-t"></p></span></span></div>
@@ -50,7 +50,7 @@
         </div>
       </div> -->
 
-      <div class="default-share-poster">
+      <div class="default-share-poster" ref="shareContent">
         <div class="default-poster-header">
           <img :src="userImage" class="default-poster-header-userImage" />
           <div class="default-poster-header-right">
