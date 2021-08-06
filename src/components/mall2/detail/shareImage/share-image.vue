@@ -52,7 +52,7 @@
 
       <div class="default-share-poster">
         <div class="default-poster-header">
-          <img :src="userImage" alt="" class="default-poster-header-userImage" />
+          <img :src="userImage" class="default-poster-header-userImage" />
           <div class="default-poster-header-right">
             <div class="default-poster-header-right-name">{{$store.state.ythUserInfo.userName}}</div>
             <div class="default-poster-header-right-desc">
@@ -145,7 +145,7 @@ export default {
         .then(res => {
           if (res.status == 0) {
             if (res.data) {
-              this.proImgUrl = `data:image/png;base64,${res.data || ""}`;
+              this[name] = `data:image/png;base64,${res.data || ""}`;
             } else {
               this.$Toast("getFileBase64 返回为空");
             }
@@ -402,6 +402,7 @@ export default {
     margin-top: -15px;
     .default-poster-header {
       display: flex;
+      margin-top: 15px;
       .default-poster-header-userImage {
         width: 60px;
         height: 60px;
@@ -432,7 +433,7 @@ export default {
       width: 15px;
       height: 10px;
       margin-left: 30px;
-      margin-top: 40px;
+      margin-top: 30px;
       margin-bottom: -6px;
     }
     .default-main-poster {
