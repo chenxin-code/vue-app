@@ -404,7 +404,8 @@
                             {{ getTimeTitle() }}
                           </div>
                           <div class="skr-row">
-                            <Countdown :endTime="getCountdownTime"></Countdown>
+                            <!-- <Countdown :endTime="getCountdownTime"></Countdown> -->
+                            <NewCountdown :endTime="detailData.mktEndDate"></NewCountdown>
                           </div>
                         </div>
                       </div>
@@ -1699,6 +1700,7 @@ import PickupAddress from "../common/pickup-address";
 import BigImage from "../common/big-image/index";
 import PullTo from "@/components/Vendor/vue-pull-to/vue-pull-to";
 import Countdown from "../../Vendor/countdown/countdown";
+import NewCountdown from "../../Vendor/countdown/newCountdown";
 import PriceOrder from "@/components/commonui/price/price-order";
 import Config from "@/api/config";
 import ShareImage from "./shareImage";
@@ -1730,7 +1732,8 @@ export default {
     PriceOrder,
     videoPlayer,
     CouponAndActivity,
-    sharePoster
+    sharePoster,
+    NewCountdown
   },
   data() {
     let that = this;

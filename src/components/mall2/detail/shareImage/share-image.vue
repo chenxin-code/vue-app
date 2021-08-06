@@ -29,7 +29,7 @@
       </div>
     </van-popup>
     <!--  页面-->
-    <div class="share-content" ref="shareContent" id="shareContent">
+    <div class="share-content">
       <!-- <div class="share-image-content">
         <div class="title">{{proData.showTitle}}</div>
         <div class="price">￥<span class="num">{{proData.activityPrice}}&nbsp;<span class="sale-price" v-if="proData.salePrice > proData.activityPrice">￥{{proData.salePrice}}<p class="line-t"></p></span></span></div>
@@ -50,7 +50,7 @@
         </div>
       </div> -->
 
-      <div class="default-share-poster">
+      <div class="default-share-poster" ref="shareContent">
         <div class="default-poster-header">
           <img :src="userImage" class="default-poster-header-userImage" />
           <div class="default-poster-header-right">
@@ -68,12 +68,12 @@
 
           <div class="default-poster-prize-sale">
             <div class="price default-poster-prize">
-              ￥<span class="num"
+              <span class="money-symbol">￥</span><span class="num" style="font-weight: bold;"
                 >{{ proData.activityPrice }}&nbsp;
                 <span
                   class="sale-price"
                   v-if="proData.salePrice > proData.activityPrice"
-                  >￥{{ proData.salePrice }}
+                  ><span class="money-symbol">￥</span>{{ proData.salePrice }}
                   <p class="line-t"></p></span
               ></span>
             </div>
@@ -169,7 +169,7 @@ export default {
     canvasPage() {
       let that = this;
       setTimeout(() => {
-        let _canvas = document.querySelector(".share-content");
+        let _canvas = document.querySelector(".default-share-poster");
         let w = parseInt(window.getComputedStyle(_canvas).width);
         let h = parseInt(window.getComputedStyle(_canvas).height);
         let canvas = document.createElement("canvas");
@@ -395,10 +395,10 @@ export default {
     background-repeat: no-repeat;
     background-size: 375px 667px;
     width:100%;
-    height:100%
+    height:667px;
     padding: 15px
-    border-top-left-radius 15px
-    border-top-right-radius 15px
+    // border-top-left-radius 15px
+    // border-top-right-radius 15px
     margin-top: -15px;
     .default-poster-header {
       display: flex;
@@ -452,10 +452,13 @@ export default {
         justify-content: space-space-between;
         .default-poster-prize {
           margin-left: 17px;
-          font-size: 18px;
+          font-size: 30px;
           font-family: PingFang SC;
           font-weight: bold;
           color: #E5165A;
+          .money-symbol {
+            font-size: 16px;
+          }
         }
       }
       .default-poster-bottom {
@@ -464,13 +467,21 @@ export default {
         margin: 15px 0;
         padding-bottom: 15px;
         .default-poster-bottom-text {
+          // margin-left: 17px;
+          // width: 180px;
+          // font-size: 18px;
+          // font-family: PingFang SC;
+          // font-weight: bold;
+          // color: #333333;
+          // line-height: 22px;
+          
           margin-left: 17px;
           width: 180px;
           font-size: 18px;
           font-family: PingFang SC;
-          font-weight: bold;
+          // font-weight: bold;
           color: #333333;
-          line-height: 22px;
+          line-height: 25px;
         }
         .default-poster-qrcode {
           width: 92px;
@@ -520,6 +531,7 @@ export default {
 
       .num {
         font-size: 28px
+        font-weight: bold;
       }
       .sale-price {
         color: $color-text-d

@@ -40,7 +40,7 @@ module.exports = [
     component: () => import('@/components/mall2/detail/new-detail-static'),
     // component: () => import('@/components/mall2/detail/detail'),
     meta: {
-      keepAlive: true
+      keepAlive: false
     }
   },
   {

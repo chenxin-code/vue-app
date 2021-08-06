@@ -460,6 +460,7 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #666666;
+    z-index: 11;
 
     .overlay-block {
       padding: 15px;
