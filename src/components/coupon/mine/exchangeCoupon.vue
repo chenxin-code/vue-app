@@ -1,10 +1,9 @@
 <template>
   <div class="exchangeCoupon">
-    <nav-top title="优惠券兑换" @backEvent="backEvent"></nav-top>
-    <!-- <div class="option">
-      <span class="btn-return" @click="pageBack"></span>
+    <div class="option">
+      <span class="btn-return" @click="backEvent"></span>
       <span class="nav-title">优惠券兑换</span>
-    </div> -->
+    </div>
     <div class="container">
       <div class="content">
         <div class="content-top-left-bg"></div>
@@ -195,7 +194,7 @@ export default {
         width: 50px;
         height: 50px;
         top: 0;
-        background-image: url(../../../assets/img/dialog/dialog-success-icon.png);
+        background-image: url(../img/dialog/dialog-success-icon.png);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         text-align: center;
@@ -233,18 +232,18 @@ export default {
     }
 
     &::after {
-      background-image: url(../../../assets/img/dialog/dialog-cancel-overlay.png);
+      background-image: url(../img/dialog/dialog-cancel-overlay.png);
     }
 
     .van-dialog__header {
       &::before {
-        background-image: url(../../../assets/img/dialog/dialog-cancel-icon.png);
+        background-image: url(../img/dialog/dialog-cancel-icon.png);
       }
     }
 
     .van-dialog__footer {
       &::before {
-        background-image: url(../../../assets/img/dialog/dialog-cancel-border.png);
+        background-image: url(../img/dialog/dialog-cancel-border.png);
       }
 
       .van-dialog__confirm {
