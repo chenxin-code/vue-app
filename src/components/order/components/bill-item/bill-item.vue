@@ -8,8 +8,9 @@
   <!--  v-if="results" -->
   <div class="property-bill">
     <div class="property-box" :class="{ isactive: isOpen }">
+      <!-- v-show="pageName === 'waitPay' && results.length" -->
       <van-checkbox
-        v-show="pageName === 'waitPay' && results.length"
+        v-show="false"
         v-model="isChecked"
         :disabled="isDisabled"
         @click="checkEvent($event)"
