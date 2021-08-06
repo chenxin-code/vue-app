@@ -136,7 +136,10 @@ export default {
       finished: false,
       showNull: false,
       nullMsg: "",
-      memberId: process.env.NODE_ENV === 'development'?'2436937814953168757':this.$store.state.userInfo.userCode,
+      memberId:
+        process.env.NODE_ENV === "development"
+          ? "2436937814953168757"
+          : this.$store.state.userInfo.userCode,
       //宠物信息
       petsUpdateList: [],
       busy: false,
@@ -151,7 +154,7 @@ export default {
         }
       ],
       list: [[], []],
-      pageIndex: [1,1],
+      pageIndex: [1, 1]
     };
   },
   components: {},
@@ -164,15 +167,17 @@ export default {
   },
   created() {
     if (!this.memberId) {
-      this.$http.post("/app/json/user/getUserSummary", {
-        deliveryType: "2",
-        orderCategory: "0"
-      }).then(res => {
-        if (res.data.status == 0) {
-          this.memberId = res.data.data.userInfo.userCode;
-          this.getList();
-        }
-      });
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          if (res.data.status == 0) {
+            this.memberId = res.data.data.userInfo.userCode;
+            this.getList();
+          }
+        });
     }
     //当前屏幕高度
     const clientHeight =
@@ -240,7 +245,7 @@ export default {
         memberId: this.memberId,
         pageIndex: this.pageIndex[tabIndex],
         pageSize: 10,
-        businessType: 0,
+        businessType: 200001,
         state: this.tabList[tabIndex].status
       };
       this.loading = true;
@@ -248,7 +253,8 @@ export default {
         if (res.data.code === 200) {
           let list = [];
           res.data.data && (list = res.data.data.records || []);
-          this.list[tabIndex] = params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
+          this.list[tabIndex] =
+            params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
           this.loading = false;
           if (this.list.length >= res.data.data.total) {
             this.finished = true;

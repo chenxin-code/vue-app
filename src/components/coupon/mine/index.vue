@@ -6,7 +6,8 @@
         v-model="loading"
         :finished="finished"
         :finished-text="'- 亲, 没有更多了 -'"
-        @load="getList()">
+        @load="getList()"
+      >
         <div class="bangdou-exchange-wrap">
           <div class="bangdou-exchange">
             <div class="bangdou-exchange-body">
@@ -72,7 +73,9 @@
                     <div class="exchange-card-left-bottom">
                       {{ couponType(item) }}
                     </div>
-                    <van-button class="btn-share" @click="useCoupon(item)">去使用</van-button>
+                    <van-button class="btn-share" @click="useCoupon(item)"
+                      >去使用</van-button
+                    >
                   </div>
                   <div class="coupon-desc-wrap" :ref="`couponDesc${cindex}`">
                     <div class="coupon-desc" :ref="`couponDesc${cindex}Cont`">
@@ -94,38 +97,50 @@
       </van-list>
     </div>
     <div class="exchange-footer">
-      <div class="exchange-footer-item" @click="$router.push('/coupon/useLog')">使用记录</div>
-      <div class="exchange-footer-item" @click="$router.push('/coupon/exchangeCoupon')">兑换优惠券</div>
+      <div class="exchange-footer-item" @click="$router.push('/coupon/useLog')">
+        使用记录
+      </div>
+      <div
+        class="exchange-footer-item"
+        @click="$router.push('/coupon/exchangeCoupon')"
+      >
+        兑换优惠券
+      </div>
     </div>
   </div>
 </template>
 <script>
 import moment from "moment";
-import {Toast} from "vant";
+import { Toast } from "vant";
 
 const defaultImg = require("../img/coupon-default.jpg");
 export default {
   data() {
     return {
-      memberId: process.env.NODE_ENV === 'development'?'2436937814953168757':this.$store.state.userInfo.userCode,
+      memberId:
+        process.env.NODE_ENV === "development"
+          ? "2436937814953168757"
+          : this.$store.state.userInfo.userCode,
       pageIndex: 1,
       defaultImg: defaultImg,
       setdefaultAvatar: 'this.src="' + defaultImg + '"',
       loading: false,
       couponList: [],
-      finished: false,
+      finished: false
     };
   },
   created() {
     if (!this.memberId) {
-      this.$http.post("/app/json/user/getUserSummary", {
-        deliveryType: "2",
-        orderCategory: "0"
-      }).then(res => {
-        if (res.data.status == 0) {
-          this.memberId = res.data.data.userInfo.userCode;
-        }
-      });
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          if (res.data.status == 0) {
+            this.memberId = res.data.data.userInfo.userCode;
+          }
+        });
     }
   },
   methods: {
@@ -176,16 +191,9 @@ export default {
     //去使用
     useCoupon() {
       if (!data.effective) {
-        Toast('该卡券未在使用期限内～');
+        Toast("该卡券未在使用期限内～");
         return false;
       }
-      let path = '/mall2/list/' + this.$util.getDataString();
-      this.$router.push({
-        path: path,
-        query: {
-          skuIds: "123,233,2222",
-        },
-      });
     },
     getList() {
       const host = process.env.VUE_APP_CENTER_APP;
@@ -193,12 +201,12 @@ export default {
       const params = {
         memberId: this.memberId,
         pageIndex: this.pageIndex,
-        businessType: '200001',
+        businessType: "200001",
         pageSize: 10,
-        state: 20,
+        state: 20
       };
       this.loading = true;
-      this.$http.get(url, {params: params}).then(res => {
+      this.$http.get(url, { params: params }).then(res => {
         if (res.data.code === 200) {
           this.couponList = this.couponList.concat(res.data.data.records);
           this.loading = false;
@@ -208,6 +216,28 @@ export default {
             this.pageIndex++;
           }
         }
+      });
+    },
+    //获取购物券sku数据
+    getShoppingSku(item) {
+      const host = process.env.VUE_APP_CENTER_APP;
+      const url =
+        host + "/times/member-bff/coupon/api/v1/findSkuListByCouponType";
+      const params = {
+        couponType: "10SC000215"
+      };
+
+      this.$http.post(url, params).then(res => {
+        console.log(`skuIds`, res);
+
+        // 跳转到商城搜索商品列表
+        let path = "/mall2/list/" + this.$util.getDataString();
+        this.$router.push({
+          path: path,
+          query: {
+            skuIds: "123,233,2222"
+          }
+        });
       });
     }
   }
