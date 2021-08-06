@@ -14,7 +14,7 @@
 
 <script>
   import countDownJs from './js/index'
-
+  import { BigNumber } from "bignumber.js";
   export default {
     name: "countdown",
     // 这里都传时间戳，方便计算
@@ -34,7 +34,7 @@
         if (this.endTime) {
           let curTime = this.$store.state.severTime.currentTime
           let endTime = this.endTime
-          let vTime = endTime - curTime
+          let vTime = BigNumber(endTime).minus(curTime)
           this.d = 0
           this.h = '0'
           this.m = '0'
@@ -51,14 +51,14 @@
           } else {
             this.trigger = true
             if (vTime > 59) {
-              this.s = vTime % 60
-              vTime = parseInt(vTime / 60)
+              this.s = BigNumber(vTime).modulo(60)
+              vTime = parseInt(BigNumber(vTime).dividedBy(60))
               if (vTime > 59) {
-                this.m = vTime % 60
-                vTime = parseInt(vTime / 60)
+                this.m = BigNumber(vTime).modulo(60)
+                vTime = parseInt(BigNumber(vTime).dividedBy(60))
                 if (vTime > 23) {
-                  this.h = parseInt(vTime % 24)
-                  vTime = parseInt(vTime / 24)
+                  this.h = parseInt(BigNumber(vTime).modulo(24))
+                  vTime = parseInt(BigNumber(vTime).dividedBy(24))
                   this.d = vTime
                 } else {
                   this.h = vTime
