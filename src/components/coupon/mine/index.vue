@@ -101,7 +101,8 @@
 </template>
 <script>
 import moment from "moment";
-import { Toast } from "vant";
+import {Toast} from "vant";
+
 const defaultImg = require("../img/coupon-default.jpg");
 export default {
   data() {
@@ -149,7 +150,6 @@ export default {
           element.style.display = "block";
           const elemetCont = this.$refs[`${ref}Cont`][0];
           const Contheight = elemetCont.offsetHeight;
-
           element.style.height = Contheight + "px";
           this.$refs[`${ref}Icon`][0].style.transform = "rotate(-180deg)";
         } else {
@@ -169,13 +169,13 @@ export default {
         this.Toast('该卡券未在使用期限内～');
         return false;
       }
-      let path='/mall2/list/'+this.$util.getDataString()
+      let path = '/mall2/list/' + this.$util.getDataString();
       this.$router.push({
-        path:path,
-        query:{
-          skuIds:"123,233,2222"
-        }
-      })
+        path: path,
+        query: {
+          skuIds: "123,233,2222",
+        },
+      });
     },
     getList() {
       const host = process.env.VUE_APP_CENTER_APP;
