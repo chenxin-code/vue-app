@@ -287,14 +287,19 @@
           border-radius 12px;
         }
         .img-div {
-          position relative;
-          width 100%;
-          height 0px;
-          padding-bottom 100%;
+          // position relative;
+          // width 100%;
+          // height 0px;
+          // padding-bottom 100%;
+          width: 175px;
+          height: 175px;
+          display: flex;
+          align-items: center;
           img {
-            position absolute;
-            width 100%;
-            height 100%;
+            // position absolute;
+            // width 100%;
+            // height 100%;
+            width: 175px;
           }
           .presale {
             position absolute;
