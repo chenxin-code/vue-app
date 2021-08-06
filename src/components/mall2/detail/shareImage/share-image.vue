@@ -384,7 +384,7 @@ export default {
   z-index: 100000;
   display flex
   flex-direction column
-  // left -1000%
+  left -1000%
   background: #FFFFFF;
   box-shadow: 0px 5px 17px 1px rgba(193, 193, 193, 0.28);
   border-radius: 20px 20px 0px 0px;
