@@ -1640,7 +1640,7 @@
     >
       <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
-          <div class="share_botton_item" @click="shareWechatFriends">
+          <div class="share_botton_item" @click="shareWechatFriends" v-if="!this.$util.isWeiXin()">
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
