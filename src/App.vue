@@ -1,10 +1,6 @@
 <template>
-  <div
-    id="app"
-    class="theme_sys_base"
-    :class="theme"
-  >
-  <van-nav-bar safe-area-inset-top />
+  <div id="app" class="theme_sys_base" :class="theme">
+    <van-nav-bar safe-area-inset-top />
     <!-- APP -->
     <!--@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"-->
     <!--<div id="app" class="theme_sys_base">-->
@@ -12,16 +8,13 @@
     <!--app结构请勿随意变动，利用耦合性写了部分代码，慎之-->
 
     <transition :name="$router.customRouterData.transitionName">
-      <keep-alive
-        ref="keep_alive"
-        key="key_keepalive"
-      >
+      <keep-alive ref="keep_alive" key="key_keepalive">
         <router-view
           :key="$route.path"
           class="router_class"
           v-if="$route.meta.keepAlive"
         />
-        </keep-alive>
+      </keep-alive>
     </transition>
     <transition :name="$router.customRouterData.transitionName">
       <router-view
@@ -30,28 +23,23 @@
         v-if="!$route.meta.keepAlive"
       />
     </transition>
+    <div class="backTop" @click="backTop" v-if="showBackTop">
+      <img src="static/image/mall2/bcakTop.png" alt="" />
+    </div>
     <div
-      class="backTop"
-      @click="backTop"
-      v-if="showBackTop"
+      class="back-index"
+      :class="{ ani: ani }"
+      ref="back_index"
+      :style="{ left: homeBtnX + 'px', top: homeBtnY + 'px' }"
+      @touchmove="touchMove"
+      @touchstart="touchStart"
+      @touchend="touchEnd"
+      v-show="showBackBtn($router.customRouterData.routerPaths)"
     >
-      <img
-        src="static/image/mall2/bcakTop.png"
-        alt=""
+      <transition-group
+        :name="homeBtnSeat == 'right' ? 'backIndexBtn_r' : 'backIndexBtn_l'"
       >
-        </div>
-        <div
-          class="back-index"
-          :class="{ ani: ani }"
-          ref="back_index"
-          :style="{ left: homeBtnX + 'px', top: homeBtnY + 'px' }"
-          @touchmove="touchMove"
-          @touchstart="touchStart"
-          @touchend="touchEnd"
-          v-show="showBackBtn($router.customRouterData.routerPaths)"
-        >
-          <transition-group :name="homeBtnSeat == 'right' ? 'backIndexBtn_r' : 'backIndexBtn_l'">
-            <!-- <div
+        <!-- <div
           class="div-shy"
           v-show="isShy == true"
           key="backIndexBtn_shy"
@@ -59,7 +47,7 @@
         >
           <img :src="appBackHomeImg" />
         </div> -->
-            <!-- <div
+        <!-- <div
           class="btn-img"
           :class="{ 'btn-img-left': homeBtnSeat == 'left' }"
           v-show="isShy == false"
@@ -68,11 +56,11 @@
         >
           <img :src="appBackHomeImg" />
         </div> -->
-          </transition-group>
-          </div>
-          <van-number-keyboard safe-area-inset-bottom />
-          <!--    <BindOilCard :showPopup="showPopup" :messagePopup="messagePopup" :giftList="giftList" :cardList="cardList" :haveCard="haveCard" :phone="phone"></BindOilCard>-->
-          </div>
+      </transition-group>
+    </div>
+    <van-number-keyboard safe-area-inset-bottom />
+    <!--    <BindOilCard :showPopup="showPopup" :messagePopup="messagePopup" :giftList="giftList" :cardList="cardList" :haveCard="haveCard" :phone="phone"></BindOilCard>-->
+  </div>
 </template>
 
 <script>
@@ -120,12 +108,12 @@ export default {
 
       ani: false,
       showBackTop: false,
-      bulkRoutePath:[
-        '/confirmOrder',
-        '/purchase',
-        '/bulkDetails',
-        '/orderInfo'
-      ]
+      bulkRoutePath: [
+        "/confirmOrder",
+        "/purchase",
+        "/bulkDetails",
+        "/orderInfo",
+      ],
     };
   },
   created() {
@@ -141,9 +129,9 @@ export default {
     appNav
       .setNavBarHidden({
         isHidden: true,
-        isAnimation: false
+        isAnimation: false,
       })
-      .then(res => {});
+      .then((res) => {});
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
@@ -154,22 +142,22 @@ export default {
       location.href
         .split("?")[1]
         .split("&")
-        .forEach(item => {
+        .forEach((item) => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
-      if(initObj.ythToken == '' || initObj.ythToken == undefined){
-        initObj.ythToken = window.localStorage.getItem('ythToken')
+      if (initObj.ythToken == "" || initObj.ythToken == undefined) {
+        initObj.ythToken = window.localStorage.getItem("ythToken");
       }
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.projectId = 11111;
       this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
-      console.log("initObj",initObj);
-      console.log("initObj.ythToken",initObj.ythToken);
-      console.log("getYthUserInfo",this.$store.state.ythToken);
+      console.log("initObj", initObj);
+      console.log("initObj.ythToken", initObj.ythToken);
+      console.log("getYthUserInfo", this.$store.state.ythToken);
       this.getYthUserInfo();
     } else {
-      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
         this.$store.state.ythToken = res.result;
         console.log("---------------一体化token获取成功----------", res);
         console.log(
@@ -179,15 +167,17 @@ export default {
         this.getYthUserInfo();
       });
     }
-    appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then(res => {
-      if (res.hasOwnProperty("result")) {
-        console.log("---------------人房id获取成功----------", res);
-        this.$store.state.userRoomId = res.result;
-      } else {
-        console.log("---------------人房id获取失败----------", res);
-        this.$store.state.userRoomId = "";
-      }
-    });
+    appLocalstorage
+      .get({ key: "LLBUserRoomId", isPublic: true })
+      .then((res) => {
+        if (res.hasOwnProperty("result")) {
+          console.log("---------------人房id获取成功----------", res);
+          this.$store.state.userRoomId = res.result;
+        } else {
+          console.log("---------------人房id获取失败----------", res);
+          this.$store.state.userRoomId = "";
+        }
+      });
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
@@ -222,7 +212,7 @@ export default {
         document.body.classList.add(theme);
       }
       return theme;
-    }
+    },
   },
   mounted() {
     sessionStorage.setItem("js_css_loaded", "1");
@@ -240,12 +230,12 @@ export default {
 
     // 注册通知回调Watchman.yidunLoginInit()
     this.$bridgefunc.registeBridge("notificationCallBack", () => {
-      this.$bridgefunc.getItem("notificationU", res => {});
+      this.$bridgefunc.getItem("notificationU", (res) => {});
     });
 
     // 注册appjump回调
     this.$bridgefunc.registeBridge("appjumpCallBack", () => {
-      this.$bridgefunc.getItem("appjumpU", res => {
+      this.$bridgefunc.getItem("appjumpU", (res) => {
         // res 是编码后的json字符串
         let resStr = decodeURIComponent(res);
         let resJson = JSON.parse(resStr);
@@ -257,7 +247,7 @@ export default {
         } else {
           this.$market.customPush(
             {
-              path: weburl
+              path: weburl,
             },
             islogin
           );
@@ -302,26 +292,43 @@ export default {
       } else {
         token = this.$store.state.ythToken;
       }
-      this.$http.post("/app/json/login/getYthUser",{token:token}).then(res=>{
-        if(res.data.status == 0){
-          this.$store.state.ythUserInfo = res.data.data;
-          console.log("一体化信息",this.$store.state.ythUserInfo)
-          initSensors();
-          let that = this;
-          this.$sensors.quick('isReady',function(){
-            console.log("sensors.quick('getAnonymousID');",that.$sensors.quick('getAnonymousID'))
-            that.postSensorsData(that.$sensors.quick('getAnonymousID'),res.data.data.id)
-          });
-        }
-      })
+      this.$http
+        .post("/app/json/login/getYthUser", { token: token })
+        .then((res) => {
+          if (res.data.status == 0) {
+            this.$store.state.ythUserInfo = res.data.data;
+            console.log("一体化信息", this.$store.state.ythUserInfo);
+            initSensors();
+            this.postAvatar(res.data.data.userImage);
+            let that = this;
+            this.$sensors.quick("isReady", function () {
+              console.log(
+                "sensors.quick('getAnonymousID');",
+                that.$sensors.quick("getAnonymousID")
+              );
+              that.postSensorsData(
+                that.$sensors.quick("getAnonymousID"),
+                res.data.data.id
+              );
+            });
+          }
+        });
     },
     postSensorsData(anonymousID, userID) {
       this.$http
         .post(
           `/app/json/sensors_analytics/sensorsAnalyticsInit?anonymousID=${anonymousID}&userID=${userID}`
         )
-        .then(res => {
+        .then((res) => {
           console.log(res);
+        });
+    },
+    postAvatar(avatar) {
+      console.log("头像", avatar);
+      this.$http
+        .post("/app/json/user/modifyHeadImg", { headImg: avatar })
+        .then((res) => {
+          console.log("头像返回", res);
         });
     },
 
@@ -337,9 +344,9 @@ export default {
     oilIsOpen() {
       http
         .post("/app/json/app_youdi/getAcctInfoList", {
-          token: this.$store.state.login.token
+          token: this.$store.state.login.token,
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           if (data.status == 0) {
             if (
@@ -352,9 +359,9 @@ export default {
                */
               http
                 .post("/app/json/user/getPopTimes", {
-                  token: this.$store.state.login.token
+                  token: this.$store.state.login.token,
                 })
-                .then(res => {
+                .then((res) => {
                   let data = res.data;
                   if (data.status == 0) {
                     if ((data.data && Number(data.data) < 2) || !data.data) {
@@ -363,28 +370,28 @@ export default {
                         "提示",
                         {
                           confirmButtonText: "去开启",
-                          cancelButtonText: "再想想"
+                          cancelButtonText: "再想想",
                         }
                       )
-                        .then(action => {
+                        .then((action) => {
                           let url =
                             window.location.origin +
                             "/app-vue/oildrop/user-identity-information-query";
                           bridgefunc.customPush({
                             path: url,
                             isVuePage: false,
-                            isnativetop: true
+                            isnativetop: true,
                           });
                         })
-                        .catch(action => {});
+                        .catch((action) => {});
                       /**
                        * 弹框一次 增加一次次数
                        */
                       http
                         .post("/app/json/user/savePopTimes", {
-                          token: this.$store.state.login.token
+                          token: this.$store.state.login.token,
                         })
-                        .then(res => {});
+                        .then((res) => {});
                     }
                   }
                 });
@@ -425,7 +432,7 @@ export default {
         return false;
       }
     },
-    touchStart: function(ev) {
+    touchStart: function (ev) {
       ev = ev || event;
       if (ev.touches.length == 1) {
         //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
@@ -436,7 +443,7 @@ export default {
         this.homeBtnOrginY = dom.offsetTop;
       }
     },
-    touchMove: function(ev) {
+    touchMove: function (ev) {
       ev = ev || event;
       if (ev.touches.length == 1) {
         //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
@@ -448,7 +455,7 @@ export default {
           (this.homeBtnBeginTouchY - ev.touches[0].clientY);
       }
     },
-    touchEnd: function(ev) {
+    touchEnd: function (ev) {
       // clientWidth
       this.ani = true;
       this.$nextTick(() => {
@@ -468,14 +475,14 @@ export default {
         }, 300);
       });
     },
-    dontShy: function() {
+    dontShy: function () {
       this.isShy = false;
       this.myTimeout = setTimeout(() => {
         this.isShy = true;
       }, 3000);
     },
     // 返回首页，这里很low但是没bug，切最简单，需要找机会处理
-    backIndex: function() {
+    backIndex: function () {
       // 返回首页时清除 微店code（河北）
       this.$util.removeStoreCode();
       if (this.$store.state.webtype == 3) {
@@ -490,7 +497,7 @@ export default {
     },
 
     //分享推荐人存储
-    storeRecommend: function() {
+    storeRecommend: function () {
       let recommend = this.$util.getUrlParam(window.location.href, "recommend");
       let recommendPhone = this.$util.getUrlParam(
         window.location.href,
@@ -508,7 +515,7 @@ export default {
     //
     //   }
     // },
-    setThemeClass: function() {
+    setThemeClass: function () {
       let oldTheme = this.theme;
       document.body.classList.add("theme_sys_base");
       if (this.$store.state.globalConfig.themeColor == "blue") {
@@ -532,7 +539,7 @@ export default {
       }
       document.getElementById("app").setAttribute("class", classVal);
     },
-    viewPortSet: function() {
+    viewPortSet: function () {
       var viewportTag = null;
       var metaTags = document.getElementsByTagName("meta");
       if (!viewportTag) {
@@ -570,17 +577,17 @@ export default {
     //   }
     //   return -1;
     // },
-    windowResize: function() {
+    windowResize: function () {
       window.onresize = () => {
         this.$store.state.clientWidth = document.documentElement.clientWidth;
       };
-    }
+    },
   },
   watch: {
     "$store.state.isShowBackTop"(a) {
       this.showBackTop = a;
     },
-    "$route.path": function(newVal, oldVal) {
+    "$route.path": function (newVal, oldVal) {
       //app环境
       if (/^\/common$/.test(newVal) || /^\/error$/.test(newVal)) {
         appUi.showTabbar && appUi.showTabbar();
@@ -608,7 +615,14 @@ export default {
     },
     "$route.matched"(value) {
       if (value.length !== 0) {
-        if (value[0].path !== "/common" && value[0].path !== "/common2/:id" && value[0].path !== "/purchase" && value[0].path !== "/confirmOrder" && value[0].path !== "/bulkDetails" && value[0].path !== "/orderInfo") {
+        if (
+          value[0].path !== "/common" &&
+          value[0].path !== "/common2/:id" &&
+          value[0].path !== "/purchase" &&
+          value[0].path !== "/confirmOrder" &&
+          value[0].path !== "/bulkDetails" &&
+          value[0].path !== "/orderInfo"
+        ) {
           // 判断是否是刘海屏
           const rate = window.screen.height / window.screen.width;
           let limit =
@@ -620,12 +634,12 @@ export default {
               this.$store.state.webtype !== "3" &&
               this.$store.state.webtype !== "2"
             ) {
-              if(value[0].path == '/mall2/detail/:id'){
+              if (value[0].path == "/mall2/detail/:id") {
                 document.getElementsByTagName("body")[0].style.paddingTop =
-                "1.17333rem";
-              }else{
+                  "1.17333rem";
+              } else {
                 document.getElementsByTagName("body")[0].style.paddingTop =
-                "0.4rem";
+                  "0.4rem";
               }
               this.$store.state.notIndexIsX = true;
             }
@@ -642,7 +656,7 @@ export default {
           this.showBackTop = false;
         }
       }
-    }
+    },
     // '$route'(to, from) {
     //   let arr = sessionStorage.getItem("routePathArrs");
     //   if (arr && arr != undefined) {
@@ -720,7 +734,7 @@ export default {
   },
   components: {
     // BindOilCard
-  }
+  },
 };
 </script>
 
