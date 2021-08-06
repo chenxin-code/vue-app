@@ -68,12 +68,12 @@
 
           <div class="default-poster-prize-sale">
             <div class="price default-poster-prize">
-              ￥<span class="num"
+              <span class="money-symbol">￥</span><span class="num" style="font-weight: bold;"
                 >{{ proData.activityPrice }}&nbsp;
                 <span
                   class="sale-price"
                   v-if="proData.salePrice > proData.activityPrice"
-                  >￥{{ proData.salePrice }}
+                  ><span class="money-symbol">￥</span>{{ proData.salePrice }}
                   <p class="line-t"></p></span
               ></span>
             </div>
@@ -384,7 +384,7 @@ export default {
   z-index: 100000;
   display flex
   flex-direction column
-  left -1000%
+  // left -1000%
   background: #FFFFFF;
   box-shadow: 0px 5px 17px 1px rgba(193, 193, 193, 0.28);
   border-radius: 20px 20px 0px 0px;
@@ -452,10 +452,13 @@ export default {
         justify-content: space-space-between;
         .default-poster-prize {
           margin-left: 17px;
-          font-size: 18px;
+          font-size: 30px;
           font-family: PingFang SC;
           font-weight: bold;
           color: #E5165A;
+          .money-symbol {
+            font-size: 16px;
+          }
         }
       }
       .default-poster-bottom {
@@ -464,11 +467,19 @@ export default {
         margin: 15px 0;
         padding-bottom: 15px;
         .default-poster-bottom-text {
+          // margin-left: 17px;
+          // width: 180px;
+          // font-size: 18px;
+          // font-family: PingFang SC;
+          // font-weight: bold;
+          // color: #333333;
+          // line-height: 22px;
+          
           margin-left: 17px;
           width: 180px;
           font-size: 18px;
           font-family: PingFang SC;
-          font-weight: bold;
+          // font-weight: bold;
           color: #333333;
           line-height: 22px;
         }
@@ -520,6 +531,7 @@ export default {
 
       .num {
         font-size: 28px
+        font-weight: bold;
       }
       .sale-price {
         color: $color-text-d
