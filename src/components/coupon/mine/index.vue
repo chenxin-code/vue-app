@@ -6,17 +6,14 @@
         v-model="loading"
         :finished="finished"
         :finished-text="'- 亲, 没有更多了 -'"
-        :immediate-check="false"
-        :offset="10"
-        @load="onLoad"
-      >
+        @load="getList()">
         <div class="bangdou-exchange-wrap">
           <div class="bangdou-exchange">
             <div class="bangdou-exchange-body">
               <div class="exchange-body-item">
                 <div
                   class="bangdou-exchange-card"
-                  v-for="(item, cindex) in data"
+                  v-for="(item, cindex) in couponList"
                   :key="cindex"
                 >
                   <div class="exchange-card-item exchange-card-right">
@@ -76,7 +73,8 @@
                       {{ couponType(item) }}
                     </div>
                     <van-button class="btn-share" @click="clickUse(item)"
-                      >去使用</van-button
+                    >去使用
+                    </van-button
                     >
                   </div>
                   <div class="coupon-desc-wrap" :ref="`couponDesc${cindex}`">
@@ -106,19 +104,21 @@
 </template>
 <script>
 import moment from "moment";
+
 const defaultImg = require("../img/coupon-default.jpg");
 export default {
   data() {
     return {
+      pageIndex: 1,
       defaultImg: defaultImg,
       setdefaultAvatar: 'this.src="' + defaultImg + '"',
       loading: false,
-      data: [],
-      finished: false
+      couponList: [],
+      finished: false,
     };
   },
   created() {
-    this.onLoad();
+
   },
   methods: {
     //返回上一页
@@ -167,35 +167,35 @@ export default {
       });
     },
     //去使用
-    clickUse() {},
+    clickUse() {
+    },
     //使用记录
-    goUseLog() {},
+    goUseLog() {
+    },
     //兑换优惠券
-    exchangeCoupon() {},
-    onLoad() {
+    exchangeCoupon() {
+    },
+    getList() {
       const host = process.env.VUE_APP_CENTER_APP;
-      const url = host + "/times/member-bff/coupon/api/v1/receive-coupon/list";
+      const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
       const params = {
         // memberId: this.memberId,
-        memberId: "2436937849312908812", //本地测试
-        pageIndex: 1,
-        businessType: 0,
-        activityType: "",
-        pageSize: 9999,
-        condition: 5
+        memberId: "2436937814953168757", //本地测试
+        pageIndex: this.pageIndex,
+        businessType: '200001',
+        pageSize: 10,
+        state: 20,
       };
-      this.$http.get(url, { params: params }).then(res => {
-        console.log(`2222`, res);
+      this.loading = true;
+      this.$http.get(url, {params: params}).then(res => {
         if (res.data.code === 200) {
-          this.data = res.data.data;
-
-          this.finished = true;
+          this.couponList = this.couponList.concat(res.data.data.records);
           this.loading = false;
-          this.reLoading = false;
-          // if (this.data.length === 0) {
-          //   this.isShowEmpty = true;
-          // }
-          // this.$forceUpdate();
+          if (this.couponList.length >= res.data.data.total) {
+            this.finished = true;
+          } else {
+            this.pageIndex++;
+          }
         }
       });
     }
@@ -209,19 +209,24 @@ $btn-fontSize = 12px;
   padding: 68px 0 78px 0;
   overflow-y: scroll;
   height: 100%;
+
   .refresh-page {
     overflow: visible;
     min-height: 100% !important;
+
     /deep/ .van-pull-refresh__track {
       min-height: -webkit-fill-available;
     }
   }
+
   .bangdou-exchange-wrap {
     padding: 20px 16px;
+
     .bangdou-exchange {
       .bangdou-exchange-body {
         .exchange-body-item {
           border-radius: 16px;
+
           .bangdou-exchange-card {
             position: relative;
             display: flex;
@@ -235,6 +240,7 @@ $btn-fontSize = 12px;
             & + .bangdou-exchange-card {
               margin-top: 16px;
             }
+
             .exchange-card-left {
               width: 101px;
               height: 106px;
@@ -254,6 +260,7 @@ $btn-fontSize = 12px;
                 align-items: center;
                 margin-bottom: 8px;
                 color: #fff;
+
                 .card-left-top-type {
                   height: 16px;
                   font-size: 16px;
@@ -262,6 +269,7 @@ $btn-fontSize = 12px;
                   color: #ffffff;
                   line-height: 16px;
                 }
+
                 .card-left-top-num {
                   font-size: 18px;
                   font-family: PingFangSC-Semibold, PingFang SC;
@@ -269,6 +277,7 @@ $btn-fontSize = 12px;
                   color: #ffffff;
                 }
               }
+
               .exchange-card-left-bottom {
                 height: 12px;
                 font-size: 12px;
@@ -283,6 +292,7 @@ $btn-fontSize = 12px;
                 justify-content: center;
                 align-items: center;
               }
+
               .btn-share {
                 background: #ffffff;
                 border-radius: 15px;
@@ -331,6 +341,7 @@ $btn-fontSize = 12px;
                   -webkit-box-orient: vertical;
                   width: 100%;
                 }
+
                 .card-right-left-middle {
                   padding-top: 0.16rem;
                   font-size: 0.24rem;
@@ -342,6 +353,7 @@ $btn-fontSize = 12px;
                   width: 100%;
                   z-index: 2;
                 }
+
                 .card-right-left-bottom {
                   padding-top: 0.2rem;
                   padding-bottom: 0.2rem;
@@ -354,6 +366,7 @@ $btn-fontSize = 12px;
                   width: 100%;
                 }
               }
+
               .exchange-card-right-right {
                 display: flex;
                 flex-direction: column;
@@ -371,17 +384,20 @@ $btn-fontSize = 12px;
                 }
               }
             }
+
             .icon-arrow-down {
               vertical-align: bottom;
               transition: all 0.3s;
               bottom: -1px;
             }
+
             .goodsimg {
               width: 72px;
               height: 72px;
               border-radius: 4px;
               overflow: hidden;
             }
+
             .coupon-desc-wrap {
               width: 100%;
               height: 0;
@@ -393,16 +409,19 @@ $btn-fontSize = 12px;
               box-shadow: 0px 0.12rem 0.6rem 0px rgba(71, 77, 96, 0.06);
               // margin-top: 4px;
               background-color: #ffffff;
+
               .coupon-desc {
                 font-size: 12px;
                 color: #bfbfbf;
                 padding: 10px 16px;
                 line-height: 18px;
+
                 &-num {
                   margin-top: 8px;
                 }
               }
             }
+
             .coupon-type {
               font-size: 14px;
               font-family: PingFangSC-Medium, PingFang SC;
@@ -412,14 +431,17 @@ $btn-fontSize = 12px;
               align-self: flex-end;
             }
           }
+
           .bangdou-exchange-rules {
             padding: 16px 12px 16px 16px;
+
             .bangdou-exchange-rules-item {
               font-size: 12px;
               font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #bfbfbf;
             }
+
             .bangdou-exchange-rules-item:last-child {
               padding-top: 10px;
             }
@@ -429,61 +451,65 @@ $btn-fontSize = 12px;
     }
   }
 }
+
 .exchange-footer {
-    width: 100%;
-    height: 78px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 2;
-    background: #fafafa;
+  width: 100%;
+  height: 78px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background: #fafafa;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .exchange-footer-item {
+    flex: 1;
+    height: 14px;
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #121212;
+    line-height: 14px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    position: relative;
 
-    .exchange-footer-item {
-      flex: 1;
-      height: 14px;
-      font-size: 14px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #121212;
-      line-height: 14px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      & + .exchange-footer-item::before {
-        position: absolute;
-        content: '';
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        height: 14px;
-        background: #d8d8d8;
-      }
-    }
-    .exchange-footer-center {
+    & + .exchange-footer-item::before {
+      position: absolute;
+      content: '';
+      left: 0;
+      top: 0;
+      bottom: 0;
       width: 1px;
       height: 14px;
       background: #d8d8d8;
     }
-    .exchange-footer-right {
-      flex: 1;
-      height: 14px;
-      font-size: 14px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #121212;
-      line-height: 14px;
-
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
   }
+
+  .exchange-footer-center {
+    width: 1px;
+    height: 14px;
+    background: #d8d8d8;
+  }
+
+  .exchange-footer-right {
+    flex: 1;
+    height: 14px;
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #121212;
+    line-height: 14px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
 </style>
