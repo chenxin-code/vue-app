@@ -176,7 +176,7 @@ export default {
     //去使用
     useCoupon() {
       if (!data.effective) {
-        this.Toast('该卡券未在使用期限内～');
+        Toast('该卡券未在使用期限内～');
         return false;
       }
       let path = '/mall2/list/' + this.$util.getDataString();
