@@ -165,7 +165,10 @@
       <div class="group-people">
         <div v-for="(item, index) in otherBuyList" :key="index">
           <div class="group-people-item">
-            <img class="group-people-pic" src="./images/user_01@2x.png" />
+            <img
+              class="group-people-pic"
+              :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
+            />
             <div class="group-people-message">
               <div class="people-item-phone">{{ item.buyerName }}</div>
               <div class="people-item-time">{{ item.buyTime }}</div>
@@ -866,6 +869,7 @@ export default {
           margin-left: 26px;
           width: 42px;
           height: 42px;
+          border-radius: 50%;
         }
 
         .group-people-message {
