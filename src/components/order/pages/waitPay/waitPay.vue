@@ -649,15 +649,15 @@ export default {
       });
     },
     checkEvent(data) {
-      if (data.billType == 13) {
-        /*去服务商城详情页*/
-        let token = this.$store.state.ythToken
-          ? this.$store.state.ythToken
-          : localStorage.getItem("ythToken");
-        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-        let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&tabShow=true&Authorization=${token}`;
-        location.href = path + query;
-      } else {
+      // if (data.billType == 13) {
+      //   /*去服务商城详情页*/
+      //   let token = this.$store.state.ythToken
+      //     ? this.$store.state.ythToken
+      //     : localStorage.getItem("ythToken");
+      //   let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+      //   let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&tabShow=true&Authorization=${token}`;
+      //   location.href = path + query;
+      // } else {
         // 从全选checkbox进来
         if (data.checkAll || data.checkAllBillType1) {
           // let refs = this.$refs.order.filter(item => {
@@ -770,7 +770,7 @@ export default {
           return BigNumber(total).plus(e.totalPrice);
         }, 0);
         this.mergeAmount = num;
-      }
+      //}
     },
 
     //toast
