@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-04 09:33:56
+ * @LastEditTime: 2021-08-07 20:31:15
 -->
 <template>
   <div class="get-coupons-page">
@@ -42,7 +42,7 @@
           <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
             >立即领取</van-button
           >
-          <van-button class="van-btn" @click="goToShopping" v-else
+          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else
             >立即使用</van-button
           >
         </div>
@@ -203,15 +203,24 @@ export default {
       });
     },
     //立即使用
-    goToShopping: _.debounce(function() {
+    goToShopping: _.debounce(function(data) {
       Toast.loading({
         duration: 0,
         type: "loading",
         message: "正在跳转",
         forbidClick: true
       });
+      // this.$router.push({
+      //   path: "/common"
+      // });
+      // 跳转到商城搜索商品列表
+      let path = "/mall2/list/" + this.$util.getDataString();
       this.$router.push({
-        path: "/common"
+        path: path,
+        query: {
+          skuIds: data.merchanDises,
+          searchFrom: "coupon"
+        }
       });
       Toast.clear(); //关闭页面loading
     }),
