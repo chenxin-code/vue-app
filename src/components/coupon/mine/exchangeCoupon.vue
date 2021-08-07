@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-     <ConfirmPop
+    <ConfirmPop
       :showConfirm="showConfirm"
       :confrimValue="confrimValue"
       :confrimDetail="confrimDetail"
@@ -68,8 +68,9 @@
 
 <script>
 import moment from "moment";
-import ConfirmPop from './../comp/confirmPopDetail';
+import ConfirmPop from "./../comp/confirmPopDetail";
 import { Toast } from "vant";
+import { bffHttp } from "@/utils/memberBffHttp.js";
 export default {
   name: "exchangeCoupon",
   components: {
@@ -84,22 +85,38 @@ export default {
       exchangeCode: "", //卡密Id
       couponActivityId: "", //卡券活动派发id
       couponId: "", //卡券id
-      memberId: "", //会员id
+      memberId:
+        process.env.NODE_ENV === "development"
+          ? "2436937814953168757"
+          : this.$store.state.userInfo.userCode, //会员id
       confrimValue: "", //卡券标题
       confrimDetail: "", //卡券面值
       confirmTime: "" //卡券有效期
     };
   },
 
-  created() {},
+  created() {
+    if (!this.memberId) {
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          if (res.data.status == 0) {
+            this.memberId = res.data.data.userInfo.userCode;
+          }
+        });
+    }
+  },
   mounted() {},
   computed: {
     momentStr() {
       return param => {
         if (!param) {
-          return '';
+          return "";
         } else {
-          return moment(param).format('YYYY/MM/DD');
+          return moment(param).format("YYYY/MM/DD");
         }
       };
     }
@@ -108,7 +125,8 @@ export default {
     moment,
     getCamiloExchangeDetail() {
       const host = process.env.VUE_APP_CENTER_APP;
-      const url = host + "/times/member-bff/member/api-c/v1/member/selectCamilo";
+      const url =
+        host + "/times/member-bff/member/api-c/v1/member/selectCamilo";
       const params = {
         camiloId: this.exchangeCode
       };
@@ -118,7 +136,8 @@ export default {
         message: "加载中...",
         forbidClick: true
       });
-      this.$http.get(url, {params: params})
+      this.$http
+        .get(url, { params: params })
         .finally(() => {
           Toast.clear();
         })
@@ -130,29 +149,40 @@ export default {
             this.confrimValue = res.data.data.couponName; //卡券标题
 
             if (res.data.data.couponType === 10) {
-              this.confrimDetail = res.data.data.faceAmount + '元代金券'; //卡券面值
+              this.confrimDetail = res.data.data.faceAmount + "元代金券"; //卡券面值
             }
             if (res.data.data.couponType === 20) {
-              this.confrimDetail = res.data.data.faceAmount + '元满减券'; //卡券面值
+              this.confrimDetail = res.data.data.faceAmount + "元满减券"; //卡券面值
             }
             if (res.data.data.couponType === 40) {
-              this.confrimDetail = res.data.data.discountRatio * 10 + '折' + '折扣券'; //卡券面值
+              this.confrimDetail =
+                res.data.data.discountRatio * 10 + "折" + "折扣券"; //卡券面值
             }
 
             if (res.data.data.expirationType === 1) {
-              this.confirmTime = this.momentStr(res.data.data.startTime) + ' ~ ' + this.momentStr(res.data.data.expirationTime); //卡券有效期
+              this.confirmTime =
+                this.momentStr(res.data.data.startTime) +
+                " ~ " +
+                this.momentStr(res.data.data.expirationTime); //卡券有效期
             }
             if (res.data.data.expirationType === 3) {
-              this.confirmTime = '相对有效期, ' + res.data.data.valiDays + '天, 领取后' + res.data.data.offsetDays + '天生效'; //卡券有效期
+              this.confirmTime =
+                "相对有效期, " +
+                res.data.data.valiDays +
+                "天, 领取后" +
+                res.data.data.offsetDays +
+                "天生效"; //卡券有效期
             }
           } else if (res.data.code === 500) {
             Toast(res.data.message);
           }
         });
     },
+    //确定兑换
     confirmExchange() {
       const host = process.env.VUE_APP_CENTER_APP;
-      const url = host + "/times/member-bff/member/api-c/v1/member/exchangeCamilo";
+      const url =
+        host + "/times/member-bff/member/api-c/v1/member/exchangeCamilo";
       const params = {
         camiloId: this.exchangeCode, //卡密Id
         couponActivityId: this.couponActivityId, //卡券活动派发id
@@ -165,26 +195,30 @@ export default {
         message: "加载中...",
         forbidClick: true
       });
-      this.$http.post(url, params)
+      bffHttp("POST", url, params)
         .finally(() => {
           Toast.clear();
         })
         .then(res => {
-          if (res.data.code === 200) {
+          if (res.code === 200) {
             this.showConfirm = false;
             this.isSuccessShow = true;
-          } else if (res.data.code === 500) {
+          } else if (res.code === 500) {
             this.showConfirm = false;
             this.isFailShow = true;
           }
         });
+    },
+    //取消兑换
+    cancelExchange() {
+      this.showConfirm = false;
     },
     exchangeSubmit() {
       if (!this.exchangeCode) {
         return;
       }
       this.getCamiloExchangeDetail();
-    },
+    }
   },
   watch: {
     exchangeCode(newVal) {
@@ -195,7 +229,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped type="text/stylus">
-.van-dialog {
+/deep/.van-dialog {
   padding: 16px 16px 24px !important;
   width: calc(100% - 92px) !important;
   background: #ffffff !important;
@@ -358,7 +392,7 @@ export default {
       width: 20px;
       height: 20px;
       float: left;
-      margin-top: 6px;
+      // margin-top: 6px;
       background-size: 100% 100%;
       background-repeat: no-repeat;
       background-image: url("../img/icon-a-left.png");
@@ -366,7 +400,7 @@ export default {
 
     .nav-title {
       float: left;
-      font-size: 24px;
+      font-size: 20px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
       color: #ffffff;

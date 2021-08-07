@@ -8,19 +8,24 @@
           v-for="(tab, index) in tabList"
           :key="`tab${tab.status}`"
         >
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="'- 亲, 没有更多了 -'"
-            :immediate-check="false"
-            :offset="10"
-            @load="getList"
+          <zk-empty
+            image="coupon"
+            v-if="!loading && !list[index].length"
+            description="暂无优惠券"
+          ></zk-empty>
+          <div
+            class="bangdou-exchange-wrap"
+            :style="{
+              height: contentHeight + 'px'
+            }"
           >
-            <div
-              class="bangdou-exchange-wrap"
-              :style="{
-                height: contentHeight + 'px'
-              }"
+            <van-list
+              v-model="loading"
+              :finished="finished"
+              :finished-text="!showEmpty ? '- 亲, 没有更多了 -' : ''"
+              :immediate-check="false"
+              :offset="50"
+              @load="getList"
             >
               <div class="bangdou-exchange">
                 <div class="bangdou-exchange-body">
@@ -113,8 +118,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </van-list>
+            </van-list>
+          </div>
         </van-tab>
       </van-tabs>
     </div>
@@ -124,6 +129,8 @@
 <script>
 import moment from "moment";
 import cookie from "js-cookie";
+import zkEmpty from "./../comp/zk-empty";
+
 const defaultImg = require("../img/coupon-default.png");
 export default {
   data() {
@@ -154,10 +161,13 @@ export default {
         }
       ],
       list: [[], []],
-      pageIndex: [1, 1]
+      pageIndex: [1, 1],
+      showEmpty: false
     };
   },
-  components: {},
+  components: {
+    zkEmpty
+  },
   filters: {
     delPoint(num) {
       const regexp = /(?:\.0*|(\.\d+?)0+)$/;
@@ -178,6 +188,8 @@ export default {
             this.getList();
           }
         });
+    } else {
+      this.getList();
     }
     //当前屏幕高度
     const clientHeight =
@@ -209,6 +221,7 @@ export default {
     },
     //切换tab
     tabChange(index) {
+      this.finished = false;
       if (this.list[index].length === 0) {
         this.pageIndex[index] = 1;
         this.getList();
@@ -245,7 +258,7 @@ export default {
         memberId: this.memberId,
         pageIndex: this.pageIndex[tabIndex],
         pageSize: 10,
-        businessType: 200001,
+        businessType: 200001, //购物券
         state: this.tabList[tabIndex].status
       };
       this.loading = true;
@@ -256,10 +269,15 @@ export default {
           this.list[tabIndex] =
             params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
           this.loading = false;
-          if (this.list.length >= res.data.data.total) {
+          if (this.list[tabIndex].length >= res.data.data.total) {
             this.finished = true;
           } else {
+            this.finished = false;
             this.pageIndex[tabIndex]++;
+          }
+          if (this.list[tabIndex].length === 0) {
+            this.finished = true;
+            this.showEmpty = true;
           }
         }
       });

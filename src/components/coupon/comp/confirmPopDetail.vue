@@ -1,3 +1,9 @@
+<!--
+ * @Description: 这是***页面
+ * @Date: 2021-08-06 19:18:31
+ * @Author: shuimei
+ * @LastEditTime: 2021-08-07 11:28:40
+-->
 <template>
   <van-popup class="confirm-pop" v-model="showConfirm">
     <div class="content">
@@ -14,18 +20,18 @@
 
 <script>
 export default {
-  name: 'ConfirmPopDetail',
-  props: ['showConfirm', 'confrimValue', 'confrimDetail', 'confirmTime'],
+  name: "ConfirmPopDetail",
+  props: ["showConfirm", "confrimValue", "confrimDetail", "confirmTime"],
   components: {},
   data() {
     return {};
   },
   methods: {
     cancelConfim() {
-      this.$parent.cancelConfim();
+      this.$parent.cancelExchange();
     },
     confirmBtn() {
-      this.$parent.confirmBtn();
+      this.$parent.confirmExchange();
     }
   }
 };
@@ -57,7 +63,7 @@ export default {
     margin-bottom: 8px;
   }
   .time {
-    font-size: 16px;
+    font-size: 14px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #8d8d8d;
