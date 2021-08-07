@@ -8,6 +8,11 @@
           v-for="(tab, index) in tabList"
           :key="`tab${tab.status}`"
         >
+          <zk-empty
+            image="coupon"
+            v-if="!loading && !list[index].length"
+            description="暂无优惠券"
+          ></zk-empty>
           <div
             class="bangdou-exchange-wrap"
             :style="{
@@ -17,7 +22,7 @@
             <van-list
               v-model="loading"
               :finished="finished"
-              :finished-text="'- 亲, 没有更多了 -'"
+              :finished-text="!showEmpty ? '- 亲, 没有更多了 -' : ''"
               :immediate-check="false"
               :offset="50"
               @load="getList"
@@ -124,6 +129,8 @@
 <script>
 import moment from "moment";
 import cookie from "js-cookie";
+import zkEmpty from "./../comp/zk-empty";
+
 const defaultImg = require("../img/coupon-default.png");
 export default {
   data() {
@@ -154,10 +161,13 @@ export default {
         }
       ],
       list: [[], []],
-      pageIndex: [1, 1]
+      pageIndex: [1, 1],
+      showEmpty: false
     };
   },
-  components: {},
+  components: {
+    zkEmpty
+  },
   filters: {
     delPoint(num) {
       const regexp = /(?:\.0*|(\.\d+?)0+)$/;
@@ -264,6 +274,10 @@ export default {
           } else {
             this.finished = false;
             this.pageIndex[tabIndex]++;
+          }
+          if (this.list[tabIndex].length === 0) {
+            this.finished = true;
+            this.showEmpty = true;
           }
         }
       });

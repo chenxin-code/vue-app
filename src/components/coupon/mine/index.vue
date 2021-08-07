@@ -5,12 +5,17 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        :finished-text="'- 亲, 没有更多了 -'"
+        :finished-text="!showEmpty ? '- 亲, 没有更多了 -' : ''"
         @load="getList()"
       >
         <div class="bangdou-exchange-wrap">
           <div class="bangdou-exchange">
             <div class="bangdou-exchange-body">
+              <zk-empty
+                v-show="!loading && showEmpty"
+                image="coupon"
+                description="暂无卡券"
+              ></zk-empty>
               <div class="exchange-body-item">
                 <div
                   class="bangdou-exchange-card"
@@ -112,9 +117,13 @@
 <script>
 import moment from "moment";
 import { Toast } from "vant";
+import zkEmpty from "./../comp/zk-empty";
 
 const defaultImg = require("../img/coupon-default.jpg");
 export default {
+  components: {
+    zkEmpty
+  },
   data() {
     return {
       memberId:
@@ -126,7 +135,8 @@ export default {
       setdefaultAvatar: 'this.src="' + defaultImg + '"',
       loading: false,
       couponList: [],
-      finished: false
+      finished: false,
+      showEmpty: false
     };
   },
   created() {
@@ -214,17 +224,28 @@ export default {
         state: 20
       };
       this.loading = true;
-      this.$http.get(url, { params: params }).then(res => {
-        if (res.data.code === 200) {
-          this.couponList = this.couponList.concat(res.data.data.records);
-          this.loading = false;
-          if (this.couponList.length >= res.data.data.total) {
-            this.finished = true;
+      this.$http
+        .get(url, { params: params })
+        .then(res => {
+          if (res.data.code === 200) {
+            this.couponList = this.couponList.concat(res.data.data.records);
+            this.loading = false;
+            if (this.couponList.length >= res.data.data.total) {
+              this.finished = true;
+            } else {
+              this.pageIndex++;
+            }
           } else {
-            this.pageIndex++;
+            this.finished = true;
           }
-        }
-      });
+          if (this.couponList.length === 0) {
+            this.finished = true;
+            this.showEmpty = true;
+          }
+        })
+        .catch(err => {
+          this.finished = true;
+        });
     }
   }
 };
