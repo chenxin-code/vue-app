@@ -203,9 +203,10 @@ export default {
           if (res.code === 200) {
             this.showConfirm = false;
             this.isSuccessShow = true;
-          } else if (res.code === 500) {
+          } else {
             this.showConfirm = false;
             this.isFailShow = true;
+            Toast(res.message)
           }
         });
     },
