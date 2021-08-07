@@ -128,7 +128,7 @@ export default {
     return {
       memberId:
         process.env.NODE_ENV === "development"
-          ? "2436937814953168757"
+          ? "2331048196588962398"
           : this.$store.state.userInfo.userCode,
       pageIndex: 1,
       defaultImg: defaultImg,
@@ -215,7 +215,8 @@ export default {
       this.$router.push({
         path: path,
         query: {
-          skuIds: data.merchanDises
+          skuIds: data.merchanDises,
+          searchFrom: "coupon"
         }
       });
     },

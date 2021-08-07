@@ -23,7 +23,12 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(async config => {
   config.headers.access_channel = "mall";
   let ythToken;
-  ythToken = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken");
+  if (store.state.webtype == "2" || store.state.webtype == "3") {
+    config.headers.Authorization = localStorage.getItem('ythToken')
+  } else {
+    ythToken = store.state.ythToken ? store.state.ythToken : localStorage.getItem("ythToken");
+  }
+  console.log(`ythToken`, ythToken);
 
   // ythToken ="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg3OTI5MTczNyIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjUzNzk3ODkzMDYzNjI1OTcyNSwiZXhwIjoxNjI3NTcwMTg1LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwibm9uT3duZXIiXSwianRpIjoiMWFhNmQ0ZTctMzdhMi00YjcyLThmMzktODNkZDVlNjZjNDhkIiwiY2xpZW50X2lkIjoiYXBwX2MifQ.ZLpUW6xVnUwwcHVMJDCfLE5aM2QvgErRTdA6uX2soApQhlgXULczWpMP2sHx7eUGq59h-htFKrXsAo6HCd7dgrG5xrCcLabS15-ZK7EfhlxExfXxzrhTBi155_w0k07_KGIof5t6AOUVhRDtskD-vDwwndTXLv489KuuDa8rx3zem6h7XXh6kFPYFvhNPmfVdgSbQ1wjQFEXg2hbm9-AUbIFeSpGrE6xktN-rWBdisVBy0UmK5Nfkty-z3CAdramDYsmW-cVtmz4EP7DThklkAESadxkvSUohszGdqVP_qB520YS-KUK1XoxJweSPlDulTydjWwV48C4ngfwEZjDpA"
   if (ythToken) {

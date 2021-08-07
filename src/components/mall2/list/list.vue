@@ -500,9 +500,6 @@ export default {
   mounted() {
     this.easyCardId = this.$route.query.easyCardId;
     this.cardType = this.$route.query.cardType;
-    if(this.$route.query.skuIds) {
-      this.skuIds = _.split(this.$route.query.skuIds, ",")
-    }
   },
   watch: {
     showFiltrate(a) {
@@ -747,6 +744,7 @@ export default {
     },
     // 获取普通商品列表
     _loadProList: function(loaded) {
+      this.queryCouponSkuList() //查询优惠券绑定的sku
       if (this.selectedType == "1") {
         InitialLoadPickupAny.checkIsInitialLoad(address => {
           if (address) {
@@ -1200,6 +1198,13 @@ export default {
           this.$Toast("请求数据失败！");
         }
       );
+    },
+    queryCouponSkuList() {
+      if(this.$route.query.skuIds && this.$route.query.searchFrom == "coupon") {
+        //从领券中心、分销推广优惠券、我的卡券跳转进商品列表页，需要根据sku查询商品列表数据
+        this.skuIds = _.split(this.$route.query.skuIds, ",")
+        // this.categoryId = ""
+      }
     }
   },
   created() {
