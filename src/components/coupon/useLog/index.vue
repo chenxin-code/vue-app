@@ -1,7 +1,7 @@
 <template>
   <div class="exchange-container">
     <nav-top title="优惠券使用记录" @backEvent="backEvent"></nav-top>
-    <div class="exchange-info">
+    <div class="exchange-info" :class="{ isWx: isWx }">
       <van-tabs v-model="active" :sticky="true" type="card" @click="tabChange">
         <van-tab
           :title="tab.label"
@@ -162,7 +162,8 @@ export default {
       ],
       list: [[], []],
       pageIndex: [1, 1],
-      showEmpty: false
+      showEmpty: false,
+      isWx: false
     };
   },
   components: {
@@ -197,6 +198,11 @@ export default {
     this.contentHeight =
       clientHeight -
       (this.$store.state.barHeight + this.$market.getNavHeight());
+
+    //判断是否小程序环境
+    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      this.isWx = true;
+    }
   },
   methods: {
     backEvent() {
@@ -299,6 +305,9 @@ export default {
   .exchange-info {
     font-size: 18px;
     margin-top: 58px;
+    &.isWx {
+      margin-top: 44px;
+    }
 
     ::v-deep .van-tabs__wrap {
       height: 42px;

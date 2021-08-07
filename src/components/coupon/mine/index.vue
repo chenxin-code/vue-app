@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-top title="发优惠券" @backEvent="backEvent"></nav-top>
-    <div class="coupon-list-page" ref="coupon">
+    <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -136,7 +136,8 @@ export default {
       loading: false,
       couponList: [],
       finished: false,
-      showEmpty: false
+      showEmpty: false,
+      isWx: false
     };
   },
   created() {
@@ -151,6 +152,11 @@ export default {
             this.memberId = res.data.data.userInfo.userCode;
           }
         });
+    }
+
+    //判断是否小程序环境
+    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      this.isWx = true;
     }
   },
   methods: {
@@ -229,6 +235,23 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.couponList = this.couponList.concat(res.data.data.records);
+            let nowTime = moment(Date.now()).format("YYYYMMDD");
+            // 是否在有效期
+            this.couponList.map(item => {
+              const stareTime = moment(Number(item.validityStartTime)).format(
+                "YYYYMMDD"
+              );
+              const endTime = moment(Number(item.validityEndTime)).format(
+                "YYYYMMDD"
+              );
+              if (nowTime >= stareTime && nowTime <= endTime) {
+                item.effective = true;
+              } else {
+                item.effective = false;
+              }
+              return item;
+            });
+
             this.loading = false;
             if (this.couponList.length >= res.data.data.total) {
               this.finished = true;
@@ -257,6 +280,9 @@ $btn-fontSize = 12px;
   padding: 68px 0 78px 0;
   overflow-y: scroll;
   height: 100%;
+  &.isWx {
+    padding: 44px 0 78px 0;
+  }
 
   .refresh-page {
     overflow: visible;
