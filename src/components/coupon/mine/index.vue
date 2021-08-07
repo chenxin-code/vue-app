@@ -189,11 +189,19 @@ export default {
       });
     },
     //去使用
-    useCoupon() {
+    useCoupon(data) {
       if (!data.effective) {
         Toast("该卡券未在使用期限内～");
         return false;
       }
+      // 跳转到商城搜索商品列表
+      let path = "/mall2/list/" + this.$util.getDataString();
+      this.$router.push({
+        path: path,
+        query: {
+          skuIds: data.merchanDises
+        }
+      });
     },
     getList() {
       const host = process.env.VUE_APP_CENTER_APP;
@@ -216,28 +224,6 @@ export default {
             this.pageIndex++;
           }
         }
-      });
-    },
-    //获取购物券sku数据
-    getShoppingSku(item) {
-      const host = process.env.VUE_APP_CENTER_APP;
-      const url =
-        host + "/times/member-bff/coupon/api/v1/findSkuListByCouponType";
-      const params = {
-        couponType: "10SC000215"
-      };
-
-      this.$http.post(url, params).then(res => {
-        console.log(`skuIds`, res);
-
-        // 跳转到商城搜索商品列表
-        let path = "/mall2/list/" + this.$util.getDataString();
-        this.$router.push({
-          path: path,
-          query: {
-            skuIds: "123,233,2222"
-          }
-        });
       });
     }
   }
