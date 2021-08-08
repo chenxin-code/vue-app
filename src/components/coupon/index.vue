@@ -39,12 +39,8 @@
         <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
         <div class="btn">
-          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
-            >立即领取</van-button
-          >
-          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else
-            >立即使用</van-button
-          >
+          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive">立即领取</van-button>
+          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else>立即使用</van-button>
         </div>
       </div>
     </div>
