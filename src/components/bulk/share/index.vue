@@ -56,8 +56,8 @@
       <div class="user-card">
         <div class="user-message">
           <img
-            src="./images/img_user_01@2x.png"
-            :error-icon="defaultAvatar"
+            :src="shareData.headAvtUrl ? shareData.headAvtUrl:defaultHeadAvt"
+            :error-icon="defaultHeadAvt"
             class="user-pic"
           />
           <!-- <img
@@ -237,6 +237,7 @@ export default {
       groupStatus: "start",
       orderSwiperList: [],
       defaultAvt: require("./images/user_01@2x.png"),
+      defaultHeadAvt:require('./images/img_user_01@2x.png')
     };
   },
   created() {
@@ -688,6 +689,7 @@ export default {
           width: 47px;
           height: 47px;
           margin-left: 18px;
+          border-radius: 50%;
         }
 
         .user-message-right {
