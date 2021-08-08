@@ -52,7 +52,7 @@
       title="兑换成功"
       :message="`有效期: ${confirmTime}`"
       confirmButtonText="返回卡包"
-      @confirm="isSuccessShow = false"
+      @confirm="confirmAct()"
     ></van-dialog>
 
     <van-dialog
@@ -94,7 +94,6 @@ export default {
       confirmTime: "" //卡券有效期
     };
   },
-
   created() {
     if (!this.memberId) {
       this.$http
@@ -123,6 +122,10 @@ export default {
   },
   methods: {
     moment,
+    confirmAct(){
+      this.isSuccessShow = false;
+      this.$router.go(-1);
+    },
     getCamiloExchangeDetail() {
       const host = process.env.VUE_APP_CENTER_APP;
       const url =
