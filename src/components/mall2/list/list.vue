@@ -637,6 +637,10 @@ export default {
       );
     },
     backEvent: function() {
+      if(this.$router.query.jumpH5 && this.$router.query.jumpH5 == 'h5') {
+        this.$router.go(-1);
+        return;
+      }
       if (this.$route.query.backApp) {
         appNav.navigatorBack({ url: "0" }).then(res => {
           console.log(res);
