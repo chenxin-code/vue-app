@@ -186,7 +186,7 @@
     line-height: 50px;
     border-radius: 5px;
     border-top: 3px solid #f5f5f5;
-    border-bottom: 3px solid #f5f5f5;" v-if="$route.query.skuIds && $route.query.searchFrom === 'coupon'">
+    border-bottom: 3px solid #f5f5f5;" v-if="checkParams()">
           以下商品可使用当前优惠券：
         </div>
         <div class="list-content">
@@ -517,6 +517,9 @@ export default {
     }
   },
   methods: {
+    checkParams(){
+      return typeof this.$route.query.skuIds !== 'undefined' && this.$route.query.searchFrom === 'coupon'
+    },
     //新增类目分类切换方法
     ...mapMutations(["setShowCategory", "setShowBackTop"]),
     toggle(category) {
