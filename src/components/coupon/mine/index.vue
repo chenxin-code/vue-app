@@ -319,7 +319,7 @@ $btn-fontSize = 12px;
             .exchange-card-left {
               width: 101px;
               height: 106px;
-              background-image: url("../img/gray_right.png");
+              background-image: url("../img/yellow_card.png");
               background-repeat: no-repeat;
               background-position: center center;
               background-size: 100% 100%;
