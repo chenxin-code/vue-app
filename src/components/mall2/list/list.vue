@@ -640,7 +640,8 @@ export default {
       );
     },
     backEvent: function() {
-      if(this.$router.query.jumpH5 && this.$router.query.jumpH5 == 'h5') {
+      console.log(123);
+      if(this.$route.query.jumpH5 && this.$route.query.jumpH5 == 'h5') {
         this.$router.go(-1);
         return;
       }
