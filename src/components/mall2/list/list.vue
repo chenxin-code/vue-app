@@ -179,6 +179,16 @@
             <i class="iconfont mall-shaixuan filter-size theme_font_tint"></i>
           </div>
         </div>
+        <div style="height: 50px;
+    width: 100%;
+    padding: 0 25px;
+    font-size: 15px;
+    line-height: 50px;
+    border-radius: 5px;
+    border-top: 3px solid #f5f5f5;
+    border-bottom: 3px solid #f5f5f5;" v-if="$route.query.skuIds && $route.query.searchFrom === 'coupon'">
+          以下商品可使用当前优惠券：
+        </div>
         <div class="list-content">
           <div class="list-pull-to">
             <pull-to
@@ -389,7 +399,7 @@ import Recommend from "./recommend/index";
 import PickupRecommend from "./recommend/pickup-recommend";
 import InitialLoadPickupAny from "@/utils/initialLoadPickupAny.js";
 import AdPage from "@/components/product/index/subpage/adpage";
-import NewCategory from "@/components/product/index/category/index";
+import NewCategory from "../../../components/product/index/category/index";
 import { mapMutations } from "vuex";
 import appNav from "@zkty-team/x-engine-module-nav";
 import _ from "lodash";
@@ -1200,7 +1210,7 @@ export default {
       );
     },
     queryCouponSkuList() {
-      if(this.$route.query.skuIds && this.$route.query.searchFrom == "coupon") {
+      if(this.$route.query.skuIds && this.$route.query.searchFrom === 'coupon') {
         //从领券中心、分销推广优惠券、我的卡券跳转进商品列表页，需要根据sku查询商品列表数据
         this.skuIds = _.split(this.$route.query.skuIds, ",")
         // this.categoryId = ""
@@ -1222,8 +1232,9 @@ export default {
       this.$store.state.webtype !== "3" &&
       this.$store.state.webtype !== "2"
     ) {
-      this.isProgram = true;
+      this.isProgram = !(this.$route.query.skuIds && this.$route.query.searchFrom === 'coupon');
     } else {
+      //小程序
       this.isProgram = false;
     }
 
