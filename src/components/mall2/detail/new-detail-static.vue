@@ -3603,11 +3603,8 @@ export default {
           : "1";
       }
 
-<<<<<<< HEAD
-=======
       // this.distributionPersonDetail = await this.getDistributionDetail();
 
->>>>>>> feature/d1.2.2_share_poster
       let url = "/appcontent/js/product/productDetail.js";
       let funcName = "productDetail_" + this.skuId;
       let args = dataMergeInterceptor.getRequestArgs() || [];
