@@ -73,9 +73,9 @@
       },
       productEvent: function (product) {
         console.log(product)
-        // if(this.$route.matched[0].path == '/mall2/detail/:id'){
-        //   this.$emit('sensorsDuration',{path:'/mall2/detail'})
-        // }
+        if(this.$route.matched[0].path == '/mall2/detail/:id'){
+          this.$emit('sensorsDuration',{path:'/mall2/detail'})
+        }
         let path = '/mall2/detail/' + this.$util.getDataString()
         if (product.productType == 2){
           path = '/mall2/ticketdetail';
