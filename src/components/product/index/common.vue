@@ -194,7 +194,7 @@ export default {
       pgCode: "",
       pageShow: false,
       payOrderShow: true,
-      pageData: null,
+      pageData: {},
       fullPageData: {},
       tabbarSubDatas: [],
       selectedIndex: -1,
@@ -1211,7 +1211,7 @@ export default {
 }
 .top_bg {
   height: 0.933333rem;
-  background-color:  #f74440;
+  background-color:  #f44981;
 }
 
 .mobile-preview {

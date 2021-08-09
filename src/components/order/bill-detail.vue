@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-20 10:18:23
+ * @LastEditTime: 2021-07-24 14:19:02
 -->
 <template>
   <div class="bill-detail">
@@ -44,17 +44,37 @@
             </van-dropdown-menu>
           </div>
         </div>
+        <div class="desc" v-if="this.results.managementFeeCycle === '1'">
+          按月度缴费
+        </div>
+        <div class="desc" v-if="this.results.managementFeeCycle === '3'">
+          按季度缴费
+        </div>
 
-        <div class="content" :class="showEmpty ? 'empty' : ''">
-          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <div
+          class="content"
+          :class="[
+            showEmpty ? 'empty' : '',
+            !isFinishBill && !showEmpty ? 'not-pay-bill' : '',
+          ]"
+        >
+          <!-- <van-pull-refresh
+            v-model="isLoading"
+            @refresh="onRefresh"
+            class="refresh-page"
+          > -->
             <van-list
+              class="tab-list-box"
+              :class="[
+                showEmpty ? 'empty' : '',
+                !isFinishBill && !showEmpty ? 'not-pay-bill' : '',
+              ]"
               v-model="loading"
               :finished="finished"
-              :finished-text="showFinishText ? '--没有更多了--' : ''"
+              :finished-text="showFinishText ? '- 亲, 没有更多账单了 -' : ''"
               :immediate-check="false"
               :offset="10"
               @load="getBillDetail"
-              style="height:100%;width:100%;overflow-y:auto;"
             >
               <div
                 class="list"
@@ -67,7 +87,7 @@
                     :name="index"
                     v-model="item.shopCheck"
                     @click="checkShop(item, index, isMonthPay)"
-                    checked-color="#ee0a24"
+                    checked-color="#E5165A"
                     ref="checkShop"
                     >{{ item.quarterTitle }}</van-checkbox
                   >
@@ -90,7 +110,7 @@
                       v-show="isMonthPay"
                       @change="checkSingle(item, detail, i)"
                       ref="checkboxGroup"
-                      checked-color="#ee0a24"
+                      checked-color="#E5165A"
                     ></van-checkbox>
                   </div>
                   <div
@@ -134,13 +154,13 @@
                 </div>
               </div>
               <Empty
-                v-show="showEmpty"
+                v-if="showEmpty && loaded"
                 :description="
                   isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
                 "
               ></Empty>
             </van-list>
-          </van-pull-refresh>
+          <!-- </van-pull-refresh> -->
         </div>
       </div>
     </div>
@@ -186,7 +206,7 @@ export default {
       billValue: 0,
       typeOption: [
         { text: "待支付", value: 0 },
-        { text: "已完成", value: 1 }
+        { text: "已完成", value: 1 },
       ],
       isLoading: false, //下拉刷新
       isFinishBill: false,
@@ -209,7 +229,8 @@ export default {
       checkPcs: false,
       errorMsg: "",
       showErrorMsg: false,
-      isDisabled: true
+      isDisabled: true,
+      loaded: false,
     };
   },
 
@@ -219,7 +240,7 @@ export default {
     Empty,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
-    [Loading.name]: Loading
+    [Loading.name]: Loading,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === "/billCenter/detail") {
@@ -249,10 +270,11 @@ export default {
         duration: 0,
         type: "loading",
         message: "加载中...",
-        forbidClick: true
+        forbidClick: true,
       });
     },
     getBillDetail() {
+      this.loaded = false;
       this.showEmpty = false;
       this.loading = true;
       if (this.isFinishBill) {
@@ -273,89 +295,109 @@ export default {
           ? this.pageTimes
             ? this.pageTimes
             : ""
-          : ""
+          : "",
       };
 
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "https://m-center-uat-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
 
-      this.$http.get(url, { params: propertyObj }).then(res => {
-        let data = res.data.data;
-        if (res.data.code === 200) {
-          if (!this.isFinishBill) {
-            //待支付
-            if (data.notpay.length && data.notpay[0].records.length) {
-              this.results = data.notpay[0];
-              this.totalPayableAmount = this.results.totalPayableAmount;
-              this.finished = true;
-              this.showFinishText = true;
-              this.isShowPayDiv = true;
-            } else {
-              this.results = [];
-              this.isShowPayDiv = false; //不显示支付支付组件
-            }
-          } else {
-            this.isShowPayDiv = false;
-            this.totalPayableAmount = "0.00"; //已完成待缴金额为0
-            //已完成
-            if (data.finish.length && data.finish[0].records.length) {
-              if (this.currentPage === 1) {
-                this.results = data.finish[0];
-                this.pageTimes = this.results.pageTimes;
+      this.$http
+        .get(url, { params: propertyObj })
+        .then((res) => {
+          let data = res.data.data;
+          if (res.data.code === 200) {
+            if (!this.isFinishBill) {
+              //待支付
+              if (data.notpay.length && data.notpay[0].records.length) {
+                this.results = data.notpay[0];
+                this.totalPayableAmount = this.results.totalPayableAmount;
+                this.finished = true;
+                this.showFinishText = true;
+                this.isShowPayDiv = true;
               } else {
-                let pageLength = this.pageTimes
-                  ? _.split(this.pageTimes, ",").length
-                  : 0;
-                if (
-                  (pageLength && pageLength === this.currentPage) ||
-                  pageLength === 1
-                ) {
-                  if (pageLength !== 1) {
+                this.results = [];
+                this.isShowPayDiv = false; //不显示支付支付组件
+              }
+            } else {
+              this.isShowPayDiv = false;
+              this.totalPayableAmount = "0.00"; //已完成待缴金额为0
+              //已完成
+              if (data.finish.length && data.finish[0].records.length) {
+                if (this.currentPage === 1) {
+                  this.results = data.finish[0];
+                  this.pageTimes = this.results.pageTimes;
+
+                  //如果年份只有一个，则不再第二次请求了
+                  if (_.split(this.pageTimes, ",").length === 1) {
+                    this.finished = true;
+                    this.showFinishText = true;
+                  }
+                } else {
+                  let pageLength = this.pageTimes
+                    ? _.split(this.pageTimes, ",").length
+                    : 0;
+                  if (
+                    (pageLength && pageLength === this.currentPage) ||
+                    pageLength === 1
+                  ) {
+                    if (pageLength !== 1) {
+                      let list = data.finish[0].records;
+                      let re = this.results.records.concat(list);
+                      this.results.records = re;
+                    }
+
+                    this.finished = true;
+                    this.showFinishText = true;
+                  } else {
                     let list = data.finish[0].records;
                     let re = this.results.records.concat(list);
                     this.results.records = re;
+                    this.finished = false;
                   }
-
-                  this.finished = true;
-                  this.showFinishText = true;
+                }
+              } else {
+                //某些年份没有数据时的处理逻辑
+                if (this.currentPage === 1) {
+                  this.results = [];
                 } else {
                   let list = data.finish[0].records;
                   let re = this.results.records.concat(list);
                   this.results.records = re;
-                  this.finished = false;
+                  if (_.split(this.pageTimes, ",").length == this.currentPage) {
+                    this.finished = true;
+                    this.showFinishText = true;
+                  }
                 }
               }
-            } else {
-              this.results = [];
             }
-          }
-          console.log(`this.results`, this.results);
-
-          this.loading = false; //清除loading
-          this.isDisabled = false;
-          this.isLoading = false;
-          if (this.results.length === 0) {
-            this.showEmpty = true;
-            this.finished = true;
-            this.showFinishText = false;
+            this.loading = false; //清除loading
+            this.isDisabled = false;
+            this.isLoading = false;
+            if (this.results.length === 0) {
+              this.showEmpty = true;
+              this.finished = true;
+              this.showFinishText = false;
+            } else {
+              this.showEmpty = false;
+              this.isMonthPay =
+                this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
+            }
+            console.log(`请求了`);
+            this.isShowNumLoading = false;
           } else {
-            this.showEmpty = false;
-            this.isMonthPay =
-              this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
+            this.results = [];
+            // this.showEmpty = true;
+            Toast({ duration: 500, message: res.data.message }); //提示错误信息
           }
-
-          this.isShowNumLoading = false;
-        } else {
-          this.results = [];
-          // this.showEmpty = true;
-          Toast({ duration: 500, message: res.data.message }); //提示错误信息
-        }
-        this.$forceUpdate();
-      });
+          this.$forceUpdate();
+        })
+        .finally(() => {
+          this.loaded = true;
+        });
     },
     //点击选中整个季度账单
     checkShop(item, index, type) {
@@ -467,7 +509,7 @@ export default {
     //单个季度账单反选
     shopFalse(item) {
       let _this = this;
-      item.quarterList.forEach(itemIn => {
+      item.quarterList.forEach((itemIn) => {
         _this.checkFalse(item, itemIn);
       });
     },
@@ -487,7 +529,7 @@ export default {
             });
           }
         } else {
-          data.forEach(item => {
+          data.forEach((item) => {
             item.shopCheck = true;
             item.quarterList.forEach((items, index) => {
               this.checkTrue(items, index);
@@ -515,7 +557,7 @@ export default {
             });
           }
         } else {
-          data.forEach(item => {
+          data.forEach((item) => {
             item.shopCheck = false;
             item.quarterList.forEach((items, index) => {
               this.checkFalse(items, index);
@@ -542,18 +584,21 @@ export default {
         type: "microapp",
         uri: "com.times.microapp.AppcInvoice", // 微应用包名
         path: "/", // 微应用具体路由
-        hideNavbar: true
+        hideNavbar: true,
       });
     },
     //下拉刷新
     onRefresh() {
       this.$refs.payDiv.isShow = false; //隐藏底部支付全选按钮
+      this.$refs.payDiv.isChecked = false; //取消勾选全选按钮
       this.checkData = new Set();
       this.mergeAmount = 0; //合计选中的账单总金额
       this.payTotal = 0;
       this.results = [];
       this.showFinishText = false;
       this.loading = true;
+      this.isLoading = false;
+      this.loaded = false;
       this.isDisabled = true;
       this.finished = false;
       this.isShowNumLoading = true;
@@ -577,6 +622,7 @@ export default {
       this.loading = true;
       this.isDisabled = true;
       this.finished = false;
+      this.loaded = false;
       this.showEmpty = false;
       this.isShowNumLoading = true;
       this.currentPage = 0;
@@ -589,13 +635,13 @@ export default {
     mergePay() {
       this.toast(); //开启页面loading
       let payInfoList = Array.from(this.checkData);
-      let payData = payInfoList.filter(item => {
+      let payData = payInfoList.filter((item) => {
         return item.monthList;
       });
       console.log(`payData`, payData);
       let billNos = [];
       payData.forEach((item, index) => {
-        item.billNos.forEach(data => {
+        item.billNos.forEach((data) => {
           billNos.push(data);
         });
       });
@@ -608,7 +654,7 @@ export default {
       } else {
         let billNoList = [];
         payData.forEach((payItem, index) => {
-          payItem.billNos.forEach(it => {
+          payItem.billNos.forEach((it) => {
             billNoList.push(it.toString());
           });
         });
@@ -622,79 +668,117 @@ export default {
           : (pcsUrl =
               "https://times-pms.linli580.com/pcs/bill-center/check-bill");
         let pcsObj = {
-          list: billNoList
+          list: billNoList,
         };
-        this.$http.post(pcsUrl, JSON.stringify(pcsObj)).then(res => {
-          if (res.data.code == "0000") {
-            let arr = res.data.data;
-            for (let index = 0; index < arr.length; index++) {
-              if (arr[index].status == 1 || arr[index].status == 2) {
-                checkStatus.push(arr[index].status);
+        this.$http
+          .post(pcsUrl, JSON.stringify(pcsObj))
+          .then((res) => {
+            if (res.data.code == "0000") {
+              let arr = res.data.data;
+              for (let index = 0; index < arr.length; index++) {
+                if (arr[index].status == 1 || arr[index].status == 2) {
+                  checkStatus.push(arr[index].status);
+                }
               }
-            }
-            console.log(`详情页checkStatus`, checkStatus);
+              console.log(`详情页checkStatus`, checkStatus);
 
-            if (_.uniq(checkStatus).includes(2)) {
-              Toast.clear(); //关闭页面loading
-              this.showErrorMsg = true;
-              this.errorMsg =
-                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            } else if (_.uniq(checkStatus).includes(1)) {
-              Toast.clear(); //关闭页面loading
-              this.showErrorMsg = true;
-              this.errorMsg =
-                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            } else {
-              let payStr = [];
-              payData.forEach((item, index) => {
-                // isPay=1：支付中；isPay=0：待支付
-                payStr.push(item.isPay);
-              });
-              console.log(`是否支付中账单`, payStr);
-              if (payStr.includes(1)) {
+              if (_.uniq(checkStatus).includes(2)) {
                 Toast.clear(); //关闭页面loading
                 this.showErrorMsg = true;
                 this.errorMsg =
-                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                  "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+              } else if (_.uniq(checkStatus).includes(1)) {
+                Toast.clear(); //关闭页面loading
+                this.showErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
               } else {
-                console.log(`提交账单中心参数`, {
-                  businessCstNo: this.$store.state.userInfo.phone,
-                  platMerCstNo: payData[0].platMerCstNo,
-                  tradeMerCstNo: payData[0].tradeMerCstNo,
-                  billNo: billNosStr,
-                  appScheme: "x-engine",
-                  payType: false
+                let payStr = [];
+                payData.forEach((item, index) => {
+                  // isPay=1：支付中；isPay=0：待支付
+                  payStr.push(item.isPay);
                 });
-                //请求账单中心发起支付
-                yjzdbill.YJBillPayment({
-                  businessCstNo: this.$store.state.userInfo.phone,
-                  platMerCstNo: payData[0].platMerCstNo,
-                  tradeMerCstNo: payData[0].tradeMerCstNo,
-                  billNo: billNosStr,
-                  appScheme: "x-engine",
-                  payType: false,
-                  __ret__: res => {
-                    console.log(
-                      "---------------开始支付提交记录---------------------"
-                    );
-                    console.log(res);
-                    if (res.billRetStatus == "1") {
-                      Toast.clear(); //关闭页面loading
-                      //支付成功
-                      this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
-                    } else {
-                      Toast.clear(); //关闭页面loading
-                      this.showErrorMsg = true;
-                      this.errorMsg = res.billRetStatusMessage
-                        ? res.billRetStatusMessage
-                        : "支付失败";
-                    }
-                  }
-                });
+                console.log(`是否支付中账单`, payStr);
+                if (payStr.includes(1)) {
+                  Toast.clear(); //关闭页面loading
+                  this.showErrorMsg = true;
+                  this.errorMsg =
+                    "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                } else {
+                  console.log(`提交账单中心参数`, {
+                    businessCstNo: this.$store.state.userInfo.phone,
+                    platMerCstNo: payData[0].platMerCstNo,
+                    tradeMerCstNo: payData[0].tradeMerCstNo,
+                    billNo: billNosStr,
+                    appScheme: "x-engine",
+                    payType: false,
+                  });
+                  //请求账单中心发起支付
+                  yjzdbill.YJBillPayment({
+                    businessCstNo: this.$store.state.userInfo.phone,
+                    platMerCstNo: payData[0].platMerCstNo,
+                    tradeMerCstNo: payData[0].tradeMerCstNo,
+                    billNo: billNosStr,
+                    appScheme: "x-engine",
+                    payType: false,
+                    __ret__: (res) => {
+                      console.log(
+                        "---------------开始支付提交记录---------------------"
+                      );
+                      console.log(res);
+                      if (res.billRetStatus == "1") {
+                        Toast.clear(); //关闭页面loading
+                        //支付成功
+                        this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                      } else {
+                        Toast.clear(); //关闭页面loading
+                        this.showErrorMsg = true;
+                        this.errorMsg = res.billRetStatusMessage
+                          ? res.billRetStatusMessage
+                          : "支付失败";
+                      }
+                    },
+                  });
+                }
               }
             }
-          }
-        });
+          })
+          .catch(() => {
+            console.log(`catch提交账单中心参数`, {
+              businessCstNo: this.$store.state.userInfo.phone,
+              platMerCstNo: payData[0].platMerCstNo,
+              tradeMerCstNo: payData[0].tradeMerCstNo,
+              billNo: billNosStr,
+              appScheme: "x-engine",
+              payType: false,
+            });
+            //请求账单中心发起支付
+            yjzdbill.YJBillPayment({
+              businessCstNo: this.$store.state.userInfo.phone,
+              platMerCstNo: payData[0].platMerCstNo,
+              tradeMerCstNo: payData[0].tradeMerCstNo,
+              billNo: billNosStr,
+              appScheme: "x-engine",
+              payType: false,
+              __ret__: (res) => {
+                console.log(
+                  "---------------catch开始支付提交记录---------------------"
+                );
+                console.log(res);
+                if (res.billRetStatus == "1") {
+                  Toast.clear(); //关闭页面loading
+                  //支付成功
+                  this.$router.push({ path: "/order/2?orderPage=false" }); //支付完成返回到待支付页面
+                } else {
+                  Toast.clear(); //关闭页面loading
+                  this.showErrorMsg = true;
+                  this.errorMsg = res.billRetStatusMessage
+                    ? res.billRetStatusMessage
+                    : "支付失败";
+                }
+              },
+            });
+          });
       }
     },
     //查看详情
@@ -711,7 +795,7 @@ export default {
           type: "microapp",
           uri: "com.times.microapp.AppcPrepay", // 微应用包名
           path: path, // 微应用具体路由
-          hideNavbar: false
+          hideNavbar: false,
         });
       } else {
         //待支付
@@ -732,24 +816,28 @@ export default {
             status: item.status, // 账单状态 10待支付， 60-支付中，70-交易失败，80-交易关闭，90-支付成功，100-已撤销"
             recStartTime: item.businessParams.recStartTime, //收费周期-开始时间
             recEndTime: item.businessParams.recEndTime, //收费周期-结束时间
-            chargeYear: item.businessParams.chargeYear //缴纳月份
-          }
+            chargeYear: item.businessParams.chargeYear, //缴纳月份
+          },
         });
       }
     },
     //关闭弹窗
     closeTanC() {
       this.showErrorMsg = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
+$title-color = #E5165A;
+$color = #8D8D8D;
+
 .bill-detail {
   .warpper {
     height: 100%;
+
     .summary {
       background-image: url('./img/bill-detail-bg.png');
       background-size: 100% 100%;
@@ -758,6 +846,7 @@ export default {
       margin: 10px 11px;
       border-radius: 12px;
       min-height: 95px;
+
       .house-title {
         font-size: 16px;
         font-family: PingFangSC-Semibold, PingFang SC;
@@ -767,9 +856,11 @@ export default {
         padding: 16px 16px 10px 16px;
         min-height: 48px;
       }
+
       .pay-total {
         display: flex;
         padding: 0 16px 25px 16px;
+
         .text {
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;
@@ -777,6 +868,7 @@ export default {
           color: #FFFFFF;
           line-height: 20px;
         }
+
         .money {
           font-size: 24px;
           font-family: PingFangSC-Regular, PingFang SC;
@@ -785,17 +877,21 @@ export default {
           line-height: 28px;
           right: 32px;
           position: absolute;
+
           span {
             font-size: 20px;
           }
         }
       }
     }
+
     .bill-list {
       height: 100%;
       margin-top: 45px;
+
       .title {
         display: inline-flex;
+
         .icon {
           display: inline-block;
           width: 15px;
@@ -804,7 +900,9 @@ export default {
           background-size: 100%;
           position: relative;
           top: 3px;
+          margin-right: 10px;
         }
+
         .text {
           font-size: 16px;
           font-family: PingFangSC-Regular, PingFang SC;
@@ -812,30 +910,35 @@ export default {
           color: #222222;
           line-height: 22px;
           margin-left: 11px;
+
           span::after {
-            content: "";
+            content: '';
             height: 10px;
-            width: 50%;
-            background: linear-gradient(270deg, #FFFFFF 0%, #FFE3E5 100%);
+            width: 40%;
+            background: linear-gradient(270deg, #FFFFFF 0%, $title-color 500%);
             border-radius: 5px;
             position: absolute;
             z-index: -1;
             left: 0;
-            margin-top: 14px;
+            margin-top: 12px;
             margin-left: 12px;
           }
         }
+
         .operation {
           right: 16px;
           position: absolute;
           display: inline-flex;
+
           /deep/ .van-dropdown-menu {
             width: 82px;
+
             .van-dropdown-item {
               left: auto;
               right: 16px;
             }
           }
+
           /deep/.van-dropdown-menu__bar {
             height: 29px;
             background: #F9F9F9;
@@ -843,6 +946,7 @@ export default {
             border: 1px solid #EEEEEE;
             box-shadow: 0 0px 0px #EEEEEE;
             padding-right: 16px;
+
             .van-dropdown-menu__title {
               font-size: 14px;
               font-family: PingFangSC-Regular, PingFang SC;
@@ -850,10 +954,12 @@ export default {
               color: #888888;
               line-height: 20px;
             }
+
             &.van-dropdown-menu__bar--opened {
               border-radius: 12px 12px 0 0;
             }
           }
+
           /deep/.van-dropdown-menu__title::after {
             background: url('./img/bill-down-icon.png') no-repeat;
             background-size: 100%;
@@ -863,23 +969,29 @@ export default {
             transform: none;
             opacity: 1;
             top: 5px;
-             right: -16px;
+            right: -16px;
           }
+
           /deep/.van-dropdown-menu__title--down::after {
             margin-top: -5px;
             transform: rotate(180deg) !important;
           }
+
           /deep/.van-dropdown-item--down {
             width: 82px;
+
             .van-dropdown-item__content {
               background: #FFFFFF;
               border-radius: 0px 0px 14px 14px;
               border: 1px solid #EEEEEE;
+
               .van-dropdown-item__option {
-                border-bottom:1px solid #EEEEEE
+                border-bottom: 1px solid #EEEEEE;
               }
+
               .van-cell {
                 padding: 4px 18px;
+
                 .van-cell__title {
                   font-size: 14px;
                   font-family: PingFangSC-Regular, PingFang SC;
@@ -889,24 +1001,99 @@ export default {
                 }
               }
             }
+
             .van-cell__value {
               display: none;
             }
           }
         }
       }
+
+      .desc {
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: $color;
+        line-height: 18px;
+        margin-left: 36px;
+        margin-top: 5px;
+      }
+
       .content {
         margin-top: 15px;
-        padding-bottom: 320px;
+        // padding-bottom: 320px;
         background: #F9F9F9;
         border-radius: 12px;
         overflow-y: scroll;
         height: 100%;
-        &.empty{
-          padding-bottom: 0
+
+        &.empty {
+          padding-bottom: 0;
         }
+
+        &.not-pay-bill {
+          // padding-bottom: 400px;
+        }
+
+        .refresh-page {
+          min-height: 100%;
+
+          .tab-list-box {
+            max-height: 100vh;
+            width: 100%;
+            overflow-y: scroll;
+            padding-bottom: 320px;
+
+            &.empty {
+              padding-bottom: 0;
+            }
+
+            &.not-pay-bill {
+              padding-bottom: 400px;
+            }
+          }
+        }
+
+        &.not-pay-bill {
+          // padding-bottom: 400px;
+        }
+
+        .refresh-page {
+          min-height: 100%;
+
+          .tab-list-box {
+            max-height: 100vh;
+            width: 100%;
+            overflow-y: scroll;
+            padding-bottom: 320px;
+
+            &.empty {
+              padding-bottom: 0;
+            }
+
+            &.not-pay-bill {
+              padding-bottom: 400px;
+            }
+          }
+        }
+        .tab-list-box {
+          max-height: 100vh;
+          width: 100%;
+          overflow-y: scroll;
+          padding-bottom: 320px;
+
+          &.empty {
+            padding-bottom: 0;
+          }
+
+          &.not-pay-bill {
+            padding-bottom: 400px;
+          }
+        }
+
         .list {
           padding: 17px 11px;
+
           .title-hd {
             font-size: 14px;
             font-family: PingFangSC-Regular, PingFang SC;
@@ -914,41 +1101,50 @@ export default {
             color: #444444;
             line-height: 16px;
           }
+
           .item {
             width: 100%;
             display: inline-flex;
             margin-top: 21px;
+
             .item-box {
-              width:100%;
+              width: 100%;
               background: #FFFFFF;
               border-radius: 12px;
               margin-left: 7px;
               padding-bottom: 16px;
+              box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
+
               &.finish-item {
                 margin-left: 0;
               }
+
               .detail-title {
                 width: 100%;
                 margin-bottom: 7px;
                 border-bottom: 0.026667rem solid #F1F1F1;
+
                 .month-text {
                   z-index: 0;
                   margin-left: 16px;
                   position: relative;
+
                   span {
                     font-size: 16px;
                     font-family: PingFangSC-Medium, PingFang SC;
                     font-weight: 500;
-                    color: #E8374A;
+                    color: $title-color;
                     line-height: 33px;
                   }
+
                   .num {
                     font-size: 24px;
+
                     &::after {
-                      content: "";
+                      content: '';
                       height: 10px;
-                      width: 35%;
-                      background: linear-gradient(270deg, #FFFFFF 0%, #FFE3E5 100%);
+                      width: 26%;
+                      background: linear-gradient(270deg, #FFFFFF 0%, $title-color 400%);
                       border-radius: 5px;
                       position: absolute;
                       z-index: -1;
@@ -956,7 +1152,6 @@ export default {
                       margin-top: 21px;
                     }
                   }
-
                 }
 
                 .status {
@@ -964,38 +1159,45 @@ export default {
                   position: relative;
                   float: right;
                   margin-right: 16px;
+
                   span {
                     font-size: 14px;
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
-                    color: #E8374A;
+                    color: $title-color;
                     line-height: 20px;
                   }
+
                   .pay-status {
                     &.finish {
-                      color: #8D8D8D;
+                      color: $color;
                     }
+
                     &.need {
-                      color: #121212
+                      color: #121212;
                     }
                   }
+
                   .pay-money {
                     font-size: 16px;
                     color: #121212;
                   }
                 }
               }
+
               .detail-item {
                 margin: 0 16px;
+
                 span {
                   font-size: 13px;
                   font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
-                  color: #8D8D8D;
+                  color: $color;
                   line-height: 26px;
                 }
+
                 i {
-                  background-image : url('./img/check-bill-icon.png');
+                  background-image: url('./img/check-bill-icon.png');
                   background-size: 100%;
                   position: relative;
                   display: inline-block;
@@ -1004,6 +1206,7 @@ export default {
                   margin-left: 4px;
                   top: 4px;
                 }
+
                 .detail-money {
                   float: right;
                 }
@@ -1011,6 +1214,7 @@ export default {
             }
           }
         }
+
         /deep/.van-checkbox {
           .van-checkbox__label {
             font-size: 14px;
@@ -1023,6 +1227,7 @@ export default {
       }
     }
   }
+
   .tanc-box {
     height: 100%;
     width: 100%;
@@ -1032,6 +1237,7 @@ export default {
     right: 0;
     z-index: 51;
     background-color: rgba(18, 18, 18, 0.8);
+
     .content {
       height: auto;
       width: calc(100% - 84px);
@@ -1042,6 +1248,7 @@ export default {
       min-height: 215px;
       padding-bottom: 1px;
       text-align: center;
+
       .bg-box {
         width: 100%;
         height: 70px;
@@ -1049,6 +1256,7 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
       }
+
       .message-box {
         margin-top: 22px;
         padding: 0 20px;
@@ -1058,21 +1266,24 @@ export default {
         color: #333333;
         line-height: 24px;
       }
+
       .btn-box {
         // width: 100%;
         height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+        background: linear-gradient(270deg, #E5165A 0%, #FF6094 100%);
         border-radius: 8px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
         color: #FFFFFF;
         line-height: 38px;
-        padding: 0 20px
+        padding: 0 20px;
         text-align: center;
         margin: 28px 20px;
       }
     }
+
     .close-btn {
       width: 34px;
       height: 34px;

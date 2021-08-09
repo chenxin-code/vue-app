@@ -1,6 +1,16 @@
 <template>
-  <div class="waitPay">
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+  <div
+    class="waitPay"
+    :class="{
+      'wait-pay-x': this.$util.getIsIphoneX_X(),
+      'empty-page': showEmpty
+    }"
+  >
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      class="refresh-page"
+    >
       <van-list
         v-model="loading"
         :finished="finished"
@@ -9,14 +19,15 @@
         :error.sync="error"
         :error-text="errorText"
         :immediate-check="false"
+        offset="10"
       >
         <property-bill
+          v-show="isLoadPropertyBill"
           pageName="waitPay"
           ref="propertyOrder"
           :isDisAll="isDisAll"
           :isDis="isDis"
           :results="billResults"
-          v-show="isLoadPropertyBill"
           @checkEvent="checkEvent"
         >
           <div v-for="(item, index) in billResults" :key="index" class="scroll">
@@ -33,7 +44,7 @@
         </property-bill>
         <div
           v-for="(item, index) in currentOrderList"
-          :key="index"
+          :key="item.id + '_' + index"
           class="scroll"
         >
           <OrderItem
@@ -56,6 +67,7 @@
             :bulkOrderType="item.bulkOrderType"
             :id="item.id"
             :tradeNo="item.tradeNo"
+            :tag="1"
           ></OrderItem>
         </div>
         <Empty v-show="showEmpty"></Empty>
@@ -109,6 +121,7 @@ export default {
       errorText: "请求失败，点击重新加载",
       properWorng: false,
       refreshing: false,
+      refresh: false,
       orderList: [],
       currentPage: 1,
       totalPage: 0,
@@ -118,6 +131,7 @@ export default {
       params: [],
       mergeAmount: 0,
       total: 0,
+      pageSize: 5,
       isLoadPropertyBill: false, //是否加载物业缴费账单组件
       isDisAll: false,
       isDis: false,
@@ -140,9 +154,10 @@ export default {
        * 14-维修服务费
        * 15-租售
        */
-      reqBillType: "2,3,4,5,6,7,8,9,10,11,14",
+      reqBillType: "2,3,4,5,6,7,8,9,10,11,13,14",
       isShowErrorMsg: false,
-      errorMsg: ""
+      errorMsg: "",
+      finishBillList: []
     };
   },
   components: {
@@ -154,7 +169,6 @@ export default {
   },
   created() {
     this.getRoomId();
-    // this.onLoad();
   },
   mounted() {
     this.onLoad();
@@ -167,10 +181,9 @@ export default {
         .get({ key: "LLBUserRoomId", isPublic: true })
         .then(res => {
           if (res.hasOwnProperty("result")) {
-            console.log("我的订单人房id获取成功", res);
             this.userRoomId = res.result;
+            console.log(`获取原生人房`, res);
           } else {
-            console.log("我的订单人房id获取失败", res);
             this.userRoomId = "";
           }
         });
@@ -304,8 +317,6 @@ export default {
 
     //获取物业账单列表
     propertyFn() {
-      // this.getRoomId();
-      console.log(`propertyFn userRoomId`, this.userRoomId);
       let airDefenseNoStr = this.userRoomId
         ? this.userRoomId
         : this.$store.state.userRoomId;
@@ -323,7 +334,7 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "http://m-center-uat.linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
+            "https://m-center-uat-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
         : (url =
             "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
       return new Promise((resolve, reject) => {
@@ -341,14 +352,13 @@ export default {
     orderFn() {
       //这里是帮租售在uat加15类型测试的，不上生产环境
       if (this.$store.state.environment == "development") {
-        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,14,15";
+        this.reqBillType = "2,3,4,5,6,7,8,9,10,11,13,14,15";
       }
-
       let obj1 = {
         orderType: "200015",
         orderTypeList: ["200015", "200502"],
         state: "1",
-        page: { index: this.currentPage, pageSize: 5 },
+        page: { index: this.currentPage, pageSize: this.pageSize },
         airDefenseNo: this.userRoomId
           ? this.userRoomId
           : this.$store.state.userRoomId,
@@ -382,7 +392,6 @@ export default {
 
       Promise.allSettled(promiseArr)
         .then(res => {
-          console.log(`onload then`, res);
           let propertyRes = "";
           let orderRes = "";
           if (res.length == 2) {
@@ -400,6 +409,7 @@ export default {
             //接口发送请求成功
             if (results.code === 200) {
               this.billResults = results.data.notpay;
+              this.finishBillList = results.data.finish;
               this.billResults.forEach(item => {
                 item.totalPrice = item.totalPayableAmount;
                 item.billId = item.spaceId;
@@ -412,12 +422,13 @@ export default {
               propertyError = true;
               this.properWorng = true;
             }
-            if (this.billResults.length) {
-              this.isLoadPropertyBill = true;
-            } else {
-              //如果没有物业账单数据，则不显示物业账单标题
-              this.isLoadPropertyBill = false;
-            }
+
+            // if (this.billResults.length) {
+            //   this.isLoadPropertyBill = true;
+            // } else {
+            //   //如果没有物业账单数据，则不显示物业账单标题
+            //   this.isLoadPropertyBill = false;
+            // }
           } else {
             if (propertyRes) {
               this.loading = false;
@@ -484,21 +495,38 @@ export default {
             this.finished = false;
             this.errorText = "物业账单和订单请求失败，点击重新加载";
             this.$toast("物业账单和订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (propertyError && !orderError) {
             this.finished = false;
             this.errorText = "物业账单请求失败，点击重新加载";
             this.$toast("物业账单请求失败，点击重新加载");
+            this.isLoadPropertyBill = false;
           } else if (!propertyError && orderError) {
             this.finished = false;
             this.errorText = "订单请求失败，点击重新加载";
             this.$toast("订单请求失败，点击重新加载");
+            this.isLoadPropertyBill = true;
+          } else {
+            //人房为空（游客）,隐藏物业缴费组件。应显示empty空页面
+            if (
+              this.userRoomId == "" &&
+              this.billResults.length == 0 &&
+              this.finishBillList.length == 0
+            ) {
+              this.isLoadPropertyBill = false;
+            } else {
+              this.isLoadPropertyBill = true;
+            }
+            // this.isLoadPropertyBill = true; //本地测试
           }
 
-          //如果物业账单列表和电商订单列表都为空,并且请求不出错的情况下，则显示页面显示空状态
+          //如果物业账单列表和电商订单列表都为空,人房id为空（游客）,并且请求不出错的情况下，则显示空状态
           if (
             this.billResults.length === 0 &&
             this.currentOrderList.length === 0 &&
-            !this.error
+            !this.error &&
+            this.userRoomId == "" &&
+            this.finishBillList.length === 0
           ) {
             this.showEmpty = true;
           } else {
@@ -506,7 +534,7 @@ export default {
           }
 
           //判断是否为下拉刷新操作，如果是，刷新成功后要将状态关掉
-          if (this.refreshing && !this.error) {
+          if (this.refresh && !this.error) {
             this.$toast("刷新成功");
             this.refreshing = false;
           }
@@ -523,6 +551,7 @@ export default {
       this.checkData = new Set();
       this.mergeAmount = 0; //合计选中的账单总金额
       this.billResults = []; //清空物业账单数据
+      this.finishBillList = [];
       this.currentOrderList = []; //清空订单数据
       this.$refs.payDiv.isChecked = false; //取消勾选全选按钮
       this.$refs.payDiv.isShow = false; // 隐藏全选按钮
@@ -535,16 +564,18 @@ export default {
       this.page = page; //将当前页数赋值给this
       this.currentPage = 1;
       this.finished = false; //将没有更多的状态改成false
-      this.refreshing = true;
+      // this.refreshing = true;
+      this.refreshing = false;
+      this.refresh = true;
       this.onLoad();
     },
     initData() {
       this.currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
+          tag: "1",
           amount: item.totalPrice,
           submitTime: item.submitTime,
-          orderType: item.orderType,
           orderId: item.shoppingOrderId,
           state: item.state,
           totalPrice: item.totalPrice,
@@ -554,6 +585,11 @@ export default {
           bulkOrderType: item.orderType,
           id: item.id,
           tradeNo: item.tradeNo,
+          orderState: item.orderStateType,
+          orderType: item.orderType, //订单类型
+          shopOrderNo: item.orderFormItemList[0]
+            ? item.orderFormItemList[0].storeOuCode
+            : "",
           payInfo: {
             businessCstNo: item.loginUserPhone,
             platMerCstNo: item.platMerCstNo,
@@ -592,6 +628,7 @@ export default {
           dataList: item.orderFormItemList.map(sub => {
             return {
               billType: item.billType,
+              tag: "1",
               billImg: sub.iconUrl,
               billName: sub.name,
               billAmount: sub.unitPrice,
@@ -600,116 +637,131 @@ export default {
               storeOuCode: sub.storeOuCode,
               info: sub.info,
               itemTypeName: sub.itemTypeName,
-              snapshotTime: sub.snapshotTime
+              snapshotTime: sub.snapshotTime,
+              tradeNo: item.tradeNo,
+              orderState: item.orderStateType,
+              orderType: item.orderType, //订单类型
+              shopOrderNo: sub.storeOuCode,
+              tradeNo: item.tradeNo
             };
           })
         };
       });
     },
     checkEvent(data) {
-      // 从全选checkbox进来
-      if (data.checkAll || data.checkAllBillType1) {
-        let refs = this.$refs.order.filter(item => {
-          // 找出全选的类型并保存起来
-          return item.billType == data.billType;
-        });
-        console.log(refs);
-        let currentOrderList = [];
-        if (refs[0] && refs[0].billType == 1) {
-          currentOrderList = this.billResults;
-        } else {
-          currentOrderList = this.currentOrderList;
-        }
-        console.log(this.currentOrderList, "++++");
-        console.log(this.billResults, "----");
-        let checkData = currentOrderList.filter(item => {
-          return item.billType == data.billType;
-        });
-        console.log(checkData + "----------");
-
-        if (data.checked) {
-          //全部选中
-          this.checkData.clear(); //清空checkData
-          refs.forEach((item, index) => {
-            //保存选中数据并设置每个checkbox选中状态
-            this.checkData.add(checkData[index]);
-            item.isChecked = true;
+      if (data.billType == 13) {
+        /*去服务商城详情页*/
+        let token = this.$store.state.ythToken
+          ? this.$store.state.ythToken
+          : localStorage.getItem("ythToken");
+        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+        let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&tabShow=true&Authorization=${token}`;
+        location.href = path + query;
+      } else {
+        // 从全选checkbox进来
+        if (data.checkAll || data.checkAllBillType1) {
+          let refs = this.$refs.order.filter(item => {
+            // 找出全选的类型并保存起来
+            return item.billType == data.billType;
           });
+          console.log(refs);
+          let currentOrderList = [];
           if (refs[0] && refs[0].billType == 1) {
-            this.$refs.propertyOrder.isChecked = true;
+            currentOrderList = this.billResults;
+          } else {
+            currentOrderList = this.currentOrderList;
           }
-        } else {
-          // 全部取消
-          this.checkData.clear(); //清空checkData
-          refs.forEach(item => {
-            item.isChecked = false; // 设置每个checkbox为没选中状态
+          console.log(this.currentOrderList, "++++");
+          console.log(this.billResults, "----");
+          let checkData = currentOrderList.filter(item => {
+            return item.billType == data.billType;
           });
-          this.$refs.payDiv.isShow = false; //隐藏全选按钮
-          this.$refs.propertyOrder.isChecked = false;
-        }
-        return;
-      }
-      // 选中或取消当个checkbox
-      let refs = this.$refs.order.filter(item => {
-        // 找到不能选的checkbox
-        return item.billType != data.billType;
-      });
-      refs.forEach(item => {
-        // 并设置不能选择属性
-        if (item.billType != data.billType) {
-          item.isDisabled = true;
-        }
-      });
-      if (data.billType != 1) {
-        this.$refs.propertyOrder.isDisabled = true;
-      }
+          console.log(checkData + "----------");
 
-      let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
-
-      if (data.checked) {
-        // 选中
-        this.checkData.add(data);
-        this.$refs.payDiv.billType = data.billType;
-        this.$refs.payDiv.isShow = true; // 显示全选按钮
-        if (this.checkData.size == checkedTotal) {
-          //checkData数量跟可选checkbox数量相等 =>全选
-          this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
-          if (data.billType == 1) {
-            this.$refs.propertyOrder.isChecked = true;
-          }
-        } else {
-          this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
-          if (data.billType == 1) {
+          if (data.checked) {
+            //全部选中
+            this.checkData.clear(); //清空checkData
+            refs.forEach((item, index) => {
+              //保存选中数据并设置每个checkbox选中状态
+              this.checkData.add(checkData[index]);
+              item.isChecked = true;
+            });
+            if (refs[0] && refs[0].billType == 1) {
+              this.$refs.propertyOrder.isChecked = true;
+            }
+          } else {
+            // 全部取消
+            this.checkData.clear(); //清空checkData
+            refs.forEach(item => {
+              item.isChecked = false; // 设置每个checkbox为没选中状态
+            });
+            this.$refs.payDiv.isShow = false; //隐藏全选按钮
             this.$refs.propertyOrder.isChecked = false;
           }
+          return;
         }
-      } else {
-        // 取消
-        this.checkData.forEach(item => {
-          if (item.billId == data.billId) {
-            this.checkData.delete(item); // 删除数据中取消选中的数据
-            this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-            if (data.billType == 1) {
-              this.$refs.propertyOrder.isChecked = false;
-              this.$refs.propertyOrder.isDisabled = false;
-            }
+        // 选中或取消当个checkbox
+        let refs = this.$refs.order.filter(item => {
+          // 找到不能选的checkbox
+          return item.billType != data.billType;
+        });
+        refs.forEach(item => {
+          // 并设置不能选择属性
+          if (item.billType != data.billType) {
+            item.isDisabled = true;
           }
         });
-        if (this.checkData.size == 0) {
-          // 个数为0，全部取消选中
-          this.$refs.order.forEach(item => {
-            item.isDisabled = false; // 所有checkbox变成可选
-          });
-          this.$refs.propertyOrder.isDisabled = false;
-          this.$refs.payDiv.isShow = false; //隐藏全选
+        if (data.billType != 1) {
+          this.$refs.propertyOrder.isDisabled = true;
         }
+
+        let checkedTotal = this.$refs.order.length - refs.length; // 计算出所有可以选的checkbox
+
+        if (data.checked) {
+          // 选中
+          this.checkData.add(data);
+          this.$refs.payDiv.billType = data.billType;
+          this.$refs.payDiv.isShow = true; // 显示全选按钮
+          if (this.checkData.size == checkedTotal) {
+            //checkData数量跟可选checkbox数量相等 =>全选
+            this.$refs.payDiv.isChecked = true; // 全选按钮变成选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = true;
+            }
+          } else {
+            this.$refs.payDiv.isChecked = false; // 全选按钮变成没选中
+            if (data.billType == 1) {
+              this.$refs.propertyOrder.isChecked = false;
+            }
+          }
+        } else {
+          // 取消
+          this.checkData.forEach(item => {
+            if (item.billId == data.billId) {
+              this.checkData.delete(item); // 删除数据中取消选中的数据
+              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
+              if (data.billType == 1) {
+                this.$refs.propertyOrder.isChecked = false;
+                this.$refs.propertyOrder.isDisabled = false;
+              }
+            }
+          });
+          if (this.checkData.size == 0) {
+            // 个数为0，全部取消选中
+            this.$refs.order.forEach(item => {
+              item.isDisabled = false; // 所有checkbox变成可选
+            });
+            this.$refs.propertyOrder.isDisabled = false;
+            this.$refs.payDiv.isShow = false; //隐藏全选
+          }
+        }
+        // console.log(this.checkData)
+        let mergeList = Array.from(this.checkData);
+        let num = mergeList.reduce((total, e) => {
+          return BigNumber(total).plus(e.totalPrice);
+        }, 0);
+        this.mergeAmount = num;
       }
-      // console.log(this.checkData)
-      let mergeList = Array.from(this.checkData);
-      let num = mergeList.reduce((total, e) => {
-        return BigNumber(total).plus(e.totalPrice);
-      }, 0);
-      this.mergeAmount = num;
     },
 
     //toast
@@ -733,100 +785,139 @@ export default {
       let paramsObj = {
         list: list
       };
-      this.$http.post(url, JSON.stringify(paramsObj)).then(res => {
-        if (res.data.code == "0000") {
-          // Toast.clear(); //关闭页面loading
-          let arr = res.data.data;
-          for (let index = 0; index < arr.length; index++) {
-            if (arr[index].status == 1 || arr[index].status == 2) {
-              check = false;
-              checkStatus.push(arr[index].status);
-            } else {
-              check = true;
+      this.$http
+        .post(url, JSON.stringify(paramsObj))
+        .then(res => {
+          if (res.data.code == "0000") {
+            // Toast.clear(); //关闭页面loading
+            let arr = res.data.data;
+            for (let index = 0; index < arr.length; index++) {
+              if (arr[index].status == 1 || arr[index].status == 2) {
+                check = false;
+                checkStatus.push(arr[index].status);
+              } else {
+                check = true;
+              }
             }
-          }
 
-          if (_.uniq(checkStatus).includes(2)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else if (_.uniq(checkStatus).includes(1)) {
-            Toast.clear(); //关闭页面loading
-            this.isShowErrorMsg = true;
-            this.errorMsg =
-              "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
-            //动态修改van-sticky样式，让弹窗铺满整个屏幕
-            this.$nextTick(() => {
-              this.$parent.$refs.stickyIndex.$el.style.position = "relative";
-              this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-            });
-          } else {
-            let payStr = [];
-            payInfoList.forEach((item, index) => {
-              // isPay=1：支付中；isPay=0：待支付
-              payStr.push(item.isPay);
-            });
-            console.log(`待支付-是否有支付中账单`, payStr);
-
-            if (payStr.includes(1)) {
+            if (_.uniq(checkStatus).includes(2)) {
               Toast.clear(); //关闭页面loading
               this.isShowErrorMsg = true;
               this.errorMsg =
-                "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                "尊敬的邻里邦用户，该账单不存在，请重新刷新页面，获取最新账单。";
+              //动态修改van-sticky样式，让弹窗铺满整个屏幕
+              this.$nextTick(() => {
+                this.$parent.$refs.stickyIndex.$el.style.position = "relative";
+                this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+              });
+            } else if (_.uniq(checkStatus).includes(1)) {
+              Toast.clear(); //关闭页面loading
+              this.isShowErrorMsg = true;
+              this.errorMsg =
+                "尊敬的邻里邦用户，该账单信息已经更新，请重新刷新页面，获取最新账单。";
               //动态修改van-sticky样式，让弹窗铺满整个屏幕
               this.$nextTick(() => {
                 this.$parent.$refs.stickyIndex.$el.style.position = "relative";
                 this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
               });
             } else {
-              console.log(`提交账单中心参数`, {
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false
+              let payStr = [];
+              payInfoList.forEach((item, index) => {
+                // isPay=1：支付中；isPay=0：待支付
+                payStr.push(item.isPay);
               });
+              console.log(`待支付-是否有支付中账单`, payStr);
 
-              yjzdbill.YJBillPayment({
-                businessCstNo: payInfo.businessCstNo,
-                platMerCstNo: payInfo.platMerCstNo,
-                tradeMerCstNo: payInfo.tradeMerCstNo,
-                billNo: billNo,
-                appScheme: "x-engine",
-                payType: false,
-                __ret__: res => {
-                  console.log(
-                    "---------------开始支付提交记录---------------------"
-                  );
-                  console.log(res);
-                  if (res.billRetStatus != "1") {
-                    Toast.clear(); //关闭页面loading
-                    this.isShowErrorMsg = true;
-                    this.errorMsg = res.billRetStatusMessage
-                      ? res.billRetStatusMessage
-                      : "支付失败";
-                    //动态修改van-sticky样式，让弹窗铺满整个屏幕
-                    this.$nextTick(() => {
-                      this.$parent.$refs.stickyIndex.$el.style.position =
-                        "relative";
-                      this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
-                    });
-                  } else {
-                    Toast.clear(); //关闭页面loading
+              if (payStr.includes(1)) {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg =
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                console.log(`提交账单中心参数`, {
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false
+                });
+
+                yjzdbill.YJBillPayment({
+                  businessCstNo: payInfo.businessCstNo,
+                  platMerCstNo: payInfo.platMerCstNo,
+                  tradeMerCstNo: payInfo.tradeMerCstNo,
+                  billNo: billNo,
+                  appScheme: "x-engine",
+                  payType: false,
+                  __ret__: res => {
+                    console.log(
+                      "---------------开始支付提交记录---------------------"
+                    );
+                    console.log(res);
+                    if (res.billRetStatus != "1") {
+                      Toast.clear(); //关闭页面loading
+                      this.isShowErrorMsg = true;
+                      this.errorMsg = res.billRetStatusMessage
+                        ? res.billRetStatusMessage
+                        : "支付失败";
+                      //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                      this.$nextTick(() => {
+                        this.$parent.$refs.stickyIndex.$el.style.position =
+                          "relative";
+                        this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                      });
+                    } else {
+                      Toast.clear(); //关闭页面loading
+                    }
                   }
-                }
-              });
+                });
+              }
             }
           }
-        }
-      });
+        })
+        .catch(() => {
+          console.log(`提交账单中心参数catch`, {
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false
+          });
+
+          yjzdbill.YJBillPayment({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine",
+            payType: false,
+            __ret__: res => {
+              if (res.billRetStatus != "1") {
+                Toast.clear(); //关闭页面loading
+                this.isShowErrorMsg = true;
+                this.errorMsg = res.billRetStatusMessage
+                  ? res.billRetStatusMessage
+                  : "支付失败";
+                //动态修改van-sticky样式，让弹窗铺满整个屏幕
+                this.$nextTick(() => {
+                  this.$parent.$refs.stickyIndex.$el.style.position =
+                    "relative";
+                  this.$parent.$refs.stickyIndex.$el.style.zIndex = 0;
+                });
+              } else {
+                Toast.clear(); //关闭页面loading
+              }
+            }
+          });
+        });
     },
     //关闭弹窗
     closeTanC() {
@@ -845,8 +936,20 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-  // padding-bottom: 182px;
-  padding-bottom: 220px;
+//   padding-bottom: 182px;
+padding-bottom: 220px;
+
+  &.wait-pay-x {
+    padding-bottom: 220px;
+  }
+
+  &.empty-page {
+    overflow-y: hidden;
+  }
+
+  .refresh-page {
+    min-height: 100%;
+  }
 }
 
 .tipsText {
@@ -857,72 +960,78 @@ export default {
 }
 
 .content {
-  .scroll:not(:last-child)  {
+  .scroll:not(:last-child) {
     .content-list {
       margin-bottom: 28px;
-      border-bottom:1px dashed #cccccc;
+      border-bottom: 1px dashed #cccccc;
     }
   }
 }
 
 .tanc-message-box {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 51;
-    background-color: rgba(18, 18, 18, 0.8);
-    .content {
-      height: auto;
-      width: calc(100% - 84px);
-      margin-left: 42px;
-      margin-top: 50%;
-      background-color: #ffff;
-      border-radius: 16px;
-      min-height: 215px;
-      padding-bottom: 1px;
-      text-align: center;
-      .bg-box {
-        width: 100%;
-        height: 70px;
-        background-image: url('../../img/tanc-bg.png');
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-      }
-      .message-box {
-        margin-top: 22px;
-        padding: 0 20px;
-        font-size: 16px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #333333;
-        line-height: 24px;
-      }
-      .btn-box {
-        // width: 100%;
-        height: 38px;
-        background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
-        border-radius: 8px;
-        font-size: 16px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
-        color: #FFFFFF;
-        line-height: 38px;
-        padding: 0 20px
-        text-align: center;
-        margin: 28px 20px;
-      }
-    }
-    .close-btn {
-      width: 34px;
-      height: 34px;
-      background-image: url('../../img/close-icon.png');
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 51;
+  background-color: rgba(18, 18, 18, 0.8);
+
+  .content {
+    height: auto;
+    width: calc(100% - 84px);
+    margin-left: 42px;
+    margin-top: 50%;
+    background-color: #ffff;
+    border-radius: 16px;
+    min-height: 215px;
+    padding-bottom: 1px;
+    text-align: center;
+
+    .bg-box {
+      width: 100%;
+      height: 70px;
+      background-image: url('../../img/tanc-bg.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
-      margin-top: 30px;
-      margin-left: calc(50% - 17px);
+    }
+
+    .message-box {
+      margin-top: 22px;
+      padding: 0 20px;
+      font-size: 16px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #333333;
+      line-height: 24px;
+    }
+
+    .btn-box {
+      // width: 100%;
+      height: 38px;
+      // background: linear-gradient(270deg, #F96B7B 0%, #EF2D30 100%);
+      background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 38px;
+      padding: 0 20px;
+      text-align: center;
+      margin: 28px 20px;
     }
   }
+
+  .close-btn {
+    width: 34px;
+    height: 34px;
+    background-image: url('../../img/close-icon.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    margin-top: 30px;
+    margin-left: calc(50% - 17px);
+  }
+}
 </style>

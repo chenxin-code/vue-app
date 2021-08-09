@@ -6,7 +6,7 @@ import Vue from 'vue'
     const tokenStr = "Bearer " + store.state.ythToken;
     console.log('sensorssensorssensors', store.state.ythToken);
     sensors.init({
-      server_url:`https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=production&token=${tokenStr}`, // 接收地址
+      server_url:`https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=llb_uat&token=${tokenStr}`, // 接收地址
       // project_name: "com.time.mall.H5.SAAF", // 项目名
       is_track_single_page: true, // 单页面配置，默认开启，若页面中有锚点设计，需要将该配置删除，否则触发锚点会多触发 $pageview 事件
       use_client_time: true, // 埋点所取事件，true为用户端，false为服务端

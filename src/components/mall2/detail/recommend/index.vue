@@ -3,7 +3,7 @@
 <template>
   <div class="index">
     <div class="recommend-row">
-      <div class="title theme_border_red">同店好货</div>
+      <!-- <div class="title theme_border_red">同店好货</div> -->
     </div>
     <div ref="sroll_list" class="list">
       <CardList @productEvent="productEvent" :listData="listData" @addToCart="addToCart"></CardList>
@@ -73,6 +73,9 @@
       },
       productEvent: function (product) {
         console.log(product)
+        // if(this.$route.matched[0].path == '/mall2/detail/:id'){
+        //   this.$emit('sensorsDuration',{path:'/mall2/detail'})
+        // }
         let path = '/mall2/detail/' + this.$util.getDataString()
         if (product.productType == 2){
           path = '/mall2/ticketdetail';
@@ -131,6 +134,7 @@
       background-color white;
       display flex;
       padding 10px 8px;
+      margin-top: 20px;
       .title {
         font-size 14px;
         padding-left 6px;

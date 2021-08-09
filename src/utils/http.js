@@ -75,7 +75,7 @@ Axios.interceptors.request.use(
       config.headers.token = store.state.login.token;
       config.headers.Authorization = store.state.login.token;
     }
-    if (/times\/distr-service\/index\/api-c\/v1\/get\/my\/info/.test(config.url)) {
+    if(/distr-service\/index\/api-c\/v1\/get\/my\/info/.test(config.url)) {
       let ua = window.navigator.userAgent.toLowerCase()
       let isWX = ua.match(/MicroMessenger/i) == 'micromessenger';
       console.log('ythtttttttttttt--store----->', store.state.ythToken)
@@ -106,6 +106,19 @@ Axios.interceptors.request.use(
       }
       config.headers.access_channel = 'mall'
       config.headers["Content-Type"] = "application/json"
+    }
+
+    if(/\/distr\-service\/customer\/api\/v1\/distr\/get\_simple\_data/.test(config.url)){
+      if (store.state.webtype == "2" || store.state.webtype == "3") {
+        config.headers.Authorization = localStorage.getItem('ythToken')
+      } else {
+        let ythToken = '';
+        await appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
+          ythToken = res.result;
+        });
+        config.headers.Authorization = ythToken
+      }
+      // config.headers.Authorization = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzU2MDU0MzgzOCIsInNjb3BlIjpbImFsbCJdLCJpZCI6MjQwNTU0OTA2MDA4MjYzMTg0MCwiZXhwIjoxNjI3Mzc4NTI3LCJhdXRob3JpdGllcyI6WyJ2aXNpdG9yIiwib3duZXIiXSwianRpIjoiMDJmYjg5MjQtMjZhZi00MjE2LTg0NjYtYTc0ZjcwYjZkMmY4IiwiY2xpZW50X2lkIjoiYXBwX2MifQ.f4GClQFSj8GEw25L9dxtFIgulKTggQkVCFVgJSJoFiaXIxlNDamAnVwOB6q7zSCOnli7E9UHr6ymSCXOGm47bhy-VEAW5BRkRO9e-vdeBfm9ebjTLW8iVo5PTxIWYYWR9pYZ0ZcYHJ7s4yH89iBSjDlHV9VDoXIItGkZ7gGi7HHimirdHCgwdUdbJYKEGEmX6aErCKpSXvKRtaxc53xNeJmvt5jYKZEgQkg8SggIDnTZhINNuT3wlL3mZidiJ1SPTrbjMUCUqQOtNdFSxPbJNQQLkm0AdGuQJiAVuUvAwXJKdX8_os_stsvQ5ag1cMR0OsuBG5lqsHFXp9ylY1EG1g"
     }
 
     //中台接口要带一体化token
@@ -169,11 +182,11 @@ Axios.interceptors.request.use(
               // }
             }
 
-            if (store.state.webtype == '8') {
-              if (store.state.etpAppId) {
-                nArgs.channel = store.state.etpAppId
-              }
-            }
+            // if (store.state.webtype == '8') {
+            //   if (store.state.etpAppId) {
+            //     nArgs.channel = store.state.etpAppId
+            //   }
+            // }
 
             for (let key in postData) {
               nArgs[key] = postData[key]
@@ -248,9 +261,9 @@ Axios.interceptors.request.use(
       if (cToken) {
         params.cToken = cToken
       }
-      if (store.state.globalConfig.channel) {
-        params.channel = store.state.globalConfig.channel
-      }
+      // if (store.state.globalConfig.channel) {
+      //   params.channel = store.state.globalConfig.channel
+      // }
       config.params = Object.assign(config.params || {}, params)
 
       return config;

@@ -18,11 +18,11 @@
     <div class="order-item">
       <div class="title">
         <van-checkbox
-          v-if="isWaitPay"
+          v-if="isWaitPay && billType != 13"
           v-model="isChecked"
           :disabled="isDisabled"
           @change="checkEvent($event, orderItem)"
-          checked-color="#f80f16"
+          checked-color="#e5165a"
           icon-size="18px"
         ></van-checkbox>
         <i class="icon" :class="iconClass"></i>
@@ -60,32 +60,44 @@
           }}<span class="decimal">.{{ goodsAmount.decimal }}</span>
         </p>
       </div>
-      <div class="total" v-if="billType == 11">
-        <span class="to"
-          >共<i>{{ amountTotal }}</i
-          >件商品</span
-        >
-        <span class="pr"
-          ><i>{{ moneyText }}:</i><span class="smallRMB">￥</span
-          >{{ goodsAmount.integer
-          }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span
-        >
+      <div class="total need-pay" v-if="billType == 11">
+        <p class="time row" style="height: 25px; line-height: 25px">
+          {{ submitTime }}
+        </p>
+        <div>
+          <span class="to"
+            >共<i>{{ amountTotal }}</i
+            >件商品</span
+          >
+          <span class="pr"
+            ><i>{{ moneyText }}:</i><span class="smallRMB">￥</span
+            >{{ goodsAmount.integer
+            }}<span class="decimal">.{{ goodsAmount.decimal }}</span></span
+          >
+        </div>
       </div>
       <div class="btn-box">
         <!-- v-if="isChangeOrder && !isBulk" -->
         <!-- 不允许修改订单 -->
-        <div
-          class="btn"
-          v-if="false"
-          @click="modifyAddress(dataList[0])"
-        >
+        <div class="btn" v-if="false" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
         <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
           <p>立即评价</p>
         </div>
-        <div class="btn" v-if="isBuyAgain && !isBulk" @click.stop="buyAgain">
+        <div
+          class="btn"
+          v-if="isBuyAgain && !isBulk && billType != 13"
+          @click.stop="buyAgain"
+        >
           <p>再次购买</p>
+        </div>
+        <div
+          class="btn"
+          v-if="billType == 13 && tag != 1"
+          @click.stop="goTMDetail"
+        >
+          <p>查看详情</p>
         </div>
         <div
           class="btn"
@@ -101,7 +113,7 @@
         >
           <p>确认收货</p>
         </div>
-        <div class="btn" v-if="isFinish"><p>已完成</p></div>
+        <div class="btn" v-if="isFinish && billType != 13"><p>已完成</p></div>
         <div class="btn" v-if="isPayAtOnce" @click="payAtOnce(payInfo)">
           <p>立即付款</p>
         </div>
@@ -158,7 +170,10 @@ export default {
     "shoppingOrderId",
     "bulkOrderType",
     "id",
-    "tradeNo"
+    "tradeNo",
+    "orderState",
+    "shopOrderNo",
+    "tag"
   ],
   data() {
     return {
@@ -187,6 +202,7 @@ export default {
     } else {
       this.smallDataList = this.dataList;
     }
+    // console.log(this.smallDataList, "this.smallDataList");
     this.itemAmount = this.amount;
     if (this.orderMode == "12" || this.bulkOrderType == "200501") {
       this.isBulk = true;
@@ -197,8 +213,11 @@ export default {
   computed: {
     stateText() {
       if (this.pageType == "finish") {
-        if (this.billType != "11") {
+        if (this.billType != "11" && this.billType != "13") {
           return "支付已完成";
+        }
+        if (this.billType == "13") {
+          return "订单已完成";
         } else {
           switch (this.state) {
             case 16:
@@ -376,6 +395,9 @@ export default {
         case 14:
           billName = "维修服务费";
           break;
+        case 13:
+          billName = "生活服务";
+          break;
         case 15:
           billName = "租售";
           break;
@@ -417,9 +439,13 @@ export default {
           break;
         case 9:
           sClass = "icon3";
+
           break;
         case 10:
           sClass = "icon4";
+          break;
+        case 13:
+          sClass = "icon2";
           break;
         case 14:
           sClass = "icon14";
@@ -454,14 +480,13 @@ export default {
         this.billType == 11
       ) {
         //团购订单
-        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${
-          this.billDetailObj.groupBuyId
-        }&mktGroupBuyId=${
-          this.billDetailObj.groupBuyActivityId
-        }&formPaySuccess='1'&ret={ret}`;
+        callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${this.billDetailObj.groupBuyId}&mktGroupBuyId=${this.billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
         this.enginePay(payInfo, callbackUrl);
       } else if (this.billType == 11) {
         this.initPayInfo(payInfo, "mall");
+      } else if (this.billType == 13) {
+        /*去服务商城详情页*/
+        this.goTMDetail();
       } else {
         this.initPayInfo(payInfo, "bill");
       }
@@ -513,6 +538,7 @@ export default {
       this.isShow = !this.isShow;
       this.showMore = !this.showMore;
     },
+    /*去服务商城详情页*/
     gotoBillDetail() {
       console.log("billId------------------", this.billId);
       // 跳转订单详情
@@ -570,6 +596,9 @@ export default {
             }
           });
         }
+      } else if (this.billType == "13") {
+        /*去服务商城详情页*/
+        this.goTMDetail();
       } else {
         console.log(
           "--------------------跳转账单中心详情----------------------"
@@ -590,7 +619,18 @@ export default {
         )}`;
       }
     },
-
+    /*去服务商城详情页*/
+    goTMDetail() {
+      let { orderItem } = this;
+      let token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
+      if (this.billType == 13) {
+        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+        let query = `orderState=${orderItem.orderState}&tradeNo=${orderItem.tradeNo}&orderType=${orderItem.orderType}&shopOrderNo=${orderItem.shopOrderNo}&tabShow=true&Authorization=${token}`;
+        location.href = path + query;
+      }
+    },
     checkEvent(event, data) {
       // console.log(event, data);
       data.checked = event;
@@ -660,8 +700,8 @@ export default {
           let data = res.data;
           if (data.status == 0) {
             /*
-             * 如果商品已经下架或者不存在了，需要终止操作 
-            */
+             * 如果商品已经下架或者不存在了，需要终止操作
+             */
             if (data.data.invalidCart !== "" || data.data.occur.length <= 0) {
               this.$MessageBox
                 .confirm(
@@ -747,9 +787,9 @@ export default {
 
         this.formItem = this.$util.deepClone(obj);
         let expressArr = [];
-        console.log(this.formItem);
-        console.log(this.formItem.expressNo);
-        console.log(typeof this.formItem.expressNo);
+        // console.log(this.formItem);
+        // console.log(this.formItem.expressNo);
+        // console.log(typeof this.formItem.expressNo);
         if (
           this.formItem.expressNo &&
           typeof this.formItem.expressNo == "string"
@@ -958,6 +998,14 @@ export default {
 
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-item: center;
+  height: 27px;
+}
 
 .order-item {
   box-sizing: border-box;
@@ -1192,10 +1240,10 @@ export default {
       height: 32px;
       font-size: 15px;
       font-weight: bold;
-      color: #8d8d8d;
+      color: #e5165a;
       text-align: center;
       line-height: 33px;
-      border: 1px solid #8d8d8d;
+      border: 1px solid #e5165a;
       border-radius: 20px;
       margin-left: 4px;
 

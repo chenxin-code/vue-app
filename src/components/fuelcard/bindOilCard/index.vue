@@ -825,7 +825,7 @@
 
     .messgae {
       .card-list {
-        margin-top: 10px
+        margin-top: 30px
       }
 
       .bind-oil-card-content {

@@ -193,7 +193,7 @@ const vueConfig = {
   devServer: {
     // open: true, // 是否自动打开浏览器页面
     // development server port 8080
-    port: 8082,
+    port: 8081,
     // port: 80,
     // host:'mall-uat-app-linli.timesgroup.cn',
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
@@ -227,7 +227,7 @@ const vueConfig = {
       //   }
       // },
       "/api": {
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
         // target: 'http://192.168.31.118:18807',
         // target: 'http://39.105.84.126:28807',
         // target: "http://mall-uat-app-linli.timesgroup.cn/",
@@ -235,7 +235,7 @@ const vueConfig = {
         // target:'http://henansydemo.deepermobile.com',
         // target: 'http://jlapp.95504.net:81',
         // target: process.env.VUE_APP_BASE_PROD_API,
-        // target: process.env.VUE_APP_BASE_API,
+        target: process.env.VUE_APP_BASE_API,
         changeOrigin: true,
         pathRewrite: {
           "^/api": ""
@@ -245,9 +245,13 @@ const vueConfig = {
         // target: 'http://tbdapp.deepermobile.com',
         // target: 'http://39.105.84.126:28807',
         // target: 'http://192.168.31.118:18807',
-        target: 'https://mall-prod-app-linli.timesgroup.cn',
-        // target: process.env.VUE_APP_BASE_API,
+        // target: 'https://mall-prod-app-linli.timesgroup.cn',
+        target: process.env.VUE_APP_BASE_API,
         changeOrigin: true
+      },
+      '/times-center-trade/mall/':{//服务商城的接口
+        target:'https://mall-uat-api-linli.timesgroup.cn:1443',
+        changeOrigin: true,
       },
       "/times/": {
         target: "https://m-center-uat-linli.timesgroup.cn", //中台系统
@@ -256,7 +260,7 @@ const vueConfig = {
       "/pcs": {
         target: "http://times-pcs.linli580.com.cn:8888", //收费系统
         changeOrigin: true
-      }
+      },
     }
   },
   // disable source map in production

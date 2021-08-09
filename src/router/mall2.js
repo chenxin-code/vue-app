@@ -40,13 +40,22 @@ module.exports = [
     component: () => import('@/components/mall2/detail/new-detail-static'),
     // component: () => import('@/components/mall2/detail/detail'),
     meta: {
-      keepAlive: true
+      keepAlive: false
     }
   },
   {
     path: '/mall2/shareTextLink',
     name: '链接分享',
     component: () => import('@/components/mall2/shareTextLink'),
+    // component: () => import('@/components/mall2/detail/detail'),
+    meta: {
+      keepAlive: false
+    }
+  },
+  {
+    path: '/mall2/savePicture',
+    name: '商品分享',
+    component: () => import('@/components/mall2/savePicture'),
     // component: () => import('@/components/mall2/detail/detail'),
     meta: {
       keepAlive: false

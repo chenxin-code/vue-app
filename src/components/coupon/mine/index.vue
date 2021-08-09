@@ -216,7 +216,8 @@ export default {
         path: path,
         query: {
           skuIds: data.merchanDises,
-          searchFrom: "coupon"
+          searchFrom: "coupon",
+          jumpH5: "h5",
         }
       });
     },

@@ -6,7 +6,7 @@
       ref="detailTop2"
       class="detail-top"
       :style="{
-        height: $store.state.barHeight + $market.getNavHeight(true) + 'px'
+        height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
       v-if="proView !== 2"
     >
@@ -15,7 +15,7 @@
         :style="{
           top: $store.state.barHeight + 'px',
           height: $market.getNavHeight(true) + 'px',
-          'line-height': $market.getNavHeight(true) + 'px'
+          'line-height': $market.getNavHeight(true) + 'px',
         }"
         v-show="proView !== 2"
       >
@@ -60,7 +60,7 @@
       class="detail-top"
       style="visibility: hidden"
       :style="{
-        height: $store.state.barHeight + $market.getNavHeight(true) + 'px'
+        height: $store.state.barHeight + $market.getNavHeight(true) + 'px',
       }"
       v-if="detailShow"
       v-show="proView !== 2"
@@ -158,7 +158,7 @@
                     failText: '加载失败',
                     loadedStayTime: 400,
                     stayDistance: 40,
-                    triggerDistance: 50
+                    triggerDistance: 50,
                   }"
                   :top-load-method="topPull"
                   :is-bottom-bounce="true"
@@ -197,7 +197,7 @@
                           class="si-item theme_bg_white_ef"
                           :class="{
                             'cus-index': proImgIndex == idx,
-                            theme_bg_red_i: proImgIndex == idx
+                            theme_bg_red_i: proImgIndex == idx,
                           }"
                           v-for="(d, idx) in arrLen"
                         ></div>
@@ -223,7 +223,7 @@
                         @click="addWishLish"
                         v-if="
                           $store.state.globalConfig.isEnabledWishOrder == 1 &&
-                            detailData.deliveryType == 2
+                          detailData.deliveryType == 2
                         "
                       >
                         <img
@@ -244,8 +244,8 @@
                         class="seconds-kill"
                         v-if="
                           detailData.mktActivityPriceLevel == 3 ||
-                            (showActivityTime == '1' &&
-                              detailData.mktActivityPriceLevel != '')
+                          (showActivityTime == '1' &&
+                            detailData.mktActivityPriceLevel != '')
                         "
                       >
                         <div class="left-div">
@@ -288,7 +288,11 @@
                           <div class="sk-row">
                             <div class="sk-icon">
                               <i
-                                class="iconfont mall-icon-test theme_bg_white theme_font_red"
+                                class="
+                                  iconfont
+                                  mall-icon-test
+                                  theme_bg_white theme_font_red
+                                "
                               ></i>
                               <span class="theme_font_white">秒杀价</span>
                             </div>
@@ -296,7 +300,7 @@
                               class="o-price theme_font_white"
                               :class="{
                                 'line-through':
-                                  $store.state.globalConfig.priceShowType == 2
+                                  $store.state.globalConfig.priceShowType == 2,
                               }"
                               v-if="
                                 detailData.activityPrice < detailData.salePrice
@@ -400,7 +404,8 @@
                             {{ getTimeTitle() }}
                           </div>
                           <div class="skr-row">
-                            <Countdown :endTime="getCountdownTime"></Countdown>
+                            <!-- <Countdown :endTime="getCountdownTime"></Countdown> -->
+                            <NewCountdown :endTime="detailData.mktEndDate"></NewCountdown>
                           </div>
                         </div>
                       </div>
@@ -409,7 +414,7 @@
                         class="seconds-kill ys"
                         v-else-if="
                           detailData.supportPreSale == 1 &&
-                            $store.state.globalConfig.presaleType == 2
+                          $store.state.globalConfig.presaleType == 2
                         "
                       >
                         <div class="left-div">
@@ -438,11 +443,11 @@
                           class="price-small theme_font_tint left-m-8"
                           v-if="
                             detailData.dpedData.linePrice &&
-                              detailData.activityPrice < detailData.salePrice
+                            detailData.activityPrice < detailData.salePrice
                           "
                           :class="{
                             'line-through':
-                              $store.state.globalConfig.priceShowType == 2
+                              $store.state.globalConfig.priceShowType == 2,
                           }"
                         >
                           <span
@@ -464,7 +469,11 @@
                         <div class="activity-notice">
                           <div class="sk-icon">
                             <i
-                              class="iconfont mall-icon-test theme_bg_red theme_font_white"
+                              class="
+                                iconfont
+                                mall-icon-test
+                                theme_bg_red theme_font_white
+                              "
                             ></i>
                             <span class="theme_font_red">距离售卖</span>
                           </div>
@@ -479,7 +488,11 @@
                         <div class="activity-notice">
                           <div class="sk-icon">
                             <i
-                              class="iconfont mall-icon-test theme_bg_red theme_font_white"
+                              class="
+                                iconfont
+                                mall-icon-test
+                                theme_bg_red theme_font_white
+                              "
                             ></i>
                             <span class="theme_font_red"
                               >{{
@@ -537,7 +550,7 @@
                       class="cou_and_act theme_bg_white"
                       v-if="
                         (!cardType || (cardType && cardType == 551)) &&
-                          orderCategory != '1'
+                        orderCategory != '1'
                       "
                     >
                       <CouponAndActivity
@@ -594,7 +607,12 @@
                         </div>
                         <div class="info-div">
                           <div
-                            class="title pro-title-height double-line theme_font_black"
+                            class="
+                              title
+                              pro-title-height
+                              double-line
+                              theme_font_black
+                            "
                             v-html="getSkuNameStr(pro)"
                           ></div>
                           <div
@@ -621,7 +639,7 @@
                       class="block-div theme_bg_white"
                       v-if="
                         detailData.supportPreSale == 1 &&
-                          $store.state.globalConfig.presaleType == 2
+                        $store.state.globalConfig.presaleType == 2
                       "
                     >
                       <div class="flex-row">
@@ -647,7 +665,11 @@
                       >
                         <div class="flex-row">
                           <p
-                            class="sl-tag line_circle theme_border_red_i theme_font_red"
+                            class="
+                              sl-tag
+                              line_circle
+                              theme_border_red_i theme_font_red
+                            "
                           >
                             {{ curSingleActivity.activityType }}
                           </p>
@@ -683,7 +705,11 @@
                           v-for="saitem in singleActivities_2"
                         >
                           <p
-                            class="sl-tag line_circle theme_standard_bdr_i theme_standard_font"
+                            class="
+                              sl-tag
+                              line_circle
+                              theme_standard_bdr_i theme_standard_font
+                            "
                           >
                             {{ saitem.activityType }}
                           </p>
@@ -709,24 +735,33 @@
                       class="block-div theme_bg_white"
                       v-if="
                         detailData.proCanUseCouList &&
-                          detailData.proCanUseCouList.length > 0
+                        detailData.proCanUseCouList.length > 0
                       "
                       @click="kyCouponEvent"
                     >
                       <div class="flex-row">
                         <div class="label-middle theme_font_gray">可用券</div>
                         <div
-                          class="act-item-full theme_standard_bg theme_font_white"
+                          class="
+                            act-item-full
+                            theme_standard_bg theme_font_white
+                          "
                           v-if="cidx < 2"
-                          v-for="(couponModel,
-                          cidx) in detailData.proCanUseCouList"
+                          v-for="(
+                            couponModel, cidx
+                          ) in detailData.proCanUseCouList"
                         >
                           {{ couponModel.couTypeTitle }}
                         </div>
                         <div class="full"></div>
                         <div>
                           <i
-                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                            class="
+                              iconfont
+                              mall-gengduo
+                              more-icon
+                              theme_font_tint
+                            "
                           ></i>
                         </div>
                       </div>
@@ -742,7 +777,12 @@
                         <div class="full"></div>
                         <div>
                           <i
-                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                            class="
+                              iconfont
+                              mall-gengduo
+                              more-icon
+                              theme_font_tint
+                            "
                           ></i>
                         </div>
                       </div>
@@ -782,7 +822,12 @@
                         </div>
                         <div>
                           <i
-                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                            class="
+                              iconfont
+                              mall-gengduo
+                              more-icon
+                              theme_font_tint
+                            "
                           ></i>
                         </div>
                       </div>
@@ -802,7 +847,12 @@
                         <div class="full"></div>
                         <div>
                           <i
-                            class="iconfont mall-gengduo more-icon theme_font_tint"
+                            class="
+                              iconfont
+                              mall-gengduo
+                              more-icon
+                              theme_font_tint
+                            "
                           ></i>
                         </div>
                       </div>
@@ -816,7 +866,7 @@
                         v-if="
                           $store.state.globalConfig
                             .product_services_show_type != '0' &&
-                            detailData.isShowAfterSale != 0
+                          detailData.isShowAfterSale != 0
                         "
                       >
                         <div
@@ -825,7 +875,12 @@
                           v-if="parseInt(server.days) > 0"
                         >
                           <i
-                            class="iconfont mall-dui theme_standard_font icon-font"
+                            class="
+                              iconfont
+                              mall-dui
+                              theme_standard_font
+                              icon-font
+                            "
                           ></i>
                           <span>{{ getServerText(server) }}</span>
                         </div>
@@ -834,7 +889,12 @@
                           v-for="server in detailData.serviceInfoJson"
                         >
                           <i
-                            class="iconfont mall-dui theme_standard_font icon-font"
+                            class="
+                              iconfont
+                              mall-dui
+                              theme_standard_font
+                              icon-font
+                            "
                           ></i>
                           <span>{{ server.name }}</span>
                         </div>
@@ -869,7 +929,12 @@
                         </div>
                         <div>
                           <i
-                            class="iconfont mall-gengduojiantou icon-font theme_font_common"
+                            class="
+                              iconfont
+                              mall-gengduojiantou
+                              icon-font
+                              theme_font_common
+                            "
                           ></i>
                         </div>
                       </div>
@@ -892,9 +957,14 @@
                           </div>
                           <div class="">
                             <i
-                              class="iconfont mall-xingxing icon-level theme_font_tint"
+                              class="
+                                iconfont
+                                mall-xingxing
+                                icon-level
+                                theme_font_tint
+                              "
                               :class="{
-                                theme_standard_font_i: comment.score >= lv
+                                theme_standard_font_i: comment.score >= lv,
                               }"
                               v-for="lv in 5"
                             ></i>
@@ -930,12 +1000,20 @@
                         <!--</div>-->
                         <div class="shop-title">
                           <i
-                            class="iconfont mall-dianpu dianpu-icon theme_standard_font"
+                            class="
+                              iconfont
+                              mall-dianpu
+                              dianpu-icon
+                              theme_standard_font
+                            "
                           ></i
                           >{{ detailData.storeOuName }}
                         </div>
                         <div
-                          class="act-item-full theme_standard_bg theme_font_white"
+                          class="
+                            act-item-full
+                            theme_standard_bg theme_font_white
+                          "
                           v-if="detailData.storeType == '0'"
                         >
                           自营
@@ -990,11 +1068,11 @@
                               class="font-small theme_font_tint left-m-8"
                               v-if="
                                 item.dpedData.linePrice &&
-                                  item.activityPrice < item.salePrice
+                                item.activityPrice < item.salePrice
                               "
                               :class="{
                                 'line-through':
-                                  $store.state.globalConfig.priceShowType == 2
+                                  $store.state.globalConfig.priceShowType == 2,
                               }"
                             >
                               <span
@@ -1012,8 +1090,8 @@
                       class="block-div theme_bg_white"
                       v-if="
                         detailData.recommendSkuList &&
-                          detailData.recommendSkuList.length > 0 &&
-                          (!cardType || (cardType && cardType == 551))
+                        detailData.recommendSkuList.length > 0 &&
+                        (!cardType || (cardType && cardType == 551))
                       "
                     >
                       <div class="flex-row">
@@ -1039,7 +1117,11 @@
                       </div>
                       <div class="more-btn">
                         <label
-                          class="act-item-empty line_circle theme_standard_font theme_standard_bdr"
+                          class="
+                            act-item-empty
+                            line_circle
+                            theme_standard_font theme_standard_bdr
+                          "
                           @click="moreRecommend"
                           >更多推荐</label
                         >
@@ -1175,7 +1257,7 @@
       <div
         class="btn theme_bg_red theme_font_white"
         :class="{
-          theme_bg_dark_d_i: canSale == false || detailData.status == 0
+          theme_bg_dark_d_i: canSale == false || detailData.status == 0,
         }"
         @click="buyNowEvent"
       >
@@ -1191,7 +1273,7 @@
           <template
             v-if="
               detailData.supportPreSale == 1 &&
-                $store.state.globalConfig.presaleType == 2
+              $store.state.globalConfig.presaleType == 2
             "
           >
             <p
@@ -1257,10 +1339,10 @@
           @click="songliEvent"
           v-if="
             $store.state.globalConfig.send_gift_enable == '1' &&
-              stockNum != 0 &&
-              canSale == true &&
-              detailData.status != '0' &&
-              isPayTime()
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime()
           "
         >
           <img class="btn-sl-img" src="./img/sl.png" />
@@ -1271,11 +1353,11 @@
           @click="addToCart"
           v-if="
             stockNum != 0 &&
-              canSale == true &&
-              detailData.status != '0' &&
-              productType != 511 &&
-              (detailData.supportPreSale != '1' ||
-                $store.state.globalConfig.presaleType == 2)
+            canSale == true &&
+            detailData.status != '0' &&
+            productType != 511 &&
+            (detailData.supportPreSale != '1' ||
+              $store.state.globalConfig.presaleType == 2)
           "
         >
           <p class="title">加入购物车</p>
@@ -1285,10 +1367,10 @@
           @click="buyNowEvent"
           v-if="
             stockNum != 0 &&
-              canSale == true &&
-              detailData.status != '0' &&
-              isPayTime() &&
-              detailData.supportPreSale != '1'
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime() &&
+            detailData.supportPreSale != '1'
           "
         >
           <p class="title">立即购买</p>
@@ -1299,10 +1381,10 @@
           @click="preSaleEvent"
           v-if="
             stockNum != 0 &&
-              canSale == true &&
-              detailData.status != '0' &&
-              isPayTime() &&
-              detailData.supportPreSale == '1'
+            canSale == true &&
+            detailData.status != '0' &&
+            isPayTime() &&
+            detailData.supportPreSale == '1'
           "
         >
           <p class="title">预购下单</p>
@@ -1361,7 +1443,7 @@
               class="item theme_font_tint theme_font_common theme_bg_white_ef"
               :class="{
                 'theme_light_bg_i theme_standard_font_i theme_standard_bdr_i':
-                  subFeature.selected
+                  subFeature.selected,
               }"
               v-for="subFeature in feature.featureValueList"
               @click="subFeatureEvent(subFeature, fidx)"
@@ -1395,12 +1477,12 @@
           @click="popSureEvent"
           v-if="
             popFlag == 'addToCart' &&
-              stockNum != 0 &&
-              canSale == true &&
-              detailData.status != '0' &&
-              (detailData.supportPreSale != '1' ||
-                $store.state.globalConfig.presaleType == 2) &&
-              detailData.productType != 8
+            stockNum != 0 &&
+            canSale == true &&
+            detailData.status != '0' &&
+            (detailData.supportPreSale != '1' ||
+              $store.state.globalConfig.presaleType == 2) &&
+            detailData.productType != 8
           "
         >
           加入购物车
@@ -1557,26 +1639,51 @@
       position="bottom"
       :style="{ height: '35%' }"
     >
-      <div class="share_popup">
+      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
-          <div class="share_botton_item" @click="shareWechatFriends">
+          <div class="share_botton_item" @click="shareWechatFriends" v-if="!this.$util.isWeiXin()">
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
-          <div class="share_botton_item" @click="shareImg" v-show="false">
-            <img src="static/image/mall2/share_img.png" alt="" />
-            <div>图片分享</div>
-          </div>
-          <div class="share_botton_item" @click="shareLink" v-show="false">
+          <div class="share_botton_item" @click="shareImg('poster')">
             <img src="static/image/mall2/share_link.png" alt="" />
-            <div>链接分享</div>
+            <div>推广海报</div>
           </div>
+          <div class="share_botton_item" @click="shareImg('imageText')">
+            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
+            <div>图文推广</div>
+          </div>
+
         </div>
         <div class="cancel" @click="showSharePopup = false">
           取消
         </div>
       </div>
+
+      <div class="share_popup" v-else>
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="defaultShareImg">
+            <img src="static/image/mall2/share_img.png" alt="" />
+            <div>图片分享</div>
+          </div>
+          <div class="share_botton_item" @click="shareLink">
+            <img src="static/image/mall2/share_link.png" alt="" />
+            <div>链接分享</div>
+          </div>
+        </div>
+        <div class="cancel" @click="showSharePopup = false">取消</div>
+      </div>
+
     </van-popup>
+    <sharePoster
+      v-if="showPoster"
+      :shareParams="shareParams"
+      @hide="showPoster = false"
+    ></sharePoster>
   </div>
 </template>
 
@@ -1593,6 +1700,7 @@ import PickupAddress from "../common/pickup-address";
 import BigImage from "../common/big-image/index";
 import PullTo from "@/components/Vendor/vue-pull-to/vue-pull-to";
 import Countdown from "../../Vendor/countdown/countdown";
+import NewCountdown from "../../Vendor/countdown/newCountdown";
 import PriceOrder from "@/components/commonui/price/price-order";
 import Config from "@/api/config";
 import ShareImage from "./shareImage";
@@ -1608,6 +1716,8 @@ import dataMergeInterceptor from "@/utils/staticData/dataMergeInterceptor";
 import cartEvent from "../../../utils/presale/cart";
 import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
+import { fetchMethod } from "@/utils/tmHttp.js";
+import sharePoster from "./shareImage/share-poster.vue";
 
 export default {
   name: "detail",
@@ -1621,11 +1731,20 @@ export default {
     BigImage,
     PriceOrder,
     videoPlayer,
-    CouponAndActivity
+    CouponAndActivity,
+    sharePoster,
+    NewCountdown
   },
   data() {
     let that = this;
     return {
+      personShareCode: "", // 人分销码
+      qrCode: "", //商品分销码
+      shareParams: {},
+      showPoster: false,
+      estimatedCommission: "", //预计佣金
+      isDistributionProduct: false, //是否是分销商品
+      referrerCode: "", // 分销码
       directWeChatShare: "0",
       backApp: false,
       couFlag: [],
@@ -1654,7 +1773,7 @@ export default {
         scrollbarSnapOnRelease: true,
         scrollbarHide: false,
         on: {
-          slideChange: function() {
+          slideChange: function () {
             that.toptab = this.realIndex + 1;
             if (that.toptab == 3) {
               that.load3 = true;
@@ -1686,8 +1805,8 @@ export default {
               that.$refs.detailTop2.style.opacity = 0;
               that.$refs.detailTop1.style.opacity = 1;
             }
-          }
-        }
+          },
+        },
       },
       swiperOption: {
         autoHeight: false, //enable auto height
@@ -1696,7 +1815,7 @@ export default {
         autoplay: {
           delay: 3000, //1秒切换一次
           clickable: true,
-          disableOnInteraction: false
+          disableOnInteraction: false,
         },
         loop: true,
         paginationShow: true,
@@ -1707,10 +1826,10 @@ export default {
         scrollbarSnapOnRelease: true,
         scrollbarHide: false,
         on: {
-          slideChange: function() {
+          slideChange: function () {
             that.proImgIndex = this.realIndex;
-          }
-        }
+          },
+        },
       },
       introductionIndex: 1,
       showPop: false,
@@ -1731,7 +1850,7 @@ export default {
       regionText: "请选择配送区域",
       region: [],
       initData: {
-        title: "请选择地区"
+        title: "请选择地区",
       },
       recommendListShow: false,
       showActivity: false,
@@ -1782,8 +1901,8 @@ export default {
         sources: [
           {
             type: "video/mp4",
-            src: ""
-          }
+            src: "",
+          },
         ],
         poster: "", //你的封面地址
         // width: document.documentElement.clientWidth,
@@ -1792,8 +1911,8 @@ export default {
           timeDivider: true,
           durationDisplay: true,
           remainingTimeDisplay: true,
-          fullscreenToggle: true //全屏按钮
-        }
+          fullscreenToggle: true, //全屏按钮
+        },
       },
       arrLen: 0,
       showActivityTime: "0",
@@ -1815,12 +1934,15 @@ export default {
       detailScrollTop: 0, //第二页滚动高度
       detailView: 1, //默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
       reachBottom: false, //是否到达底部,
-      viewpoint_radio: 0
+      viewpoint_radio: 0,
+      // duration:0,
+      // interval:null,
+      // distributionPersonDetail:{},
     };
   },
   computed: {
     ...mapState(["recommendationSku"]),
-    getCountdownTime: function() {
+    getCountdownTime: function () {
       let nowT = this.$store.state.severTime.currentTime;
       // let startT = this.$util.getDateFromString(this.detailData.mktStartDate)
       // let endT = this.$util.getDateFromString(this.detailData.mktEndDate)
@@ -1840,7 +1962,7 @@ export default {
         return endT;
       }
       return endT;
-    }
+    },
   },
   mounted() {
     this.easyCardId = this.$route.query.easyCardId;
@@ -1849,35 +1971,91 @@ export default {
     window.addEventListener("scroll", this.handleScroll, true); // 监听（绑定）滚轮滚动事件
     console.log("商品详情参数", this.$route.query);
     console.log("商品详情路径", window.location);
+    // clearInterval(this.interval)
+    // this.interval = setInterval(()=>{
+    //   this.duration++;
+    //   console.log(this.duration)
+    // },1000)
   },
   watch: {
     introduction1(val) {
       console.log("---------introduction1---->", val);
     },
-    "$store.state.mall2.zitiAddress.id": function(val, oldVal) {
+    "$store.state.mall2.zitiAddress.id": function (val, oldVal) {
       if (this.deliveryType == 1) {
         this.getDatas();
       }
     },
-    proView: function(newVal, oldVal) {
+    proView: function (newVal, oldVal) {
       if (newVal == 2) {
         this.detailView = 2;
         this.$nextTick(() => {
           document.getElementsByClassName("scroll-container")[1].scrollTop = 1;
-          this.detailScrollHeight = document.getElementsByClassName(
-            "scroll-container"
-          )[1].scrollHeight;
-          this.detailClientHeight = document.getElementsByClassName(
-            "scroll-container"
-          )[1].clientHeight;
+          this.detailScrollHeight =
+            document.getElementsByClassName("scroll-container")[1].scrollHeight;
+          this.detailClientHeight =
+            document.getElementsByClassName("scroll-container")[1].clientHeight;
         });
       }
-    }
+    },
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    distributionInit() {
+      this.distributionMessage();
+      this.distributionProduct();
+    },
+    // 分销员信息
+    distributionMessage() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
+        : (url =
+            "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
+      console.log("----distributionMessage------");
+      this.$http.get(url).then(
+        res => {
+          console.log("----distributionMessage------", res);
+
+          this.referrerCode = res.data.data.shareCode;
+          this.personShareCode = res.data.data.shareCode;
+          this.distributionMessageCode();
+        },
+        err => {}
+      );
+    },
+    // 分销商品分享码
+    distributionMessageCode() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url =
+            `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url =
+            `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+
+
+      fetchMethod("GET", url).then(res => {
+        console.log("----distributionMessageCode--->>-", res);
+        this.qrCode = res.data;
+      });
+    },
+
+    // 商品信息 是否是分销商品
+    distributionProduct() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+      fetchMethod("POST", url).then(res => {
+        if (res.code == 200 && res.data) {
+          this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
+          this.isDistributionProduct = true; //是否是分销商品
+        }
+      });
+    },
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -1915,22 +2093,26 @@ export default {
           }
         }
         this.viewpoint_radio = this.$util.toDecimal2(viewpoint_radio);
-        console.log(
-          "viewpoint_radio",
-          this.viewpoint_radio,
-          this.detailScrollHeight,
-          this.detailClientHeight
-        );
+        // console.log(
+        //   "viewpoint_radio",
+        //   this.viewpoint_radio,
+        //   this.detailScrollHeight,
+        //   this.detailClientHeight
+        // );
       });
     },
     shareSensors(share_type) {
+      // clearInterval(this.interval)
       this.$sensors.track("goods_share", {
+        // referrer_id:this.distributionPersonDetail.distributorId,
+        // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
         goods_cls1: this.categoryList[0],
         goods_cls2: this.categoryList[1],
         goods_cls3: this.categoryList[2],
+        // goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
         goods_quantity: this.selectedNum,
@@ -1939,7 +2121,7 @@ export default {
         merchant_id: this.detailData.ouCode,
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
-        share_type: share_type
+        share_type: share_type,
       });
     },
     onShare() {
@@ -1947,11 +2129,13 @@ export default {
         this.detailData.picUrls[0] +
           "?x-oss-process=image/format,jpg/quality,Q_25"
       );
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        this.showShare();
-      } else {
-        this.showSharePopup = true;
-      }
+      this.showSharePopup = true;
+
+      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      //   this.showShare();
+      // } else {
+      //   this.showSharePopup = true;
+      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
@@ -1977,16 +2161,58 @@ export default {
           // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
           miniProgramType:
             this.$store.state.environment == "production" ? 0 : 2,
-          __event__: res => {}
+          __event__: (res) => {},
         })
-        .then(res => {
+        .then((res) => {
           // document.getElementById("debug_text").innerText = res;
           // alert("shareThenRes----------", JSON.stringify(res));
         });
       this.showSharePopup = false;
       this.shareSensors("微信");
     },
-    shareImg() {
+    shareImg(type) {
+      // this.showShare();
+      let { picUrls, salePrice, skuName } = this.detailData;
+      const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+
+
+      let params = {
+        type,
+        picUrls,
+        salePrice,
+        skuName,
+        userImage:
+          this.$store.state.ythUserInfo.userImage,
+        userName: this.$store.state.ythUserInfo.userName,
+        referrerCode: this.referrerCode,
+        qrCode: this.qrCode,
+        estimatedCommission: this.estimatedCommission,
+        link
+      };
+      this.showSharePopup = false;
+      // 判断容器环境，如果是微信小程序跳转到微信小程序原生进行分享操作
+      // 两套
+      let ua = window.navigator.userAgent.toLowerCase();
+      let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+      console.log("------isWX", isWX);
+      if (isWX) {
+        wx.miniProgram.navigateTo({
+          // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`
+        });
+      } else {
+        this.shareParams = params;
+        this.showPoster = true;
+        // this.$router.push({
+        //   path: 'mall2/savePicture',
+        //   query: params
+        // })
+      }
+    },
+    defaultShareImg() {
       this.showShare();
     },
     shareLink() {
@@ -1994,9 +2220,12 @@ export default {
         path: "/mall2/shareTextLink",
         query: {
           price: this.detailData.activityPrice,
-          link: window.location.href,
+          skuId: this.skuId,
           goodsTitle: this.getSkuNameStr(this.detailData),
           goods_share_data: JSON.stringify({
+            // referrer_id:this.distributionPersonDetail.distributorId,
+            // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+            // goods_cl3_id: this.detailData.categoryId,
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
@@ -2011,30 +2240,30 @@ export default {
             merchant_id: this.detailData.ouCode,
             merchant_name: this.detailData.ouName,
             viewpoint_radio: this.viewpoint_radio,
-            share_type: "文字"
-          })
-        }
+            share_type: "文字",
+          }),
+        },
       });
     },
     // 唤起客服
-    handleCustomer: function() {
+    handleCustomer: function () {
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
         email: "",
         mobile: this.$store.state.userInfo.phone,
         data: this.$store.state.userLable,
-        success: function() {
+        success: function () {
           // 成功回调
           ysf("open");
         },
-        error: function() {
+        error: function () {
           // 错误回调
           // handle error
-        }
+        },
       });
     },
-    getJdSilmilarSku: function() {
+    getJdSilmilarSku: function () {
       return;
       if (this.lastRequestId == this.detailData.id) {
         return;
@@ -2044,10 +2273,10 @@ export default {
       this.$Loading.open();
       let url = "/app/json/product/getJdSilmilarSku";
       let params = {
-        id: this.detailData.id
+        id: this.detailData.id,
       };
       this.$http.post(url, params).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -2056,7 +2285,7 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("获取数据失败");
         }
@@ -2067,7 +2296,7 @@ export default {
       // you can use it to do something...
       // player.[methods]
     },
-    serversEvent: function() {
+    serversEvent: function () {
       let serviceInfo = this.detailData.serviceInfo;
       if (serviceInfo != "") {
         let arr = JSON.parse(serviceInfo);
@@ -2081,11 +2310,11 @@ export default {
         let url =
           "/app/json/app_pro_sku_service_detail/getServiceDetailListByIds";
         let params = {
-          inIds: JSON.stringify(ids)
+          inIds: JSON.stringify(ids),
         };
         this.$Loading.open();
         this.$http.post(url, params).then(
-          res => {
+          (res) => {
             this.$Loading.close();
             let data = res.data;
             if (data.status == 0) {
@@ -2093,8 +2322,8 @@ export default {
               if (arr.length > 0) {
                 ServersDetail.open({
                   initData: {
-                    list: arr
-                  }
+                    list: arr,
+                  },
                 });
               } else {
                 this.$Toast("暂无服务说明！");
@@ -2103,7 +2332,7 @@ export default {
               this.$Toast(data.info);
             }
           },
-          error => {
+          (error) => {
             this.$Loading.close();
             this.$Toast("请求数据失败！");
           }
@@ -2111,14 +2340,14 @@ export default {
       }
     },
     ...mapMutations(["setRecommendationSku"]),
-    getFxUnit: function(returnType) {
+    getFxUnit: function (returnType) {
       if (returnType == 3) {
         return "积分";
       } else {
         return "元";
       }
     },
-    isPayTime: function() {
+    isPayTime: function () {
       if (this.detailData.productType == 6) {
         let nowDate = new Date();
         let nt = nowDate.getTime();
@@ -2143,18 +2372,18 @@ export default {
       }
       return true;
     },
-    getSkuNameStr: function(item) {
+    getSkuNameStr: function (item) {
       let skuName = item.showTitle;
       if (item.interfaceType == "2") {
         skuName =
-          `<span style="padding: 1px 3px;font-size: 8px;background-color: #ff0000;border-radius: 2px;color: #ffffff;margin-right: 6px;">${this
-            .$store.state.globalConfig.interface_type_name_1 ||
-            "京东"}</span>` + skuName;
+          `<span style="padding: 1px 3px;font-size: 8px;background-color: #ff0000;border-radius: 2px;color: #ffffff;margin-right: 6px;">${
+            this.$store.state.globalConfig.interface_type_name_1 || "京东"
+          }</span>` + skuName;
       } else if (item.interfaceType == "1") {
         skuName =
-          `<span style="padding: 1px 3px;font-size: 8px;background-color: #ff0000;border-radius: 2px;color: #ffffff;margin-right: 6px;">${this
-            .$store.state.globalConfig.interface_type_name_2 ||
-            "有路"}</span>` + skuName;
+          `<span style="padding: 1px 3px;font-size: 8px;background-color: #ff0000;border-radius: 2px;color: #ffffff;margin-right: 6px;">${
+            this.$store.state.globalConfig.interface_type_name_2 || "有路"
+          }</span>` + skuName;
       }
       return skuName;
     },
@@ -2162,12 +2391,12 @@ export default {
       // 打开弹框
       if (Object.keys(this.detailData).length > 0) {
         ShareImage.show({
-          proData: this.detailData || {}
+          proData: this.detailData || {},
         });
         this.shareSensors("图片");
       }
     },
-    getPackageStartTime: function() {
+    getPackageStartTime: function () {
       let nowT = this.$store.state.severTime.currentTime;
       let startT = this.$util.getDateFromString(
         this.detailData.packageStartTime
@@ -2177,7 +2406,7 @@ export default {
       }
       return 0;
     },
-    getTimeTitle: function() {
+    getTimeTitle: function () {
       let nowT = this.$store.state.severTime.currentTime;
       let startT;
       let endT;
@@ -2196,7 +2425,7 @@ export default {
       }
       return "活动已结束";
     },
-    getActivityStr: function(activity) {
+    getActivityStr: function (activity) {
       for (let i = 0; i < this.$store.state.globalConfig.acctList.length; i++) {
         let accitem = this.$store.state.globalConfig.acctList[i];
         if (activity[accitem.listKey] && activity[accitem.listKey] != "") {
@@ -2204,7 +2433,7 @@ export default {
         }
       }
     },
-    changeDelivery: function(type) {
+    changeDelivery: function (type) {
       this.showSelectDeliveryType = false;
       this.$store.state.mall2.staticDeliverType = type;
       this.$bridgefunc.vuexStorage();
@@ -2216,14 +2445,14 @@ export default {
         this.getDatas();
       }
     },
-    selectDeliveryType: function() {
+    selectDeliveryType: function () {
       this.showSelectDeliveryType = true;
     },
-    removeSingleActivity: function() {
+    removeSingleActivity: function () {
       this.activityId = "-2";
       this._getProductDetail();
     },
-    reviseSingleActivity: function() {
+    reviseSingleActivity: function () {
       let listData = [];
 
       for (let i = 0; i < this.singleActivities_2.length; i++) {
@@ -2235,24 +2464,24 @@ export default {
             " " +
             this.getActivityPrice(item) +
             this.$util.toDecimal2(item.activityPrice),
-          checked: item.activityId == this.curSingleActivity.activityId
+          checked: item.activityId == this.curSingleActivity.activityId,
         });
       }
       listData.push({
         mktActivityId: "-2",
         title: "不参加兑换活动",
-        checked: false
+        checked: false,
       });
       SalesPro.open({
         listData: listData,
-        sureFunc: item1 => {
+        sureFunc: (item1) => {
           this.activityId = item1.mktActivityId;
           this._getProductDetail();
-        }
+        },
       });
     },
     //获取虚拟价格和单位
-    getActivityPrice: function(item) {
+    getActivityPrice: function (item) {
       for (let i = 0; i < this.$store.state.globalConfig.acctList.length; i++) {
         let tempItem = this.$store.state.globalConfig.acctList[i];
         let tempPoints = item[tempItem.listKey];
@@ -2261,11 +2490,11 @@ export default {
         }
       }
     },
-    joinSingleActivity: function(saitem) {
+    joinSingleActivity: function (saitem) {
       this.activityId = saitem.activityId;
       this._getProductDetail();
     },
-    noticeIsShow: function() {
+    noticeIsShow: function () {
       if (
         this.detailData.noticeActivityDetail &&
         this.detailData.noticeActivityDetail != "" &&
@@ -2281,7 +2510,7 @@ export default {
       }
       return false;
     },
-    getNoticeTime: function() {
+    getNoticeTime: function () {
       let time = this.detailData.noticeActivityDetail.startTime.replace(
         /\-/g,
         "/"
@@ -2301,27 +2530,27 @@ export default {
           this.$util.getzf(oMinute); //最后拼接时间
       return oTime;
     },
-    getNoticePrice: function() {
+    getNoticePrice: function () {
       let price = this.detailData.noticeActivityDetail.activityPrice;
       let activityType = this.detailData.noticeActivityDetail.activityType;
       return activityType + "价￥" + this.$util.toDecimal2(price);
     },
-    getScrollTop: function() {
+    getScrollTop: function () {
       let top = "top: " + this.$store.state.barHeight + "px;";
       let bottom = `bottom: ${this.recommendCommodity ? 0 : 50}px`;
       return `${top}${bottom}`;
     },
-    canNotSaleEvent: function() {
+    canNotSaleEvent: function () {
       this.$Toast("当前区域不可售");
     },
-    noStockEvent: function() {
+    noStockEvent: function () {
       // if (this.detailData.mktActivityPriceLevel == 3) {
       //   this.$Toast('秒杀商品已抢光！')
       //   return;
       // }
       this.$Toast("当前地区没有库存！");
     },
-    descartesInList: function(descartes, kyList) {
+    descartesInList: function (descartes, kyList) {
       let featureList = this.detailData.featureList;
       if (descartes.length == featureList.length) {
         if (kyList[descartes]) {
@@ -2359,7 +2588,7 @@ export default {
       // }
       // return true
     },
-    getCanSelectWith: function(fidx, subFeature) {
+    getCanSelectWith: function (fidx, subFeature) {
       if (subFeature.selected) {
         return false;
       }
@@ -2387,7 +2616,7 @@ export default {
       }
       return this.descartesInList(descartes, kyList);
     },
-    productPickageEvent: function(product) {
+    productPickageEvent: function (product) {
       // this.$Toast('开发中')
       let path = "/mall2/detail/" + this.$util.getDataString();
       if (product.productType == 2) {
@@ -2400,35 +2629,35 @@ export default {
           skuId: product.skuId,
           lastPath: this.$route.path,
           // deliveryType: product.deliverType,
-          productType: product.productType
-        }
+          productType: product.productType,
+        },
       });
     },
-    getSelectedTabStyle: function(idx) {
+    getSelectedTabStyle: function (idx) {
       if (idx == this.toptab) {
         return { fontWeight: "600", fontSize: "18px" };
       } else {
       }
     },
-    showBigImgsEvent: function(arr) {
+    showBigImgsEvent: function (arr) {
       this.picUrls = arr;
       this.showPicUrls = true;
     },
-    getCommentImgs: function(imgsStr) {
+    getCommentImgs: function (imgsStr) {
       if (imgsStr != "") {
         return imgsStr.split(",");
       }
       return [];
     },
-    closeBigImage: function() {
+    closeBigImage: function () {
       this.showBigImage = false;
       this.showPicUrls = false;
     },
-    showBigImageEvent: function(index) {
+    showBigImageEvent: function (index) {
       this.proImgIndex = index;
       this.showBigImage = true;
     },
-    productEvent: function(product) {
+    productEvent: function (product) {
       let path = "/mall2/detail/" + this.$util.getDataString();
       if (product.productType == 2) {
         path = "/mall2/ticketdetail";
@@ -2440,11 +2669,11 @@ export default {
           skuId: product.skuId,
           lastPath: this.$route.path,
           // deliveryType: product.deliverType,
-          productType: product.productType
-        }
+          productType: product.productType,
+        },
       });
     },
-    productImgAfterEnter: function(el) {
+    productImgAfterEnter: function (el) {
       this.showProductImg = false;
       this.showAddCartAn = true;
     },
@@ -2471,18 +2700,18 @@ export default {
       //   this.showAddCartAn = false
       // })
     },
-    _setDefaultPickupAddress: function(id) {
+    _setDefaultPickupAddress: function (id) {
       let url = "/app/json/user_address/addDefaultAddress";
       let params1 = {
         token: this.$store.state.login.token,
-        selfId: id
+        selfId: id,
       };
       this.$http.post(url, params1).then(
-        res => {},
-        error => {}
+        (res) => {},
+        (error) => {}
       );
     },
-    selectPickUpAddress: function() {
+    selectPickUpAddress: function () {
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
         return;
       }
@@ -2492,9 +2721,9 @@ export default {
           token: this.$store.state.login.token,
           posx: this.$store.state.currentLocation.posx,
           posy: this.$store.state.currentLocation.posy,
-          skuIds: [this.detailData.skuId]
+          skuIds: [this.detailData.skuId],
         },
-        addressEvent: selected => {
+        addressEvent: (selected) => {
           PickupAddress.close();
           if (selected) {
             this.$store.state.mall2.zitiAddress = selected;
@@ -2511,14 +2740,14 @@ export default {
           this.$router.push({
             path: path,
             query: {
-              skuIds: JSON.stringify(arr)
-            }
+              skuIds: JSON.stringify(arr),
+            },
           });
           PickupAddress.close();
-        }
+        },
       });
     },
-    touchend: function() {
+    touchend: function () {
       let mySite = this.$refs.scrollView1.scrollTop;
       let maxSize =
         this.$refs.scrollView1.scrollHeight -
@@ -2527,11 +2756,11 @@ export default {
         this.proView = 2;
       }
     },
-    pageSite: function() {
+    pageSite: function () {
       let mySite = this.$refs.scrollView1.scrollTop;
       this.pullScrollEvent(mySite);
     },
-    pullScrollEvent: function(scrollTop) {
+    pullScrollEvent: function (scrollTop) {
       if (this.proView == 1) {
         this.page1ScrollTop = scrollTop;
         if (scrollTop < 60) {
@@ -2556,7 +2785,7 @@ export default {
         this.scrollTopValue2 = scrollTop;
       }
     },
-    getCommentUserStr: function(comment) {
+    getCommentUserStr: function (comment) {
       if (comment.userName != "") {
         return comment.userName;
       }
@@ -2568,30 +2797,30 @@ export default {
       }
       return "未知用户";
     },
-    bottomPull: function(loaded) {
+    bottomPull: function (loaded) {
       loaded("done");
       this.proView = 2;
       this.$nextTick(this.setPicMedia); // 设置京东商品图文大小
     },
-    topPull: function(loaded) {
+    topPull: function (loaded) {
       loaded("done");
       this.proView = 1;
     },
-    toCart: function() {
+    toCart: function () {
       // this.$store.state.isSpecialPush = true;
       let pushData = {
         path: "/mall2/cart",
         query: {
           orderCategory: this.orderCategory,
-          vipUnitUserCode: this.vipUnitUserCode
-        }
+          vipUnitUserCode: this.vipUnitUserCode,
+        },
       };
       if (
         this.detailData.supportPreSale == 1 &&
         this.$store.state.globalConfig.presaleType == 2
       ) {
         pushData = {
-          path: "/mall2/presalecart"
+          path: "/mall2/presalecart",
         };
       }
       if (
@@ -2605,73 +2834,118 @@ export default {
       this.$store.state.cartEntrance = "goodsDetail";
     },
     // 去店铺
-    toShop: function() {
+    toShop: function () {
       // this.$store.state.isSpecialPush = true;
       this.$router.push({
         path: "/mall2/shop",
         query: {
           storeOuCode: this.detailData.storeOuCode,
-          lastPath: this.$route.path
-        }
+          lastPath: this.$route.path,
+        },
       });
     },
-    backEvent: function() {
+    backEvent: function () {
       // if (this.$store.state.webtype == 3 && window.history.length === 1) {
       //   wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
       // }
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      console.log("this.viewpoint_radio", this.viewpoint_radio);
-      this.$sensors.track("goods_detail_quit", {
-        module_source:
-          this.$store.state.inToDetail == "common"
-            ? "商城臻选专场"
-            : this.$store.state.inToDetail == "list"
-            ? "商城商品列表页"
-            : "商城搜索列表",
-        goods_id: this.skuId,
-        goods_name: this.detailData.skuName,
-        tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
-        org_price: this.detailData.activityPrice,
-        price: this.detailData.salePrice,
-        store_id: this.detailData.storeOuCode,
-        store_name: this.detailData.storeOuName,
-        merchant_id: this.detailData.ouCode,
-        merchant_name: this.detailData.ouName,
-        viewpoint_radio: this.viewpoint_radio
-      });
-
-      if (
-        this.$store.state.webtype != "2" ||
-        this.$store.state.webtype != "3"
-      ) {
-        if (this.backApp) {
-          appNav.navigatorBack({ url: "0" }).then(res => {
-            console.log(res);
+      // let to = {
+      //   path:"",
+      // };
+      window.removeEventListener("scroll", this.handleScroll, true);
+      console.log("----backEvent->>>>----this.$route.query", this.$route.query);
+      console.log("this.$util.isAndroid()", this.$util.isAndroid());
+      if (this.$route.query.channel == "fromApp") {
+        // to.path = 'fromApp';
+        // this.sensorsDuration(to);
+        if (this.$util.isAndroid()) {
+          window.location.href = `x-engine-json://yjzdbill/webToApp?args=&callback=${encodeURIComponent(
+            // location.origin
+            this.$store.state.environment !== 'production'?
+            "https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common":
+            "https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/common"
+          )}`;
+        } else {
+          appNav.navigatorBack({ url: "0" }).then((res) => {
           });
-          return;
+          appNav.changeBottomToIndex({ selectIndex: 2 }).then((res) => {
+            console.log("跳转", res);
+          });
+        }
+      } else {
+        console.log("this.viewpoint_radio", this.viewpoint_radio);
+        this.$sensors.track("goods_detail_quit", {
+          module_source:
+            this.$store.state.inToDetail == "common"
+              ? "商城臻选专场"
+              : this.$store.state.inToDetail == "list"
+              ? "商城商品列表页"
+              : "商城搜索列表",
+          goods_id: this.skuId,
+          goods_name: this.detailData.skuName,
+          tag: this.tagList,
+          goods_cls1: this.categoryList[0],
+          goods_cls2: this.categoryList[1],
+          goods_cls3: this.categoryList[2],
+          goods_cl3_id: this.detailData.categoryId,
+          org_price: this.detailData.activityPrice,
+          price: this.detailData.salePrice,
+          store_id: this.detailData.storeOuCode,
+          store_name: this.detailData.storeOuName,
+          merchant_id: this.detailData.ouCode,
+          merchant_name: this.detailData.ouName,
+          viewpoint_radio: this.viewpoint_radio,
+        });
+        if (
+          this.$store.state.webtype != "2" ||
+          this.$store.state.webtype != "3"
+        ) {
+          if (this.backApp) {
+            // to.path = 'fromApp';
+            // this.sensorsDuration(to);
+            appNav.navigatorBack({ url: "0" }).then((res) => {
+              console.log(res);
+            });
+            return;
+          }
+        }
+
+        if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+          if (window.history.length === 1) {
+            // to.path = '/common';
+            // this.sensorsDuration(to);
+            this.$router.replace("/common");
+          } else {
+            // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+            // to.path = this.$store.state.inToDetail == "search"
+            //   ? '/search'
+            //   : this.$store.state.inToDetail == "list"
+            //   ? '/list'
+            //   : '/common'
+            // this.sensorsDuration(to);
+            this.$router.go(-1);
+          }
+        } else {
+          // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+          // to.path = this.$store.state.inToDetail == "search"
+          //   ? '/search'
+          //   : this.$store.state.inToDetail == "list"
+          //   ? '/list'
+          //   : '/common'
+          // this.sensorsDuration(to);
+          this.$router.go(-1);
+          this.$keepaliveHelper.deleteCache(this);
         }
       }
+
       // if (this.proView == 2) {
       //   this.proView = 1;
       //   return;
       // }
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        if (window.history.length === 1) {
-          this.$router.replace("/common");
-        } else {
-          this.$router.go(-1);
-        }
-      } else {
-        this.$router.go(-1);
-        this.$keepaliveHelper.deleteCache(this);
-      }
     },
-    activityProducts: function(activity) {
+    activityProducts: function (activity) {
       this.$store.state.showCategory = false;
       this.showActivity = false;
       let path = "/mall2/list/" + this.$util.getDataString();
@@ -2683,11 +2957,11 @@ export default {
           delivertype: this.deliveryType,
           skuId: this.detailData.skuId,
           storeOuCode: this.detailData.storeOuCode,
-          lastPath: this.$route.path
-        }
+          lastPath: this.$route.path,
+        },
       });
     },
-    couponProducts: function(coupon) {
+    couponProducts: function (coupon) {
       let path = "/mall2/list/" + this.$util.getDataString();
       this.$router.push({
         path: path,
@@ -2699,11 +2973,11 @@ export default {
           skuId: this.detailData.skuId,
           lastPath: this.$route.path,
           storeOuCode: this.detailData.storeOuCode,
-          endTime: this.$util.getDateFromString(coupon.validEndDate)
-        }
+          endTime: this.$util.getDateFromString(coupon.validEndDate),
+        },
       });
     },
-    loadJFHQList: async function() {
+    loadJFHQList: async function () {
       this.$Loading.open();
       let res = await this.getJFHQList();
       this.$Loading.close();
@@ -2712,30 +2986,30 @@ export default {
         this.jfhqList = res.data.data.list;
       }
     },
-    getJFHQList: async function() {
+    getJFHQList: async function () {
       return this.$http.post("/app/json/product/getProDetailExchangeList", {
         id: this.detailData.skuId,
         brandId: this.detailData.brandId,
-        storeOuCode: this.detailData.storeOuCode
+        storeOuCode: this.detailData.storeOuCode,
       });
     },
-    kyCouponEvent: function() {
+    kyCouponEvent: function () {
       Coupon.open({
         initData: {
           type: "show",
-          listData: this.detailData.proCanUseCouList
+          listData: this.detailData.proCanUseCouList,
         },
-        selectedCoupon: coupon => {
+        selectedCoupon: (coupon) => {
           Coupon.close();
         },
-        getedCoupon: coupon => {},
-        couponProducts: coupon => {
+        getedCoupon: (coupon) => {},
+        couponProducts: (coupon) => {
           this.couponProducts(coupon);
           Coupon.close();
-        }
+        },
       });
     },
-    couponEvent: async function() {
+    couponEvent: async function () {
       if (
         this.detailData.couponInList == "" &&
         this.jfhqList == "" &&
@@ -2754,12 +3028,12 @@ export default {
           type: "receive",
           categoryId: this.detailData.categoryId,
           token: this.$store.state.login.token,
-          jfhqData: this.jfhqList
+          jfhqData: this.jfhqList,
         },
-        selectedCoupon: coupon => {
+        selectedCoupon: (coupon) => {
           Coupon.close();
         },
-        getedCoupon: coupon => {
+        getedCoupon: (coupon) => {
           for (let i = 0; i < this.detailData.couponInList.length; i++) {
             let item = this.detailData.couponInList[i];
             if (item.couTypeCode == coupon.couTypeCode) {
@@ -2772,21 +3046,21 @@ export default {
             }
           }
         },
-        couponProducts: coupon => {
+        couponProducts: (coupon) => {
           this.couponProducts(coupon);
           Coupon.close();
         },
-        activityProducts: activity => {
+        activityProducts: (activity) => {
           this.activityProducts(activity);
           Coupon.close();
-        }
+        },
       });
     },
-    moreRecommend: function() {
+    moreRecommend: function () {
       this.recommendListShow = true;
       this.toptabEvent(4);
     },
-    getServerText: function(server) {
+    getServerText: function (server) {
       let days = server.days;
       if (days == 1) {
         days = "当";
@@ -2799,12 +3073,12 @@ export default {
         return days + "天无理由维修";
       }
     },
-    proSelectEvent: function() {
+    proSelectEvent: function () {
       this.getJdSilmilarSku();
       this.popFlag = "addToCart";
       this.showPop = true;
     },
-    subFeatureEvent: function(subFeature, fidx) {
+    subFeatureEvent: function (subFeature, fidx) {
       let skuId = this.getCanSelectWith(fidx, subFeature);
       console.log(skuId);
       if (skuId == false) {
@@ -2832,7 +3106,7 @@ export default {
         this._getProductDetail();
       }
     },
-    numChange: function() {
+    numChange: function () {
       let num = this.selectedNum;
       // 如果不是整步幅，取整步幅
       num =
@@ -2844,7 +3118,7 @@ export default {
       }
       this.generateSelectedText();
     },
-    generateSelectedText: function() {
+    generateSelectedText: function () {
       this.selectedText = "";
       this.myFeatures = [];
       for (let i = 0; i < this.detailData.featureList.length; i++) {
@@ -2863,14 +3137,14 @@ export default {
         (this.detailData.metric ? this.detailData.metric : "件");
       console.log("this.detailData.", this.detailData);
     },
-    dataProcessing: function(item) {
+    dataProcessing: function (item) {
       // 数据，尤其是价格，需要做初始化处理
       // 全局价格处理
       let dpedData = this.$mallCommon.priceFromItem(item);
       item.dpedData = dpedData;
     },
     // 获取当前库存
-    _getCustomStock: function() {
+    _getCustomStock: function () {
       if (
         this.deliveryType == 2 &&
         (this.$store.state.mall2.selectAddress.id == "" ||
@@ -2897,15 +3171,15 @@ export default {
           province: this.$store.state.mall2.selectAddress.provinceId,
           city: this.$store.state.mall2.selectAddress.cityId,
           area: this.$store.state.mall2.selectAddress.countryId,
-          town: this.$store.state.mall2.selectAddress.townId
+          town: this.$store.state.mall2.selectAddress.townId,
         },
         deliverType: this.deliveryType,
         selfPickStore: this.$store.state.mall2.zitiAddress.id,
-        storeCode: this.detailData.storeOuCode
+        storeCode: this.detailData.storeOuCode,
       };
       this.$Loading.open();
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -2944,18 +3218,18 @@ export default {
             }
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    selectArea: function() {
+    selectArea: function () {
       // if (this.$store.state.mall2.selectAddress.id > 0) {
       Address.open({
         initData: {
           selectedId: this.$store.state.mall2.selectAddress.id,
-          token: this.$store.state.login.token
+          token: this.$store.state.login.token,
         },
         addressEvent: (selected, saddress) => {
           this.matchAddress = saddress;
@@ -2963,7 +3237,7 @@ export default {
           this.$bridgefunc.vuexStorage();
           this._getCustomStock();
           Address.close();
-        }
+        },
       });
       // } else {
       //   //选择省市区
@@ -2971,7 +3245,7 @@ export default {
       //   this._getRegionData(0);
       // }
     },
-    selectedItemsEvent: function(selectedValue) {
+    selectedItemsEvent: function (selectedValue) {
       let item = selectedValue.item;
       this.selectedItems = selectedValue.selecteds;
       if (this.selectedItems.length == 4) {
@@ -2982,24 +3256,24 @@ export default {
       }
       this._getRegionData(item.id);
     },
-    regionCloseEvent: function() {
+    regionCloseEvent: function () {
       this.showSelect = false;
     },
-    _getRegionData: function(parentId) {
+    _getRegionData: function (parentId) {
       this.$Loading.open();
       let url = "/app/json/area/loadAreaList";
       let params1 = {
         token: this.$store.state.login.token,
-        parentId: parentId
+        parentId: parentId,
       };
       this.$http.post(url, params1).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
             let arr = data.data;
             if (arr.length > 0) {
-              this.$nextTick(function() {
+              this.$nextTick(function () {
                 this.$refs.regionselect.pushCustomOptions(arr);
               });
             } else {
@@ -3011,13 +3285,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("获取数据失败");
         }
       );
     },
-    getRegionText: function() {
+    getRegionText: function () {
       let str = "";
       let address = {
         provinceId: "",
@@ -3027,7 +3301,7 @@ export default {
         countryId: "",
         countryName: "",
         townId: "",
-        townName: ""
+        townName: "",
       };
       address.id = "-1";
       for (let i = 0; i < this.region.length; i++) {
@@ -3058,11 +3332,11 @@ export default {
       this.regionText = str;
       this.$refs.regionselect.reset(null);
     },
-    allCommentEvent: function() {
+    allCommentEvent: function () {
       this.commentListShow = true;
       this.toptabEvent(3);
     },
-    toptabEvent: function(idx) {
+    toptabEvent: function (idx) {
       this.toptab = idx;
       if (this.toptab == 3) {
         this.load3 = true;
@@ -3078,11 +3352,11 @@ export default {
       //   this.recommendListShow = true;
       // }
     },
-    introductionSelected: function(idx) {
+    introductionSelected: function (idx) {
       this.introductionIndex = idx;
       this.$nextTick(this.setPicMedia); // 设置京东商品图文大小
     },
-    addToCart: function() {
+    addToCart: function () {
       if (
         this.$store.state.login.token == "" &&
         this.$store.state.webtype == 2
@@ -3095,7 +3369,7 @@ export default {
       this.showPop = true;
       // this._addToCart();
     },
-    songliEvent: function() {
+    songliEvent: function () {
       if (
         this.detailData.mktActivityPriceLevel == 3 &&
         this.detailData.soldNum >= 100
@@ -3139,7 +3413,7 @@ export default {
       this.popFlag = "songli";
       this.showPop = true;
     },
-    preSaleEvent: function() {
+    preSaleEvent: function () {
       if (
         this.detailData.mktActivityPriceLevel == 3 &&
         this.detailData.soldNum >= 100
@@ -3184,8 +3458,8 @@ export default {
           path: "/movie-ticket-order",
           query: {
             skuId: this.detailData.skuId,
-            activityId: this.activityId
-          }
+            activityId: this.activityId,
+          },
         });
       } else {
         this.getJdSilmilarSku();
@@ -3193,7 +3467,7 @@ export default {
         this.showPop = true;
       }
     },
-    buyNowEvent: function() {
+    buyNowEvent: function () {
       if (this.canSale == false) {
         this.$Toast("该商品在该地区暂不支持购买！");
         return;
@@ -3250,8 +3524,8 @@ export default {
           path: "/movie-ticket-order",
           query: {
             skuId: this.detailData.skuId,
-            activityId: this.activityId
-          }
+            activityId: this.activityId,
+          },
         });
       } else {
         this.getJdSilmilarSku();
@@ -3260,10 +3534,10 @@ export default {
         // this._buyNow()
       }
     },
-    popClose: function() {
+    popClose: function () {
       this.showPop = false;
     },
-    popSureEvent: function() {
+    popSureEvent: function () {
       if (this.popFlag == "addToCart") {
         this._addToCart();
       } else if (this.popFlag == "buyNow") {
@@ -3276,7 +3550,7 @@ export default {
       this.showPop = false;
     },
     // 请求详情信息
-    _getProductDetail: function() {
+    _getProductDetail :function () {
       this.$Loading.open();
 
       let storeOuCode = this.$route.query.storeOuCode
@@ -3324,7 +3598,7 @@ export default {
       args.push({ secondDeliveType: secondDeliveType });
       args.push({ activityId: activityId });
 
-      staticDataRequest.request(url, funcName, args).then(data => {
+      staticDataRequest.request(url, funcName, args).then((data) => {
         this.$Loading.close();
         if (data.status == 0) {
           this.tgfxData = null;
@@ -3370,7 +3644,7 @@ export default {
             this.$store.state.mall2.staticDeliverType = deliveryType;
           }
           if (deliveryType == 1) {
-            InitialLoadPickupAny.checkIsInitialLoad(address => {
+            InitialLoadPickupAny.checkIsInitialLoad((address) => {
               if (address) {
                 this._getProductDetail();
               }
@@ -3451,10 +3725,11 @@ export default {
           // 全局价格处理
           let dpedData = this.$mallCommon.priceFromItem(this.detailData);
           this.detailData.dpedData = dpedData;
-          this.introduction1 = this.detailData.proSkuMediaModel.mobileDetail.replace(
-            /\<title\>.*\<\/title\>/,
-            ""
-          );
+          this.introduction1 =
+            this.detailData.proSkuMediaModel.mobileDetail.replace(
+              /\<title\>.*\<\/title\>/,
+              ""
+            );
           // 这里是临时匹配某些京东商品详情，去掉写死的宽高样式
           this.introduction1 = this.$util.removeWidthAndHeight(
             this.introduction1
@@ -3513,12 +3788,15 @@ export default {
             this.cartNum = cartEvent.getCartNum();
           }
 
-          this.detailData.activityList.forEach(e => {
+          this.detailData.activityList.forEach((e) => {
             this.tagList.push(e.title);
           });
           this.categoryList = this.detailData.categoryName.split("_");
           console.log("category", this.detailData.categoryName, this.tagList);
           this.$sensors.track("goods_detail_view", {
+            // referrer_id:this.distributionPersonDetail.distributorId,
+            // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+            // goods_cl3_id: this.detailData.categoryId,
             module_source:
               this.$store.state.inToDetail == "common"
                 ? "商城臻选专场"
@@ -3536,7 +3814,7 @@ export default {
             store_id: this.detailData.storeOuCode,
             store_name: this.detailData.storeOuName,
             merchant_id: this.detailData.ouCode,
-            merchant_name: this.detailData.ouName
+            merchant_name: this.detailData.ouName,
           });
         } else {
           this.$Toast(data.info);
@@ -3547,7 +3825,7 @@ export default {
      * 获取详情动态数据
      * @private
      */
-    _getProductDetailDynamic: function() {
+    _getProductDetailDynamic: function () {
       let url = "/app/json/product/getProductDetailDynamic";
       let paramsData = {
         skuId: this.skuId,
@@ -3556,15 +3834,15 @@ export default {
           province: this.$store.state.mall2.selectAddress.provinceId,
           city: this.$store.state.mall2.selectAddress.cityId,
           area: this.$store.state.mall2.selectAddress.countryId,
-          town: this.$store.state.mall2.selectAddress.townId
+          town: this.$store.state.mall2.selectAddress.townId,
         },
         deliverType: this.deliveryType,
         referrerCode: this.$route.query.referrerCode
           ? this.$route.query.referrerCode
-          : ""
+          : "",
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
             // 购物车数量
@@ -3604,23 +3882,23 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Toast("请求数据失败！");
         }
       );
     },
     // 获取详情的评价
-    _getDetailComment: function(skuId) {
+    _getDetailComment: function (skuId) {
       // evaluate/loadSkuDetailTwoEvaluate
       let url = "/app/json/evaluate/loadSkuDetailTwoEvaluate";
       let paramsData = {
         token: this.$store.state.login.token,
         skuId: skuId,
         rows: 2,
-        page: 1
+        page: 1,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
             this.detailComment = data.data;
@@ -3628,13 +3906,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Toast("请求数据失败！");
         }
       );
     },
     // 添加商品到购物车
-    _addToCart: function() {
+    _addToCart: function () {
       if (
         this.detailData.supportPreSale == 1 &&
         this.$store.state.globalConfig.presaleType == 2
@@ -3644,8 +3922,8 @@ export default {
             skuId: this.detailData.skuId,
             storeOuCode: this.detailData.storeOuCode,
             number: this.selectedNum,
-            selfActivityId: this.activityId
-          }
+            selfActivityId: this.activityId,
+          },
         ]);
         this.cartNum = cartEvent.getCartNum();
         this.showPop = false;
@@ -3662,15 +3940,15 @@ export default {
             skuId: this.detailData.skuId,
             storeOuCode: this.detailData.storeOuCode,
             number: this.selectedNum,
-            selfActivityId: this.activityId
-          }
+            selfActivityId: this.activityId,
+          },
         ],
         deliveryType: this.detailData.deliveryType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -3680,6 +3958,9 @@ export default {
             this.showProductImg = true;
 
             this.$sensors.track("add_to_shoppingcart", {
+              // referrer_id:this.distributionPersonDetail.distributorId,
+              // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+              // goods_cl3_id: this.detailData.categoryId,
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
@@ -3693,20 +3974,20 @@ export default {
               store_name: this.detailData.storeOuName,
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
-              viewpoint_radio: this.viewpoint_radio
+              viewpoint_radio: this.viewpoint_radio,
             });
           } else {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
     // 立即购买
-    _buyNow: function() {
+    _buyNow: function () {
       if (this.stockNum < this.selectedNum) {
         this.$Toast("当前商品库存不足！");
         return;
@@ -3727,8 +4008,8 @@ export default {
             storeOuCode: this.detailData.storeOuCode,
             number: this.selectedNum,
             selfActivityId: this.activityId,
-            checked: "1"
-          }
+            checked: "1",
+          },
         ],
         deliveryType: this.detailData.deliveryType,
         userAddress: this.$store.state.mall2.selectAddress,
@@ -3736,7 +4017,7 @@ export default {
         userAddressId: "",
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
-        limitWalletCardNo: this.$route.query.cardNo // 易捷卡的卡号（充值卡）
+        limitWalletCardNo: this.$route.query.cardNo, // 易捷卡的卡号（充值卡）
       };
       if (this.deliveryType == 2) {
         if (this.$store.state.mall2.selectAddress.id > 0) {
@@ -3750,7 +4031,7 @@ export default {
         paramsData.cartType = "1";
       }
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -3763,7 +4044,7 @@ export default {
               cardNo: this.$route.query.cardNo, // 卡号 (提交订单页面查询易捷卡支付信息使用)
               skuCode: this.$route.query.skuCode, // 商品编码
               storeOuCode: this.$route.query.storeOuCode, // 店铺编码
-              cardName: this.$route.query.cardName // 计次卡名称
+              cardName: this.$route.query.cardName, // 计次卡名称
             };
             let recommendPhone = this.$route.query.recommendPhone;
             if (
@@ -3804,17 +4085,17 @@ export default {
                   "提示",
                   { confirmButtonText: "确定" }
                 )
-                .then(action => {
+                .then((action) => {
                   this.$router.push({
                     name: "填写订单",
-                    params: params
+                    params: params,
                   });
                 })
-                .catch(action => {});
+                .catch((action) => {});
             } else {
               this.$router.push({
                 name: "填写订单",
-                params: params
+                params: params,
               });
             }
 
@@ -3825,6 +4106,7 @@ export default {
               goods_cls1: this.categoryList[0],
               goods_cls2: this.categoryList[1],
               goods_cls3: this.categoryList[2],
+              // goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -3832,30 +4114,30 @@ export default {
               store_name: this.detailData.storeOuName,
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
-              viewpoint_radio: this.viewpoint_radio
+              viewpoint_radio: this.viewpoint_radio,
             });
           } else {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
     // 获取是否收藏
-    _getCollectState: function() {
+    _getCollectState: function () {
       if (this.$store.state.login.token == "") {
         return;
       }
       let url = "/app/json/user_pro_collect/checkUserHasCollectPro";
       let paramsData = {
         token: this.$store.state.login.token,
-        productId: this.id
+        productId: this.id,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
             this.isCollect = data.data;
@@ -3867,13 +4149,13 @@ export default {
             // this.collectName = "collectName";
           }
         },
-        error => {
+        (error) => {
           this.$Toast("请求数据失败！");
         }
       );
     },
     // 添加收藏或者取消收藏
-    collectEvent: function() {
+    collectEvent: function () {
       if (
         this.$store.state.login.token == "" &&
         this.$store.state.webtype == 2
@@ -3890,16 +4172,19 @@ export default {
         deliveryType: this.detailData.deliveryType,
         storeOuCode: this.detailData.storeOuCode,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
             if (this.isCollect == false) {
               this.isCollect = true;
 
               this.$sensors.track("add_to_favourite", {
+                // referrer_id:this.distributionPersonDetail.distributorId,
+                // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+                // goods_cl3_id: this.detailData.categoryId,
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
@@ -3913,7 +4198,7 @@ export default {
                 store_name: this.detailData.storeOuName,
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
-                viewpoint_radio: this.viewpoint_radio
+                viewpoint_radio: this.viewpoint_radio,
               });
             } else {
               this.isCollect = false;
@@ -3922,12 +4207,12 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Toast("请求数据失败！");
         }
       );
     },
-    sharegoods: function() {
+    sharegoods: function () {
       //分享
       let shareData = {};
       shareData = {};
@@ -3969,14 +4254,14 @@ export default {
 
       this.$bridgefunc.wechatShare(shareData);
     },
-    getDatas: function() {
+    getDatas: function () {
       this._getProductDetail();
       // if (this.$store.state.login.token != '') {
       //   this._getDetailComment(this.skuId);
       // }
     },
     //这里先判断是否有地理位置  没有地理位置需要获取签名  然后获取坐标 转地理位置 存储位置
-    getWechatDatas: function() {
+    getWechatDatas: function () {
       //1自提 2配送
       if (this.deliveryType == 1) {
         //自提地址不存在的情况 直接根据storeid 获取自提点
@@ -4017,18 +4302,18 @@ export default {
       }
     },
     //根据自提点的id去得到自提点
-    getSysStoreById: function() {
+    getSysStoreById: function () {
       let url = "/app/json/user_address/getSysStoreById";
       let idStr = this.$route.query.storeID || "";
       if (idStr == "") {
         return;
       }
       let paramsData = {
-        id: idStr
+        id: idStr,
       };
       this.$Loading.open();
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -4038,20 +4323,20 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
 
-    getWechatSignature: function() {
-      wxfunc.getWechatSignature(isSignature => {
+    getWechatSignature: function () {
+      wxfunc.getWechatSignature((isSignature) => {
         //签名成功
         if (isSignature) {
-          wxfunc.wxGetLocation(location => {
+          wxfunc.wxGetLocation((location) => {
             //
-            this.$mallCommon.addressAnalysis(res => {
+            this.$mallCommon.addressAnalysis((res) => {
               this.getDatas();
             }, location);
           });
@@ -4060,7 +4345,7 @@ export default {
         }
       });
     },
-    bindWechat: function(pushData) {
+    bindWechat: function (pushData) {
       if (pushData) {
         this.$store.state.pushData.pushData = pushData;
         this.$store.state.pushData.pushType = 0;
@@ -4069,7 +4354,7 @@ export default {
       }
       this.$util.wechatBind();
     },
-    setWxShareArgs: function() {
+    setWxShareArgs: function () {
       let shareData = {};
       shareData = {};
       shareData.title = this.detailData.skuName;
@@ -4109,7 +4394,7 @@ export default {
         }
       }
       if (this.$store.state.webtype == 2) {
-        wxfunc.getWechatSignature(isSignature => {
+        wxfunc.getWechatSignature((isSignature) => {
           //签名成功
           if (isSignature) {
             wxfunc.wxSetShareData(shareData);
@@ -4126,10 +4411,10 @@ export default {
           title: this.detailData.skuName,
           path: `${Config.shareUrl}${wxfunc.wxmpPath({
             query,
-            path: this.$route.path
+            path: this.$route.path,
           })}`,
           imageUrl: this.detailData.phMainUrl,
-          rfrCode
+          rfrCode,
         });
       }
     },
@@ -4154,9 +4439,9 @@ export default {
       this.$http
         .post("/app/json/wish_order/addWishOrder", {
           skuId: this.detailData.skuId,
-          storeOuCode: this.detailData.storeOuCode
+          storeOuCode: this.detailData.storeOuCode,
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           if (data.status == 0) {
             if (data.data == 1) {
@@ -4169,18 +4454,18 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$Toast(err);
         });
     },
-    getTgfxDetail: function() {
+    getTgfxDetail: function () {
       this.$http
         .post("/app/json/app_group_buy_cashback/getGroupCashbackDetail", {
           // skuId: this.detailData.skuId,
           skuId: "373754",
-          activityId: "3476"
+          activityId: "3476",
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           if (data.status == 0) {
             this.tgfxData = data.data;
@@ -4188,7 +4473,7 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$Toast(err);
         });
     },
@@ -4196,7 +4481,7 @@ export default {
       if (this.recommendationSku.skuList.length) {
         this.$router.push({
           path: "/recommend-commodity/newRecommendation",
-          query: { status: status }
+          query: { status: status },
         });
       } else {
         this.$Toast("请选择推荐商品");
@@ -4212,7 +4497,74 @@ export default {
         GET[key] = tmp_arr[1];
       }
       return GET;
-    }
+    },
+    // sensorsDuration(to){
+    //   clearInterval(this.interval)
+    //   console.log('to.path',to)
+    //   let jumpPage = "";
+    //   switch (to.path) {
+    //     case '/mall2/cart':
+    //       jumpPage = '购物车'
+    //       break;
+    //     case '/common':
+    //       jumpPage = '商城首页'
+    //       break;
+    //     case '/list':
+    //       jumpPage = '商城商品列表页'
+    //       break;
+    //     case '/search':
+    //       jumpPage = '商品搜索列表页'
+    //       break;
+    //     case '/mall2/detail':
+    //       jumpPage = '推荐商品详情'
+    //       break;
+    //     case '/mall2/placeorder':
+    //       jumpPage = '填写订单'
+    //       break;
+    //     case 'fromApp':
+    //       jumpPage = '返回APP'
+    //       break;
+      
+    //     default:
+    //       jumpPage = ''
+    //       break;
+    //   }
+    //   console.log('jumpPage',jumpPage)
+    //   this.$sensors.track("goods_detail_view_duration", {
+    //     // referrer_id:this.distributionPersonDetail.distributorId,
+    //     // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+    //     goods_id: this.skuId,
+    //     goods_name: this.detailData.skuName,
+    //     tag: this.tagList,
+    //     goods_cls1: this.categoryList[0],
+    //     goods_cls2: this.categoryList[1],
+    //     goods_cls3: this.categoryList[2],
+    //     // goods_cl3_id: this.detailData.categoryId,
+    //     org_price: this.detailData.activityPrice,
+    //     price: this.detailData.salePrice,
+    //     store_id: this.detailData.storeOuCode,
+    //     store_name: this.detailData.storeOuName,
+    //     merchant_id: this.detailData.ouCode,
+    //     merchant_name: this.detailData.ouName,
+    //     jump_page: jumpPage,
+    //     duration: this.duration,
+    //   });
+    // },
+    // getDistributionDetail(){
+    //   let url = "";
+    //   // this.$store.state.ythUserInfo.phone
+    //   this.$store.state.environment == "development" ? url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
+    //     : url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
+    //   return new Promise((resolve, reject)=>{
+    //     this.$http.get(url).then(res=>{
+    //       if(res.data.code == 200){
+    //         resolve(res.data.data);
+    //       }
+    //     }).catch(err=>{
+    //       reject(err)
+    //     })
+    //   })
+    // },
   },
   created() {
     console.log("created");
@@ -4231,7 +4583,8 @@ export default {
     this.id = this.$route.query.id ? this.$route.query.id : "";
     this.skuId = this.$route.query.skuId ? this.$route.query.skuId : "";
     if (this.$route.query.shareDeliveryType) {
-      this.$store.state.mall2.staticDeliverType = this.$route.query.shareDeliveryType;
+      this.$store.state.mall2.staticDeliverType =
+        this.$route.query.shareDeliveryType;
     }
     this.deliveryType = this.$store.state.mall2.staticDeliverType;
     this.productType = this.$route.query.productType
@@ -4257,6 +4610,7 @@ export default {
     } else {
       this.getDatas();
     }
+    this.distributionInit();
   },
   activated() {
     if (
@@ -4286,6 +4640,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    // this.sensorsDuration(to);
     if (to.path == this.lastPath) {
       this.$keepaliveHelper.deleteCache(this);
     } else if (this.lastPath == "" && to.path == "/common") {
@@ -4299,8 +4654,9 @@ export default {
       if (this.$refs.scrollView4)
         this.scrollTopValue5 = this.$refs.scrollView4.getScrollSite();
     }
+    window.removeEventListener("scroll", this.handleScroll, true);
     next();
-  }
+  },
 };
 </script>
 
@@ -4308,16 +4664,16 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
-.theme_standard_bg{
+.theme_standard_bg {
   width: 102px;
   height: 39px;
   background: linear-gradient(270deg, #FFC360 0%, #FFA500 100%);
   border-radius: 20px;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
-  
-  .title{
+
+  .title {
     font-size: 15px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
@@ -4326,13 +4682,15 @@ export default {
     // line-height: 21px;
   }
 }
-.theme_bg_y{
+
+.theme_bg_y {
   width: 102px;
   height: 39px;
   background: linear-gradient(270deg, #FF6094 0%, #E5165A 100%);
   border-radius: 20px;
 }
-.nogoods{
+
+.nogoods {
   width: 214px !important;
   height: 39px;
   background: #F1F1F1;
@@ -4421,10 +4779,11 @@ export default {
 
   .share_botton {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 
     .share_botton_item {
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -4990,8 +5349,8 @@ export default {
       }
 
       /* .btn-item:nth-child(n+2) {
-         border-left 1px solid #ddd;
-         } */
+      border-left 1px solid #ddd;
+      } */
     }
 
     .comment-div {
@@ -5315,23 +5674,22 @@ export default {
 }
 
 // .collectName-enter-active {
-//   transition: all 0.2s ease;
+// transition: all 0.2s ease;
 // }
 
 // .collectName-leave-active {
-//   transition: all 0.2s ease-in;
+// transition: all 0.2s ease-in;
 // }
 
 // .collectName-enter {
-//   transform: translateY(-500%);
-//   transform: scale(10);
+// transform: translateY(-500%);
+// transform: scale(10);
 // }
 
 // .collectName-leave-to {
-//   transform: translateY(-500%);
-//   transform: scale(10);
+// transform: translateY(-500%);
+// transform: scale(10);
 // }
-
 .transition1-enter-active, .transition1-leave-active, .transition2-enter-active, .transition2-leave-active {
   transition: all 0.5s;
 }

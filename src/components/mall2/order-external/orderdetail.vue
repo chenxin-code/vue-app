@@ -1,22 +1,34 @@
 /**Created by liaoyingchao on 2018/11/5.*/
 
 <template>
-  <div class="orderdetail mall2"   :class="{theme_sys_base:orderCategory == 1,theme_sys_blue:orderCategory == 1}">
+  <div
+    class="orderdetail mall2"
+    :class="{
+      theme_sys_base: orderCategory == 1,
+      theme_sys_blue: orderCategory == 1
+    }"
+  >
     <nav-top @backEvent="backEvent"></nav-top>
     <nav-content>
-      <div class="scroll-div" v-if="detailData" :class="{'bottom0':!getIsShowBottomBtns()}">
+      <div
+        class="scroll-div"
+        v-if="detailData"
+        :class="{ bottom0: !getIsShowBottomBtns() }"
+      >
         <div class="top-div">
           <!--待支付-->
           <div class="order-info" v-if="tag == '1'">
             <div class="row theme_font_white">
               <div class="title">等待买家付款</div>
-              <div class="tip">剩余{{timeString}}自动关闭订单</div>
+              <div class="tip">剩余{{ timeString }}自动关闭订单</div>
             </div>
             <div class="row theme_font_white">
               <div class="price">
                 <span>需付款： ￥</span>
-                <span class="price-z">{{detailData.dpedData.integer}}</span>
-                <span class="left-no-space">.{{detailData.dpedData.decimals}}</span>
+                <span class="price-z">{{ detailData.dpedData.integer }}</span>
+                <span class="left-no-space price-z"
+                  >.{{ detailData.dpedData.decimals }}</span
+                >
                 <span>元</span>
               </div>
             </div>
@@ -31,7 +43,10 @@
             </div>
           </div>
           <!--待收货-->
-          <div class="order-info order-info-top" v-if="tag == '4' && detailData.deliverType == 2">
+          <div
+            class="order-info order-info-top"
+            v-if="tag == '4' && detailData.deliverType == 2"
+          >
             <div class="row theme_font_white">
               <div class="icon-div">
                 <i class="iconfont mall-dianpu"></i>
@@ -39,7 +54,10 @@
               <div class="title">等待收货</div>
             </div>
           </div>
-          <div class="order-info order-info-top" v-if="tag == '4' && detailData.deliverType == 1">
+          <div
+            class="order-info order-info-top"
+            v-if="tag == '4' && detailData.deliverType == 1"
+          >
             <div class="row theme_font_white">
               <div class="icon-div">
                 <i class="iconfont mall-dianpu"></i>
@@ -69,7 +87,7 @@
               <div class="title">已取消</div>
             </div>
           </div>
-          <img src="static/image/mall2/order-bg.png">
+          <img src="static/image/mall2/order-bg.png" />
         </div>
         <div class="place block-div theme_bg_white">
           <!--待支付-->
@@ -79,11 +97,17 @@
               <div class="flex-row">
                 <i class="iconfont mall-ren-copy"></i>
                 <div class="label-text theme_font_black">手机号:</div>
-                <div class="theme_font_black full">{{detailData.virtualUserPhone}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.virtualUserPhone }}
+                </div>
               </div>
               <div class="flex-row">
-                <div class="left-space label-text theme_font_black">身份证号:</div>
-                <div class="theme_font_black full">{{detailData.virtualUserIdcard}}</div>
+                <div class="left-space label-text theme_font_black">
+                  身份证号:
+                </div>
+                <div class="theme_font_black full">
+                  {{ detailData.virtualUserIdcard }}
+                </div>
               </div>
             </div>
             <!--配送-->
@@ -92,13 +116,22 @@
               <div v-if="hasCommonPro(detailData.orderItemList)">
                 <div class="flex-row">
                   <i class="iconfont mall-dingwei"></i>
-                  <div class="title right-margin theme_font_black">{{detailData.receiver}}</div>
-                  <div class="title theme_font_black">{{detailData.mobile}}</div>
+                  <div class="title right-margin theme_font_black">
+                    {{ detailData.receiver }}
+                  </div>
+                  <div class="title theme_font_black">
+                    {{ detailData.mobile }}
+                  </div>
                 </div>
                 <div class="flex-row">
                   <div class="left-space theme_font_tint full">
-                    收货地址：{{detailData.provinceName + detailData.cityName + detailData.countryName + detailData.townName
-                    + detailData.address}}
+                    收货地址：{{
+                      detailData.provinceName +
+                        detailData.cityName +
+                        detailData.countryName +
+                        detailData.townName +
+                        detailData.address
+                    }}
                   </div>
                 </div>
               </div>
@@ -108,10 +141,14 @@
               <div class="flex-row">
                 <i class="iconfont mall-dianhua theme_font_common"></i>
                 <div class="label-text theme_font_black">预留号码:</div>
-                <div class="theme_font_black full">{{detailData.virtualUserPhone}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.virtualUserPhone }}
+                </div>
               </div>
               <div class="flex-row">
-                <div class="left-space theme_font_tint full">商品相关信息将以短信的形式发放给您</div>
+                <div class="left-space theme_font_tint full">
+                  商品相关信息将以短信的形式发放给您
+                </div>
               </div>
             </div>
             <!--自提-->
@@ -119,22 +156,30 @@
               <div class="flex-row">
                 <i class="iconfont mall-time theme_font_black"></i>
                 <div class="label-text theme_font_black">提货时间:</div>
-                <div class="theme_font_black full">{{detailData.selectReceiveTime}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.selectReceiveTime }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-dianpu theme_font_black"></i>
                 <div class="label-text theme_font_black">提货店铺:</div>
-                <div class="theme_font_black full">{{detailData.pickupName}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.pickupName }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-ren-copy"></i>
                 <div class="label-text theme_font_black">联系电话:</div>
-                <div class="theme_font_black full">{{detailData.storePhone}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.storePhone }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-dingwei theme_font_tint"></i>
                 <div class="label-text theme_font_black">提货地址:</div>
-                <div class="theme_font_black full">{{detailData.address}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.address }}
+                </div>
               </div>
             </div>
           </div>
@@ -144,10 +189,14 @@
             <div v-if="hasDateProduct(detailData.orderItemList)">
               <div class="flex-row">
                 <i class="iconfont mall-peisong"></i>
-                <div class="title theme_font_black">订单已提交，等待商家备货</div>
+                <div class="title theme_font_black">
+                  订单已提交，等待商家备货
+                </div>
               </div>
               <div class="flex-row">
-                <div class="left-space theme_font_tint full">{{detailData.paidTime}}</div>
+                <div class="left-space theme_font_tint full">
+                  {{ detailData.paidTime }}
+                </div>
               </div>
             </div>
             <!--配送-->
@@ -156,20 +205,33 @@
               <div v-if="hasCommonPro(detailData.orderItemList)">
                 <div class="flex-row" v-if="detailData.stockupFinishTime != ''">
                   <i class="iconfont mall-peisong"></i>
-                  <div class="title theme_font_black">备货已完成，等待商家发货</div>
+                  <div class="title theme_font_black">
+                    备货已完成，等待商家发货
+                  </div>
                 </div>
                 <div class="flex-row" v-if="detailData.stockupFinishTime != ''">
-                  <div class="left-space theme_font_tint full">{{detailData.stockupFinishTime}}</div>
+                  <div class="left-space theme_font_tint full">
+                    {{ detailData.stockupFinishTime }}
+                  </div>
                 </div>
                 <div class="flex-row">
-                  <i class="iconfont mall-peisong" v-if="detailData.stockupFinishTime == ''"></i>
+                  <i
+                    class="iconfont mall-peisong"
+                    v-if="detailData.stockupFinishTime == ''"
+                  ></i>
                   <div
                     class="title theme_font_black"
-                    :class="{'left-space': detailData.stockupFinishTime != ''}"
-                  >订单已提交，等待商家备货</div>
+                    :class="{
+                      'left-space': detailData.stockupFinishTime != ''
+                    }"
+                  >
+                    订单已提交，等待商家备货
+                  </div>
                 </div>
                 <div class="flex-row">
-                  <div class="left-space theme_font_tint full">{{detailData.paidTime}}</div>
+                  <div class="left-space theme_font_tint full">
+                    {{ detailData.paidTime }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -183,38 +245,74 @@
               <div v-if="hasCommonPro(detailData.orderItemList)">
                 <div class="flex-row">
                   <i class="iconfont mall-peisong"></i>
-                  <div class="title theme_font_black">快递公司已发货，请密切注意物流信息</div>
+                  <div class="title theme_font_black">
+                    快递公司已发货，请密切注意物流信息
+                  </div>
                 </div>
                 <div class="flex-row">
-                  <div class="left-space theme_font_tint full" >物流公司：{{detailData.interfaceType == 2?getPeisongString(detailData.interfaceType):detailData.expressName}}</div>
-                  <div class="copy-btn" v-if="detailData.interfaceType == 2"  @click="showExpress">查看物流</div>
+                  <div class="left-space theme_font_tint full">
+                    物流公司：{{
+                      detailData.interfaceType == 2
+                        ? getPeisongString(detailData.interfaceType)
+                        : detailData.expressName
+                    }}
+                  </div>
+                  <div
+                    class="copy-btn"
+                    v-if="detailData.interfaceType == 2"
+                    @click="showExpress"
+                  >
+                    查看物流
+                  </div>
                 </div>
 
                 <!--不是京东快递才显示-->
                 <div class="flex-row" v-if="detailData.interfaceType != 2">
-                  <div class="left-space theme_font_tint full">物流单号：{{detailData.expressNo}}</div>
-                  <div class="copy-btn" ref="copybtn" v-if="detailData.expressNo && detailData.expressNo.length" :data-clipboard-text="detailData.expressNo" @click="copyExpressNo">复制</div>
-
+                  <div class="left-space theme_font_tint full">
+                    物流单号：{{ detailData.expressNo }}
+                  </div>
+                  <div
+                    class="copy-btn"
+                    ref="copybtn"
+                    v-if="detailData.expressNo && detailData.expressNo.length"
+                    :data-clipboard-text="detailData.expressNo"
+                    @click="copyExpressNo"
+                  >
+                    复制
+                  </div>
                 </div>
                 <div class="flex-row">
-                  <div class="left-space theme_font_tint full">发货时间：{{detailData.interfaceType == 2?detailData.thirdpartySplitTime:detailData.deliveryTime}}</div>
+                  <div class="left-space theme_font_tint full">
+                    发货时间：{{
+                      detailData.interfaceType == 2
+                        ? detailData.thirdpartySplitTime
+                        : detailData.deliveryTime
+                    }}
+                  </div>
                 </div>
                 <!--不是京东快递才显示-->
                 <div v-if="detailData.interfaceType != 2">
                   <div class="flex-row">
-                    <div class="left-space title theme_font_black">备货已完成，等待商家发货</div>
+                    <div class="left-space title theme_font_black">
+                      备货已完成，等待商家发货
+                    </div>
                   </div>
                   <div class="flex-row">
-                    <div class="left-space theme_font_tint full">{{detailData.stockupFinishTime}}</div>
+                    <div class="left-space theme_font_tint full">
+                      {{ detailData.stockupFinishTime }}
+                    </div>
                   </div>
                   <div class="flex-row">
-                    <div class="left-space title theme_font_black">订单已提交，等待商家备货</div>
+                    <div class="left-space title theme_font_black">
+                      订单已提交，等待商家备货
+                    </div>
                   </div>
                   <div class="flex-row">
-                    <div class="left-space theme_font_tint full">{{detailData.paidTime}}</div>
+                    <div class="left-space theme_font_tint full">
+                      {{ detailData.paidTime }}
+                    </div>
                   </div>
                 </div>
-
               </div>
             </div>
             <!--自提-->
@@ -222,30 +320,43 @@
               <div class="flex-row">
                 <i class="iconfont mall-time theme_font_black"></i>
                 <div class="label-text theme_font_black">提货时间:</div>
-                <div class="theme_font_black full">{{detailData.selectReceiveTime}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.selectReceiveTime }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-dianpu theme_font_black"></i>
                 <div class="label-text theme_font_black">提货店铺:</div>
-                <div class="theme_font_black full">{{detailData.pickupName}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.pickupName }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-ren-copy"></i>
                 <div class="label-text theme_font_black">联系电话:</div>
-                <div class="theme_font_black full">{{detailData.storePhone}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.storePhone }}
+                </div>
               </div>
               <div class="flex-row">
                 <i class="iconfont mall-dingwei theme_font_tint"></i>
                 <div class="label-text theme_font_black">提货地址:</div>
-                <div class="theme_font_black full">{{detailData.address}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.address }}
+                </div>
               </div>
-              <div class="flex-row" v-if="tag == '4' && detailData.deliverType == 1">
+              <div
+                class="flex-row"
+                v-if="tag == '4' && detailData.deliverType == 1"
+              >
                 <i class="iconfont mall-scan theme_font_tint"></i>
                 <div class="label-text theme_font_black">提货码:</div>
                 <div
                   class="theme_font_black full"
                   v-if="$store.state.globalConfig.webpos_type != 'cloudpos'"
-                >{{detailData.deliverCheckcode}}</div>
+                >
+                  {{ detailData.deliverCheckcode }}
+                </div>
               </div>
               <div
                 class="flex-row"
@@ -256,7 +367,7 @@
                   <canvas id="codeDiv"></canvas>
                 </div>
                 <div class="refresh-div" @click="_getOrderDetail">
-                  <img src="static/image/mall2/shuaxin.png" alt="">
+                  <img src="static/image/mall2/shuaxin.png" alt="" />
                 </div>
               </div>
             </div>
@@ -267,26 +378,34 @@
             <div v-if="hasDateProduct(detailData.orderItemList)">
               <div class="flex-row">
                 <i class="iconfont mall-peisong"></i>
-                <div class="title theme_font_black">感谢购物，欢迎您再次光临！</div>
+                <div class="title theme_font_black">
+                  感谢购物，欢迎您再次光临！
+                </div>
               </div>
               <div class="flex-row" style="align-items: flex-start;">
                 <i class="iconfont mall-youhuiquan-xianxing"></i>
                 <div class="label-text theme_font_black">券码:</div>
-                <div class="theme_font_black full">{{detailData.orderItemList[0].eleCode}}</div>
+                <div class="theme_font_black full">
+                  {{ detailData.orderItemList[0].eleCode }}
+                </div>
               </div>
             </div>
             <!--普通商品-->
             <div v-if="hasCommonPro(detailData.orderItemList)">
               <div class="flex-row">
                 <i class="iconfont mall-peisong"></i>
-                <div class="title theme_font_black">感谢购物，欢迎您再次光临！</div>
+                <div class="title theme_font_black">
+                  感谢购物，欢迎您再次光临！
+                </div>
               </div>
             </div>
             <!--电子券商品-->
             <div v-if="hasCouponPro(detailData.orderItemList)">
               <div class="flex-row">
                 <i class="iconfont mall-peisong"></i>
-                <div class="title theme_font_black">感谢购物，欢迎您再次光临！</div>
+                <div class="title theme_font_black">
+                  感谢购物，欢迎您再次光临！
+                </div>
               </div>
             </div>
           </div>
@@ -300,7 +419,9 @@
                 <div class="theme_font_black">商家已退款，请注意查收</div>
               </div>
               <div class="flex-row">
-                <div class="left-space theme_font_tint">{{detailData.createTime}}</div>
+                <div class="left-space theme_font_tint">
+                  {{ detailData.createTime }}
+                </div>
               </div>
               <!--<div class="flex-row">-->
               <!--<i class="iconfont mall-tuikuan theme_font_black" v-if="detailData.refundTime == ''"></i>-->
@@ -312,7 +433,9 @@
               <div class="flex-row">
                 <i class="iconfont mall-qian"></i>
                 <div class="label-text theme_font_black">退款金额:</div>
-                <div class="theme_standard_font full">￥{{$util.toDecimal2(detailData.payAmount)}}</div>
+                <div class="theme_standard_font full">
+                  ￥{{ $util.toDecimal2(detailData.payAmount) }}
+                </div>
               </div>
             </div>
             <!--未支付取消-->
@@ -322,7 +445,9 @@
                 <div class="title theme_font_black">您的订单已取消</div>
               </div>
               <div class="flex-row">
-                <div class="left-space title theme_font_tint">{{detailData.cancelTime}}</div>
+                <div class="left-space title theme_font_tint">
+                  {{ detailData.cancelTime }}
+                </div>
               </div>
             </div>
           </div>
@@ -331,30 +456,35 @@
           <div class="share" @click="shareActivity">
             <div class="text">
               分享可得
-              <span class="num">{{awardActivity.awardAmount}}</span>
-              元{{awardActivity.awardName}}
+              <span class="num">{{ awardActivity.awardAmount }}</span>
+              元{{ awardActivity.awardName }}
             </div>
           </div>
         </div>
         <div class="block-div">
           <div class="flex-row">
-            <div class="name full" v-if="tag == '1'">{{detailData.ouName}}</div>
-            <div class="name full" v-if="tag == '16' || tag == '4' || tag == '9'">
+            <div class="name full" v-if="tag == '1'">
+              {{ detailData.ouName }}
+            </div>
+            <div
+              class="name full"
+              v-if="tag == '16' || tag == '4' || tag == '9'"
+            >
               <i class="iconfont mall-dianpu" style="margin-right: 2px;"></i>
-              {{detailData.storeName}}
+              {{ detailData.storeName }}
             </div>
           </div>
           <div v-for="product in detailData.itemAbstractList">
             <div class="pro-row">
               <div class="img-div">
-                <img :src="product.phPictureUrl">
+                <img :src="product.phPictureUrl" />
               </div>
 
               <div class="info-div">
-                <div class="title theme_font_black">{{product.skuName}}</div>
+                <div class="title theme_font_black">{{ product.skuName }}</div>
                 <div class="title theme_font_black">
-                  <span>{{product.specs}}</span>
-                  <span style="float: right;">x {{product.number}}</span>
+                  <span>{{ product.specs }}</span>
+                  <span style="float: right;">x {{ product.number }}</span>
                 </div>
                 <div class="price">
                   <PriceOrder :orderdetailp="product"></PriceOrder>
@@ -364,13 +494,13 @@
             <div class="package-wrapper">
               <div class="pro-row" v-for="item in product.packageItem">
                 <div class="img-div">
-                  <img :src="item.phPictureUrl">
+                  <img :src="item.phPictureUrl" />
                 </div>
                 <div class="info-div">
-                  <div class="title theme_font_black">{{item.skuName}}</div>
+                  <div class="title theme_font_black">{{ item.skuName }}</div>
                   <div class="title theme_font_black">
-                    <span>{{item.specs}}</span>
-                    <span style="float: right;">x {{item.number}}</span>
+                    <span>{{ item.specs }}</span>
+                    <span style="float: right;">x {{ item.number }}</span>
                   </div>
                   <div class="price">
                     <PriceOrder :orderdetailp="product"></PriceOrder>
@@ -382,50 +512,53 @@
         </div>
         <div
           class="block-div"
-          v-if="detailData.orderItemList.length&&detailData.orderItemList[0].productType==2"
+          v-if="
+            detailData.orderItemList.length &&
+              detailData.orderItemList[0].productType == 2
+          "
         >
           <div class="title flex-row">出行人信息</div>
           <div class="border-top" v-for="person in personList">
             <div class="flex-row">
               <div class="label theme_font_tint">姓名</div>
-              <div>{{person.name}}</div>
+              <div>{{ person.name }}</div>
             </div>
             <div class="flex-row">
               <div class="label theme_font_tint">身份证号</div>
-              <div>{{person.phone}}</div>
+              <div>{{ person.phone }}</div>
             </div>
             <div class="flex-row">
               <div class="label theme_font_tint">手机号码</div>
-              <div>{{person.idcard}}</div>
+              <div>{{ person.idcard }}</div>
             </div>
           </div>
         </div>
         <div class="block-div" v-if="detailData.invoiceUse == '1'">
           <div class="flex-row top-padding">
             <div class="label theme_font_tint">发票类型</div>
-            <div>{{getInvoiceTypeText()}}</div>
+            <div>{{ getInvoiceTypeText() }}</div>
           </div>
           <div class="flex-row">
             <div class="label theme_font_tint">发票抬头</div>
-            <div>{{detailData.invoiceTitle}}</div>
+            <div>{{ detailData.invoiceTitle }}</div>
           </div>
           <div class="flex-row" v-if="detailData.invoiceUserOrgTaxNo != ''">
             <div class="label theme_font_tint">发票税号</div>
-            <div>{{detailData.invoiceUserOrgTaxNo}}</div>
+            <div>{{ detailData.invoiceUserOrgTaxNo }}</div>
           </div>
           <div class="flex-row" v-if="detailData.invoiceUserMobile != ''">
             <div class="label theme_font_tint">发票手机号</div>
-            <div>{{detailData.invoiceUserMobile}}</div>
+            <div>{{ detailData.invoiceUserMobile }}</div>
           </div>
         </div>
         <div class="block-div">
           <div class="flex-row">
             <div class="label theme_font_tint">订单号</div>
-            <div>{{detailData.id}}</div>
+            <div>{{ detailData.id }}</div>
           </div>
           <div class="flex-row">
             <div class="label theme_font_tint">下单时间</div>
-            <div>{{detailData.submitTime}}</div>
+            <div>{{ detailData.submitTime }}</div>
           </div>
           <!-- <div class="flex-row" v-if="detailData.payMode != ''">
             <div class="label theme_font_tint">支付方式</div>
@@ -433,152 +566,225 @@
           </div> -->
           <div class="flex-row" v-if="detailData.paidTime != ''">
             <div class="label theme_font_tint">支付完成时间</div>
-            <div>{{detailData.paidTime}}</div>
-          </div>
-          <div class="flex-row" v-if="detailData.receiver != '' && detailData.deliverType == 1">
-            <div class="label theme_font_tint">自提人</div>
-            <div>{{detailData.receiver}}</div>
-          </div>
-          <div class="flex-row" v-if="detailData.mobile != '' && detailData.deliverType == 1">
-            <div class="label theme_font_tint">自提人电话</div>
-            <div>{{detailData.mobile}}</div>
+            <div>{{ detailData.paidTime }}</div>
           </div>
           <div
             class="flex-row"
-            v-if="detailData.deliverType == 2 && hasCommonPro(detailData.orderItemList)"
+            v-if="detailData.receiver != '' && detailData.deliverType == 1"
+          >
+            <div class="label theme_font_tint">自提人</div>
+            <div>{{ detailData.receiver }}</div>
+          </div>
+          <div
+            class="flex-row"
+            v-if="detailData.mobile != '' && detailData.deliverType == 1"
+          >
+            <div class="label theme_font_tint">自提人电话</div>
+            <div>{{ detailData.mobile }}</div>
+          </div>
+          <div
+            class="flex-row"
+            v-if="
+              detailData.deliverType == 2 &&
+                hasCommonPro(detailData.orderItemList)
+            "
           >
             <div class="label theme_font_tint">配送方式</div>
-            <div>{{getPeisongString(detailData.interfaceType)}}</div>
+            <div>{{ getPeisongString(detailData.interfaceType) }}</div>
           </div>
           <div
             class="flex-row"
-            v-if="detailData.deliveryTime != '' && !hasDateProduct(detailData.orderItemList)"
+            v-if="
+              detailData.deliveryTime != '' &&
+                !hasDateProduct(detailData.orderItemList)
+            "
           >
             <div class="label theme_font_tint">配送时间</div>
-            <div>{{detailData.deliveryTime}}</div>
+            <div>{{ detailData.deliveryTime }}</div>
           </div>
         </div>
 
         <div class="block-div" v-if="detailData.rfrCode">
           <div class="flex-row">
             <div class="label theme_font_tint">推荐码</div>
-            <div>{{detailData.rfrCode}}</div>
+            <div>{{ detailData.rfrCode }}</div>
           </div>
         </div>
 
         <!--日期型商品， （待发货，已完成 支付后取消 才有-->
         <div
           class="block-div"
-          v-if="detailData.deliverType != 1 && hasDateProduct(detailData.orderItemList) && (tag == 16 || tag == 9 || detailData.state == '12')"
+          v-if="
+            detailData.deliverType != 1 &&
+              hasDateProduct(detailData.orderItemList) &&
+              (tag == 16 || tag == 9 || detailData.state == '12')
+          "
         >
           <div class="flex-row">
             <i class="iconfont mall-ren-copy left-icon"></i>
             <div class="label-text theme_font_black">手机号:</div>
-            <div class="theme_font_black full">{{detailData.virtualUserPhone}}</div>
+            <div class="theme_font_black full">
+              {{ detailData.virtualUserPhone }}
+            </div>
           </div>
           <div class="flex-row">
             <div class="left-space label-text theme_font_black">身份证号:</div>
-            <div class="theme_font_black full">{{detailData.virtualUserIdcard}}</div>
+            <div class="theme_font_black full">
+              {{ detailData.virtualUserIdcard }}
+            </div>
           </div>
         </div>
         <!--需要配送的商品， （待发货，待收货，已完成 支付后取消 才有-->
         <div
           class="block-div"
-          v-if="detailData.deliverType != 1 && hasCommonPro(detailData.orderItemList) && (tag == 16 || tag == 4 || tag == 9 || detailData.state == '12')"
+          v-if="
+            detailData.deliverType != 1 &&
+              hasCommonPro(detailData.orderItemList) &&
+              (tag == 16 || tag == 4 || tag == 9 || detailData.state == '12')
+          "
         >
           <div class="flex-row">
             <i class="iconfont mall-dingwei left-icon"></i>
-            <div class="title right-margin theme_font_black">{{detailData.receiver}}</div>
-            <div class="title theme_font_black">{{detailData.mobile}}</div>
+            <div class="title right-margin theme_font_black">
+              {{ detailData.receiver }}
+            </div>
+            <div class="title theme_font_black">{{ detailData.mobile }}</div>
           </div>
           <div class="flex-row">
             <div class="left-space theme_font_tint full">
-              收货地址：{{detailData.provinceName + detailData.cityName + detailData.countryName + detailData.townName +
-              detailData.address}}
+              收货地址：{{
+                detailData.provinceName +
+                  detailData.cityName +
+                  detailData.countryName +
+                  detailData.townName +
+                  detailData.address
+              }}
             </div>
           </div>
         </div>
         <!--需要电子券商品， （已完成 支付后取消） 才有-->
         <div
           class="block-div"
-          v-if="detailData.deliverType != 1 && hasCouponPro(detailData.orderItemList) && (tag == 9 || detailData.state == '12')"
+          v-if="
+            detailData.deliverType != 1 &&
+              hasCouponPro(detailData.orderItemList) &&
+              (tag == 9 || detailData.state == '12')
+          "
         >
           <div class="flex-row">
             <i class="iconfont mall-dianhua theme_font_common left-icon"></i>
             <div class="label-text theme_font_black">预留号码:</div>
-            <div class="theme_font_black full">{{detailData.virtualUserPhone}}</div>
+            <div class="theme_font_black full">
+              {{ detailData.virtualUserPhone }}
+            </div>
           </div>
           <div class="flex-row">
-            <div class="left-space theme_font_tint full">商品相关信息将以短信的形式发放给您</div>
+            <div class="left-space theme_font_tint full">
+              商品相关信息将以短信的形式发放给您
+            </div>
           </div>
         </div>
         <!--需要电子券商品， （已完成 支付后取消） 才有-->
-        <div class="block-div" v-if="detailData.deliverType == 1 && (detailData.state == '12')">
+        <div
+          class="block-div"
+          v-if="detailData.deliverType == 1 && detailData.state == '12'"
+        >
           <div class="flex-row">
             <i class="iconfont mall-time theme_font_black"></i>
             <div class="label-text theme_font_black">提货时间:</div>
-            <div class="theme_font_black full">{{detailData.selectReceiveTime}}</div>
+            <div class="theme_font_black full">
+              {{ detailData.selectReceiveTime }}
+            </div>
           </div>
           <div class="flex-row">
             <i class="iconfont mall-dianpu theme_font_black"></i>
             <div class="label-text theme_font_black">提货店铺:</div>
-            <div class="theme_font_black full">{{detailData.pickupName}}</div>
+            <div class="theme_font_black full">{{ detailData.pickupName }}</div>
           </div>
           <div class="flex-row">
             <i class="iconfont mall-ren-copy"></i>
             <div class="label-text theme_font_black">联系电话:</div>
-            <div class="theme_font_black full">{{detailData.storePhone}}</div>
+            <div class="theme_font_black full">{{ detailData.storePhone }}</div>
           </div>
           <div class="flex-row">
             <i class="iconfont mall-dingwei theme_font_tint"></i>
             <div class="label-text theme_font_black">提货地址:</div>
-            <div class="theme_font_black full">{{detailData.address}}</div>
+            <div class="theme_font_black full">{{ detailData.address }}</div>
           </div>
-          <div class="flex-row" v-if="tag == '4' && detailData.deliverType == 1">
+          <div
+            class="flex-row"
+            v-if="tag == '4' && detailData.deliverType == 1"
+          >
             <i class="iconfont mall-scan theme_font_tint"></i>
             <div class="label-text theme_font_black">提货码:</div>
-            <div class="theme_font_black full">{{detailData.deliverCheckcode}}</div>
+            <div class="theme_font_black full">
+              {{ detailData.deliverCheckcode }}
+            </div>
           </div>
         </div>
         <div class="block-div">
           <div class="flex-row">
             <div class="label full theme_font_common">商品金额</div>
-            <div class="theme_font_black">￥{{$util.toDecimal2(detailData.totalAmount)}}</div>
+            <div class="theme_font_black">
+              ￥{{ $util.toDecimal2(detailData.totalAmount) }}
+            </div>
           </div>
           <div class="flex-row" v-if="detailData.productType != 5">
             <div class="label full theme_font_common">立减</div>
-            <div class="theme_standard_font">-￥{{$util.toDecimal2(detailData.discountAmount)}}</div>
+            <div class="theme_standard_font">
+              -￥{{ $util.toDecimal2(detailData.discountAmount) }}
+            </div>
           </div>
           <div
             class="flex-row"
-            v-if="detailData.deliverType == 2 && hasCommonPro(detailData.orderItemList)"
+            v-if="
+              detailData.deliverType == 2 &&
+                hasCommonPro(detailData.orderItemList)
+            "
             @click="showFreightDetail"
           >
             <div class="label full theme_font_common">
               运费
-              <i class="iconfont mall-info theme_font_gray" style="margin-left: 3px;"></i>
+              <i
+                class="iconfont mall-info theme_font_gray"
+                style="margin-left: 3px;"
+              ></i>
             </div>
             <div class="theme_standard_font">
-              +￥{{$util.toDecimal2(parseFloat(detailData.freightAmount) -
-              parseFloat(detailData.freightDiscountAmount))}}
+              +￥{{
+                $util.toDecimal2(
+                  parseFloat(detailData.freightAmount) -
+                    parseFloat(detailData.freightDiscountAmount)
+                )
+              }}
             </div>
           </div>
           <div class="flex-row">
             <div class="label full theme_font_common">优惠券</div>
-            <div class="theme_standard_font">-￥{{$util.toDecimal2(detailData.couponAmount)}}</div>
+            <div class="theme_standard_font">
+              -￥{{ $util.toDecimal2(detailData.couponAmount) }}
+            </div>
           </div>
           <div class="flex-row">
             <div class="label full theme_font_common">积分</div>
-            <div class="theme_standard_font">-￥{{$util.toDecimal2(detailData.pointsAmount)}}</div>
+            <div class="theme_standard_font">
+              -￥{{ $util.toDecimal2(detailData.pointsAmount) }}
+            </div>
           </div>
           <div class="flex-row bottom-line" v-if="limitType == 'true'">
             <div class="label full theme_font_common">易捷卡</div>
-            <div class="theme_standard_font">-￥{{$util.toDecimal2(detailData.payLimitWallet)}}</div>
+            <div class="theme_standard_font">
+              -￥{{ $util.toDecimal2(detailData.payLimitWallet) }}
+            </div>
           </div>
           <div class="flex-row top-padding">
             <div class="full"></div>
             <div class="price theme_font_common">
-              <span>共{{detailData.orderItemList.length}}件商品，{{getPayTitle()}}:</span>
+              <span
+                >共{{ detailData.orderItemList.length }}件商品，{{
+                  getPayTitle()
+                }}:</span
+              >
               <PriceOrder :orderitem="detailData"></PriceOrder>
             </div>
           </div>
@@ -590,39 +796,70 @@
           class="row-btn line_circle theme_font_common theme_border_gray"
           @click="cancelOrder"
           v-if="tag == '1'"
-        >取消订单</div>
+        >
+          取消订单
+        </div>
         <!--跟据订单 allowPaidCancel 字段判断,  null 或者 1 允许支付后取消-->
         <div
           class="row-btn line_circle theme_font_common theme_border_gray"
           @click="applyOrder"
-          v-if="((detailData.stockupFinishTime == '' && tag == '16') || (tag == '4' && detailData.deliverType == 1)) && (detailData.allowPaidCancel == null || detailData.allowPaidCancel == 1)"
-        >申请退款</div>
+          v-if="
+            ((detailData.stockupFinishTime == '' && tag == '16') ||
+              (tag == '4' && detailData.deliverType == 1)) &&
+              (detailData.allowPaidCancel == null ||
+                detailData.allowPaidCancel == 1)
+          "
+        >
+          申请退款
+        </div>
         <div
           class="row-btn line_circle row-btn-big-space theme_font_common theme_border_gray"
           @click="payEvent"
           v-if="tag == '1'"
-        >付款</div>
+        >
+          付款
+        </div>
         <div
           class="row-btn line_circle theme_font_common theme_border_gray"
           @click="showExpress"
           v-if="tag == '4' && detailData.deliverType == 2 && isShowExpress"
-        >查看物流</div>
+        >
+          查看物流
+        </div>
         <div
           class="row-btn line_circle theme_font_common theme_border_gray"
           @click="confirmProduct"
           v-if="tag == '4' && detailData.deliverType == 2"
-        >确认收货</div>
+        >
+          确认收货
+        </div>
         <div
           class="row-btn line_circle theme_font_common theme_border_gray"
           @click="toComment"
           v-if="tag == '9' && detailData.state != 6"
-        >晒单评价</div>
-        <div class="row-btn line_circle theme_font_common theme_border_gray" @click v-if="tag == '9' && $store.state.globalConfig.invoice_shopping_enable != 'false'">查看发票</div>
+        >
+          晒单评价
+        </div>
+        <div
+          class="row-btn line_circle theme_font_common theme_border_gray"
+          @click
+          v-if="
+            tag == '9' &&
+              $store.state.globalConfig.invoice_shopping_enable != 'false'
+          "
+        >
+          查看发票
+        </div>
         <div
           class="row-btn line_circle theme_standard_font theme_standard_bdr"
           @click="reBuy"
-          v-if="(tag == '16' || tag == '4' || tag == '7' || tag == '9') && getProductType(detailData) != 2"
-        >再次购买</div>
+          v-if="
+            (tag == '16' || tag == '4' || tag == '7' || tag == '9') &&
+              getProductType(detailData) != 2
+          "
+        >
+          再次购买
+        </div>
       </div>
     </nav-content>
     <!--<PickUpCode v-if="showCode" :code="detailData.deliverCheckcode" @backEvent="codeBack"></PickUpCode>-->
@@ -630,11 +867,11 @@
 </template>
 
 <script>
-import JsBarcode from 'jsbarcode'
-import QRCode from 'qrcode'
-import Freight from '../common/freight'
-import PriceOrder from '@/components/commonui/price/price-order'
-import ClipboardJS from 'clipboard';
+import JsBarcode from "jsbarcode";
+import QRCode from "qrcode";
+import Freight from "../common/freight";
+import PriceOrder from "@/components/commonui/price/price-order";
+import ClipboardJS from "clipboard";
 
 export default {
   name: "orderdetail",
@@ -644,51 +881,54 @@ export default {
   },
   data() {
     return {
-      orderId: '',
-      orderType: '',
-      orderIndex: '',
+      orderId: "",
+      orderType: "",
+      orderIndex: "",
       detailData: null,
-      timeString: '',
+      timeString: "",
       timeValue: 0,
       myTimer: null,
       showCode: false,
       personList: [],
-      awardActivity: {},// 活动
-      orderCategory:'',
-      vipUnitUserCode:'',
+      awardActivity: {}, // 活动
+      orderCategory: "",
+      vipUnitUserCode: "",
       copyBtn: null, //存储初始化复制按钮事件
       brightnessResult: {},
-      limitType: '' // 易捷卡配置
-    }
+      limitType: "" // 易捷卡配置
+    };
   },
-  mounted(){
-    let acctList = this.$store.state.globalConfig.acctList || []
-    let startUsing = ''
+  mounted() {
+    let acctList = this.$store.state.globalConfig.acctList || [];
+    let startUsing = "";
     acctList.forEach(item => {
-      if (item.acctType == 'LimitWallet') {
-        startUsing = item.startUsing
+      if (item.acctType == "LimitWallet") {
+        startUsing = item.startUsing;
       }
-    })
-    this.limitType = startUsing
+    });
+    this.limitType = startUsing;
   },
   computed: {
     isShowExpress() {
-      return this.$store.state.webtype != 3
+      return this.$store.state.webtype != 3;
     }
   },
   methods: {
-    copyExpressNo(){
-      this.copyBtn.on('success', (e) => {
-        this.$Toast('物流单号已复制成功');
+    copyExpressNo() {
+      this.copyBtn.on("success", e => {
+        this.$Toast("物流单号已复制成功");
       });
-      this.copyBtn.on('error', function(e) {
+      this.copyBtn.on("error", function(e) {
         console.log(e);
       });
     },
     //是否显示底部的这些按钮
-    getIsShowBottomBtns: function () {
+    getIsShowBottomBtns: function() {
       if (this.detailData) {
-        if ((this.getProductType(this.detailData) == 2 && this.tag == '7') || this.orderType == '200117') {
+        if (
+          (this.getProductType(this.detailData) == 2 && this.tag == "7") ||
+          this.orderType == "200117"
+        ) {
           return false;
         } else {
           return true;
@@ -697,141 +937,150 @@ export default {
         return false;
       }
     },
-    getPayTitle: function () {
-      if (this.tag == '1') {
-        return '需付款';
-      } else if (this.tag == '7') {
-        return '共';
+    getPayTitle: function() {
+      if (this.tag == "1") {
+        return "需付款";
+      } else if (this.tag == "7") {
+        return "共";
       } else {
-        return '实付款';
+        return "实付款";
       }
     },
 
     //如果有一个商品是日期型商品  就肯定是日期型商品
-    getProductType: function (item) {
+    getProductType: function(item) {
       let abstractList = item.orderItemList;
       for (let i = 0; i < abstractList.length; i++) {
         let item = abstractList[i];
         if (item.productType == 2) {
-          return '2';
+          return "2";
         }
       }
-      return ''
+      return "";
     },
-    getImgArrs: function (list) {
-      let arr = []
+    getImgArrs: function(list) {
+      let arr = [];
       for (let i = 0; i < list.length; i++) {
-        arr.push(list[i].phPictureUrl)
+        arr.push(list[i].phPictureUrl);
       }
-      return arr
+      return arr;
     },
-    showFreightDetail: function () {
-      let storeArr = []
-      let item = {}
-      item.proImgs = this.getImgArrs(this.detailData.orderItemList)
-      item.freightAmount = this.detailData.freightAmount
-      item.freightDiscountAmount = this.detailData.freightDiscountAmount
+    showFreightDetail: function() {
+      let storeArr = [];
+      let item = {};
+      item.proImgs = this.getImgArrs(this.detailData.orderItemList);
+      item.freightAmount = this.detailData.freightAmount;
+      item.freightDiscountAmount = this.detailData.freightDiscountAmount;
       if (this.tag == 1 || this.tag == 7) {
-        item.storeName = this.detailData.ouName
+        item.storeName = this.detailData.ouName;
       } else {
-        item.storeName = this.detailData.storeName
+        item.storeName = this.detailData.storeName;
       }
-      storeArr.push(item)
+      storeArr.push(item);
 
       Freight.open({
         initData: {
-          listData: storeArr,
+          listData: storeArr
         },
         sureEvent: () => {
           Freight.close();
         }
-      })
+      });
     },
-    getPayWayText: function (payModel) {
-      if (payModel == '200') {
-        return '支付宝支付'
-      } else if (payModel == '210') {
-        return '微信支付'
+    getPayWayText: function(payModel) {
+      if (payModel == "200") {
+        return "支付宝支付";
+      } else if (payModel == "210") {
+        return "微信支付";
       }
-      return ''
+      return "";
     },
-    hasCommonPro: function (list) {
+    hasCommonPro: function(list) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].productType == 1 || list[i].productType == 4) {
-          return true
+          return true;
         }
       }
-      return false
+      return false;
     },
-    hasDateProduct: function (list) {
+    hasDateProduct: function(list) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].productType == 2) {
-          return true
+          return true;
         }
       }
-      return false
+      return false;
     },
-    hasCouponPro: function (list) {
+    hasCouponPro: function(list) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].productType == 5) {
-          return true
+          return true;
         }
       }
-      return false
+      return false;
     },
-    showExpress: function () {
+    showExpress: function() {
       // 京东物流
-      if(this.detailData.interfaceType == 2){
+      if (this.detailData.interfaceType == 2) {
         this.$router.push({
-          path: '/mall2/expressinfo',
+          path: "/mall2/expressinfo",
           query: {
-            expressinfo: encodeURIComponent(JSON.stringify(this.detailData.tracksList)),
+            expressinfo: encodeURIComponent(
+              JSON.stringify(this.detailData.tracksList)
+            )
           }
-        })
-      } else if (this.$store.state.globalConfig.enableEMS == 1 && this.detailData.expressSendingMode == '1') {
+        });
+      } else if (
+        this.$store.state.globalConfig.enableEMS == 1 &&
+        this.detailData.expressSendingMode == "1"
+      ) {
         this.$router.push({
-          path: '/mall2/orderlogistics',
+          path: "/mall2/orderlogistics",
           query: {
-            traceNo: this.detailData.expressNo,
+            traceNo: this.detailData.expressNo
           }
-        })
+        });
       } else {
-        let url = 'https://m.kuaidi100.com/index_all.html?type=' + encodeURIComponent(this.detailData.expressName) + '&postid=' + encodeURIComponent(this.detailData.expressNo)
+        let url =
+          "https://m.kuaidi100.com/index_all.html?type=" +
+          encodeURIComponent(this.detailData.expressName) +
+          "&postid=" +
+          encodeURIComponent(this.detailData.expressNo);
         this.$bridgefunc.customPush({
           path: url,
-          isnativetop: '1',
+          isnativetop: "1",
           isVuePage: false
-        })
+        });
       }
     },
-    codeBack: function () {
-      this.showCode = false
+    codeBack: function() {
+      this.showCode = false;
     },
-    showCodeFunc: function () {
-      this.showCode = true
+    showCodeFunc: function() {
+      this.showCode = true;
     },
-    toComment: function () {
+    toComment: function() {
       this.$router.push({
-        path: '/mall2/commentcenter',
-      })
+        path: "/mall2/commentcenter"
+      });
     },
-    getPeisongString: function (type) {
-      if (type == '0') {
-        return '快递配送'
-      } else if (type == '2') {
-        return '京东配送'
+    getPeisongString: function(type) {
+      if (type == "0") {
+        return "快递配送";
+      } else if (type == "2") {
+        return "京东配送";
       }
-      return '快递配送'
+      return "快递配送";
     },
-    _confirmProductApi: function () {
+    _confirmProductApi: function() {
       this.$Loading.open();
-      let url = '/app/json/app_shopping_order/orderConfirm';
+      let url = "/app/json/app_shopping_order/orderConfirm";
       let paramsData = {
         token: this.$store.state.login.token,
         orderId: this.orderId,
         orderType: this.orderType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode:this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
         res => {
@@ -840,44 +1089,46 @@ export default {
           if (data.status == 0) {
             // this.tabEvent(this.tabs[3])
             this.$store.state.mall2.order.backIndex = 3;
-            this.backEvent()
+            this.backEvent();
           } else {
             this.$Toast(data.info);
           }
         },
         error => {
           this.$Loading.close();
-          this.$Toast('请求数据失败！')
+          this.$Toast("请求数据失败！");
         }
       );
     },
     // 确认收货
-    confirmProduct: function () {
-      this.$MessageBox.confirm('您确定已经收到商品了吗？', '提示').then(action => {
-        this._confirmProductApi();
-      }).catch(action => {
-      });
+    confirmProduct: function() {
+      this.$MessageBox
+        .confirm("您确定已经收到商品了吗？", "提示")
+        .then(action => {
+          this._confirmProductApi();
+        })
+        .catch(action => {});
     },
     // 从新购买
-    reBuy: function () {
+    reBuy: function() {
       this.$Loading.open();
-      let url = '/app/json/app_cart/addCart';
+      let url = "/app/json/app_cart/addCart";
       let paramsData = {
         token: this.$store.state.login.token,
         carts: [],
         deliveryType: this.detailData.deliverType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode:this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode
       };
-      let arr = []
+      let arr = [];
       for (let i = 0; i < this.detailData.orderItemList.length; i++) {
-        let product = this.detailData.orderItemList[i]
+        let product = this.detailData.orderItemList[i];
         let cd = {
           skuId: product.skuId,
           storeOuCode: product.storeOuCode,
-          number: product.number,
-        }
-        arr.push(cd)
+          number: product.number
+        };
+        arr.push(cd);
       }
       paramsData.carts = arr;
       this.$http.post(url, paramsData).then(
@@ -885,33 +1136,33 @@ export default {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$store.state.mall2.staticDeliverType = this.detailData.deliverType
+            this.$store.state.mall2.staticDeliverType = this.detailData.deliverType;
             this.$store.state.mall2.cartNum = data.data;
             this.$router.push({
-              path: '/mall2/cart',
+              path: "/mall2/cart",
               query: {
-                orderCategory:this.orderCategory,
-                vipUnitUserCode:this.vipUnitUserCode
+                orderCategory: this.orderCategory,
+                vipUnitUserCode: this.vipUnitUserCode
               }
-            })
+            });
           } else {
             this.$Toast(data.info);
           }
         },
         error => {
           this.$Loading.close();
-          this.$Toast('请求数据失败！')
+          this.$Toast("请求数据失败！");
         }
       );
     },
-    timerCreated: function () {
+    timerCreated: function() {
       if (this.myTimer) {
-        window.clearInterval(this.myTimer)
+        window.clearInterval(this.myTimer);
       }
       this.myTimer = window.setInterval(() => {
         if (this.timeValue <= 0) {
           if (this.myTimer) {
-            window.clearInterval(this.myTimer)
+            window.clearInterval(this.myTimer);
           }
           return;
         }
@@ -919,34 +1170,36 @@ export default {
         this.timeValueString();
       }, 1000);
     },
-    timeValueString: function () {
-      let time = this.timeValue
-      let h = 0, m = 0, s = 0;
+    timeValueString: function() {
+      let time = this.timeValue;
+      let h = 0,
+        m = 0,
+        s = 0;
       if (time > 3600) {
-        h = parseInt(time / 3600)
-        time = time % 3600
+        h = parseInt(time / 3600);
+        time = time % 3600;
       }
       if (time > 60) {
-        m = parseInt(time / 60)
-        time = time % 60
+        m = parseInt(time / 60);
+        time = time % 60;
       }
-      s = time
-      this.timeString = h + '时' + m + '分' + s + '秒'
+      s = time;
+      this.timeString = h + "时" + m + "分" + s + "秒";
     },
-    backEvent: function () {
+    backEvent: function() {
       this.$router.go(-1);
     },
-    getInvoiceTypeText: function () {
+    getInvoiceTypeText: function() {
       if (this.detailData.invoiceType == 0) {
-        return '电子发票'
+        return "电子发票";
       } else if (this.detailData.invoiceType == 1) {
-        return '普通发票'
+        return "普通发票";
       } else if (this.detailData.invoiceType == 2) {
-        return '增值税发票'
+        return "增值税发票";
       }
-      return ''
+      return "";
     },
-    payEvent: function () {
+    payEvent: function() {
       // this.$router.push({
       //   name: '收银台',
       //   params: {
@@ -960,7 +1213,7 @@ export default {
       //   }
       // })
       this.$router.push({
-        path: '/mall2/checkstand',
+        path: "/mall2/checkstand",
         query: {
           payInfo: JSON.stringify({
             orderId: this.orderId,
@@ -970,109 +1223,116 @@ export default {
           }),
           occurOuCode: this.detailData.ouCode
         }
-      })
-    },
-    // 申请退款
-    applyOrder: function () {
-      let message = '申请退款将不退还优惠券！现金会在7-14个工作日内到账，请问是否确认退款？'
-      if (this.$store.state.globalConfig.app_home_special_flag == 'cnooc') {
-        message = '现金会在7-14个工作日内到账，请问是否确认退款？'
-      }
-      this.$MessageBox.confirm(message, '提示').then(action => {
-      // this.$MessageBox.confirm('申请退款将不退还优惠券或积分!', '提示').then(action => {
-        this.refund();
-      }).catch(action => {
       });
     },
+    // 申请退款
+    applyOrder: function() {
+      let message =
+        "申请退款将不退还优惠券！现金会在7-14个工作日内到账，请问是否确认退款？";
+      if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
+        message = "现金会在7-14个工作日内到账，请问是否确认退款？";
+      }
+      this.$MessageBox
+        .confirm(message, "提示")
+        .then(action => {
+          // this.$MessageBox.confirm('申请退款将不退还优惠券或积分!', '提示').then(action => {
+          this.refund();
+        })
+        .catch(action => {});
+    },
     //退款操作
-    refund:function(){
+    refund: function() {
       this.$Loading.open();
-      let url = '/app/json/app_shopping_order/cancelOrder';
+      let url = "/app/json/app_shopping_order/cancelOrder";
       let paramsData = {
         token: this.$store.state.login.token,
         orderType: this.orderType,
         orderId: this.orderId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode:this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
         res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$Toast('申请成功');
+            this.$Toast("申请成功");
             this.$store.state.mall2.order.backIndex = this.orderIndex;
-            this.backEvent()
+            this.backEvent();
           } else {
             this.$Toast(data.info);
           }
         },
         error => {
           this.$Loading.close();
-          this.$Toast('请求数据失败！')
+          this.$Toast("请求数据失败！");
         }
       );
     },
     // 取消订单
-    cancelOrder: function () {
+    cancelOrder: function() {
       this.$Loading.open();
-      let url = '/app/json/app_shopping_order/cancelOrder';
+      let url = "/app/json/app_shopping_order/cancelOrder";
       let paramsData = {
         token: this.$store.state.login.token,
         orderType: this.orderType,
         orderId: this.orderId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode:this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
         res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            this.$Toast('取消成功');
+            this.$Toast("取消成功");
             this.$store.state.mall2.order.backIndex = this.orderIndex;
-            this.backEvent()
+            this.backEvent();
           } else {
             this.$Toast(data.info);
           }
         },
         error => {
           this.$Loading.close();
-          this.$Toast('请求数据失败！')
+          this.$Toast("请求数据失败！");
         }
       );
     },
     // 获取订单详情
-    _getOrderDetail: function () {
+    _getOrderDetail: function() {
       this.$Loading.open();
-      let url = '/app/json/app_shopping_order/detail';
+      let url = "/app/json/app_shopping_order/detail";
       let paramsData = {
         token: this.$store.state.login.token,
         orderType: this.orderType,
         orderId: this.orderId,
         orderCategory: this.orderCategory,
-        vipUnitUserCode:this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
         res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
-            let myData = data.data
-            this.$mallCommon.dataProcessing(myData)
-            this.detailData = myData
-            if (myData.orderItemList.length) {//处理出行人 Json转 数组
-              let bookingGuest = myData.orderItemList[0].bookingGuestJson
+            let myData = data.data;
+            this.$mallCommon.dataProcessing(myData);
+            this.detailData = myData;
+            if (myData.orderItemList.length) {
+              //处理出行人 Json转 数组
+              let bookingGuest = myData.orderItemList[0].bookingGuestJson;
               if (bookingGuest.length) {
-                let arrParse = JSON.parse(decodeURIComponent(bookingGuest))
+                let arrParse = JSON.parse(decodeURIComponent(bookingGuest));
                 this.personList = arrParse;
               }
             }
             this.$nextTick(() => {
-              if (myData.deliverCheckcode != '') {
-                let barcode = document.getElementById('codeDiv');
+              if (myData.deliverCheckcode != "") {
+                let barcode = document.getElementById("codeDiv");
                 if (this.$store.state.globalConfig.webpos_type == "cloudpos") {
-                  QRCode.toCanvas(barcode, myData.deliverCheckcode || '', { width: 160, margin:0})
+                  QRCode.toCanvas(barcode, myData.deliverCheckcode || "", {
+                    width: 160,
+                    margin: 0
+                  });
                 } else {
                   JsBarcode(barcode, myData.deliverCheckcode, {
                     // format: "pharmacode",
@@ -1082,12 +1342,12 @@ export default {
                   });
                 }
               }
-              if(this.$refs.copybtn){
+              if (this.$refs.copybtn) {
                 this.copyBtn = new ClipboardJS(this.$refs.copybtn);
               }
-            })
-            if (this.tag == '1') {
-              this.timeValue = myData.cancelRemainTime
+            });
+            if (this.tag == "1") {
+              this.timeValue = myData.cancelRemainTime;
               this.timeValueString();
               this.timerCreated();
             }
@@ -1097,35 +1357,49 @@ export default {
         },
         error => {
           this.$Loading.close();
-          this.$Toast('请求数据失败！')
+          this.$Toast("请求数据失败！");
         }
       );
     },
     shareActivity() {
-      this.$router.push({ path: '/share-gift/share', query: { awardActivity: JSON.stringify(this.awardActivity) } })
+      this.$router.push({
+        path: "/share-gift/share",
+        query: { awardActivity: JSON.stringify(this.awardActivity) }
+      });
     }
   },
   created() {
-    this.orderId = this.$route.query.orderId ? this.$route.query.orderId : ''
-    this.orderType = this.$route.query.orderType ? this.$route.query.orderType : ''
-    this.tag = this.$route.query.tag ? this.$route.query.tag : ''
-    this.orderIndex = this.$route.query.orderIndex ? this.$route.query.orderIndex : '0'
-    this.awardActivity = { orderId: this.orderId, ...JSON.parse(this.$route.query.awardActivity) }
+    this.orderId = this.$route.query.orderId ? this.$route.query.orderId : "";
+    this.orderType = this.$route.query.orderType
+      ? this.$route.query.orderType
+      : "";
+    this.tag = this.$route.query.tag ? this.$route.query.tag : "";
+    this.orderIndex = this.$route.query.orderIndex
+      ? this.$route.query.orderIndex
+      : "0";
+    this.awardActivity = {
+      orderId: this.orderId,
+      ...JSON.parse(this.$route.query.awardActivity)
+    };
     this.orderCategory = this.$route.query.orderCategory;
     this.vipUnitUserCode = this.$route.query.vipUnitUserCode;
     this._getOrderDetail();
-    this.$bridgefunc.brightness(1, 0, (result) => {
-      this.brightnessResult = result
-    })
+    this.$bridgefunc.brightness(1, 0, result => {
+      this.brightnessResult = result;
+    });
   },
   beforeRouteLeave(to, from, next) {
-    this.$keepaliveHelper.deleteCache(this)
-    next()
+    this.$keepaliveHelper.deleteCache(this);
+    next();
   },
   destroyed() {
-    this.$bridgefunc.brightness(this.brightnessResult.value, this.brightnessResult.isauto, (result) => {})
+    this.$bridgefunc.brightness(
+      this.brightnessResult.value,
+      this.brightnessResult.isauto,
+      result => {}
+    );
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
