@@ -15,6 +15,10 @@ export default {
   name: "NewMinPage",
   data() {
     return {
+      memberId:
+        process.env.NODE_ENV === "development"
+          ? "2331048196588962398"
+          : this.$store.state.userInfo.userCode,
       walletData: {
         gridList: [
           { title: "邦豆", value: "0", url: "/record", id: "bean" },
@@ -239,13 +243,33 @@ export default {
             this.memberInfo.integral ? this.memberInfo.integral : 0,
             false
           );
-          this.setValue(
-            this.walletData.gridList,
-            "coupons",
-            "value",
-            this.memberInfo.couponNum ? this.memberInfo.couponNum : 0,
-            false
-          );
+          // this.setValue(
+          //   this.walletData.gridList,
+          //   "coupons",
+          //   "value",
+          //   this.memberInfo.couponNum ? this.memberInfo.couponNum : 0,
+          //   false
+          // );
+          const host = process.env.VUE_APP_CENTER_APP;
+          const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
+          const params = {
+            memberId: this.memberId,
+            pageIndex: 1,
+            businessType: "200001",
+            pageSize: 10,
+            state: 20
+          };
+          this.$http.get(url, { params: params }).then(resp => {
+              if (resp.data.code === 200) {
+                this.setValue(
+                  this.walletData.gridList,
+                  "coupons",
+                  "value",
+                  resp.data.data.total ? resp.data.data.total : 0,
+                  false
+                );
+              }
+            });
         } else {
           this.$toast("请求失败，请重新尝试");
         }
@@ -356,10 +380,27 @@ export default {
     }
   },
   created() {
-    this.getMemberInformation();
-    this.getUserInfo();
-    this.getWallet();
-    this.getOrderCount();
+    if (!this.memberId) {
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          if (res.data.status == 0) {
+            this.memberId = res.data.data.userInfo.userCode;
+            this.getMemberInformation();
+            this.getUserInfo();
+            this.getWallet();
+            this.getOrderCount();
+          }
+        });
+    }else{
+      this.getMemberInformation();
+      this.getUserInfo();
+      this.getWallet();
+      this.getOrderCount();
+    }
   }
 };
 </script>

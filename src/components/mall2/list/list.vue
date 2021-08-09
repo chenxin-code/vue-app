@@ -645,6 +645,7 @@ export default {
         appNav.navigatorBack({ url: "0" }).then(res => {
           console.log(res);
         });
+        console.log('toApp!')
       } else {
         if(this.$route.query.searchFrom == "coupon" && this.$store.state.webtype == "0") {
           // //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
