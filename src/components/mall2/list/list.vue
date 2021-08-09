@@ -641,11 +641,6 @@ export default {
       );
     },
     backEvent: function() {
-      console.log(123);
-      if(this.$route.query.jumpH5 && this.$route.query.jumpH5 == 'h5') {
-        this.$router.go(-1);
-        return;
-      }
       if (this.$route.query.backApp) {
         appNav.navigatorBack({ url: "0" }).then(res => {
           console.log(res);
@@ -654,16 +649,14 @@ export default {
         if(this.$route.query.searchFrom == "coupon" && this.$store.state.webtype === "1") {
           //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
           nativeRouter.openTargetRouter({
-            type: "microapp",
-            uri: "com.times.microapp.AppcMember",
-            path: encodeURI(`/couponsMine`)
-          });
+            type: "microapp",
+            uri: "com.times.microapp.AppcMember",
+            path: encodeURI(`/couponsMine`)
+          });
         } else {
           this.$router.go(-1);
         }
-        
       }
-      this.$router.go(-1);
     },
     toSearchEvent: function() {
       Search.open({
