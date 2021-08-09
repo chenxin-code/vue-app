@@ -405,7 +405,9 @@
                           </div>
                           <div class="skr-row">
                             <!-- <Countdown :endTime="getCountdownTime"></Countdown> -->
-                            <NewCountdown :endTime="detailData.mktEndDate"></NewCountdown>
+                            <NewCountdown
+                              :endTime="detailData.mktEndDate"
+                            ></NewCountdown>
                           </div>
                         </div>
                       </div>
@@ -1230,6 +1232,7 @@
                 :skuId="this.skuId"
                 v-show="toptab == 4"
                 v-if="load4"
+                @sensorsDuration="sensorsDuration"
               ></Recommend>
             </div>
           </div>
@@ -1641,7 +1644,11 @@
     >
       <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
-          <div class="share_botton_item" @click="shareWechatFriends">
+          <div
+            class="share_botton_item"
+            @click="shareWechatFriends"
+            v-if="!this.$util.isWeiXin()"
+          >
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
@@ -1650,14 +1657,15 @@
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
+            <img
+              src="./shareImage/image/picText.png"
+              alt=""
+              style="width: 60px; height: 60px; margin-bottom: 10px"
+            />
             <div>图文推广</div>
           </div>
-
         </div>
-        <div class="cancel" @click="showSharePopup = false">
-          取消
-        </div>
+        <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
 
       <div class="share_popup" v-else>
@@ -1677,7 +1685,6 @@
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
-
     </van-popup>
     <sharePoster
       v-if="showPoster"
@@ -1733,11 +1740,12 @@ export default {
     videoPlayer,
     CouponAndActivity,
     sharePoster,
-    NewCountdown
+    NewCountdown,
   },
   data() {
     let that = this;
     return {
+      isWX: false, // 是否是微信环境
       personShareCode: "", // 人分销码
       qrCode: "", //商品分销码
       shareParams: {},
@@ -1935,9 +1943,9 @@ export default {
       detailView: 1, //默认第一页，只要进了第二页就永远是第二页，不会再变回第一页
       reachBottom: false, //是否到达底部,
       viewpoint_radio: 0,
-      // duration:0,
-      // interval:null,
-      // distributionPersonDetail:{},
+      duration: 0,
+      interval: null,
+      distributionPersonDetail: {},
     };
   },
   computed: {
@@ -1971,11 +1979,11 @@ export default {
     window.addEventListener("scroll", this.handleScroll, true); // 监听（绑定）滚轮滚动事件
     console.log("商品详情参数", this.$route.query);
     console.log("商品详情路径", window.location);
-    // clearInterval(this.interval)
-    // this.interval = setInterval(()=>{
-    //   this.duration++;
-    //   console.log(this.duration)
-    // },1000)
+    clearInterval(this.interval);
+    this.interval = setInterval(() => {
+      this.duration++;
+      console.log(this.duration);
+    }, 1000);
   },
   watch: {
     introduction1(val) {
@@ -2003,6 +2011,10 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      this.isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     distributionInit() {
       this.distributionMessage();
       this.distributionProduct();
@@ -2017,27 +2029,24 @@ export default {
             "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
       console.log("----distributionMessage------");
       this.$http.get(url).then(
-        res => {
+        (res) => {
           console.log("----distributionMessage------", res);
 
           this.referrerCode = res.data.data.shareCode;
           this.personShareCode = res.data.data.shareCode;
           this.distributionMessageCode();
         },
-        err => {}
+        (err) => {}
       );
     },
     // 分销商品分享码
     distributionMessageCode() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url =
-            `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
-        : (url =
-            `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
 
-
-      fetchMethod("GET", url).then(res => {
+      fetchMethod("GET", url).then((res) => {
         console.log("----distributionMessageCode--->>-", res);
         this.qrCode = res.data;
       });
@@ -2049,7 +2058,7 @@ export default {
       this.$store.state.environment == "development"
         ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
         : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
-      fetchMethod("POST", url).then(res => {
+      fetchMethod("POST", url).then((res) => {
         if (res.code == 200 && res.data) {
           this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
           this.isDistributionProduct = true; //是否是分销商品
@@ -2102,17 +2111,17 @@ export default {
       });
     },
     shareSensors(share_type) {
-      // clearInterval(this.interval)
+      clearInterval(this.interval);
       this.$sensors.track("goods_share", {
-        // referrer_id:this.distributionPersonDetail.distributorId,
-        // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
+        referrer_id: this.distributionPersonDetail.distributorId,
+        top_referrer_id: this.distributionPersonDetail.parentDistributorId,
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
         goods_cls1: this.categoryList[0],
         goods_cls2: this.categoryList[1],
         goods_cls3: this.categoryList[2],
-        // goods_cl3_id: this.detailData.categoryId,
+        goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
         goods_quantity: this.selectedNum,
@@ -2125,11 +2134,35 @@ export default {
       });
     },
     onShare() {
-      console.log(
-        this.detailData.picUrls[0] +
-          "?x-oss-process=image/format,jpg/quality,Q_25"
-      );
-      this.showSharePopup = true;
+        this.showSharePopup = true;
+
+      // if (this.isWX) {
+      //   let { picUrls, salePrice, skuName } = this.detailData;
+      //   const link =
+      //     this.$store.state.environment == "development"
+      //       ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+      //       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
+      //   let params = {
+      //     type: "default",
+      //     skuId: this.skuId,
+      //     picUrls,
+      //     salePrice,
+      //     skuName,
+      //     userImage: this.$store.state.ythUserInfo.userImage,
+      //     userName: this.$store.state.ythUserInfo.userName,
+      //     referrerCode: this.referrerCode,
+      //     qrCode: this.qrCode,
+      //     estimatedCommission: this.estimatedCommission,
+      //     link,
+      //   };
+      //   wx.miniProgram.navigateTo({
+      //     url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+      //       JSON.stringify(params)
+      //     )}`,
+      //   });
+      // } else {
+      //   this.showSharePopup = true;
+      // }
 
       // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       //   this.showShare();
@@ -2173,43 +2206,34 @@ export default {
     shareImg(type) {
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
-      const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-
-
+      const link =
+        this.$store.state.environment == "development"
+          ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+          : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
       let params = {
         type,
         picUrls,
         salePrice,
         skuName,
-        userImage:
-          this.$store.state.ythUserInfo.userImage,
+        userImage: this.$store.state.ythUserInfo.userImage,
         userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
         estimatedCommission: this.estimatedCommission,
-        link
+        link,
       };
       this.showSharePopup = false;
       // 判断容器环境，如果是微信小程序跳转到微信小程序原生进行分享操作
       // 两套
-      let ua = window.navigator.userAgent.toLowerCase();
-      let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
-      console.log("------isWX", isWX);
-      if (isWX) {
+      if (this.isWX) {
         wx.miniProgram.navigateTo({
-          // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
           url: `/pages/common/savePicture/index?params=${encodeURIComponent(
             JSON.stringify(params)
-          )}`
+          )}`,
         });
       } else {
         this.shareParams = params;
         this.showPoster = true;
-        // this.$router.push({
-        //   path: 'mall2/savePicture',
-        //   query: params
-        // })
       }
     },
     defaultShareImg() {
@@ -2223,9 +2247,9 @@ export default {
           skuId: this.skuId,
           goodsTitle: this.getSkuNameStr(this.detailData),
           goods_share_data: JSON.stringify({
-            // referrer_id:this.distributionPersonDetail.distributorId,
-            // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-            // goods_cl3_id: this.detailData.categoryId,
+            referrer_id: this.distributionPersonDetail.distributorId,
+            top_referrer_id: this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
@@ -2851,25 +2875,25 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      // let to = {
-      //   path:"",
-      // };
+      let to = {
+        path:"",
+      };
+      
       window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
       if (this.$route.query.channel == "fromApp") {
-        // to.path = 'fromApp';
-        // this.sensorsDuration(to);
+        to.path = "fromApp";
+        this.sensorsDuration(to);
         if (this.$util.isAndroid()) {
           window.location.href = `x-engine-json://yjzdbill/webToApp?args=&callback=${encodeURIComponent(
             // location.origin
-            this.$store.state.environment !== 'production'?
-            "https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common":
-            "https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/common"
+            this.$store.state.environment !== "production"
+              ? "https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index#/common"
+              : "https://mall-prod-app-linli.timesgroup.cn/app-vue/app/index#/common"
           )}`;
         } else {
-          appNav.navigatorBack({ url: "0" }).then((res) => {
-          });
+          appNav.navigatorBack({ url: "0" }).then((res) => {});
           appNav.changeBottomToIndex({ selectIndex: 2 }).then((res) => {
             console.log("跳转", res);
           });
@@ -2903,8 +2927,8 @@ export default {
           this.$store.state.webtype != "3"
         ) {
           if (this.backApp) {
-            // to.path = 'fromApp';
-            // this.sensorsDuration(to);
+            to.path = "fromApp";
+            this.sensorsDuration(to);
             appNav.navigatorBack({ url: "0" }).then((res) => {
               console.log(res);
             });
@@ -2914,27 +2938,35 @@ export default {
 
         if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
           if (window.history.length === 1) {
-            // to.path = '/common';
-            // this.sensorsDuration(to);
+            to.path = "/common";
+            this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
-            // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
-            // to.path = this.$store.state.inToDetail == "search"
-            //   ? '/search'
-            //   : this.$store.state.inToDetail == "list"
-            //   ? '/list'
-            //   : '/common'
-            // this.sensorsDuration(to);
+            console.log(
+              "this.$store.state.inToDetail",
+              this.$store.state.inToDetail
+            );
+            to.path =
+              this.$store.state.inToDetail == "search"
+                ? "/search"
+                : this.$store.state.inToDetail == "list"
+                ? "/list"
+                : "/common";
+            this.sensorsDuration(to);
             this.$router.go(-1);
           }
         } else {
-          // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
-          // to.path = this.$store.state.inToDetail == "search"
-          //   ? '/search'
-          //   : this.$store.state.inToDetail == "list"
-          //   ? '/list'
-          //   : '/common'
-          // this.sensorsDuration(to);
+          console.log(
+            "this.$store.state.inToDetail",
+            this.$store.state.inToDetail
+          );
+          to.path =
+            this.$store.state.inToDetail == "search"
+              ? "/search"
+              : this.$store.state.inToDetail == "list"
+              ? "/list"
+              : "/common";
+          this.sensorsDuration(to);
           this.$router.go(-1);
           this.$keepaliveHelper.deleteCache(this);
         }
@@ -3550,7 +3582,7 @@ export default {
       this.showPop = false;
     },
     // 请求详情信息
-    _getProductDetail :function () {
+    _getProductDetail: function () {
       this.$Loading.open();
 
       let storeOuCode = this.$route.query.storeOuCode
@@ -3795,10 +3827,12 @@ export default {
           });
           this.categoryList = this.detailData.categoryName.split("_");
           console.log("category", this.detailData.categoryName, this.tagList);
+          
           this.$sensors.track("goods_detail_view", {
-            // referrer_id:this.distributionPersonDetail.distributorId,
-            // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-            // goods_cl3_id: this.detailData.categoryId,
+            referrer_id: this.distributionPersonDetail.distributorId,
+            top_referrer_id:
+              this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
             module_source:
               this.$store.state.inToDetail == "common"
                 ? "商城臻选专场"
@@ -3818,6 +3852,7 @@ export default {
             merchant_id: this.detailData.ouCode,
             merchant_name: this.detailData.ouName,
           });
+
         } else {
           this.$Toast(data.info);
         }
@@ -3842,6 +3877,8 @@ export default {
         referrerCode: this.$route.query.referrerCode
           ? this.$route.query.referrerCode
           : "",
+        referrerId:this.distributionPersonDetail.distributorId,
+        referrerFatherId:this.distributionPersonDetail.parentDistributorId,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
@@ -3960,9 +3997,10 @@ export default {
             this.showProductImg = true;
 
             this.$sensors.track("add_to_shoppingcart", {
-              // referrer_id:this.distributionPersonDetail.distributorId,
-              // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-              // goods_cl3_id: this.detailData.categoryId,
+              referrer_id: this.distributionPersonDetail.distributorId,
+              top_referrer_id:
+                this.distributionPersonDetail.parentDistributorId,
+              goods_cl3_id: this.detailData.categoryId,
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
@@ -4108,7 +4146,7 @@ export default {
               goods_cls1: this.categoryList[0],
               goods_cls2: this.categoryList[1],
               goods_cls3: this.categoryList[2],
-              // goods_cl3_id: this.detailData.categoryId,
+              goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -4184,9 +4222,10 @@ export default {
               this.isCollect = true;
 
               this.$sensors.track("add_to_favourite", {
-                // referrer_id:this.distributionPersonDetail.distributorId,
-                // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-                // goods_cl3_id: this.detailData.categoryId,
+                referrer_id: this.distributionPersonDetail.distributorId,
+                top_referrer_id:
+                  this.distributionPersonDetail.parentDistributorId,
+                goods_cl3_id: this.detailData.categoryId,
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
@@ -4500,58 +4539,58 @@ export default {
       }
       return GET;
     },
-    // sensorsDuration(to){
-    //   clearInterval(this.interval)
-    //   console.log('to.path',to)
-    //   let jumpPage = "";
-    //   switch (to.path) {
-    //     case '/mall2/cart':
-    //       jumpPage = '购物车'
-    //       break;
-    //     case '/common':
-    //       jumpPage = '商城首页'
-    //       break;
-    //     case '/list':
-    //       jumpPage = '商城商品列表页'
-    //       break;
-    //     case '/search':
-    //       jumpPage = '商品搜索列表页'
-    //       break;
-    //     case '/mall2/detail':
-    //       jumpPage = '推荐商品详情'
-    //       break;
-    //     case '/mall2/placeorder':
-    //       jumpPage = '填写订单'
-    //       break;
-    //     case 'fromApp':
-    //       jumpPage = '返回APP'
-    //       break;
-      
-    //     default:
-    //       jumpPage = ''
-    //       break;
-    //   }
-    //   console.log('jumpPage',jumpPage)
-    //   this.$sensors.track("goods_detail_view_duration", {
-    //     // referrer_id:this.distributionPersonDetail.distributorId,
-    //     // top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-    //     goods_id: this.skuId,
-    //     goods_name: this.detailData.skuName,
-    //     tag: this.tagList,
-    //     goods_cls1: this.categoryList[0],
-    //     goods_cls2: this.categoryList[1],
-    //     goods_cls3: this.categoryList[2],
-    //     // goods_cl3_id: this.detailData.categoryId,
-    //     org_price: this.detailData.activityPrice,
-    //     price: this.detailData.salePrice,
-    //     store_id: this.detailData.storeOuCode,
-    //     store_name: this.detailData.storeOuName,
-    //     merchant_id: this.detailData.ouCode,
-    //     merchant_name: this.detailData.ouName,
-    //     jump_page: jumpPage,
-    //     duration: this.duration,
-    //   });
-    // },
+    sensorsDuration(to) {
+      clearInterval(this.interval);
+      console.log("to.path", to);
+      let jumpPage = "";
+      switch (to.path) {
+        case "/mall2/cart":
+          jumpPage = "购物车";
+          break;
+        case "/common":
+          jumpPage = "商城首页";
+          break;
+        case "/list":
+          jumpPage = "商城商品列表页";
+          break;
+        case "/search":
+          jumpPage = "商品搜索列表页";
+          break;
+        case "/mall2/detail":
+          jumpPage = "推荐商品详情";
+          break;
+        case "/mall2/placeorder":
+          jumpPage = "填写订单";
+          break;
+        case "fromApp":
+          jumpPage = "返回APP";
+          break;
+
+        default:
+          jumpPage = "";
+          break;
+      }
+      console.log("jumpPage", jumpPage);
+      this.$sensors.track("goods_detail_view_duration", {
+        referrer_id: this.distributionPersonDetail.distributorId,
+        top_referrer_id: this.distributionPersonDetail.parentDistributorId,
+        goods_id: this.skuId,
+        goods_name: this.detailData.skuName,
+        tag: this.tagList,
+        goods_cls1: this.categoryList[0],
+        goods_cls2: this.categoryList[1],
+        goods_cls3: this.categoryList[2],
+        goods_cl3_id: this.detailData.categoryId,
+        org_price: this.detailData.activityPrice,
+        price: this.detailData.salePrice,
+        store_id: this.detailData.storeOuCode,
+        store_name: this.detailData.storeOuName,
+        merchant_id: this.detailData.ouCode,
+        merchant_name: this.detailData.ouName,
+        jump_page: jumpPage,
+        duration: this.duration,
+      });
+    },
     // getDistributionDetail(){
     //   let url = "";
     //   // this.$store.state.ythUserInfo.phone
@@ -4613,6 +4652,9 @@ export default {
       this.getDatas();
     }
     this.distributionInit();
+    this.wxenvironment();
+    this.distributionPersonDetail = this.$store.state.distributionPersonDetail;
+    console.log('this.distributionPersonDetail',this.distributionPersonDetail);
   },
   activated() {
     if (
@@ -4642,7 +4684,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    // this.sensorsDuration(to);
+    this.sensorsDuration(to);
     if (to.path == this.lastPath) {
       this.$keepaliveHelper.deleteCache(this);
     } else if (this.lastPath == "" && to.path == "/common") {

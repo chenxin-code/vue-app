@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-04 09:33:56
+ * @LastEditTime: 2021-08-07 21:01:27
 -->
 <template>
   <div class="get-coupons-page">
@@ -39,12 +39,8 @@
         <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
         <div class="btn">
-          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
-            >立即领取</van-button
-          >
-          <van-button class="van-btn" @click="goToShopping" v-else
-            >立即使用</van-button
-          >
+          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive">立即领取</van-button>
+          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else>立即使用</van-button>
         </div>
       </div>
     </div>
@@ -64,19 +60,17 @@ export default {
       query: this.$route.query,
       memberId: "",
       userInfo: {},
-      userSummary: {},
       couponDetail: {},
       couNoList: "", //优惠劵id
-      isReceive: false //是否领取
+      isReceive: false, //是否领取
+      skuIds: ""
     };
   },
   components: {
     [VanImage.name]: VanImage
   },
   created() {
-    this.userSummary = this.$store.state;
-    this.memberId = this.userSummary.userInfo.userCode;
-    console.log(`this.userSummary`, this.userSummary.userInfo);
+    this.memberId = this.$store.state.userInfo.userCode;
     // get_distr_coupon?shareCode=lec5bn&memberId=2331048196588962398&couActivitiesId=2632817580967985166&couTypeCode=10SC000173
     this.shareCode = this.query.shareCode;
     this.toast();
@@ -139,11 +133,6 @@ export default {
           if (res.data.code === 200) {
             this.couponDetail = res.data.data;
             console.log(`couponDetail1`, this.couponDetail);
-            console.log(
-              `couponDetail.voucherAmount`,
-              this.couponDetail.voucherAmount
-            );
-
             // this.$forceUpdate();
           } else {
             this.$toast(res.message);
@@ -206,15 +195,21 @@ export default {
       });
     },
     //立即使用
-    goToShopping: _.debounce(function() {
+    goToShopping: _.debounce(function(data) {
       Toast.loading({
         duration: 0,
         type: "loading",
         message: "正在跳转",
         forbidClick: true
       });
+      // 跳转到商城搜索商品列表
+      let path = "/mall2/list/" + this.$util.getDataString();
       this.$router.push({
-        path: "/common"
+        path: path,
+        query: {
+          skuIds: this.skuIds,
+          searchFrom: "coupon"
+        }
       });
       Toast.clear(); //关闭页面loading
     }),
@@ -248,6 +243,7 @@ export default {
           if (res.data.code === 200) {
             if (res.data.data.result) {
               this.couNoList = res.data.data.couNoList;
+              this.skuIds = res.data.data.merchanDises;
               this.isReceive = true;
               this.save();
               Toast.success({

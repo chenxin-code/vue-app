@@ -15,25 +15,34 @@ export default {
   name: "NewMinPage",
   data() {
     return {
+      memberId:
+        process.env.NODE_ENV === "development"
+          ? "2331048196588962398"
+          : this.$store.state.userInfo.userCode,
       walletData: {
         gridList: [
           { title: "邦豆", value: "0", url: "/record", id: "bean" },
-          { title: "优惠券", value: "0", url: "", id: "coupons" },
+          {
+            title: "优惠券",
+            value: "0",
+            url: "/coupon/get_coupon_list",
+            id: "coupons"
+          },
           {
             title: "零钱（元）",
             value: "0.00",
             url: "",
             id: "wallet",
-            isShowUnit: true,
-          },
+            isShowUnit: true
+          }
         ],
         endData: {
           title: "我的钱包",
           icon: require("./images/wallet.png"),
           url: "wallet",
           imgWidth: "0.88rem",
-          imgHeight: "0.706667rem",
-        },
+          imgHeight: "0.706667rem"
+        }
       },
       orderData: {
         gridList: [
@@ -45,7 +54,7 @@ export default {
             imgHeight: "0.48rem",
             isShowTip: false,
             id: "waitPay",
-            tipValue: "",
+            tipValue: ""
           },
           {
             title: "待发货",
@@ -55,7 +64,7 @@ export default {
             imgHeight: "0.546667rem",
             isShowTip: false,
             id: "waitDelivery",
-            tipValue: "",
+            tipValue: ""
           },
           {
             title: "待收货",
@@ -65,7 +74,7 @@ export default {
             imgHeight: "0.546667rem",
             isShowTip: false,
             id: "waitTakeDelivery",
-            tipValue: "",
+            tipValue: ""
           },
           {
             title: "退换/售后",
@@ -75,17 +84,17 @@ export default {
             imgHeight: "0.546667rem",
             isShowTip: false,
             id: "afterSales",
-            tipValue: "",
-          },
+            tipValue: ""
+          }
         ],
         endData: {
           title: "我的订单",
           icon: require("./images/order.png"),
           url: "/mall2/orderlist?selectedIndex=0",
           imgWidth: "0.773333rem",
-          imgHeight: "0.826667rem",
+          imgHeight: "0.826667rem"
         },
-        isShowNumber: true,
+        isShowNumber: true
       },
       cellData: [
         {
@@ -95,7 +104,7 @@ export default {
             "https://mall-uat-app-linli.timesgroup.cn:1443/order/listPage?token=",
           prodUrl:
             "https://mall-prod-app-linli.timesgroup.cn:9001/order/listPage?token=",
-          externalLinks: true,
+          externalLinks: true
         },
         {
           title: "服务商城售后",
@@ -104,45 +113,45 @@ export default {
             "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleList?token=",
           prodUrl:
             "https://mall-prod-app-linli.timesgroup.cn:9001/order/afterSaleList?token=",
-          externalLinks: true,
+          externalLinks: true
         },
         {
           title: "个人信息",
           icon: require("./images/user.png"),
-          pageUrl: "/minUserInfo",
+          pageUrl: "/minUserInfo"
         },
-        {
-          title: "分享有礼",
-          icon: require("./images/share.png"),
-          devUrl:
-            "https://mall-uat-app-linli.timesgroup.cn:8001/wxApplyDistribution?token=",
-          prodUrl:
-            "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
-          externalLinks: true,
-        },
+        // {
+        //   title: "分享有礼",
+        //   icon: require("./images/share.png"),
+        //   devUrl:
+        //     "https://mall-uat-app-linli.timesgroup.cn:8001/wxApplyDistribution?token=",
+        //   prodUrl:
+        //     "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
+        //   externalLinks: true,
+        // },
         {
           title: "收货地址",
           icon: require("./images/address.png"),
-          pageUrl: "/mall2/addresslist?pageType=1",
+          pageUrl: "/mall2/addresslist?pageType=1"
         },
         {
           title: "客服热线",
           icon: require("./images/message.png"),
           phone: "400-111-9928",
-          pageUrl: "noNav",
-        },
+          pageUrl: "noNav"
+        }
       ],
       memberInfo: {},
       userInfo: {
         userImage: "",
-        userName: "",
-      },
+        userName: ""
+      }
     };
   },
   components: {
     MinTop,
     GridList,
-    BottomCell,
+    BottomCell
   },
   methods: {
     navTo(url, value) {
@@ -150,7 +159,7 @@ export default {
       let params = {};
       if (url == "/record") {
         params = {
-          totalRecord: value,
+          totalRecord: value
         };
       }
       console.log(params);
@@ -162,7 +171,7 @@ export default {
         } else {
           this.$router.push({
             path: url,
-            query: params,
+            query: params
           });
         }
       }
@@ -234,13 +243,33 @@ export default {
             this.memberInfo.integral ? this.memberInfo.integral : 0,
             false
           );
-          this.setValue(
-            this.walletData.gridList,
-            "coupons",
-            "value",
-            this.memberInfo.couponNum ? this.memberInfo.couponNum : 0,
-            false
-          );
+          // this.setValue(
+          //   this.walletData.gridList,
+          //   "coupons",
+          //   "value",
+          //   this.memberInfo.couponNum ? this.memberInfo.couponNum : 0,
+          //   false
+          // );
+          const host = process.env.VUE_APP_CENTER_APP;
+          const url = host + "/times/member-bff/coupon/api/v1/coupon-member/list";
+          const params = {
+            memberId: this.memberId,
+            pageIndex: 1,
+            businessType: "200001",
+            pageSize: 10,
+            state: 20
+          };
+          this.$http.get(url, { params: params }).then(resp => {
+              if (resp.data.code === 200) {
+                this.setValue(
+                  this.walletData.gridList,
+                  "coupons",
+                  "value",
+                  resp.data.data.total ? resp.data.data.total : 0,
+                  false
+                );
+              }
+            });
         } else {
           this.$toast("请求失败，请重新尝试");
         }
@@ -259,7 +288,7 @@ export default {
         localStorage.getItem("ythToken")
       );
       let params = {
-        token: localStorage.getItem("ythToken"),
+        token: localStorage.getItem("ythToken")
       };
       try {
         let data = await this.$http.post(url, params);
@@ -274,7 +303,7 @@ export default {
     },
     getWallet() {
       //获取零钱
-      this.$http.post("/app/json/app_pay/getWalletBalance").then((res) => {
+      this.$http.post("/app/json/app_pay/getWalletBalance").then(res => {
         if (res.data.status == 0) {
           this.setValue(
             this.walletData.gridList,
@@ -287,7 +316,7 @@ export default {
     },
     getOrderCount() {
       //获取待支付订单数目
-      this.$http.post("/app/json/app_shopping_order/queryBadge").then((res) => {
+      this.$http.post("/app/json/app_shopping_order/queryBadge").then(res => {
         if (res.data.status == 0) {
           // this.setValue(
           //   this.orderData.gridList,
@@ -337,7 +366,7 @@ export default {
       });
     },
     setValue(arr, id, valName, value, isToDecimal) {
-      let newArr = arr.filter((e) => {
+      let newArr = arr.filter(e => {
         return e.id == id;
       });
       if (newArr.length !== 0) {
@@ -348,14 +377,31 @@ export default {
           arr[index][valName] = value;
         }
       }
-    },
+    }
   },
   created() {
-    this.getMemberInformation();
-    this.getUserInfo();
-    this.getWallet();
-    this.getOrderCount();
-  },
+    if (!this.memberId) {
+      this.$http
+        .post("/app/json/user/getUserSummary", {
+          deliveryType: "2",
+          orderCategory: "0"
+        })
+        .then(res => {
+          if (res.data.status == 0) {
+            this.memberId = res.data.data.userInfo.userCode;
+            this.getMemberInformation();
+            this.getUserInfo();
+            this.getWallet();
+            this.getOrderCount();
+          }
+        });
+    }else{
+      this.getMemberInformation();
+      this.getUserInfo();
+      this.getWallet();
+      this.getOrderCount();
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
