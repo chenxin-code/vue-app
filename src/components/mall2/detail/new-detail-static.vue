@@ -2876,6 +2876,7 @@ export default {
       let to = {
         path:"",
       };
+      
       window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
