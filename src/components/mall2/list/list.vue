@@ -402,7 +402,7 @@ import AdPage from "@/components/product/index/subpage/adpage";
 import NewCategory from "../../../components/product/index/category/index";
 import { mapMutations } from "vuex";
 import appNav from "@zkty-team/x-engine-module-nav";
-import nativeRouter from '@zkty-team/x-engine-module-router';
+// import nativeRouter from '@zkty-team/x-engine-module-router';
 import _ from "lodash";
 
 export default {
@@ -648,13 +648,15 @@ export default {
         console.log('toApp!')
       } else {
         if(this.$route.query.searchFrom == "coupon" && this.$store.state.webtype == "0") {
-          console.log(`searchFrom`);
-          //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
-          nativeRouter.openTargetRouter({
-            type: "microapp",
-            uri: "com.times.microapp.AppcMember", // 微应用包名
-            path: "/couponsMine", // 微应用具体路由
-            hideNavbar: false
+          // //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
+          // nativeRouter.openTargetRouter({
+          //   type: "microapp",
+          //   uri: "com.times.microapp.AppcMember", // 微应用包名
+          //   path: "/couponsMine", // 微应用具体路由
+          //   hideNavbar: false
+          // });
+          appNav.navigatorBack({ url: "0" }).then(res => {
+            console.log(res);
           });
         } else {
           this.$router.go(-1);
