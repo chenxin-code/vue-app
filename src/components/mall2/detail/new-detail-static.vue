@@ -3790,7 +3790,7 @@ export default {
           console.log("category", this.detailData.categoryName, this.tagList);
 
 
-          let distributionUrl = "";
+          let distributionUrl = ""; 
           // this.$store.state.ythUserInfo.phone
           this.$store.state.environment == "development" ? distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
           : distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
@@ -3803,7 +3803,7 @@ export default {
                   distributorId:"",
                   parentDistributorId:-1,
                 }
-              }
+              } 
               
               this.$sensors.track("goods_detail_view", {
                 referrer_id:this.distributionPersonDetail.distributorId,
@@ -3828,7 +3828,7 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
               });
-            }
+            } 
           }).catch(err=>{
             this.$Toast(err)
           })
