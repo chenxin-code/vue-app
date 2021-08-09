@@ -2873,9 +2873,9 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      // let to = {
-      //   path:"",
-      // };
+      let to = {
+        path:"",
+      };
       window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
