@@ -3976,7 +3976,7 @@ export default {
             this.$sensors.track("add_to_shoppingcart", {
               referrer_id:this.distributionPersonDetail.distributorId,
               top_referrer_id:this.distributionPersonDetail.parentDistributorId,
-              goods_cl3_id: this.detailData.categoryId,
+              goods_cl3_id: this.detailData.categoryId, 
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
