@@ -641,17 +641,21 @@ export default {
       );
     },
     backEvent: function() {
+      console.log(`this.$store.state.webtype`,this.$store.state.webtype);
+      console.log(`backEvent $route.query`,this.$route.query);
       if (this.$route.query.backApp) {
         appNav.navigatorBack({ url: "0" }).then(res => {
           console.log(res);
         });
       } else {
         if(this.$route.query.searchFrom == "coupon" && this.$store.state.webtype === "1") {
+          console.log(`searchFrom`);
           //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
           nativeRouter.openTargetRouter({
-            type: "microapp",
-            uri: "com.times.microapp.AppcMember",
-            path: encodeURI(`/couponsMine`)
+            type: "microapp",
+            uri: "com.times.microapp.AppcMember", // 微应用包名
+            path: "/couponsMine", // 微应用具体路由
+            hideNavbar: false
           });
         } else {
           this.$router.go(-1);
