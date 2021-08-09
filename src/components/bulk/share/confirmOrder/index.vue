@@ -1,81 +1,82 @@
 <template>
   <!-- // created by hjc 分享确认订单 -->
   <div class="confirm_order" ref="confirmOrder">
-    <div class="user_info">
-      <div class="info">
-        <span>提货人姓名：</span>
-        <input placeholder="请输入姓名" v-model="userName" />
-      </div>
-      <div class="line"></div>
-      <div class="info">
-        <span>联系人电话：</span>
-        <input
-          placeholder="请输入联系人电话"
-          v-model.number="userPhone"
-          type="number"
-        />
-      </div>
-      <!-- <div class="pick_up_way">
+    <div class="scrollBox">
+      <div class="user_info">
+        <div class="info">
+          <span>提货人姓名：</span>
+          <input placeholder="请输入姓名" v-model="userName" />
+        </div>
+        <div class="line"></div>
+        <div class="info">
+          <span>联系人电话：</span>
+          <input
+            placeholder="请输入联系人电话"
+            v-model.number="userPhone"
+            type="number"
+          />
+        </div>
+        <!-- <div class="pick_up_way">
         <span> 提货方式：</span>
         <span>自提</span>
       </div> -->
-    </div>
-    <div class="pick_up_address">
-      <div class="addres_title">
-        <div class="addres_title_text">
-          <span></span>
-          团购提货地点
-        </div>
-        <!-- <div class="change" @click="$router.push('/selectAddress')">
+      </div>
+      <div class="pick_up_address">
+        <div class="addres_title">
+          <div class="addres_title_text">
+            <span></span>
+            团购提货地点
+          </div>
+          <!-- <div class="change" @click="$router.push('/selectAddress')">
           切换提货地址
           <img :src="require('./activity/images/button_next_default.png')" alt="">
         </div> -->
-      </div>
-      <div class="line"></div>
-      <div class="addres_info">
-        <div class="addres_info_detail">
-          <div class="addres">
-            <div class="adders-key">提货联系人：</div>
-            <div class="adders-val">{{ shareData.headUser }}</div>
-          </div>
-          <div class="addres" style="margin-top: 0.42667rem">
-            <div class="adders-key">提货小区：</div>
-            <div class="adders-val">
-              {{ shareData.communityCityName
-              }}{{ shareData.communityDistrictName
-              }}{{ shareData.communityName }}
-            </div>
-          </div>
-          <div class="addres" style="margin-top: 0.42667rem">
-            <div class="adders-key">详细地址：</div>
-            <div class="adders-val">{{ shareData.place }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="goods_info" v-for="(item, index) in goodsList" :key="index">
-      <div class="goods_title">
-        <div class="goods_title_text">
-          <span></span>
-          商品信息
         </div>
         <div class="line"></div>
-      </div>
-      <div class="goods_item">
-        <div class="goods_info_item">
-          <img :src="item.skuPicUrl.split(',')[0]" alt="" />
-          <div class="goods_info_detail">
-            <div class="goods_name">{{ item.skuName }}</div>
-            <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>
-            <div class="count_price">
-              <div class="bulk_price">团购价格：¥{{ item.groupPrice }}</div>
-              <div class="count">共{{ item.count }}件</div>
+        <div class="addres_info">
+          <div class="addres_info_detail">
+            <div class="addres">
+              <div class="adders-key">提货联系人：</div>
+              <div class="adders-val">{{ shareData.headUser }}</div>
+            </div>
+            <div class="addres" style="margin-top: 0.42667rem">
+              <div class="adders-key">提货小区：</div>
+              <div class="adders-val">
+                {{ shareData.communityCityName
+                }}{{ shareData.communityDistrictName
+                }}{{ shareData.communityName }}
+              </div>
+            </div>
+            <div class="addres" style="margin-top: 0.42667rem">
+              <div class="adders-key">详细地址：</div>
+              <div class="adders-val">{{ shareData.place }}</div>
             </div>
           </div>
         </div>
-        <!-- <div class="line" v-show="index !== goodsList.length <= 3"></div> -->
       </div>
-      <!-- <img
+      <div class="goods_info" v-for="(item, index) in goodsList" :key="index">
+        <div class="goods_title">
+          <div class="goods_title_text">
+            <span></span>
+            商品信息
+          </div>
+          <div class="line"></div>
+        </div>
+        <div class="goods_item">
+          <div class="goods_info_item">
+            <img :src="item.skuPicUrl.split(',')[0]" alt="" />
+            <div class="goods_info_detail">
+              <div class="goods_name">{{ item.skuName }}</div>
+              <div class="sell_price">销售价格：¥{{ item.crossedPrice }}</div>
+              <div class="count_price">
+                <div class="bulk_price">团购价格：¥{{ item.groupPrice }}</div>
+                <div class="count">共{{ item.count }}件</div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="line" v-show="index !== goodsList.length <= 3"></div> -->
+        </div>
+        <!-- <img
         :src="require('./images/more_icon.png')"
         alt=""
         class="more"
@@ -86,19 +87,20 @@
         <div class="sell_price_statistics">¥{{ crossedPrice }}</div>
         <div class="bulk_price_statistics">团购价格：¥{{ totalPrice }}</div>
       </div> -->
+      </div>
+      <div class="remark">
+        <span>订单备注</span>
+        <textarea
+          ref="textarea"
+          :style="{ height: textareaHeight }"
+          v-model="textareaValue"
+          placeholder="请输入订单备注"
+          @input="vaidateEmoji"
+        ></textarea>
+      </div>
+      <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
+      <div ref="nullBox"></div>
     </div>
-    <div class="remark">
-      <span>订单备注</span>
-      <textarea
-        ref="textarea"
-        :style="{ height: textareaHeight }"
-        v-model="textareaValue"
-        placeholder="请输入订单备注"
-        @input="vaidateEmoji"
-      ></textarea>
-    </div>
-    <!-- 用来实现浏览器随着内容输入滚动   勿删 -->
-    <div ref="nullBox"></div>
     <div
       class="pay_now"
       :style="{
@@ -304,11 +306,18 @@ export default {
   background-position: top;
   padding: 12px;
   // overflow: auto;
-  overflow-y: auto;
+  overflow-x: hidden;
   bottom: 49px !important;
   box-sizing: border-box;
-  overflow-x: hidden;
   position: relative;
+
+  .scrollBox {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f6f6f6
+  }
 
   .line {
     width: 315px;
