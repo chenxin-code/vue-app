@@ -27,7 +27,7 @@
             </div>
             <div class="save-btn" @click="saveData">保存图文</div>
           </div>
-          <div class="overlay-content-bottom">
+          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
             <div class="share-money" @click="savePoster">
               分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
             </div>
@@ -82,7 +82,7 @@
             ref="posterPicture"
             @click="saveIOS"
           />
-          <div class="overlay-content-bottom">
+          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
             <div class="share-money">
               分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
             </div>
