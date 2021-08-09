@@ -519,7 +519,7 @@ export default {
   },
   methods: {
     checkParams(){
-      return typeof this.$route.query.skuIds !== 'undefined' && this.$route.query.searchFrom === 'coupon'
+      return typeof this.$route.query.skuIds !== 'undefined' && this.$route.query.searchFrom === 'coupon';
     },
     //新增类目分类切换方法
     ...mapMutations(["setShowCategory", "setShowBackTop"]),
@@ -1245,7 +1245,7 @@ export default {
       this.$store.state.webtype !== "3" &&
       this.$store.state.webtype !== "2"
     ) {
-      this.isProgram = !(this.$route.query.skuIds && this.$route.query.searchFrom === 'coupon');
+      this.isProgram = !this.checkParams();
     } else {
       //小程序
       this.isProgram = false;
