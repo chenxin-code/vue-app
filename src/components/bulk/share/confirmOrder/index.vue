@@ -316,7 +316,7 @@ export default {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: #f6f6f6
+    background-color: rgba(0, 0, 0, 0);
   }
 
   .line {
