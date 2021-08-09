@@ -2136,6 +2136,7 @@ export default {
         : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
         let params = {
           type: 'default',
+          skuId: this.skuId,
           picUrls,
           salePrice,
           skuName,
