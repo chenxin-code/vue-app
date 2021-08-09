@@ -652,6 +652,7 @@ export default {
       } else {
         this.$router.go(-1);
       }
+      this.$router.go(-1);
     },
     toSearchEvent: function() {
       Search.open({
