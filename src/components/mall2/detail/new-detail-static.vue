@@ -1738,6 +1738,7 @@ export default {
   data() {
     let that = this;
     return {
+      isWX: false, // 是否是微信环境
       personShareCode: "", // 人分销码
       qrCode: "", //商品分销码
       shareParams: {},
@@ -2003,6 +2004,10 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      this.isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     distributionInit() {
       this.distributionMessage();
       this.distributionProduct();
@@ -2125,11 +2130,31 @@ export default {
       });
     },
     onShare() {
-      console.log(
-        this.detailData.picUrls[0] +
-          "?x-oss-process=image/format,jpg/quality,Q_25"
-      );
-      this.showSharePopup = true;
+      if(this.isWX) {
+        let { picUrls, salePrice, skuName } = this.detailData;
+        const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+        : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+        let params = {
+          type: 'default',
+          picUrls,
+          salePrice,
+          skuName,
+          userImage:
+            this.$store.state.ythUserInfo.userImage,
+          userName: this.$store.state.ythUserInfo.userName,
+          referrerCode: this.referrerCode,
+          qrCode: this.qrCode,
+          estimatedCommission: this.estimatedCommission,
+          link
+        };
+        wx.miniProgram.navigateTo({
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`
+        });
+      }else {
+        this.showSharePopup = true;
+      }
 
       // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       //   this.showShare();
@@ -2175,8 +2200,6 @@ export default {
       let { picUrls, salePrice, skuName } = this.detailData;
       const link = this.$store.state.environment == "development" ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
        : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-
-
       let params = {
         type,
         picUrls,
@@ -2193,12 +2216,8 @@ export default {
       this.showSharePopup = false;
       // 判断容器环境，如果是微信小程序跳转到微信小程序原生进行分享操作
       // 两套
-      let ua = window.navigator.userAgent.toLowerCase();
-      let isWX = ua.match(/MicroMessenger/i) == "micromessenger";
-      console.log("------isWX", isWX);
-      if (isWX) {
+      if (this.isWX) {
         wx.miniProgram.navigateTo({
-          // url: `/pages/common/savePicture/index?picUrls=${encodeURIComponent(picUrls)}&salePrice=${salePrice}&skuName=${skuName}`,
           url: `/pages/common/savePicture/index?params=${encodeURIComponent(
             JSON.stringify(params)
           )}`
@@ -2206,10 +2225,6 @@ export default {
       } else {
         this.shareParams = params;
         this.showPoster = true;
-        // this.$router.push({
-        //   path: 'mall2/savePicture',
-        //   query: params
-        // })
       }
     },
     defaultShareImg() {
@@ -4613,6 +4628,7 @@ export default {
       this.getDatas();
     }
     this.distributionInit();
+    this.wxenvironment();
   },
   activated() {
     if (
