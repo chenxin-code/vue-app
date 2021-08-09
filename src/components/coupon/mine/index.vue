@@ -279,7 +279,7 @@ export default {
 $btn-color = #ff7809;
 $btn-fontSize = 12px;
 .coupon-list-page {
-  padding: 68px 0 78px 0;
+  padding: 60px 0 70px 0;
   overflow-y: scroll;
   height: 100%;
   &.isWx {
@@ -416,10 +416,11 @@ $btn-fontSize = 12px;
                   line-clamp: 2;
                   -webkit-box-orient: vertical;
                   width: 100%;
+                  word-break: break-all;
                 }
 
                 .card-right-left-middle {
-                  padding-top: 0.16rem;
+                  //padding-top: 0.16rem;
                   font-size: 0.24rem;
                   font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
@@ -431,7 +432,7 @@ $btn-fontSize = 12px;
                 }
 
                 .card-right-left-bottom {
-                  padding-top: 0.2rem;
+                  //padding-top: 0.2rem;
                   padding-bottom: 0.2rem;
                   font-size: 0.2rem;
                   font-family: PingFangSC-Regular, PingFang SC;
@@ -468,8 +469,8 @@ $btn-fontSize = 12px;
             }
 
             .goodsimg {
-              width: 72px;
-              height: 72px;
+              width: 75px;
+              height: 75px;
               border-radius: 4px;
               overflow: hidden;
             }
@@ -530,7 +531,7 @@ $btn-fontSize = 12px;
 
 .exchange-footer {
   width: 100%;
-  height: 78px;
+  height: 70px;
   position: fixed;
   bottom: 0;
   left: 0;
