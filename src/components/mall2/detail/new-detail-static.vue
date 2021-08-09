@@ -3825,54 +3825,32 @@ export default {
           });
           this.categoryList = this.detailData.categoryName.split("_");
           console.log("category", this.detailData.categoryName, this.tagList);
+          
+          this.$sensors.track("goods_detail_view", {
+            referrer_id: this.distributionPersonDetail.distributorId,
+            top_referrer_id:
+              this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
+            module_source:
+              this.$store.state.inToDetail == "common"
+                ? "商城臻选专场"
+                : this.$store.state.inToDetail == "list"
+                ? "商城商品列表页"
+                : "商城搜索列表",
+            goods_id: this.skuId,
+            goods_name: this.detailData.skuName,
+            tag: this.tagList,
+            goods_cls1: this.categoryList[0],
+            goods_cls2: this.categoryList[1],
+            goods_cls3: this.categoryList[2],
+            org_price: this.detailData.activityPrice,
+            price: this.detailData.salePrice,
+            store_id: this.detailData.storeOuCode,
+            store_name: this.detailData.storeOuName,
+            merchant_id: this.detailData.ouCode,
+            merchant_name: this.detailData.ouName,
+          });
 
-          let distributionUrl = "";
-          // this.$store.state.ythUserInfo.phone
-          this.$store.state.environment == "development"
-            ? (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`)
-            : (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`);
-          this.$http
-            .get(distributionUrl)
-            .then((res) => {
-              if (res.data.code == 200) {
-                if (res.data.data) {
-                  this.distributionPersonDetail = res.data.data;
-                } else {
-                  this.distributionPersonDetail = {
-                    distributorId: "",
-                    parentDistributorId: -1,
-                  };
-                }
-
-                this.$sensors.track("goods_detail_view", {
-                  referrer_id: this.distributionPersonDetail.distributorId,
-                  top_referrer_id:
-                    this.distributionPersonDetail.parentDistributorId,
-                  goods_cl3_id: this.detailData.categoryId,
-                  module_source:
-                    this.$store.state.inToDetail == "common"
-                      ? "商城臻选专场"
-                      : this.$store.state.inToDetail == "list"
-                      ? "商城商品列表页"
-                      : "商城搜索列表",
-                  goods_id: this.skuId,
-                  goods_name: this.detailData.skuName,
-                  tag: this.tagList,
-                  goods_cls1: this.categoryList[0],
-                  goods_cls2: this.categoryList[1],
-                  goods_cls3: this.categoryList[2],
-                  org_price: this.detailData.activityPrice,
-                  price: this.detailData.salePrice,
-                  store_id: this.detailData.storeOuCode,
-                  store_name: this.detailData.storeOuName,
-                  merchant_id: this.detailData.ouCode,
-                  merchant_name: this.detailData.ouName,
-                });
-              }
-            })
-            .catch((err) => {
-              this.$Toast(err);
-            });
         } else {
           this.$Toast(data.info);
         }
@@ -3897,6 +3875,8 @@ export default {
         referrerCode: this.$route.query.referrerCode
           ? this.$route.query.referrerCode
           : "",
+        referrerId:this.distributionPersonDetail.distributorId,
+        referrerFatherId:this.distributionPersonDetail.parentDistributorId,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
@@ -4671,6 +4651,8 @@ export default {
     }
     this.distributionInit();
     this.wxenvironment();
+    this.distributionPersonDetail = this.$store.state.distributionPersonDetail;
+    console.log('this.distributionPersonDetail',this.distributionPersonDetail);
   },
   activated() {
     if (

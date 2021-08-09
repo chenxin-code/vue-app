@@ -299,9 +299,13 @@ export default {
             this.$store.state.ythUserInfo = res.data.data;
             console.log("一体化信息", this.$store.state.ythUserInfo);
             initSensors();
-            if(this.$store.state.webtype != 2 && this.$store.state.webtype != 3){
+            if (
+              this.$store.state.webtype != 2 &&
+              this.$store.state.webtype != 3
+            ) {
               this.postAvatar(res.data.data.userImage);
-            };
+            }
+            this.getDistributionInfo(res.data.data.phone)
             let that = this;
             this.$sensors.quick("isReady", function () {
               console.log(
@@ -331,6 +335,35 @@ export default {
         .post("/app/json/user/modifyHeadImg", { headImg: avatar })
         .then((res) => {
           console.log("头像返回", res);
+        });
+    },
+    getDistributionInfo(phone) {
+      let distributionUrl = "";
+      // this.$store.state.ythUserInfo.phone
+      this.$store.state.environment == "development"
+        ? (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`)
+        : (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`);
+      this.$http
+        .get(distributionUrl)
+        .then((res) => {
+          if (res.data.code == 200) {
+            if (res.data.data) {
+              this.$store.state.distributionPersonDetail = res.data.data;
+            } else {
+              this.$store.state.distributionPersonDetail = {
+                customerHeaderPic: "",
+                customerId: "",
+                customerName: "",
+                distributorId: "",
+                distributorName: "",
+                parentDistributorId: -1,
+                source: "",
+              };
+            }
+          }
+        })
+        .catch((err) => {
+          this.$Toast(err);
         });
     },
 
