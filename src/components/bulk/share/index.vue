@@ -26,7 +26,7 @@
                   alt=""
                 />
                 <div class="buyerText" v-if="item.show">
-                  {{ item.buyerName }} {{ item.timeOut }}参与了团购
+                  {{ item.swipeBuyerName }} {{ item.timeOut }}参与了团购
                 </div>
               </div>
             </van-swipe-item>
@@ -56,7 +56,7 @@
       <div class="user-card">
         <div class="user-message">
           <img
-            :src="shareData.headAvtUrl ? shareData.headAvtUrl:defaultHeadAvt"
+            :src="shareData.headAvtUrl ? shareData.headAvtUrl : defaultHeadAvt"
             :error-icon="defaultHeadAvt"
             class="user-pic"
           />
@@ -237,7 +237,7 @@ export default {
       groupStatus: "start",
       orderSwiperList: [],
       defaultAvt: require("./images/user_01@2x.png"),
-      defaultHeadAvt:require('./images/img_user_01@2x.png')
+      defaultHeadAvt: require("./images/img_user_01@2x.png"),
     };
   },
   created() {
@@ -320,6 +320,12 @@ export default {
                 }
                 e["timeOut"] = this.getDateDiff(this.getTimestamp(e.buyTime));
                 e["show"] = true;
+                if (e["buyerName"].length > 6) {
+                  e['swipeBuyerName'] = e['buyerName'][0]+e['buyerName'][1]+'**'+e['buyerName'][e['buyerName'].length-2]+e['buyerName'][e['buyerName'].length-1];
+                  // e["swipeBuyerName"] = "刚刚好六个字";
+                } else {
+                  e["swipeBuyerName"] = e["buyerName"];
+                }
                 this.orderSwiperList.push(e);
                 this.orderSwiperList.push({ show: false });
               });
@@ -569,6 +575,9 @@ export default {
       padding-right: 12px;
 
       .orderSwiper {
+        position: fixed;
+        top: 8px;
+        right: 12px;
         flex: 1;
         display: flex;
         justify-content: flex-end;
