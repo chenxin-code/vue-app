@@ -245,13 +245,13 @@ export default {
     };
   },
   created() {
-    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
-    this.chiefId = JSON.parse(this.$route.query.chiefId);
-    this.userId = JSON.parse(this.$route.query.userId);
+    // this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    // this.chiefId = JSON.parse(this.$route.query.chiefId);
+    // this.userId = JSON.parse(this.$route.query.userId);
 
-    // this.purchaseId = 61;
-    // this.chiefId = "4";
-    // this.userId = "2337237484980666802";
+    this.purchaseId = 61;
+    this.chiefId = "4";
+    this.userId = "2337237484980666802";
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
     this.checkList.forEach((e) => {
