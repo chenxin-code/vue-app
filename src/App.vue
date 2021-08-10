@@ -261,6 +261,10 @@ export default {
     // if (this.$store.state.webtype == '7') {
     //   Eruda.init()
     // }
+    console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+    if(process.env.NODE_ENV == 'development'){
+      initSensors();
+    }
   },
   methods: {
     // getUserTable(phone){
