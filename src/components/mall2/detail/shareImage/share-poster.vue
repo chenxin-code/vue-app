@@ -7,7 +7,26 @@
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
-            {{ shareParams.skuName }}
+            <div v-show="!isEditor">{{ shareParams.skuName }}</div>
+            <div v-show="isEditor">
+              <van-cell-group style="width: 130%">
+                <van-field
+                  v-model="shareParams.skuName"
+                  placeholder=""
+                  autosize
+                  type="textarea"
+                />
+              </van-cell-group>
+            </div>
+            <div @click="isEditor = !isEditor">
+              <img
+                src="./image/editor.png"
+                alt=""
+                v-show="!isEditor"
+                class="share-editor"
+              />
+              <div v-show="isEditor">完成</div>
+            </div>
           </div>
           <div class="share-desc" style="word-break: break-all;">
             购买链接: {{ shareParams.link }}
@@ -165,6 +184,7 @@ export default {
   },
   data() {
     return {
+      isEditor: false,
       isCanvas: false,
       canvasData: "",
       proImgUrl: "",
@@ -346,7 +366,7 @@ export default {
         border-radius: 50%;
       }
       .default-poster-header-right {
-        margin-left: 30px;
+        margin-left: 15px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -537,7 +557,12 @@ export default {
         font-size: 13px;
         margin-top 5px;
         line-height: 20px;
-
+        display: flex;
+        justify-content: space-between;
+      .share-editor {
+        width 15px;
+        height: 15px;
+      }
     }
   }
 
