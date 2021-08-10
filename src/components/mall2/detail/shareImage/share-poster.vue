@@ -2,105 +2,151 @@
   <div>
     <div class="poster-mask"></div>
     <!-- <van-overlay :show="true"> -->
-      <div class="share-main" style="height: 100vh">
-        <div class="overlay-content" v-if="!showResult && !isPoster">
-          <img
-            src="./image/guanbi@2x.png"
-            class="close-icon"
-            @click="backPage"
-          />
-          <div class="save-pic-text">
-            <div class="share-desc">
-              {{ shareParams.skuName }}
-            </div>
-            <div class="share-desc" style="word-break: break-all;">
-              购买链接: {{ shareParams.link }}
-            </div>
+    <div class="share-main" style="height: 100vh">
+      <div class="overlay-content" v-if="!showResult && !isPoster">
+        <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
+        <div class="save-pic-text">
+          <div class="share-desc">
+            {{ shareParams.skuName }}
+          </div>
+          <div class="share-desc" style="word-break: break-all;">
+            购买链接: {{ shareParams.link }}
+          </div>
 
-            <div class="share-picture">
-              <img
-                class="share-image"
-                v-for="(item, index) in shareParams.picUrls"
-                :key="index"
-                :src="item"
-              />
-            </div>
-            <div class="save-btn" @click="saveData">保存图文</div>
+          <div class="share-picture">
+            <img
+              class="share-image"
+              v-for="(item, index) in shareParams.picUrls"
+              :key="index"
+              :src="item"
+            />
           </div>
-          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
-            <div class="share-money" @click="savePoster">
-              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-            </div>
-            <div class="share-check">佣金可在“分销员中心”里查看</div>
-          </div>
+          <div class="save-btn" @click="saveData">保存图文</div>
         </div>
-
-
-        <div class="overlay-content" v-if="!showResult && isPoster">
-          <img
-            src="./image/guanbi@2x.png"
-            class="close-icon"
-            @click="backPage"
-          />
-
-          <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
-            <img :src="proImgUrl" class="main-poster" />
-            <div class="poster-user-message">
-              <div>
-                <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
-                <img
-                  src="./image/default-image.jpeg"
-                  class="user-image"
-                  v-else
-                />
-              </div>
-              <div class="poster-user-right">
-                <div class="poster-user-name">{{ shareParams.userName }}</div>
-                <div class="poster-user-text">为你挑选了一个好物</div>
-              </div>
-            </div>
-            <div class="poster-product-message">
-              <div class="poster-product-message-left">
-                <div class="poster-product-prize">
-                  ¥ {{ shareParams.salePrice }}
-                </div>
-                <div class="poster-product-desc">{{ shareParams.skuName }}</div>
-              </div>
-              <div class="poster-product-message-right">
-                <img
-                  :src="shareParams.qrCode"
-                  style="width:60px;height: 60px;"
-                />
-              </div>
-            </div>
+        <div
+          class="overlay-content-bottom"
+          v-if="shareParams.estimatedCommission"
+        >
+          <div class="share-money" @click="savePoster">
+            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
           </div>
-          <img
-            :src="canvasData"
-            alt=""
-            v-if="isCanvas"
-            style="width: 100%"
-            ref="posterPicture"
-            @click="saveIOS"
-          />
-          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
-            <div class="share-money">
-              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-            </div>
-            <div class="share-check">佣金可在“分销员中心”里查看</div>
-          </div>
-          <div class="finger" ref="fingerSave">
-            <img class="finger-image" src="./image/finger.png" />
-            <div class="finger-save-text">长按图片保存到相册</div>
-          </div>
-        </div>
-
-        <div class="overlay-result" v-if="showResult">
-          <div class="overlay-block">文案/链接已复制</div>
-          <div style="text-align: center;">图片已保存到相册</div>
-          <div class="result-line"></div>
-          <div class="overlay-btn" @click="backPage">我知道了</div>
+          <div class="share-check">佣金可在“分销员中心”里查看</div>
         </div>
       </div>
+
+      <div class="overlay-content" v-if="!showResult && isPoster">
+        <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
+
+        <!-- <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
+          <img :src="proImgUrl" class="main-poster" />
+          <div class="poster-user-message">
+            <div>
+              <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
+              <img src="./image/default-image.jpeg" class="user-image" v-else />
+            </div>
+            <div class="poster-user-right">
+              <div class="poster-user-name">{{ shareParams.userName }}</div>
+              <div class="poster-user-text">为你挑选了一个好物</div>
+            </div>
+          </div>
+          <div class="poster-product-message">
+            <div class="poster-product-message-left">
+              <div class="poster-product-prize">
+                ¥ {{ shareParams.salePrice }}
+              </div>
+              <div class="poster-product-desc">{{ shareParams.skuName }}</div>
+            </div>
+            <div class="poster-product-message-right">
+              <img :src="shareParams.qrCode" style="width:60px;height: 60px;" />
+            </div>
+          </div>
+        </div> -->
+
+        <div
+          class="default-share-poster"
+          ref="poster"
+          @click="saveIOS"
+          v-if="!isShowPoster && !isCanvas"
+        >
+          <div class="default-poster-header">
+            <img
+              :src="proUserUrl"
+              class="default-poster-header-userImage"
+              v-if="proUserUrl"
+            />
+            <img
+              src="./image/default-image.jpeg"
+              class="default-poster-header-userImage"
+              v-else
+            />
+
+            <div class="default-poster-header-right">
+              <div class="default-poster-header-right-name">
+                {{ $store.state.ythUserInfo.userName }}
+              </div>
+              <div class="default-poster-header-right-desc">
+                为你挑选了一个好物
+              </div>
+            </div>
+          </div>
+
+          <img src="./image/sanjiaoxing.png" alt="" class="sanjiaoxing-logo" />
+
+          <div class="default-main-poster">
+            <img :src="proImgUrl" alt="" class="prouct-main-pic" />
+
+            <div class="default-poster-prize-sale">
+              <div class="price default-poster-prize">
+                <span class="money-symbol">￥</span
+                ><span class="num" style="font-weight: bold;"
+                  >{{ shareParams.salePrice }}
+                </span>
+              </div>
+            </div>
+
+            <div class="default-poster-bottom">
+              <div class="default-poster-bottom-text">
+                {{ shareParams.skuName }}
+              </div>
+              <img
+                :src="shareParams.qrCode"
+                alt=""
+                class="default-poster-qrcode"
+              />
+            </div>
+          </div>
+        </div>
+
+        <img
+          :src="canvasData"
+          alt=""
+          v-if="isCanvas"
+          style="width: 100%"
+          ref="posterPicture"
+          @click="saveIOS"
+        />
+        <div
+          class="overlay-content-bottom"
+          v-if="shareParams.estimatedCommission"
+        >
+          <div class="share-money">
+            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+          </div>
+          <div class="share-check">佣金可在“分销员中心”里查看</div>
+        </div>
+        <div class="finger" ref="fingerSave">
+          <img class="finger-image" src="./image/finger.png" />
+          <div class="finger-save-text">长按图片保存到相册</div>
+        </div>
+      </div>
+
+      <div class="overlay-result" v-if="showResult">
+        <div class="overlay-block">文案/链接已复制</div>
+        <div style="text-align: center;">图片已保存到相册</div>
+        <div class="result-line"></div>
+        <div class="overlay-btn" @click="backPage">我知道了</div>
+      </div>
+    </div>
     <!-- </van-overlay> -->
   </div>
 </template>
@@ -133,13 +179,12 @@ export default {
   async created() {
     await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
     await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
-
     html2canvas(this.$refs.poster).then(canvas => {
       this.canvasData = canvas.toDataURL("image/png");
       this.isCanvas = true;
+      console.log("---->canvasData", this.canvasData);
       // this.getImages("posterPicture");
       // this.getImages("fingerSave");
-
       window.saveImageToAlbum = () => {
         appCamera.saveImageToAlbum({
           type: "base64",
@@ -148,13 +193,12 @@ export default {
       };
     });
   },
+  mounted() {},
   methods: {
     getImages(ref) {
       const that = this;
       window.time = 0;
-      console.log("--getImages--ref-", ref);
       var objs = this.$refs[ref];
-      console.log("--getImages--ref-", objs);
       objs.addEventListener("touchstart", function(e) {
         e.stopPropagation();
         time = setTimeout(function() {
@@ -284,6 +328,106 @@ export default {
       width: 23px;
       height: 23px;
     }
+   .default-share-poster {
+    background-image: url('./image/poster_bg.png');
+    background-repeat: no-repeat;
+    background-size: 375px 667px;
+    width:100%;
+    height:540px;
+    padding: 15px
+    // border-top-left-radius 15px
+    // border-top-right-radius 15px
+    margin-top: -15px;
+    .default-poster-header {
+      display: flex;
+      .default-poster-header-userImage {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+      }
+      .default-poster-header-right {
+        margin-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .default-poster-header-right-name {
+          font-size: 16px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #FFFFFF;
+        }
+        .default-poster-header-right-desc {
+          font-size: 13px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #FFFFFF;
+          opacity: 0.7;
+          margin-top: 15px;
+        }
+      }
+    }
+    .sanjiaoxing-logo {
+      width: 15px;
+      height: 10px;
+      margin-left: 20px;
+      margin-top: 8px;
+      margin-bottom: -6px;
+    }
+    .default-main-poster {
+      width: 260px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      margin: auto;
+      .prouct-main-pic {
+        width: 230px;
+        height: 230px;
+        border-radius: 6px;
+        margin: 15px;
+      }
+      .default-poster-prize-sale {
+        display: flex;
+        justify-content: space-space-between;
+        .default-poster-prize {
+          margin-left: 17px;
+          font-size: 30px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #E5165A;
+          .money-symbol {
+            font-size: 16px;
+          }
+        }
+      }
+      .default-poster-bottom {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        padding-bottom: 15px;
+        .default-poster-bottom-text {
+          // margin-left: 17px;
+          // width: 180px;
+          // font-size: 18px;
+          // font-family: PingFang SC;
+          // font-weight: bold;
+          // color: #333333;
+          // line-height: 22px;
+
+          margin-left: 17px;
+          width: 180px;
+          font-size: 18px;
+          font-family: PingFang SC;
+          // font-weight: bold;
+          color: #333333;
+          line-height: 25px;
+        }
+        .default-poster-qrcode {
+          width: 60px;
+          height: 60px;
+          margin-right: 17px;
+        }
+      }
+    }
+  }
 
     .main-poster {
       width: 300px;
