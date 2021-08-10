@@ -846,6 +846,7 @@ $color = #8D8D8D;
       margin: 10px 11px;
       border-radius: 12px;
       min-height: 95px;
+      background-color: #fb568c
 
       .house-title {
         font-size: 16px;
