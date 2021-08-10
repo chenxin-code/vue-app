@@ -2176,12 +2176,6 @@ export default {
       }else {
         this.showSharePopup = true;
       }
-
-      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-      //   this.showShare();
-      // } else {
-      //   this.showSharePopup = true;
-      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
