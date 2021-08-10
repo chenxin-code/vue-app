@@ -2155,41 +2155,39 @@ export default {
       });
     },
     onShare() {
+      if (this.isWX) {
+        let { picUrls, salePrice, skuName } = this.detailData;
+        const link =
+          this.$store.state.environment == "development"
+            ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+            : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
+        let params = {
+          type: "default",
+          skuId: this.skuId,
+          picUrls,
+          salePrice,
+          skuName,
+          userImage: this.$store.state.ythUserInfo.userImage,
+          userName: this.$store.state.ythUserInfo.userName,
+          referrerCode: this.referrerCode,
+          qrCode: this.qrCode,
+          estimatedCommission: this.estimatedCommission,
+          link,
+        };
+        wx.miniProgram.navigateTo({
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`,
+        });
+      } else {
         this.showSharePopup = true;
+      }
 
-      // if (this.isWX) {
-      //   let { picUrls, salePrice, skuName } = this.detailData;
-      //   const link =
-      //     this.$store.state.environment == "development"
-      //       ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-      //       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
-      //   let params = {
-      //     type: "default",
-      //     skuId: this.skuId,
-      //     picUrls,
-      //     salePrice,
-      //     skuName,
-      //     userImage: this.$store.state.ythUserInfo.userImage,
-      //     userName: this.$store.state.ythUserInfo.userName,
-      //     referrerCode: this.referrerCode,
-      //     qrCode: this.qrCode,
-      //     estimatedCommission: this.estimatedCommission,
-      //     link,
-      //   };
-      //   wx.miniProgram.navigateTo({
-      //     url: `/pages/common/savePicture/index?params=${encodeURIComponent(
-      //       JSON.stringify(params)
-      //     )}`,
-      //   });
-      // } else {
-      //   this.showSharePopup = true;
-      // }
-
-      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-      //   this.showShare();
-      // } else {
-      //   this.showSharePopup = true;
-      // }
+      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+        this.showShare();
+      } else {
+        this.showSharePopup = true;
+      }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
