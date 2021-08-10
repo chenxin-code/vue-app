@@ -304,9 +304,8 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top;
-  padding: 12px;
   // overflow: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   bottom: 49px !important;
   box-sizing: border-box;
   position: relative;
@@ -316,7 +315,8 @@ export default {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: rgba(0, 0, 0, 0);
+    padding: 12px;
+    // background-color: rgba(0, 0, 0, 0);
   }
 
   .line {
