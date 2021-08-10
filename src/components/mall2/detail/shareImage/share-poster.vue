@@ -134,6 +134,15 @@
               />
             </div>
           </div>
+          <div
+            class="overlay-content-bottom"
+            v-if="shareParams.referrerCode"
+          >
+            <div class="share-money">
+              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+            </div>
+            <div class="share-check">佣金可在“分销员中心”里查看</div>
+          </div>
         </div>
 
         <img
@@ -144,15 +153,6 @@
           ref="posterPicture"
           @click="saveIOS"
         />
-        <div
-          class="overlay-content-bottom"
-          v-if="shareParams.estimatedCommission"
-        >
-          <div class="share-money">
-            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-          </div>
-          <div class="share-check">佣金可在“分销员中心”里查看</div>
-        </div>
         <div class="finger" ref="fingerSave">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
@@ -396,7 +396,7 @@ export default {
     .default-main-poster {
       width: 260px;
       background: #FFFFFF;
-      border-radius: 12px;
+      border-radius: 12px 12px 0 0;
       margin: auto;
       .prouct-main-pic {
         width: 230px;
@@ -434,7 +434,7 @@ export default {
 
           margin-left: 17px;
           width: 180px;
-          font-size: 18px;
+          font-size: 16px;
           font-family: PingFang SC;
           // font-weight: bold;
           color: #333333;
@@ -527,10 +527,11 @@ export default {
     }
 
     .overlay-content-bottom {
-      width: 300px;
+      width: 260px;
       height: 63px;
       background: #FFF1E5;
       border-radius: 0px 0px 10px 10px;
+      margin: -0.4rem auto;
 
       .share-money {
         font-size: 13px;
