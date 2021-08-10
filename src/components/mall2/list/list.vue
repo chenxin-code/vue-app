@@ -186,7 +186,7 @@
     line-height: 50px;
     border-radius: 5px;
     border-top: 3px solid #f5f5f5;
-    border-bottom: 3px solid #f5f5f5;" v-if="checkParams()">
+    border-bottom: 3px solid #f5f5f5;" v-if="checkParams() && !isNoList">
           以下商品可使用当前优惠券：
         </div>
         <div class="list-content">
