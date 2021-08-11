@@ -41,7 +41,7 @@
     </div>
     <div v-else>
       <div class="left-div">
-        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in leftArray" @click="productEvent(item)">
+        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in leftArray" :key="item.id" @click="productEvent(item)">
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="right-div">
-        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in rightArray" @click="productEvent(item)">
+        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in rightArray" :key="item.id" @click="productEvent(item)">
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
@@ -240,6 +240,8 @@
         }
         this.rightArray = rightArr;
         this.leftArray = leftArr;
+        console.log('leftArray',this.leftArray)
+        console.log('rightArray',this.rightArray)
       }
     },
     watch: {

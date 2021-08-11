@@ -140,10 +140,10 @@ export default {
   },
   created() {
     Toast.clear();
-    this.shareData = JSON.parse(this.$route.query.shareData);
-    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
-    this.chiefId = JSON.parse(this.$route.query.chiefId);
-    this.userId = JSON.parse(this.$route.query.userId);
+    this.shareData = JSON.parse(this.$route.params.shareData);
+    this.purchaseId = JSON.parse(this.$route.params.purchaseId);
+    this.chiefId = JSON.parse(this.$route.params.chiefId);
+    this.userId = JSON.parse(this.$route.params.userId);
     // if (this.checkList.length > 3) {
     //   this.goodsList.push(this.checkList[0]);
     //   this.goodsList.push(this.checkList[1]);
@@ -157,6 +157,7 @@ export default {
     console.log('this.goodsList',this.goodsList);
     console.log(this.shareData);
     this.getUser();
+    console.log('this.$route',this.$route)
   },
   methods: {
     getUser() {
@@ -279,10 +280,10 @@ export default {
     checkList: {
       get() {
         console.log(
-          "this.$route.query.checkList",
-          JSON.parse(this.$route.query.checkList)
+          "this.$route.params.checkList",
+          JSON.parse(this.$route.params.checkList)
         );
-        return JSON.parse(this.$route.query.checkList);
+        return JSON.parse(this.$route.params.checkList);
       },
       set() {},
     },
