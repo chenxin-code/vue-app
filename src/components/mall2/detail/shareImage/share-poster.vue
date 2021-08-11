@@ -3,7 +3,7 @@
     <div class="poster-mask"></div>
     <!-- <van-overlay :show="true"> -->
     <div class="share-main" style="height: 100vh">
-      <div class="overlay-content" v-if="!showResult && !isPoster">
+      <div class="overlay-content" v-if="!showResult && !isPoster" :style="!isPoster ? 'background: #ffffff' : ''">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
@@ -337,7 +337,7 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     width: 300px;
-    background: #ffffff;
+    // background: #ffffff;
     border-radius: 6px;
     z-index: 11;
 
