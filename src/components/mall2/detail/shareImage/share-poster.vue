@@ -137,7 +137,7 @@
               />
             </div>
           </div>
-          <div class="overlay-content-bottom" v-if="shareParams.referrerCode">
+          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
             <div class="share-money">
               分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
             </div>
