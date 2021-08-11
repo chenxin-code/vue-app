@@ -752,6 +752,7 @@ export default {
           this.filterType = 5;
         }
       }
+      this.$Loading.open();
       this.nowPage = 0;
       this._loadProList();
     },
