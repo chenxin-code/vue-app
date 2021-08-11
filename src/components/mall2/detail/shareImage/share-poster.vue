@@ -3,21 +3,23 @@
     <div class="poster-mask"></div>
     <!-- <van-overlay :show="true"> -->
     <div class="share-main" style="height: 100vh">
-      <div class="overlay-content" v-if="!showResult && !isPoster" :style="!isPoster ? 'background: #ffffff' : ''">
+      <div
+        class="overlay-content"
+        v-if="!showResult && !isPoster"
+        :style="!isPoster ? 'background: #ffffff' : ''"
+      >
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
-            <div v-show="!isEditor">{{ shareParams.skuName }}</div>
-            <div v-show="isEditor">
-              <van-cell-group style="width: 130%">
-                <van-field
-                  v-model="shareParams.skuName"
-                  placeholder=""
-                  autosize
-                  type="textarea"
-                />
-              </van-cell-group>
-            </div>
+            <div v-show="!isEditor" style="width: 88%;">{{ shareParams.skuName }}</div>
+            <van-field
+              v-model="shareParams.skuName"
+              placeholder=""
+              autosize
+              type="textarea"
+              v-show="isEditor"
+              style="width: 88%;"
+            />
             <div @click="isEditor = !isEditor">
               <img
                 src="./image/editor.png"
@@ -28,8 +30,9 @@
               <div v-show="isEditor">完成</div>
             </div>
           </div>
+          <div style="font-size: 13px;margin-top: 10px;">【零售价格】:¥ {{shareParams.salePrice}}</div>
           <div class="share-desc" style="word-break: break-all;">
-            购买链接: {{ shareParams.link }}
+            【购买链接】: {{ shareParams.link }}
           </div>
 
           <div class="share-picture">
@@ -134,10 +137,7 @@
               />
             </div>
           </div>
-          <div
-            class="overlay-content-bottom"
-            v-if="shareParams.referrerCode"
-          >
+          <div class="overlay-content-bottom" v-if="shareParams.referrerCode">
             <div class="share-money">
               分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
             </div>
