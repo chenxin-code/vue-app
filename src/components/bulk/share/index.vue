@@ -335,11 +335,16 @@ export default {
                 } else {
                   e["swipeBuyerName"] = e["buyerName"];
                 }
-                this.orderSwiperList.push(e);
-                this.orderSwiperList.push({ show: false });
               });
-              console.log("orderSwiperList", this.orderSwiperList);
             }
+            let swipeLength = 0;
+            this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+            for (let index = 0; index < swipeLength; index++) {
+              this.orderSwiperList.push(this.otherBuyList[index]);
+              this.orderSwiperList.push({ show: false });
+            }
+            console.log("orderSwiperList", this.orderSwiperList);
+
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
                 key: i,

@@ -154,6 +154,7 @@ export default {
     //   this.isShowMore = false;
     // }
     this.goodsList = this.checkList;
+    console.log('this.goodsList',this.goodsList);
     console.log(this.shareData);
     this.getUser();
   },
