@@ -43,7 +43,7 @@
                              <!--:minValue="cartitem.saleNumBegin" :stepNum="cartitem.saleNumStep"-->
                              <!--:maxValue="cartitem.saleNumMax"-->
                              <!--@numChange="numChange"></Counter>-->
-                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="cartitem.saleNumMax" @blur="numBlur" @change="numChange" integer disable-input @plus="plusNum" @minus="minusNum" />
+                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="getMin(cartitem)" @blur="numBlur" @change="numChange" integer disable-input @plus="plusNum" @minus="minusNum" @overlimit="overLimit"/>
                     <span v-if="cartitem.isGift != 0" class="gift-num theme_font_gray">x{{cartitem.number}}</span>
                   </div>
                 </div>
@@ -86,6 +86,7 @@
   import SalesPro from '../common/salepro'
   import PriceOrder from '@/components/commonui/price/price-order'
   import {CellSwipe} from 'mint-ui'
+  import _ from "lodash";
 
   export default {
     name: "cart-item",
@@ -111,6 +112,9 @@
       }
     },
     methods: {
+      getMin(cartitem){
+        return _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+      },
       getDigitalDisplayName: function (acctType) {
         return this.$mallCommon.accTypeToName(acctType, '200001')
         // let arr = this.$store.state.globalConfig.acctList;
@@ -290,6 +294,9 @@
       minusNum: function () {
         event.stopPropagation();
         this.$emit('minusNum', this.cartitem);
+      },
+      overLimit(){
+        event.stopPropagation();
       },
       getStateStr: function () {
         if (this.cartitem.state == 1) {
