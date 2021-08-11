@@ -1642,7 +1642,27 @@
       position="bottom"
       :style="{ height: '35%' }"
     >
-      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
+      <!-- <div class="share_popup" v-if="referrerCode && isDistributionProduct">
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="static/image/mall2/share_wechat.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('poster')">
+            <img src="static/image/mall2/share_link.png" alt="" />
+            <div>推广海报</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('imageText')">
+            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
+            <div>图文推广</div>
+          </div>
+
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>    -->
+      <div class="share_popup">
         <div class="share_botton">
           <div
             class="share_botton_item"
@@ -1668,7 +1688,7 @@
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
 
-      <div class="share_popup" v-else>
+      <!-- <div class="share_popup" v-else>
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
@@ -1684,7 +1704,8 @@
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
-      </div>
+      </div> -->
+
     </van-popup>
     <sharePoster
       v-if="showPoster"
@@ -2134,35 +2155,35 @@ export default {
       });
     },
     onShare() {
-        this.showSharePopup = true;
+        // this.showSharePopup = true;
 
-      // if (this.isWX) {
-      //   let { picUrls, salePrice, skuName } = this.detailData;
-      //   const link =
-      //     this.$store.state.environment == "development"
-      //       ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-      //       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
-      //   let params = {
-      //     type: "default",
-      //     skuId: this.skuId,
-      //     picUrls,
-      //     salePrice,
-      //     skuName,
-      //     userImage: this.$store.state.ythUserInfo.userImage,
-      //     userName: this.$store.state.ythUserInfo.userName,
-      //     referrerCode: this.referrerCode,
-      //     qrCode: this.qrCode,
-      //     estimatedCommission: this.estimatedCommission,
-      //     link,
-      //   };
-      //   wx.miniProgram.navigateTo({
-      //     url: `/pages/common/savePicture/index?params=${encodeURIComponent(
-      //       JSON.stringify(params)
-      //     )}`,
-      //   });
-      // } else {
-      //   this.showSharePopup = true;
-      // }
+      if (this.isWX) {
+        let { picUrls, salePrice, skuName } = this.detailData;
+        const link =
+          this.$store.state.environment == "development"
+            ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+            : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
+        let params = {
+          type: "default",
+          skuId: this.skuId,
+          picUrls,
+          salePrice,
+          skuName,
+          userImage: this.$store.state.ythUserInfo.userImage,
+          userName: this.$store.state.ythUserInfo.userName,
+          referrerCode: this.referrerCode,
+          qrCode: this.qrCode,
+          estimatedCommission: this.estimatedCommission,
+          link,
+        };
+        wx.miniProgram.navigateTo({
+          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+            JSON.stringify(params)
+          )}`,
+        });
+      } else {
+        this.showSharePopup = true;
+      }
 
       // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       //   this.showShare();
