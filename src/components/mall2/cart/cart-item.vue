@@ -10,8 +10,8 @@
              @click="setCartSel(cartitem,storeitem,occuritem)"></i>
         </div>
         <div class="cell-content">
-          <div class="good-content" >
-            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}" @click.stop="enterGoodDetail(cartitem)">
+          <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
+            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
               <div class="click-div"></div>
               <img :src="cartitem.phPictureUrl" alt="">
               <div class="cart-item-state theme_font_white" v-if="cartitem.state == 1 || cartitem.state == 4">
@@ -284,9 +284,11 @@
         this.$emit('numChange', this.cartitem);
       },
       plusNum: function () {
+        event.stopPropagation();
         this.$emit('plusNum', this.cartitem);
       },
       minusNum: function () {
+        event.stopPropagation();
         this.$emit('minusNum', this.cartitem);
       },
       getStateStr: function () {
@@ -356,7 +358,7 @@
     background none
     overflow hidden;
     margin-bottom: 18px;
-    padding-bottom: 4px; 
+    padding-bottom: 4px;
     padding-right: 2px;
 
     .cart-item-sel {
