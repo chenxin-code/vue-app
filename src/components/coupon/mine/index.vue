@@ -12,7 +12,7 @@
           <div class="bangdou-exchange">
             <div class="bangdou-exchange-body">
               <zk-empty
-                v-show="!loading && showEmpty"
+                v-show="showEmpty"
                 image="coupon"
                 description="暂无卡券"
               ></zk-empty>
@@ -217,7 +217,7 @@ export default {
         query: {
           skuIds: data.merchanDises,
           searchFrom: "coupon",
-          jumpH5: "h5",
+          jumpH5: "h5"
         }
       });
     },
@@ -236,7 +236,9 @@ export default {
         .get(url, { params: params })
         .then(res => {
           if (res.data.code === 200) {
-            this.couponList = this.couponList.concat(res.data.data.records);
+            this.couponList = res.data.data
+              ? this.couponList.concat(res.data.data.records)
+              : [];
             let nowTime = moment(Date.now()).format("YYYYMMDD");
             // 是否在有效期
             this.couponList.map(item => {
@@ -253,12 +255,13 @@ export default {
               }
               return item;
             });
-
             this.loading = false;
-            if (this.couponList.length >= res.data.data.total) {
-              this.finished = true;
-            } else {
-              this.pageIndex++;
+            if (res.data.data) {
+              if (this.couponList.length >= res.data.data.total) {
+                this.finished = true;
+              } else {
+                this.pageIndex++;
+              }
             }
           } else {
             this.finished = true;
