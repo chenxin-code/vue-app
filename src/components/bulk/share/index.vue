@@ -936,7 +936,7 @@ export default {
 
   .bottom-button {
     width: 375px;
-    height: 84px;
+    height: 71px;
     background: #ffffff;
     box-shadow: 0px -4px 15px 1px rgba(0, 0, 0, 0.04);
     display: flex;

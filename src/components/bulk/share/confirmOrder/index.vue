@@ -144,15 +144,16 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    if (this.checkList.length > 3) {
-      this.goodsList.push(this.checkList[0]);
-      this.goodsList.push(this.checkList[1]);
-      this.goodsList.push(this.checkList[2]);
-      this.isShowMore = true;
-    } else {
-      this.goodsList = this.checkList;
-      this.isShowMore = false;
-    }
+    // if (this.checkList.length > 3) {
+    //   this.goodsList.push(this.checkList[0]);
+    //   this.goodsList.push(this.checkList[1]);
+    //   this.goodsList.push(this.checkList[2]);
+    //   this.isShowMore = true;
+    // } else {
+    //   this.goodsList = this.checkList;
+    //   this.isShowMore = false;
+    // }
+    this.goodsList = this.checkList;
     console.log(this.shareData);
     this.getUser();
   },
