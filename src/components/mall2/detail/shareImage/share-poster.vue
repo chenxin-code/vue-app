@@ -11,7 +11,9 @@
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
-            <div v-show="!isEditor" style="width: 88%;">{{ shareParams.skuName }}</div>
+            <div v-show="!isEditor" style="width: 88%;">
+              {{ shareParams.skuName }}
+            </div>
             <van-field
               v-model="shareParams.skuName"
               placeholder=""
@@ -30,7 +32,9 @@
               <div v-show="isEditor">完成</div>
             </div>
           </div>
-          <div style="font-size: 13px;margin-top: 10px;">【零售价格】:¥ {{shareParams.salePrice}}</div>
+          <div style="font-size: 13px;margin-top: 10px;">
+            【零售价格】:¥ {{ shareParams.salePrice }}
+          </div>
           <div class="share-desc" style="word-break: break-all;">
             【购买链接】: {{ shareParams.link }}
           </div>
@@ -47,6 +51,7 @@
         </div>
         <div
           class="overlay-content-bottom"
+          style="width: 100%;"
           v-if="shareParams.estimatedCommission"
         >
           <div class="share-money" @click="savePoster">
@@ -58,31 +63,6 @@
 
       <div class="overlay-content" v-if="!showResult && isPoster">
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
-
-        <!-- <div v-if="!isShowPoster && !isCanvas" ref="poster" @click="saveIOS">
-          <img :src="proImgUrl" class="main-poster" />
-          <div class="poster-user-message">
-            <div>
-              <img :src="proUserUrl" class="user-image" v-if="proUserUrl" />
-              <img src="./image/default-image.jpeg" class="user-image" v-else />
-            </div>
-            <div class="poster-user-right">
-              <div class="poster-user-name">{{ shareParams.userName }}</div>
-              <div class="poster-user-text">为你挑选了一个好物</div>
-            </div>
-          </div>
-          <div class="poster-product-message">
-            <div class="poster-product-message-left">
-              <div class="poster-product-prize">
-                ¥ {{ shareParams.salePrice }}
-              </div>
-              <div class="poster-product-desc">{{ shareParams.skuName }}</div>
-            </div>
-            <div class="poster-product-message-right">
-              <img :src="shareParams.qrCode" style="width:60px;height: 60px;" />
-            </div>
-          </div>
-        </div> -->
 
         <div
           class="default-share-poster"
@@ -127,7 +107,10 @@
             </div>
 
             <div class="default-poster-bottom">
-              <div class="default-poster-bottom-text">
+              <div class="default-poster-bottom-text" v-if="shareParams.skuName && shareParams.skuName.length > 20">
+                {{ shareParams.skuName.substr(0, 19) }} ...
+              </div>
+              <div class="default-poster-bottom-text" v-else>
                 {{ shareParams.skuName }}
               </div>
               <img
@@ -137,12 +120,16 @@
               />
             </div>
           </div>
-          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
-            <div class="share-money">
-              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-            </div>
-            <div class="share-check">佣金可在“分销员中心”里查看</div>
+        </div>
+
+        <div
+          class="overlay-content-bottom content-bottom-style"
+          v-if="shareParams.estimatedCommission"
+        >
+          <div class="share-money">
+            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
           </div>
+          <div class="share-check">佣金可在“分销员中心”里查看</div>
         </div>
 
         <img
@@ -153,6 +140,7 @@
           ref="posterPicture"
           @click="saveIOS"
         />
+        <div style="height: 1.72rem;" v-if="isCanvas"></div>
         <div class="finger" ref="fingerSave">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
@@ -197,47 +185,23 @@ export default {
     };
   },
   async created() {
-    await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
-    await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
+    console.log('---shareParams---', this.shareParams)
+    try {
+      await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
+      await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
+    }catch(err) {
+      console.log('---err----', err)
+    }
+
     html2canvas(this.$refs.poster).then(canvas => {
       this.canvasData = canvas.toDataURL("image/png");
       this.isCanvas = true;
-      console.log("---->canvasData", this.canvasData);
-      // this.getImages("posterPicture");
-      // this.getImages("fingerSave");
-      window.saveImageToAlbum = () => {
-        appCamera.saveImageToAlbum({
-          type: "base64",
-          imageData: this.canvasData
-        });
-      };
     });
   },
   mounted() {},
   methods: {
-    getImages(ref) {
-      const that = this;
-      window.time = 0;
-      var objs = this.$refs[ref];
-      objs.addEventListener("touchstart", function(e) {
-        e.stopPropagation();
-        time = setTimeout(function() {
-          //这里写需要执行操作的代码
-          console.log("--------2000ms");
-          if (that.isIOS()) {
-            appCamera.saveImageToAlbum({
-              type: "base64",
-              imageData: that.canvasData
-            });
-          }
-        }, 2000); //这里设置长按响应时间
-      });
-      objs.addEventListener("touchend", function(e) {
-        e.stopPropagation();
-        clearTimeout(time);
-      });
-    },
     saveIOS() {
+      // ios的webview 无法通过长按图片保存到手机
       if (this.isIOS()) {
         appCamera.saveImageToAlbum({
           type: "base64",
@@ -249,6 +213,7 @@ export default {
       var u = navigator.userAgent;
       return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     },
+    // 复制文字并保存图片到本地
     saveData() {
       this.shareParams.picUrls.forEach(item => {
         appCamera.saveImageToAlbum({
@@ -260,34 +225,18 @@ export default {
       new ClipboardJS(".save-btn", {
         text: function(trigger) {
           return `${that.shareParams.skuName}
-购买链接：${that.shareParams.link}
+【零售价格】：${that.shareParams.salePrice}
+【购买链接】：${that.shareParams.link}
           `;
         }
       });
       this.showResult = true;
     },
     savePoster() {
-      //   window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
-      //     JSON.stringify({
-      //       // businessCstNo, //会员标识
-      //       // platMerCstNo, //预下单平台商户号
-      //       // tradeMerCstNo, //预下单交易商户号
-      //       // billNo, //业务系统订单号
-      //       ...tradeParam,
-      //       appScheme: "x-engine-c",
-      //       payType: false
-      //     })
-      //   )}&callback=${encodeURIComponent(this.redirectUrl)}`;
-      //   xengine.api("com.zkty.jsi.camera", "saveImageToPhotoAlbum", {
-      //     type: "url",
-      //     imageData: this.proUserUrl
-      //   });
-      //   appCamera.saveImageToAlbum = () => {
       appCamera.saveImageToAlbum({
         type: "url",
         imageData: this.shareParams.picUrls[0]
       });
-      //   };
     },
     backPage() {
       this.$emit("hide");
@@ -314,11 +263,6 @@ export default {
   }
 };
 </script>
-<style>
-.van-overlay {
-  z-index: 999;
-}
-</style>
 
 <style lang="stylus" scoped type="text/stylus">
   .poster-mask {
@@ -351,9 +295,9 @@ export default {
    .default-share-poster {
     background-image: url('./image/poster_bg.png');
     background-repeat: no-repeat;
-    background-size: 375px 667px;
+    background-size: 375px 675px;
     width:100%;
-    height:540px;
+    height:550px;
     padding: 15px
     // border-top-left-radius 15px
     // border-top-right-radius 15px
@@ -431,7 +375,9 @@ export default {
           // font-weight: bold;
           // color: #333333;
           // line-height: 22px;
-
+          display: flex;
+          align-items: center;
+          padding-right: 5px;
           margin-left: 17px;
           width: 180px;
           font-size: 16px;
@@ -526,6 +472,11 @@ export default {
       }
     }
 
+    .content-bottom-style {
+      position: fixed;
+      top: 485px;
+      left: 0.54rem;
+    }
     .overlay-content-bottom {
       width: 260px;
       height: 63px;
@@ -571,7 +522,7 @@ export default {
     display: flex;
     position: absolute;
     align-items: center;
-    bottom: -50px;
+    bottom: 0;
     width: 300px;
     justify-content: center;
 
