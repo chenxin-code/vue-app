@@ -8,7 +8,7 @@
             <div class="back-img"></div>
             <div class="back-word">返回</div>
           </div>
-          <div class="orderSwiper">
+          <div class="orderSwiper" v-if="orderSwiperList.length > 4">
             <van-swipe
               style="height: 0.74667rem"
               vertical
@@ -249,7 +249,7 @@ export default {
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
 
-    // this.purchaseId = 61;
+    // this.purchaseId = 63;
     // this.chiefId = "4";
     // this.userId = "2337237484980666802";
 
@@ -337,13 +337,15 @@ export default {
                 }
               });
             }
-            let swipeLength = 0;
-            this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
-            for (let index = 0; index < swipeLength; index++) {
-              this.orderSwiperList.push(this.otherBuyList[index]);
-              this.orderSwiperList.push({ show: false });
+            if(this.otherBuyList.length > 2){
+              let swipeLength = 0;
+              this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+              for (let index = 0; index < swipeLength; index++) {
+                this.orderSwiperList.push(this.otherBuyList[index]);
+                this.orderSwiperList.push({ show: false });
+              }
+              console.log("orderSwiperList", this.orderSwiperList);
             }
-            console.log("orderSwiperList", this.orderSwiperList);
 
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
