@@ -664,7 +664,7 @@ export default {
         let pcsUrl = "";
         this.$store.state.environment == "development"
           ? (pcsUrl =
-              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+              "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
           : (pcsUrl =
               "https://times-pms.linli580.com/pcs/bill-center/check-bill");
         let pcsObj = {
@@ -805,7 +805,7 @@ export default {
             buildings: this.results.spaceFullName,
             businessCreateTime: item.businessCreateTime, //创建时间
             houseNo: item.houseNo, //房号
-            showInfo: item.showInfo, //商品说明
+            showInfo: item.showInfo, //商品说明 --- 收费项目
             showInfoExt: item.showInfoExt,
             proprietorName: item.proprietorName, //业主名称
             payableAmount: item.payableAmount, //应收金额
@@ -814,9 +814,9 @@ export default {
             tradeMerCstNo: item.tradeMerCstNo, //交易单号
             airDefenseNo: item.airDefenseNo,
             status: item.status, // 账单状态 10待支付， 60-支付中，70-交易失败，80-交易关闭，90-支付成功，100-已撤销"
-            recStartTime: item.businessParams.recStartTime, //收费周期-开始时间
-            recEndTime: item.businessParams.recEndTime, //收费周期-结束时间
-            chargeYear: item.businessParams.chargeYear, //缴纳月份
+            recStartTime: item.businessParams.recStartTime, //收费周期-开始时间 -------费用所属时段
+            recEndTime: item.businessParams.recEndTime, //收费周期-结束时间 ----费用所属时段
+            chargeYear: item.businessParams.chargeYear, //缴纳月份 --- 费用所属年月
           },
         });
       }

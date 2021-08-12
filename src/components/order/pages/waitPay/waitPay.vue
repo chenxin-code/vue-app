@@ -410,9 +410,10 @@ export default {
             if (results.code === 200) {
               this.billResults = results.data.notpay;
               this.finishBillList = results.data.finish;
-              this.billResults.forEach(item => {
+              this.billResults.forEach((item, index) => {
                 item.totalPrice = item.totalPayableAmount;
                 item.billId = item.spaceId;
+                item.id = Date.now() + index;
                 item.billType = 1;
               });
             } else {
@@ -517,7 +518,10 @@ export default {
             } else {
               this.isLoadPropertyBill = true;
             }
-            // this.isLoadPropertyBill = true; //本地测试
+
+            if (this.$store.state.environment == "development") {
+              this.isLoadPropertyBill = true; //本地测试
+            }
           }
 
           //如果物业账单列表和电商订单列表都为空,人房id为空（游客）,并且请求不出错的情况下，则显示空状态
@@ -737,12 +741,17 @@ export default {
         } else {
           // 取消
           this.checkData.forEach(item => {
-            if (item.billId == data.billId) {
-              this.checkData.delete(item); // 删除数据中取消选中的数据
-              this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
-              if (data.billType == 1) {
+            if (data.billType == 1) {
+              if (item.id == data.id) {
+                this.checkData.delete(item); // 删除数据中取消选中的数据
+                this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
                 this.$refs.propertyOrder.isChecked = false;
                 this.$refs.propertyOrder.isDisabled = false;
+              }
+            } else {
+              if (item.billId == data.billId) {
+                this.checkData.delete(item); // 删除数据中取消选中的数据
+                this.$refs.payDiv.isChecked = false; // 没有全选，所以全选checkbox变成没选中
               }
             }
           });
@@ -780,7 +789,7 @@ export default {
       let checkStatus = [];
       this.$store.state.environment == "development"
         ? (url =
-            "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+            "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
         : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
       let paramsObj = {
         list: list

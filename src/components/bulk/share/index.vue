@@ -8,7 +8,7 @@
             <div class="back-img"></div>
             <div class="back-word">返回</div>
           </div>
-          <div class="orderSwiper">
+          <div class="orderSwiper" v-if="orderSwiperList.length > 4">
             <van-swipe
               style="height: 0.74667rem"
               vertical
@@ -249,7 +249,7 @@ export default {
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
 
-    // this.purchaseId = 61;
+    // this.purchaseId = 63;
     // this.chiefId = "4";
     // this.userId = "2337237484980666802";
 
@@ -335,11 +335,18 @@ export default {
                 } else {
                   e["swipeBuyerName"] = e["buyerName"];
                 }
-                this.orderSwiperList.push(e);
-                this.orderSwiperList.push({ show: false });
               });
+            }
+            if(this.otherBuyList.length > 2){
+              let swipeLength = 0;
+              this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+              for (let index = 0; index < swipeLength; index++) {
+                this.orderSwiperList.push(this.otherBuyList[index]);
+                this.orderSwiperList.push({ show: false });
+              }
               console.log("orderSwiperList", this.orderSwiperList);
             }
+
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
                 key: i,
@@ -539,6 +546,7 @@ export default {
         );
         this.$router.push({
           path: "/bulk_share_confirm_order",
+          // name: "分享确认订单",
           query: {
             shareData: JSON.stringify(this.shareData),
             purchaseId: JSON.stringify(this.purchaseId),
@@ -546,6 +554,13 @@ export default {
             userId: JSON.stringify(this.userId),
             checkList: JSON.stringify(this.checkList),
           },
+          // params:{
+          //   shareData: JSON.stringify(this.shareData),
+          //   purchaseId: JSON.stringify(this.purchaseId),
+          //   chiefId: JSON.stringify(this.chiefId),
+          //   userId: JSON.stringify(this.userId),
+          //   checkList: JSON.stringify(this.checkList),
+          // }
         });
       }
     },
@@ -936,7 +951,7 @@ export default {
 
   .bottom-button {
     width: 375px;
-    height: 84px;
+    height: 71px;
     background: #ffffff;
     box-shadow: 0px -4px 15px 1px rgba(0, 0, 0, 0.04);
     display: flex;

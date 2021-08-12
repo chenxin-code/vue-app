@@ -2,6 +2,13 @@
   <!-- // created by hjc 分享确认订单 -->
   <div class="confirm_order" ref="confirmOrder">
     <div class="scrollBox">
+      <div class="navTop">
+        <div class="back" @click="$router.go(-1)">
+          <img src="./images/back.png" alt="" class="back_icon" />
+        </div>
+        <div class="navTitle">确认订单</div>
+        <div class="placeholder"></div>
+      </div>
       <div class="user_info">
         <div class="info">
           <span>提货人姓名：</span>
@@ -144,17 +151,20 @@ export default {
     this.purchaseId = JSON.parse(this.$route.query.purchaseId);
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
-    if (this.checkList.length > 3) {
-      this.goodsList.push(this.checkList[0]);
-      this.goodsList.push(this.checkList[1]);
-      this.goodsList.push(this.checkList[2]);
-      this.isShowMore = true;
-    } else {
-      this.goodsList = this.checkList;
-      this.isShowMore = false;
-    }
+    // if (this.checkList.length > 3) {
+    //   this.goodsList.push(this.checkList[0]);
+    //   this.goodsList.push(this.checkList[1]);
+    //   this.goodsList.push(this.checkList[2]);
+    //   this.isShowMore = true;
+    // } else {
+    //   this.goodsList = this.checkList;
+    //   this.isShowMore = false;
+    // }
+    this.goodsList = this.checkList;
+    console.log("this.goodsList", this.goodsList);
     console.log(this.shareData);
     this.getUser();
+    console.log("this.$route", this.$route);
   },
   methods: {
     getUser() {
@@ -323,6 +333,37 @@ export default {
     width: 315px;
     height: 1px;
     background-color: #EEEDED;
+  }
+
+  .navTop {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .back {
+      width: 75px;
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .back_icon {
+        width: 20px;
+        height: 21px;
+      }
+    }
+
+    .navTitle {
+      font-weight: 600;
+      font-size: 0.48rem;
+      color: #fff;
+    }
+
+    .placeholder {
+      width: 75px;
+    }
   }
 
   .user_info {
@@ -742,7 +783,7 @@ export default {
     width: 100%;
     // height: 49px;
     background: #FFFFFF;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     padding: 8px 22px 24px 30px;
