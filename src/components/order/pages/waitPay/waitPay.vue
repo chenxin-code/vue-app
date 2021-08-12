@@ -518,10 +518,7 @@ export default {
             } else {
               this.isLoadPropertyBill = true;
             }
-
-            if (this.$store.state.environment == "development") {
-              this.isLoadPropertyBill = true; //本地测试
-            }
+            // this.isLoadPropertyBill = true; //本地测试
           }
 
           //如果物业账单列表和电商订单列表都为空,人房id为空（游客）,并且请求不出错的情况下，则显示空状态
