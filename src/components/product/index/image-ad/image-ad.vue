@@ -289,6 +289,7 @@ export default {
             let nav = that.moduleData.rows[this.realIndex];
             that.hotEvent(nav.idCode);
             that.enterNav(nav);
+            that.swiperSensors(nav,this.realIndex)
           },
           doubleTap: function () {
             let nav = that.moduleData.rows[this.realIndex];
@@ -558,6 +559,7 @@ export default {
         return "";
     },
     enterNav: function (nav) {
+      console.log('nav',nav)
       console.log('nnnnnnnnnnnnnnnnnnn', nav.link.url)
       if(nav.link.url == '/mall2/list/1003'){
         this.$store.state.showCategory = false;
@@ -592,6 +594,18 @@ export default {
         this.canEnterNav = true;
       }
     },
+
+
+    swiperSensors(nav,index){
+      this.$sensors.track("mall_banner_click", {
+        banner_name: nav.link.name,
+        banner_id: nav.link.pgCode,
+        url: nav.link.type == '1' ? `/common2?pgCode=${nav.link.pgCode}` : '',
+        banner_rank: index+1,
+      })
+    },
+
+
     resetGndhPageArr: function (codeArr) {
       let arr = JSON.parse(JSON.stringify(this.moduleData.rows));
       if (codeArr) {

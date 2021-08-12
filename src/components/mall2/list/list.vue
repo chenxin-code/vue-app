@@ -678,6 +678,11 @@ export default {
           this.setShowCategory(false);
           this.showNewCategory = this.$store.state.showNewCategory;
 
+          this.$sensors.track("goods_search_click", {
+            which_page: '商城商品列表页',
+            search_word: searchStr,
+          })
+
           Search.close();
           this.$mallCommon.pushSearchHistory(searchStr);
           this.searchKey = searchStr;
