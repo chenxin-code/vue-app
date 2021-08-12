@@ -3,21 +3,23 @@
     <div class="poster-mask"></div>
     <!-- <van-overlay :show="true"> -->
     <div class="share-main" style="height: 100vh">
-      <div class="overlay-content" v-if="!showResult && !isPoster">
+      <div
+        class="overlay-content"
+        v-if="!showResult && !isPoster"
+        :style="!isPoster ? 'background: #ffffff' : ''"
+      >
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
-            <div v-show="!isEditor">{{ shareParams.skuName }}</div>
-            <div v-show="isEditor">
-              <van-cell-group style="width: 130%">
-                <van-field
-                  v-model="shareParams.skuName"
-                  placeholder=""
-                  autosize
-                  type="textarea"
-                />
-              </van-cell-group>
-            </div>
+            <div v-show="!isEditor" style="width: 88%;">{{ shareParams.skuName }}</div>
+            <van-field
+              v-model="shareParams.skuName"
+              placeholder=""
+              autosize
+              type="textarea"
+              v-show="isEditor"
+              style="width: 88%;"
+            />
             <div @click="isEditor = !isEditor">
               <img
                 src="./image/editor.png"
@@ -28,8 +30,9 @@
               <div v-show="isEditor">完成</div>
             </div>
           </div>
+          <div style="font-size: 13px;margin-top: 10px;">【零售价格】:¥ {{shareParams.salePrice}}</div>
           <div class="share-desc" style="word-break: break-all;">
-            购买链接: {{ shareParams.link }}
+            【购买链接】: {{ shareParams.link }}
           </div>
 
           <div class="share-picture">
@@ -134,6 +137,12 @@
               />
             </div>
           </div>
+          <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission">
+            <div class="share-money">
+              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+            </div>
+            <div class="share-check">佣金可在“分销员中心”里查看</div>
+          </div>
         </div>
 
         <img
@@ -144,15 +153,6 @@
           ref="posterPicture"
           @click="saveIOS"
         />
-        <div
-          class="overlay-content-bottom"
-          v-if="shareParams.estimatedCommission"
-        >
-          <div class="share-money">
-            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-          </div>
-          <div class="share-check">佣金可在“分销员中心”里查看</div>
-        </div>
         <div class="finger" ref="fingerSave">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
@@ -337,7 +337,7 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     width: 300px;
-    background: #ffffff;
+    // background: #ffffff;
     border-radius: 6px;
     z-index: 11;
 
@@ -396,7 +396,7 @@ export default {
     .default-main-poster {
       width: 260px;
       background: #FFFFFF;
-      border-radius: 12px;
+      border-radius: 12px 12px 0 0;
       margin: auto;
       .prouct-main-pic {
         width: 230px;
@@ -434,7 +434,7 @@ export default {
 
           margin-left: 17px;
           width: 180px;
-          font-size: 18px;
+          font-size: 16px;
           font-family: PingFang SC;
           // font-weight: bold;
           color: #333333;
@@ -527,10 +527,11 @@ export default {
     }
 
     .overlay-content-bottom {
-      width: 300px;
+      width: 260px;
       height: 63px;
       background: #FFF1E5;
       border-radius: 0px 0px 10px 10px;
+      margin: -0.4rem auto;
 
       .share-money {
         font-size: 13px;

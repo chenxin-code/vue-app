@@ -2155,6 +2155,8 @@ export default {
       });
     },
     onShare() {
+        // this.showSharePopup = true;
+
       if (this.isWX) {
         let { picUrls, salePrice, skuName } = this.detailData;
         const link =
@@ -2182,6 +2184,12 @@ export default {
       } else {
         this.showSharePopup = true;
       }
+
+      // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+      //   this.showShare();
+      // } else {
+      //   this.showSharePopup = true;
+      // }
     },
     shareWechatFriends() {
       // let routeQuery = this.$route.query;
