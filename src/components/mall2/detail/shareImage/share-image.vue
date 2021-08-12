@@ -242,6 +242,7 @@ export default {
                   res => {
                     if (res.status === 0) {
                       this.qrcode = "data:image/png;base64," + res.data;
+                      console.log('--qrcode--', this.qrcode);
                       const img = new Image();
                       img.src = this.qrcode;
                       img.onload = () => {
