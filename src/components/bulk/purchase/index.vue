@@ -130,7 +130,7 @@ export default {
       this.saleDataList = [];
       this.loading = true;
       this.finished = false;
-      this.isLoading = true;
+      // this.isLoading = true;
       this.page = 1;
       this.saleDataList = [];
       this.getList(1);
