@@ -543,22 +543,22 @@ export default {
           this.$store.state.bulkCheckList
         );
         this.$router.push({
-          // path: "/bulk_share_confirm_order",
-          name: "分享确认订单",
-          // query: {
-          //   shareData: JSON.stringify(this.shareData),
-          //   purchaseId: JSON.stringify(this.purchaseId),
-          //   chiefId: JSON.stringify(this.chiefId),
-          //   userId: JSON.stringify(this.userId),
-          //   checkList: JSON.stringify(this.checkList),
-          // },
-          params:{
+          path: "/bulk_share_confirm_order",
+          // name: "分享确认订单",
+          query: {
             shareData: JSON.stringify(this.shareData),
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
             checkList: JSON.stringify(this.checkList),
-          }
+          },
+          // params:{
+          //   shareData: JSON.stringify(this.shareData),
+          //   purchaseId: JSON.stringify(this.purchaseId),
+          //   chiefId: JSON.stringify(this.chiefId),
+          //   userId: JSON.stringify(this.userId),
+          //   checkList: JSON.stringify(this.checkList),
+          // }
         });
       }
     },

@@ -2,6 +2,13 @@
   <!-- // created by hjc 分享确认订单 -->
   <div class="confirm_order" ref="confirmOrder">
     <div class="scrollBox">
+      <div class="navTop">
+        <div class="back" @click="$router.go(-1)">
+          <img src="./images/back.png" alt="" class="back_icon" />
+        </div>
+        <div class="navTitle">确认订单</div>
+        <div class="placeholder"></div>
+      </div>
       <div class="user_info">
         <div class="info">
           <span>提货人姓名：</span>
@@ -140,10 +147,10 @@ export default {
   },
   created() {
     Toast.clear();
-    this.shareData = JSON.parse(this.$route.params.shareData);
-    this.purchaseId = JSON.parse(this.$route.params.purchaseId);
-    this.chiefId = JSON.parse(this.$route.params.chiefId);
-    this.userId = JSON.parse(this.$route.params.userId);
+    this.shareData = JSON.parse(this.$route.query.shareData);
+    this.purchaseId = JSON.parse(this.$route.query.purchaseId);
+    this.chiefId = JSON.parse(this.$route.query.chiefId);
+    this.userId = JSON.parse(this.$route.query.userId);
     // if (this.checkList.length > 3) {
     //   this.goodsList.push(this.checkList[0]);
     //   this.goodsList.push(this.checkList[1]);
@@ -154,10 +161,10 @@ export default {
     //   this.isShowMore = false;
     // }
     this.goodsList = this.checkList;
-    console.log('this.goodsList',this.goodsList);
+    console.log("this.goodsList", this.goodsList);
     console.log(this.shareData);
     this.getUser();
-    console.log('this.$route',this.$route)
+    console.log("this.$route", this.$route);
   },
   methods: {
     getUser() {
@@ -280,10 +287,10 @@ export default {
     checkList: {
       get() {
         console.log(
-          "this.$route.params.checkList",
-          JSON.parse(this.$route.params.checkList)
+          "this.$route.query.checkList",
+          JSON.parse(this.$route.query.checkList)
         );
-        return JSON.parse(this.$route.params.checkList);
+        return JSON.parse(this.$route.query.checkList);
       },
       set() {},
     },
@@ -326,6 +333,37 @@ export default {
     width: 315px;
     height: 1px;
     background-color: #EEEDED;
+  }
+
+  .navTop {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .back {
+      width: 75px;
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .back_icon {
+        width: 20px;
+        height: 21px;
+      }
+    }
+
+    .navTitle {
+      font-weight: 600;
+      font-size: 0.48rem;
+      color: #fff;
+    }
+
+    .placeholder {
+      width: 75px;
+    }
   }
 
   .user_info {
