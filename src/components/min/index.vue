@@ -120,15 +120,15 @@ export default {
           icon: require("./images/user.png"),
           pageUrl: "/minUserInfo"
         },
-        // {
-        //   title: "分享有礼",
-        //   icon: require("./images/share.png"),
-        //   devUrl:
-        //     "https://mall-uat-app-linli.timesgroup.cn:8001/wxApplyDistribution?token=",
-        //   prodUrl:
-        //     "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
-        //   externalLinks: true,
-        // },
+        {
+          title: "分享有礼",
+          icon: require("./images/share.png"),
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:8001/wxApplyDistribution?token=",
+          prodUrl:
+            "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=",
+          externalLinks: true,
+        },
         {
           title: "收货地址",
           icon: require("./images/address.png"),
