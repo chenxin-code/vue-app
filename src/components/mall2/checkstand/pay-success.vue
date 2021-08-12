@@ -103,7 +103,7 @@
           }else{
 
             this.payResult == "success" ? path = `/order/3?backIndex=${true}&time=${Date.now()}` : path = `/order/2?backIndex=${true}time=${Date.now()}`;
-            
+
             this.$router.push({
               path: path,
             });
@@ -185,7 +185,7 @@
             })
           }
         });
-        
+
         // if (this.$util.isICBCApp()) {
         //   // 工银e生活，需要跳到首页
         //   this.$router.replace({
@@ -204,6 +204,10 @@
       },
       sharePage() {
         this.$bridgefunc.wechatShare(this.shareData)
+      },
+      goBack(){
+        history.pushState(null, null, document.URL);
+        this.backEvent();
       },
     },
     created() {
@@ -246,7 +250,14 @@
         });
         console.log('埋点后',this.payResult)
       }
-    }
+      if (window.history && window.history.pushState) {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', this.goBack, false);//false阻止默认事件
+      }
+    },
+    destroyed(){
+      window.removeEventListener('popstate', this.goBack, false);
+    },
   }
 </script>
 
