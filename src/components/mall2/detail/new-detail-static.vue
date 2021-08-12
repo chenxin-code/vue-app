@@ -2273,7 +2273,7 @@ export default {
         salePrice,
         skuName,
         userImage:
-          this.$store.state.ythUserInfo.userImage,
+          this.$store.state.ythUserInfo.userImage || 'https://times-new-store.oss-cn-shenzhen.aliyuncs.com/common/d1d6fde0-1351-4598-9ebc-7a11e22101a7static',
         userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
