@@ -1640,7 +1640,6 @@
       v-model="showSharePopup"
       round
       position="bottom"
-      :style="{ height: '35%' }"
     >
       <!-- <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
@@ -1664,24 +1663,16 @@
       </div>    -->
       <div class="share_popup">
         <div class="share_botton">
-          <div
-            class="share_botton_item"
-            @click="shareWechatFriends"
-            v-if="!this.$util.isWeiXin()"
-          >
-            <img src="static/image/mall2/share_wechat.png" alt="" />
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="./shareImage/image/share_wx.png" alt="" />
             <div>微信好友</div>
           </div>
           <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="static/image/mall2/share_link.png" alt="" />
+            <img src="./shareImage/image/share_haibao.png" alt="" />
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img
-              src="./shareImage/image/picText.png"
-              alt=""
-              style="width: 60px; height: 60px; margin-bottom: 10px"
-            />
+            <img src="./shareImage/image/share_tuwen.png" alt="" />
             <div>图文推广</div>
           </div>
         </div>
@@ -4894,7 +4885,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding: 35px 26px 36px 25px;
+  padding-top: 40px;
 
   .share_botton {
     display: flex;
@@ -4909,32 +4900,33 @@ export default {
       align-items: center;
 
       img {
-        width: 74px;
-        height: 74px;
+        width: 48px;
+        height: 48px;
       }
 
       div {
-        font-size: 14px;
+        margin-top: 23px;
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #999999;
-        line-height: 20px;
+        color: #666666;
       }
     }
   }
 
   .cancel {
-    width: 86.4%;
-    height: 49px;
-    border-radius: 16px;
-    border: 1px solid #E5E5E5;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333333;
-    line-height: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 27px auto 0;
+    width: 295px;
+    height: 37px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 37px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    margin: 20px auto;
   }
 }
 
