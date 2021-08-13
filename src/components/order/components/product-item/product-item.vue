@@ -13,7 +13,7 @@
         <img
           :src="productItem.billImg"
           v-if="productItem.billType == 11 || productItem.billType == 13"
-          @click.stop="nativeRouterGoodsDetail(productItem)"
+          @click.stop="gotoProductDetail(productItem)"
         />
         <div
           class="billImg"
