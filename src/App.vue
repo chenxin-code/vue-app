@@ -301,6 +301,10 @@ export default {
           if (res.data.status == 0) {
             this.$store.state.ythUserInfo = res.data.data;
             console.log("一体化信息", this.$store.state.ythUserInfo);
+            this.$store.state.ythUser = {
+              userImage:res.data.data.userImage,
+              userName:res.data.data.userName,
+            }
             initSensors();
             if (
               this.$store.state.webtype != 2 &&
