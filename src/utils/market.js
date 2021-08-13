@@ -29,6 +29,7 @@ import MessageBox from '@/components/Vendor/messagebox/index';
 import More from '@/components/product/index/top-nav/more/index'
 import Bus from "../components/product/index/bus";
 import Login from '@/components/commonui/login/index'
+import Vue from 'vue'
 
 let resultUrl = window.location.href
 resultUrl = resultUrl.substring(0, resultUrl.indexOf('/site/wx') + 8)
@@ -1099,7 +1100,11 @@ let market = {
         if (searchStr == '') {
           return;
         }
-        console.log(searchStr)
+        console.log('搜索关键字',searchStr)
+        Vue.prototype.$sensors.track("goods_search_click", {
+          which_page: '商城首页',
+          search_word: searchStr,
+        })
         mallCommon.pushSearchHistory(searchStr)
         // this._loadProList()
         let path = '/mall2/list/' + util.getDataString()

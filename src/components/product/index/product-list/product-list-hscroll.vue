@@ -71,6 +71,15 @@
         } else {
           this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
         }
+        this.$sensors.track("goods_click", {
+          module: '运营位商品',
+          goods_id: product.skuId,
+          goods_name: product.skuName,
+          org_price: product.activityPrice,
+          price: product.salePrice,
+          store_id: product.storeOuCode,
+          store_name: product.storeName,
+        })
       },
       getItemStyle: function (index) {
         let styleStr = ''
