@@ -275,11 +275,13 @@ export default {
           this.list[tabIndex] =
             params.pageIndex === 1 ? list : _.concat(this.list[tabIndex], list);
           this.loading = false;
-          if (this.list[tabIndex].length >= res.data.data.total) {
-            this.finished = true;
-          } else {
-            this.finished = false;
-            this.pageIndex[tabIndex]++;
+          if (res.data.data) {
+            if (this.list[tabIndex].length >= res.data.data.total) {
+              this.finished = true;
+            } else {
+              this.finished = false;
+              this.pageIndex[tabIndex]++;
+            }
           }
           if (this.list[tabIndex].length === 0) {
             this.finished = true;
