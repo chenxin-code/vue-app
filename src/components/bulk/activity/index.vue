@@ -153,6 +153,13 @@
       :data-clipboard-text="this.link"
     ></button> -->
     <!-- </nav-content> -->
+    <div class="withdraw">
+      <img src="./images/money.png" alt="">
+      <div class="dingwei">
+      <p style="font-size:14px"><span style="font-size:6px">￥</span>50.00</p>
+      <p>点击提现</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -708,5 +715,25 @@ export default {
 
 /deep/ .van-tab--active {
   color: #C61606;
+}
+.withdraw{
+  position: fixed;
+  right:10px;
+  bottom:12%;
+  width: 60px;
+  height: 60px;
+  img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+  .dingwei{
+    position: absolute;
+    left: 10%;
+    bottom: 10%;
+    color: #fff;
+  }
 }
 </style>
