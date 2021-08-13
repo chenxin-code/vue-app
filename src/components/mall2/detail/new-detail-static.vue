@@ -2182,9 +2182,9 @@ export default {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
+        goods_cls1: this.detailData.nowCls1Name,
+        goods_cls2: this.detailData.nowCls2Name,
+        goods_cls3: this.detailData.nowCls3Name,
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -2195,6 +2195,7 @@ export default {
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
         share_type: share_type,
+        ...this.$store.state.ythUser
       });
     },
     onShare() {
@@ -2319,9 +2320,9 @@ export default {
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
-            goods_cls1: this.categoryList[0],
-            goods_cls2: this.categoryList[1],
-            goods_cls3: this.categoryList[2],
+            goods_cls1: this.detailData.nowCls1Name,
+            goods_cls2: this.detailData.nowCls2Name,
+            goods_cls3: this.detailData.nowCls3Name,
             org_price: this.detailData.activityPrice,
             price: this.detailData.salePrice,
             goods_quantity: this.selectedNum,
@@ -2976,9 +2977,9 @@ export default {
           goods_id: this.skuId,
           goods_name: this.detailData.skuName,
           tag: this.tagList,
-          goods_cls1: this.categoryList[0],
-          goods_cls2: this.categoryList[1],
-          goods_cls3: this.categoryList[2],
+          goods_cls1: this.detailData.nowCls1Name,
+          goods_cls2: this.detailData.nowCls2Name,
+          goods_cls3: this.detailData.nowCls3Name,
           goods_cl3_id: this.detailData.categoryId,
           org_price: this.detailData.activityPrice,
           price: this.detailData.salePrice,
@@ -3908,9 +3909,9 @@ export default {
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
-            goods_cls1: this.categoryList[0],
-            goods_cls2: this.categoryList[1],
-            goods_cls3: this.categoryList[2],
+            goods_cls1: this.detailData.nowCls1Name,
+            goods_cls2: this.detailData.nowCls2Name,
+            goods_cls3: this.detailData.nowCls3Name,
             org_price: this.detailData.activityPrice,
             price: this.detailData.salePrice,
             store_id: this.detailData.storeOuCode,
@@ -4070,9 +4071,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.categoryList[0],
-              goods_cls2: this.categoryList[1],
-              goods_cls3: this.categoryList[2],
+              goods_cls1: this.detailData.nowCls1Name,
+              goods_cls2: this.detailData.nowCls2Name,
+              goods_cls3: this.detailData.nowCls3Name,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -4081,6 +4082,7 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
+              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4209,9 +4211,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.categoryList[0],
-              goods_cls2: this.categoryList[1],
-              goods_cls3: this.categoryList[2],
+              goods_cls1: this.detailData.nowCls1Name,
+              goods_cls2: this.detailData.nowCls2Name,
+              goods_cls3: this.detailData.nowCls3Name,
               goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
@@ -4221,6 +4223,7 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
+              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4295,9 +4298,9 @@ export default {
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
-                goods_cls1: this.categoryList[0],
-                goods_cls2: this.categoryList[1],
-                goods_cls3: this.categoryList[2],
+                goods_cls1: this.detailData.nowCls1Name,
+                goods_cls2: this.detailData.nowCls2Name,
+                goods_cls3: this.detailData.nowCls3Name,
                 org_price: this.detailData.activityPrice,
                 price: this.detailData.salePrice,
                 goods_quantity: this.selectedNum,
@@ -4306,6 +4309,7 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
                 viewpoint_radio: this.viewpoint_radio,
+                ...this.$store.state.ythUser
               });
             } else {
               this.isCollect = false;
@@ -4643,9 +4647,9 @@ export default {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
+        goods_cls1: this.detailData.nowCls1Name,
+        goods_cls2: this.detailData.nowCls2Name,
+        goods_cls3: this.detailData.nowCls3Name,
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -4655,6 +4659,7 @@ export default {
         merchant_name: this.detailData.ouName,
         jump_page: jumpPage,
         duration: this.duration,
+        ...this.$store.state.ythUser
       });
     },
     // getDistributionDetail(){
