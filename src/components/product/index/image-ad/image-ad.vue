@@ -74,7 +74,7 @@
                 v-if="moduleData.style == 'imgStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <CornerMark
@@ -288,8 +288,7 @@ export default {
           click: function () {
             let nav = that.moduleData.rows[this.realIndex];
             that.hotEvent(nav.idCode);
-            that.enterNav(nav);
-            that.swiperSensors(nav,this.realIndex)
+            that.enterNav(nav,this.realIndex);
           },
           doubleTap: function () {
             let nav = that.moduleData.rows[this.realIndex];
@@ -558,7 +557,7 @@ export default {
         }
         return "";
     },
-    enterNav: function (nav) {
+    enterNav: function (nav,index) {
       console.log('nav',nav)
       console.log('nnnnnnnnnnnnnnnnnnn', nav.link.url)
       if(nav.link.url == '/mall2/list/1003'){
@@ -588,23 +587,31 @@ export default {
 
       console.log('ccccccccccccccccc', newNav.link.url)
 
+
+
+      if(nav.link.type == '1'){
+        this.$sensors.track("mall_banner_click", {
+          banner_name: nav.link.name,
+          banner_id: nav.link.pgCode,
+          url: nav.link.type == '1' ? `/common2?pgCode=${nav.link.pgCode}` : '',
+          banner_rank: index+1,
+        })
+      }else if(nav.link.type == '2' || nav.link.type == '3'){
+        this.$sensors.track("mall_ad_click", {
+          ad_name: nav.link.name,
+          ad_id: nav.idCode,
+          url: nav.link.url,
+          ad_rank: index+1,
+        })
+      }
+
       if (this.canEnterNav) {
         this.$market.enterNav(newNav, this.pageData.pgCode);
       } else {
         this.canEnterNav = true;
       }
+
     },
-
-
-    swiperSensors(nav,index){
-      this.$sensors.track("mall_banner_click", {
-        banner_name: nav.link.name,
-        banner_id: nav.link.pgCode,
-        url: nav.link.type == '1' ? `/common2?pgCode=${nav.link.pgCode}` : '',
-        banner_rank: index+1,
-      })
-    },
-
 
     resetGndhPageArr: function (codeArr) {
       let arr = JSON.parse(JSON.stringify(this.moduleData.rows));
