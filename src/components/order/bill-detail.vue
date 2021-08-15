@@ -817,6 +817,9 @@ export default {
             recStartTime: item.businessParams.recStartTime, //收费周期-开始时间 -------费用所属时段
             recEndTime: item.businessParams.recEndTime, //收费周期-结束时间 ----费用所属时段
             chargeYear: item.businessParams.chargeYear, //缴纳月份 --- 费用所属年月
+            billNo: item.billNo, //账单编号
+            price: item.businessParams.standard ? item.businessParams.standard.price : '', //单价
+            unit: item.businessParams.standard ? item.businessParams.standard.unit : '', //单位
           },
         });
       }
