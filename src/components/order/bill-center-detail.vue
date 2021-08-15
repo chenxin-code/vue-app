@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-07-16 15:30:54
+ * @LastEditTime: 2021-08-15 12:42:35
 -->
 <template>
   <div class="bill-center-detail">
@@ -20,10 +20,6 @@
       </div>
       <div class="detail-box">
         <div class="item">
-          <!-- <div class="item-hd">
-            <div class="title">支付方式</div>
-            <div class="result">微信</div>
-          </div> -->
           <div class="item-hd">
             <div class="title">创建时间</div>
             <div class="result">
@@ -42,42 +38,30 @@
           </div>
         </div>
         <div class="item border">
-          <!-- <div class="item-hd">
-            <div class="title">实付金额</div>
-            <div class="result">{{ query.realAmount }}</div>
-          </div> -->
           <div class="item-hd">
-            <div class="title">收费周期</div>
+            <div class="title">收费项目</div>
+            <div class="result">{{ query.showInfo }}</div>
+          </div>
+          <div class="item-hd">
+            <div class="title">收费所属时段</div>
             <div class="result">
               {{ query.recStartTime | filterDateCycle(query.recEndTime) }}
             </div>
           </div>
           <div class="item-hd">
-            <div class="title">商品说明</div>
-            <div class="result">{{ query.showInfo }}</div>
-          </div>
-          <div class="item-hd">
-            <div class="title">缴纳月份</div>
+            <div class="title">费用所属年月</div>
             <div class="result">
               {{ query.chargeYear }}
             </div>
           </div>
-          <!-- <div class="item-hd">
-            <div class="title">楼盘小区</div>
-            <div class="result">时代外滩</div>
+          <div class="item-hd">
+            <div class="title">单价(元)</div>
+            <div class="result buildings">{{ query.price || "--" }}</div>
           </div>
           <div class="item-hd">
-            <div class="title">房屋楼栋</div>
-            <div class="result">3座</div>
+            <div class="title">单位</div>
+            <div class="result buildings">{{ query.unit || "--" }}</div>
           </div>
-          <div class="item-hd">
-            <div class="title">单元号</div>
-            <div class="result unit">00</div>
-          </div>
-          <div class="item-hd">
-            <div class="title">门牌房号</div>
-            <div class="result">2104</div>
-          </div> -->
           <div class="item-hd">
             <div class="title">房号</div>
             <div class="result buildings">{{ query.buildings }}</div>
@@ -89,6 +73,10 @@
           <div class="item-hd">
             <div class="title">收款员</div>
             <div class="result saler">无</div>
+          </div>
+          <div class="item-hd">
+            <div class="title">账单编号</div>
+            <div class="result">{{ query.billNo }}</div>
           </div>
         </div>
       </div>

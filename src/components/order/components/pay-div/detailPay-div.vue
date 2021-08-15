@@ -92,7 +92,7 @@ $color = #E5165A;
   width: 100%;
   .adapter-iphoneX{
     width: 100%;
-    height: 34px;
+    height: 20px;
     background-color: #fff;
   }
 }
