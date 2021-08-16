@@ -268,12 +268,13 @@ const vueConfig = {
   lintOnSave: false,
   // babel-loader no-ignore node_modules/*
   transpileDependencies: [
-    "@zkty-team/x-engine-module-device",
-    "@zkty-team/x-engine-module-engine",
-    "@zkty-team/x-engine-module-localstorage",
-    "@zkty-team/x-engine-module-nav",
-    "@zkty-team/x-engine-module-router",
-    "@zkty-team/x-engine-module-ui"
+    // "@zkty-team/x-engine-module-device",
+    // "@zkty-team/x-engine-module-engine",
+    // "@zkty-team/x-engine-module-localstorage",
+    // "@zkty-team/x-engine-module-nav",
+    // "@zkty-team/x-engine-module-router",
+    // "@zkty-team/x-engine-module-ui",
+    /[/\\]node_modules[/\\](.+?)?zkty-team(.*)/,
   ]
 };
 
