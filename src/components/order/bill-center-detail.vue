@@ -2,12 +2,13 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-15 12:42:35
+ * @LastEditTime: 2021-08-16 14:09:56
 -->
 <template>
   <div class="bill-center-detail">
     <van-sticky :offset-top="offsetTop">
-      <nav-top leftTitle="账单详情" @backEvent="backEvent"></nav-top>
+      <!-- <nav-top leftTitle="账单详情" @backEvent="backEvent"></nav-top> -->
+      <nav-top navLeftName="账单详情" @backEvent="backEvent"></nav-top>
     </van-sticky>
     <div class="content">
       <div class="total">
@@ -85,9 +86,13 @@
 </template>
 <script>
 // import appNav from "@zkty-team/x-engine-module-nav";
+import navTop from "@/components/order/components/common/nav-top";
 import _ from "lodash";
 import moment from "moment";
 export default {
+  components: {
+    navTop
+  },
   data() {
     return {
       offsetTop: "0rem",
