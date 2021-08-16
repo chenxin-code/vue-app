@@ -178,7 +178,7 @@ export default {
   // overflow: auto;
   top: 80px;
   &.order-x {
-    top: 65px;
+    top: 75px;
   }
 }
 
