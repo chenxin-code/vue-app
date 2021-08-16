@@ -2,12 +2,11 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-16 14:09:56
+ * @LastEditTime: 2021-08-16 14:34:44
 -->
 <template>
   <div class="bill-center-detail">
     <van-sticky :offset-top="offsetTop">
-      <!-- <nav-top leftTitle="账单详情" @backEvent="backEvent"></nav-top> -->
       <nav-top navLeftName="账单详情" @backEvent="backEvent"></nav-top>
     </van-sticky>
     <div class="content">
@@ -148,7 +147,7 @@ $color = #E5165A;
   }
   .content {
     padding: 16px 11px 34px 11px;
-    margin-top: 65px;
+    margin-top: 80px;
     .total {
       background-color: #FFFFFF;
       box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.04);
