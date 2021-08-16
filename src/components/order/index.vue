@@ -1,7 +1,19 @@
 <template>
-  <div class="order">
+  <div
+    class="order"
+    :class="{
+      'order-x': this.$util.getIsIphoneX_X()
+    }"
+  >
+    <van-sticky :offset-top="offsetTop">
+      <nav-top
+        navLeftName="我的订单"
+        navRightName="历史缴费记录"
+        @backEvent="goBack"
+        @navToPage="navToHistory"
+      ></nav-top>
+    </van-sticky>
     <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <nav-top></nav-top>
       <van-tabs
         v-model="active"
         swipeable
@@ -27,7 +39,7 @@
 </template>
 
 <script>
-import navTop from "@/components/order/components/nav-top/nav-top";
+import navTop from "@/components/order/components/common/nav-top";
 import AllPages from "./pages/allOrder/allOrder";
 import Cancel from "./pages/cancel/cancel";
 import Finish from "./pages/finish/finish";
@@ -35,6 +47,7 @@ import WaitDelivery from "./pages/waitDelivery/waitDelivery";
 import WaitPay from "./pages/waitPay/waitPay";
 import WaitTakeDelivery from "./pages/waitTakeDelivery/waitTakeDelivery";
 import navToMicroApplication from "@zkty-team/x-engine-module-router";
+import appLocalstorage from "@zkty-team/x-engine-module-localstorage";
 import nav from "@zkty-team/x-engine-module-nav";
 export default {
   data() {
@@ -48,7 +61,8 @@ export default {
         { title: "已完成", components: "Finish", id: 5 },
         { title: "已取消", components: "Cancel", id: 6 }
       ],
-      offsetTop: "0rem"
+      offsetTop: "0rem",
+      backIndex: false
     };
   },
   components: {
@@ -66,6 +80,9 @@ export default {
     padding = document.getElementsByTagName("body")[0].style.paddingTop;
     if (padding !== "") {
       this.offsetTop = padding;
+    }
+    if (this.$route.query.backIndex) {
+      this.backIndex = true;
     }
   },
   activated() {
@@ -97,6 +114,48 @@ export default {
         hideNavbar: false
       });
     },
+    goBack: function() {
+      if (this.backIndex) {
+        this.$router.replace({
+          path: "/common"
+        });
+      } else {
+        appLocalstorage
+          .get({
+            key: "LLBIsHomeView",
+            isPublic: true
+          })
+          .then(res => {
+            let _result = res.result;
+            console.log("appLocalstorage_result", _result);
+            if (
+              !_result ||
+              _result == "" ||
+              _result == "null" ||
+              _result == undefined
+            ) {
+              console.log("appLocalstorage_result", _result);
+              nav.navigatorBack({ url: "0" }).then(res => {
+                console.log(res);
+              });
+              return;
+            }
+            if (_result == "1") {
+              this.$router.replace({
+                path: "/common"
+              });
+            } else if (_result == "0") {
+              nav.navigatorBack({ url: "0" }).then(res => {
+                console.log(res);
+              });
+            } else if (_result == "2") {
+              nav.navigatorBack({ url: "0" }).then(res => {
+                console.log(res);
+              });
+            }
+          });
+      }
+    },
     navTo(name, title) {
       this.active = name;
     },
@@ -117,6 +176,10 @@ export default {
 #app .router_class.order {
   background: #F9F9F9;
   // overflow: auto;
+  top: 80px;
+  &.order-x {
+    top: 65px;
+  }
 }
 
 .van-tab__pane, .van-tab__pane-wrapper {
