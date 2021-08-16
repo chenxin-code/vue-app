@@ -2,10 +2,17 @@
  * @Description: 这是***页面
  * @Date: 2021-06-10 18:00:33
  * @Author: shuimei
- * @LastEditTime: 2021-07-07 17:31:39
+ * @LastEditTime: 2021-08-16 10:44:33
 -->
 <template>
-  <div class="nav-top" :style="{ 'padding-top': adapterTop }">
+  <!--  :style="{ 'padding-top': adapterTop }"  -->
+  <div
+    class="nav-top"
+    :style="{
+      '--status-height': statusHeight,
+      '--nav-height': navHeight
+    }"
+  >
     <div @click="goBack">
       <i class="icon"></i>
       <span class="left-title">{{ leftTitle }}</span>
@@ -17,25 +24,25 @@
 </template>
 
 <script>
+import device from "@zkty-team/x-engine-module-device";
 export default {
   props: ["leftTitle", "rightTitle"],
   data() {
     return {
-      adapterTop: "0.426667rem"
+      statusHeight: "20px",
+      navHeight: "0px"
     };
   },
-  created() {
-    // 判断是否是刘海屏
-    const rate = window.screen.height / window.screen.width;
-    let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-    // window.screen.height为屏幕高度
-    //  window.screen.availHeight 为浏览器 可用高度
-    if (rate > limit) {
-      this.adapterTop = "1.173333rem";
-    } else {
-      this.adapterTop = "0.426667rem";
-    }
+  beforeCreate() {
+    return device
+      .getStatusHeight({
+        __event__: () => void 0
+      })
+      .then(({ content }) => {
+        this.statusHeight = content + "px";
+      });
   },
+  created() {},
   methods: {
     goBack() {
       this.$emit("backEvent");
