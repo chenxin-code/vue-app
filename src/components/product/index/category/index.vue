@@ -107,6 +107,14 @@ export default {
           this.$emit("toggle", item.id);
         }
       }
+
+      this.$sensors.track("mall_tab_click", {
+        tab_name: item.name,
+        tab_id: item.id,
+        url: item.id == 0?"/common":"/mall2/list",
+        tab_rank: index+1,
+      })
+
     },
     ...mapMutations(["setShowCategory"]),
   },

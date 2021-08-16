@@ -141,7 +141,7 @@
           @click="saveIOS"
         />
         <div style="height: 1.72rem;" v-if="isCanvas"></div>
-        <div class="finger" ref="fingerSave">
+        <div class="finger" ref="fingerSave" :style="isCanvas ? { bottom: 0 } : ''">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
         </div>
@@ -340,7 +340,7 @@ export default {
     .default-main-poster {
       width: 260px;
       background: #FFFFFF;
-      border-radius: 12px 12px 0 0;
+      border-radius: 12px;
       margin: auto;
       .prouct-main-pic {
         width: 230px;
@@ -474,7 +474,7 @@ export default {
 
     .content-bottom-style {
       position: fixed;
-      top: 485px;
+      top: 475px;
       left: 0.54rem;
     }
     .overlay-content-bottom {
@@ -522,9 +522,10 @@ export default {
     display: flex;
     position: absolute;
     align-items: center;
-    bottom: 0;
+    bottom: -50px;
     width: 300px;
     justify-content: center;
+    z-index: 8;
 
     .finger-image {
       width: 28px;
