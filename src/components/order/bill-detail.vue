@@ -2,14 +2,14 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-07-24 14:19:02
+ * @LastEditTime: 2021-08-16 14:08:51
 -->
 <template>
   <div class="bill-detail">
     <van-sticky :offset-top="offsetTop">
       <nav-top
-        leftTitle="账单明细"
-        rightTitle="发票查询"
+        navLeftName="账单明细"
+        navRightName="发票查询"
         @backEvent="backEvent"
         @navToPage="navToPage"
       ></nav-top>
@@ -55,7 +55,7 @@
           class="content"
           :class="[
             showEmpty ? 'empty' : '',
-            !isFinishBill && !showEmpty ? 'not-pay-bill' : '',
+            !isFinishBill && !showEmpty ? 'not-pay-bill' : ''
           ]"
         >
           <!-- <van-pull-refresh
@@ -63,103 +63,100 @@
             @refresh="onRefresh"
             class="refresh-page"
           > -->
-            <van-list
-              class="tab-list-box"
-              :class="[
-                showEmpty ? 'empty' : '',
-                !isFinishBill && !showEmpty ? 'not-pay-bill' : '',
-              ]"
-              v-model="loading"
-              :finished="finished"
-              :finished-text="showFinishText ? '- 亲, 没有更多账单了 -' : ''"
-              :immediate-check="false"
-              :offset="10"
-              @load="getBillDetail"
+          <van-list
+            class="tab-list-box"
+            :class="[
+              showEmpty ? 'empty' : '',
+              !isFinishBill && !showEmpty ? 'not-pay-bill' : ''
+            ]"
+            v-model="loading"
+            :finished="finished"
+            :finished-text="showFinishText ? '- 亲, 没有更多账单了 -' : ''"
+            :immediate-check="false"
+            :offset="10"
+            @load="getBillDetail"
+          >
+            <div
+              class="list"
+              v-for="(item, index) in results.records"
+              :key="index"
             >
-              <div
-                class="list"
-                v-for="(item, index) in results.records"
-                :key="index"
-              >
-                <div v-show="!isFinishBill">
-                  <van-checkbox
-                    v-show="!isMonthPay"
-                    :name="index"
-                    v-model="item.shopCheck"
-                    @click="checkShop(item, index, isMonthPay)"
-                    checked-color="#E5165A"
-                    ref="checkShop"
-                    >{{ item.quarterTitle }}</van-checkbox
-                  >
-                  <div class="title-hd" v-show="isMonthPay">
-                    {{ item.quarterTitle }}
-                  </div>
-                </div>
-                <div class="title-hd" v-show="isFinishBill">
+              <div v-show="!isFinishBill">
+                <van-checkbox
+                  v-show="!isMonthPay"
+                  :name="index"
+                  v-model="item.shopCheck"
+                  @click="checkShop(item, index, isMonthPay)"
+                  checked-color="#E5165A"
+                  ref="checkShop"
+                  >{{ item.quarterTitle }}</van-checkbox
+                >
+                <div class="title-hd" v-show="isMonthPay">
                   {{ item.quarterTitle }}
                 </div>
-                <div
-                  class="item"
-                  v-for="(detail, i) in item.quarterList"
-                  :key="i"
-                  ref="billItem"
-                >
-                  <div class="check-operation" v-show="!isFinishBill">
-                    <van-checkbox
-                      v-model="detail.checked"
-                      v-show="isMonthPay"
-                      @change="checkSingle(item, detail, i)"
-                      ref="checkboxGroup"
-                      checked-color="#E5165A"
-                    ></van-checkbox>
-                  </div>
-                  <div
-                    class="item-box"
-                    :class="{ 'finish-item': isFinishBill }"
-                  >
-                    <div class="detail-title">
-                      <div class="month-text">
-                        <span class="num">{{ detail.month }}</span>
-                        <span>{{ detail.monthTitle }}</span>
-                      </div>
-                      <div class="status">
-                        <span
-                          class="pay-status"
-                          :class="detail.isPay == 1 ? 'paying' : 'need'"
-                          v-show="!isFinishBill"
-                          >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
-                        >
-                        <span class="pay-status finish" v-show="isFinishBill"
-                          >已完成</span
-                        >
-                        <span class="pay-money" v-show="!isFinishBill"
-                          >￥{{ detail.monthPayableAmount }}</span
-                        >
-                      </div>
+              </div>
+              <div class="title-hd" v-show="isFinishBill">
+                {{ item.quarterTitle }}
+              </div>
+              <div
+                class="item"
+                v-for="(detail, i) in item.quarterList"
+                :key="i"
+                ref="billItem"
+              >
+                <div class="check-operation" v-show="!isFinishBill">
+                  <van-checkbox
+                    v-model="detail.checked"
+                    v-show="isMonthPay"
+                    @change="checkSingle(item, detail, i)"
+                    ref="checkboxGroup"
+                    checked-color="#E5165A"
+                  ></van-checkbox>
+                </div>
+                <div class="item-box" :class="{ 'finish-item': isFinishBill }">
+                  <div class="detail-title">
+                    <div class="month-text">
+                      <span class="num">{{ detail.month }}</span>
+                      <span>{{ detail.monthTitle }}</span>
                     </div>
-                    <div
-                      class="detail-item"
-                      v-for="(monthDetail, k) in detail.monthList"
-                      :key="k"
-                      @click="goToDetail(monthDetail, isFinishBill)"
-                    >
-                      <span class="detail-name"
-                        >{{ monthDetail.showInfo }}<i></i
-                      ></span>
-                      <span class="detail-money"
-                        >￥{{ monthDetail.payableAmount }}</span
+                    <div class="status">
+                      <span
+                        class="pay-status"
+                        :class="detail.isPay == 1 ? 'paying' : 'need'"
+                        v-show="!isFinishBill"
+                        >{{ detail.isPay == 1 ? "支付中" : "待支付" }}</span
+                      >
+                      <span class="pay-status finish" v-show="isFinishBill"
+                        >已完成</span
+                      >
+                      <span class="pay-money" v-show="!isFinishBill"
+                        >￥{{ detail.monthPayableAmount }}</span
                       >
                     </div>
                   </div>
+                  <div
+                    class="detail-item"
+                    v-for="(monthDetail, k) in detail.monthList"
+                    :key="k"
+                    @click="goToDetail(monthDetail, isFinishBill)"
+                  >
+                    <span class="detail-name"
+                      >{{ monthDetail.showInfo }}<i></i
+                    ></span>
+                    <span class="detail-money"
+                      >￥{{ monthDetail.payableAmount }}</span
+                    >
+                  </div>
                 </div>
               </div>
-              <Empty
-                v-if="showEmpty && loaded"
-                :description="
-                  isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
-                "
-              ></Empty>
-            </van-list>
+            </div>
+            <Empty
+              v-if="showEmpty && loaded"
+              :description="
+                isFinishBill ? '暂无账单' : '恭喜您，账单已经全部缴清啦!'
+              "
+            ></Empty>
+          </van-list>
           <!-- </van-pull-refresh> -->
         </div>
       </div>
@@ -206,7 +203,7 @@ export default {
       billValue: 0,
       typeOption: [
         { text: "待支付", value: 0 },
-        { text: "已完成", value: 1 },
+        { text: "已完成", value: 1 }
       ],
       isLoading: false, //下拉刷新
       isFinishBill: false,
@@ -230,7 +227,7 @@ export default {
       errorMsg: "",
       showErrorMsg: false,
       isDisabled: true,
-      loaded: false,
+      loaded: false
     };
   },
 
@@ -240,7 +237,7 @@ export default {
     Empty,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
-    [Loading.name]: Loading,
+    [Loading.name]: Loading
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === "/billCenter/detail") {
@@ -270,7 +267,7 @@ export default {
         duration: 0,
         type: "loading",
         message: "加载中...",
-        forbidClick: true,
+        forbidClick: true
       });
     },
     getBillDetail() {
@@ -295,7 +292,7 @@ export default {
           ? this.pageTimes
             ? this.pageTimes
             : ""
-          : "",
+          : ""
       };
 
       let url = "";
@@ -307,7 +304,7 @@ export default {
 
       this.$http
         .get(url, { params: propertyObj })
-        .then((res) => {
+        .then(res => {
           let data = res.data.data;
           if (res.data.code === 200) {
             if (!this.isFinishBill) {
@@ -509,7 +506,7 @@ export default {
     //单个季度账单反选
     shopFalse(item) {
       let _this = this;
-      item.quarterList.forEach((itemIn) => {
+      item.quarterList.forEach(itemIn => {
         _this.checkFalse(item, itemIn);
       });
     },
@@ -529,7 +526,7 @@ export default {
             });
           }
         } else {
-          data.forEach((item) => {
+          data.forEach(item => {
             item.shopCheck = true;
             item.quarterList.forEach((items, index) => {
               this.checkTrue(items, index);
@@ -557,7 +554,7 @@ export default {
             });
           }
         } else {
-          data.forEach((item) => {
+          data.forEach(item => {
             item.shopCheck = false;
             item.quarterList.forEach((items, index) => {
               this.checkFalse(items, index);
@@ -584,7 +581,7 @@ export default {
         type: "microapp",
         uri: "com.times.microapp.AppcInvoice", // 微应用包名
         path: "/", // 微应用具体路由
-        hideNavbar: true,
+        hideNavbar: true
       });
     },
     //下拉刷新
@@ -635,13 +632,13 @@ export default {
     mergePay() {
       this.toast(); //开启页面loading
       let payInfoList = Array.from(this.checkData);
-      let payData = payInfoList.filter((item) => {
+      let payData = payInfoList.filter(item => {
         return item.monthList;
       });
       console.log(`payData`, payData);
       let billNos = [];
       payData.forEach((item, index) => {
-        item.billNos.forEach((data) => {
+        item.billNos.forEach(data => {
           billNos.push(data);
         });
       });
@@ -654,7 +651,7 @@ export default {
       } else {
         let billNoList = [];
         payData.forEach((payItem, index) => {
-          payItem.billNos.forEach((it) => {
+          payItem.billNos.forEach(it => {
             billNoList.push(it.toString());
           });
         });
@@ -668,11 +665,11 @@ export default {
           : (pcsUrl =
               "https://times-pms.linli580.com/pcs/bill-center/check-bill");
         let pcsObj = {
-          list: billNoList,
+          list: billNoList
         };
         this.$http
           .post(pcsUrl, JSON.stringify(pcsObj))
-          .then((res) => {
+          .then(res => {
             if (res.data.code == "0000") {
               let arr = res.data.data;
               for (let index = 0; index < arr.length; index++) {
@@ -711,7 +708,7 @@ export default {
                     tradeMerCstNo: payData[0].tradeMerCstNo,
                     billNo: billNosStr,
                     appScheme: "x-engine",
-                    payType: false,
+                    payType: false
                   });
                   //请求账单中心发起支付
                   yjzdbill.YJBillPayment({
@@ -721,7 +718,7 @@ export default {
                     billNo: billNosStr,
                     appScheme: "x-engine",
                     payType: false,
-                    __ret__: (res) => {
+                    __ret__: res => {
                       console.log(
                         "---------------开始支付提交记录---------------------"
                       );
@@ -737,7 +734,7 @@ export default {
                           ? res.billRetStatusMessage
                           : "支付失败";
                       }
-                    },
+                    }
                   });
                 }
               }
@@ -750,7 +747,7 @@ export default {
               tradeMerCstNo: payData[0].tradeMerCstNo,
               billNo: billNosStr,
               appScheme: "x-engine",
-              payType: false,
+              payType: false
             });
             //请求账单中心发起支付
             yjzdbill.YJBillPayment({
@@ -760,7 +757,7 @@ export default {
               billNo: billNosStr,
               appScheme: "x-engine",
               payType: false,
-              __ret__: (res) => {
+              __ret__: res => {
                 console.log(
                   "---------------catch开始支付提交记录---------------------"
                 );
@@ -776,7 +773,7 @@ export default {
                     ? res.billRetStatusMessage
                     : "支付失败";
                 }
-              },
+              }
             });
           });
       }
@@ -795,7 +792,7 @@ export default {
           type: "microapp",
           uri: "com.times.microapp.AppcPrepay", // 微应用包名
           path: path, // 微应用具体路由
-          hideNavbar: false,
+          hideNavbar: false
         });
       } else {
         //待支付
@@ -818,17 +815,21 @@ export default {
             recEndTime: item.businessParams.recEndTime, //收费周期-结束时间 ----费用所属时段
             chargeYear: item.businessParams.chargeYear, //缴纳月份 --- 费用所属年月
             billNo: item.billNo, //账单编号
-            price: item.businessParams.standard ? item.businessParams.standard.price : '', //单价
-            unit: item.businessParams.standard ? item.businessParams.standard.unit : '', //单位
-          },
+            price: item.businessParams.standard
+              ? item.businessParams.standard.price
+              : "", //单价
+            unit: item.businessParams.standard
+              ? item.businessParams.standard.unit
+              : "" //单位
+          }
         });
       }
     },
     //关闭弹窗
     closeTanC() {
       this.showErrorMsg = false;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped type="text/stylus">
@@ -840,7 +841,7 @@ $color = #8D8D8D;
 .bill-detail {
   .warpper {
     height: 100%;
-
+    margin-top: 88px;
     .summary {
       background-image: url('./img/bill-detail-bg.png');
       background-size: 100% 100%;
