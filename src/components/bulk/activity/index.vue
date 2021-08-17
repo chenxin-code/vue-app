@@ -428,9 +428,9 @@ export default {
         ? this.$store.state.ythToken
         : localStorage.getItem("ythToken");
       if (this.$store.state.environment == "development") {
-        url = `https://mall-uat-app-linli.timesgroup.cn/commission/?token=${token}`;
+        url = `https://mall-uat-app-linli.timesgroup.cn/commission/?ythToken=${token}`;
       } else {
-        url = `https://mall-prod-app-linli.timesgroup.cn/commission/?token=${token}`;
+        url = `https://mall-prod-app-linli.timesgroup.cn/commission/?ythToken=${token}`;
       }
       window.location.href = url;
     }
