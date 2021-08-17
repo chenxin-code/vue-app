@@ -278,9 +278,10 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped type="text/stylus">
-$btn-color = #ff7809;
-$btn-fontSize = 12px;
+
+<style lang="less" scoped>
+@btn-color: #ff7809;
+@btn-fontSize: 12px;
 .coupon-list-page {
   padding: 60px 0 70px 0;
   overflow-y: scroll;
@@ -294,7 +295,7 @@ $btn-fontSize = 12px;
     min-height: 100% !important;
 
     /deep/ .van-pull-refresh__track {
-      min-height: -webkit-fill-available;
+      // min-height: fill-available;
     }
   }
 
@@ -311,7 +312,6 @@ $btn-fontSize = 12px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-items: stretch;
             box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.12);
             border-radius: 12px;
             overflow: hidden;
@@ -376,10 +376,10 @@ $btn-fontSize = 12px;
                 background: #ffffff;
                 border-radius: 15px;
                 height: 22px;
-                font-size: $btn-fontSize;
+                font-size: @btn-fontSize;
                 font-family: PingFangSC-Medium, PingFang SC;
                 font-weight: 500;
-                color: $btn-color;
+                color: @btn-color;
                 line-height: 12px;
                 border: 1px solid #ffffff;
               }
@@ -394,7 +394,7 @@ $btn-fontSize = 12px;
               display: flex;
               flex-direction: row;
               justify-content: flex-start;
-              align-items: stretch;
+
               padding-left: 12px;
 
               .exchange-card-right-left {
@@ -402,7 +402,6 @@ $btn-fontSize = 12px;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                align-items: stretch;
                 flex: 1;
                 padding-left: 12px;
                 flex-flow: row wrap;
@@ -423,9 +422,7 @@ $btn-fontSize = 12px;
                 }
 
                 .card-right-left-middle {
-                  //padding-top: 0.16rem;
                   font-size: 0.24rem;
-                  font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
                   color: #8d8d8d;
                   align-self: flex-end;
@@ -435,10 +432,8 @@ $btn-fontSize = 12px;
                 }
 
                 .card-right-left-bottom {
-                  //padding-top: 0.2rem;
                   padding-bottom: 0.2rem;
                   font-size: 0.2rem;
-                  font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
                   color: #bfbfbf;
                   line-height: 1;
@@ -487,7 +482,6 @@ $btn-fontSize = 12px;
               transition: height 0.3s ease-in-out;
               will-change: height;
               box-shadow: 0px 0.12rem 0.6rem 0px rgba(71, 77, 96, 0.06);
-              // margin-top: 4px;
               background-color: #ffffff;
 
               .coupon-desc {
@@ -504,7 +498,6 @@ $btn-fontSize = 12px;
 
             .coupon-type {
               font-size: 14px;
-              font-family: PingFangSC-Medium, PingFang SC;
               font-weight: 500;
               color: #ffffff;
               margin-left: 4px;
@@ -517,11 +510,9 @@ $btn-fontSize = 12px;
 
             .bangdou-exchange-rules-item {
               font-size: 12px;
-              font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #bfbfbf;
             }
-
             .bangdou-exchange-rules-item:last-child {
               padding-top: 10px;
             }
@@ -549,7 +540,6 @@ $btn-fontSize = 12px;
     flex: 1;
     height: 14px;
     font-size: 14px;
-    font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: #121212;
     line-height: 14px;
@@ -561,7 +551,7 @@ $btn-fontSize = 12px;
 
     & + .exchange-footer-item::before {
       position: absolute;
-      content: '';
+      content: "";
       left: 0;
       top: 0;
       bottom: 0;
@@ -581,7 +571,6 @@ $btn-fontSize = 12px;
     flex: 1;
     height: 14px;
     font-size: 14px;
-    font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: #121212;
     line-height: 14px;
