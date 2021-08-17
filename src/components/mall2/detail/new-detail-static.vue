@@ -1640,10 +1640,15 @@
       v-model="showSharePopup"
       round
       position="bottom"
+      :style="{ height: '35%' }"
     >
-      <!-- <div class="share_popup" v-if="referrerCode && isDistributionProduct">
+      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
-          <div class="share_botton_item" @click="shareWechatFriends">
+          <div
+            class="share_botton_item"
+            @click="shareWechatFriends"
+            v-if="!this.$util.isWeiXin()"
+          >
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
@@ -1652,34 +1657,18 @@
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
-            <div>图文推广</div>
-          </div>
-
-        </div>
-        <div class="cancel" @click="showSharePopup = false">
-          取消
-        </div>
-      </div>    -->
-      <div class="share_popup">
-        <div class="share_botton">
-          <div class="share_botton_item" @click="shareWechatFriends">
-            <img src="./shareImage/image/share_wx.png" alt="" />
-            <div>微信好友</div>
-          </div>
-          <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="./shareImage/image/share_haibao.png" alt="" />
-            <div>推广海报</div>
-          </div>
-          <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/share_tuwen.png" alt="" />
+            <img
+              src="./shareImage/image/picText.png"
+              alt=""
+              style="width: 60px; height: 60px; margin-bottom: 10px"
+            />
             <div>图文推广</div>
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
 
-      <!-- <div class="share_popup" v-else>
+      <div class="share_popup" v-else>
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
@@ -1695,8 +1684,7 @@
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
-      </div> -->
-
+      </div>
     </van-popup>
     <sharePoster
       v-if="showPoster"
@@ -2039,18 +2027,14 @@ export default {
             "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
         : (url =
             "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
+      console.log("----distributionMessage------");
       this.$http.get(url).then(
         (res) => {
           console.log("----distributionMessage------", res);
-          // 如果非分销员则走非分销逻辑
-          if(res.data.code == 200) {
-            this.referrerCode = res.data.data.shareCode;
-            this.personShareCode = res.data.data.shareCode;
-            this.distributionMessageCode();
-          }else {
-            this.getCode();
-          }
 
+          this.referrerCode = res.data.data.shareCode;
+          this.personShareCode = res.data.data.shareCode;
+          this.distributionMessageCode();
         },
         (err) => {}
       );
@@ -2062,57 +2046,9 @@ export default {
         ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
         : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
 
-
-      fetchMethod("GET", url).then(res => {
+      fetchMethod("GET", url).then((res) => {
         console.log("----distributionMessageCode--->>-", res);
         this.qrCode = res.data;
-      });
-    },
-
-    getCode: function() {
-      return new Promise((resolve, reject) => {
-        // let rfrCode = this.$store.state.rfrCode || this.$store.state.userInfo.userId
-        console.log('-------', `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`);
-        this.$request
-          .post("/app/json/short_address/makeShortAddress", {
-            // longAddress: `${this.delParams()}&rfrCode=${rfrCode}`
-            longAddress: `${encodeURIComponent(
-              `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
-            )}`
-          })
-          .then(res => {
-            if (res.status === 0) {
-              const shortCode = res.data.substr(res.data.indexOf("/s/"));
-              // /app/json/we_chat/getwxacodeunlimit
-              console.log("shortCode", shortCode);
-              this.$request
-                .post("/app/json/wechat_mini_program/createQrCode", {
-                  // path: `pages/common/home/index`,
-                  // scene: shortCode,
-                  // width: 430
-                  page: `pages/common/home/index`,
-                  scene: shortCode,
-                  width: 430,
-                  type: "0"
-                })
-                .then(
-                  res => {
-                    if (res.status === 0) {
-                      this.qrCode = "data:image/png;base64," + res.data.replace(/[\r\n]/g, "")
-                      const img = new Image();
-                      img.src = this.qrcode;
-                      img.onload = () => {
-                        resolve();
-                      };
-                    } else {
-                      reject();
-                      this.$Toast(res.info || "获取小程序码失败");
-                    }
-                  },
-                  error => {}
-                );
-            }
-          });
       });
     },
 
@@ -2182,9 +2118,9 @@ export default {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.detailData.nowCls1Name,
-        goods_cls2: this.detailData.nowCls2Name,
-        goods_cls3: this.detailData.nowCls3Name,
+        goods_cls1: this.categoryList[0],
+        goods_cls2: this.categoryList[1],
+        goods_cls3: this.categoryList[2],
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -2195,40 +2131,38 @@ export default {
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
         share_type: share_type,
-        ...this.$store.state.ythUser
       });
     },
     onShare() {
-        // this.showSharePopup = true;
-
-      if (this.isWX) {
-        let { picUrls, salePrice, skuName } = this.detailData;
-        const link =
-          this.$store.state.environment == "development"
-            ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
-            : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
-        let params = {
-          type: "default",
-          skuId: this.skuId,
-          picUrls,
-          salePrice,
-          skuName,
-          userImage:
-            this.$store.state.ythUserInfo.userImage || 'https://times-new-store.oss-cn-shenzhen.aliyuncs.com/common/d1d6fde0-1351-4598-9ebc-7a11e22101a7static',
-          userName: this.$store.state.ythUserInfo.userName,
-          referrerCode: this.referrerCode,
-          qrCode: this.qrCode,
-          estimatedCommission: this.estimatedCommission,
-          link,
-        };
-        wx.miniProgram.navigateTo({
-          url: `/pages/common/savePicture/index?params=${encodeURIComponent(
-            JSON.stringify(params)
-          )}`,
-        });
-      } else {
         this.showSharePopup = true;
-      }
+
+      // if (this.isWX) {
+      //   let { picUrls, salePrice, skuName } = this.detailData;
+      //   const link =
+      //     this.$store.state.environment == "development"
+      //       ? `http://m-center-uat-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`
+      //       : `http://m-center-prod-linli.timesgroup.cn:8001/sharingMall?skuId=${this.skuId}&referrerCode=${this.referrerCode}&channel=fromApp`;
+      //   let params = {
+      //     type: "default",
+      //     skuId: this.skuId,
+      //     picUrls,
+      //     salePrice,
+      //     skuName,
+      //     userImage: this.$store.state.ythUserInfo.userImage,
+      //     userName: this.$store.state.ythUserInfo.userName,
+      //     referrerCode: this.referrerCode,
+      //     qrCode: this.qrCode,
+      //     estimatedCommission: this.estimatedCommission,
+      //     link,
+      //   };
+      //   wx.miniProgram.navigateTo({
+      //     url: `/pages/common/savePicture/index?params=${encodeURIComponent(
+      //       JSON.stringify(params)
+      //     )}`,
+      //   });
+      // } else {
+      //   this.showSharePopup = true;
+      // }
 
       // if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
       //   this.showShare();
@@ -2281,8 +2215,7 @@ export default {
         picUrls,
         salePrice,
         skuName,
-        userImage:
-          this.$store.state.ythUserInfo.userImage || 'https://times-new-store.oss-cn-shenzhen.aliyuncs.com/common/d1d6fde0-1351-4598-9ebc-7a11e22101a7static',
+        userImage: this.$store.state.ythUserInfo.userImage,
         userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
@@ -2320,9 +2253,9 @@ export default {
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
-            goods_cls1: this.detailData.nowCls1Name,
-            goods_cls2: this.detailData.nowCls2Name,
-            goods_cls3: this.detailData.nowCls3Name,
+            goods_cls1: this.categoryList[0],
+            goods_cls2: this.categoryList[1],
+            goods_cls3: this.categoryList[2],
             org_price: this.detailData.activityPrice,
             price: this.detailData.salePrice,
             goods_quantity: this.selectedNum,
@@ -2977,9 +2910,9 @@ export default {
           goods_id: this.skuId,
           goods_name: this.detailData.skuName,
           tag: this.tagList,
-          goods_cls1: this.detailData.nowCls1Name,
-          goods_cls2: this.detailData.nowCls2Name,
-          goods_cls3: this.detailData.nowCls3Name,
+          goods_cls1: this.categoryList[0],
+          goods_cls2: this.categoryList[1],
+          goods_cls3: this.categoryList[2],
           goods_cl3_id: this.detailData.categoryId,
           org_price: this.detailData.activityPrice,
           price: this.detailData.salePrice,
@@ -3909,9 +3842,9 @@ export default {
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
-            goods_cls1: this.detailData.nowCls1Name,
-            goods_cls2: this.detailData.nowCls2Name,
-            goods_cls3: this.detailData.nowCls3Name,
+            goods_cls1: this.categoryList[0],
+            goods_cls2: this.categoryList[1],
+            goods_cls3: this.categoryList[2],
             org_price: this.detailData.activityPrice,
             price: this.detailData.salePrice,
             store_id: this.detailData.storeOuCode,
@@ -4071,9 +4004,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.detailData.nowCls1Name,
-              goods_cls2: this.detailData.nowCls2Name,
-              goods_cls3: this.detailData.nowCls3Name,
+              goods_cls1: this.categoryList[0],
+              goods_cls2: this.categoryList[1],
+              goods_cls3: this.categoryList[2],
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -4082,7 +4015,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4211,9 +4143,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.detailData.nowCls1Name,
-              goods_cls2: this.detailData.nowCls2Name,
-              goods_cls3: this.detailData.nowCls3Name,
+              goods_cls1: this.categoryList[0],
+              goods_cls2: this.categoryList[1],
+              goods_cls3: this.categoryList[2],
               goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
@@ -4223,7 +4155,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4298,9 +4229,9 @@ export default {
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
-                goods_cls1: this.detailData.nowCls1Name,
-                goods_cls2: this.detailData.nowCls2Name,
-                goods_cls3: this.detailData.nowCls3Name,
+                goods_cls1: this.categoryList[0],
+                goods_cls2: this.categoryList[1],
+                goods_cls3: this.categoryList[2],
                 org_price: this.detailData.activityPrice,
                 price: this.detailData.salePrice,
                 goods_quantity: this.selectedNum,
@@ -4309,7 +4240,6 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
                 viewpoint_radio: this.viewpoint_radio,
-                ...this.$store.state.ythUser
               });
             } else {
               this.isCollect = false;
@@ -4647,9 +4577,9 @@ export default {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.detailData.nowCls1Name,
-        goods_cls2: this.detailData.nowCls2Name,
-        goods_cls3: this.detailData.nowCls3Name,
+        goods_cls1: this.categoryList[0],
+        goods_cls2: this.categoryList[1],
+        goods_cls3: this.categoryList[2],
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -4659,7 +4589,6 @@ export default {
         merchant_name: this.detailData.ouName,
         jump_page: jumpPage,
         duration: this.duration,
-        ...this.$store.state.ythUser
       });
     },
     // getDistributionDetail(){
@@ -4890,7 +4819,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding-top: 40px;
+  padding: 35px 26px 36px 25px;
 
   .share_botton {
     display: flex;
@@ -4905,33 +4834,32 @@ export default {
       align-items: center;
 
       img {
-        width: 48px;
-        height: 48px;
+        width: 74px;
+        height: 74px;
       }
 
       div {
-        margin-top: 23px;
-        font-size: 13px;
-        font-family: PingFangSC-Regular, PingFang SC;
+        font-size: 14px;
         font-weight: 400;
-        color: #666666;
+        color: #999999;
+        line-height: 20px;
       }
     }
   }
 
   .cancel {
-    width: 295px;
-    height: 37px;
-    background: #ffffff;
-    border-radius: 6px;
-    border: 1px solid #e5e5e5;
-    text-align: center;
-    line-height: 37px;
-    font-size: 13px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #666666;
-    margin: 20px auto;
+    width: 86.4%;
+    height: 49px;
+    border-radius: 16px;
+    border: 1px solid #E5E5E5;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 27px auto 0;
   }
 }
 
