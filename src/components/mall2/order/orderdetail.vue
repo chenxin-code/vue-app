@@ -1575,7 +1575,7 @@
     <!--<PickUpCode v-if="showCode" :code="detailData.deliverCheckcode" @backEvent="codeBack"></PickUpCode>-->
     <van-popup v-model="showRefundLoading" round :style="{ height: '26.23%',width:'46.66%' }" :close-on-click-overlay="false">
       <div class="refundLoading">
-        <van-loading size="1.52rem" vertical text-size="0.37333rem" text-color="#333333" color="#F83676">正在为您拦截订单…</van-loading>
+        <van-loading size="1.52rem" vertical text-size="0.37333rem" text-color="#333333">正在为您拦截订单…</van-loading>
       </div>
     </van-popup>
     <van-popup v-model="showRefundTip" round :style="{ height: '31.48%',width:'80%' }" :close-on-click-overlay="false">
