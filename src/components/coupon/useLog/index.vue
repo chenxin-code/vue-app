@@ -378,7 +378,7 @@ export default {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
-                align-items: stretch;
+                
                 box-shadow: 0px 6px 30px 0px rgba(71, 77, 96, 0.12);
                 border-radius: 12px;
                 overflow: hidden;
@@ -462,7 +462,7 @@ export default {
                   display: flex;
                   flex-direction: row;
                   justify-content: flex-start;
-                  align-items: stretch;
+                  
                   padding-left: 12px;
 
                   .exchange-card-right-left {
@@ -470,7 +470,7 @@ export default {
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-start;
-                    align-items: stretch;
+                    
                     flex: 1;
                     padding-left: 12px;
                     flex-flow: row wrap;

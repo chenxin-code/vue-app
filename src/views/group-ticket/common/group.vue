@@ -290,7 +290,6 @@
   .coupon-container {
     height 100%
     display flex
-    align-items stretch
     background-color #fff
     box-shadow 0 1px 8px #efefef;
     border-radius 8px;
