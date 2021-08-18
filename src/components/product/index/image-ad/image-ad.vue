@@ -591,6 +591,8 @@ export default {
 
       if(nav.link.type == '1'){
         this.$sensors.track("mall_banner_click", {
+          which_page:this.$route.name,
+          page_path:this.$route.path,
           banner_name: nav.link.name,
           banner_id: nav.link.pgCode,
           url: nav.link.type == '1' ? `/common2?pgCode=${nav.link.pgCode}` : '',
@@ -598,6 +600,8 @@ export default {
         })
       }else if(nav.link.type == '2' || nav.link.type == '3'){
         this.$sensors.track("mall_ad_click", {
+          which_page:this.$route.name,
+          page_path:this.$route.path,
           ad_name: nav.link.name,
           ad_id: nav.idCode,
           url: nav.link.url,

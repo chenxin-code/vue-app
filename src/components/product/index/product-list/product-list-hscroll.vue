@@ -72,7 +72,8 @@
           this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
         }
         this.$sensors.track("goods_click", {
-          module: '运营位商品',
+          which_page:this.$route.name,
+          page_path:this.$route.path,
           goods_id: product.skuId,
           goods_name: product.skuName,
           org_price: product.activityPrice,
