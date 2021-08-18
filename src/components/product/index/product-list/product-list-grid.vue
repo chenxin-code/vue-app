@@ -145,12 +145,6 @@ export default {
     },
     enterNav: function (product) {
       console.log("inToDetail",product);
-      this.$market.productEvent(
-        product,
-        this.$route,
-        this.moduleData.onlyDeliveryType
-      );
-      this.$store.state.inToDetail = "common";
       this.$sensors.track("goods_click", {
         which_page:this.$route.name,
         page_path:this.$route.path,
@@ -161,6 +155,12 @@ export default {
         store_id: product.storeOuCode,
         store_name: product.storeName,
       })
+      this.$market.productEvent(
+        product,
+        this.$route,
+        this.moduleData.onlyDeliveryType
+      );
+      this.$store.state.inToDetail = "common";
     },
     addToCart: function (item) {
       this.$Loading.open();
