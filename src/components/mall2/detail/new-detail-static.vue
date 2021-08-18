@@ -95,6 +95,7 @@
               class="btn-div"
               :style="getSelectedTabStyle(3)"
               @click="toptabEvent(3)"
+              v-if="false"
             >
               评价
             </div>
