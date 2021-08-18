@@ -93,7 +93,7 @@
                 v-if="moduleData.style == 'imgTextStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <CornerMark
@@ -118,7 +118,7 @@
                 v-if="moduleData.style == 'minImgTextStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <div class="min-img-text-box">
@@ -172,7 +172,7 @@
             :style="swiperSlideStyle"
             @click="
               hotEvent(nav.idCode);
-              enterNav(nav);
+              enterNav(nav,index);
             "
           />
           <div
@@ -196,7 +196,7 @@
               class="cell lbdh-row fill-bgp"
               @click="
                 hotEvent(nav.idCode);
-                enterNav(nav);
+                enterNav(nav,index);
               "
             >
               <div class="cell__hd padding-left relative">
@@ -293,7 +293,7 @@ export default {
           doubleTap: function () {
             let nav = that.moduleData.rows[this.realIndex];
             that.hotEvent(nav.idCode);
-            that.enterNav(nav);
+            that.enterNav(nav,this.realIndex);
           },
         },
       },
