@@ -82,7 +82,8 @@
         <div class="btn" v-if="false" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
-        <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
+        <div class="btn" v-if="false"  @click.stop="toComment">
+          <!-- v-if="isEvalute && !isBulk" -->
           <p>立即评价</p>
         </div>
         <div
@@ -1095,7 +1096,7 @@ export default {
       font-size: 15px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #E8374A;
+      color: #E5165A;
       line-height: 30px;
       display: flex;
       justify-content: flex-end;
@@ -1258,10 +1259,10 @@ export default {
       }
     }
 
-    .btn:last-child {
-      color: #e8374a;
-      border-color: #e8374a;
-    }
+    // .btn:last-child {
+    //   color: #e8374a;
+    //   border-color: #e8374a;
+    // }
   }
 
   .product-box {

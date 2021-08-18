@@ -65,6 +65,16 @@
     },
     methods: {
       enterNav: function (product) {
+        this.$sensors.track("goods_click", {
+          which_page:this.$route.name,
+          page_path:this.$route.path,
+          goods_id: product.skuId,
+          goods_name: product.skuName,
+          org_price: product.activityPrice,
+          price: product.salePrice,
+          store_id: product.storeOuCode,
+          store_name: product.storeName,
+        })
         // this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3 && list.length > 0
         if (this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3) {
           this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType, '1')

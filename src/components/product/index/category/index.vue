@@ -90,6 +90,15 @@ export default {
     navToSearch(item, index) {
       this.currentSelect = item.id;
 
+      this.$sensors.track("mall_tab_click", {
+        which_page:this.$route.name,
+        page_path:this.$route.path,
+        tab_name: item.name,
+        tab_id: item.id,
+        url: item.id == 0?"/common":"/mall2/list",
+        tab_rank: index+1,
+      })
+
       if (item.id == 0) {
         this.$router.push("/common");
       } else {
@@ -107,6 +116,7 @@ export default {
           this.$emit("toggle", item.id);
         }
       }
+
     },
     ...mapMutations(["setShowCategory"]),
   },

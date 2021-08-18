@@ -74,7 +74,7 @@
                 v-if="moduleData.style == 'imgStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <CornerMark
@@ -93,7 +93,7 @@
                 v-if="moduleData.style == 'imgTextStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <CornerMark
@@ -118,7 +118,7 @@
                 v-if="moduleData.style == 'minImgTextStyle'"
                 @click.prevent="
                   hotEvent(nav.idCode);
-                  enterNav(nav);
+                  enterNav(nav,index);
                 "
               >
                 <div class="min-img-text-box">
@@ -172,7 +172,7 @@
             :style="swiperSlideStyle"
             @click="
               hotEvent(nav.idCode);
-              enterNav(nav);
+              enterNav(nav,index);
             "
           />
           <div
@@ -196,7 +196,7 @@
               class="cell lbdh-row fill-bgp"
               @click="
                 hotEvent(nav.idCode);
-                enterNav(nav);
+                enterNav(nav,index);
               "
             >
               <div class="cell__hd padding-left relative">
@@ -288,12 +288,12 @@ export default {
           click: function () {
             let nav = that.moduleData.rows[this.realIndex];
             that.hotEvent(nav.idCode);
-            that.enterNav(nav);
+            that.enterNav(nav,this.realIndex);
           },
           doubleTap: function () {
             let nav = that.moduleData.rows[this.realIndex];
             that.hotEvent(nav.idCode);
-            that.enterNav(nav);
+            that.enterNav(nav,this.realIndex);
           },
         },
       },
@@ -557,7 +557,8 @@ export default {
         }
         return "";
     },
-    enterNav: function (nav) {
+    enterNav: function (nav,index) {
+      console.log('nav',nav)
       console.log('nnnnnnnnnnnnnnnnnnn', nav.link.url)
       if(nav.link.url == '/mall2/list/1003'){
         this.$store.state.showCategory = false;
@@ -586,12 +587,36 @@ export default {
 
       console.log('ccccccccccccccccc', newNav.link.url)
 
+
+
+      if(nav.link.type == '1'){
+        this.$sensors.track("mall_banner_click", {
+          which_page:this.$route.name,
+          page_path:this.$route.path,
+          banner_name: nav.link.name,
+          banner_id: nav.link.pgCode,
+          url: nav.link.type == '1' ? `/common2?pgCode=${nav.link.pgCode}` : '',
+          banner_rank: index+1,
+        })
+      }else if(nav.link.type == '2' || nav.link.type == '3'){
+        this.$sensors.track("mall_ad_click", {
+          which_page:this.$route.name,
+          page_path:this.$route.path,
+          ad_name: nav.link.name,
+          ad_id: nav.idCode,
+          url: nav.link.url,
+          ad_rank: index+1,
+        })
+      }
+
       if (this.canEnterNav) {
         this.$market.enterNav(newNav, this.pageData.pgCode);
       } else {
         this.canEnterNav = true;
       }
+
     },
+
     resetGndhPageArr: function (codeArr) {
       let arr = JSON.parse(JSON.stringify(this.moduleData.rows));
       if (codeArr) {
