@@ -2997,8 +2997,8 @@ export default {
 
         if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
           if (window.history.length === 1) {
-            to.path = "/common";
-            this.sensorsDuration(to);
+            // to.path = '/common';
+            // this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
             // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
