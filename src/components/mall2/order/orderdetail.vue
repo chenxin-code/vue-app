@@ -1479,12 +1479,13 @@
           <div
             class="row-btn line_circle theme_font_common "
             @click="toComment"
-            v-if="
+            v-if="false"
+          >
+            <!-- v-if="
               tag == '9' &&
                 detailData.state != 6 &&
                 detailData.orderPayType != 1
-            "
-          >
+            " -->
             晒单评价
           </div>
           <!-- <div class="row-btn line_circle theme_font_common theme_border_gray" @click v-if="tag == '9' && $store.state.globalConfig.invoice_shopping_enable != 'false' && detailData.orderPayType != 1">查看发票</div> -->

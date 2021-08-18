@@ -82,7 +82,8 @@
         <div class="btn" v-if="false" @click="modifyAddress(dataList[0])">
           <p>修改订单</p>
         </div>
-        <div class="btn" v-if="isEvalute && !isBulk" @click.stop="toComment">
+        <div class="btn" v-if="false"  @click.stop="toComment">
+          <!-- v-if="isEvalute && !isBulk" -->
           <p>立即评价</p>
         </div>
         <div
