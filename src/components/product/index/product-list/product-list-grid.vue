@@ -152,7 +152,8 @@ export default {
       );
       this.$store.state.inToDetail = "common";
       this.$sensors.track("goods_click", {
-        module: '商城臻选专场',
+        which_page:this.$route.name,
+        page_path:this.$route.path,
         goods_id: product.skuId,
         goods_name: product.skuName,
         org_price: product.activityPrice,

@@ -1095,7 +1095,7 @@ export default {
       font-size: 15px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #E8374A;
+      color: #E5165A;
       line-height: 30px;
       display: flex;
       justify-content: flex-end;
@@ -1258,10 +1258,10 @@ export default {
       }
     }
 
-    .btn:last-child {
-      color: #e8374a;
-      border-color: #e8374a;
-    }
+    // .btn:last-child {
+    //   color: #e8374a;
+    //   border-color: #e8374a;
+    // }
   }
 
   .product-box {
