@@ -1641,7 +1641,6 @@
       v-model="showSharePopup"
       round
       position="bottom"
-      :style="{ height: '35%' }"
     >
       <!-- <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
@@ -1665,24 +1664,16 @@
       </div>    -->
       <div class="share_popup">
         <div class="share_botton">
-          <div
-            class="share_botton_item"
-            @click="shareWechatFriends"
-            v-if="!this.$util.isWeiXin()"
-          >
-            <img src="static/image/mall2/share_wechat.png" alt="" />
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="./shareImage/image/share_wx.png" alt="" />
             <div>微信好友</div>
           </div>
           <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="static/image/mall2/share_link.png" alt="" />
+            <img src="./shareImage/image/share_haibao.png" alt="" />
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img
-              src="./shareImage/image/picText.png"
-              alt=""
-              style="width: 60px; height: 60px; margin-bottom: 10px"
-            />
+            <img src="./shareImage/image/share_tuwen.png" alt="" />
             <div>图文推广</div>
           </div>
         </div>
@@ -1747,9 +1738,11 @@ import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
+import mixins from './mixins.js'
 
 export default {
   name: "detail",
+  mixins: [mixins],
   components: {
     Countdown,
     // Counter,
@@ -2053,14 +2046,13 @@ export default {
         (res) => {
           console.log("----distributionMessage------", res);
           // 如果非分销员则走非分销逻辑
-          if(res.data.code == 200) {
+          if (res.data.code == 200) {
             this.referrerCode = res.data.data.shareCode;
             this.personShareCode = res.data.data.shareCode;
             this.distributionMessageCode();
-          }else {
+          } else {
             this.getCode();
           }
-
         },
         (err) => {}
       );
@@ -2082,7 +2074,10 @@ export default {
     getCode: function() {
       return new Promise((resolve, reject) => {
         // let rfrCode = this.$store.state.rfrCode || this.$store.state.userInfo.userId
-        console.log('-------', `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`);
+        console.log(
+          "-------",
+          `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
+        );
         this.$request
           .post("/app/json/short_address/makeShortAddress", {
             // longAddress: `${this.delParams()}&rfrCode=${rfrCode}`
@@ -2108,7 +2103,9 @@ export default {
                 .then(
                   res => {
                     if (res.status === 0) {
-                      this.qrCode = "data:image/png;base64," + res.data.replace(/[\r\n]/g, "")
+                      this.qrCode =
+                        "data:image/png;base64," +
+                        res.data.replace(/[\r\n]/g, "");
                       const img = new Image();
                       img.src = this.qrcode;
                       img.onload = () => {
@@ -2125,6 +2122,18 @@ export default {
           });
       });
     },
+    // 分销商品分享码
+    distributionMessageCode() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+
+      fetchMethod("GET", url).then(res => {
+        console.log("----distributionMessageCode--->>-", res);
+        this.qrCode = res.data;
+      });
+    },
 
     // 商品信息 是否是分销商品
     distributionProduct() {
@@ -2139,6 +2148,9 @@ export default {
         }
       });
     },
+
+
+
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -2209,9 +2221,8 @@ export default {
       });
     },
     onShare() {
-        // this.showSharePopup = true;
-
-      if (this.isWX) {
+      console.log('------iswx--->', this.isWX);
+      if(this.isWX) {
         let { picUrls, salePrice, skuName } = this.detailData;
         const link =
           this.$store.state.environment == "development"
@@ -4904,7 +4915,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding: 35px 26px 36px 25px;
+  padding-top: 40px;
 
   .share_botton {
     display: flex;
@@ -4919,32 +4930,33 @@ export default {
       align-items: center;
 
       img {
-        width: 74px;
-        height: 74px;
+        width: 48px;
+        height: 48px;
       }
 
       div {
-        font-size: 14px;
+        margin-top: 23px;
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #999999;
-        line-height: 20px;
+        color: #666666;
       }
     }
   }
 
   .cancel {
-    width: 86.4%;
-    height: 49px;
-    border-radius: 16px;
-    border: 1px solid #E5E5E5;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333333;
-    line-height: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 27px auto 0;
+    width: 295px;
+    height: 37px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 37px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    margin: 20px auto;
   }
 }
 
