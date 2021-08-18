@@ -4534,8 +4534,13 @@ export default {
           jumpPage = ''
           break;
       }
-      if(to.matched[0].path == '/mall2/list/:id' && (this.$store.state.webtype == 2 || this.$store.state.webtype == 3)){
-        jumpPage = '商品搜索列表页'
+      // this.$store.state.inToDetail == "list"
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        if(to.matched[0].path == '/mall2/list/:id'){
+          jumpPage = this.$store.state.inToDetail == 'search' ? '商品搜索列表页' : '商城商品列表页';
+        }else if(to.matched[0].path == '/common'){
+          jumpPage = '商城首页';
+        }
       }
       console.log('jumpPage',jumpPage)
       this.$sensors.track("goods_detail_view_duration", {
