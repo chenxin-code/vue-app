@@ -29,7 +29,6 @@
         </div>
       </div>
     </div>
-    <div class="adapter-iphoneX"></div>
     <!-- <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div> -->
   </div>
 </template>
@@ -92,7 +91,7 @@ $color = #E5165A;
   width: 100%;
   .adapter-iphoneX{
     width: 100%;
-    height: 34px;
+    height: 20px;
     background-color: #fff;
   }
 }
@@ -101,7 +100,7 @@ $color = #E5165A;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 52px;
+  height: 75px;
   background: #fff;
   padding: 0 23.375px ;
   box-shadow: 0px -3px 10px 0px #F1F1F1;

@@ -31,7 +31,6 @@
       </div>
     </div>
     <!-- <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div> -->
-        <div class="adapter-iphoneX" ></div>
   </div>
 </template>
 
@@ -45,8 +44,8 @@ export default {
       billType: "",
       amount: {
         integer: "0",
-        decimal: "00",
-      },
+        decimal: "00"
+      }
     };
   },
   created() {},
@@ -101,7 +100,7 @@ export default {
           break;
       }
       return billName;
-    },
+    }
   },
   methods: {
     checkEvent(event) {
@@ -115,16 +114,16 @@ export default {
     },
     mergePay() {
       this.$emit("mergePay");
-    },
+    }
   },
   watch: {
-    mergeAmount: function (newVal, oldVal) {
+    mergeAmount: function(newVal, oldVal) {
       let totalPrice = this.$util.toDecimal2(newVal);
       let totalArr = totalPrice.toString().split(".");
       this.amount.integer = totalArr[0];
       this.amount.decimal = totalArr[1];
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -152,7 +151,7 @@ $color = #E5165A;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 52px;
+  height: 75px;
   background: #fff;
   padding: 0 23.375px;
   box-shadow: 0px -3px 10px 0px #F1F1F1;

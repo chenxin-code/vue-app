@@ -1,86 +1,111 @@
 <!--
  * @Description: 这是***页面
- * @Date: 2021-06-10 18:00:33
+ * @Date: 2021-08-16 10:52:04
  * @Author: shuimei
- * @LastEditTime: 2021-07-07 17:31:39
+ * @LastEditTime: 2021-08-16 14:07:14
 -->
 <template>
-  <div class="nav-top" :style="{ 'padding-top': adapterTop }">
-    <div @click="goBack">
-      <i class="icon"></i>
-      <span class="left-title">{{ leftTitle }}</span>
+  <div
+    :style="{ '--status-height': statusHeight, '--nav-height': navHeight }"
+    class="total-content"
+  >
+    <div class="nav" ref="navHeightRefs">
+      <van-nav-bar
+        :title="title"
+        :left-text="navLeftName"
+        :right-text="navRightName"
+        @click-left="onBack"
+        @click-right="goPage"
+        left-arrow
+      >
+      </van-nav-bar>
     </div>
-    <span class="right-title" @click="navToPage" v-if="rightTitle">{{
-      rightTitle
-    }}</span>
+    <slot></slot>
   </div>
 </template>
-
 <script>
+import device from "@zkty-team/x-engine-module-device";
 export default {
-  props: ["leftTitle", "rightTitle"],
-  data() {
-    return {
-      adapterTop: "0.426667rem"
-    };
-  },
-  created() {
-    // 判断是否是刘海屏
-    const rate = window.screen.height / window.screen.width;
-    let limit = window.screen.height == window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
-    // window.screen.height为屏幕高度
-    //  window.screen.availHeight 为浏览器 可用高度
-    if (rate > limit) {
-      this.adapterTop = "1.173333rem";
-    } else {
-      this.adapterTop = "0.426667rem";
+  name: "navBar",
+  props: {
+    title: {
+      type: String,
+      default: ""
+    },
+    navLeftName: {
+      type: String,
+      default: ""
+    },
+    navRightName: {
+      type: String,
+      default: ""
     }
   },
+  data() {
+    return {
+      statusHeight: "20px",
+      navHeight: "0px"
+    };
+  },
+  beforeCreate() {
+    return device
+      .getStatusHeight({
+        __event__: () => void 0
+      })
+      .then(({ content }) => {
+        this.statusHeight = content + "px";
+        console.log(`statusHeight`, content);
+      });
+  },
+  mounted() {
+    setTimeout(() => {
+      this.navHeight = this.$refs.navHeightRefs.offsetHeight + "px";
+    }, 150);
+  },
   methods: {
-    goBack() {
+    onBack() {
       this.$emit("backEvent");
     },
-    navToPage() {
+    goPage() {
       this.$emit("navToPage");
     }
   }
 };
 </script>
-
 <style lang="stylus" scoped type="text/stylus">
-@import '~@/common/stylus/variable.styl';
-
-.nav-top {
-  padding: 16px;
-  background: #fff;
-  display: flex;
+$nav-left-title = 17px;
+$nav-right-title = 14px;
+$nav-color = #333333;
+.nav {
+  width: 100%;
+  position: fixed;
+  top: 0px;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: 0px 5px 10px 0px rgba(0, 64, 128, 0.04);
+  background: #ffffff;
+  padding-top: calc(var(--status-height) + 10px);
+  z-index: 11;
+  box-sizing: border-box;
+  /deep/.van-nav-bar {
+    .van-nav-bar__content {
+      .van-nav-bar__left {
+        .van-icon-arrow-left {
+          color: $nav-color;
+          font-size: 20px;
+        }
+      }
+      .van-nav-bar__text {
+        font-size: $nav-left-title;
+        color: $nav-color;
+        font-weight: 500;
+        font-family: "PingFangSC-Medium";
+      }
+      .van-nav-bar__right {
+        .van-nav-bar__text {
+          font-size: $nav-right-title;
+        }
+      }
+    }
 
-  .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url('../../img/back.png') no-repeat;
-    background-size: 20px auto;
-    position: relative;
-    top: 2px;
-  }
-
-  .left-title {
-    // font-size: 24px;
-    font-size: 18px;
-    color: #121212;
-    font-family: PingFangSC-Medium, PingFang SC;
-    font-weight: 500;
-  }
-  .right-title {
-    font-size: 14px;
-    font-weight: 500;
-    font-family: PingFangSC-Medium, PingFang SC;
-    color: #333333;
-    line-height: 24px;
   }
 }
 </style>

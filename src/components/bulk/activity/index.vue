@@ -56,7 +56,7 @@
               backgroundImage:
                 item.groupbuyActivityStatus == 1
                   ? `url(${require('./images/tips_on_default.png')})`
-                  : `url(${require('./images/tips_over_default.png')})`,
+                  : `url(${require('./images/tips_over_default.png')})`
             }"
           >
             {{
@@ -153,6 +153,16 @@
       :data-clipboard-text="this.link"
     ></button> -->
     <!-- </nav-content> -->
+    <div class="withdraw" @click="goTocommission">
+      <img src="./images/money.png" alt="" />
+      <div class="dingwei">
+        <p style="font-size:14px">
+          <span style="font-size:6px">￥</span
+          >{{ $util.toDecimal2(this.balancesAmount) }}
+        </p>
+        <p>点击提现</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -161,6 +171,7 @@ import Qs from "qs";
 import ClipboardJS from "clipboard";
 import appShare from "@zkty-team/x-engine-module-share";
 import { getLocation } from "../utils";
+import { cashHttp } from "@/utils/cashHttp.js";
 export default {
   name: "activity",
   // mixins: [api],
@@ -169,7 +180,7 @@ export default {
       state: 1,
       showShare: false,
       options: [
-        { name: "微信", icon: "wechat" },
+        { name: "微信", icon: "wechat" }
         // { name: "复制链接", icon: "link" },
       ],
       copybtn: null,
@@ -177,7 +188,7 @@ export default {
         { title: "全部" },
         { title: "进行中" },
         { title: "未开始" },
-        { title: "已结束" },
+        { title: "已结束" }
       ],
       currentTab: 1,
       allList: [],
@@ -192,18 +203,20 @@ export default {
       link: "",
       getDataOk: false,
       page: 1,
+      balancesAmount: 0 //可提现金额
     };
   },
   created() {
     this.allList = [];
     this.$http
       .get("/app/json/group_buying_head_info/findSelfInfo")
-      .then((res) => {
+      .then(res => {
         if (res.data.result == "success") {
           this.userData = res.data.data;
         }
       });
     this.getlist();
+    this.getCommissionBalances();
     console.log("getLocation---->", getLocation());
   },
   methods: {
@@ -238,11 +251,11 @@ export default {
             ? 0
             : this.currentTab == 3
             ? 2
-            : undefined,
+            : undefined
       };
       this.$http
         .post("/app/json/groupbuying_activity_app/list", Qs.stringify(obj))
-        .then((res) => {
+        .then(res => {
           if (res.data.result == "success") {
             this.allList = this.allList.concat(res.data.data);
             this.page = res.data.page; //将总页数赋值给this
@@ -254,7 +267,7 @@ export default {
             this.error = true; //大家错误状态
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$toast("请求失败，点击重新加载");
           this.loading = false;
           this.error = true;
@@ -287,21 +300,21 @@ export default {
       return new Promise((resolve, reject) => {
         this.$request
           .post("/app/json/short_address/makeShortAddress", {
-            longAddress: url,
+            longAddress: url
           })
-          .then((res) => {
+          .then(res => {
             if (res.status == 0) {
               resolve(new URL(res.data).pathname);
             } else {
               reject();
             }
           })
-          .catch((err) => {
+          .catch(err => {
             reject(err);
           });
       });
     },
-    onShare: async function (option) {
+    onShare: async function(option) {
       ///app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}
       // const sence = await this.addCode(
       //   `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/bulk_share?purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}&activityName=${this.shareItemData.groupbuyActivityName}`
@@ -338,9 +351,9 @@ export default {
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
                 this.$store.state.environment == "production" ? 0 : 2,
-              __event__: (res) => {},
+              __event__: res => {}
             })
-            .then((res) => {
+            .then(res => {
               // document.getElementById("debug_text").innerText = res;
               // alert("shareThenRes----------", JSON.stringify(res));
             });
@@ -362,16 +375,16 @@ export default {
             path: "/pages/homePage/temporaryCapture",
             query: `redirect=${encodeURIComponent(
               `/app-vue/app/index.html#/bulk_share?params=1&purchaseId=${this.shareItemData.id}&chiefId=${this.userData.teamLeaderNo}&userId=${this.userData.userNo}`
-            )}`,
+            )}`
           })
-          .then((res) => {
+          .then(res => {
             if (res.data.data.errcode == 0) {
               this.link = getLocation(res.data.data.openlink);
               // weixin://dl/business/?t=lzjYaPnRpgo
               new ClipboardJS(".btn", {
-                text: function (trigger) {
+                text: function(trigger) {
                   return this.link;
-                },
+                }
               });
             }
           });
@@ -383,8 +396,8 @@ export default {
       this.$router.push({
         path: "/groupOrder",
         query: {
-          id: JSON.stringify(id),
-        },
+          id: JSON.stringify(id)
+        }
       });
     },
     goToDeatil(id, groupbuyActivityName) {
@@ -392,11 +405,36 @@ export default {
         path: "/bulkDetails",
         query: {
           activityNo: JSON.stringify(id),
-          groupbuyActivityName: JSON.stringify(groupbuyActivityName),
-        },
+          groupbuyActivityName: JSON.stringify(groupbuyActivityName)
+        }
       });
     },
-  },
+    //获取可提现金额
+    getCommissionBalances() {
+      let url = "/times/mall-cash-center/api/commission/commissionBalances";
+      let obj = {
+        systemFlag: "02" //01：分销；02：团购
+      };
+      cashHttp("POST", url, obj).then(res => {
+        if (res.code === 200) {
+          this.balancesAmount = res.data.balances;
+        }
+      });
+    },
+    //点击提现
+    goTocommission() {
+      let url = "";
+      let token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
+      if (this.$store.state.environment == "development") {
+        url = `https://mall-uat-app-linli.timesgroup.cn/commission/?ythToken=${token}`;
+      } else {
+        url = `https://mall-prod-app-linli.timesgroup.cn/commission/?ythToken=${token}`;
+      }
+      window.location.href = url;
+    }
+  }
 };
 </script>
 
@@ -708,5 +746,29 @@ export default {
 
 /deep/ .van-tab--active {
   color: #C61606;
+}
+.withdraw{
+  position: fixed;
+  right:10px;
+  bottom:12%;
+  width: 90px;
+  height: 90px;
+  text-align: center;
+  img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+  .dingwei{
+    // position: absolute;
+    position: relative;
+    // left: 10%;
+    // bottom: 10%;
+    color: #fff;
+    top: 48px;
+    line-height: 15px;
+  }
 }
 </style>
