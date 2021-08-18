@@ -3001,17 +3001,13 @@ export default {
             this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
-            console.log(
-              "this.$store.state.inToDetail",
-              this.$store.state.inToDetail
-            );
-            to.path =
-              this.$store.state.inToDetail == "search"
-                ? "/search"
-                : this.$store.state.inToDetail == "list"
-                ? "/list"
-                : "/common";
-            this.sensorsDuration(to);
+            // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+            // to.path = this.$store.state.inToDetail == "search"
+            //   ? '/search'
+            //   : this.$store.state.inToDetail == "list"
+            //   ? '/list'
+            //   : '/common'
+            // this.sensorsDuration(to);
             this.$router.go(-1);
           }
         } else {
@@ -4629,7 +4625,15 @@ export default {
           jumpPage = "";
           break;
       }
-      console.log("jumpPage", jumpPage);
+      // this.$store.state.inToDetail == "list"
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        if(to.matched[0].path == '/mall2/list/:id'){
+          jumpPage = this.$store.state.inToDetail == 'search' ? '商品搜索列表页' : '商城商品列表页';
+        }else if(to.matched[0].path == '/common'){
+          jumpPage = '商城首页';
+        }
+      }
+      console.log('jumpPage',jumpPage)
       this.$sensors.track("goods_detail_view_duration", {
         referrer_id: this.distributionPersonDetail.distributorId,
         top_referrer_id: this.distributionPersonDetail.parentDistributorId,
