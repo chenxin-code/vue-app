@@ -65,12 +65,6 @@
     },
     methods: {
       enterNav: function (product) {
-        // this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3 && list.length > 0
-        if (this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3) {
-          this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType, '1')
-        } else {
-          this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
-        }
         this.$sensors.track("goods_click", {
           which_page:this.$route.name,
           page_path:this.$route.path,
@@ -81,6 +75,12 @@
           store_id: product.storeOuCode,
           store_name: product.storeName,
         })
+        // this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3 && list.length > 0
+        if (this.moduleData.showTime && this.moduleData.type == '3' && this.moduleData.useApi == 3) {
+          this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType, '1')
+        } else {
+          this.$market.productEvent(product, this.$route, this.moduleData.onlyDeliveryType)
+        }
       },
       getItemStyle: function (index) {
         let styleStr = ''
