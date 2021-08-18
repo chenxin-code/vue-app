@@ -2915,13 +2915,13 @@ export default {
             this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
-            console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
-            to.path = this.$store.state.inToDetail == "search"
-              ? '/search'
-              : this.$store.state.inToDetail == "list"
-              ? '/list'
-              : '/common'
-            this.sensorsDuration(to);
+            // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+            // to.path = this.$store.state.inToDetail == "search"
+            //   ? '/search'
+            //   : this.$store.state.inToDetail == "list"
+            //   ? '/list'
+            //   : '/common'
+            // this.sensorsDuration(to);
             this.$router.go(-1);
           }
         } else {
@@ -4533,6 +4533,9 @@ export default {
         default:
           jumpPage = ''
           break;
+      }
+      if(to.matched[0].path == '/mall2/list/:id' && (this.$store.state.webtype == 2 || this.$store.state.webtype == 3)){
+        jumpPage = '商品搜索列表页'
       }
       console.log('jumpPage',jumpPage)
       this.$sensors.track("goods_detail_view_duration", {
