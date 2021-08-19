@@ -1,7 +1,7 @@
 <template>
   <!-- // created by hjc  -->
   <!-- 首页顶部新增类目 -->
-  <div class="category" :style="{ backgroundColor: bgColor }" v-if="!$store.state.isPreview">
+  <div class="category" :style="{ backgroundColor: bgColor }" v-if="!$store.state.isPreview && !isPreview">
     <div class="categoryList" ref="categoryList">
       <div
         class="categoryItem"
@@ -42,6 +42,7 @@ export default {
     return {
       categoryList: [],
       currentSelect: 0,
+      isPreview:false,
     };
   },
   created() {
@@ -82,7 +83,7 @@ export default {
       }
     });
 
-    console.log(this.$route);
+    this.$route.query.isPreview?this.isPreview = true:this.isPreview = false;
   },
   mounted() {},
   components: {},
