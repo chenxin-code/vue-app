@@ -2490,7 +2490,7 @@ export default {
 
       // 默认提示
       let message =
-        "申请退款将不退还优惠券！现金会在7-14个工作日内到账，请问是否确认退款？";
+        "已提交退款申请中，若订单成功拦截，预计将在申请成功后14个工作日内退款到账，若订单中包含优惠券将不退还。";
       // 后期可以去掉cnooc配置，改为下面动态配置
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
         message = "现金会在7-14个工作日内到账，请问是否确认退款？";

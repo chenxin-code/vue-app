@@ -1196,13 +1196,25 @@
                   <div
                     v-html="introduction2"
                     class="introduction-div"
-                    v-if="introductionIndex == 2"
+                    v-if="introductionIndex == 2 && introduction2"
                   ></div>
+                  <div class="introduction-div" v-show="introductionIndex == 2 && !introduction2">
+                    <div class="introduction-default">
+                      <img src="./img/defaultTips1.png" alt="">
+                      <div class="default-text">该商品暂无规格参数信息</div>
+                    </div>
+                  </div>
                   <div
                     v-html="introduction3"
                     class="introduction-div"
-                    v-if="introductionIndex == 3"
+                    v-if="introductionIndex == 3 && introduction3"
                   ></div>
+                  <div class="introduction-div" v-show="introductionIndex == 3 && !introduction3">
+                    <div class="introduction-default">
+                      <img src="./img/defaultTips2.png" alt="">
+                      <div class="default-text">该商品暂无售后包装信息</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2975,7 +2987,7 @@ export default {
           if (this.backApp) {
             to.path = "fromApp";
             this.sensorsDuration(to);
-            appNav.navigatorBack({ url: "0" }).then((res) => {
+            appNav.navigatorBack({ url: "" }).then((res) => {
               console.log(res);
             });
             return;
@@ -5426,6 +5438,26 @@ export default {
 
           img {
             width: 100%;
+          }
+          .introduction-default{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            img{
+              width: 100%;
+              height: 200px;
+            }
+            .default-text{
+              font-size: 14px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: #8D8D8D;
+              line-height: 14px;
+              margin-top: 8px;
+            }
           }
         }
       }

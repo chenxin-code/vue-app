@@ -549,7 +549,7 @@ export default {
             this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
             this.serviceMallOrderFormList = [];
         }
-        if(this.currentOrderList.length != 0 && this.currentOrderList.length <= 2 && this.currentOrderList){
+        if(this.currentOrderList && this.currentOrderList.length != 0 && this.currentOrderList.length <= 2){
           this.onLoad();
           console.log("currentOrderList.length",this.currentOrderList);
         }
@@ -627,6 +627,7 @@ export default {
       if(this.finished){
         return
       }
+      this.finished = true;
       let orderError = false;
       let propertyError = false;
       let promiseArr = [this.propertyFn()];
@@ -704,7 +705,6 @@ export default {
           this.errorText = "物业账单和订单请求失败，点击重新加载";
           this.$toast("物业账单和订单请求失败，点击重新加载");
         }
-        this.finished = true;
         // this.allLoadingFn();
         this.handelShowTip();
       });
