@@ -31,12 +31,8 @@
                 <div class="row theme_font_white">
                   <div class="price">
                     <span>需付款： ￥</span>
-                    <span class="price-z">{{
-                      detailData.dpedData.integer
-                    }}&nbsp;</span>
-                    <span class="left-no-space price-z"
-                      >.{{ detailData.dpedData.decimals }}</span
-                    >
+                    <span class="price-z left-no-space">{{detailData.dpedData.integer}}</span>
+                    <span class="left-no-space">.{{detailData.dpedData.decimals}}</span>
                     <span>元</span>
                   </div>
                 </div>
@@ -1503,13 +1499,12 @@
           <div
             class="row-btn line_circle theme_font_common "
             @click="toComment"
-            v-if="false"
-          >
-            <!-- v-if="
+            v-if="
               tag == '9' &&
                 detailData.state != 6 &&
                 detailData.orderPayType != 1
-            " -->
+            "
+          >
             晒单评价
           </div>
           <!-- <div class="row-btn line_circle theme_font_common theme_border_gray" @click v-if="tag == '9' && $store.state.globalConfig.invoice_shopping_enable != 'false' && detailData.orderPayType != 1">查看发票</div> -->
