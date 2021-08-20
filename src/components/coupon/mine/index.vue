@@ -534,7 +534,7 @@ $btn-fontSize = 12px;
 
 .exchange-footer {
   width: 100%;
-  height: 70px;
+  height: 50px;
   position: fixed;
   bottom: 0;
   left: 0;

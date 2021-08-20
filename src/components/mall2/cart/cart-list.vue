@@ -478,14 +478,14 @@ export default {
       }
 
       if (this.deliverType == 2) {
-        
+
         // if (
         //   this.$store.state.mall2.selectAddress.id == "" ||
         //   this.$store.state.mall2.selectAddress.id == "undefined"
         // ) {
         //   this.$Toast("请先选择配送区域！--------》");
         //   return;
-        // } else 
+        // } else
         if (this.$store.state.mall2.selectAddress.id != "-1") {
           paramsData.userAddressId = this.$store.state.mall2.selectAddress.id;
         } else {
@@ -588,7 +588,7 @@ export default {
       return true;
     },
     getDataList: function () {
-      // this.$Loading.open();
+      this.$Loading.open();
       let url = "/app/json/app_cart/getCart";
       let paramsData = {
         token: this.$store.state.login.token,

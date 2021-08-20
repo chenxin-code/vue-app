@@ -125,7 +125,7 @@
             <span
               class="single-line"
               :class="{
-                theme_standard_font_i: filterType == 1 || filterType == 2
+                theme_standard_font_i: filterType == 1 || filterType == 2,
               }"
               >销量</span
             >
@@ -144,7 +144,7 @@
             <span
               class="single-line"
               :class="{
-                theme_standard_font_i: filterType == 3 || filterType == 4
+                theme_standard_font_i: filterType == 3 || filterType == 4,
               }"
               >价格</span
             >
@@ -179,14 +179,19 @@
             <i class="iconfont mall-shaixuan filter-size theme_font_tint"></i>
           </div>
         </div>
-        <div style="height: 50px;
-    width: 100%;
-    padding: 0 25px;
-    font-size: 15px;
-    line-height: 50px;
-    border-radius: 5px;
-    border-top: 3px solid #f5f5f5;
-    border-bottom: 3px solid #f5f5f5;" v-if="checkParams()">
+        <div
+          style="
+            height: 50px;
+            width: 100%;
+            padding: 0 25px;
+            font-size: 15px;
+            line-height: 50px;
+            border-radius: 5px;
+            border-top: 3px solid #f5f5f5;
+            border-bottom: 3px solid #f5f5f5;
+          "
+          v-if="checkParams() && !isNoList"
+        >
           以下商品可使用当前优惠券：
         </div>
         <div class="list-content">
@@ -201,7 +206,7 @@
                 failText: '加载失败',
                 loadedStayTime: 400,
                 stayDistance: 40,
-                triggerDistance: 50
+                triggerDistance: 50,
               }"
               :bottom-load-method="_loadProList"
               :isBottomAutoS="true"
@@ -284,9 +289,9 @@
             class="btn theme_bg_y theme_font_white"
             v-if="
               activityInfo.linkType == 3 ||
-                activityInfo.linkType == 4 ||
-                activityInfo.linkType == 5 ||
-                activityInfo.linkType == 6
+              activityInfo.linkType == 4 ||
+              activityInfo.linkType == 5 ||
+              activityInfo.linkType == 6
             "
             @click="goGift"
           >
@@ -505,7 +510,7 @@ export default {
       domIndex: 0,
       isProgram: false,
       isStress: false, // 筛选按钮是否高亮
-      skuIds: [] //sku搜索
+      skuIds: [], //sku搜索
     };
   },
   mounted() {
@@ -515,11 +520,14 @@ export default {
   watch: {
     showFiltrate(a) {
       this.setShowBackTop(!a);
-    }
+    },
   },
   methods: {
-    checkParams(){
-      return typeof this.$route.query.skuIds !== 'undefined' && this.$route.query.searchFrom === 'coupon';
+    checkParams() {
+      return (
+        typeof this.$route.query.skuIds !== "undefined" &&
+        this.$route.query.searchFrom === "coupon"
+      );
     },
     //新增类目分类切换方法
     ...mapMutations(["setShowCategory", "setShowBackTop"]),
@@ -645,9 +653,12 @@ export default {
         appNav.navigatorBack({ url: "0" }).then((res) => {
           console.log(res);
         });
-        console.log('toApp!')
+        console.log("toApp!");
       } else {
-        if(this.$route.query.searchFrom == "coupon" && this.$store.state.webtype == "0") {
+        if (
+          this.$route.query.searchFrom == "coupon" &&
+          this.$store.state.webtype == "0"
+        ) {
           // //从AppcMember微应用跳转过来的，点击返回要回到AppcMember
           // nativeRouter.openTargetRouter({
           //   type: "microapp",
@@ -655,7 +666,7 @@ export default {
           //   path: "/couponsMine", // 微应用具体路由
           //   hideNavbar: false
           // });
-          appNav.navigatorBack({ url: "0" }).then(res => {
+          appNav.navigatorBack({ url: "0" }).then((res) => {
             console.log(res);
           });
         } else {
@@ -718,7 +729,7 @@ export default {
         // this.deductionCart();
       }
     },
-    filterEvent: function(type) {
+    filterEvent: function (type) {
       console.log(this.filterType);
       this.showCategory = false;
       if (type == 0) {
@@ -750,10 +761,11 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    filtrateEvent: function(filtrateData) {
+    filtrateEvent: function (filtrateData) {
       this.isStress =
-        Object.keys(filtrateData).filter(item => filtrateData[item].length > 0)
-          .length > 0; // 如果有筛选内容，高亮筛选按钮
+        Object.keys(filtrateData).filter(
+          (item) => filtrateData[item].length > 0
+        ).length > 0; // 如果有筛选内容，高亮筛选按钮
       this.showFiltrate = false;
       this.filterBrands = [];
       this.filterFeatureies = [];
@@ -777,8 +789,8 @@ export default {
       this.showCreated = true;
     },
     // 获取普通商品列表
-    _loadProList: function(loaded) {
-      this.queryCouponSkuList() //查询优惠券绑定的sku
+    _loadProList: function (loaded) {
+      this.queryCouponSkuList(); //查询优惠券绑定的sku
       if (this.selectedType == "1") {
         InitialLoadPickupAny.checkIsInitialLoad((address) => {
           if (address) {
@@ -820,7 +832,7 @@ export default {
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
         //搜索sku
-        skuIds: this.skuIds
+        skuIds: this.skuIds,
       };
       let url = "/app/json/product/getAppProSearchList";
       if (this.componentName == "BeanShop") {
@@ -1235,12 +1247,15 @@ export default {
       );
     },
     queryCouponSkuList() {
-      if(this.$route.query.skuIds && this.$route.query.searchFrom === 'coupon') {
+      if (
+        this.$route.query.skuIds &&
+        this.$route.query.searchFrom === "coupon"
+      ) {
         //从领券中心、分销推广优惠券、我的卡券跳转进商品列表页，需要根据sku查询商品列表数据
-        this.skuIds = _.split(this.$route.query.skuIds, ",")
+        this.skuIds = _.split(this.$route.query.skuIds, ",");
         // this.categoryId = ""
       }
-    }
+    },
   },
   created() {
     this.domIndex = this.$route.query.domIndex ? this.$route.query.domIndex : 1;
