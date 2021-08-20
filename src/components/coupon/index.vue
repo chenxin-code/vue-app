@@ -7,9 +7,10 @@
 <template>
   <div class="get-coupons-page">
     <nav-top title="领取优惠券" @backEvent="backEvent"></nav-top>
-    <div class=" container">
+    <div class="container">
+      <img :src="require('./img/bg4.png')" style="width: 100%;" ref="bg4" />
       <div class="content">
-        <div class="avatar">
+        <div class="avatar" ref="avatar">
           <van-image
             class="avatar-img"
             width="70"
@@ -19,10 +20,7 @@
             :src="imgSrc"
           />
         </div>
-        <div class="user-name">{{ userInfo.distributorName }}</div>
-        <div class="title">送你一张优惠券</div>
-        <div class="line"></div>
-
+        <div class="user-name" ref="username">{{ userInfo.distributorName }}</div>
         <div class="money" v-if="couponDetail.couponType === 40">
           {{ +couponDetail.discountRatio * 10 }}
           <span>折</span>
@@ -31,14 +29,13 @@
           <span>￥</span>
           {{ couponDetail.voucherAmount }}
         </div>
-        <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
         <div class="btn">
           <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
-            >立即领取</van-button
+          >立即领取</van-button
           >
           <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else
-            >立即使用</van-button
+          >立即使用</van-button
           >
         </div>
       </div>
@@ -110,6 +107,10 @@ export default {
           } else {
             this.$toast(res.data.message);
           }
+          this.$nextTick(() => {
+            this.$refs['avatar'].style.top = this.$refs['bg4'].offsetHeight * 0.63 + 'px';
+            this.$refs['username'].style.top = this.$refs['bg4'].offsetHeight * 0.72 + 'px';
+          })
         })
         .catch(err => {
           // this.$toast("请求失败");
@@ -274,9 +275,11 @@ $fontColor = #FFFFFF;
 .get-coupons-page {
   position: relative;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-image: linear-gradient( #CF1E17, #C71B15);
+  height: auto;
+  overflow: auto;
+  background-image: url('./img/bg3.png');
+  background-repeat: no-repeat;
+  background-size:100% 100%;
   /deep/.nav-top {
     background-color: #ffffff;
     .navcontent {
@@ -289,15 +292,15 @@ $fontColor = #FFFFFF;
     }
   }
   .container {
-    top: 110px;
+    top: 15%;
+    left 50%
+    transform translateX(-50%)
     position: absolute;
-    width: 100%;
-    // height: 100vh;
-    background-image: url('./img/bg-1.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: auto;
-    padding-bottom: 165px;
+    width: 90%;
+    //background-image: url('./img/bg4.png');
+    //background-repeat: no-repeat;
+    //background-size: 100% auto;
+    padding-bottom: 80px;
     .content {
       padding: 0 45px;
       text-align: center;
@@ -310,8 +313,10 @@ $fontColor = #FFFFFF;
         margin-bottom 16px;
       }
       .avatar {
+        position absolute
+        left 50%
+        transform translateX(-50%)
         text-align: center;
-        position: relative;
         margin-top: -16px;
         margin-bottom: 0;
         .avatar-img {
@@ -320,13 +325,27 @@ $fontColor = #FFFFFF;
         }
       }
       .user-name {
+        position absolute
+        left 50%
+        transform translateX(-50%)
         font-family: PingFangSC-Regular, PingFang SC;
         min-height: 40px;
+        font-size 14px
       }
       .desc,
       .title {
+        position absolute
+        top 25%
+        left 50%
+        font-size 12px
+        transform translateX(-50%)
         font-weight: 600;
-        min-height: 40px;
+        color #FF393E
+        //min-height: 40px;
+        border 1px solid #FF393E
+        border-radius 8px
+        padding 5px
+        line-height 1
       }
       .line {
         border-top: 2px dashed #F1F1F1;
@@ -337,12 +356,15 @@ $fontColor = #FFFFFF;
         }
       }
       .money {
-        font-size: 38px;
-        font-family: PingFangSC-Semibold, PingFang SC;
-        font-weight: 600;
-        color: $fontColor;
+        position absolute
+        top 12%
+        left 50%
+        transform translateX(-50%)
+        font-size: 40px;
+        font-family: PingFang-SC-Heavy;
+        font-weight: 700;
         line-height: 38px;
-        color: #FAC88B;
+        color: #FF393E;
         // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         // -webkit-background-clip: text;
         // -webkit-text-fill-color: transparent;
