@@ -2,7 +2,7 @@
  * @Description: 这是分销-领取优惠券页面
  * @Date: 2021-07-28 15:34:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-07 21:01:27
+ * @LastEditTime: 2021-08-20 11:01:44
 -->
 <template>
   <div class="get-coupons-page">
@@ -27,11 +27,6 @@
           {{ +couponDetail.discountRatio * 10 }}
           <span>折</span>
         </div>
-        <!-- {{
-            couponDetail.voucherAmount
-              ? delPoint(couponDetail.voucherAmount)
-              : ""
-          }} -->
         <div class="money" v-else>
           <span>￥</span>
           {{ couponDetail.voucherAmount }}
@@ -39,8 +34,12 @@
         <div class="line line-item"></div>
         <div class="desc">{{ couponType(couponDetail) }}</div>
         <div class="btn">
-          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive">立即领取</van-button>
-          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else>立即使用</van-button>
+          <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
+            >立即领取</van-button
+          >
+          <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else
+            >立即使用</van-button
+          >
         </div>
       </div>
     </div>
@@ -127,13 +126,10 @@ export default {
 
       this.$http
         .get(url, { params: obj })
-        // bffHttp("GET", url, obj)
         .then(res => {
-          console.log(`获取优惠券详情`, res);
           if (res.data.code === 200) {
             this.couponDetail = res.data.data;
             console.log(`couponDetail1`, this.couponDetail);
-            // this.$forceUpdate();
           } else {
             this.$toast(res.message);
           }
@@ -190,7 +186,6 @@ export default {
         parentShareCode: this.shareCode //分享码
       };
       bffHttp("POST", api, params).then(res => {
-        // this.$http.post(api, JSON.stringify(params)).then(res => {
         console.log(`save`, res);
       });
     },
@@ -283,14 +278,14 @@ $fontColor = #FFFFFF;
   overflow: hidden;
   background-image: linear-gradient( #CF1E17, #C71B15);
   /deep/.nav-top {
-    background-color: #cf1e17;
+    background-color: #ffffff;
     .navcontent {
       .title-div {
         font-weight: 400;
       }
     }
     .theme_font_black {
-      color: $fontColor;
+      color: #000000;
     }
   }
   .container {
