@@ -1028,6 +1028,7 @@ export default {
         this.$store.state.commonNotch = false;
       }
     }
+    this.$sensors.track("mall_homepage_view");
   },
   activated() {
     // 爱心积分特殊处理

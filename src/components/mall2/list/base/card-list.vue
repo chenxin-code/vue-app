@@ -25,7 +25,8 @@
                 <span class="font-small theme_font_tint" v-if="showComments">评价：{{item.commentsNum != '' ? item.commentsNum : '0'}}</span>
                 <div v-if="item.productType != 2" class="car-c">
                   <div class="number theme_bg_red" v-if="getNumber(item) > 0">{{getNumber(item)}}</div>
-                  <i class="iconfont mall-gouwuche theme_font_red car-size" :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
+                  <!-- :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" -->
+                  <i class="iconfont mall-gouwuche theme_font_red car-size"  @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
                   <div v-else>
                     <div v-if="item.productType == 1 && item.deliverType == 2" :class="{'is-add-wish': item.isAddWishOrder}" class="wish-icon-c" @click.stop="addToWishList(item, $event)">
                       <img src="../../wish-list/images/wish-icon-no.png" alt="" class="wish-icon">
@@ -41,7 +42,7 @@
     </div>
     <div v-else>
       <div class="left-div">
-        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in leftArray" @click="productEvent(item)">
+        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in leftArray" :key="item.id" @click="productEvent(item)">
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
@@ -62,7 +63,8 @@
                 <span class="font-small theme_font_tint" v-if="showComments">评价：{{item.commentsNum != '' ? item.commentsNum : '0'}}</span>
                 <div v-if="item.productType != 2" class="car-c">
                   <div class="number theme_bg_red" v-if="getNumber(item) > 0">{{getNumber(item)}}</div>
-                  <i class="iconfont mall-gouwuche theme_font_red car-size" :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
+                  <!-- :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" -->
+                  <i class="iconfont mall-gouwuche theme_font_red car-size"  @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
                   <div v-else>
                     <div v-if="item.productType == 1 && item.deliverType == 2" :class="{'is-add-wish': item.isAddWishOrder}" class="wish-icon-c" @click.stop="addToWishList(item, $event)">
                       <img src="../../wish-list/images/wish-icon-no.png" alt="" class="wish-icon">
@@ -76,7 +78,7 @@
         </div>
       </div>
       <div class="right-div">
-        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in rightArray" @click="productEvent(item)">
+        <div class="card" :class="{'no-stock': (item.stockNum == '' || item.stockNum == '0') && $store.state.globalConfig.showNoStockCover == '1'}" v-for="(item, index) in rightArray" :key="item.id" @click="productEvent(item)">
           <div v-show="isOpen || index < 1">
             <div class="card-content theme_bg_white" :class="{'big-corner': $store.state.globalConfig.product_big_corner == '1'}">
               <div class="img-div">
@@ -96,7 +98,8 @@
                 <span class="font-small theme_font_tint" v-if="showComments">评价：{{item.commentsNum != '' ? item.commentsNum : '0'}}</span>
                 <div v-if="item.productType != 2" class="car-c">
                   <div class="number theme_bg_red" v-if="getNumber(item) > 0">{{getNumber(item)}}</div>
-                  <i class="iconfont mall-gouwuche theme_font_red car-size" :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
+                  <!-- :class="{'theme_font_gray_i': item.stockNum == '' || item.stockNum == '0' || item.stockNum == null}" -->
+                  <i class="iconfont mall-gouwuche theme_font_red car-size"  @click.stop="addToCart(item)" v-if="$route.query.entryType !== 'wish'"></i>
                   <div v-else>
                     <div v-if="item.productType == 1 && item.deliverType == 2" :class="{'is-add-wish': item.isAddWishOrder}" class="wish-icon-c" @click.stop="addToWishList(item, $event)">
                       <img src="../../wish-list/images/wish-icon-no.png" alt="" class="wish-icon">
@@ -191,10 +194,10 @@
         this.$emit('productEvent', item)
       },
       addToCart: function (item) {
-        if (item.stockNum == '' || item.stockNum == '0' || item.stockNum == null) {
-          this.$Toast('商品缺货！');
-          return
-        }
+        // if (item.stockNum == '' || item.stockNum == '0' || item.stockNum == null) {
+        //   this.$Toast('商品缺货！');
+        //   return
+        // }
         this.$emit('addToCart', item)
       },
       addToWishList(item, event) {
@@ -240,6 +243,8 @@
         }
         this.rightArray = rightArr;
         this.leftArray = leftArr;
+        console.log('leftArray',this.leftArray)
+        console.log('rightArray',this.rightArray)
       }
     },
     watch: {

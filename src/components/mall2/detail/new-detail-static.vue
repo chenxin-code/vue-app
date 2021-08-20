@@ -95,6 +95,7 @@
               class="btn-div"
               :style="getSelectedTabStyle(3)"
               @click="toptabEvent(3)"
+              v-if="false"
             >
               评价
             </div>
@@ -1640,15 +1641,10 @@
       v-model="showSharePopup"
       round
       position="bottom"
-      :style="{ height: '35%' }"
     >
-      <div class="share_popup" v-if="referrerCode && isDistributionProduct">
+      <!-- <div class="share_popup" v-if="referrerCode && isDistributionProduct">
         <div class="share_botton">
-          <div
-            class="share_botton_item"
-            @click="shareWechatFriends"
-            v-if="!this.$util.isWeiXin()"
-          >
+          <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
             <div>微信好友</div>
           </div>
@@ -1657,18 +1653,34 @@
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img
-              src="./shareImage/image/picText.png"
-              alt=""
-              style="width: 60px; height: 60px; margin-bottom: 10px"
-            />
+            <img src="./shareImage/image/picText.png" alt="" style="width: 60px;height: 60px;margin-bottom: 10px;" />
+            <div>图文推广</div>
+          </div>
+
+        </div>
+        <div class="cancel" @click="showSharePopup = false">
+          取消
+        </div>
+      </div>    -->
+      <div class="share_popup">
+        <div class="share_botton">
+          <div class="share_botton_item" @click="shareWechatFriends">
+            <img src="./shareImage/image/share_wx.png" alt="" />
+            <div>微信好友</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('poster')">
+            <img src="./shareImage/image/share_haibao.png" alt="" />
+            <div>推广海报</div>
+          </div>
+          <div class="share_botton_item" @click="shareImg('imageText')">
+            <img src="./shareImage/image/share_tuwen.png" alt="" />
             <div>图文推广</div>
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
 
-      <div class="share_popup" v-else>
+      <!-- <div class="share_popup" v-else>
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
             <img src="static/image/mall2/share_wechat.png" alt="" />
@@ -1684,7 +1696,8 @@
           </div>
         </div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
-      </div>
+      </div> -->
+
     </van-popup>
     <sharePoster
       v-if="showPoster"
@@ -1725,9 +1738,11 @@ import appNav from "@zkty-team/x-engine-module-nav";
 import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
+import mixins from './mixins.js'
 
 export default {
   name: "detail",
+  mixins: [mixins],
   components: {
     Countdown,
     // Counter,
@@ -2027,14 +2042,17 @@ export default {
             "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
         : (url =
             "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
-      console.log("----distributionMessage------");
       this.$http.get(url).then(
         (res) => {
           console.log("----distributionMessage------", res);
-
-          this.referrerCode = res.data.data.shareCode;
-          this.personShareCode = res.data.data.shareCode;
-          this.distributionMessageCode();
+          // 如果非分销员则走非分销逻辑
+          if (res.data.code == 200) {
+            this.referrerCode = res.data.data.shareCode;
+            this.personShareCode = res.data.data.shareCode;
+            this.distributionMessageCode();
+          } else {
+            this.getCode();
+          }
         },
         (err) => {}
       );
@@ -2046,7 +2064,72 @@ export default {
         ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
         : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
 
-      fetchMethod("GET", url).then((res) => {
+
+      fetchMethod("GET", url).then(res => {
+        console.log("----distributionMessageCode--->>-", res);
+        this.qrCode = res.data;
+      });
+    },
+
+    getCode: function() {
+      return new Promise((resolve, reject) => {
+        // let rfrCode = this.$store.state.rfrCode || this.$store.state.userInfo.userId
+        console.log(
+          "-------",
+          `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
+        );
+        this.$request
+          .post("/app/json/short_address/makeShortAddress", {
+            // longAddress: `${this.delParams()}&rfrCode=${rfrCode}`
+            longAddress: `${encodeURIComponent(
+              `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
+            )}`
+          })
+          .then(res => {
+            if (res.status === 0) {
+              const shortCode = res.data.substr(res.data.indexOf("/s/"));
+              // /app/json/we_chat/getwxacodeunlimit
+              console.log("shortCode", shortCode);
+              this.$request
+                .post("/app/json/wechat_mini_program/createQrCode", {
+                  // path: `pages/common/home/index`,
+                  // scene: shortCode,
+                  // width: 430
+                  page: `pages/common/home/index`,
+                  scene: shortCode,
+                  width: 430,
+                  type: "0"
+                })
+                .then(
+                  res => {
+                    if (res.status === 0) {
+                      this.qrCode =
+                        "data:image/png;base64," +
+                        res.data.replace(/[\r\n]/g, "");
+                      const img = new Image();
+                      img.src = this.qrcode;
+                      img.onload = () => {
+                        resolve();
+                      };
+                    } else {
+                      reject();
+                      this.$Toast(res.info || "获取小程序码失败");
+                    }
+                  },
+                  error => {}
+                );
+            }
+          });
+      });
+    },
+    // 分销商品分享码
+    distributionMessageCode() {
+      let url = "";
+      this.$store.state.environment == "development"
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+
+      fetchMethod("GET", url).then(res => {
         console.log("----distributionMessageCode--->>-", res);
         this.qrCode = res.data;
       });
@@ -2065,6 +2148,9 @@ export default {
         }
       });
     },
+
+
+
     handleScroll(e) {
       this.scrollTop = e.target.scrollTop;
       this.$nextTick(() => {
@@ -2118,9 +2204,9 @@ export default {
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
+        goods_cls1: this.detailData.nowCls1Name,
+        goods_cls2: this.detailData.nowCls2Name,
+        goods_cls3: this.detailData.nowCls3Name,
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -2131,10 +2217,12 @@ export default {
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
         share_type: share_type,
+        ...this.$store.state.ythUser
       });
     },
     onShare() {
-      if (this.isWX) {
+      console.log('------iswx--->', this.isWX);
+      if(this.isWX) {
         let { picUrls, salePrice, skuName } = this.detailData;
         const link =
           this.$store.state.environment == "development"
@@ -2146,7 +2234,8 @@ export default {
           picUrls,
           salePrice,
           skuName,
-          userImage: this.$store.state.ythUserInfo.userImage,
+          userImage:
+            this.$store.state.ythUserInfo.userImage || 'https://times-new-store.oss-cn-shenzhen.aliyuncs.com/common/d1d6fde0-1351-4598-9ebc-7a11e22101a7static',
           userName: this.$store.state.ythUserInfo.userName,
           referrerCode: this.referrerCode,
           qrCode: this.qrCode,
@@ -2213,7 +2302,8 @@ export default {
         picUrls,
         salePrice,
         skuName,
-        userImage: this.$store.state.ythUserInfo.userImage,
+        userImage:
+          this.$store.state.ythUserInfo.userImage || 'https://times-new-store.oss-cn-shenzhen.aliyuncs.com/common/d1d6fde0-1351-4598-9ebc-7a11e22101a7static',
         userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
@@ -2251,9 +2341,9 @@ export default {
             goods_id: this.skuId,
             goods_name: this.detailData.skuName,
             tag: this.tagList,
-            goods_cls1: this.categoryList[0],
-            goods_cls2: this.categoryList[1],
-            goods_cls3: this.categoryList[2],
+            goods_cls1: this.detailData.nowCls1Name,
+            goods_cls2: this.detailData.nowCls2Name,
+            goods_cls3: this.detailData.nowCls3Name,
             org_price: this.detailData.activityPrice,
             price: this.detailData.salePrice,
             goods_quantity: this.selectedNum,
@@ -2873,9 +2963,10 @@ export default {
       // detailScrollHeight:0,//第二页滚动总高度
       // detailClientHeight:0,//屏幕高度
       // detailScrollTop:0,//第二页滚动高度
-      // let to = {
-      //   path:"",
-      // };
+      let to = {
+        path:"",
+      };
+      
       window.removeEventListener("scroll", this.handleScroll, true);
       console.log("----backEvent->>>>----this.$route.query", this.$route.query);
       console.log("this.$util.isAndroid()", this.$util.isAndroid());
@@ -2907,9 +2998,9 @@ export default {
           goods_id: this.skuId,
           goods_name: this.detailData.skuName,
           tag: this.tagList,
-          goods_cls1: this.categoryList[0],
-          goods_cls2: this.categoryList[1],
-          goods_cls3: this.categoryList[2],
+          goods_cls1: this.detailData.nowCls1Name,
+          goods_cls2: this.detailData.nowCls2Name,
+          goods_cls3: this.detailData.nowCls3Name,
           goods_cl3_id: this.detailData.categoryId,
           org_price: this.detailData.activityPrice,
           price: this.detailData.salePrice,
@@ -2935,21 +3026,17 @@ export default {
 
         if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
           if (window.history.length === 1) {
-            to.path = "/common";
-            this.sensorsDuration(to);
+            // to.path = '/common';
+            // this.sensorsDuration(to);
             this.$router.replace("/common");
           } else {
-            console.log(
-              "this.$store.state.inToDetail",
-              this.$store.state.inToDetail
-            );
-            to.path =
-              this.$store.state.inToDetail == "search"
-                ? "/search"
-                : this.$store.state.inToDetail == "list"
-                ? "/list"
-                : "/common";
-            this.sensorsDuration(to);
+            // console.log('this.$store.state.inToDetail',this.$store.state.inToDetail);
+            // to.path = this.$store.state.inToDetail == "search"
+            //   ? '/search'
+            //   : this.$store.state.inToDetail == "list"
+            //   ? '/list'
+            //   : '/common'
+            // this.sensorsDuration(to);
             this.$router.go(-1);
           }
         } else {
@@ -3824,54 +3911,32 @@ export default {
           });
           this.categoryList = this.detailData.categoryName.split("_");
           console.log("category", this.detailData.categoryName, this.tagList);
+          
+          this.$sensors.track("goods_detail_view", {
+            referrer_id: this.distributionPersonDetail.distributorId,
+            top_referrer_id:
+              this.distributionPersonDetail.parentDistributorId,
+            goods_cl3_id: this.detailData.categoryId,
+            module_source:
+              this.$store.state.inToDetail == "common"
+                ? "商城臻选专场"
+                : this.$store.state.inToDetail == "list"
+                ? "商城商品列表页"
+                : "商城搜索列表",
+            goods_id: this.skuId,
+            goods_name: this.detailData.skuName,
+            tag: this.tagList,
+            goods_cls1: this.detailData.nowCls1Name,
+            goods_cls2: this.detailData.nowCls2Name,
+            goods_cls3: this.detailData.nowCls3Name,
+            org_price: this.detailData.activityPrice,
+            price: this.detailData.salePrice,
+            store_id: this.detailData.storeOuCode,
+            store_name: this.detailData.storeOuName,
+            merchant_id: this.detailData.ouCode,
+            merchant_name: this.detailData.ouName,
+          });
 
-          let distributionUrl = "";
-          // this.$store.state.ythUserInfo.phone
-          this.$store.state.environment == "development"
-            ? (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`)
-            : (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`);
-          this.$http
-            .get(distributionUrl)
-            .then((res) => {
-              if (res.data.code == 200) {
-                if (res.data.data) {
-                  this.distributionPersonDetail = res.data.data;
-                } else {
-                  this.distributionPersonDetail = {
-                    distributorId: "",
-                    parentDistributorId: -1,
-                  };
-                }
-
-                this.$sensors.track("goods_detail_view", {
-                  referrer_id: this.distributionPersonDetail.distributorId,
-                  top_referrer_id:
-                    this.distributionPersonDetail.parentDistributorId,
-                  goods_cl3_id: this.detailData.categoryId,
-                  module_source:
-                    this.$store.state.inToDetail == "common"
-                      ? "商城臻选专场"
-                      : this.$store.state.inToDetail == "list"
-                      ? "商城商品列表页"
-                      : "商城搜索列表",
-                  goods_id: this.skuId,
-                  goods_name: this.detailData.skuName,
-                  tag: this.tagList,
-                  goods_cls1: this.categoryList[0],
-                  goods_cls2: this.categoryList[1],
-                  goods_cls3: this.categoryList[2],
-                  org_price: this.detailData.activityPrice,
-                  price: this.detailData.salePrice,
-                  store_id: this.detailData.storeOuCode,
-                  store_name: this.detailData.storeOuName,
-                  merchant_id: this.detailData.ouCode,
-                  merchant_name: this.detailData.ouName,
-                });
-              }
-            })
-            .catch((err) => {
-              this.$Toast(err);
-            });
         } else {
           this.$Toast(data.info);
         }
@@ -3896,6 +3961,8 @@ export default {
         referrerCode: this.$route.query.referrerCode
           ? this.$route.query.referrerCode
           : "",
+        referrerId:this.distributionPersonDetail.distributorId,
+        referrerFatherId:this.distributionPersonDetail.parentDistributorId,
       };
       this.$http.post(url, paramsData).then(
         (res) => {
@@ -4021,9 +4088,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.categoryList[0],
-              goods_cls2: this.categoryList[1],
-              goods_cls3: this.categoryList[2],
+              goods_cls1: this.detailData.nowCls1Name,
+              goods_cls2: this.detailData.nowCls2Name,
+              goods_cls3: this.detailData.nowCls3Name,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
               goods_quantity: this.selectedNum,
@@ -4032,6 +4099,7 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
+              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4160,9 +4228,9 @@ export default {
               goods_id: this.skuId,
               goods_name: this.detailData.skuName,
               tag: this.tagList,
-              goods_cls1: this.categoryList[0],
-              goods_cls2: this.categoryList[1],
-              goods_cls3: this.categoryList[2],
+              goods_cls1: this.detailData.nowCls1Name,
+              goods_cls2: this.detailData.nowCls2Name,
+              goods_cls3: this.detailData.nowCls3Name,
               goods_cl3_id: this.detailData.categoryId,
               org_price: this.detailData.activityPrice,
               price: this.detailData.salePrice,
@@ -4172,6 +4240,7 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
+              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4246,9 +4315,9 @@ export default {
                 goods_id: this.skuId,
                 goods_name: this.detailData.skuName,
                 tag: this.tagList,
-                goods_cls1: this.categoryList[0],
-                goods_cls2: this.categoryList[1],
-                goods_cls3: this.categoryList[2],
+                goods_cls1: this.detailData.nowCls1Name,
+                goods_cls2: this.detailData.nowCls2Name,
+                goods_cls3: this.detailData.nowCls3Name,
                 org_price: this.detailData.activityPrice,
                 price: this.detailData.salePrice,
                 goods_quantity: this.selectedNum,
@@ -4257,6 +4326,7 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
                 viewpoint_radio: this.viewpoint_radio,
+                ...this.$store.state.ythUser
               });
             } else {
               this.isCollect = false;
@@ -4587,16 +4657,24 @@ export default {
           jumpPage = "";
           break;
       }
-      console.log("jumpPage", jumpPage);
+      // this.$store.state.inToDetail == "list"
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        if(to.matched[0].path == '/mall2/list/:id'){
+          jumpPage = this.$store.state.inToDetail == 'search' ? '商品搜索列表页' : '商城商品列表页';
+        }else if(to.matched[0].path == '/common'){
+          jumpPage = '商城首页';
+        }
+      }
+      console.log('jumpPage',jumpPage)
       this.$sensors.track("goods_detail_view_duration", {
         referrer_id: this.distributionPersonDetail.distributorId,
         top_referrer_id: this.distributionPersonDetail.parentDistributorId,
         goods_id: this.skuId,
         goods_name: this.detailData.skuName,
         tag: this.tagList,
-        goods_cls1: this.categoryList[0],
-        goods_cls2: this.categoryList[1],
-        goods_cls3: this.categoryList[2],
+        goods_cls1: this.detailData.nowCls1Name,
+        goods_cls2: this.detailData.nowCls2Name,
+        goods_cls3: this.detailData.nowCls3Name,
         goods_cl3_id: this.detailData.categoryId,
         org_price: this.detailData.activityPrice,
         price: this.detailData.salePrice,
@@ -4606,6 +4684,7 @@ export default {
         merchant_name: this.detailData.ouName,
         jump_page: jumpPage,
         duration: this.duration,
+        ...this.$store.state.ythUser
       });
     },
     // getDistributionDetail(){
@@ -4670,6 +4749,8 @@ export default {
     }
     this.distributionInit();
     this.wxenvironment();
+    this.distributionPersonDetail = this.$store.state.distributionPersonDetail;
+    console.log('this.distributionPersonDetail',this.distributionPersonDetail);
   },
   activated() {
     if (
@@ -4834,7 +4915,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding: 35px 26px 36px 25px;
+  padding-top: 40px;
 
   .share_botton {
     display: flex;
@@ -4849,32 +4930,33 @@ export default {
       align-items: center;
 
       img {
-        width: 74px;
-        height: 74px;
+        width: 48px;
+        height: 48px;
       }
 
       div {
-        font-size: 14px;
+        margin-top: 23px;
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #999999;
-        line-height: 20px;
+        color: #666666;
       }
     }
   }
 
   .cancel {
-    width: 86.4%;
-    height: 49px;
-    border-radius: 16px;
-    border: 1px solid #E5E5E5;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333333;
-    line-height: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 27px auto 0;
+    width: 295px;
+    height: 37px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 37px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    margin: 20px auto;
   }
 }
 

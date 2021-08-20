@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import nativeRouter from "@zkty-team/x-engine-module-router";
 export default {
   props: ["productItem", "billId", "billType"],
   data() {
@@ -91,6 +92,52 @@ export default {
     this.goodsAmount = this.productItem.billAmount;
   },
   methods: {
+    nativeRouterGoodsDetail(product){
+      console.log('product',this.productItem)
+      if (this.productItem.billType == 13) {
+        nativeRouter.openTargetRouter({
+          type: "native",
+          path:"LLBProductDetailViewController,cn.timesneighborhood.app.c.view.activity.servemall.MallProductDetailActivity",
+          args: {
+            spuId: this.productItem.skuId,
+            businessTypeId: this.productItem.billType,
+            hiddenNavWhenBack: true //从app返回h5时候，影藏顶部导航条
+          }
+        });
+      }else{
+        // 砍价订单禁止进入详情
+        if (this.$store.state.globalConfig.cut_price_strict == 1) {
+          return;
+        }
+        if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
+          return;
+        }
+        if (this.watermark == 1) {
+          // 蜂鸟配送无法查看详情
+          return;
+        }
+        let path = "/mall2/detail/" + this.$util.getDataString();
+        if (this.billType == "11") {
+          this.$router.push({
+            path: path,
+            query: {
+              storeOuCode: product.storeOuCode,
+              skuId: product.skuId,
+              lastPath: "/order/3",
+              productType: product.productType,
+            },
+          });
+        } else {
+          window.location.href = `x-engine-json://yjzdbill/queryBillDetail?args=${encodeURIComponent(
+            JSON.stringify({
+              billId: this.billId,
+              payType: "no",
+              isRefund: "no",
+            })
+          )}`;
+        }
+      }
+    },
     gotoProductDetail: function (product) {
       /*billType == 13 服务商城的清单类型*/
       if (this.productItem.billType == 13) {

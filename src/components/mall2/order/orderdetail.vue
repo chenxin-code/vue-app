@@ -31,12 +31,8 @@
                 <div class="row theme_font_white">
                   <div class="price">
                     <span>需付款： ￥</span>
-                    <span class="price-z">{{
-                      detailData.dpedData.integer
-                    }}&nbsp;</span>
-                    <span class="left-no-space price-z"
-                      >.{{ detailData.dpedData.decimals }}</span
-                    >
+                    <span class="price-z left-no-space">{{detailData.dpedData.integer}}</span>
+                    <span class="left-no-space">.{{detailData.dpedData.decimals}}</span>
                     <span>元</span>
                   </div>
                 </div>
@@ -105,11 +101,19 @@
                   <div class="title">已取消</div>
                 </div>
               </div>
-              <img src="static/image/mall2/order-bg.png" />
+              <img src="./img/orderDetailBg.png" />
+            </div>
+            <div class="refund" v-if="isRefunding">
+              <img :src="refundData.applyState == 0 ? refunding : refundData.applyState == 1 ? refundSuccess : refundLose" alt="">
+              <div class="refundTip">
+                <div class="refundTitle">{{refundData.applyState == 0 ? '退款申请中' : refundData.applyState == 1 ? '退款申请成功' : '退款申请失败'}}</div>
+                <div class="refundText">{{refundData.applyState == 0 ? '待平台拦截订单' : refundData.applyState == 1 ? '预计将在申请成功后7个工作日内退款到账' : '很抱歉，订单拦截失败，您可在到货后进行售后退款申请'}}</div>
+              </div>
             </div>
             <div
               class="place block-div theme_bg_white"
               v-if="detailData.orderMode != 9"
+              :style="{marginTop:isRefunding ? '0.21333rem' : '-0.8rem'}"
             >
               <!--待支付-->
               <div v-if="tag == '1'">
@@ -1438,6 +1442,11 @@
             class="row-btn line_circle theme_font_common "
             @click="applyOrder"
             v-if="isShowCancelOrder"
+            :style="{
+              color:isRefunding?'#999999':'',
+              border:isRefunding?'1px solid #999':'',
+              background:isRefunding?'#F0F0F0':''
+            }"
           >
             申请退款
           </div>
@@ -1448,17 +1457,28 @@
           >
             付款
           </div>
-          <div
-            class="row-btn line_circle theme_font_common "
-            @click="expressType"
+          <!-- 
             v-if="
               pivotalProductType != 8 &&
                 tag == '4' &&
                 detailData.deliverType == 2 &&
                 isShowExpress
             "
+           -->
+          <div
+            class="row-btn line_circle theme_font_common "
+            @click="expressType"
+            v-if="false"
           >
             查看物流
+          </div>
+          <div
+            class="row-btn line_circle theme_font_common "
+            @click="interceptOrder"
+            v-if="
+              tag == '4' && (detailData.deliverType == 2 || detailData.deliverType == 3) && pivotalProductType != 8"
+          >
+            申请退款
           </div>
           <!--  如果选择“用提货码确认订单”把确认收货按钮前台隐藏掉
                     配送订单时, 如果  deliveryConfirmType 为null 或者为0 展示确认收货按钮, 如果为 1 隐藏确认收货按钮-->
@@ -1553,6 +1573,19 @@
       </van-radio-group>
     </van-dialog>
     <!--<PickUpCode v-if="showCode" :code="detailData.deliverCheckcode" @backEvent="codeBack"></PickUpCode>-->
+    <van-popup v-model="showRefundLoading" round :style="{ height: '26.23%',width:'46.66%' }" :close-on-click-overlay="false">
+      <div class="refundLoading">
+        <van-loading size="1.52rem" vertical text-size="0.37333rem" text-color="#333333">正在为您拦截订单…</van-loading>
+      </div>
+    </van-popup>
+    <van-popup v-model="showRefundTip" round :style="{ height: '31.48%',width:'80%' }" :close-on-click-overlay="false">
+      <div class="refundFail">
+        <img src="./img/fail.png" alt="">
+        <div class="failTitle">当前物流单拦截失败</div>
+        <div class="failText">您可在收货后，进行售后申请</div>
+        <div class="failBtn" @click="showRefundTip = false">确定</div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -1612,7 +1645,14 @@ export default {
       pivotalProductType: "",
       errorInfo: "",
       showKeyboard: true,
-      time: null
+      time: null,
+      refundData:{},
+      isRefunding:false,
+      refunding:require('./img/refunding.png'),
+      refundLose:require('./img/refundLose.png'),
+      refundSuccess:require('./img/refundSuccess.png'),
+      showRefundLoading:false,
+      showRefundTip:false,
     };
   },
   mounted() {
@@ -1722,6 +1762,8 @@ export default {
             return true;
           }
         }
+      }else if(this.detailData.state == 16){
+        return true;
       }
       // return false
     },
@@ -2441,6 +2483,11 @@ export default {
     },
     // 申请退款
     applyOrder: function() {
+
+      if(this.isRefunding){
+        return
+      }
+
       // 默认提示
       let message =
         "申请退款将不退还优惠券！现金会在7-14个工作日内到账，请问是否确认退款？";
@@ -2470,13 +2517,18 @@ export default {
     //退款操作
     refund: function() {
       this.$Loading.open();
-      let url = "/app/json/app_shopping_order/cancelOrder";
+      // let url = "/app/json/app_shopping_order/cancelOrder";
+      // let paramsData = {
+      //   token: this.$store.state.login.token,
+      //   orderId: this.orderId,
+      //   orderCategory: this.orderCategory,
+      //   vipUnitUserCode: this.vipUnitUserCode
+      // };
+      let url = "/app/json/app_shopping_order/submitRefundApply";
       let paramsData = {
-        token: this.$store.state.login.token,
+        serialNumber:this.tradeNo,
         orderType: this.orderType,
-        orderId: this.orderId,
-        orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        // refundReason:"退款",
       };
       this.$http.post(url, paramsData).then(
         res => {
@@ -2497,6 +2549,29 @@ export default {
           this.$Toast("请求数据失败！");
         }
       );
+    },
+    // 退款进度
+    checkRefund(){
+      this.$http.post('/app/json/app_shopping_order/queryRefundRecord',{tradeNo:this.tradeNo}).then(res=>{
+        console.log(res)
+        if(res.data.status == 0){
+          this.refundData = res.data.data;
+          if(this.refundData.applyState.length == 0){
+            this.isRefunding = false;
+          }else{
+            this.isRefunding = true;
+          }
+          console.log('this.refundData',this.refundData)
+        }
+      })
+    },
+    // 收货时的申请退款  写死失败
+    interceptOrder(){
+      this.showRefundLoading = true;
+      setTimeout(()=>{
+        this.showRefundLoading = false;
+        this.showRefundTip = true;
+      },5000)
     },
     // 取消订单
     cancelOrder: function(cancelType) {
@@ -2815,6 +2890,7 @@ export default {
     // 代付相关end
 
     this._getOrderDetail();
+    this.checkRefund();
   },
   beforeRouteLeave(to, from, next) {
     this.$keepaliveHelper.deleteCache(this);
@@ -2844,8 +2920,107 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
+  .refundFail{
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding 17px 0 15px;
+
+    img{
+      width: 47px;
+      height: 55px;
+    }
+
+    .failTitle{
+      font-size: 16px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #333333;
+      line-height: 15px;
+      margin: 19px 0 15px;
+    }
+    
+    .failText{
+      font-size: 14px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #666666;
+      line-height: 15px;
+    }
+    .failBtn{
+      width: 95px;
+      height: 38px;
+      background: #FB0200;
+      border-radius: 19px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #FFFFFF;
+      line-height: 15px;
+      margin-top: 22px;
+    }
+  }
+
+  .refundLoading{
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .refund{
+    position: relative;
+    z-index: 1;
+    width:359px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 1px 0.21333rem #efefef;
+    margin: -30px auto 0;
+    padding: 17px 29px 17px 19px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    img{
+      width: 32px;
+      height: 31px;
+    }
+    .refundTip{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-left: 17px;
+
+      .refundTitle{
+        font-size: 16px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #333333;
+        line-height: 15px;
+      }
+      .refundText{
+        font-size: 12px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #999999;
+        line-height: 15px;
+        margin-top: 10px;
+      }
+    }
+  }
+
   .line_circle{
-    border: 1px solid #EF2D30;
+    border: 1px solid #F83676;
     border-radius: 17px;
     font-size: 14px;
     font-weight: bold;
@@ -3058,7 +3233,7 @@ export default {
     .place {
       position: relative;
       z-index: 1;
-      margin-top: -30px;
+      // margin-top: -30px;
 
       i {
         font-size: 16px;
@@ -3174,14 +3349,20 @@ export default {
       /*border-radius: 16px;
       border-width: 0.5px;
       border-style: solid;*/
-      color: #EF3034;
+      color: #F83676;
     }
     .pay{
-      background: linear-gradient(90deg, #EF2D30 0%, #F96B7B 100%);
+      background: #F83676;
       font-size: 14px;
       font-weight: bold;
       color: #F4F4F4;
     }
+
+    // .solid{
+    //   background:linear-gradient(to right, #F1363B , #F96A7A);
+    //   color:#ffffff;
+    //   border:none;
+    // }
   }
   .copy-btn{
     margin-right 10px

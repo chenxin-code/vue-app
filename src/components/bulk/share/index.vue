@@ -1,143 +1,146 @@
 <template>
   <div class="bulk-share-main">
-    <div class="bulk-header">
-      <div class="headbox">
-        <!-- <img src="./images/icon_time_default@2x.png" class="block-time" /> -->
-        <div class="bulk-back" @click="backHome">
-          <div class="back-img"></div>
-          <div class="back-word">返回</div>
-        </div>
-        <div class="orderSwiper">
-          <van-swipe
-            style="height: 0.74667rem"
-            vertical
-            autoplay="2500"
-            :show-indicators="false"
-            :touchable="false"
-          >
-            <van-swipe-item
-              v-for="(item, index) in orderSwiperList"
-              :key="index"
+    <div class="scrollBox">
+      <div class="bulk-header">
+        <div class="headbox">
+          <!-- <img src="./images/icon_time_default@2x.png" class="block-time" /> -->
+          <div class="bulk-back" @click="backHome">
+            <div class="back-img"></div>
+            <div class="back-word">返回</div>
+          </div>
+          <div class="orderSwiper" v-if="orderSwiperList.length > 4">
+            <van-swipe
+              style="height: 0.74667rem"
+              vertical
+              autoplay="2500"
+              :show-indicators="false"
+              :touchable="false"
             >
-              <div :class="item.show ? 'swipeItem' : 'nullSwipeItem'">
-                <img
-                  :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
-                  v-if="item.show"
-                  alt=""
-                />
-                <div class="buyerText" v-if="item.show">
-                  {{ item.buyerName }} {{ item.timeOut }}参与了团购
+              <van-swipe-item
+                v-for="(item, index) in orderSwiperList"
+                :key="index"
+              >
+                <div :class="item.show ? 'swipeItem' : 'nullSwipeItem'">
+                  <img
+                    :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
+                    v-if="item.show"
+                    alt=""
+                  />
+                  <div class="buyerText" v-if="item.show">
+                    {{ item.swipeBuyerName }} {{ item.timeOut }}参与了团购
+                  </div>
                 </div>
-              </div>
-            </van-swipe-item>
-          </van-swipe>
+              </van-swipe-item>
+            </van-swipe>
+          </div>
         </div>
-      </div>
-      <div class="time-block">
-        <img src="./images/icon_time_default@2x.png" class="block-time" />
-        <div style="margin-left: 7px">拼团结束时间</div>
+        <div class="time-block">
+          <img src="./images/icon_time_default@2x.png" class="block-time" />
+          <div style="margin-left: 7px">拼团结束时间</div>
 
-        <van-count-down :time="shareData.remainingTime * 1000">
-          <template #default="timeData">
-            <div style="display: flex; align-items: center">
-              <div class="time-bg-block">{{ timeData.days }}天</div>
+          <van-count-down :time="shareData.remainingTime * 1000">
+            <template #default="timeData">
+              <div style="display: flex; align-items: center">
+                <div class="time-bg-block">{{ timeData.days }}天</div>
 
-              <span style="color: #c0003f">:</span>
-              <div class="time-bg-block">{{ timeData.hours }}</div>
-              <span style="color: #c0003f">:</span>
-              <div class="time-bg-block">{{ timeData.minutes }}</div>
-              <span style="color: #c0003f">:</span>
-              <div class="time-bg-block">{{ timeData.seconds }}</div>
-            </div>
-          </template>
-        </van-count-down>
-      </div>
+                <span style="color: #c0003f">:</span>
+                <div class="time-bg-block">{{ timeData.hours }}</div>
+                <span style="color: #c0003f">:</span>
+                <div class="time-bg-block">{{ timeData.minutes }}</div>
+                <span style="color: #c0003f">:</span>
+                <div class="time-bg-block">{{ timeData.seconds }}</div>
+              </div>
+            </template>
+          </van-count-down>
+        </div>
 
-      <div class="user-card">
-        <div class="user-message">
-          <img
-            :src="shareData.headAvtUrl ? shareData.headAvtUrl:defaultHeadAvt"
-            :error-icon="defaultHeadAvt"
-            class="user-pic"
-          />
-          <!-- <img
+        <div class="user-card">
+          <div class="user-message">
+            <img
+              :src="
+                shareData.headAvtUrl ? shareData.headAvtUrl : defaultHeadAvt
+              "
+              :error-icon="defaultHeadAvt"
+              class="user-pic"
+            />
+            <!-- <img
             :src="shareData.headAvtUrl ? shareData.headAvtUrl : ''"
             :error-icon="defaultAvatar"
             class="user-pic"
           /> -->
 
-          <div class="user-message-right">
-            <div class="user-message-top">
-              团长名称：{{ shareData.headUser }}
-              <img
-                :src="
-                  groupStatus == 'finish'
-                    ? require('@/components/bulk/share/images/img_tips_over@2x.png')
-                    : groupStatus == 'notAtThe'
-                    ? require('@/components/bulk/share/images/img_tips_ready@2x.png')
-                    : require('@/components/bulk/share/images/img_tips_default@2x.png')
-                "
-                class="group-status"
-              />
+            <div class="user-message-right">
+              <div class="user-message-top">
+                团长名称：{{ shareData.headUser }}
+                <img
+                  :src="
+                    groupStatus == 'finish'
+                      ? require('@/components/bulk/share/images/img_tips_over@2x.png')
+                      : groupStatus == 'notAtThe'
+                      ? require('@/components/bulk/share/images/img_tips_ready@2x.png')
+                      : require('@/components/bulk/share/images/img_tips_default@2x.png')
+                  "
+                  class="group-status"
+                />
+              </div>
+              <div class="user-message-bottom">
+                <span style="color: #999999">提货地址：</span>
+                <span style="color: #121212"
+                  >{{ shareData.communityName }}{{ shareData.place }}</span
+                >
+              </div>
             </div>
-            <div class="user-message-bottom">
-              <span style="color: #999999">提货地址：</span>
-              <span style="color: #121212"
-                >{{ shareData.communityName }}{{ shareData.place }}</span
-              >
+          </div>
+        </div>
+
+        <div class="group-desc">
+          <div class="group-desc-content">
+            <img src="./images/icon_01@2x.png" class="group-desc-content-pic" />
+            <div class="group-desc-content-right">
+              <div class="group-desc-content-right-top">团购活动描述:</div>
+              <div class="group-desc-content-right-bottom" v-html="str"></div>
+            </div>
+          </div>
+
+          <div class="divLine"></div>
+
+          <div class="group-desc-content">
+            <img src="./images/icon_02@2x.png" class="group-desc-content-pic" />
+            <div class="group-desc-content-right">
+              <div class="group-desc-content-right-top">团购规则描述:</div>
+              <div class="group-desc-content-right-bottom">
+                {{ shareData.ruleDescription }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="group-desc">
-        <div class="group-desc-content">
-          <img src="./images/icon_01@2x.png" class="group-desc-content-pic" />
-          <div class="group-desc-content-right">
-            <div class="group-desc-content-right-top">团购活动描述:</div>
-            <div class="group-desc-content-right-bottom" v-html="str"></div>
-          </div>
-        </div>
-
-        <div class="divLine"></div>
-
-        <div class="group-desc-content">
-          <img src="./images/icon_02@2x.png" class="group-desc-content-pic" />
-          <div class="group-desc-content-right">
-            <div class="group-desc-content-right-top">团购规则描述:</div>
-            <div class="group-desc-content-right-bottom">
-              {{ shareData.ruleDescription }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-for="(item, index) in goodsList" :key="index">
-      <div class="product-card" @click.stop="navToDetail(item)">
-        <div class="product-message">
-          <img class="product-pic" :src="item.skuImg[0]" />
-          <div class="product-desc">
-            <div style="display: flex; flex-direction: column">
-              <div class="product-title">{{ item.skuName }}</div>
-              <div class="product-prize-old">
-                销售价格：￥{{ item.crossedPrice }}
+      <div v-for="(item, index) in goodsList" :key="index">
+        <div class="product-card" @click.stop="navToDetail(item)">
+          <div class="product-message">
+            <img class="product-pic" :src="item.skuImg[0]" />
+            <div class="product-desc">
+              <div style="display: flex; flex-direction: column">
+                <div class="product-title">{{ item.skuName }}</div>
+                <div class="product-prize-old">
+                  销售价格：￥{{ item.crossedPrice }}
+                </div>
+                <div class="product-prize-group">
+                  团购价格：￥{{ item.groupPrice }}
+                </div>
               </div>
-              <div class="product-prize-group">
-                团购价格：￥{{ item.groupPrice }}
-              </div>
-            </div>
 
-            <div class="change-product-num" @click.stop>
-              <van-stepper
-                v-model="item.count"
-                min="0"
-                integer
-                theme="round"
-                :max="item.remainingItem"
-                @change="goodsChange(item)"
-              />
-              <!-- <img
+              <div class="change-product-num" @click.stop>
+                <van-stepper
+                  v-model="item.count"
+                  min="0"
+                  integer
+                  theme="round"
+                  :max="item.remainingItem"
+                  @change="goodsChange(item)"
+                />
+                <!-- <img
                 src="./images/button_add_default@2x.png"
                 alt=""
                 class="change-num-pic"
@@ -148,45 +151,46 @@
                 alt=""
                 class="change-num-pic"
               /> -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="user-group-team">
-      <div class="gruop-title">
-        <div class="group-header-one">这些团友都买了</div>
-        <div class="group-header-second">
-          （共{{ otherBuyList.length }}人参加了本次团购）
-        </div>
-      </div>
-
-      <div class="group-people">
-        <div v-for="(item, index) in otherBuyList" :key="index">
-          <div class="group-people-item">
-            <img
-              class="group-people-pic"
-              :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
-            />
-            <div class="group-people-message">
-              <div class="people-item-phone">{{ item.buyerName }}</div>
-              <div class="people-item-time">{{ item.buyTime }}</div>
-              <div
-                class="people-item-desc"
-                v-for="(targetItem, indexTarget) in item.orderItemList"
-                :key="indexTarget"
-              >
-                <span>{{ targetItem.groupbuySkuName }}</span>
-                <span>X{{ targetItem.buyNumber }}</span>
               </div>
             </div>
           </div>
-          <div
-            class="divLine"
-            style="width: 8rem"
-            v-show="index !== otherBuyList.length - 1"
-          ></div>
+        </div>
+      </div>
+
+      <div class="user-group-team">
+        <div class="gruop-title">
+          <div class="group-header-one">这些团友都买了</div>
+          <div class="group-header-second">
+            （共{{ otherBuyList.length }}人参加了本次团购）
+          </div>
+        </div>
+
+        <div class="group-people">
+          <div v-for="(item, index) in otherBuyList" :key="index">
+            <div class="group-people-item">
+              <img
+                class="group-people-pic"
+                :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
+              />
+              <div class="group-people-message">
+                <div class="people-item-phone">{{ item.buyerName }}</div>
+                <div class="people-item-time">{{ item.buyTime }}</div>
+                <div
+                  class="people-item-desc"
+                  v-for="(targetItem, indexTarget) in item.orderItemList"
+                  :key="indexTarget"
+                >
+                  <span>{{ targetItem.groupbuySkuName }}</span>
+                  <span>X{{ targetItem.buyNumber }}</span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="divLine"
+              style="width: 8rem"
+              v-show="index !== otherBuyList.length - 1"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
@@ -237,7 +241,7 @@ export default {
       groupStatus: "start",
       orderSwiperList: [],
       defaultAvt: require("./images/user_01@2x.png"),
-      defaultHeadAvt:require('./images/img_user_01@2x.png')
+      defaultHeadAvt: require("./images/img_user_01@2x.png"),
     };
   },
   created() {
@@ -245,7 +249,7 @@ export default {
     this.chiefId = JSON.parse(this.$route.query.chiefId);
     this.userId = JSON.parse(this.$route.query.userId);
 
-    // this.purchaseId = 61;
+    // this.purchaseId = 63;
     // this.chiefId = "4";
     // this.userId = "2337237484980666802";
 
@@ -320,11 +324,29 @@ export default {
                 }
                 e["timeOut"] = this.getDateDiff(this.getTimestamp(e.buyTime));
                 e["show"] = true;
-                this.orderSwiperList.push(e);
-                this.orderSwiperList.push({ show: false });
+                if (e["buyerName"].length > 6) {
+                  e["swipeBuyerName"] =
+                    e["buyerName"][0] +
+                    e["buyerName"][1] +
+                    "**" +
+                    e["buyerName"][e["buyerName"].length - 2] +
+                    e["buyerName"][e["buyerName"].length - 1];
+                  // e["swipeBuyerName"] = "刚刚好六个字";
+                } else {
+                  e["swipeBuyerName"] = e["buyerName"];
+                }
               });
+            }
+            if(this.otherBuyList.length > 2){
+              let swipeLength = 0;
+              this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+              for (let index = 0; index < swipeLength; index++) {
+                this.orderSwiperList.push(this.otherBuyList[index]);
+                this.orderSwiperList.push({ show: false });
+              }
               console.log("orderSwiperList", this.orderSwiperList);
             }
+
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
                 key: i,
@@ -524,6 +546,7 @@ export default {
         );
         this.$router.push({
           path: "/bulk_share_confirm_order",
+          // name: "分享确认订单",
           query: {
             shareData: JSON.stringify(this.shareData),
             purchaseId: JSON.stringify(this.purchaseId),
@@ -531,6 +554,13 @@ export default {
             userId: JSON.stringify(this.userId),
             checkList: JSON.stringify(this.checkList),
           },
+          // params:{
+          //   shareData: JSON.stringify(this.shareData),
+          //   purchaseId: JSON.stringify(this.purchaseId),
+          //   chiefId: JSON.stringify(this.chiefId),
+          //   userId: JSON.stringify(this.userId),
+          //   checkList: JSON.stringify(this.checkList),
+          // }
         });
       }
     },
@@ -552,7 +582,14 @@ export default {
 
 .bulk-share-main {
   background: #f0f0f0 !important;
-  overflow: auto;
+  width: 100%;
+  height: 100%;
+
+  .scrollBox {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
 
   .bulk-header {
     width: 100%;
@@ -569,6 +606,9 @@ export default {
       padding-right: 12px;
 
       .orderSwiper {
+        position: fixed;
+        top: 8px;
+        right: 12px;
         flex: 1;
         display: flex;
         justify-content: flex-end;
@@ -911,7 +951,7 @@ export default {
 
   .bottom-button {
     width: 375px;
-    height: 84px;
+    height: 71px;
     background: #ffffff;
     box-shadow: 0px -4px 15px 1px rgba(0, 0, 0, 0.04);
     display: flex;

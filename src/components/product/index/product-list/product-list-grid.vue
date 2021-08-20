@@ -144,13 +144,23 @@ export default {
       return "";
     },
     enterNav: function (product) {
+      console.log("inToDetail",product);
+      this.$sensors.track("goods_click", {
+        which_page:this.$route.name,
+        page_path:this.$route.path,
+        goods_id: product.skuId,
+        goods_name: product.skuName,
+        org_price: product.activityPrice,
+        price: product.salePrice,
+        store_id: product.storeOuCode,
+        store_name: product.storeName,
+      })
       this.$market.productEvent(
         product,
         this.$route,
         this.moduleData.onlyDeliveryType
       );
       this.$store.state.inToDetail = "common";
-      console.log("inToDetail");
     },
     addToCart: function (item) {
       this.$Loading.open();

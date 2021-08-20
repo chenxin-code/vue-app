@@ -1,7 +1,7 @@
 <template>
   <!-- // created by hjc  -->
   <!-- 首页顶部新增类目 -->
-  <div class="category" :style="{ backgroundColor: bgColor }" v-if="!$store.state.isPreview">
+  <div class="category" :style="{ backgroundColor: bgColor }" v-if="!$store.state.isPreview && !isPreview">
     <div class="categoryList" ref="categoryList">
       <div
         class="categoryItem"
@@ -42,6 +42,7 @@ export default {
     return {
       categoryList: [],
       currentSelect: 0,
+      isPreview:false,
     };
   },
   created() {
@@ -82,13 +83,22 @@ export default {
       }
     });
 
-    console.log(this.$route);
+    this.$route.query.isPreview?this.isPreview = true:this.isPreview = false;
   },
   mounted() {},
   components: {},
   methods: {
     navToSearch(item, index) {
       this.currentSelect = item.id;
+
+      this.$sensors.track("mall_tab_click", {
+        which_page:this.$route.name,
+        page_path:this.$route.path,
+        tab_name: item.name,
+        tab_id: item.id,
+        url: item.id == 0?"/common":"/mall2/list",
+        tab_rank: index+1,
+      })
 
       if (item.id == 0) {
         this.$router.push("/common");
@@ -107,6 +117,7 @@ export default {
           this.$emit("toggle", item.id);
         }
       }
+
     },
     ...mapMutations(["setShowCategory"]),
   },

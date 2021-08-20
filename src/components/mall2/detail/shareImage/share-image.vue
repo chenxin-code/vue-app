@@ -30,26 +30,6 @@
     </van-popup>
     <!--  页面-->
     <div class="share-content">
-      <!-- <div class="share-image-content">
-        <div class="title">{{proData.showTitle}}</div>
-        <div class="price">￥<span class="num">{{proData.activityPrice}}&nbsp;<span class="sale-price" v-if="proData.salePrice > proData.activityPrice">￥{{proData.salePrice}}<p class="line-t"></p></span></span></div>
-        <div class="pro-img">
-          <img :src="proImgUrl" @load="loadImage" alt="">
-        </div>
-        <div class="qrcode">
-          <div class="img">
-            <img :src="qrcode" alt="">
-          </div>
-          <div class="text">
-            <div class="top-title">{{$store.state.globalConfig.mpName}}</div>
-            <div class="bottom-tips">长按识别•去逛逛</div>
-          </div>
-        </div>
-        <div class="logo">
-          <img :src="baseIcon" alt="">
-        </div>
-      </div> -->
-
       <div class="default-share-poster" ref="shareContent">
         <div class="default-poster-header">
           <img :src="userImage" class="default-poster-header-userImage" />
@@ -87,6 +67,10 @@
           </div>
         </div>
       </div>
+
+
+
+      
     </div>
   </div>
 </template>
@@ -258,6 +242,7 @@ export default {
                   res => {
                     if (res.status === 0) {
                       this.qrcode = "data:image/png;base64," + res.data;
+                      console.log('--qrcode--', this.qrcode);
                       const img = new Image();
                       img.src = this.qrcode;
                       img.onload = () => {

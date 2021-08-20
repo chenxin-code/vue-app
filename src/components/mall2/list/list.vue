@@ -419,7 +419,7 @@ export default {
     PickupRecommend,
     AllCategory,
     AdPage,
-    NewCategory
+    NewCategory,
   },
   props: ["componentName", "orderCategory", "vipUnitUserCode", "axPoints"],
   data() {
@@ -431,13 +431,13 @@ export default {
         {
           text: "配送",
           fontclass: "mall-peisong",
-          tag: "2"
+          tag: "2",
         },
         {
           text: "自提",
           fontclass: "mall-ziti",
-          tag: "1"
-        }
+          tag: "1",
+        },
       ],
       selectedType: 2,
       listZitiId: "",
@@ -531,15 +531,15 @@ export default {
       this._loadProList();
     },
 
-    axPointsDetail: function() {
+    axPointsDetail: function () {
       this.$emit("axPointsDetail");
     },
-    channelEvent: function(channel) {
+    channelEvent: function (channel) {
       this.selectedChannel = channel;
       this.nowPage = 0;
       this._loadProList();
     },
-    getCouponTip: function() {
+    getCouponTip: function () {
       let amount =
         this.cartCanUseCouponAmount != "" ? this.cartCanUseCouponAmount : "0";
       if (parseFloat(amount) > parseFloat(this.couThresholdAmount)) {
@@ -551,7 +551,7 @@ export default {
         return "还差" + num + "元可以优惠" + this.couFaceValue + "元";
       }
     },
-    cateEvent: function(item) {
+    cateEvent: function (item) {
       // 更换分类之后 清空筛选属性信息
       this.showCreated = false;
       this.filterBrands = [];
@@ -566,7 +566,7 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    categoryEvent: function() {
+    categoryEvent: function () {
       if (this.pageType != "") {
         this.showCategory = !this.showCategory;
       } else {
@@ -574,7 +574,7 @@ export default {
       }
     },
     // linkType  1去凑单  2再逛逛 3领赠品 4去换购  5赠品未满足  6换购未满足
-    getGiftText: function() {
+    getGiftText: function () {
       if (this.activityInfo.linkType == 3) {
         return "选择赠品";
       } else if (this.activityInfo.linkType == 4) {
@@ -585,7 +585,7 @@ export default {
         return "查看换购";
       }
     },
-    goCart: function() {
+    goCart: function () {
       if (this.$route.query.fromCart == 1) {
         this.$router.go(-1);
       } else {
@@ -593,13 +593,13 @@ export default {
           path: "/mall2/cart",
           query: {
             orderCategory: this.orderCategory,
-            vipUnitUserCode: this.vipUnitUserCode
-          }
+            vipUnitUserCode: this.vipUnitUserCode,
+          },
         });
         this.$store.state.cartEntrance = "goodsList";
       }
     },
-    goGift: function() {
+    goGift: function () {
       let isScan = cartJS.getGiftIsOnlyScan(this.activityInfo);
       let giftType = cartJS.getGiftType(this.activityInfo);
 
@@ -608,10 +608,10 @@ export default {
         activityId: this.activityInfo.mktActivityId,
         sureFunc: this.sureFunc,
         isScan: isScan,
-        giftType: giftType
+        giftType: giftType,
       });
     },
-    sureFunc: function(carts) {
+    sureFunc: function (carts) {
       console.log(123123);
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
@@ -620,10 +620,10 @@ export default {
         carts: carts,
         deliveryType: this.selectedType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -634,15 +634,15 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    backEvent: function() {
+    backEvent: function () {
       if (this.$route.query.backApp) {
-        appNav.navigatorBack({ url: "0" }).then(res => {
+        appNav.navigatorBack({ url: "0" }).then((res) => {
           console.log(res);
         });
         console.log('toApp!')
@@ -663,47 +663,52 @@ export default {
         }
       }
     },
-    toSearchEvent: function() {
+    toSearchEvent: function () {
       Search.open({
         initData: {
           barHeight: this.$store.state.barHeight,
-          searchHistory: this.$store.state.mall2.searchHistory
+          searchHistory: this.$store.state.mall2.searchHistory,
         },
         clearSearchHistory: () => {
           this.$store.state.mall2.searchHistory = [];
         },
-        searchEvent: searchStr => {
+        searchEvent: (searchStr) => {
           this.category = "";
           this.cateLevel = "";
           this.setShowCategory(false);
           this.showNewCategory = this.$store.state.showNewCategory;
+
+          this.$sensors.track("goods_search_click", {
+            which_page: '商城商品列表页',
+            search_word: searchStr,
+          })
 
           Search.close();
           this.$mallCommon.pushSearchHistory(searchStr);
           this.searchKey = searchStr;
           this.nowPage = 0;
           this._loadProList();
-        }
+        },
       });
     },
-    listStyleEvent: function() {
+    listStyleEvent: function () {
       if (this.listStyle == 1) {
         this.listStyle = 2;
       } else {
         this.listStyle = 1;
       }
     },
-    filtrateCloseEvent: function() {
+    filtrateCloseEvent: function () {
       this.showFiltrate = false;
     },
-    selectedTypeEvent: function(tag) {
+    selectedTypeEvent: function (tag) {
       this.$store.state.mall2.staticDeliverType = tag;
       this.$bridgefunc.vuexStorage();
       this.selectedType = tag;
       if (tag == 1 && this.$store.state.mall2.zitiAddress.id == "") {
         this.backRefresh = true;
         this.$router.push({
-          path: "/mall2/mypickupaddress"
+          path: "/mall2/mypickupaddress",
         });
       } else {
         this.nowPage = 0;
@@ -741,6 +746,7 @@ export default {
           this.filterType = 5;
         }
       }
+      this.$Loading.open();
       this.nowPage = 0;
       this._loadProList();
     },
@@ -755,7 +761,7 @@ export default {
         // this.filterFeatureies.push(filtrateData.featureies[i].id)
         this.filterFeatureies.push({
           id: filtrateData.featureies[i].id,
-          featureType: filtrateData.featureies[i].featureType
+          featureType: filtrateData.featureies[i].featureType,
         });
       }
       this.maxPrice = filtrateData.maxPrice;
@@ -765,7 +771,7 @@ export default {
       this.nowPage = 0;
       this._loadProList();
     },
-    superFilter: function() {
+    superFilter: function () {
       this.showCategory = false;
       this.showFiltrate = true;
       this.showCreated = true;
@@ -774,7 +780,7 @@ export default {
     _loadProList: function(loaded) {
       this.queryCouponSkuList() //查询优惠券绑定的sku
       if (this.selectedType == "1") {
-        InitialLoadPickupAny.checkIsInitialLoad(address => {
+        InitialLoadPickupAny.checkIsInitialLoad((address) => {
           if (address) {
             this._loadProList();
           }
@@ -860,7 +866,7 @@ export default {
           provinceId: sad.provinceId,
           cityId: sad.cityId,
           countryId: sad.countryId,
-          townId: sad.townId
+          townId: sad.townId,
         };
       }
       if (this.productType && this.productType != "") {
@@ -877,7 +883,7 @@ export default {
       }
 
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -921,10 +927,10 @@ export default {
                     childList: [
                       {
                         name: "全部分类",
-                        id: ""
-                      }
-                    ]
-                  }
+                        id: "",
+                      },
+                    ],
+                  },
                 ];
                 for (let i = 0; i < cList.length; i++) {
                   let subArr = cList[i].childList;
@@ -945,7 +951,7 @@ export default {
             loaded("done");
           }
         },
-        error => {
+        (error) => {
           if (loaded) {
             loaded("done");
           }
@@ -954,7 +960,7 @@ export default {
         }
       );
     },
-    productEvent: function(product) {
+    productEvent: function (product) {
       let path = "/mall2/detail/" + this.$util.getDataString();
       if (product.productType == 2) {
         path = "/mall2/ticketdetail";
@@ -980,8 +986,8 @@ export default {
           skuCode: product.skuCode, // 商品编码
           storeOuCode: product.storeOuCode, // 店铺编码
           cardType: this.cardType, // 区分充值卡 计次卡
-          cardName: this.$route.query.cardName // 计次卡名称
-        }
+          cardName: this.$route.query.cardName, // 计次卡名称
+        },
       });
       if (this.searchKey !== "") {
         this.$store.state.inToDetail = "search";
@@ -990,7 +996,7 @@ export default {
       }
     },
     // 获取购物车数量
-    _getCartCount: function() {
+    _getCartCount: function () {
       if (this.$store.state.login.token == "") {
         return;
       }
@@ -999,10 +1005,10 @@ export default {
         token: this.$store.state.login.token,
         deliveryType: this.selectedType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
             this.$store.state.mall2.cartNum = data.data;
@@ -1010,13 +1016,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    addToCart: function(item) {
+    addToCart: function (item) {
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -1028,15 +1034,15 @@ export default {
             activityId: this.activityId,
             selfActivityId: item.activityId,
             deliveryType: this.selectedType,
-            number: 1
-          }
+            number: 1,
+          },
         ],
         orderCategory: this.orderCategory,
         vipUnitUserCode: this.vipUnitUserCode,
-        deliveryType: item.deliverType
+        deliveryType: item.deliverType,
       };
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -1059,13 +1065,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    deductionCart: function() {
+    deductionCart: function () {
       if (this.pageType == "" || this.pageType == "activity_nocart") {
         return;
       }
@@ -1077,10 +1083,11 @@ export default {
         skuId: this.deductionSkuId,
         storeOuCode: this.storeOuCode,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode
+        vipUnitUserCode: this.vipUnitUserCode,
       };
       if (this.selectedType == 2) {
-        paramsData.provinceId = this.$store.state.mall2.selectAddress.provinceId;
+        paramsData.provinceId =
+          this.$store.state.mall2.selectAddress.provinceId;
         paramsData.cityId = this.$store.state.mall2.selectAddress.cityId;
         paramsData.countryId = this.$store.state.mall2.selectAddress.countryId;
       } else if (this.selectedType == 1) {
@@ -1092,7 +1099,7 @@ export default {
         paramsData.activityId = this.activityId;
       }
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -1136,14 +1143,14 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
     // getProduct
-    selectAddressClick: function() {
+    selectAddressClick: function () {
       //选择地址
 
       let path = "";
@@ -1165,11 +1172,11 @@ export default {
       this.$router.push({
         path: path,
         query: {
-          productType: this.productType
-        }
+          productType: this.productType,
+        },
       });
     },
-    productImgAfterEnter: function(el) {
+    productImgAfterEnter: function (el) {
       this.showProductImg = false;
       this.showAddCartAn = true;
     },
@@ -1196,14 +1203,14 @@ export default {
         });
       });
     },
-    queryChannelList: function() {
+    queryChannelList: function () {
       let url = "/app/json/product/getAppProChannelList";
       let paramsData = {
-        channelGroupId: this.channelGroupId
+        channelGroupId: this.channelGroupId,
       };
       this.$Loading.open();
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -1221,7 +1228,7 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
@@ -1262,16 +1269,16 @@ export default {
         {
           text: "自提",
           fontclass: "mall-ziti",
-          tag: "1"
-        }
+          tag: "1",
+        },
       ];
     } else if (this.$store.state.globalConfig.delivertype_default == "2") {
       this.deliveryTypes = [
         {
           text: "配送",
           fontclass: "mall-peisong",
-          tag: "2"
-        }
+          tag: "2",
+        },
       ];
     }
 
@@ -1308,8 +1315,8 @@ export default {
           {
             text: "自提",
             fontclass: "mall-ziti",
-            tag: "1"
-          }
+            tag: "1",
+          },
         ];
       } else if (this.$route.query.deliveryType == 2) {
         this.$store.state.mall2.staticDeliverType = 2;
@@ -1317,8 +1324,8 @@ export default {
           {
             text: "配送",
             fontclass: "mall-peisong",
-            tag: "2"
-          }
+            tag: "2",
+          },
         ];
       }
     }
@@ -1424,7 +1431,7 @@ export default {
       this.$keepaliveHelper.deleteCache(this);
     }
     next();
-  }
+  },
 };
 </script>
 
