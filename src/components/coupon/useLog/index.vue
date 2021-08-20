@@ -264,7 +264,7 @@ export default {
         memberId: this.memberId,
         pageIndex: this.pageIndex[tabIndex],
         pageSize: 10,
-        businessType: 0,
+        businessType: "200001",
         state: this.tabList[tabIndex].status
       };
       this.loading = true;
