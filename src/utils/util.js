@@ -570,9 +570,9 @@ var utils = {
     // iPhone XR
     let isIPhoneXR = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
 
-    let isIPhone12 = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 390 && window.screen.height === 844;
+    let isIPhone12 = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 390 && window.screen.height === 844;
     console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR, isIPhone12)
-    console.log('-----window.devicePixelRatio---->', window.devicePixelRatio);
+    console.log('-----window.devicePixelRatio---->', window.screen.width, window.screen.height);
 
     if (isIPhoneX || isIPhoneXSMax || isIPhoneXR || isIPhone12) {
       return true
