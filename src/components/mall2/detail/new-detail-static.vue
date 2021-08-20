@@ -1649,7 +1649,7 @@
             <div>微信好友</div>
           </div>
           <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="static/image/mall2/share_link.png" alt="" />
+            <img src="./shareImage/image/share_haibao.png" alt="" />
             <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
