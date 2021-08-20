@@ -719,18 +719,18 @@ export default {
               paramsData: paramsData,
               deliveryType: paramsData.deliveryType
             };
-
-            if (
-              !(this.$store.state.mall2.selectAddress.id > 0) &&
-              this.detailData.deliveryType == 2
-            ) {
-              if (this.matchAddress) {
-                this.$store.state.mall2.selectAddress = this.matchAddress;
-                this.$bridgefunc.vuexStorage(() => {});
-              } else {
-                params.noMatch = true;
-              }
-            }
+              // this.detailData.deliveryType == 2
+            // if (
+            //   !(this.$store.state.mall2.selectAddress.id > 0) &&
+            //   this.detailData.deliveryType == 2
+            // ) {
+            //   if (this.matchAddress) {
+            //     this.$store.state.mall2.selectAddress = this.matchAddress;
+            //     this.$bridgefunc.vuexStorage(() => {});
+            //   } else {
+            //     params.noMatch = true;
+            //   }
+            // }
             if (
               this.$mallCommon.isExistCanNotAttendActivity(data.data.occur) ==
               true

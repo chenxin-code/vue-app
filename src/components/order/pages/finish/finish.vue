@@ -195,7 +195,7 @@ export default {
         this.loading = false;
         this.mallRequestDone = true;
         this.mallAllDone = true;
-        this.handelMegerOrderForm();
+        // this.handelMegerOrderForm();
         this.handelShowTip()
         return;
       }
@@ -206,7 +206,7 @@ export default {
         this.loading = false;
         this.mallAllDone = true;
         console.log("自建商城已请求到最后数量,调整下标",this.mallNowPage);
-        this.handelMegerOrderForm();
+        // this.handelMegerOrderForm();
         this.handelShowTip()
         return;
       }
@@ -384,17 +384,17 @@ export default {
         this.loading = false;
         this.serviceRequestDone = true;
         this.serviceMallAllDone = true;
-        this.handelMegerOrderForm();
+        // this.handelMegerOrderForm();
         this.handelShowTip()
         return;
       }
 
       if(this.serviceMallNowPage != 1 && this.serviceMallTotalPage != null  && this.serviceMallNowPage > this.serviceMallTotalPage){
-        this.serviceMallNowPage = this.serviceMallTotalPage;
+        this.serviceMallNowPage = this.serviceMallTotalPage == '0'? 1 : this.serviceMallTotalPage;
         this.loading = false;
         this.serviceMallAllDone = true;
         console.log("服务商城已请求到最后数量,调整下标",this.mallNowPage);
-        this.handelMegerOrderForm();
+        // this.handelMegerOrderForm();
         this.handelShowTip()
         return;
       }
@@ -418,9 +418,9 @@ export default {
           this.serviceMallTotalPage = res.data.pages;
           let formateList = this.handelServiceMallOrderForm(res);
           console.log("formateList",formateList);
-          this.handelShowTip()
           if(!formateList && this.serviceMallNowPage <= this.serviceMallTotalPage){
             this.requestServiceMallOrderFormList();
+            this.handelShowTip()
           }else{
             this.serviceMallOrderFormList = formateList;
             this.serviceRequestDone = true;
