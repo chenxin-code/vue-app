@@ -571,7 +571,8 @@ var utils = {
     let isIPhoneXR = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
 
     let isIPhone12 = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 390 && window.screen.height === 844;
-    console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR)
+    console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR, isIPhone12)
+    console.log('-----window.devicePixelRatio---->', window.devicePixelRatio);
 
     if (isIPhoneX || isIPhoneXSMax || isIPhoneXR || isIPhone12) {
       return true
