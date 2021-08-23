@@ -74,18 +74,16 @@ export default {
     this.toast();
     this.getDisCenterBaseInfo();
     this.getDetail();
-    window.onresize = () => {
-      return (() => {
-        this.setPosition();
-      })()
-    }
-
+    window.onresize = _.debounce(() => {
+      this.setPosition();
+    }, 500);
   },
   methods: {
     setPosition(){
       this.$nextTick(() => {
         this.$refs['avatar'].style.top = this.$refs['bg4'].offsetHeight * 0.63 + 'px';
         this.$refs['username'].style.top = this.$refs['bg4'].offsetHeight * 0.72 + 'px';
+        console.log('查看offsetHeight---------->',this.$refs['bg4'].offsetHeight);
       })
     },
     toast() {
@@ -124,6 +122,7 @@ export default {
           this.setPosition();
         })
         .catch(err => {
+          this.setPosition();
           // this.$toast("请求失败");
         });
     },
@@ -283,6 +282,9 @@ export default {
 </script>
 <style lang="stylus" scoped type="text/stylus">
 $fontColor = #FFFFFF;
+.router_class {
+  background-color #FF5642 !important
+}
 .get-coupons-page {
   position: relative;
   width: 100%;
@@ -290,7 +292,7 @@ $fontColor = #FFFFFF;
   overflow: auto;
   background-image: url('./img/bg3.png');
   background-repeat: no-repeat;
-  background-size:100% 100%;
+  background-size:100% auto;
   /deep/.nav-top {
     background-color: #ffffff;
     .navcontent {
@@ -342,6 +344,7 @@ $fontColor = #FFFFFF;
         font-family: PingFangSC-Regular, PingFang SC;
         min-height: 40px;
         font-size 14px
+        color #FFF9E3
       }
       .desc {
         position absolute
