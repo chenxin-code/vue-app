@@ -13,22 +13,16 @@
         <div class="avatar" ref="avatar">
           <van-image
             class="avatar-img"
-            width="70"
-            height="70"
+            width="60"
+            height="60"
             round
             fit="cover"
             :src="imgSrc"
           />
         </div>
         <div class="user-name" ref="username">{{ userInfo.distributorName }}</div>
-        <div class="money" v-if="couponDetail.couponType === 40">
-          {{ +couponDetail.discountRatio * 10 }}
-          <span>折</span>
-        </div>
-        <div class="money" v-else>
-          <span>￥</span>
-          {{ couponDetail.voucherAmount }}
-        </div>
+        <div class="money" v-if="couponDetail.couponType === 40">{{ +couponDetail.discountRatio * 10 }}<span>折</span></div>
+        <div class="money" v-else><span>￥</span>{{ couponDetail.voucherAmount }}</div>
         <div class="desc">{{ '·' + couponType(couponDetail) + '·' }}</div>
         <!--<div class="btn">
           <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
@@ -334,7 +328,7 @@ $fontColor = #FFFFFF;
         margin-bottom: 0;
         .avatar-img {
           margin-bottom: 0;
-          border: 2px solid #facb94;
+          border: 3px solid #FFF9E3;
         }
       }
       .user-name {
