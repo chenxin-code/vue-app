@@ -23,7 +23,7 @@
         <div class="user-name" ref="username">{{ userInfo.distributorName }}</div>
         <div class="money" v-if="couponDetail.couponType === 40">{{ +couponDetail.discountRatio * 10 }}<span>折</span></div>
         <div class="money" v-else><span>￥</span>{{ couponDetail.voucherAmount }}</div>
-        <div class="desc">{{ '·' + couponType(couponDetail) + '·' }}</div>
+        <div class="desc">{{ '· ' + couponType(couponDetail) + ' ·' }}</div>
         <!--<div class="btn">
           <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
           >立即领取</van-button
@@ -105,10 +105,12 @@ export default {
       };
       this.$http
         .get(url, { params: obj })
-        .then(res => {
+        .then(async res => {
           if (res.data.code === 200) {
             this.userInfo = res.data.data;
-            this.imgSrc = this.userInfo.headerPic;
+            if(await this.CheckImgExists(this.userInfo.headerPic)){
+              this.imgSrc = this.userInfo.headerPic;
+            }
             this.$forceUpdate();
           } else {
             this.$toast(res.data.message);
@@ -270,6 +272,19 @@ export default {
         })
         .finally(() => {})
         .catch(err => {});
+    },
+    //判断图片地址是否有效
+    CheckImgExists(imgurl){
+      return new Promise(function(resolve,reject){
+        var ImgObj = new Image();
+        ImgObj.src= imgurl;
+        ImgObj.onload = function(res){
+          resolve(true);
+        };
+        ImgObj.onerror = function(err){
+          resolve(false);
+        };
+      });
     }
   }
 };
