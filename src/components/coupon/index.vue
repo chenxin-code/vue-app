@@ -377,6 +377,7 @@ $fontColor = #FFFFFF;
         line-height: 55px;
         color: #FF393E;
         margin-top 45px
+        width 100%
         // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         // -webkit-background-clip: text;
         // -webkit-text-fill-color: transparent;
