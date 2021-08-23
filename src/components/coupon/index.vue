@@ -29,15 +29,17 @@
           <span>￥</span>
           {{ couponDetail.voucherAmount }}
         </div>
-        <div class="desc">{{ couponType(couponDetail) }}</div>
-        <div class="btn">
+        <div class="desc">{{ '·' + couponType(couponDetail) + '·' }}</div>
+        <!--<div class="btn">
           <van-button class="van-btn" @click="receiveCoupon" v-if="!isReceive"
           >立即领取</van-button
           >
           <van-button class="van-btn" @click="goToShopping(couponDetail)" v-else
           >立即使用</van-button
           >
-        </div>
+        </div>-->
+        <img :src="require('./img/get.png')" class="img-btn" @click="receiveCoupon" v-if="!isReceive" />
+        <img :src="require('./img/use.png')" class="img-btn" @click="goToShopping(couponDetail)" v-else />
       </div>
     </div>
   </div>
@@ -72,8 +74,20 @@ export default {
     this.toast();
     this.getDisCenterBaseInfo();
     this.getDetail();
+    window.onresize = () => {
+      return (() => {
+        this.setPosition();
+      })()
+    }
+
   },
   methods: {
+    setPosition(){
+      this.$nextTick(() => {
+        this.$refs['avatar'].style.top = this.$refs['bg4'].offsetHeight * 0.63 + 'px';
+        this.$refs['username'].style.top = this.$refs['bg4'].offsetHeight * 0.72 + 'px';
+      })
+    },
     toast() {
       Toast.loading({
         duration: 0,
@@ -107,10 +121,7 @@ export default {
           } else {
             this.$toast(res.data.message);
           }
-          this.$nextTick(() => {
-            this.$refs['avatar'].style.top = this.$refs['bg4'].offsetHeight * 0.63 + 'px';
-            this.$refs['username'].style.top = this.$refs['bg4'].offsetHeight * 0.72 + 'px';
-          })
+          this.setPosition();
         })
         .catch(err => {
           // this.$toast("请求失败");
@@ -332,8 +343,7 @@ $fontColor = #FFFFFF;
         min-height: 40px;
         font-size 14px
       }
-      .desc,
-      .title {
+      .desc {
         position absolute
         top 25%
         left 50%
@@ -344,8 +354,9 @@ $fontColor = #FFFFFF;
         //min-height: 40px;
         border 1px solid #FF393E
         border-radius 8px
-        padding 5px
+        padding 4px 5px
         line-height 1
+        margin-top 35px
       }
       .line {
         border-top: 2px dashed #F1F1F1;
@@ -360,18 +371,19 @@ $fontColor = #FFFFFF;
         top 12%
         left 50%
         transform translateX(-50%)
-        font-size: 40px;
+        font-size: 44px;
         font-family: PingFang-SC-Heavy;
         font-weight: 700;
-        line-height: 38px;
+        line-height: 55px;
         color: #FF393E;
+        margin-top 45px
         // background: linear-gradient(127deg, #FCECD9 0%, #FAC88B 100%);
         // -webkit-background-clip: text;
         // -webkit-text-fill-color: transparent;
         // text-shadow: -3px 0px 1px #fac88b;
         // background-color: #6666667a;
         span {
-          font-size: 26px;
+          font-size: 30px;
         }
       }
       .btn {
@@ -384,11 +396,14 @@ $fontColor = #FFFFFF;
           background: linear-gradient(270deg, #FCECD9 0%, #FAC88B 100%);
           width: 135px;
           /deep/.van-button__text {
+            font-size 17px
             color: #E5165A;
-            font-weight: 600;
+            font-weight: 700;
           }
         }
-
+      }
+      .img-btn {
+        width: 165px;
       }
     }
   }
