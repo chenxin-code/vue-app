@@ -571,10 +571,14 @@ var utils = {
     let isIPhoneXR = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
 
     let isIPhone12 = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 390 && window.screen.height === 844;
-    console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR, isIPhone12)
+    let isIPhone12Mini = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 360 && window.screen.height === 780;
+    let isIPhone12ProMax = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 428 && window.screen.height === 926;
+
+
+    console.log('isIPhoneX,isIPhoneXSMax,isIPhoneXR)',isIPhoneX,isIPhoneXSMax,isIPhoneXR, isIPhone12, window.devicePixelRatio)
     console.log('-----window.devicePixelRatio---->', window.screen.width, window.screen.height);
 
-    if (isIPhoneX || isIPhoneXSMax || isIPhoneXR || isIPhone12) {
+    if (isIPhoneX || isIPhoneXSMax || isIPhoneXR || isIPhone12 || isIPhone12Mini || isIPhone12ProMax) {
       return true
     }
     return false
