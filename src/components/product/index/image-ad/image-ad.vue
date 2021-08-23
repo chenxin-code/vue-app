@@ -585,8 +585,6 @@ export default {
         newNav.link.url = newNav.link.url.replace(/scToken=/,`scToken=${this.$store.state.login.token}`)
       }
 
-      console.log('ccccccccccccccccc', newNav.link.url)
-
       // 分销工程单独跳转webview， 解决微信小程序双标题问题
       if(this.wxenvironment() && this.isDistribution(newNav.link.url)) {
         wx.miniProgram.navigateTo({
@@ -628,11 +626,10 @@ export default {
       return ua.match(/MicroMessenger/i) == "micromessenger";
     },
     isDistribution(url) {
-      if(process.env.ENV == 'production') {
-        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8001/.test(url);
-
-      }else {
+      if(this.$store.state.environment == "development") {
         return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
+      }else {
+        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8001/.test(url);
       }
     },
     resetGndhPageArr: function (codeArr) {
