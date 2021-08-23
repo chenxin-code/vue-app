@@ -10,8 +10,8 @@
              @click="setCartSel(cartitem,storeitem,occuritem)"></i>
         </div>
         <div class="cell-content">
-          <div class="good-content" >
-            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}" @click.stop="enterGoodDetail(cartitem)">
+          <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
+            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
               <div class="click-div"></div>
               <img :src="cartitem.phPictureUrl" alt="">
               <div class="cart-item-state theme_font_white" v-if="cartitem.state == 1 || cartitem.state == 4">
@@ -43,7 +43,7 @@
                              <!--:minValue="cartitem.saleNumBegin" :stepNum="cartitem.saleNumStep"-->
                              <!--:maxValue="cartitem.saleNumMax"-->
                              <!--@numChange="numChange"></Counter>-->
-                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="cartitem.saleNumMax" @blur="numBlur" @change="numChange" integer disable-input @plus="plusNum" @minus="minusNum" />
+                    <van-stepper v-if="cartitem.isGift == 0 && cartitem.state != 1 &&cartitem.state != 4" v-model="cartitem.number" :min="cartitem.saleNumBegin" :step="cartitem.saleNumStep" :max="getMin(cartitem)" @blur="numBlur" @change="numChange" integer disable-input @plus="plusNum" @minus="minusNum" @overlimit="overLimit"/>
                     <span v-if="cartitem.isGift != 0" class="gift-num theme_font_gray">x{{cartitem.number}}</span>
                   </div>
                 </div>
@@ -86,6 +86,7 @@
   import SalesPro from '../common/salepro'
   import PriceOrder from '@/components/commonui/price/price-order'
   import {CellSwipe} from 'mint-ui'
+  import _ from "lodash";
 
   export default {
     name: "cart-item",
@@ -111,6 +112,9 @@
       }
     },
     methods: {
+      getMin(cartitem){
+        return _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+      },
       getDigitalDisplayName: function (acctType) {
         return this.$mallCommon.accTypeToName(acctType, '200001')
         // let arr = this.$store.state.globalConfig.acctList;
@@ -284,10 +288,15 @@
         this.$emit('numChange', this.cartitem);
       },
       plusNum: function () {
+        event.stopPropagation();
         this.$emit('plusNum', this.cartitem);
       },
       minusNum: function () {
+        event.stopPropagation();
         this.$emit('minusNum', this.cartitem);
+      },
+      overLimit(){
+        event.stopPropagation();
       },
       getStateStr: function () {
         if (this.cartitem.state == 1) {
@@ -356,7 +365,7 @@
     background none
     overflow hidden;
     margin-bottom: 18px;
-    padding-bottom: 4px; 
+    padding-bottom: 4px;
     padding-right: 2px;
 
     .cart-item-sel {
