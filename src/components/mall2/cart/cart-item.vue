@@ -4,11 +4,13 @@
   <div>
     <van-swipe-cell :right-width="80" :on-close="onClose" class="cell-swipe">
       <div class="cart-item">
+        <!-- 左侧选中 -->
         <div class="cart-item-sel">
           <i v-show="cartitem.isGift == 0 || isEditing " class="iconfont font-large"
              :class="cartJS.getXZClass(isEditing,cartitem.checked,cartitem.dchecked)"
              @click="setCartSel(cartitem,storeitem,occuritem)"></i>
         </div>
+         <!-- 主要数据 -->
         <div class="cell-content">
           <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
             <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
@@ -59,11 +61,12 @@
             <p class="good-salespro-right" v-if="singleActivities_2.length == 1" @click="removeSingleActivity()">不参加</p>
           </div>
           <!--未参加单品活动 级别2，但是有活动 级别2-->
-          <div class="good-salespro" v-for="item in singleActivities_2"
-               v-if="singleActivities_2.length > 0 && curSingleActivity == null && orderCategory != 1">
-            <p class="sa-type">{{item.currentSelfActivity.mktActivityType}}</p>
-            <p class="sl-title single-line">{{item.currentSelfActivity.mktActivityTitle}} <span class="theme_standard_font">{{item.digitalPrice}}{{getDigitalDisplayName(item.acctType)}}</span> <span class="theme_standard_font" v-show="item.price">+ ¥{{$util.toDecimal2(item.price)}}</span></p>
-            <p class="good-salespro-right" @click="joinSingleActivity(item.currentSelfActivity)">参加</p>
+          <div class="good-salespro" v-for="item in singleActivities_2" :key="item.id">
+            <div v-if="singleActivities_2.length > 0 && curSingleActivity == null && orderCategory != 1">
+                <p class="sa-type">{{item.currentSelfActivity.mktActivityType}}</p>
+                <p class="sl-title single-line">{{item.currentSelfActivity.mktActivityTitle}} <span class="theme_standard_font">{{item.digitalPrice}}{{getDigitalDisplayName(item.acctType)}}</span> <span class="theme_standard_font" v-show="item.price">+ ¥{{$util.toDecimal2(item.price)}}</span></p>
+                <p class="good-salespro-right" @click="joinSingleActivity(item.currentSelfActivity)">参加</p>
+            </div>
           </div>
 
           <div class="good-salespro" v-if="cartitem.activity.length > 1 && cartitem.isGift == 0">

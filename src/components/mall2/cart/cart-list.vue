@@ -2,6 +2,7 @@
 
 <template>
   <div class="cart-list">
+    <!-- 主内容：店铺商品列表 -->
     <div
       class="cart-content"
       v-show="occurArr.length || invalidCart.length"
@@ -11,8 +12,10 @@
         <div
           :ref="getCartRef(index)"
           v-for="(occuritem, index) in occurArr"
+          :key="index"
           class="occur-div theme_bg_white"
         >
+          <!-- 店铺名称 -->
           <div
             class="occur-title theme_font_white theme_bg_ml_red"
             @click="setOccSel(occuritem)"
@@ -32,8 +35,14 @@
               {{ occuritem.store[0].storeName }}</span
             >
           </div>
-          <div class="store-div" v-for="(storeitem, index) in occuritem.store">
-            <div class="store-title">
+          <!-- 店铺商品列表 -->
+          <div
+            class="store-div"
+            v-for="(storeitem, index) in occuritem.store"
+            :key="index"
+          >
+            <!-- 商品优惠券 -->
+            <div class="store-title" v-if="storeitem.userCanGetCoupon && storeitem.userCanGetCoupon.length">
               <div class="leftcontent">
                 <!--                <i class="iconfont font-large-x"-->
                 <!--                   :class="cartJS.getXZClass(isEditing,storeitem.checked,storeitem.dchecked)"-->
@@ -43,10 +52,6 @@
               </div>
               <div
                 class="rightcontent"
-                v-show="
-                  storeitem.userCanGetCoupon &&
-                  storeitem.userCanGetCoupon.length
-                "
                 @click="coupon(storeitem)"
               >
                 <span>优惠券</span>
@@ -55,10 +60,11 @@
                 ></i>
               </div>
             </div>
-
+            <!-- 店铺活动商品-->
             <div
               class="store-content"
               v-for="(activityitem, index) in storeitem.activity"
+              :key="index"
             >
               <div class="activity-title">
                 <div class="leftcontent single-line">
@@ -84,7 +90,7 @@
               </div>
               <div class="activity-content">
                 <CartItem
-                  v-for="(cartitem, index) in activityitem.cart"
+                  v-for="cartitem in activityitem.cart"
                   :isEditing="isEditing"
                   :cartitem="cartitem"
                   :occuritem="occuritem"
@@ -102,10 +108,11 @@
                 </CartItem>
               </div>
             </div>
+            <!-- 商品信息详情 -->
             <div class="store-content marT10">
               <div class="activity-content">
                 <CartItem
-                  v-for="(cartitem, index) in storeitem.noActivityCart"
+                  v-for="cartitem in storeitem.noActivityCart"
                   :isEditing="isEditing"
                   :cartitem="cartitem"
                   :occuritem="occuritem"
@@ -124,7 +131,7 @@
               </div>
             </div>
           </div>
-          <div class="pay-div-height">
+          <!-- <div class="pay-div-height">
             <PayDiv
               :occuritem="occuritem"
               :isEditing="isEditing"
@@ -134,21 +141,18 @@
               v-show="showFirstBt"
             >
             </PayDiv>
-          </div>
+          </div> -->
         </div>
+        <!-- 失效宝贝 -->
         <div
           class="occur-div theme_bg_white"
           v-show="invalidCart && invalidCart.length"
         >
           <div
-            class="occur-title title-between theme_font_white theme_bg_ml_red"
-          >
+            class="occur-title title-between theme_font_white theme_bg_ml_red">
             <span class="theme_font_black">
-              <i class="iconfont mall-shoukuanfang"></i> 失效的宝贝</span
-            >
-            <span class="theme_font_tint flotr" @click.stop="clearInvalid"
-              >清除所有</span
-            >
+              <i class="iconfont mall-shoukuanfang"></i> 失效的宝贝</span>
+            <span class="theme_font_tint flotr" @click.stop="clearInvalid">清除所有</span>
           </div>
           <div class="invalid-content">
             <InvalidCartItem
@@ -159,10 +163,11 @@
             </InvalidCartItem>
           </div>
         </div>
+        <div style="height:76px"></div>
       </div>
 
       <!--固定在顶部的div-->
-      <div
+      <!-- <div
         v-for="(occuritem, index) in occurArr"
         class="occur-title theme_font_white theme_bg_ml_red occur-top-fixed"
         @click="setOccSel(occuritem)"
@@ -178,24 +183,23 @@
           <i class="iconfont mall-shoukuanfang"></i>
           {{ occuritem.store[0].storeName }}</span
         >
-      </div>
-      <!--固定在底部的div-->
-      <div class="occur-bt-fixed">
+      </div> -->
+      <!--底部固定 ：全选及购物车结算-->
+      <div class="occur-bt-fixed" v-if="occurArr.length">
         <PayDiv
-          v-for="(occuritem, index) in occurArr"
-          :occuritem="occuritem"
+          :occurArr="occurArr"
+          :occuritem="occurArr[0]"
           class="pay-div theme_bg_white"
           :isEditing="isEditing"
-          @setOccSel="setOccSel"
-          @toPay="toPay"
+          @setOccSel="checkedAllSel"
+          @toPay="submitOrder"
           @toDelete="toDelete"
-          v-show="fixedIndex == index"
-          :key="index"
         >
         </PayDiv>
         <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
       </div>
     </div>
+    <!-- 购物车为空时 -->
     <div
       class="nodata-content"
       v-if="!(occurArr.length || invalidCart.length) && isHasRequest"
@@ -213,7 +217,7 @@
         class="recommend-div"
         v-if="
           $store.state.globalConfig.app_home_special_flag != 'cnooc' &&
-          this.isPresale != true
+            this.isPresale != true
         "
       >
         <Recommend
@@ -222,9 +226,15 @@
         ></Recommend>
       </div>
     </div>
-    <van-popup v-model="showDelectPopup" round closeable :style="{ height: '196px' }">
+    <!-- 商品删除弹框 -->
+    <van-popup
+      v-model="showDelectPopup"
+      round
+      closeable
+      :style="{ height: '196px' }"
+    >
       <div class="delectPopup">
-        <div class="tipsText">确认将这{{deleteCartNum}}个商品删除？</div>
+        <div class="tipsText">确认将这{{ deleteCartNum }}个商品删除？</div>
         <div class="btns">
           <div class="cancel" @click="showDelectPopup = false">取消</div>
           <div class="delect" @click="deleteCartItem">删除</div>
@@ -245,7 +255,6 @@ import Recommend from "../list/recommend/index";
 import BScroll from "better-scroll";
 import PayDiv from "./pay-div";
 import cartEvent from "../../../utils/presale/cart";
-import cart from './js/cart';
 
 export default {
   name: "cart-list",
@@ -254,14 +263,14 @@ export default {
     CartItem,
     Recommend,
     PayDiv,
-    InvalidCartItem,
+    InvalidCartItem
   },
   props: [
     "deliverType",
     "isEditing",
     "orderCategory",
     "vipUnitUserCode",
-    "isPresale",
+    "isPresale"
   ],
   data() {
     return {
@@ -272,33 +281,33 @@ export default {
       heightArr: [],
       fixedIndex: -1,
       showFirstBt: true,
-      showDelectPopup:false,
-      deleteItem:[],
-      deleteCartNum:0,
-      detItem:[],
-      checkedDelectItem:[],
-      deleteType:"checked"
+      showDelectPopup: false,
+      deleteItem: [],
+      deleteCartNum: 0,
+      detItem: [],
+      checkedDelectItem: [],
+      deleteType: "checked"
     };
   },
   methods: {
-    clearInvalid: function () {
+    clearInvalid: function() {
       let carts = cartJS.getInvalidArr(this.invalidCart);
       this.deleteCart(carts);
     },
     // 去店铺
-    toShop: function (storeItem) {
+    toShop: function(storeItem) {
       this.$router.push({
         path: "/mall2/shop",
         query: {
           storeOuCode: storeItem.storeOuCode,
-          lastPath: this.$route.path,
-        },
+          lastPath: this.$route.path
+        }
       });
     },
-    getCartRef: function (index) {
+    getCartRef: function(index) {
       return "mall2cart" + index;
     },
-    goShopList: function () {
+    goShopList: function() {
       // let path = "/mall2/list/" + this.$util.getDataString();
       // this.$router.push({
       //   path: path,
@@ -311,20 +320,20 @@ export default {
       //   path: '/common',
       // })
       if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        if(this.$route.path == "/common"){
-          location.reload()
-        }else{
+        if (this.$route.path == "/common") {
+          location.reload();
+        } else {
           this.$router.replace({
-            path: '/common',
-          })
+            path: "/common"
+          });
         }
       } else {
         this.$router.replace({
-          path: '/common',
-        })
+          path: "/common"
+        });
       }
     },
-    coupon: function (storeitem) {
+    coupon: function(storeitem) {
       Coupon.open({
         initData: {
           listData: storeitem.userCanGetCoupon,
@@ -332,12 +341,12 @@ export default {
           skuId: "",
           type: "receive",
           categoryId: "",
-          token: this.$store.state.login.token,
+          token: this.$store.state.login.token
         },
-        selectedCoupon: (coupon) => {
+        selectedCoupon: coupon => {
           Coupon.close();
         },
-        getedCoupon: (coupon) => {
+        getedCoupon: coupon => {
           // for (let i = 0; i < this.detailData.couponModels.length; i++) {
           //   let item = this.detailData.couponModels[i]
           //   if (item.couTypeNo == coupon.couTypeNo) {
@@ -346,7 +355,7 @@ export default {
           //   }
           // }
         },
-        couponProducts: (coupon) => {
+        couponProducts: coupon => {
           let path = "/mall2/list/" + this.$util.getDataString();
           this.$router.push({
             path: path,
@@ -358,8 +367,8 @@ export default {
               lastPath: this.$route.path,
               couFaceValue: coupon.couFaceValue,
               couThresholdAmount: coupon.couThresholdAmount,
-              endTime: this.$util.getDateFromString(coupon.validEndDate),
-            },
+              endTime: this.$util.getDateFromString(coupon.validEndDate)
+            }
           });
           // pageType: 'coupon',
           //   coupon: coupon.couTypeCode,
@@ -370,10 +379,10 @@ export default {
           //   storeOuCode: this.detailData.storeOuCode,
           //   endTime: this.$util.getDateFromString(coupon.validEndDate)
           Coupon.close();
-        },
+        }
       });
     },
-    rightActivityClick: function (activityitem) {
+    rightActivityClick: function(activityitem) {
       // linkType  1去凑单  2再逛逛 3领赠品 4去换购  5赠品未满足  6换购未满足
       if (activityitem.linkType != 3 && activityitem.linkType != 4) {
         //调选商品的界面
@@ -387,8 +396,8 @@ export default {
             delivertype: this.deliverType,
             skuId: activityitem.cart[0].skuId,
             storeOuCode: activityitem.cart[0].storeOuCode,
-            lastPath: this.$route.path,
-          },
+            lastPath: this.$route.path
+          }
         });
       } else {
         let giftType = cartJS.getGiftType(activityitem);
@@ -396,11 +405,11 @@ export default {
           listData: activityitem.gift,
           activityId: activityitem.mktActivityId,
           sureFunc: this.sureFunc,
-          giftType: giftType,
+          giftType: giftType
         });
       }
     },
-    sureFunc: function (carts) {
+    sureFunc: function(carts) {
       this.$Loading.open();
       let url = "/app/json/app_cart/addCart";
       let paramsData = {
@@ -408,10 +417,10 @@ export default {
         carts: carts,
         deliveryType: this.deliverType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -422,13 +431,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    setCartSel: function (cartitem, storeitem, occuritem) {
+    setCartSel: function(cartitem, storeitem, occuritem) {
       if (this.isEditing) {
         cartJS.setCartSel(cartitem, this.isEditing, storeitem, occuritem);
       } else {
@@ -437,13 +446,13 @@ export default {
             skuId: cartitem.skuId,
             storeOuCode: cartitem.storeOuCode,
             checked: cartitem.checked ? 0 : 1,
-            activityId: cartitem.activityId,
-          },
+            activityId: cartitem.activityId
+          }
         ];
         this.updateCart(carts);
       }
     },
-    setStoreSel: function (storeitem, undefined, occuritem) {
+    setStoreSel: function(storeitem, undefined, occuritem) {
       if (this.isEditing) {
         cartJS.setStoreSel(storeitem, this.isEditing, undefined, occuritem);
       } else {
@@ -451,7 +460,24 @@ export default {
         this.updateCart(carts);
       }
     },
-    setOccSel: function (occuritem) {
+    /*底部---切换选中全部*/
+    checkedAllSel() {
+      let isChecked = cartJS.isCheckedAll(this.occurArr, this.isEditing);
+      if (this.isEditing) {
+        this.occurArr.map(occuritem => {
+          cartJS.setOccSel(occuritem, this.isEditing, !isChecked ? 1 : 0);
+        });
+      } else {
+        let carts = cartJS.getStoreSelOccur(
+          this.occurArr,
+          this.isEditing,
+          "update",
+          !isChecked ? 1 : 0
+        );
+        this.updateCart(carts);
+      }
+    },
+    setOccSel: function(occuritem) {
       if (this.isEditing) {
         cartJS.setOccSel(occuritem, this.isEditing);
       } else {
@@ -459,121 +485,136 @@ export default {
         this.updateCart(carts);
       }
     },
-    toPay: function (occuritem) {
-      let carts = cartJS.getSelOccur(occuritem, this.isEditing, "pay");
-      if (carts.length == 0) {
-        this.$Toast("请选择要结算的商品");
+     /*底部----提交订单*/
+    submitOrder(name) {
+      let occurArr=[];
+      this.occurArr.map(occuritem => {
+        let carts=cartJS.getSelOccur(occuritem, this.isEditing, "pay");
+        if(carts.length){
+          occurArr.push(occuritem)
+        }
+      });
+      if(occurArr.length >10){
+        this.$Toast("只能结算最多10个店铺的商品！");
+        return;
+      }else if (occurArr.length == 0) {
+        this.$Toast("请选择要结算的商品")
         return;
       }
-      let url = "/app/json/app_cart/SettleCart";
-      let paramsData = {
-        token: this.$store.state.login.token,
-        deliveryType: this.deliverType,
-        carts: carts,
-        orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
-      };
-      if (this.isPresale == true) {
-        paramsData.cartType = "1";
-      }
-
-      if (this.deliverType == 2) {
-
-        // if (
-        //   this.$store.state.mall2.selectAddress.id == "" ||
-        //   this.$store.state.mall2.selectAddress.id == "undefined"
-        // ) {
-        //   this.$Toast("请先选择配送区域！--------》");
-        //   return;
-        // } else
-        if (this.$store.state.mall2.selectAddress.id != "-1") {
-          paramsData.userAddressId = this.$store.state.mall2.selectAddress.id;
-        } else {
-          paramsData.userAddress = {};
-          paramsData.userAddress.provinceId = this.$store.state.mall2.selectAddress.provinceId;
-          paramsData.userAddress.provinceName = this.$store.state.mall2.selectAddress.provinceName;
-          paramsData.userAddress.cityId = this.$store.state.mall2.selectAddress.cityId;
-          paramsData.userAddress.cityName = this.$store.state.mall2.selectAddress.cityName;
-          paramsData.userAddress.countryId = this.$store.state.mall2.selectAddress.countryId;
-          paramsData.userAddress.countryName = this.$store.state.mall2.selectAddress.countryName;
-          paramsData.userAddress.townId = this.$store.state.mall2.selectAddress.townId;
-          paramsData.userAddress.townName = this.$store.state.mall2.selectAddress.townName;
-        }
-      }
-
-      this.setCommonPara(paramsData);
+      let apiList = this.toPay(occurArr);
       this.$Loading.open();
-      this.$http.post(url, paramsData).then(
-        (res) => {
+      let this_=this;
+      Promise.all(apiList).then(response => {
+        console.log(response,'Promise.all');
+        let isErrorData = response.find(item => item.status !=0);
+        if(isErrorData){
+           this.$Toast(isErrorData.info);
+        }else{
+          let occurArr=[],firstResolveData={},occurList=[],cartsList=[],needAlert=false;
+          response.map((data,k)=>{
+             if(!k){
+               firstResolveData=data
+             }
+             occurList=occurList.concat(data.data.occur);
+             cartsList=cartsList.concat(data.paramsData.carts);
+             occurArr=occurArr.concat( cartJS.dealCartList(data.data.occur) );
+             needAlert=this_.$mallCommon.isExistCanNotAttendActivity( data.data.occur);
+          })
+          this.occurArr=occurArr;
+          this.isEditing && cartJS.setAllUnSel(this.occurArr);
           this.$Loading.close();
-          let data = res.data;
-          if (data.status == 0) {
-            this.occurArr = cartJS.dealCartList(data.data.occur);
-
-            if (this.isEditing) {
-              cartJS.setAllUnSel(this.occurArr);
-            }
-            // this.$router.push({
-            //   name: '填写订单',
-            //   params: {
-            //     res: data.data,
-            //     paramsData: paramsData,
-            //     deliveryType: this.deliverType
-            //   }
-            // })
-            // this.$mallCommon.isExistCanNotAttendActivity(data.data.occur);
-            if (
-              this.$mallCommon.isExistCanNotAttendActivity(data.data.occur) ==
-              true
-            ) {
-              this.$MessageBox
-                .confirm(
-                  "部分商品不能参加活动</br>将按原价购买，是否继续？",
-                  "提示",
-                  { confirmButtonText: "确定" }
-                )
-                .then((action) => {
-                  this.$router.push({
-                    name: "填写订单",
-                    params: {
-                      res: data.data,
-                      paramsData: paramsData,
-                      deliveryType: this.deliverType,
-                      name: occuritem.name,
-                    },
-                  });
-                })
-                .catch((action) => {});
-            } else {
-              this.$router.push({
-                name: "填写订单",
-                params: {
-                  res: data.data,
-                  paramsData: paramsData,
-                  deliveryType: this.deliverType,
-                  name: occuritem.name,
-                },
-              });
-            }
-          } else {
-            this.$Toast(data.info);
+          firstResolveData.paramsData.carts=cartsList;
+          firstResolveData.data.occur=occurList;
+          console.log(firstResolveData,'firstResolveData');
+          let linkTo=()=>{
+            this.$router.push({
+              name: "填写订单",
+              params: {
+                res: { ...firstResolveData.data},
+                paramsData: { ...firstResolveData.paramsData},
+                deliveryType: this.deliverType,
+                name: name
+              }
+            });
           }
-        },
-        (error) => {
-          this.$Loading.close();
-          this.$Toast("请求数据失败！");
+          if(needAlert){
+            this.$MessageBox.confirm(
+              "部分商品不能参加活动</br>将按原价购买，是否继续？","提示",
+              { confirmButtonText: "确定" }
+            ).then(action => {
+              linkTo()
+            })
+          }else{
+            linkTo()
+          }
         }
-      );
+      }).catch(err=>{
+        this.$Toast("请求数据失败！");
+        this.$Loading.close();
+      })
     },
-    toDelete: function (occuritem) {
-      let carts = cartJS.getSelOccur(occuritem, this.isEditing, "delete");
-      this.deleteCart(carts);
-      this.detItem = cartJS.getSelOccur(occuritem, true, "buried");
-      console.log('carts',cartJS.getSelOccur(occuritem, true, "buried"))
-      console.log('detItem',this.detItem)
-    },
+    toPay(occurArr) {
+      return occurArr.map(occuritem => {
+        return new Promise((resolve, reject) => {
+          let carts=  cartJS.getSelOccur(occuritem, this.isEditing, "pay");
+          let url = "/app/json/app_cart/SettleCart";
+          let paramsData = {
+            token: this.$store.state.login.token,
+            deliveryType: this.deliverType,
+            carts: carts,
+            orderCategory: this.orderCategory,
+            vipUnitUserCode: this.vipUnitUserCode
+          };
+          if (this.isPresale == true) {
+            paramsData.cartType = "1";
+          }
 
-    setCommonPara: function (paramsData) {
+          if (this.deliverType == 2) {
+            if (this.$store.state.mall2.selectAddress.id != "-1") {
+              paramsData.userAddressId = this.$store.state.mall2.selectAddress.id;
+            } else {
+              paramsData.userAddress = {};
+              paramsData.userAddress.provinceId = this.$store.state.mall2.selectAddress.provinceId;
+              paramsData.userAddress.provinceName = this.$store.state.mall2.selectAddress.provinceName;
+              paramsData.userAddress.cityId = this.$store.state.mall2.selectAddress.cityId;
+              paramsData.userAddress.cityName = this.$store.state.mall2.selectAddress.cityName;
+              paramsData.userAddress.countryId = this.$store.state.mall2.selectAddress.countryId;
+              paramsData.userAddress.countryName = this.$store.state.mall2.selectAddress.countryName;
+              paramsData.userAddress.townId = this.$store.state.mall2.selectAddress.townId;
+              paramsData.userAddress.townName = this.$store.state.mall2.selectAddress.townName;
+            }
+          }
+          this.setCommonPara(paramsData);
+          this.$http.post(url, paramsData).then(
+            res => {
+              this.$Loading.close();
+              let data = res.data;
+              if(data.status==0){
+                data.paramsData=paramsData
+              }
+              resolve(data);
+            },
+            error => {
+              reject(error)
+            }
+          );
+        });
+      });
+    },
+    /*底部----删除功能*/
+    toDelete: function() {
+      let detItem = [],
+        cars = [];
+      this.occurArr.map(occuritem => {
+        cars = cars.concat(
+          cartJS.getSelOccur(occuritem, this.isEditing, "delete")
+        );
+        detItem = detItem.concat(cartJS.getSelOccur(occuritem, true, "buried"));
+      });
+      this.deleteCart(cars);
+      this.detItem = detItem;
+    },
+    setCommonPara: function(paramsData) {
       if (this.deliverType == 2) {
         // if(!this.$store.state.mall2.selectAddress.id){
         //   this.$Toast('请选择配送地址')
@@ -587,14 +628,14 @@ export default {
       }
       return true;
     },
-    getDataList: function () {
+    getDataList: function() {
       this.$Loading.open();
       let url = "/app/json/app_cart/getCart";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: this.deliverType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.setCommonPara(paramsData);
 
@@ -606,7 +647,7 @@ export default {
       //   return;
       // }
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -641,18 +682,17 @@ export default {
             // }
             // console.log('occur',num)
             // this.$store.state.mall2.cartNum = num;
-
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    _initScroll: function () {
+    _initScroll: function() {
       if (this.cityListScroll) {
         this.cityListScroll.refresh();
         this.cityListScroll.off("scroll");
@@ -660,7 +700,7 @@ export default {
         this.cityListScroll = new BScroll(this.$refs.scrollwarp, {
           click: true,
           probeType: 3,
-          bounce: false,
+          bounce: false
         });
       }
 
@@ -686,7 +726,7 @@ export default {
           top: el.offsetTop,
           height: el.offsetHeight,
           //默认是不需要固定的
-          isFixed: false,
+          isFixed: false
         };
         //只有超出了距离才需要固定
         if (el.offsetHeight > warpHeight) {
@@ -695,7 +735,7 @@ export default {
         this.heightArr.push(dic);
       }
 
-      this.cityListScroll.on("scroll", (pos) => {
+      this.cityListScroll.on("scroll", pos => {
         if (pos.y > 5) {
           this.fixedIndex = -1;
           return;
@@ -705,7 +745,7 @@ export default {
       });
       this.calculateFixedIndex(0, warpHeight);
     },
-    calculateFixedIndex: function (posy, warpHeight) {
+    calculateFixedIndex: function(posy, warpHeight) {
       let isHasSet = false;
       for (let i = 0; i < this.heightArr.length; i++) {
         let dic = this.heightArr[i];
@@ -727,74 +767,80 @@ export default {
         this.fixedIndex = -1;
       }
     },
-
     // 获取购物车数量
-    _getCartCount: function () {
+    _getCartCount: function() {
       let url = "/app/json/app_cart/getCartCount";
       let paramsData = {
         token: this.$store.state.login.token,
         deliveryType: this.deliverType,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           let data = res.data;
 
           if (data.status == 0) {
             this.$store.state.mall2.cartNum = data.data;
-            console.log('this.$store.state.mall2.cartNum','cart-list',this.$store.state.mall2.cartNum)
+            console.log(
+              "this.$store.state.mall2.cartNum",
+              "cart-list",
+              this.$store.state.mall2.cartNum
+            );
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-
-    numChange: function (itemInfo) {
+    numChange: function(itemInfo) {
       let carts = [
         {
           skuId: itemInfo.skuId,
           storeOuCode: itemInfo.storeOuCode,
           number: itemInfo.number,
           isGift: itemInfo.isGift,
-          activityId: itemInfo.activityId,
-        },
+          activityId: itemInfo.activityId
+        }
       ];
       this.updateCart(carts);
     },
-    plusNum(itemInfo){
-      this.sensorsEdit('增加',itemInfo);
+    plusNum(itemInfo) {
+      this.sensorsEdit("增加", itemInfo);
     },
-    minusNum(itemInfo){
-      this.sensorsEdit('减少',itemInfo);
+    minusNum(itemInfo) {
+      this.sensorsEdit("减少", itemInfo);
     },
-    sensorsEdit(behavior,itemInfo){
-      console.log('itemInfo',itemInfo)
-      let categoryList = itemInfo.categoryName.split('_')
-      this.$sensors.track('shoppingcart_edit', {
-        goods_id:itemInfo.skuId,
-        goods_name:itemInfo.productName,
+    sensorsEdit(behavior, itemInfo) {
+      console.log("itemInfo", itemInfo);
+      let categoryList = itemInfo.categoryName.split("_");
+      this.$sensors.track("shoppingcart_edit", {
+        goods_id: itemInfo.skuId,
+        goods_name: itemInfo.productName,
         // tag:this.tagList,
-        goods_cls1:categoryList[0],
-        goods_cls2:categoryList[1],
-        goods_cls3:categoryList[2],
-        goods_cl3_id:itemInfo.categoryId,
+        goods_cls1: categoryList[0],
+        goods_cls2: categoryList[1],
+        goods_cls3: categoryList[2],
+        goods_cl3_id: itemInfo.categoryId,
         // org_price:this.detailData.activityPrice,
-        price:itemInfo.price,
-        goods_quantity:1,
-        store_id:itemInfo.storeOuCode,
-        store_name:itemInfo.storeName,
+        price: itemInfo.price,
+        goods_quantity: 1,
+        store_id: itemInfo.storeOuCode,
+        store_name: itemInfo.storeName,
         // merchant_id:this.occuritem.ouCode,
         // merchant_name:this.occuritem.ouName,
-        behavior:behavior,
+        behavior: behavior
       });
     },
-    updateCart: function (carts, callBack) {
+    /*防抖后更新cart*/
+    updateCart: function(carts, callBack) {
+      cartJS.debounce(this.updateCartData(carts, callBack));
+    },
+    updateCartData(carts, callBack) {
       if (this.isPresale == true) {
         cartEvent.updateCart(carts);
         this.getDataList();
@@ -807,10 +853,10 @@ export default {
         deliveryType: this.deliverType,
         carts: carts,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
@@ -825,7 +871,7 @@ export default {
             }
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
           if (callBack) {
@@ -834,43 +880,41 @@ export default {
         }
       );
     },
-    sensorsDelete(){
+    sensorsDelete() {
       let item = [];
-      if(this.deleteType == 'checked'){
-        this.detItem.forEach(e=>{
-          this.checkedDelectItem.forEach(i=>{
-            if(e.goods_id == i.skuId){
-              item.push(e)
+      if (this.deleteType == "checked") {
+        this.detItem.forEach(e => {
+          this.checkedDelectItem.forEach(i => {
+            if (e.goods_id == i.skuId) {
+              item.push(e);
             }
-          })
-        })
-      }else{
+          });
+        });
+      } else {
         item = this.detItem;
       }
-      console.log('item',this.detItem)
-      console.log('item',this.checkedDelectItem)
-      item.forEach(e=>{
-        let categoryList = e.categoryName.split('_');
-        this.$sensors.track('shoppingcart_edit', {
-          goods_id:e.goods_id,
-          goods_name:e.goods_name,
+      item.forEach(e => {
+        let categoryList = e.categoryName.split("_");
+        this.$sensors.track("shoppingcart_edit", {
+          goods_id: e.goods_id,
+          goods_name: e.goods_name,
           // tag:this.tagList,
-          goods_cls1:categoryList[0],
-          goods_cls2:categoryList[1],
-          goods_cls3:categoryList[2],
-          goods_cl3_id:e.categoryId,
+          goods_cls1: categoryList[0],
+          goods_cls2: categoryList[1],
+          goods_cls3: categoryList[2],
+          goods_cl3_id: e.categoryId,
           // org_price:this.detailData.activityPrice,
-          price:e.price,
-          goods_quantity:e.goods_quantity,
-          store_id:e.store_id,
-          store_name:e.store_name,
+          price: e.price,
+          goods_quantity: e.goods_quantity,
+          store_id: e.store_id,
+          store_name: e.store_name,
           // merchant_id:this.occuritem.ouCode,
           // merchant_name:this.occuritem.ouName,
-          behavior:'删除',
+          behavior: "删除"
         });
-      })
+      });
     },
-    deleteCart: function (carts,type) {
+    deleteCart: function(carts, type) {
       if (this.isPresale == true) {
         cartEvent.deleteCart(carts);
         this.getDataList();
@@ -883,27 +927,26 @@ export default {
       this.deleteCartNum = carts.length;
       this.showDelectPopup = true;
       this.deleteItem = carts;
-      if(type == 'spreads'){
+      if (type == "spreads") {
         let item = [];
         let obj = {
-          goods_id:carts[0].skuId,
-          goods_name:carts[0].productName,
-          categoryName:carts[0].categoryName,
-          price:carts[0].salePrice,
-          goods_quantity:1,
-          store_id:carts[0].storeOuCode,
-          store_name:carts[0].storeName,
+          goods_id: carts[0].skuId,
+          goods_name: carts[0].productName,
+          categoryName: carts[0].categoryName,
+          price: carts[0].salePrice,
+          goods_quantity: 1,
+          store_id: carts[0].storeOuCode,
+          store_name: carts[0].storeName
         };
-        item.push(obj)
+        item.push(obj);
         this.detItem = item;
-        this.deleteType = 'spreads'
-      }else{
+        this.deleteType = "spreads";
+      } else {
         this.checkedDelectItem = carts;
-        this.deleteType = 'checked'
-        console.log('cartsasdasdadadas',this.checkedDelectItem)
+        this.deleteType = "checked";
       }
     },
-    deleteCartItem(){
+    deleteCartItem() {
       this.$Loading.open();
       let url = "/app/json/app_cart/deleteCart";
       let paramsData = {
@@ -911,24 +954,24 @@ export default {
         deliveryType: this.deliverType,
         carts: this.deleteItem,
         orderCategory: this.orderCategory,
-        vipUnitUserCode: this.vipUnitUserCode,
+        vipUnitUserCode: this.vipUnitUserCode
       };
       this.$http.post(url, paramsData).then(
-        (res) => {
+        res => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
             this.showDelectPopup = false;
             this.$Toast("删除成功");
             this.getDataList();
-            this._getCartCount()
-            console.log('this.detItem',this.detItem)
+            this._getCartCount();
+            console.log("this.detItem", this.detItem);
             this.sensorsDelete();
           } else {
             this.$Toast(data.info);
           }
         },
-        (error) => {
+        error => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
@@ -936,15 +979,15 @@ export default {
     }
   },
   watch: {
-    isEditing: function (val, oldVal) {
+    isEditing: function(val, oldVal) {
       if (val && this.occurArr) {
         this.occurArr = cartJS.setAllUnSel(this.occurArr);
       }
-    },
+    }
   },
   created() {
-    console.log('$store.state.isX',this.$store.state.isX)
-  },
+    console.log("$store.state.isX", this.$store.state.isX);
+  }
 };
 </script>
 
