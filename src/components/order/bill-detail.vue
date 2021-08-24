@@ -661,7 +661,7 @@ export default {
         let pcsUrl = "";
         this.$store.state.environment == "development"
           ? (pcsUrl =
-              "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
           : (pcsUrl =
               "https://times-pms.linli580.com/pcs/bill-center/check-bill");
         let pcsObj = {
