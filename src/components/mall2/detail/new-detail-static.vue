@@ -1682,6 +1682,7 @@
 
 <script>
 // import Counter from '@/components/commonui/counter/counter'
+import appUi from "@zkty-team/x-engine-module-ui";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import Judgement from "./judgement/judgement";
 import RegionSelect from "../../base/region-select";
@@ -4670,6 +4671,11 @@ export default {
     // },
   },
   created() {
+    // ios原生方法问题，需要做这样的处理才能隐藏调底部tab
+    appUi.hideTabbar();
+    setTimeout(() => {
+      appUi.hideTabbar();
+    }, 500);
     console.log("created");
     this.backApp = this.$route.query.backApp
       ? this.$route.query.backApp
