@@ -510,28 +510,31 @@ export default {
         if(isErrorData){
            this.$Toast(isErrorData.info);
         }else{
-          let occurArr=[],firstResolveData={},occurList=[],paramsData=[],needAlert=false;
+          let occurArr=[],firstResolveData={},occurList=[],cartsList=[],paramsDataList=[],needAlert=false;
           response.map((data,k)=>{
              if(!k){
-               firstResolveData=data
+               firstResolveData={...data}
              }
+             paramsDataList.push({...data.paramsData});
              occurList=occurList.concat(data.data.occur);
-             paramsData.push(data.paramsData);
+             cartsList=cartsList.concat(data.paramsData.carts);
              occurArr=occurArr.concat( cartJS.dealCartList(data.data.occur) );
              needAlert=this_.$mallCommon.isExistCanNotAttendActivity( data.data.occur);
           })
           this.occurArr=occurArr;
           this.isEditing && cartJS.setAllUnSel(this.occurArr);
           this.$Loading.close();
+          firstResolveData.paramsData.carts=cartsList;
           firstResolveData.data.occur=occurList;
-          // console.log(firstResolveData,paramsData,'firstResolveData');
+          //console.log(firstResolveData,paramsDataList,'firstResolveData');
           let linkTo=()=>{
             this.$router.push({
               name: "填写订单",
               params: {
                 res: { ...firstResolveData.data},
-                paramsData: paramsData,
+                paramsData: { ...firstResolveData.paramsData},
                 deliveryType: this.deliverType,
+                paramsDataList:paramsDataList,
                 name: name
               }
             });
