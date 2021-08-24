@@ -115,8 +115,10 @@
       }
     },
     methods: {
+      /*已选数量及库存，选较大的max值*/ 
       getMin(cartitem){
-        return _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+        let max_= _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+        return max_ >= cartitem.number? max_: cartitem.number
       },
       getDigitalDisplayName: function (acctType) {
         return this.$mallCommon.accTypeToName(acctType, '200001')
