@@ -510,28 +510,27 @@ export default {
         if(isErrorData){
            this.$Toast(isErrorData.info);
         }else{
-          let occurArr=[],firstResolveData={},occurList=[],cartsList=[],needAlert=false;
+          let occurArr=[],firstResolveData={},occurList=[],paramsData=[],needAlert=false;
           response.map((data,k)=>{
              if(!k){
                firstResolveData=data
              }
              occurList=occurList.concat(data.data.occur);
-             cartsList=cartsList.concat(data.paramsData.carts);
+             paramsData.push(data.paramsData);
              occurArr=occurArr.concat( cartJS.dealCartList(data.data.occur) );
              needAlert=this_.$mallCommon.isExistCanNotAttendActivity( data.data.occur);
           })
           this.occurArr=occurArr;
           this.isEditing && cartJS.setAllUnSel(this.occurArr);
           this.$Loading.close();
-          firstResolveData.paramsData.carts=cartsList;
           firstResolveData.data.occur=occurList;
-          console.log(firstResolveData,'firstResolveData');
+          // console.log(firstResolveData,paramsData,'firstResolveData');
           let linkTo=()=>{
             this.$router.push({
               name: "填写订单",
               params: {
                 res: { ...firstResolveData.data},
-                paramsData: { ...firstResolveData.paramsData},
+                paramsData: paramsData,
                 deliveryType: this.deliverType,
                 name: name
               }
