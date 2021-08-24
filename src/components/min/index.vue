@@ -203,6 +203,7 @@ export default {
           this.$store.state.environment == "development"
             ? (url = item.devUrl)
             : (url = item.prodUrl);
+          
           if (/token=/.test(url)) {
             let ythToken = "";
 
@@ -211,6 +212,13 @@ export default {
               : (ythToken = this.$store.state.ythToken);
 
             url = url.replace(/token=/, `token=${ythToken}`);
+          }
+          // 分销工程单独跳转webview， 解决微信小程序双标题问题
+          if(this.wxenvironment() && this.isDistribution(url)) {
+            wx.miniProgram.navigateTo({
+              url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(url))}`,
+            });
+            return ;
           }
           console.log(url);
           window.location.href = url;
@@ -222,6 +230,17 @@ export default {
             this.$router.push(item.pageUrl);
           }
         }
+      }
+    },
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
+    isDistribution(url) {
+      if(this.$store.state.environment == "development") {
+        return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
+      }else {
+        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8001/.test(url);
       }
     },
     async getMemberInformation() {
