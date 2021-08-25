@@ -39,7 +39,7 @@
               <p class="theme_font_gray">您暂时没有可以使用的优惠券</p>
             </div>
             <div class="cate-title" v-if="initData.freightCoupon && initData.freightCoupon.length > 0">商场券</div>
-            <Coupon :listType="2" :payAmount="initData.payAmount" :coupons="initData.userCanUseCoupon" @getCouponEvent="getCouponEvent" @couponProducts="couponProducts" @selectedItems="selectedItemsEvent" :fiveEnter="initData.fiveEnter"></Coupon>
+            <Coupon :listType="2" :payAmount="initData.payAmount" :coupons="initData.userCanUseCoupon" @getCouponEvent="getCouponEvent" @couponProducts="couponProducts" @selectedItems="selectedItemsEvent" :fiveEnter="initData.fiveEnter" :isSelectedList="initData.isSelectedList" :storeIndex="initData.storeIndex"></Coupon>
             <div class="cate-title" v-if="initData.freightCoupon && initData.freightCoupon.length > 0">运费券</div>
             <Coupon :listType="2" :payAmount="initData.payAmount" :coupons="initData.freightCoupon" @getCouponEvent="getCouponEvent" @couponProducts="couponProducts" @selectedItems="selectedItemsEvent"></Coupon>
           </div>
@@ -90,7 +90,9 @@
           categoryId: '',
           storeOuCode: '',
           token: '',
-          jfhqData: ''
+          jfhqData: '',
+          isSelectedList:[],
+          storeIndex:0,
         },
         visible: false,
         selectedCoupon: function () {
@@ -105,7 +107,7 @@
         receivedCoupon: [],
         canReceiveCoupon: [],
         canUseCoupon: true,
-        selectedItems: []
+        selectedItems: [],
       }
     },
     methods: {

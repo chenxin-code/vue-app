@@ -565,7 +565,8 @@ export default {
             deliveryType: this.deliverType,
             carts: carts,
             orderCategory: this.orderCategory,
-            vipUnitUserCode: this.vipUnitUserCode
+            vipUnitUserCode: this.vipUnitUserCode,
+            couNo:['-1']
           };
           if (this.isPresale == true) {
             paramsData.cartType = "1";
