@@ -347,7 +347,7 @@ export default {
               link: getLocation(window.location.href),
               imageurl:
                 this.shareItemData.groupbuyActivityPicurl +
-                "?x-oss-process=image/format,jpg/quality,Q_10",
+                `?x-oss-process=image/format,jpg/quality,Q_${this.$util.isAndroid()?'50':'10'}`,
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
                 this.$store.state.environment == "production" ? 0 : 2,
