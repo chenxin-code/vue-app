@@ -585,9 +585,13 @@ export default {
         newNav.link.url = newNav.link.url.replace(/scToken=/,`scToken=${this.$store.state.login.token}`)
       }
 
-      console.log('ccccccccccccccccc', newNav.link.url)
-
-
+      // 分销工程单独跳转webview， 解决微信小程序双标题问题
+      if(this.wxenvironment() && this.isDistribution(newNav.link.url)) {
+        wx.miniProgram.navigateTo({
+          url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(newNav.link.url))}`,
+        });
+        return ;
+      }
 
       if(nav.link.type == '1'){
         this.$sensors.track("mall_banner_click", {
@@ -617,6 +621,17 @@ export default {
 
     },
 
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
+    isDistribution(url) {
+      if(this.$store.state.environment == "development") {
+        return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
+      }else {
+        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8001/.test(url);
+      }
+    },
     resetGndhPageArr: function (codeArr) {
       let arr = JSON.parse(JSON.stringify(this.moduleData.rows));
       if (codeArr) {
