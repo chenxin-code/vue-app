@@ -1752,11 +1752,7 @@ import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
 import mixins from "./mixins.js";
 import appUi from "@zkty-team/x-engine-module-ui";
-// // ios原生方法问题，需要做这样的处理才能隐藏调底部tab
-// appUi.hideTabbar();
-// setTimeout(() => {
-//   appUi.hideTabbar();
-// }, 500);
+
 export default {
   name: "detail",
   mixins: [mixins],
