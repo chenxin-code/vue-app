@@ -3,9 +3,9 @@
     <van-sticky :offset-top="offsetTop">
       <nav-top
         navLeftName="我的订单"
-        navRightName="历史缴费记录"
+        navRightName="发票中心"
         @backEvent="goBack"
-        @navToPage="navToHistory"
+        @navToPage="navToInvoiceCenter"
       ></nav-top>
     </van-sticky>
     <van-sticky :offset-top="offsetTop" ref="stickyIndex">
@@ -100,12 +100,12 @@ export default {
     // });
   },
   methods: {
-    //跳到历史欠缴记录页面
-    navToHistory() {
+    //跳到发票中心页面
+    navToInvoiceCenter() {
+      let url = `http://8.134.9.70/`;
       navToMicroApplication.openTargetRouter({
-        type: "microapp",
-        uri: "com.times.microapp.AppcPrepay", // 微应用包名
-        path: "/bill/index", // 微应用具体路由
+        type: "h5",
+        uri: url,
         hideNavbar: false
       });
     },
