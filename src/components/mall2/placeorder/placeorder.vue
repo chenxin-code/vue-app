@@ -2139,6 +2139,9 @@ export default {
           paramsData.couNo.push("-1");
         }
       }
+      if(paramsData.couNo.length == 0 ){
+        paramsData.couNo = ['-1'];
+      }
       paramsData.limitWalletCardNo = cardNo;
 
       if (this.deliveryType == 2) {
