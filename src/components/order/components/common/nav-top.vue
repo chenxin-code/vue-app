@@ -2,7 +2,7 @@
  * @Description: 这是***页面
  * @Date: 2021-08-16 10:52:04
  * @Author: shuimei
- * @LastEditTime: 2021-08-16 14:07:14
+ * @LastEditTime: 2021-08-26 16:01:55
 -->
 <template>
   <div
@@ -18,6 +18,24 @@
         @click-right="goPage"
         left-arrow
       >
+        <template #right>
+          <van-popover
+            v-if="showPopoverTemp"
+            v-model="showPopover"
+            trigger="click"
+            :actions="actions"
+            @select="onSelect"
+            placement="bottom-end"
+            class="nav-popover"
+          >
+            <template #reference>
+              <div class="more" @click="showPopover = true">
+                <img :src="moreIcon" alt="" />
+                <span>更多</span>
+              </div>
+            </template>
+          </van-popover>
+        </template>
       </van-nav-bar>
     </div>
     <slot></slot>
@@ -25,6 +43,7 @@
 </template>
 <script>
 import device from "@zkty-team/x-engine-module-device";
+import navToMicroApplication from "@zkty-team/x-engine-module-router";
 export default {
   name: "navBar",
   props: {
@@ -39,12 +58,22 @@ export default {
     navRightName: {
       type: String,
       default: ""
+    },
+    showPopoverTemp: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       statusHeight: "20px",
-      navHeight: "0px"
+      navHeight: "0px",
+      showPopover: false,
+      actions: [
+        { text: "历史缴费记录", name: "history" },
+        { text: "发票查询", name: "invoice" }
+      ],
+      moreIcon: require("../../img/more-icon.png")
     };
   },
   beforeCreate() {
@@ -63,11 +92,35 @@ export default {
     }, 150);
   },
   methods: {
+    //跳转微应用
+    navToMicroapp(microappUri, microappPath, isHideNavbar) {
+      navToMicroApplication.openTargetRouter({
+        type: "microapp",
+        uri: microappUri, // 微应用包名
+        path: microappPath, // 微应用具体路由
+        hideNavbar: isHideNavbar
+      });
+    },
+    onSelect(action) {
+      if (action.name === "history") {
+        this.navToMicroapp(
+          "com.times.microapp.AppcPrepay",
+          "/bill/index",
+          false
+        );
+      } else if (action.name === "invoice") {
+        this.navToMicroapp("com.times.microapp.AppcInvoice", "/", true);
+      }
+    },
     onBack() {
       this.$emit("backEvent");
     },
     goPage() {
-      this.$emit("navToPage");
+      if (this.showPopoverTemp) {
+        this.showPopover = true;
+      } else {
+        this.$emit("navToPage");
+      }
     }
   }
 };
@@ -106,6 +159,17 @@ $nav-color = #333333;
       }
     }
 
+  }
+  .nav-popover {
+    .more {
+      img {
+        height 12px
+        width 12px
+      }
+      span {
+        margin-left: 4px;
+      }
+    }
   }
 }
 </style>

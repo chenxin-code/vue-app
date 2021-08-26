@@ -9,9 +9,9 @@
     <van-sticky :offset-top="offsetTop">
       <nav-top
         navLeftName="账单明细"
-        navRightName="发票查询"
+        navRightName="更多"
+        :showPopoverTemp="true"
         @backEvent="backEvent"
-        @navToPage="navToPage"
       ></nav-top>
     </van-sticky>
     <div class="warpper">
