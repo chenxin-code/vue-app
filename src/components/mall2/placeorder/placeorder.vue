@@ -2230,6 +2230,12 @@ export default {
       }
 
       for (let index = 0; index < this.occurList.length; index++) {
+        if (
+          this.occurList[index].cashCouponFaceValue > this.occurList[index].cashCouponAmount
+        ) {
+          this.$Toast('您的优惠券金额比订单金额大,无法使用,请重新选择');
+          break
+        }
         if (!this.occurList[index].store || this.occurList[index].store.length == 0) {
           if (this.deliveryType == 1) {
             this.$Toast("当前自提点无库存！");
@@ -2294,18 +2300,19 @@ export default {
           });
           break
         } else {
-          if (this.pageType == 2) {
-            if (this.payWayText == "提货付款") {
-              //如果提货付款方式
-              this.overFlag = true;
-              this._submitOrder(carts);
-            } else {
-              // 不是提货付款，校验金额
-              this.checkHighest_recharge(carts);
-            }
-          } else {
-            this.checkCouponPrice(carts,index);
-          }
+          // if (this.pageType == 2) {
+          //   if (this.payWayText == "提货付款") {
+          //     //如果提货付款方式
+          //     this.overFlag = true;
+          //     this._submitOrder(carts);
+          //   } else {
+          //     // 不是提货付款，校验金额
+          //     this.checkHighest_recharge(carts);
+          //   }
+          // } else {
+          //   this.checkCouponPrice(carts,index);
+          // }
+          this.checkNeedPwd(carts,index);
         }
       }
 
@@ -2484,43 +2491,12 @@ export default {
         }
       })
     },
+
     enterSuccess(wxOrderInfoKey){
       console.log('payInfoList',JSON.parse(JSON.parse(this.payInfoList[0].payInfo)))
       let payInfo = JSON.parse(JSON.parse(this.payInfoList[0].payInfo));
       let billNo = "";
-      if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3){
-        this.payInfoList.forEach(e => {
-          billNo += JSON.parse(JSON.parse(e.payInfo)).billNo + ",";
-        });
-        console.log("唤起邻里邦支付平台");
-        let currentOrderDetails = {
-          state: 3,
-          orderId: this.submitDataList[0].orderId,
-          orderType: this.submitDataList[0].orderType,
-          tradeNo: this.submitDataList[0].tradeNo,
-          tag: 1,
-          deliverCheckcode: "",
-          deviceCode: '', //正常流程支付也为空 待保留
-          storeOuCode: '', //正常流程支付也为空 待保留
-          stationName: '', //正常流程支付也为空 待保留
-        };
-        console.log('currentOrderDetails',currentOrderDetails);
-        console.log('payInfo',payInfo);
-        console.log('billNo',billNo);
-        localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
-        this.$Loading.close();
-        // 唤起邻里邦支付平台
-        window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
-          JSON.stringify({
-            businessCstNo: payInfo.businessCstNo,
-            platMerCstNo: payInfo.platMerCstNo,
-            tradeMerCstNo: payInfo.tradeMerCstNo,
-            billNo: billNo,
-            appScheme: "x-engine-c",
-            payType: false,
-          })
-        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/order/2?time=${Date.now()}`)}`;
-      }else{
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
         //时代微信小程序支付
         // let info = JSON.parse(JSON.parse(payInfo))
         // console.log('info-info-info',info)
@@ -2557,6 +2533,38 @@ export default {
           url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
         })
         console.log('跳转小程序')
+      }else{
+        this.payInfoList.forEach(e => {
+          billNo += JSON.parse(JSON.parse(e.payInfo)).billNo + ",";
+        });
+        console.log("唤起邻里邦支付平台");
+        let currentOrderDetails = {
+          state: 3,
+          orderId: this.submitDataList[0].orderId,
+          orderType: this.submitDataList[0].orderType,
+          tradeNo: this.submitDataList[0].tradeNo,
+          tag: 1,
+          deliverCheckcode: "",
+          deviceCode: '', //正常流程支付也为空 待保留
+          storeOuCode: '', //正常流程支付也为空 待保留
+          stationName: '', //正常流程支付也为空 待保留
+        };
+        console.log('currentOrderDetails',currentOrderDetails);
+        console.log('payInfo',payInfo);
+        console.log('billNo',billNo);
+        localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
+        this.$Loading.close();
+        // 唤起邻里邦支付平台
+        window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+          JSON.stringify({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine-c",
+            payType: false,
+          })
+        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/order/2?time=${Date.now()}`)}`;
       }
     },
     concatPay(){
@@ -2574,10 +2582,10 @@ export default {
             if(item.value.data.status == 0){
               this.payInfoList.push(item.value.data.data) 
               if(index == res.length - 1){
-                if(this.$store.state.webtype != 2 || this.$store.state.webtype != 3){
-                  this.enterSuccess();
-                }else{
+                if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
                   this.setWxOrderInfo();
+                }else{
+                  this.enterSuccess();
                 }
               }
             }else{
