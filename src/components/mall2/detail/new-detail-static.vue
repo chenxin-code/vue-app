@@ -4133,6 +4133,7 @@ export default {
             let params = {
               res: data.data,
               paramsData: paramsData,
+              paramsDataList: [paramsData],
               deliveryType: this.detailData.deliveryType,
               easyCardId: this.easyCardId,
               cardType: this.cardType, // 区分充值卡 计次卡
