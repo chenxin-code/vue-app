@@ -283,7 +283,11 @@
           </div> -->
 
           <div class="concatStore" v-for="(item,index) in occurList" :key="index">
-            <div class="block-div">{{item.ouName}}</div>
+            <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
+            <span class="theme_font_black margin_div">
+              <i class="iconfont mall-shoukuanfang"></i>
+              {{ item.store[0].storeName }}</span
+            >
             <div
               class="block-div"
               v-for="(store, storeIndex) in item.store"
@@ -3148,6 +3152,13 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
+
+.margin_div{
+  margin: 0 8px;
+  font-size: 0.37333rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
 
 .adapter-iphoneX {
   width: 100%;
