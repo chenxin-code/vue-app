@@ -10,7 +10,7 @@
       :style="color == 'blue' ? 'color:#fff;background:none' : ''"
       class="red-div theme_font_white"
       :class="[type || 'grewColor']"
-      v-if="d != 0 && !hiddenDay"
+      v-show="d != 0 && !hiddenDay"
     >
       {{ d + "天" }}
     </div>
