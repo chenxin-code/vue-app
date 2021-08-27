@@ -2,7 +2,7 @@
  * @Description: 这是***页面
  * @Date: 2021-08-16 10:52:04
  * @Author: shuimei
- * @LastEditTime: 2021-08-27 11:38:15
+ * @LastEditTime: 2021-08-27 13:55:54
 -->
 <template>
   <div
@@ -138,7 +138,6 @@ $nav-color = #333333;
   padding-top: calc(var(--status-height) + 10px);
   z-index: 11;
   box-sizing: border-box;
-  height: var(--nav-height);
   /deep/.van-nav-bar {
     .van-nav-bar__content {
       .van-nav-bar__left {
