@@ -205,6 +205,11 @@ export default {
   font-weight: bold;
   color: #333333;
   line-height: 16px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:1;
 }
 .good-ms dt .price-x {
   margin-top: 11px;

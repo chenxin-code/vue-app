@@ -20,7 +20,7 @@
       class="red-div theme_font_white"
       :class="[type || 'grewColor']"
     >
-      {{ h }}
+      {{ h === '0' ? '00' : h }}
     </div>
     <div class="point">:</div>
     <div
@@ -28,7 +28,7 @@
       class="red-div theme_font_white"
       :class="[type || 'grewColor']"
     >
-      {{ m }}
+      {{ m === '0' ? '00' : m }}
     </div>
     <div class="point">:</div>
     <div
@@ -36,7 +36,7 @@
       class="red-div theme_font_white"
       :class="[type || 'grewColor']"
     >
-      {{ s }}
+      {{ s === '0' ? '00' : s }}
     </div>
     <div class="text" v-if="isShowEndText">后结束</div>
   </div>

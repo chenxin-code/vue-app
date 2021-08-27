@@ -95,8 +95,8 @@
         @click="goConfirm()"
         :style="{
           background:
-            resouce.groupbuyStockNumber == 0
-              ? '#999999'
+            getTimeTitle() == '活动已结束' || resouce.groupbuyStockNumber == 0
+              ? '#ffa5c3'
               : 'linear-gradient(180deg, #FF7BA6 0%, #E9306D 100%)',
         }"
       >
@@ -173,6 +173,9 @@ export default {
       return endT;
     },
     goConfirm() {
+      if(this.getTimeTitle() == '活动已结束' || this.resouce.groupbuyStockNumber == 0){
+        return
+      }
       if (this.$route.query.isWxShare) {
         console.log("跳转go-1", window.location.href);
         this.$router.go(-1);
