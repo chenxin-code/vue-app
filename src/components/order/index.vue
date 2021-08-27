@@ -183,8 +183,6 @@ export default {
 
   /deep/.van-tabs {
     box-shadow: 0px 5px 10px 0px #F1F1F1;
-    position: fixed;
-    width: 100%;
   }
 
   /deep/.van-tab {

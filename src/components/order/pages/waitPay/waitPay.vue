@@ -943,7 +943,6 @@ export default {
   height: 100%;
   overflow-y: auto;
   padding-bottom: 220px;
-  margin-top: 45px;
 
   &.wait-pay-x {
     padding-bottom: 220px;
