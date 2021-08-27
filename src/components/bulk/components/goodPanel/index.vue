@@ -200,6 +200,7 @@ export default {
   justify-content: flex-start;
 }
 .good-ms dt .good-name {
+  height: 16px;
   font-size: 14px;
   font-family: PingFang SC;
   font-weight: bold;
