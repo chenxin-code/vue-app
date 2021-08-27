@@ -240,7 +240,7 @@ export default {
       if(this.$store.state.environment == "development") {
         return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
       }else {
-        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8001/.test(url);
+        return /https:\/\/mall-prod-app-linli.timesgroup.cn:8081/.test(url);
       }
     },
     async getMemberInformation() {
