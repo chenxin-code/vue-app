@@ -1718,7 +1718,6 @@ import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
 import mixins from "./mixins.js";
-import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "detail",
@@ -4664,21 +4663,6 @@ export default {
         duration: this.duration,
       });
     }
-    // getDistributionDetail(){
-    //   let url = "";
-    //   // this.$store.state.ythUserInfo.phone
-    //   this.$store.state.environment == "development" ? url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
-    //     : url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
-    //   return new Promise((resolve, reject)=>{
-    //     this.$http.get(url).then(res=>{
-    //       if(res.data.code == 200){
-    //         resolve(res.data.data);
-    //       }
-    //     }).catch(err=>{
-    //       reject(err)
-    //     })
-    //   })
-    // },
   },
   created() {
     appUi.hideTabbar();
