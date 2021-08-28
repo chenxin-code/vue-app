@@ -298,7 +298,7 @@ export default {
       }
       //加多一个token获取
       token = token || this.$util.getUrlQuery("ythToken") || this.$util.getUrlQuery("Authorization");
-      store.commit("setYthToken", token);
+      this.$store.commit("setYthToken", token);
       this.$http
         .post("/app/json/login/getYthUser", { token: token })
         .then((res) => {
