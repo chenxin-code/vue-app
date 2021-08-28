@@ -349,15 +349,17 @@
         this.goodsInfo.number = this.orderInfo.payNumber;//接口的payNumber 是购买数量 number是申请数量
         this.goodsInfo.phPictureUrl = this.orderInfo.phPictureUrl;
         this.goodsInfo.packageList = this.orderInfo.packageList
-        if ((this.orderInfo.type == 0 || this.orderInfo.type == 4) && this.orderInfo.state == 5) {
+        // (this.orderInfo.type == 0 || this.orderInfo.type == 4)
+        if ((this.orderInfo.type == 0 || this.orderInfo.type == 5) && this.orderInfo.state == 5) {
           // bug6903  孙哥哥让去掉的
           this.btnTitle = '确认已收款';
           // 增加逻辑自提的时候不显示，配上显示
-          if (this.orderInfo.deliverType == '1') {
-            this.isShowSureBtn = false;
-          } else {
-            this.isShowSureBtn = true;
-          }
+          // if (this.orderInfo.deliverType == '1') {
+          //   this.isShowSureBtn = false;
+          // } else {
+          //   this.isShowSureBtn = true;
+          // }
+          this.isShowSureBtn = true;
         } else if (this.orderInfo.type == 1 && this.orderInfo.state == 4) {//// repairType
           this.btnTitle = '确认收货';
           this.isShowSureBtn = true;
