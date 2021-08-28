@@ -117,6 +117,8 @@ export default {
     };
   },
   created() {
+    const ythToken = this.$util.getUrlQuery('ythToken') || this.$util.getUrlQuery('Authorization')
+    this.$store.commit('setYthToken',ythToken)
     // this.viewPortSet();
     console.log("this.$util.getIsIphoneX_X();", this.$util.getIsIphoneX_X());
     console.log(window.location.href);
