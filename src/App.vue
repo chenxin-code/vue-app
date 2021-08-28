@@ -117,8 +117,6 @@ export default {
     };
   },
   created() {
-    const ythToken = this.$util.getUrlQuery('ythToken') || this.$util.getUrlQuery('Authorization')
-    this.$store.commit('setYthToken',ythToken)
     // this.viewPortSet();
     console.log("this.$util.getIsIphoneX_X();", this.$util.getIsIphoneX_X());
     console.log(window.location.href);
@@ -298,6 +296,9 @@ export default {
       } else {
         token = this.$store.state.ythToken;
       }
+      //加多一个token获取
+      token = token || this.$util.getUrlQuery("ythToken") || this.$util.getUrlQuery("Authorization");
+      store.commit("setYthToken", token);
       this.$http
         .post("/app/json/login/getYthUser", { token: token })
         .then((res) => {
