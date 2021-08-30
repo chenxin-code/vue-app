@@ -194,10 +194,7 @@
         this.$emit('productEvent', item)
       },
       addToCart: function (item) {
-        // if (item.stockNum == '' || item.stockNum == '0' || item.stockNum == null) {
-        //   this.$Toast('商品缺货！');
-        //   return
-        // }
+        
         this.$emit('addToCart', item)
       },
       addToWishList(item, event) {
