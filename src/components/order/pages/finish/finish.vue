@@ -538,10 +538,17 @@ export default {
       console.log("服务商城请求完成",this.serviceRequestDone);
       if(this.mallRequestDone && this.serviceRequestDone){
         if(this.mallOrderFormList){
-            console.log("自建商城合并数据",this.mallOrderFormList);
-            this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
-            this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
-            this.mallOrderFormList = [];
+          this.currentOrderList.forEach(e=>{
+            this.mallOrderFormList.forEach((i,index)=>{
+              if(e.id == i.id){
+                this.mallOrderFormList.splice(index,1);
+              }
+            })
+          })
+          console.log("自建商城合并数据",this.mallOrderFormList);
+          this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
+          this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
+          this.mallOrderFormList = [];
         }
         if(this.serviceMallOrderFormList){
             console.log("服务商城合并数据",this.serviceMallOrderFormList);
