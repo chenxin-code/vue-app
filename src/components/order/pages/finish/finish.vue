@@ -555,7 +555,7 @@ export default {
             for (let j = 0; j < length2; j++) {
                 //判断添加的数组是否为空了
               if (this.mallOrderFormList.length > 0) {
-                if (this.mallOrderFormList[i]["id"] === this.currentOrderList[j]["id"]) {
+                if (this.mallOrderFormList[i]["id"] == this.currentOrderList[j]["id"]) {
                   this.mallOrderFormList.splice(i, 1); //利用splice函数删除元素，从第i个位置，截取长度为1的元素
                   length1--; 
                   console.log('重复元素',this.currentOrderList[j]);//重复元素
