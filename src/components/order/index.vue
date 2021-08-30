@@ -1,5 +1,5 @@
 <template>
-  <div class="order">
+  <div class="order" :class="{ 'order-x': this.$util.getIsIphoneX_X() }">
     <van-sticky :offset-top="offsetTop">
       <nav-top
         navLeftName="我的订单"
@@ -171,7 +171,10 @@ export default {
 #app .router_class.order {
   background: #F9F9F9;
   // overflow: auto;
-  top: 80px;
+  top: 70px;
+  &.order-x {
+    top: 85px;
+  }
 }
 
 .van-tab__pane, .van-tab__pane-wrapper {
