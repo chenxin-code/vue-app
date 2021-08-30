@@ -112,7 +112,7 @@ export default {
         //     isAnimation: true,
         //   })
         //   .then((res) => {});
-        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&tabShow=${isWx ? true : false}&Authorization=${Authorization}`;
+        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&tabShow=${isWx ? false : true}&Authorization=${Authorization}`;
       }
     },
   },
