@@ -117,6 +117,9 @@ export default {
   methods: {
     /*tab切换*/
     navToMsg(data) {
+      if(this.categoryId == data.id){
+        return
+      }
       this.saleDataList = [];
       this.categoryId = data.id;
       this.loading = true;
