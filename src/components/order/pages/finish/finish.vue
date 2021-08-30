@@ -538,6 +538,17 @@ export default {
       console.log("服务商城请求完成",this.serviceRequestDone);
       if(this.mallRequestDone && this.serviceRequestDone){
         if(this.mallOrderFormList){
+          let obj = {};
+          let arr = [];
+          this.mallOrderFormList.forEach(e=>{
+            if(!obj[e.id]){
+              arr.push(e);
+              obj[e.id] = true;
+            }
+          })
+          console.log('请求数组去重',arr);
+          this.mallOrderFormList = arr;
+          console.log('this.mallOrderFormList',this.mallOrderFormList);
           let length1 = this.mallOrderFormList.length;
           let length2 = this.currentOrderList.length;
           for (let i = 0; i < length1; i++) {
