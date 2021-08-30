@@ -8,24 +8,24 @@
         @navToPage="navToInvoiceCenter"
       ></nav-top>
     </van-sticky>
-    <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <van-tabs
-        v-model="active"
-        swipeable
-        swipe-threshold="6"
-        title-active-color="#e5165a"
-        @click="navTo"
+    <!-- <van-sticky :offset-top="offsetTop" ref="stickyIndex"> -->
+    <van-tabs
+      v-model="active"
+      swipeable
+      swipe-threshold="6"
+      title-active-color="#e5165a"
+      @click="navTo"
+    >
+      <van-tab
+        :title="item.title"
+        v-for="(item, index) in orderStatusList"
+        :key="index"
+        title-class="tabTitle"
+        :name="item.components"
       >
-        <van-tab
-          :title="item.title"
-          v-for="(item, index) in orderStatusList"
-          :key="index"
-          title-class="tabTitle"
-          :name="item.components"
-        >
-        </van-tab>
-      </van-tabs>
-    </van-sticky>
+      </van-tab>
+    </van-tabs>
+    <!-- </van-sticky> -->
     <component
       v-bind:is="active"
       :key="$route.path + $route.query.time"
@@ -182,7 +182,7 @@ export default {
   font-family: SourceHanSansCN-Medium, SourceHanSansCN;
 
   /deep/.van-tabs {
-    box-shadow: 0px 5px 10px 0px #F1F1F1;
+    box-shadow: 0px 10px 10px -3px #F1F1F1;
   }
 
   /deep/.van-tab {
