@@ -841,7 +841,7 @@ export default {
     },
     /*防抖后更新cart*/
     updateCart: function(carts, callBack) {
-      cartJS.debounce(this.updateCartData(carts, callBack));
+      this.updateCartData(carts, callBack);
     },
     updateCartData(carts, callBack) {
       if (this.isPresale == true) {

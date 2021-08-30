@@ -12,8 +12,8 @@
         </div>
          <!-- 主要数据 -->
         <div class="cell-content">
-          <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
-            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
+          <div class="good-content" >
+            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}" @click.stop="enterGoodDetail(cartitem)">
               <div class="click-div"></div>
               <img :src="cartitem.phPictureUrl" alt="">
               <div class="cart-item-state theme_font_white" v-if="cartitem.state == 1 || cartitem.state == 4">
@@ -28,7 +28,7 @@
               <!--<div class="good-tag theme_border_red  theme_font_red ">换购</div>-->
               <!--</div>-->
               <div class="good-info">
-                <p class="good-name line-two" :class="getFontColorClass()"><span
+                <p class="good-name line-two" :class="getFontColorClass()" @click.stop="enterGoodDetail(cartitem)"><span
                   class="good-tag theme_border_red  theme_font_red" v-if="cartitem.isGift == 1">赠品</span><span
                   class="good-tag theme_border_red  theme_font_red" v-if="cartitem.isGift == 2">换购</span>
                   {{cartitem.productName}}</p>
@@ -452,7 +452,7 @@
           left 0px;
           top 0px;
           bottom 0px;
-          right -130px;
+          right -140px;
           z-index 1;
         }
 

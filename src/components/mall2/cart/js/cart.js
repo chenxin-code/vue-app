@@ -285,7 +285,7 @@ let cart = {
                     storeitem.activity.map(activityitem => {
                         num = activityitem.cart.reduce((acc, cur) => {
                             if (cur[checkKey] && cur.isGift == '0') {
-                                acc + cur.number;
+                                acc += cur.number;
                             }
                             return acc
                         }, num);
