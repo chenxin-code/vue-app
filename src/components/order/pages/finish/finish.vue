@@ -538,17 +538,26 @@ export default {
       console.log("服务商城请求完成",this.serviceRequestDone);
       if(this.mallRequestDone && this.serviceRequestDone){
         if(this.mallOrderFormList){
-          this.currentOrderList.forEach(e=>{
-            this.mallOrderFormList.forEach((i,index)=>{
-              if(e.id == i.id){
-                this.mallOrderFormList.splice(index,1);
+          let length1 = this.mallOrderFormList.length;
+          let length2 = this.currentOrderList.length;
+          for (let i = 0; i < length1; i++) {
+            for (let j = 0; j < length2; j++) {
+                //判断添加的数组是否为空了
+              if (this.mallOrderFormList.length > 0) {
+                if (this.mallOrderFormList[i]["id"] === this.currentOrderList[j]["id"]) {
+                  this.mallOrderFormList.splice(i, 1); //利用splice函数删除元素，从第i个位置，截取长度为1的元素
+                  length1--; 
+                  console.log('重复元素',this.currentOrderList[j]);//重复元素
+                }
               }
-            })
-          })
-          console.log("自建商城合并数据",this.mallOrderFormList);
+            }
+          }
+          console.log("去重后请求数据",this.mallOrderFormList);
           this.currentOrderList = this.currentOrderList.concat(this.mallOrderFormList);
+          console.log("去重后总列表数据",this.currentOrderList);
           this.currentOrderList = this.sortKey(this.currentOrderList, "submitTime");
           this.mallOrderFormList = [];
+          console.log("重置后数组",this.mallOrderFormList);
         }
         if(this.serviceMallOrderFormList){
             console.log("服务商城合并数据",this.serviceMallOrderFormList);
