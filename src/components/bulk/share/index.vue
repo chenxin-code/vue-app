@@ -204,6 +204,8 @@
 
       <div class="order-button" @click="confirmOrder">去结算</div>
     </div>
+
+    <nav-button/>
   </div>
 </template>
 
@@ -213,10 +215,12 @@ import { mapMutations } from "vuex";
 import vantImage from "@/components/bulk/components/vantImage.js";
 import { Toast } from "vant";
 import { BigNumber } from "bignumber.js";
+import navButton from "./components/navButton";
 
 export default {
   name: "share",
   props: {},
+  components:{navButton},
   data() {
     return {
       defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
@@ -241,7 +245,7 @@ export default {
       groupStatus: "start",
       orderSwiperList: [],
       defaultAvt: require("./images/user_01@2x.png"),
-      defaultHeadAvt: require("./images/img_user_01@2x.png"),
+      defaultHeadAvt: require("./images/img_user_01@2x.png")
     };
   },
   created() {
@@ -254,7 +258,7 @@ export default {
     // this.userId = "2337237484980666802";
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
-    this.checkList.forEach((e) => {
+    this.checkList.forEach(e => {
       this.result.push(e.id);
     });
     this.initData();
@@ -303,21 +307,21 @@ export default {
           purchaseId: this.purchaseId,
           chiefId: this.chiefId,
           userId: this.userId,
-          status: "1,2,3,4,5",
+          status: "1,2,3,4,5"
         })
-        .then((res) => {
+        .then(res => {
           console.log("分享页面信息~~~~~~~", res);
           if (res.data.result == "success") {
             this.shareData = res.data.data;
             this.goodsList = this.shareData.groupbuySkuInfoList;
-            this.goodsList.forEach((item) => {
+            this.goodsList.forEach(item => {
               item["count"] = 0;
               item["isCheck"] = true;
               item["skuImg"] = item.skuPicUrl.split(",");
             });
             if (this.shareData.currentActOrderList) {
               this.otherBuyList = this.shareData.currentActOrderList;
-              this.otherBuyList.forEach((e) => {
+              this.otherBuyList.forEach(e => {
                 e["isShowOther"] = false;
                 if (e.orderItemList.length > 1) {
                   e["otherOrderItemList"] = e.orderItemList.slice(1);
@@ -337,9 +341,11 @@ export default {
                 }
               });
             }
-            if(this.otherBuyList.length > 2){
+            if (this.otherBuyList.length > 2) {
               let swipeLength = 0;
-              this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+              this.otherBuyList.length <= 10
+                ? (swipeLength = this.otherBuyList.length)
+                : (swipeLength = 10);
               for (let index = 0; index < swipeLength; index++) {
                 this.orderSwiperList.push(this.otherBuyList[index]);
                 this.orderSwiperList.push({ show: false });
@@ -350,19 +356,20 @@ export default {
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
                 key: i,
-                value: this.shareData.categoryMap[i],
+                value: this.shareData.categoryMap[i]
               });
             }
             this.descData = this.shareData.groupDescriptionRichTxt;
 
             this.str = this.descData.replace(/<img.*?>/g, "");
 
-            let imgStrs =
-              this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
+            let imgStrs = this.shareData.groupDescriptionRichTxt.match(
+              /<img.*?>/g
+            );
 
             // 获取每个img url
             if (imgStrs) {
-              this.imgUrls = imgStrs.map((url) => {
+              this.imgUrls = imgStrs.map(url => {
                 return url.match(/\ssrc=['"](.*?)['"]/)[1];
               });
             }
@@ -385,7 +392,7 @@ export default {
                 this.shareData.communityName + this.shareData.place,
               group_buying_describe: this.shareData.groupDescriptionRichTxt,
               group_buying_rule_descibe: this.shareData.ruleDescription,
-              group_buying_end_time: this.shareData.actEndTime,
+              group_buying_end_time: this.shareData.actEndTime
             });
           }
         });
@@ -400,18 +407,18 @@ export default {
         groupbuySkuName: item.skuName,
         groupbuyPurchaseNumber: item.buyerCount,
         groupbuyRuleDescribe: this.shareData.ruleDescription,
-        groupbuySkuDetail: item.groupbuySkuDetail,
+        groupbuySkuDetail: item.groupbuySkuDetail
       };
       this.$store.state.CharseInfo = obj;
       console.log("this.$store.state.charseInfo", this.$store.state.CharseInfo);
       this.$router.push({
         path: "/bulk_goods_deatil",
         params: {
-          resouce: obj,
+          resouce: obj
         },
         query: {
-          isWxShare: true,
-        },
+          isWxShare: true
+        }
       });
     },
 
@@ -421,7 +428,7 @@ export default {
 
     checkAll() {
       if (this.isCheckAll) {
-        this.checkList.forEach((item) => {
+        this.checkList.forEach(item => {
           item.isCheck = false;
         });
         this.result = [];
@@ -430,7 +437,7 @@ export default {
       } else {
         this.isCheckAll = true;
         this.result = [];
-        this.checkList.forEach((e) => {
+        this.checkList.forEach(e => {
           e.isCheck = true;
           this.result.push(e.id);
         });
@@ -484,7 +491,7 @@ export default {
       this.totalPriceFn();
     },
     clearCar() {
-      this.checkList.forEach((e) => {
+      this.checkList.forEach(e => {
         e.count = 0;
       });
       this.checkList = [];
@@ -509,11 +516,11 @@ export default {
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
           purchaseId: this.purchaseId,
           chiefId: this.chiefId,
-          skuCategory: item.key == "all" ? undefined : item.key,
+          skuCategory: item.key == "all" ? undefined : item.key
         })
-        .then((res) => {
+        .then(res => {
           this.goodsList = res.data.data;
-          this.goodsList.forEach((item) => {
+          this.goodsList.forEach(item => {
             item["count"] = 0;
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
@@ -535,7 +542,7 @@ export default {
         Toast.loading({
           message: "加载中...",
           duration: "toast",
-          forbidClick: true,
+          forbidClick: true
         });
         this.setBulkTotalPrice(this.totalPrice);
         // this.setBulkCheckList(this.checkList);
@@ -552,8 +559,8 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            checkList: JSON.stringify(this.checkList),
-          },
+            checkList: JSON.stringify(this.checkList)
+          }
           // params:{
           //   shareData: JSON.stringify(this.shareData),
           //   purchaseId: JSON.stringify(this.purchaseId),
@@ -564,8 +571,8 @@ export default {
         });
       }
     },
-    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"]),
-  },
+    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"])
+  }
 };
 </script>
 
