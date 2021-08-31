@@ -2193,6 +2193,7 @@ export default {
       );
     },
     checkProductStock: function () {
+      
       if(this.occurList.length > 1 ){
         if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
           this.$Toast("小程序暂不支持多店铺合并支付");
