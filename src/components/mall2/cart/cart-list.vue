@@ -118,7 +118,6 @@
                   :occuritem="occuritem"
                   :storeitem="storeitem"
                   @setCartSel="setCartSel"
-                  @numChange="numChange"
                   :key="cartitem.skuId"
                   :orderCategory="orderCategory"
                   :vipUnitUserCode="vipUnitUserCode"
@@ -810,13 +809,16 @@ export default {
           activityId: itemInfo.activityId
         }
       ];
-      this.updateCart(carts);
+      let fun = cartJS.debounce(this.updateCart);
+      fun(carts);
     },
     plusNum(itemInfo) {
       this.sensorsEdit("增加", itemInfo);
+      this.numChange(itemInfo)
     },
     minusNum(itemInfo) {
       this.sensorsEdit("减少", itemInfo);
+      this.numChange(itemInfo)
     },
     sensorsEdit(behavior, itemInfo) {
       console.log("itemInfo", itemInfo);

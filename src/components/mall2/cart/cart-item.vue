@@ -290,7 +290,7 @@
         }
       },
       numChange: function () {
-        this.$emit('numChange', this.cartitem);
+        // this.$emit('numChange', this.cartitem);
       },
       plusNum: function () {
         event.stopPropagation();

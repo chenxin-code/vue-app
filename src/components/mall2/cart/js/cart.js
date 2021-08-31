@@ -3,6 +3,7 @@ import util from '../../../../utils/util'
 import store from "../../../../vuex/store";
 import market from "../../../../utils/market";
 
+let timeout = null;
 let cart = {
     getTopArr: function() {
         let arr = [{
@@ -302,13 +303,13 @@ let cart = {
         }
     },
     /*防抖--防止过快选中商品*/
-    debounce(fn, wait = 600) {
-        var timer = null;
+    debounce(fn, wait = 150) {
         return function() {
-            if (timer !== null) {
-                clearTimeout(timer);
-            }
-            timer = setTimeout(fn, wait);
+            let self = this
+            if (timeout) clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                fn.apply(self, arguments)
+            }, wait)
         }
     },
     getCheckKey: function(isEditing) {
