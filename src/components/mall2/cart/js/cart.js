@@ -303,7 +303,7 @@ let cart = {
         }
     },
     /*防抖--防止过快选中商品*/
-    debounce(fn, wait = 150) {
+    debounce(fn, wait = 50) {
         return function() {
             let self = this
             if (timeout) clearTimeout(timeout)

@@ -233,9 +233,10 @@
           .car-c {
             float right;
             margin-top -3px;
+            margin-right -8px;
           }
           .car-size {
-            padding 5px;
+            padding 7px 11px;
             font-size 18px;
           }
           span:nth-child(2) {

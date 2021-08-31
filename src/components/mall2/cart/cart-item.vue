@@ -286,7 +286,7 @@
         if (num != this.cartitem.number) {
           this.cartitem.number = num
           this.$Toast('输入数量不符合步幅限制，已自动调整')
-          this.numChange()
+          this.$emit('numChange', this.cartitem);
         }
       },
       numChange: function () {

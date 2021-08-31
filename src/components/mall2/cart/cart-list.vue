@@ -96,7 +96,6 @@
                   :occuritem="occuritem"
                   :storeitem="storeitem"
                   @setCartSel="setCartSel"
-                  @numChange="numChange"
                   :key="cartitem.skuId"
                   :orderCategory="orderCategory"
                   :vipUnitUserCode="vipUnitUserCode"
@@ -814,7 +813,7 @@ export default {
     },
     plusNum(itemInfo) {
       this.sensorsEdit("增加", itemInfo);
-      this.numChange(itemInfo)
+      this.numChange(itemInfo);
     },
     minusNum(itemInfo) {
       this.sensorsEdit("减少", itemInfo);
