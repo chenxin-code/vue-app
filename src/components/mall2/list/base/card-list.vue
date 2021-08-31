@@ -197,7 +197,7 @@
         if (item.stockNum != '' && item.stockNum <= 0 ) {
           this.$Toast('商品缺货！');
           return
-        }
+        };
         this.$emit('addToCart', item)
       },
       addToWishList(item, event) {
