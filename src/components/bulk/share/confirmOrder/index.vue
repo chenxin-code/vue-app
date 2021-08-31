@@ -120,16 +120,20 @@
       </div>
       <div class="pay" @click="pay">立即支付</div>
     </div>
+
+    <nav-button/>
   </div>
 </template>
 
 <script>
 import calcTextareaHeight from "../../utils/calcTextareaHeight"; //element 文本域自适应大小
+import navButton from "../components/navButton";
 import { Toast } from "vant";
 import util from "@/utils/util.js";
 export default {
   name: "confirmOrder",
   props: {},
+  components:{navButton},
   data() {
     return {
       goodsList: [],

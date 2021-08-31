@@ -18,7 +18,7 @@ export default {
     return {
         navConfig:[
             {label:"首页",img:"home",path:"/common"},
-            {label:"订单",img:"order",path:"/mall2/cart"}
+            {label:"订单",img:"order",path:"/mall2/orderlist?selectedIndex=0"}
         ],
         showMore:false
     };
@@ -31,9 +31,16 @@ export default {
       this.showMore=!this.showMore
     },
     linkTo(item){
-      this.$router.push({
-        path: item.path
-      });
+      if(item.label=='首页'){
+         wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
+      }else{
+         this.$router.push({
+          path: '/mall2/orderlist',
+          query: {
+              selectedIndex: 0
+          }
+        })
+      }
     }
   }
 };
