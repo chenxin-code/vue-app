@@ -2568,7 +2568,7 @@ export default {
             appScheme: "x-engine-c",
             payType: false,
           })
-        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/order/2?time=${Date.now()}`)}`;
+        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/mall2/paysuccess?orderId=${this.submitDataList[0].orderId}&tradeNo=${this.submitDataList[0].tradeNo}&selectedIndex=1&orderCategory=&vipUnitUserCode=&type=&ret={ret}`)}`;
       }
     },
     concatPay(){
