@@ -297,6 +297,7 @@
           height: 175px;
           display: flex;
           align-items: center;
+			overflow: hidden;
           img {
             // position absolute;
             // width 100%;
