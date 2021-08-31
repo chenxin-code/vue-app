@@ -786,7 +786,7 @@ export default {
       let checkStatus = [];
       this.$store.state.environment == "development"
         ? (url =
-            "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+            "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
         : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
       let paramsObj = {
         list: list
@@ -942,8 +942,7 @@ export default {
 .waitPay {
   height: 100%;
   overflow-y: auto;
-//   padding-bottom: 182px;
-padding-bottom: 220px;
+  padding-bottom: 220px;
 
   &.wait-pay-x {
     padding-bottom: 220px;
