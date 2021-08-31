@@ -1687,6 +1687,7 @@
 
 <script>
 // import Counter from '@/components/commonui/counter/counter'
+import appUi from "@zkty-team/x-engine-module-ui";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import Judgement from "./judgement/judgement";
 import RegionSelect from "../../base/region-select";
@@ -1717,7 +1718,6 @@ import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
 import mixins from "./mixins.js";
-import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "detail",
@@ -2195,7 +2195,6 @@ export default {
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
         share_type: share_type,
-        ...this.$store.state.ythUser
       });
     },
     onShare() {
@@ -4076,7 +4075,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4140,6 +4138,7 @@ export default {
             let params = {
               res: data.data,
               paramsData: paramsData,
+              paramsDataList: [paramsData],
               deliveryType: this.detailData.deliveryType,
               easyCardId: this.easyCardId,
               cardType: this.cardType, // 区分充值卡 计次卡
@@ -4217,7 +4216,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4303,7 +4301,6 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
                 viewpoint_radio: this.viewpoint_radio,
-                ...this.$store.state.ythUser
               });
             } else {
               this.isCollect = false;
@@ -4664,24 +4661,8 @@ export default {
         merchant_name: this.detailData.ouName,
         jump_page: jumpPage,
         duration: this.duration,
-        ...this.$store.state.ythUser
       });
     }
-    // getDistributionDetail(){
-    //   let url = "";
-    //   // this.$store.state.ythUserInfo.phone
-    //   this.$store.state.environment == "development" ? url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
-    //     : url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
-    //   return new Promise((resolve, reject)=>{
-    //     this.$http.get(url).then(res=>{
-    //       if(res.data.code == 200){
-    //         resolve(res.data.data);
-    //       }
-    //     }).catch(err=>{
-    //       reject(err)
-    //     })
-    //   })
-    // },
   },
   created() {
     appUi.hideTabbar();
@@ -4897,7 +4878,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding-top: 40px;
+  padding: 35px 26px 36px 25px;
 
   .share_botton {
     display: flex;
@@ -4912,33 +4893,32 @@ export default {
       align-items: center;
 
       img {
-        width: 48px;
-        height: 48px;
+        width: 74px;
+        height: 74px;
       }
 
       div {
-        margin-top: 23px;
-        font-size: 13px;
-        font-family: PingFangSC-Regular, PingFang SC;
+        font-size: 14px;
         font-weight: 400;
-        color: #666666;
+        color: #999999;
+        line-height: 20px;
       }
     }
   }
 
   .cancel {
-    width: 295px;
-    height: 37px;
-    background: #ffffff;
-    border-radius: 6px;
-    border: 1px solid #e5e5e5;
-    text-align: center;
-    line-height: 37px;
-    font-size: 13px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #666666;
-    margin: 20px auto;
+    width: 86.4%;
+    height: 49px;
+    border-radius: 16px;
+    border: 1px solid #E5E5E5;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 27px auto 0;
   }
 }
 

@@ -97,7 +97,6 @@
   .coupon {
     height 100%
     display flex
-    align-items stretch
     padding 12px;
     border-radius 8px;
     margin-bottom 10px

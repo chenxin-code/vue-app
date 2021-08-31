@@ -4,14 +4,16 @@
   <div>
     <van-swipe-cell :right-width="80" :on-close="onClose" class="cell-swipe">
       <div class="cart-item">
+        <!-- 左侧选中 -->
         <div class="cart-item-sel">
           <i v-show="cartitem.isGift == 0 || isEditing " class="iconfont font-large"
              :class="cartJS.getXZClass(isEditing,cartitem.checked,cartitem.dchecked)"
              @click="setCartSel(cartitem,storeitem,occuritem)"></i>
         </div>
+         <!-- 主要数据 -->
         <div class="cell-content">
-          <div class="good-content" @click.stop="enterGoodDetail(cartitem)">
-            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}">
+          <div class="good-content" >
+            <div class="good-img" :class="{'img-samll': cartitem.isGift != 0}" @click.stop="enterGoodDetail(cartitem)">
               <div class="click-div"></div>
               <img :src="cartitem.phPictureUrl" alt="">
               <div class="cart-item-state theme_font_white" v-if="cartitem.state == 1 || cartitem.state == 4">
@@ -26,7 +28,7 @@
               <!--<div class="good-tag theme_border_red  theme_font_red ">换购</div>-->
               <!--</div>-->
               <div class="good-info">
-                <p class="good-name line-two" :class="getFontColorClass()"><span
+                <p class="good-name line-two" :class="getFontColorClass()" @click.stop="enterGoodDetail(cartitem)"><span
                   class="good-tag theme_border_red  theme_font_red" v-if="cartitem.isGift == 1">赠品</span><span
                   class="good-tag theme_border_red  theme_font_red" v-if="cartitem.isGift == 2">换购</span>
                   {{cartitem.productName}}</p>
@@ -59,11 +61,12 @@
             <p class="good-salespro-right" v-if="singleActivities_2.length == 1" @click="removeSingleActivity()">不参加</p>
           </div>
           <!--未参加单品活动 级别2，但是有活动 级别2-->
-          <div class="good-salespro" v-for="item in singleActivities_2"
-               v-if="singleActivities_2.length > 0 && curSingleActivity == null && orderCategory != 1">
-            <p class="sa-type">{{item.currentSelfActivity.mktActivityType}}</p>
-            <p class="sl-title single-line">{{item.currentSelfActivity.mktActivityTitle}} <span class="theme_standard_font">{{item.digitalPrice}}{{getDigitalDisplayName(item.acctType)}}</span> <span class="theme_standard_font" v-show="item.price">+ ¥{{$util.toDecimal2(item.price)}}</span></p>
-            <p class="good-salespro-right" @click="joinSingleActivity(item.currentSelfActivity)">参加</p>
+          <div class="good-salespro" v-for="item in singleActivities_2" :key="item.id">
+            <div v-if="singleActivities_2.length > 0 && curSingleActivity == null && orderCategory != 1">
+                <p class="sa-type">{{item.currentSelfActivity.mktActivityType}}</p>
+                <p class="sl-title single-line">{{item.currentSelfActivity.mktActivityTitle}} <span class="theme_standard_font">{{item.digitalPrice}}{{getDigitalDisplayName(item.acctType)}}</span> <span class="theme_standard_font" v-show="item.price">+ ¥{{$util.toDecimal2(item.price)}}</span></p>
+                <p class="good-salespro-right" @click="joinSingleActivity(item.currentSelfActivity)">参加</p>
+            </div>
           </div>
 
           <div class="good-salespro" v-if="cartitem.activity.length > 1 && cartitem.isGift == 0">
@@ -112,8 +115,10 @@
       }
     },
     methods: {
+      /*已选数量及库存，选较大的max值*/ 
       getMin(cartitem){
-        return _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+        let max_= _.min([cartitem.saleNumMax,cartitem.stockNumber]);
+        return max_ >= cartitem.number? max_: cartitem.number
       },
       getDigitalDisplayName: function (acctType) {
         return this.$mallCommon.accTypeToName(acctType, '200001')
@@ -281,11 +286,11 @@
         if (num != this.cartitem.number) {
           this.cartitem.number = num
           this.$Toast('输入数量不符合步幅限制，已自动调整')
-          this.numChange()
+          this.$emit('numChange', this.cartitem);
         }
       },
       numChange: function () {
-        this.$emit('numChange', this.cartitem);
+        // this.$emit('numChange', this.cartitem);
       },
       plusNum: function () {
         event.stopPropagation();
@@ -447,7 +452,7 @@
           left 0px;
           top 0px;
           bottom 0px;
-          right -130px;
+          right -140px;
           z-index 1;
         }
 

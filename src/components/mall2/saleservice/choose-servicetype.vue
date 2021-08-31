@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="seservices-cell shadow-cell">
-        <div class="type-cell" v-for="(seservice,index) in seservices" v-if="seservice.isShow==1">
+        <div class="type-cell" v-for="(seservice,index) in seservices" :key="index" v-show="seservice.isShow==1">
           <div class="left-info">
             <img :src="seservice.icon"/>
             <p>{{seservice.typeTitle}}</p>
@@ -171,7 +171,12 @@
             this.order = data.data;
             this.showType();
             this.isShow = true;
-
+            if(this.order.onlyRefundFlag == 0 && this.order.fillFlag == 0){
+              this.$Toast('该商品已申请售后，请到售后订单查看')
+              setTimeout(()=>{
+                this.$router.go(-1);
+              },2000)
+            }
           } else {
             this.isShow = false;
             this.$Toast(data.info)

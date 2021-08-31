@@ -253,10 +253,10 @@
           this.$bridgefunc.customGo(-1)
           return;
         }
-        // if (this.stockNum <= 0) {
-        //   this.$Toast('当前商品库存不足，请稍等一会儿尝试！')
-        //   return;
-        // }
+        if (this.stockNum <= 0) {
+          this.$Toast('当前商品库存不足，请稍等一会儿尝试！')
+          return;
+        }
         this.$Loading.open()
         let url = '/app/json/ord_cart/addCart';
         let params1 = {

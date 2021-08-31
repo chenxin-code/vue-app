@@ -343,7 +343,7 @@ $fontColor = #FFFFFF;
         margin-bottom: 0;
         .avatar-img {
           margin-bottom: 0;
-          border: 3px solid #FFF9E3;
+          border: 3.33px solid #FFF9E3;
         }
       }
       .user-name {
@@ -384,7 +384,7 @@ $fontColor = #FFFFFF;
         left 50%
         transform translateX(-50%)
         font-size: 44px;
-        font-family: PingFang-SC-Heavy;
+        font-family: PingFang-SC-Heavy !important;
         font-weight: 700;
         line-height: 55px;
         color: #FF393E;
