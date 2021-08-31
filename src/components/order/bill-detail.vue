@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-08-16 14:08:51
+ * @LastEditTime: 2021-08-31 18:00:51
 -->
 <template>
   <div class="bill-detail">
@@ -44,13 +44,6 @@
             </van-dropdown-menu>
           </div>
         </div>
-        <div class="desc" v-if="this.results.managementFeeCycle === '1'">
-          按月度缴费
-        </div>
-        <div class="desc" v-if="this.results.managementFeeCycle === '3'">
-          按季度缴费
-        </div>
-
         <div
           class="content"
           :class="[
@@ -117,7 +110,7 @@
                   <div class="detail-title">
                     <div class="month-text">
                       <span class="num">{{ detail.month }}</span>
-                      <span>{{ detail.monthTitle }}</span>
+                      <span>月</span>
                     </div>
                     <div class="status">
                       <span
@@ -135,7 +128,7 @@
                     </div>
                   </div>
                   <div
-                    class="detail-item"
+                    class="detail-item collecting"
                     v-for="(monthDetail, k) in detail.monthList"
                     :key="k"
                     @click="goToDetail(monthDetail, isFinishBill)"
@@ -146,6 +139,13 @@
                     <span class="detail-money"
                       >￥{{ monthDetail.payableAmount }}</span
                     >
+                    <span class="detail-collecting">托收中</span>
+                    <div>
+                      {{
+                        monthDetail.businessParams.recStartTime
+                          | filterRecTime(monthDetail.businessParams.recEndTime)
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -230,7 +230,6 @@ export default {
       loaded: false
     };
   },
-
   components: {
     navTop,
     payDiv,
@@ -246,6 +245,11 @@ export default {
       to.meta.keepAlive = false;
     }
     next();
+  },
+  filters: {
+    filterRecTime(start, end) {
+      return moment(start).format("MM/DD") + "-" + moment(end).format("MM/DD");
+    }
   },
   created() {
     if (this.$route.query.billDetailType == "1") {
@@ -295,12 +299,8 @@ export default {
           : ""
       };
 
-      let url = "";
-      this.$store.state.environment == "development"
-        ? (url =
-            "https://m-center-uat-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList")
-        : (url =
-            "https://m-center-prod-linli.timesgroup.cn/times/charge-bff/order-center/api-c/v1/getList");
+      let host = process.env.VUE_APP_CENTER_APP;
+      let url = host + "/times/charge-bff/order-center/api-c/v1/getList";
 
       this.$http
         .get(url, { params: propertyObj })
@@ -383,7 +383,6 @@ export default {
               this.isMonthPay =
                 this.results.managementFeeCycle == "1" ? true : false; //1为月度账单，3为季度账单
             }
-            console.log(`请求了`);
             this.isShowNumLoading = false;
           } else {
             this.results = [];
@@ -781,49 +780,33 @@ export default {
     //查看详情
     goToDetail(item, isFinishBill) {
       console.log(`goToDetail`, item);
-      if (isFinishBill) {
-        //完成的账单 - 跳到预缴余额的预缴详情页面
-        let name = "账单详情";
-        let tollDate = moment(item.payTime).format("YYYY-MM-DD");
-        let path = `/advancePaymentDetails?type=1&amount=${item.realAmount}&objectName=${this.results.spaceFullName}&customerName=${item.proprietorName}&tollDate=${tollDate}
-        &payWay=${item.payType}&tradeMerCstno=${item.tradeMerCstNo}&platMerCstno=${item.platMerCstNo}&projectName=${item.showInfo}&navTitleName=${name}`;
-
-        navToMicroApplication.openTargetRouter({
-          type: "microapp",
-          uri: "com.times.microapp.AppcPrepay", // 微应用包名
-          path: path, // 微应用具体路由
-          hideNavbar: false
-        });
-      } else {
-        //待支付
-        this.$router.push({
-          path: "/billCenter/detail",
-          query: {
-            buildings: this.results.spaceFullName,
-            businessCreateTime: item.businessCreateTime, //创建时间
-            houseNo: item.houseNo, //房号
-            showInfo: item.showInfo, //商品说明 --- 收费项目
-            showInfoExt: item.showInfoExt,
-            proprietorName: item.proprietorName, //业主名称
-            payableAmount: item.payableAmount, //应收金额
-            realAmount: item.realAmount, //实付金额
-            platMerCstNo: item.platMerCstNo, //商户单号
-            tradeMerCstNo: item.tradeMerCstNo, //交易单号
-            airDefenseNo: item.airDefenseNo,
-            status: item.status, // 账单状态 10待支付， 60-支付中，70-交易失败，80-交易关闭，90-支付成功，100-已撤销"
-            recStartTime: item.businessParams.recStartTime, //收费周期-开始时间 -------费用所属时段
-            recEndTime: item.businessParams.recEndTime, //收费周期-结束时间 ----费用所属时段
-            chargeYear: item.businessParams.chargeYear, //缴纳月份 --- 费用所属年月
-            billNo: item.billNo, //账单编号
-            price: item.businessParams.standard
-              ? item.businessParams.standard.price
-              : "", //单价
-            unit: item.businessParams.standard
-              ? item.businessParams.standard.unit
-              : "" //单位
-          }
-        });
-      }
+      this.$router.push({
+        path: "/billCenter/detail",
+        query: {
+          buildings: this.results.spaceFullName,
+          businessCreateTime: item.businessCreateTime, //创建时间
+          houseNo: item.houseNo, //房号
+          showInfo: item.showInfo, //商品说明 --- 收费项目
+          showInfoExt: item.showInfoExt,
+          proprietorName: item.proprietorName, //业主名称
+          payableAmount: item.payableAmount, //应收金额
+          realAmount: item.realAmount, //实付金额
+          platMerCstNo: item.platMerCstNo, //商户单号
+          tradeMerCstNo: item.tradeMerCstNo, //交易单号
+          airDefenseNo: item.airDefenseNo,
+          status: item.status, // 账单状态 10待支付， 60-支付中，70-交易失败，80-交易关闭，90-支付成功，100-已撤销"
+          recStartTime: item.businessParams.recStartTime, //收费周期-开始时间 -------费用所属时段
+          recEndTime: item.businessParams.recEndTime, //收费周期-结束时间 ----费用所属时段
+          chargeYear: item.businessParams.chargeYear, //缴纳月份 --- 费用所属年月
+          billNo: item.billNo, //账单编号
+          price: item.businessParams.standard
+            ? item.businessParams.standard.price
+            : "", //单价
+          unit: item.businessParams.standard
+            ? item.businessParams.standard.unit
+            : "" //单位
+        }
+      });
     },
     //关闭弹窗
     closeTanC() {
@@ -1191,13 +1174,14 @@ $color = #8D8D8D;
               }
 
               .detail-item {
-                margin: 0 16px;
-
+                margin: 5px 16px;
+                &.collecting {
+                  color $color
+                }
                 span {
                   font-size: 13px;
                   font-family: PingFangSC-Regular, PingFang SC;
                   font-weight: 400;
-                  color: $color;
                   line-height: 26px;
                 }
 
@@ -1211,7 +1195,10 @@ $color = #8D8D8D;
                   margin-left: 4px;
                   top: 4px;
                 }
-
+                .detail-collecting {
+                  position: relative;
+                  left: 32px;
+                }
                 .detail-money {
                   float: right;
                 }
