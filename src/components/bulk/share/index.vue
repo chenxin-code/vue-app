@@ -127,7 +127,7 @@
                   销售价格：￥{{ item.crossedPrice }}
                 </div>
                 <div class="product-prize-group">
-                  团购价格：￥{{ item.groupPrice }}
+                  团购价格：<span style="font-weight:bold">￥{{ item.groupPrice }}</span>
                 </div>
               </div>
 
@@ -191,8 +191,7 @@
               </div>
             </div>
             <div
-              class="divLine"
-              style="width: 8rem"
+              class="div_menber_Line"
               v-show="index !== otherBuyList.length - 1"
             ></div>
           </div>
@@ -682,7 +681,7 @@ export default {
       border-radius: 0px 10.67px 10.67px 0px;
       display: flex;
       align-items center;
-      padding-left: 6px;
+      padding-left: 11px;
 
       .back-img {
         background-image: url('./images/btn-back.png');
@@ -756,7 +755,7 @@ export default {
             align-items: center;
             font-size: 16px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #121212;
           }
 
@@ -848,7 +847,7 @@ export default {
         .product-title {
           font-size: 13px;
           font-family: PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           color: #121212;
           width: 200px;
         }
@@ -856,7 +855,7 @@ export default {
         .product-prize-old {
           font-size: 12px;
           font-family: PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           text-decoration: line-through;
           color: #999999;
           margin-top: 13px;
@@ -865,7 +864,7 @@ export default {
         .product-prize-group {
           font-size: 13px;
           font-family: PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           color: #f00000;
           margin-top: 13px;
         }
@@ -889,11 +888,11 @@ export default {
             height:24px;
             border:none;
             opacity:1;
+            background-color:#fff;
             background-size:100%;
           }
           /deep/ .van-stepper--round .van-stepper__minus{
-            background:#fff url('./images/button_del_default@2x.png');
-            background-size:100%;
+            background-image:url('./images/button_del_default@2x.png');
           }
 
           /deep/ .van-stepper--round .van-stepper__plus{
@@ -935,24 +934,30 @@ export default {
       }
 
       .group-header-second {
-        margin: 10px 0 20px 0;
+        margin: 10px 0 5px 0;
         font-size: 13px;
         font-family: PingFang SC;
-        font-weight: bold;
+        font-weight: 400;
         color: #999999;
       }
     }
 
     .group-people {
+      .div_menber_Line{
+        margin-left:54px;
+        height: 1px;
+        background: #F0F0F0;
+        width:100%
+      }
       .group-people-item {
-        margin-top: 10px;
+        padding: 20px 0;
         display: flex;
-
+        height: 92px;
         .group-people-number{
           width: 26px; 
           font-size: 15px;
           color: #BABABA;
-          width 60px;
+          width 54px;
           line-height 42px;
           text-align center;
         }
@@ -967,18 +972,19 @@ export default {
           display: flex;
           flex-direction: column;
           padding:0 13px;
+          flex:1;
 
           .people-item-phone {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #121212;
           }
 
           .people-item-time {
             font-size: 12px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
             margin-top: 8px;
           }
@@ -986,12 +992,11 @@ export default {
           .people-item-desc {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #666666;
             margin-top: 8px;
             display: flex;
             justify-content: space-between;
-            width: 250px;
           }
         }
       }
