@@ -4764,8 +4764,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="stylus" scoped type="text/stylus">
-@import '~@/common/stylus/variable.styl';
+<style lang="less" scoped>
+// @import '~@/common/stylus/variable.styl';
 
 .theme_standard_bg {
   width: 102px;
@@ -4961,14 +4961,14 @@ export default {
   }
 
   .sl-tag {
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 2px 6px;
   }
 
   .sl-title {
     flex: 1;
     margin-left: 4px;
-    font-size: $font-size-small;
+    font-size: 12px;
 
     span {
       margin-left: 10px;
@@ -4977,7 +4977,7 @@ export default {
 
   .good-salespro-right {
     margin: -10px;
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 12px 16px;
   }
 
@@ -5375,7 +5375,7 @@ export default {
 
       .title {
         font-weight: 500;
-        font-size: $font-size-large;
+        font-size: 18px;
         line-height: 20px;
       }
 
@@ -5468,7 +5468,7 @@ export default {
       .btn-item {
         flex: 1;
         padding: 3px;
-        font-size: $font-size-medium;
+        font-size: 14px;
         text-align: center;
       }
 
@@ -5503,7 +5503,7 @@ export default {
       .imgs {
         overflow: hidden;
         padding-bottom: 12px;
-        font-size: $font-size-medium;
+        font-size: 14px;
 
         .s-img-div {
           margin-right: 2%;
