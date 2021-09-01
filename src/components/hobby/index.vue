@@ -251,7 +251,7 @@ export default {
       display: flex;
       flex-direction column
       justify-content: center;
-      align-items: stretch;
+      
       position: fixed;
       top: 0px;
       left: 0;

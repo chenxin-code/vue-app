@@ -18,7 +18,7 @@
     <div class="order-item">
       <div class="title">
         <van-checkbox
-          v-if="isWaitPay && billType != 13"
+          v-if="isWaitPay"
           v-model="isChecked"
           :disabled="isDisabled"
           @change="checkEvent($event, orderItem)"
@@ -487,7 +487,8 @@ export default {
         this.initPayInfo(payInfo, "mall");
       } else if (this.billType == 13) {
         /*去服务商城详情页*/
-        this.goTMDetail();
+        // this.goTMDetail();
+        this.initPayInfo(payInfo, "mall");
       } else {
         this.initPayInfo(payInfo, "bill");
       }
@@ -633,7 +634,7 @@ export default {
       }
     },
     checkEvent(event, data) {
-      // console.log(event, data);
+      console.log(event, data);
       data.checked = event;
       this.$emit("checkEvent", data);
     },

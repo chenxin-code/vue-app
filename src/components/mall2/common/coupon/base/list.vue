@@ -108,12 +108,16 @@
         <img src="/static/image/mall2/used.png" v-if="listType == 4" />
         <div class="select-div" v-if="listType == 2">
           <i
+            class="iconfont mall-weixuanzhong theme_font_tint canNotSelect"
+            v-if="isSelected(item.couNo)"
+          ></i>
+          <i
             class="iconfont mall-weixuanzhong theme_font_tint"
-            v-if="!item.selected"
+            v-else-if="!item.selected"
           ></i>
           <i
             class="iconfont mall-xuanzhong theme_font_red"
-            v-if="item.selected"
+            v-else-if="item.selected"
           ></i>
           <!-- <van-checkbox
             :name="index"
@@ -132,7 +136,7 @@ import Toast from "../../../../Vendor/toast";
 
 export default {
   name: "list",
-  props: ["coupons", "listType", "payAmount", "fiveEnter"],
+  props: ["coupons", "listType", "payAmount", "fiveEnter",'isSelectedList','storeIndex'],
   components: {},
   data() {
     return {
@@ -143,7 +147,44 @@ export default {
       selectedCouNo: ""
     };
   },
+  created(){
+
+  },
+  computed:{
+    isSelected(){
+      return function (couNo) {
+        console.log('this.isSelectedList',this.isSelectedList)
+        console.log('this.storeIndex',this.storeIndex)
+        if(this.isSelectedList){
+          let filter = this.isSelectedList.filter(e=>{
+            return e.couNo == couNo && e.storeIndex != this.storeIndex;
+          })
+          if(filter.length > 0){
+            return true
+          }else{
+            return false
+          }
+        }else{
+          return false
+        }
+      }
+    },
+  },
   methods: {
+    // isSelected(couNo){
+    //   if(this.isSelectedList && this.storeIndex){
+    //     let filter = this.isSelectedList.filter(e=>{
+    //       return e.couNo == couNo && e.storeIndex != this.storeIndex;
+    //     })
+    //     if(filter.length > 0){
+    //       return true
+    //     }else{
+    //       false
+    //     }
+    //   }else{
+    //     return false
+    //   }
+    // },
     // checkShop(data) {
     //   console.log(`datadatadtaa`, data);
     // },
@@ -156,6 +197,10 @@ export default {
     itemEvent: function(item, index) {
       // 5进活动调整
       console.log(item, index, "item", this);
+      if(this.isSelected(item.couNo)){
+        Toast("不能与已选优惠券叠加使用！");
+        return
+      }
       if (this.fiveEnter) {
         this.coupons.forEach((value, index1) => {
           this.coupons[index1].selected = false;
@@ -207,6 +252,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import "~@/common/stylus/variable.styl"
+  .canNotSelect{
+    background: #999;
+    border-radius: 50%;
+    overflow: hidden; 
+  }
 .list {
   overflow hidden
   .eccell {

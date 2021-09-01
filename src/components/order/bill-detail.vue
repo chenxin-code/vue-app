@@ -9,9 +9,9 @@
     <van-sticky :offset-top="offsetTop">
       <nav-top
         navLeftName="账单明细"
-        navRightName="发票查询"
+        navRightName="更多"
+        :showPopoverTemp="true"
         @backEvent="backEvent"
-        @navToPage="navToPage"
       ></nav-top>
     </van-sticky>
     <div class="warpper">
@@ -661,7 +661,7 @@ export default {
         let pcsUrl = "";
         this.$store.state.environment == "development"
           ? (pcsUrl =
-              "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
           : (pcsUrl =
               "https://times-pms.linli580.com/pcs/bill-center/check-bill");
         let pcsObj = {

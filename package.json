@@ -5,6 +5,7 @@
   "author": "liqiang <623057062@qq.com>",
   "private": true,
   "scripts": {
+    "serve:build": "vue-cli-service serve --mode production",
     "serve": "vue-cli-service serve",
     "build:staging": "vue-cli-service build --mode staging",
     "build": "vue-cli-service build",
@@ -83,6 +84,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "http-proxy-middleware": "^1.0.5",
+    "less": "^3.13.1",
+    "less-loader": "^6.2.0",
     "postcss-loader": "^6.1.1",
     "postcss-px-to-viewport": "^1.1.1",
     "postcss-pxtorem": "^5.1.1",

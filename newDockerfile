@@ -1,0 +1,2 @@
+FROM 10.1.245.66:31104/times-linli/nginx:1.15.2-alpinejianshu
+COPY ./app /home/sunbox/vue/app-vue/app

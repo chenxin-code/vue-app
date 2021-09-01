@@ -6,22 +6,26 @@
       <div
         class="overlay-content"
         v-if="!showResult && !isPoster"
-        :style="!isPoster ? 'background: #ffffff' : ''"
+        style="background: #ffffff"
       >
         <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
         <div class="save-pic-text">
           <div class="share-desc">
-            <div v-show="!isEditor" style="width: 88%;">
+            <div v-show="!isEditor" style="width: 90%;">
               {{ shareParams.skuName }}
             </div>
+
+            <!-- <van-cell-group style="width: 80%;border: red solid 1px;"> -->
             <van-field
               v-model="shareParams.skuName"
               placeholder=""
               autosize
               type="textarea"
               v-show="isEditor"
-              style="width: 88%;"
+              style="width: 90%;"
             />
+            <!-- </van-cell-group> -->
+
             <div @click="isEditor = !isEditor">
               <img
                 src="./image/editor.png"
@@ -32,8 +36,8 @@
               <div v-show="isEditor">完成</div>
             </div>
           </div>
-          <div style="font-size: 13px;margin-top: 10px;">
-            【零售价格】:¥ {{ shareParams.salePrice }}
+          <div style="margin: 10px 0 0 1px;">
+            【零售价格】: ¥ {{ shareParams.salePrice }}
           </div>
           <div class="share-desc" style="word-break: break-all;">
             【购买链接】: {{ shareParams.link }}
@@ -49,11 +53,7 @@
           </div>
           <div class="save-btn" @click="saveData">保存图文</div>
         </div>
-        <div
-          class="overlay-content-bottom"
-          style="width: 100%;"
-          v-if="shareParams.estimatedCommission"
-        >
+        <div class="overlay-content-bottom" v-if="shareParams.estimatedCommission" style="background: #fff1e5;">
           <div class="share-money" @click="savePoster">
             分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
           </div>
@@ -61,14 +61,30 @@
         </div>
       </div>
 
-      <div class="overlay-content" v-if="!showResult && isPoster">
-        <img src="./image/guanbi@2x.png" class="close-icon" @click="backPage" />
+      <div
+        class="overlay-content"
+        v-if="!showResult && isPoster"
+        :style="
+          !isCanvas
+            ? ''
+            : ''
+        "
+      >
+        <div style="width: 100%;">
+          <img
+            src="./image/guanbi@2x.png"
+            class="close-icon"
+            @click="backPage"
+            v-if="isCanvas"
+          />
+        </div>
 
         <div
           class="default-share-poster"
           ref="poster"
           @click="saveIOS"
           v-if="!isShowPoster && !isCanvas"
+          :style="shareParams.estimatedCommission ? '' : { height: '13rem' }"
         >
           <div class="default-poster-header">
             <img
@@ -84,7 +100,7 @@
 
             <div class="default-poster-header-right">
               <div class="default-poster-header-right-name">
-                {{ $store.state.ythUserInfo.userName }}
+                {{ shareParams.userName }}
               </div>
               <div class="default-poster-header-right-desc">
                 为你挑选了一个好物
@@ -98,20 +114,22 @@
             <img :src="proImgUrl" alt="" class="prouct-main-pic" />
 
             <div class="default-poster-prize-sale">
-              <div class="price default-poster-prize">
-                <span class="money-symbol">￥</span
-                ><span class="num" style="font-weight: bold;"
-                  >{{ shareParams.salePrice }}
-                </span>
-              </div>
+              <span class="money-symbol">￥</span>
+              <span
+                style="font-weight: bold;font-size: 30px;margin-left: 5px;"
+                >{{ shareParams.salePrice }}</span
+              >
             </div>
 
             <div class="default-poster-bottom">
-              <div class="default-poster-bottom-text" v-if="shareParams.skuName && shareParams.skuName.length > 20">
-                {{ shareParams.skuName.substr(0, 19) }} ...
+              <div
+                class="default-poster-bottom-text"
+                v-if="shareParams.skuName && shareParams.skuName.length < 17"
+              >
+                {{ shareParams.skuName }}
               </div>
               <div class="default-poster-bottom-text" v-else>
-                {{ shareParams.skuName }}
+                {{ shareParams.skuName.substr(0, 16) }}...
               </div>
               <img
                 :src="shareParams.qrCode"
@@ -122,16 +140,6 @@
           </div>
         </div>
 
-        <div
-          class="overlay-content-bottom content-bottom-style"
-          v-if="shareParams.estimatedCommission"
-        >
-          <div class="share-money">
-            分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
-          </div>
-          <div class="share-check">佣金可在“分销员中心”里查看</div>
-        </div>
-
         <img
           :src="canvasData"
           alt=""
@@ -140,8 +148,18 @@
           ref="posterPicture"
           @click="saveIOS"
         />
-        <div style="height: 1.72rem;" v-if="isCanvas"></div>
-        <div class="finger" ref="fingerSave" :style="isCanvas ? { bottom: 0 } : ''">
+        <div
+          class="overlay-content-bottom poster-bottom-span"
+          v-if="shareParams.estimatedCommission && isCanvas"
+        >
+          <div class="poster-bottom-desc">
+            <div class="share-money">
+              分享后预计可赚 ¥{{ shareParams.estimatedCommission }}
+            </div>
+            <div class="share-check">佣金可在“分销员中心”里查看</div>
+          </div>
+        </div>
+        <div class="finger" ref="fingerSave" v-if="isCanvas">
           <img class="finger-image" src="./image/finger.png" />
           <div class="finger-save-text">长按图片保存到相册</div>
         </div>
@@ -153,6 +171,10 @@
         <div class="result-line"></div>
         <div class="overlay-btn" @click="backPage">我知道了</div>
       </div>
+
+      <!-- <div class="poster-content" v-if="isCanvas">
+        <van-loading size="48px" vertical style="padding: 40px">海报生成中...</van-loading>
+      </div> -->
     </div>
     <!-- </van-overlay> -->
   </div>
@@ -162,12 +184,12 @@
 import ClipboardJS from "clipboard";
 import appCamera from "@zkty-team/x-engine-module-camera";
 import html2canvas from "html2canvas";
+import { Toast } from "vant";
 
 export default {
   props: {
     shareParams: {
-      type: Object,
-      default: {}
+      type: Object
     }
   },
   data() {
@@ -184,24 +206,56 @@ export default {
       isShowPoster: false
     };
   },
-  async created() {
-    console.log('---shareParams---', this.shareParams)
-    try {
-      await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
-      await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
-    }catch(err) {
-      console.log('---err----', err)
-    }
+  async mounted() {
+    // this.shareParams.estimatedCommission = 10;
+    //  await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
+    //   await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
+    if (this.isPoster) {
+      if (/data:image/.test(this.shareParams.picUrls[0])) {
+        this.proImgUrl = this.shareParams.picUrls[0];
+      } else {
+        await this.formatImgUrl(this.shareParams.picUrls[0], "proImgUrl");
+      }
 
-    html2canvas(this.$refs.poster).then(canvas => {
-      this.canvasData = canvas.toDataURL("image/png");
-      this.isCanvas = true;
-    });
+      if (/data:image/.test(this.shareParams.userImage)) {
+        this.proUserUrl = this.shareParams.userImage;
+      } else {
+        await this.formatImgUrl(this.shareParams.userImage, "proUserUrl");
+      }
+      console.log('this.$refs.poster.clientHeight', this.$refs.poster.clientHeight);
+      Toast.loading({
+        message: "正在生成海报中...",
+        duration: "toast",
+        forbidClick: true
+      });
+      setTimeout(() => {
+        try {
+          html2canvas(this.$refs.poster, {
+            // height: this.$refs.poster.clientHeight - 4,
+            // width: this.$refs.poster.clientWidth - 4
+            dpi: window.devicePixelRatio * 2,
+            scale: 2
+          }).then(canvas => {
+            this.canvasData = canvas.toDataURL("image/png");
+            this.isCanvas = true;
+            console.log("---->canvasData", this.canvasData);
+            Toast.clear();
+            window.saveImageToAlbum = () => {
+              appCamera.saveImageToAlbum({
+                type: "base64",
+                imageData: this.canvasData
+              });
+            };
+          });
+        } catch (err) {
+          Toast.clear();
+          Toast("生成海报失败，请重试！");
+        }
+      }, 500);
+    }
   },
-  mounted() {},
   methods: {
     saveIOS() {
-      // ios的webview 无法通过长按图片保存到手机
       if (this.isIOS()) {
         appCamera.saveImageToAlbum({
           type: "base64",
@@ -213,7 +267,6 @@ export default {
       var u = navigator.userAgent;
       return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     },
-    // 复制文字并保存图片到本地
     saveData() {
       this.shareParams.picUrls.forEach(item => {
         appCamera.saveImageToAlbum({
@@ -225,8 +278,7 @@ export default {
       new ClipboardJS(".save-btn", {
         text: function(trigger) {
           return `${that.shareParams.skuName}
-【零售价格】：${that.shareParams.salePrice}
-【购买链接】：${that.shareParams.link}
+购买链接：${that.shareParams.link}
           `;
         }
       });
@@ -237,6 +289,7 @@ export default {
         type: "url",
         imageData: this.shareParams.picUrls[0]
       });
+      //   };
     },
     backPage() {
       this.$emit("hide");
@@ -263,42 +316,74 @@ export default {
   }
 };
 </script>
+<style>
+.van-overlay {
+  z-index: 999;
+}
+</style>
 
-<style lang="stylus" scoped type="text/stylus">
-  .poster-mask {
-    position: fixed;
-    top: 0;
-    background: black;
-    opacity: 0.6;
+<style lang="less" scoped>
+.poster-mask {
+  position: fixed;
+  top: 0;
+  background: black;
+  opacity: 0.6;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+}
+.share-main {
+  position: fixed;
+  top: 0;
+  z-index: 11;
+  // left: 50%;
+  // transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poster-content {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  z-index: 11;
+}
+
+.overlay-content {
+  position: relative;
+  // left: 50%;
+  // top: 50%;
+  // transform: translate(-50%, -50%);
+  width: 300px;
+  // background: #ffffff;
+  border-radius: 6px;
+  z-index: 11;
+  .close-item {
     width: 100%;
-    height: 100vh;
-    z-index 10;
+    padding-bottom: 10px;
+    margin-left: 15px;
+    text-align: right;
   }
-
-  .overlay-content {
-    position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    // background: #ffffff;
-    border-radius: 6px;
-    z-index: 11;
-
-    .close-icon {
-      position: absolute;
-      top: -50px;
-      left: 300px;
-      width: 23px;
-      height: 23px;
-    }
-   .default-share-poster {
-    background-image: url('./image/poster_bg.png');
+  .close-icon {
+    position: absolute;
+    top: -0.8rem;
+    left: 8rem;
+    width: 23px;
+    height: 23px;
+  }
+  .default-share-poster {
+    background-image: url("./image/poster_bg.png");
     background-repeat: no-repeat;
-    background-size: 375px 675px;
-    width:100%;
-    height:550px;
-    padding: 15px
+    background-size: 375px 667px;
+    width: 100%;
+    height: 520px;
+    padding: 15px;
+    position: relative;
+    left: 5000px;
     // border-top-left-radius 15px
     // border-top-right-radius 15px
     margin-top: -15px;
@@ -318,13 +403,13 @@ export default {
           font-size: 16px;
           font-family: PingFang SC;
           font-weight: bold;
-          color: #FFFFFF;
+          color: #ffffff;
         }
         .default-poster-header-right-desc {
           font-size: 13px;
           font-family: PingFang SC;
           font-weight: bold;
-          color: #FFFFFF;
+          color: #ffffff;
           opacity: 0.7;
           margin-top: 15px;
         }
@@ -339,7 +424,7 @@ export default {
     }
     .default-main-poster {
       width: 260px;
-      background: #FFFFFF;
+      background: #ffffff;
       border-radius: 12px;
       margin: auto;
       .prouct-main-pic {
@@ -349,17 +434,12 @@ export default {
         margin: 15px;
       }
       .default-poster-prize-sale {
-        display: flex;
-        justify-content: space-space-between;
-        .default-poster-prize {
-          margin-left: 17px;
-          font-size: 30px;
-          font-family: PingFang SC;
-          font-weight: bold;
-          color: #E5165A;
-          .money-symbol {
-            font-size: 16px;
-          }
+        // display: flex;
+        // justify-content: space-space-between;
+        color: #e5165a;
+        .money-symbol {
+          font-size: 16px;
+          margin-left: 15px;
         }
       }
       .default-poster-bottom {
@@ -375,12 +455,10 @@ export default {
           // font-weight: bold;
           // color: #333333;
           // line-height: 22px;
-          display: flex;
-          align-items: center;
-          padding-right: 5px;
+
           margin-left: 17px;
-          width: 180px;
-          font-size: 16px;
+          width: 160px;
+          font-size: 18px;
           font-family: PingFang SC;
           // font-weight: bold;
           color: #333333;
@@ -395,106 +473,34 @@ export default {
     }
   }
 
-    .main-poster {
-      width: 300px;
-      height: 300px;
+  .main-poster {
+    width: 300px;
+    height: 300px;
+  }
+
+  .poster-user-message {
+    display: flex;
+    margin-left: 10px;
+    margin-top: 20px;
+
+    .user-image {
+      width: 37.5px;
+      height: 37.5px;
+      border-radius: 50%;
     }
 
-    .poster-user-message {
-      display: flex;
+    .poster-user-right {
       margin-left: 10px;
-      margin-top: 20px;
 
-      .user-image {
-        width: 37.5px;
-        height: 37.5px;
-        border-radius: 50%;
-      }
-
-      .poster-user-right {
-        margin-left: 10px;
-
-        .poster-user-name {
-          font-size: 13px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 500;
-          color: #3C3F43;
-        }
-
-        .poster-user-text {
-          margin-top: 8px;
-          font-size: 13px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #666666;
-
-        }
-      }
-    }
-
-    .poster-product-message {
-      margin-left: 10px;
-      margin-bottom: 10px;
-      margin-top: 15px;
-      display: flex;
-      justify-content: space-between;
-
-      .poster-product-message-left {
-        margin-left: 10px;
-        display: flex;
-        flex-direction: column;
-        width: 65%;
-
-        .poster-product-prize {
-          font-size: 24px;
-          font-family: PingFangSC-Semibold, PingFang SC;
-          font-weight: 600;
-          color: #E0483F;
-        }
-
-        .poster-product-desc {
-          font-size: 13px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #3C3F43;
-          margin-top: 10px;
-        }
-      }
-
-      .poster-product-message-right {
-        text-align: center;
-        width: 35%;
-
-        .qrcode {
-          width: 58px;
-          height: 58px;
-        }
-      }
-    }
-
-    .content-bottom-style {
-      position: fixed;
-      top: 475px;
-      left: 0.54rem;
-    }
-    .overlay-content-bottom {
-      width: 260px;
-      height: 63px;
-      background: #FFF1E5;
-      border-radius: 0px 0px 10px 10px;
-      margin: -0.4rem auto;
-
-      .share-money {
+      .poster-user-name {
         font-size: 13px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #121212;
-        padding: 10px 0;
-        text-align: center;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: #3c3f43;
       }
 
-      .share-check {
-        text-align: center;
+      .poster-user-text {
+        margin-top: 8px;
         font-size: 13px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
@@ -503,107 +509,185 @@ export default {
     }
   }
 
-  .save-pic-text {
-    padding: 10px 15px;
-    .share-desc {
+  .poster-product-message {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    .poster-product-message-left {
+      margin-left: 10px;
+      display: flex;
+      flex-direction: column;
+      width: 65%;
+
+      .poster-product-prize {
+        font-size: 24px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: #e0483f;
+      }
+
+      .poster-product-desc {
         font-size: 13px;
-        margin-top 5px;
-        line-height: 20px;
-        display: flex;
-        justify-content: space-between;
-      .share-editor {
-        width 15px;
-        height: 15px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #3c3f43;
+        margin-top: 10px;
+      }
+    }
+
+    .poster-product-message-right {
+      text-align: center;
+      width: 35%;
+
+      .qrcode {
+        width: 58px;
+        height: 58px;
       }
     }
   }
 
-  .finger {
-    display: flex;
+  .poster-bottom-span {
     position: absolute;
-    align-items: center;
-    bottom: -50px;
-    width: 300px;
-    justify-content: center;
-    z-index: 8;
-
-    .finger-image {
-      width: 28px;
-      height: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15px;
+    background: url("./image/poster_bottom.png");
+    .poster-bottom-desc {
+      background: rgb(255, 241, 229);
+      width: 260px;
+      margin: 0 auto;
+      border-radius: 0 0 12px 12px;
     }
+  }
+  .overlay-content-bottom {
+    // width: 260px;
+    // height: 90px;
+    // background: #fff1e5;
+    border-radius: 0px 0px 10px 10px;
 
-    .finger-save-text {
-      margin-left: 20px;
-      font-size: 16px;
+    .share-money {
+      font-size: 13px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #FFFFFF;
+      color: #121212;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .share-check {
+      text-align: center;
+      font-size: 13px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #666666;
+      padding-bottom: 5px;
     }
   }
+}
 
-  .share-picture {
-    display: flex;
-    padding: 10px 10px 10px 0;
-    height: 90px;
-    // width: 250px;
-    overflow: scroll;
-
-    .share-image {
-      flex: none;
-      width: 85px;
-      height: 85px;
-      padding: 0 7px;
-    }
-  }
-
-  .save-btn {
-    margin: 15px auto;
-    width: 86px;
-    height: 26px;
-    text-align: center;
-    line-height: 26px;
-    background: #FF7900;
-    border-radius: 10px;
+.save-pic-text {
+  padding: 10px 15px;
+  .share-desc {
     font-size: 13px;
-    font-family: PingFangSC-Semibold, PingFang SC;
-    font-weight: 600;
-    color: #FFFFFF;
+    margin-top: 5px;
+    line-height: 20px;
+    display: flex;
+    justify-content: space-between;
+    .share-editor {
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+.finger {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  width: 300px;
+  justify-content: center;
+  z-index: 8;
+  margin-top: 10px;
+
+  .finger-image {
+    width: 28px;
+    height: 28px;
   }
 
-  .overlay-result {
-    width: 256px;
-    background: #FFFFFF;
-    border-radius: 10px;
-    position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
+  .finger-save-text {
+    margin-left: 20px;
+    font-size: 16px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: #666666;
-    z-index: 11;
+    color: #ffffff;
+  }
+}
 
-    .overlay-block {
-      padding: 15px;
-      text-align: center;
-    }
+.share-picture {
+  display: flex;
+  padding: 10px 10px 10px 0;
+  height: 90px;
+  // width: 250px;
+  overflow: scroll;
 
-    .result-line {
-      width: 256px;
-      height: 1px;
-      background: #F6F5F5;
-      margin: 10px 0;
-    }
+  .share-image {
+    flex: none;
+    width: 85px;
+    height: 85px;
+    padding: 0 7px;
+  }
+}
 
-    .overlay-btn {
-      font-size: 14px;
-      font-family: PingFangSC-Medium, PingFang SC;
-      font-weight: 500;
-      color: #FF7900;
-      text-align: center;
-      padding-bottom: 10px;
-    }
+.save-btn {
+  margin: 15px auto;
+  width: 86px;
+  height: 26px;
+  text-align: center;
+  line-height: 26px;
+  background: #ff7900;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: #ffffff;
+}
 
+.overlay-result {
+  width: 256px;
+  background: #ffffff;
+  border-radius: 10px;
+  // position: relative;
+  // left: 50%;
+  // top: 50%;
+  // transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  z-index: 11;
+
+  .overlay-block {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .result-line {
+    width: 256px;
+    height: 1px;
+    background: #f6f5f5;
+    margin: 10px 0;
+  }
+
+  .overlay-btn {
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #ff7900;
+    text-align: center;
+    padding-bottom: 10px;
+  }
 }
 </style>

@@ -194,7 +194,10 @@
         this.$emit('productEvent', item)
       },
       addToCart: function (item) {
-        
+        if (item.stockNum !== '' && item.stockNum <= 0 ) {
+          this.$Toast('商品缺货！');
+          return
+        };
         this.$emit('addToCart', item)
       },
       addToWishList(item, event) {
@@ -322,6 +325,7 @@
           margin 5px 0;
           font-size 14px;
           line-height 16px;
+          height 32px;
         }
         .info-row {
           font-size $font-size-medium;

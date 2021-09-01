@@ -187,6 +187,7 @@ export default {
             this.userRoomId = "";
           }
         });
+      // this.userRoomId = 'E1EC637885824F479FC1253389E58161|bc473c57910c413d83e79a5d925dd580|5b396961f6ef47fc97f13ea3c7c0e70f|ed205b9c878e42428a6f42ae5fc49937|aec8fe7ce853498bbac110dbbd2dbf82|2aefaa18689d46fdb0898057bcdc2fc6|d5a35e5ab59f4fd982ec201b5f1db46a|282ab400e934490b8996ba622b93f6f4|9d814023df6e4a0583a6e5e17fb9d99f|5dcd605c09754ef4b33e4f5a05f3307a|4E8FF028D93B4C48B18A8A6501139357|ffe876cd9ccb47c0b2d179e034025959|24900f03346b4cf5b08cc856b01e7744'
     },
     //合并支付
     mergePay() {
@@ -254,7 +255,7 @@ export default {
           //团购订单
           callbackUrl = `/app-vue/app/index.html#/group_detail?orderId=${payInfoList[0].billDetailObj.groupBuyId}&mktGroupBuyId=${payInfoList[0].billDetailObj.groupBuyActivityId}&formPaySuccess='1'&ret={ret}`;
           this.enginePay(payInfoList[0].payInfo, billNo, callbackUrl);
-        } else if (payInfoList[0].billType == 11) {
+        } else if (payInfoList[0].billType == 11 || payInfoList[0].billType == 13) {
           //普通订单
           this.initPayinfo(payInfoList, billNo, "mall");
           console.log("payInfoList", payInfoList);
@@ -650,22 +651,28 @@ export default {
       });
     },
     checkEvent(data) {
-      if (data.billType == 13) {
-        /*去服务商城详情页*/
-        let token = this.$store.state.ythToken
-          ? this.$store.state.ythToken
-          : localStorage.getItem("ythToken");
-        let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
-        let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&tabShow=true&Authorization=${token}`;
-        location.href = path + query;
-      } else {
+      // if (data.billType == 13) {
+      //   /*去服务商城详情页*/
+      //   let token = this.$store.state.ythToken
+      //     ? this.$store.state.ythToken
+      //     : localStorage.getItem("ythToken");
+      //   let path = process.env.VUE_APP_TMASS_APP + "/order/detailPage?";
+      //   let query = `orderState=${data.orderState}&tradeNo=${data.tradeNo}&orderType=${data.orderType}&shopOrderNo=${data.shopOrderNo}&tabShow=true&Authorization=${token}`;
+      //   location.href = path + query;
+      // } else {
         // 从全选checkbox进来
+        console.log('data',data)
         if (data.checkAll || data.checkAllBillType1) {
           let refs = this.$refs.order.filter(item => {
             // 找出全选的类型并保存起来
-            return item.billType == data.billType;
+            // return item.billType == data.billType;
+            if(data.billType == 13 || data.billType == 11){
+              return item.billType == 13 || item.billType == 11;
+            }else{
+              return item.billType == data.billType;
+            }
           });
-          console.log(refs);
+          console.log('refs',refs);
           let currentOrderList = [];
           if (refs[0] && refs[0].billType == 1) {
             currentOrderList = this.billResults;
@@ -675,9 +682,14 @@ export default {
           console.log(this.currentOrderList, "++++");
           console.log(this.billResults, "----");
           let checkData = currentOrderList.filter(item => {
-            return item.billType == data.billType;
+            // return item.billType == data.billType;
+            if(data.billType == 13 || data.billType == 11){
+              return item.billType == 13 || item.billType == 11;
+            }else{
+              return item.billType == data.billType;
+            }
           });
-          console.log(checkData + "----------");
+          console.log("----------",Array.from(checkData));
 
           if (data.checked) {
             //全部选中
@@ -704,7 +716,12 @@ export default {
         // 选中或取消当个checkbox
         let refs = this.$refs.order.filter(item => {
           // 找到不能选的checkbox
-          return item.billType != data.billType;
+          // return item.billType != data.billType;
+          if(data.billType == 13 || data.billType == 11){
+            return item.billType != 13 && item.billType != 11
+          }else{
+            return item.billType != data.billType;
+          }
         });
         refs.forEach(item => {
           // 并设置不能选择属性
@@ -763,11 +780,12 @@ export default {
         }
         // console.log(this.checkData)
         let mergeList = Array.from(this.checkData);
+        console.log('mergeList',mergeList)
         let num = mergeList.reduce((total, e) => {
           return BigNumber(total).plus(e.totalPrice);
         }, 0);
         this.mergeAmount = num;
-      }
+      // }
     },
 
     //toast
