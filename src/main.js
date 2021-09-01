@@ -55,6 +55,9 @@ Vue.use(MintUI);
 
 // vant框架
 import "./config/vant-expand";
+import { Lazyload } from 'vant'
+Vue.use(Vant);
+Vue.use(Lazyload);
 
 //自定义界面操作
 import market from "./utils/market";
