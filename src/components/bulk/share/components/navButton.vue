@@ -36,7 +36,7 @@ export default {
          wx.miniProgram.reLaunch({ url: `/pages/common/home/index` });
       }else{
          this.$router.push({
-          path: '/mall2/orderlist',
+          path: '/mall2/orderlist?back=true',
           query: {
               selectedIndex: 0
           }

@@ -185,7 +185,7 @@
                   v-for="(targetItem, indexTarget) in item.orderItemList"
                   :key="indexTarget"
                 >
-                  <span>{{ targetItem.groupbuySkuName }}</span>
+                  <span style="padding-right:4px">{{ targetItem.groupbuySkuName }}</span>
                   <span>X{{ targetItem.buyNumber }}</span>
                 </div>
               </div>
@@ -623,7 +623,7 @@ export default {
 
       .orderSwiper {
         position: fixed;
-        top: 8px;
+        top: 13px;
         right: 12px;
         flex: 1;
         display: flex;
@@ -769,7 +769,7 @@ export default {
             margin-top: 10px;
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
           }
         }
@@ -836,6 +836,7 @@ export default {
       .product-pic {
         width: 120px;
         height: 120px;
+        object-fit:contain;
       }
 
       .product-desc {
@@ -950,9 +951,8 @@ export default {
         width:100%
       }
       .group-people-item {
-        padding: 20px 0;
+        padding: 16px 0;
         display: flex;
-        height: 92px;
         .group-people-number{
           width: 26px; 
           font-size: 15px;
@@ -991,6 +991,7 @@ export default {
 
           .people-item-desc {
             font-size: 13px;
+            line-height 15px;
             font-family: PingFang SC;
             font-weight: 400;
             color: #666666;
@@ -1016,7 +1017,7 @@ export default {
     .car-shop {
       width: 51px;
       height: 51px;
-      margin: -15px 0 0 13px;
+      margin: -15px 6px 0 13px;
     }
 
     .bottom-button-prize {
