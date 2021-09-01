@@ -948,7 +948,6 @@ export default {
         margin-left:54px;
         height: 1px;
         background: #F0F0F0;
-        width:100%
       }
       .group-people-item {
         padding: 16px 0;
