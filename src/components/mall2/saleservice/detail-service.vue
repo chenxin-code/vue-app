@@ -266,6 +266,12 @@
                 case 1:
                   str = '商家审核'
                   break;
+                case 2:
+                  str = '客户发货'
+                  break;
+                case 3:
+                  str = '商家收货'
+                  break;
                 case 5:
                   str = '确定退款'
                   break;
@@ -274,6 +280,9 @@
                   break;
                 case 8:
                   str = '售后完成'
+                  break;
+                default:
+                  str = e.value;
                   break;
               }
               this.stateAll.push({value:str,code:e.code})
