@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-08-31 18:00:51
+ * @LastEditTime: 2021-09-01 10:55:51
 -->
 <template>
   <div class="bill-detail">
@@ -128,7 +128,8 @@
                     </div>
                   </div>
                   <div
-                    class="detail-item collecting"
+                    class="detail-item"
+                    :class="{ collecting: i == 0 }"
                     v-for="(monthDetail, k) in detail.monthList"
                     :key="k"
                     @click="goToDetail(monthDetail, isFinishBill)"
@@ -136,10 +137,12 @@
                     <span class="detail-name"
                       >{{ monthDetail.showInfo }}<i></i
                     ></span>
-                    <span class="detail-money"
-                      >￥{{ monthDetail.payableAmount }}</span
+                    <span class="detail-money" v-if="i == 0">
+                      托收中 ￥{{ monthDetail.payableAmount }}</span
                     >
-                    <span class="detail-collecting">托收中</span>
+                    <span class="detail-money" v-else>
+                      ￥{{ monthDetail.payableAmount }}</span
+                    >
                     <div>
                       {{
                         monthDetail.businessParams.recStartTime
@@ -783,6 +786,11 @@ export default {
       this.$router.push({
         path: "/billCenter/detail",
         query: {
+          isFinishBill: isFinishBill,
+          payWay: item.payType,
+          tollDate: item.payTime
+            ? moment(item.payTime).format("YYYY-MM-DD")
+            : "",
           buildings: this.results.spaceFullName,
           businessCreateTime: item.businessCreateTime, //创建时间
           houseNo: item.houseNo, //房号
@@ -1194,10 +1202,6 @@ $color = #8D8D8D;
                   height: 17px;
                   margin-left: 4px;
                   top: 4px;
-                }
-                .detail-collecting {
-                  position: relative;
-                  left: 32px;
                 }
                 .detail-money {
                   float: right;
