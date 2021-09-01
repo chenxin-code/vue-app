@@ -44,11 +44,11 @@
                 <div class="time-bg-block">{{ timeData.days }}天</div>
 
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.hours }}</div>
+                <div class="time-bg-block">{{ timeData.hours | formartStr }}</div>
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.minutes }}</div>
+                <div class="time-bg-block">{{ timeData.minutes | formartStr }}</div>
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.seconds }}</div>
+                <div class="time-bg-block">{{ timeData.seconds | formartStr }}</div>
               </div>
             </template>
           </van-count-down>
@@ -159,7 +159,11 @@
 
       <div class="user-group-team">
         <div class="gruop-title">
-          <div class="group-header-one">这些团友都买了</div>
+          <div class="group-header-one">
+            <img src="./images/tips_01.png" alt="" width="5px">
+            这些团友都买了
+             <img src="./images/tips_01.png" alt="" width="5px">
+          </div>
           <div class="group-header-second">
             （共{{ otherBuyList.length }}人参加了本次团购）
           </div>
@@ -168,6 +172,7 @@
         <div class="group-people">
           <div v-for="(item, index) in otherBuyList" :key="index">
             <div class="group-people-item">
+              <div class="group-people-number">{{otherBuyList.length-index}}F</div>
               <img
                 class="group-people-pic"
                 :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
@@ -263,7 +268,12 @@ export default {
     });
     this.initData();
   },
-
+  filters:{
+    formartStr(num){
+      if(num<=9) return "0"+num;
+      return num;
+    }
+  },
   methods: {
     getTimestamp(time) {
       //把时间日期转成时间戳
@@ -588,7 +598,7 @@ export default {
 }
 
 .bulk-share-main {
-  background: #f0f0f0 !important;
+  background: #F7F8F9 !important;
   width: 100%;
   height: 100%;
 
@@ -604,7 +614,7 @@ export default {
     background-image: url('./images/main_bg_default@2x.png');
     background-repeat: no-repeat;
     background-color: #ffffff;
-    padding-top: 8px;
+    padding-top: 12px;
 
     .headbox {
       display: flex;
@@ -666,28 +676,25 @@ export default {
     }
 
     .bulk-back {
-      width: 50px;
-      height: 25px;
+      width: 71px;
+      height: 32px;
       background-color: rgba(0, 0, 0, 0.3);
       border-radius: 0px 10.67px 10.67px 0px;
       display: flex;
-      padding-left: 5px;
+      align-items center;
+      padding-left: 6px;
 
       .back-img {
         background-image: url('./images/btn-back.png');
         background-size: 100% 100%;
-        width: 4px;
-        height: 12px;
-        margin-top: 5px;
-        flex: 0.15;
+        width: 9px;
+        height: 16px;
       }
 
       .back-word {
-        font-size: 12px;
+        font-size: 14px;
         color: #FFFFFF;
         font-weight: blod;
-        line-height: 25px;
-        flex: 0.85;
         padding-left: 4px;
       }
     }
@@ -859,7 +866,7 @@ export default {
           font-size: 13px;
           font-family: PingFang SC;
           font-weight: bold;
-          color: #f03000;
+          color: #f00000;
           margin-top: 13px;
         }
 
@@ -876,6 +883,26 @@ export default {
           .product-num {
             margin: 0 10px;
           }
+          /deep/ .van-stepper__minus, 
+          /deep/ .van-stepper__plus{
+            width: 24px;
+            height:24px;
+            border:none;
+            opacity:1;
+            background-size:100%;
+          }
+          /deep/ .van-stepper--round .van-stepper__minus{
+            background:#fff url('./images/button_del_default@2x.png');
+            background-size:100%;
+          }
+
+          /deep/ .van-stepper--round .van-stepper__plus{
+            background-image: url('./images/button_add_default@2x.png');
+          }
+
+          /deep/ .van-stepper--round .van-stepper__plus.van-stepper__plus--disabled{
+            opacity:0.5
+          }
         }
       }
     }
@@ -890,7 +917,7 @@ export default {
     padding: 15px 0;
 
     .gruop-title {
-      padding-top: 21px;
+      padding-top: 6px;
       text-align: center;
 
       .group-header-one {
@@ -898,6 +925,13 @@ export default {
         font-family: PingFang SC;
         font-weight: bold;
         color: #121212;
+        display : flex;
+        justify-content center;
+        align-items center;
+        height:14px;
+        img{
+          margin 0 8px;
+        }
       }
 
       .group-header-second {
@@ -914,17 +948,25 @@ export default {
         margin-top: 10px;
         display: flex;
 
+        .group-people-number{
+          width: 26px; 
+          font-size: 15px;
+          color: #BABABA;
+          width 60px;
+          line-height 42px;
+          text-align center;
+        }
+
         .group-people-pic {
-          margin-left: 26px;
           width: 42px;
           height: 42px;
           border-radius: 50%;
         }
-
+        
         .group-people-message {
           display: flex;
           flex-direction: column;
-          margin-left: 13px;
+          padding:0 13px;
 
           .people-item-phone {
             font-size: 13px;

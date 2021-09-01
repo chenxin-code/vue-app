@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
   },
   methods: {
     getImg(name){
-      return require(`../images/icon_${name}.png`);
+      return require(`../images/icon_${name}.png`)
     },
     changeShow(){
       this.showMore=!this.showMore
@@ -48,7 +49,7 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 .bulk_nav_components{
     position fixed;
-    bottom 131px;
+    bottom 200px;
     left 12px;
     width: 45px;
     background: #FFFFFF;
