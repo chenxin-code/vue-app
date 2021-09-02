@@ -19,7 +19,6 @@ if (NODE_ENV !== "production") {
 //路由
 import router from "./router";
 console.log("----router---", router);
-console.log("%c**** 12.14 v1.0 ****", "color:#f0f");
 
 // import Eruda from 'eruda'
 // eruda.init()

@@ -7,7 +7,7 @@
           <div class="top-step theme_bg_red">
             <div class="line-con theme_bg_white" :style="getStyleWith()"></div>
             <div class="steps">
-              <div class="step-item theme_font_white" v-for="(step,index) in orderInfo.stateAll">
+              <div class="step-item theme_font_white" v-for="(step,index) in stateAll">
                 <div class="step-icon">
                   <i v-if="step.code<=(orderInfo.state==10?1:orderInfo.state)"
                      class="iconfont mall-dui theme_font_red theme_bg_white"></i>
@@ -149,7 +149,8 @@
         orderInfo: [],
         isShowSureBtn: false,
         btnTitle: '',
-        toRewrite: false
+        toRewrite: false,
+        stateAll:[],
       }
     },
     methods: {
@@ -255,7 +256,37 @@
           let data = res.data;
           console.log('售后详情:', data);
           if (data.status == 0) {
-            this.orderInfo = data.data
+            this.orderInfo = data.data;
+            this.orderInfo.stateAll.forEach(e=>{
+              let str = "";
+              switch (e.code) {
+                case 0:
+                  str = '提交申请'
+                  break;
+                case 1:
+                  str = '商家审核'
+                  break;
+                case 2:
+                  str = '客户发货'
+                  break;
+                case 3:
+                  str = '商家收货'
+                  break;
+                case 5:
+                  str = '确定退款'
+                  break;
+                case 7:
+                  str = '客户确认'
+                  break;
+                case 8:
+                  str = '售后完成'
+                  break;
+                default:
+                  str = e.value;
+                  break;
+              }
+              this.stateAll.push({value:str,code:e.code})
+            })
             this.liftsVoucher = this.orderInfo.liftsVoucher
             this.isShow = true;
             if (this.liftsVoucher) {

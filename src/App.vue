@@ -112,8 +112,8 @@ export default {
         "/confirmOrder",
         "/purchase",
         "/bulkDetails",
-        "/orderInfo",
-      ],
+        "/orderInfo"
+      ]
     };
   },
   created() {
@@ -129,12 +129,17 @@ export default {
     appNav
       .setNavBarHidden({
         isHidden: true,
-        isAnimation: false,
+        isAnimation: false
       })
-      .then((res) => {});
+      .then(res => {});
     this.windowResize();
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
+    //加多一个token获取
+    var token =
+      this.$util.getUrlQuery("ythToken") ||
+      this.$util.getUrlQuery("Authorization");
+    this.$store.commit("setYthToken", token);
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       let initObj = {};
@@ -142,7 +147,7 @@ export default {
       location.href
         .split("?")[1]
         .split("&")
-        .forEach((item) => {
+        .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
@@ -150,42 +155,41 @@ export default {
       }
       this.$store.state.projectId = initObj.projectId;
       this.$store.state.projectId = 11111;
-      this.$store.state.ythToken = initObj.ythToken;
+      // this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
       console.log("initObj", initObj);
       console.log("initObj.ythToken", initObj.ythToken);
       console.log("getYthUserInfo", this.$store.state.ythToken);
+      this.$store.commit("setYthToken", initObj.ythToken);
       this.getYthUserInfo();
     } else {
-      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then((res) => {
+      appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
         this.$store.state.ythToken = res.result;
         console.log("---------------一体化token获取成功----------", res);
         console.log(
           "---------------this.$store.state.ythToken----------",
           this.$store.state.ythToken
         );
+        this.$store.commit("setYthToken", res.result);
         this.getYthUserInfo();
       });
     }
-    appLocalstorage
-      .get({ key: "LLBUserRoomId", isPublic: true })
-      .then((res) => {
-        if (res.hasOwnProperty("result")) {
-          console.log("---------------人房id获取成功----------", res);
-          this.$store.state.userRoomId = res.result;
-        } else {
-          console.log("---------------人房id获取失败----------", res);
-          this.$store.state.userRoomId = "";
-        }
-      });
+    appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then(res => {
+      if (res.hasOwnProperty("result")) {
+        console.log("---------------人房id获取成功----------", res);
+        this.$store.state.userRoomId = res.result;
+      } else {
+        console.log("---------------人房id获取失败----------", res);
+        this.$store.state.userRoomId = "";
+      }
+    });
     // this.$http.post('/app/json/user/getUserSummary',{deliveryType:'2',orderCategory:'0'}).then(res=>{
     //   console.log('/app/json/user/getUserSummary',res.data.data.userInfo.phone)
     //   this.getUserTable(res.data.data.userInfo.phone)
     // })
-    appLocalstorage.get({ key: "LLBPhone_encrypt",isPublic: true }).then(res => {
-      console.log('加密手机号',res)
-    });
-
+    // appLocalstorage.get({ key: "LLBPhone_encrypt",isPublic: true }).then(res => {
+    //   console.log('加密手机号',res)
+    // });
   },
   computed: {
     appBackHomeImg() {
@@ -212,7 +216,7 @@ export default {
         document.body.classList.add(theme);
       }
       return theme;
-    },
+    }
   },
   mounted() {
     sessionStorage.setItem("js_css_loaded", "1");
@@ -230,12 +234,12 @@ export default {
 
     // 注册通知回调Watchman.yidunLoginInit()
     this.$bridgefunc.registeBridge("notificationCallBack", () => {
-      this.$bridgefunc.getItem("notificationU", (res) => {});
+      this.$bridgefunc.getItem("notificationU", res => {});
     });
 
     // 注册appjump回调
     this.$bridgefunc.registeBridge("appjumpCallBack", () => {
-      this.$bridgefunc.getItem("appjumpU", (res) => {
+      this.$bridgefunc.getItem("appjumpU", res => {
         // res 是编码后的json字符串
         let resStr = decodeURIComponent(res);
         let resJson = JSON.parse(resStr);
@@ -247,7 +251,7 @@ export default {
         } else {
           this.$market.customPush(
             {
-              path: weburl,
+              path: weburl
             },
             islogin
           );
@@ -262,10 +266,10 @@ export default {
     // if (this.$store.state.webtype == '7') {
     //   Eruda.init()
     // }
-    console.log('process.env.NODE_ENV',process.env.NODE_ENV)
-    if(process.env.NODE_ENV == 'development'){
-      initSensors();
-    }
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+    if (process.env.NODE_ENV == "development") {
+      initSensors();
+    }
   },
   methods: {
     // getUserTable(phone){
@@ -296,16 +300,22 @@ export default {
       } else {
         token = this.$store.state.ythToken;
       }
+      //加多一个token获取
+      token =
+        token ||
+        this.$util.getUrlQuery("ythToken") ||
+        this.$util.getUrlQuery("Authorization");
+      this.$store.commit("setYthToken", token);
       this.$http
         .post("/app/json/login/getYthUser", { token: token })
-        .then((res) => {
+        .then(res => {
           if (res.data.status == 0) {
             this.$store.state.ythUserInfo = res.data.data;
             console.log("一体化信息", this.$store.state.ythUserInfo);
             this.$store.state.ythUser = {
-              userImage:res.data.data.userImage,
-              userName:res.data.data.userName,
-            }
+              userImage: res.data.data.userImage,
+              userName: res.data.data.userName
+            };
             initSensors();
             if (
               this.$store.state.webtype != 2 &&
@@ -313,9 +323,9 @@ export default {
             ) {
               this.postAvatar(res.data.data.userImage);
             }
-            this.getDistributionInfo(res.data.data.phone)
+            this.getDistributionInfo(res.data.data.phone);
             let that = this;
-            this.$sensors.quick("isReady", function () {
+            this.$sensors.quick("isReady", function() {
               console.log(
                 "sensors.quick('getAnonymousID');",
                 that.$sensors.quick("getAnonymousID")
@@ -333,7 +343,7 @@ export default {
         .post(
           `/app/json/sensors_analytics/sensorsAnalyticsInit?anonymousID=${anonymousID}&userID=${userID}`
         )
-        .then((res) => {
+        .then(res => {
           console.log(res);
         });
     },
@@ -341,7 +351,7 @@ export default {
       console.log("头像", avatar);
       this.$http
         .post("/app/json/user/modifyHeadImg", { headImg: avatar })
-        .then((res) => {
+        .then(res => {
           console.log("头像返回", res);
         });
     },
@@ -353,7 +363,7 @@ export default {
         : (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`);
       this.$http
         .get(distributionUrl)
-        .then((res) => {
+        .then(res => {
           if (res.data.code == 200) {
             if (res.data.data) {
               this.$store.state.distributionPersonDetail = res.data.data;
@@ -365,12 +375,12 @@ export default {
                 distributorId: "",
                 distributorName: "",
                 parentDistributorId: -1,
-                source: "",
+                source: ""
               };
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$Toast(err);
         });
     },
@@ -387,9 +397,9 @@ export default {
     oilIsOpen() {
       http
         .post("/app/json/app_youdi/getAcctInfoList", {
-          token: this.$store.state.login.token,
+          token: this.$store.state.login.token
         })
-        .then((res) => {
+        .then(res => {
           let data = res.data;
           if (data.status == 0) {
             if (
@@ -402,9 +412,9 @@ export default {
                */
               http
                 .post("/app/json/user/getPopTimes", {
-                  token: this.$store.state.login.token,
+                  token: this.$store.state.login.token
                 })
-                .then((res) => {
+                .then(res => {
                   let data = res.data;
                   if (data.status == 0) {
                     if ((data.data && Number(data.data) < 2) || !data.data) {
@@ -413,28 +423,28 @@ export default {
                         "提示",
                         {
                           confirmButtonText: "去开启",
-                          cancelButtonText: "再想想",
+                          cancelButtonText: "再想想"
                         }
                       )
-                        .then((action) => {
+                        .then(action => {
                           let url =
                             window.location.origin +
                             "/app-vue/oildrop/user-identity-information-query";
                           bridgefunc.customPush({
                             path: url,
                             isVuePage: false,
-                            isnativetop: true,
+                            isnativetop: true
                           });
                         })
-                        .catch((action) => {});
+                        .catch(action => {});
                       /**
                        * 弹框一次 增加一次次数
                        */
                       http
                         .post("/app/json/user/savePopTimes", {
-                          token: this.$store.state.login.token,
+                          token: this.$store.state.login.token
                         })
-                        .then((res) => {});
+                        .then(res => {});
                     }
                   }
                 });
@@ -475,7 +485,7 @@ export default {
         return false;
       }
     },
-    touchStart: function (ev) {
+    touchStart: function(ev) {
       ev = ev || event;
       if (ev.touches.length == 1) {
         //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
@@ -486,7 +496,7 @@ export default {
         this.homeBtnOrginY = dom.offsetTop;
       }
     },
-    touchMove: function (ev) {
+    touchMove: function(ev) {
       ev = ev || event;
       if (ev.touches.length == 1) {
         //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
@@ -498,7 +508,7 @@ export default {
           (this.homeBtnBeginTouchY - ev.touches[0].clientY);
       }
     },
-    touchEnd: function (ev) {
+    touchEnd: function(ev) {
       // clientWidth
       this.ani = true;
       this.$nextTick(() => {
@@ -518,14 +528,14 @@ export default {
         }, 300);
       });
     },
-    dontShy: function () {
+    dontShy: function() {
       this.isShy = false;
       this.myTimeout = setTimeout(() => {
         this.isShy = true;
       }, 3000);
     },
     // 返回首页，这里很low但是没bug，切最简单，需要找机会处理
-    backIndex: function () {
+    backIndex: function() {
       // 返回首页时清除 微店code（河北）
       this.$util.removeStoreCode();
       if (this.$store.state.webtype == 3) {
@@ -540,7 +550,7 @@ export default {
     },
 
     //分享推荐人存储
-    storeRecommend: function () {
+    storeRecommend: function() {
       let recommend = this.$util.getUrlParam(window.location.href, "recommend");
       let recommendPhone = this.$util.getUrlParam(
         window.location.href,
@@ -558,7 +568,7 @@ export default {
     //
     //   }
     // },
-    setThemeClass: function () {
+    setThemeClass: function() {
       let oldTheme = this.theme;
       document.body.classList.add("theme_sys_base");
       if (this.$store.state.globalConfig.themeColor == "blue") {
@@ -582,7 +592,7 @@ export default {
       }
       document.getElementById("app").setAttribute("class", classVal);
     },
-    viewPortSet: function () {
+    viewPortSet: function() {
       var viewportTag = null;
       var metaTags = document.getElementsByTagName("meta");
       if (!viewportTag) {
@@ -620,17 +630,17 @@ export default {
     //   }
     //   return -1;
     // },
-    windowResize: function () {
+    windowResize: function() {
       window.onresize = () => {
         this.$store.state.clientWidth = document.documentElement.clientWidth;
       };
-    },
+    }
   },
   watch: {
     "$store.state.isShowBackTop"(a) {
       this.showBackTop = a;
     },
-    "$route.path": function (newVal, oldVal) {
+    "$route.path": function(newVal, oldVal) {
       //app环境
       if (/^\/common$/.test(newVal) || /^\/error$/.test(newVal)) {
         appUi.showTabbar && appUi.showTabbar();
@@ -699,7 +709,7 @@ export default {
           this.showBackTop = false;
         }
       }
-    },
+    }
     // '$route'(to, from) {
     //   let arr = sessionStorage.getItem("routePathArrs");
     //   if (arr && arr != undefined) {
@@ -777,7 +787,7 @@ export default {
   },
   components: {
     // BindOilCard
-  },
+  }
 };
 </script>
 

@@ -102,7 +102,10 @@ export default {
   methods: {
     //跳到发票中心页面
     navToInvoiceCenter() {
-      let url = `http://8.134.9.70/`;
+      let url = "";
+      this.$store.state.environment == "production"
+        ? (url = `https://mall-prod-app-linli.timesgroup.cn:5000`)
+        : (url = `http://8.134.9.70/`);
       navToMicroApplication.openTargetRouter({
         type: "h5",
         uri: url,

@@ -4764,8 +4764,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="stylus" scoped type="text/stylus">
-@import '~@/common/stylus/variable.styl';
+<style lang="less" scoped>
+// @import '~@/common/stylus/variable.styl';
 
 .theme_standard_bg {
   width: 102px;
@@ -4878,7 +4878,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding: 35px 26px 36px 25px;
+  padding-top: 40px;
 
   .share_botton {
     display: flex;
@@ -4893,32 +4893,33 @@ export default {
       align-items: center;
 
       img {
-        width: 74px;
-        height: 74px;
+        width: 48px;
+        height: 48px;
       }
 
       div {
-        font-size: 14px;
+        margin-top: 23px;
+        font-size: 13px;
+        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        color: #999999;
-        line-height: 20px;
+        color: #666666;
       }
     }
   }
 
   .cancel {
-    width: 86.4%;
-    height: 49px;
-    border-radius: 16px;
-    border: 1px solid #E5E5E5;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333333;
-    line-height: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 27px auto 0;
+    width: 295px;
+    height: 37px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 37px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    margin: 20px auto;
   }
 }
 
@@ -4960,14 +4961,14 @@ export default {
   }
 
   .sl-tag {
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 2px 6px;
   }
 
   .sl-title {
     flex: 1;
     margin-left: 4px;
-    font-size: $font-size-small;
+    font-size: 12px;
 
     span {
       margin-left: 10px;
@@ -4976,7 +4977,7 @@ export default {
 
   .good-salespro-right {
     margin: -10px;
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 12px 16px;
   }
 
@@ -5374,7 +5375,7 @@ export default {
 
       .title {
         font-weight: 500;
-        font-size: $font-size-large;
+        font-size: 18px;
         line-height: 20px;
       }
 
@@ -5467,7 +5468,7 @@ export default {
       .btn-item {
         flex: 1;
         padding: 3px;
-        font-size: $font-size-medium;
+        font-size: 14px;
         text-align: center;
       }
 
@@ -5502,7 +5503,7 @@ export default {
       .imgs {
         overflow: hidden;
         padding-bottom: 12px;
-        font-size: $font-size-medium;
+        font-size: 14px;
 
         .s-img-div {
           margin-right: 2%;

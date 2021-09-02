@@ -2193,6 +2193,7 @@ export default {
       );
     },
     checkProductStock: function () {
+      
       if(this.occurList.length > 1 ){
         if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
           this.$Toast("小程序暂不支持多店铺合并支付");
@@ -2567,7 +2568,7 @@ export default {
             appScheme: "x-engine-c",
             payType: false,
           })
-        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/order/2?time=${Date.now()}`)}`;
+        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/mall2/paysuccess?orderId=${this.submitDataList[0].orderId}&tradeNo=${this.submitDataList[0].tradeNo}&selectedIndex=1&orderCategory=&vipUnitUserCode=&type=&ret={ret}`)}`;
       }
     },
     concatPay(){

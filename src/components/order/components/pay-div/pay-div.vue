@@ -18,7 +18,7 @@
                   >.<span class="decimal">{{ amount.decimal }}</span></span
                 >
               </div>
-              <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div>
+              <!-- <div class="onlyCheck">(仅可全选{{ billTypeName }}类订单)</div> -->
             </div>
           </div>
         </div>

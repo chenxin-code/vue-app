@@ -118,7 +118,7 @@
         this.$emit('productEvent', item)
       },
       addToCart: function (item) {
-        if (item.stockNum == '' || item.stockNum == '0' || item.stockNum == null) {
+        if (item.stockNum !== '' && item.stockNum <= 0 ) {
           this.$Toast('商品缺货！');
           return
         }
