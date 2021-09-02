@@ -495,7 +495,7 @@
             p {
               margin-top 8px;
               display inline-block;
-              font-size 14px;
+              font-size 12px;
               width 28px;
             }
           }
