@@ -3,7 +3,7 @@
     <div :class="showMore?'tans tans-open':'tans tans-closed'">
         <div v-for="item in navConfig" :key="item.label" class="nav_item" @click="linkTo(item)">
             <img :src="getImg(item.img)" width="20px"/>
-            <div v-if="item.label" class="nav_title">{{item.label}}</div>
+            <div v-if="item.label" class="nav_title" style="margin-top:2px">{{item.label}}</div>
        </div>
     </div>
     <div class="nav_item" @click="changeShow">
@@ -54,7 +54,7 @@ export default {
     width: 45px;
     background: #FFFFFF;
     border: 1px solid #DDDDDD;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.1);
     opacity: 0.9;
     border-radius: 23px;  
     .tans{
