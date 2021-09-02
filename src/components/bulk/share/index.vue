@@ -1006,6 +1006,7 @@ export default {
             display: flex;
             .people-item-desc-name{
                flex:1;
+               padding-right:11px;
                justify-content: space-between;
                white-space: nowrap;
                text-overflow: ellipsis;
