@@ -19,7 +19,6 @@ if (NODE_ENV !== "production") {
 //路由
 import router from "./router";
 console.log("----router---", router);
-console.log("%c**** 12.14 v1.0 ****", "color:#f0f");
 
 // import Eruda from 'eruda'
 // eruda.init()
@@ -55,9 +54,6 @@ Vue.use(MintUI);
 
 // vant框架
 import "./config/vant-expand";
-import { Lazyload } from 'vant'
-Vue.use(Vant);
-Vue.use(Lazyload);
 
 //自定义界面操作
 import market from "./utils/market";
