@@ -7,7 +7,7 @@
        </div>
     </div>
     <div class="nav_item" @click="changeShow">
-      <img :src="showMore?getImg('down'):getImg('menu')" width="20px"/>
+      <img :src="showMore?getImg('down'):getImg('menu')" :width="showMore?'14px':'20px'"/>
       <div v-show="!showMore" class="nav_title">导航</div>
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
     width: 45px;
     background: #FFFFFF;
     border: 1px solid #DDDDDD;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
     opacity: 0.9;
     border-radius: 23px;  
     .tans{

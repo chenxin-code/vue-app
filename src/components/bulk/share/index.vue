@@ -95,7 +95,7 @@
 
         <div class="group-desc">
           <div class="group-desc-content">
-            <img src="./images/icon_01@2x.png" class="group-desc-content-pic" />
+            <img src="./images/icon_01@2x.png" width="12px" height="12px"/>
             <div class="group-desc-content-right">
               <div class="group-desc-content-right-top">团购活动描述:</div>
               <div class="group-desc-content-right-bottom" v-html="str"></div>
@@ -105,7 +105,7 @@
           <div class="divLine"></div>
 
           <div class="group-desc-content">
-            <img src="./images/icon_02@2x.png" class="group-desc-content-pic" />
+            <img src="./images/icon_02@2x.png" width="11px" height="15px"/>
             <div class="group-desc-content-right">
               <div class="group-desc-content-right-top">团购规则描述:</div>
               <div class="group-desc-content-right-bottom">
@@ -185,7 +185,7 @@
                   v-for="(targetItem, indexTarget) in item.orderItemList"
                   :key="indexTarget"
                 >
-                  <span style="padding-right:4px">{{ targetItem.groupbuySkuName }}</span>
+                  <span class="people-item-desc-name">{{ targetItem.groupbuySkuName }}</span>
                   <span>X{{ targetItem.buyNumber }}</span>
                 </div>
               </div>
@@ -629,6 +629,7 @@ export default {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        z-index:1;
 
         .van-swipe-item {
           width: 100%;
@@ -678,10 +679,10 @@ export default {
       width: 71px;
       height: 32px;
       background-color: rgba(0, 0, 0, 0.3);
-      border-radius: 0px 10.67px 10.67px 0px;
+      border-radius: 0px 16px 16px 0px;
       display: flex;
       align-items center;
-      padding-left: 11px;
+      padding-left: 17px;
 
       .back-img {
         background-image: url('./images/btn-back.png');
@@ -782,12 +783,8 @@ export default {
 
       .group-desc-content {
         display: flex;
-        margin-left: 10px;
-
-        .group-desc-content-pic {
-          width: 12px;
-          height: 12px;
-        }
+        margin-left: 7px;
+        align-items:baseline;
 
         .group-desc-content-right {
           display: flex;
@@ -847,10 +844,19 @@ export default {
 
         .product-title {
           font-size: 13px;
+          line-height 18px;
+          margin-top:5px;
           font-family: PingFang SC;
           font-weight: 400;
           color: #121212;
           width: 200px;
+          text-overflow: -o-ellipsis-lastline;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
 
         .product-prize-old {
@@ -946,6 +952,7 @@ export default {
     .group-people {
       .div_menber_Line{
         margin-left:54px;
+        margin-right: 13px;
         height: 1px;
         background: #F0F0F0;
       }
@@ -972,6 +979,7 @@ export default {
           flex-direction: column;
           padding:0 13px;
           flex:1;
+          overflow:hidden;
 
           .people-item-phone {
             font-size: 13px;
@@ -996,7 +1004,14 @@ export default {
             color: #666666;
             margin-top: 8px;
             display: flex;
-            justify-content: space-between;
+            .people-item-desc-name{
+               flex:1;
+               justify-content: space-between;
+               white-space: nowrap;
+               text-overflow: ellipsis;
+               overflow: hidden;
+               word-break: break-all;
+            }
           }
         }
       }
