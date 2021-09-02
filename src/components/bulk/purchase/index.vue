@@ -19,6 +19,7 @@
             @load="onLoad"
             :offset="offset"
             class="content"
+            :immediate-check="false"
           >
             <van-cell style="height: auto; padding: 16px 0 0;background:#f6f6f6;">
               <goodPanel
@@ -116,6 +117,9 @@ export default {
   methods: {
     /*tab切换*/
     navToMsg(data) {
+      if(this.categoryId == data.id){
+        return
+      }
       this.saleDataList = [];
       this.categoryId = data.id;
       this.loading = true;
@@ -128,12 +132,12 @@ export default {
      */
     onRefresh() {
       this.saleDataList = [];
-      this.loading = true;
+      // this.loading = true;
       this.finished = false;
-      // this.isLoading = true;
+      this.isLoading = false;
       this.page = 1;
       this.saleDataList = [];
-      this.getList(1);
+      this.onLoad();
     },
     /**
      *  上拉加载方法

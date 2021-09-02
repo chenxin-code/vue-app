@@ -1687,6 +1687,7 @@
 
 <script>
 // import Counter from '@/components/commonui/counter/counter'
+import appUi from "@zkty-team/x-engine-module-ui";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import Judgement from "./judgement/judgement";
 import RegionSelect from "../../base/region-select";
@@ -1717,7 +1718,6 @@ import appShare from "@zkty-team/x-engine-module-share";
 import { fetchMethod } from "@/utils/tmHttp.js";
 import sharePoster from "./shareImage/share-poster.vue";
 import mixins from "./mixins.js";
-import appUi from "@zkty-team/x-engine-module-ui";
 
 export default {
   name: "detail",
@@ -2195,7 +2195,6 @@ export default {
         merchant_name: this.detailData.ouName,
         viewpoint_radio: this.viewpoint_radio,
         share_type: share_type,
-        ...this.$store.state.ythUser
       });
     },
     onShare() {
@@ -4076,7 +4075,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4140,6 +4138,7 @@ export default {
             let params = {
               res: data.data,
               paramsData: paramsData,
+              paramsDataList: [paramsData],
               deliveryType: this.detailData.deliveryType,
               easyCardId: this.easyCardId,
               cardType: this.cardType, // 区分充值卡 计次卡
@@ -4217,7 +4216,6 @@ export default {
               merchant_id: this.detailData.ouCode,
               merchant_name: this.detailData.ouName,
               viewpoint_radio: this.viewpoint_radio,
-              ...this.$store.state.ythUser
             });
           } else {
             this.$Toast(data.info);
@@ -4303,7 +4301,6 @@ export default {
                 merchant_id: this.detailData.ouCode,
                 merchant_name: this.detailData.ouName,
                 viewpoint_radio: this.viewpoint_radio,
-                ...this.$store.state.ythUser
               });
             } else {
               this.isCollect = false;
@@ -4664,24 +4661,8 @@ export default {
         merchant_name: this.detailData.ouName,
         jump_page: jumpPage,
         duration: this.duration,
-        ...this.$store.state.ythUser
       });
     }
-    // getDistributionDetail(){
-    //   let url = "";
-    //   // this.$store.state.ythUserInfo.phone
-    //   this.$store.state.environment == "development" ? url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`
-    //     : url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${this.$store.state.ythUserInfo.phone}`;
-    //   return new Promise((resolve, reject)=>{
-    //     this.$http.get(url).then(res=>{
-    //       if(res.data.code == 200){
-    //         resolve(res.data.data);
-    //       }
-    //     }).catch(err=>{
-    //       reject(err)
-    //     })
-    //   })
-    // },
   },
   created() {
     appUi.hideTabbar();
@@ -4783,8 +4764,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="stylus" scoped type="text/stylus">
-@import '~@/common/stylus/variable.styl';
+<style lang="less" scoped>
+// @import '~@/common/stylus/variable.styl';
 
 .theme_standard_bg {
   width: 102px;
@@ -4980,14 +4961,14 @@ export default {
   }
 
   .sl-tag {
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 2px 6px;
   }
 
   .sl-title {
     flex: 1;
     margin-left: 4px;
-    font-size: $font-size-small;
+    font-size: 12px;
 
     span {
       margin-left: 10px;
@@ -4996,7 +4977,7 @@ export default {
 
   .good-salespro-right {
     margin: -10px;
-    font-size: $font-size-small;
+    font-size: 12px;
     padding: 12px 16px;
   }
 
@@ -5394,7 +5375,7 @@ export default {
 
       .title {
         font-weight: 500;
-        font-size: $font-size-large;
+        font-size: 18px;
         line-height: 20px;
       }
 
@@ -5487,7 +5468,7 @@ export default {
       .btn-item {
         flex: 1;
         padding: 3px;
-        font-size: $font-size-medium;
+        font-size: 14px;
         text-align: center;
       }
 
@@ -5522,7 +5503,7 @@ export default {
       .imgs {
         overflow: hidden;
         padding-bottom: 12px;
-        font-size: $font-size-medium;
+        font-size: 14px;
 
         .s-img-div {
           margin-right: 2%;

@@ -31,8 +31,8 @@
                 <div class="row theme_font_white">
                   <div class="price">
                     <span>需付款： ￥</span>
-                    <span class="price-z left-no-space">{{detailData.dpedData.integer}}</span>
-                    <span class="left-no-space">.{{detailData.dpedData.decimals}}</span>
+                    <span class="price-z">{{detailData.dpedData.integer}}</span>
+                    <span>.{{detailData.dpedData.decimals}}</span>
                     <span>元</span>
                   </div>
                 </div>
@@ -103,7 +103,7 @@
               </div>
               <img src="./img/orderDetailBg.png" />
             </div>
-            <div class="refund" v-if="isRefunding">
+            <div class="refund" v-if="isRefunding && tag != '9' ">
               <img :src="refundData.applyState == 0 ? refunding : refundData.applyState == 1 ? refundSuccess : refundLose" alt="">
               <div class="refundTip">
                 <div class="refundTitle">{{refundData.applyState == 0 ? '退款申请中' : refundData.applyState == 1 ? '退款申请成功' : '退款申请失败'}}</div>

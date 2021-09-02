@@ -13,9 +13,9 @@
                 deliveryType == 2 &&
                 occurData.needAddress == 1 &&
                 $route.params.productType != 514) ||
-                (deliveryType == 1 &&
-                  $route.query.entryType != 'wish' &&
-                  $route.params.productType != 514)
+              (deliveryType == 1 &&
+                $route.query.entryType != 'wish' &&
+                $route.params.productType != 514)
             "
           >
             <div
@@ -44,7 +44,12 @@
                 </div>
                 <div>
                   <i
-                    class="iconfont mall-gengduojiantou theme_font_tint icon-font"
+                    class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
                   ></i>
                 </div>
               </div>
@@ -52,8 +57,8 @@
             <div
               v-if="
                 !($store.state.mall2.selectAddress.id > 0) &&
-                  deliveryType == 2 &&
-                  $route.params.productType != 514
+                deliveryType == 2 &&
+                $route.params.productType != 514
               "
               @click="toSelectAddress"
             >
@@ -62,8 +67,8 @@
             <div
               v-if="
                 $store.state.mall2.zitiAddress.id > 0 &&
-                  deliveryType == 1 &&
-                  $route.params.productType != 514
+                deliveryType == 1 &&
+                $route.params.productType != 514
               "
               @click="toSelectZitiAddress"
             >
@@ -91,7 +96,12 @@
                 </div>
                 <div>
                   <i
-                    class="iconfont mall-gengduojiantou theme_font_tint icon-font"
+                    class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
                   ></i>
                 </div>
               </div>
@@ -137,8 +147,8 @@
               @click="openPicker"
               v-if="
                 hasShengxian == false &&
-                  $store.state.globalConfig.order_pickup_time_selecter_show !=
-                    'false'
+                $store.state.globalConfig.order_pickup_time_selecter_show !=
+                  'false'
               "
             >
               <!--没有生鲜的时候才能选时间-->
@@ -165,7 +175,7 @@
                 }}，超过自提时间后系统将自动取消订单<span
                   v-if="
                     $store.state.globalConfig.order_fresh_pickup_cancel_type !=
-                      '0'
+                    '0'
                   "
                   >并退款</span
                 ><span
@@ -201,7 +211,7 @@
           </div>
 
           <!-- 心愿单 -->
-          <div
+          <!-- <div
             class="block-div wish-message-container"
             v-if="$route.query.entryType == 'wish'"
           >
@@ -226,7 +236,7 @@
                 placeholder="请输入昵称"
               />
             </div>
-          </div>
+          </div> -->
 
           <div class="block-div" v-if="occurData.needVirtualUserPhone == '1'">
             <div class="flex-row">
@@ -243,7 +253,7 @@
           </div>
 
           <!-- 支付方式 -->
-          <div class="block-div">
+          <!-- <div class="block-div" v-if="false">
             <div class="flex-row" @click="payWayShow">
               <div class="label-middle theme_font_common">支付方式</div>
               <div class="full"></div>
@@ -252,8 +262,8 @@
                 <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
               </div>
             </div>
-          </div>
-          <div class="block-div" v-if="pageType == 2">
+          </div> -->
+          <!-- <div class="block-div" v-if="pageType == 2">
             <div class="flex-row" @click="contratWayShow">
               <div class="label-middle theme_font_common" style="width: 100px">
                 预约单联系方式
@@ -270,127 +280,150 @@
               <van-cell title="姓名：" :value="selectItem.realName" />
               <van-cell title="联系电话：" :value="selectItem.userName" />
             </div>
-          </div>
+          </div> -->
 
-          <div class="block-div" v-for="store in occurData.store">
-            <!--{{returnStoreProducts(store)}}-->
-            <!--            <div class="flex-row">-->
-            <!--              <div class="name">{{store.storeName}}</div>-->
-            <!--            </div>-->
-            <div v-if="store.storeProData.num == 1">
-              <div class="pro-row" v-for="prodata in store.storeProData.proArr">
-                <div class="img-div">
-                  <img :src="prodata.phPictureUrl" />
-                  <div class="presale" v-if="paramsData.cartType == 1">
-                    预售
+          <div class="concatStore" v-for="(item,index) in occurList" :key="index">
+            <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
+            <span class="theme_font_black margin_div">
+              <i class="iconfont mall-shoukuanfang"></i>
+              {{ item.store[0].storeName }}</span
+            >
+            <div
+              class="block-div"
+              v-for="(store, storeIndex) in item.store"
+              :key="storeIndex"
+            >
+              <!--{{returnStoreProducts(store)}}-->
+              <!--            <div class="flex-row">-->
+              <!--              <div class="name">{{store.storeName}}</div>-->
+              <!--            </div>-->
+              <div v-if="store.storeProData.num == 1">
+                <div
+                  class="pro-row"
+                  v-for="(prodata, prodataIndex) in store.storeProData.proArr"
+                  :key="prodataIndex"
+                >
+                  <div class="img-div">
+                    <img :src="prodata.phPictureUrl" />
+                    <div class="presale" v-if="paramsData.cartType == 1">
+                      预售
+                    </div>
+                  </div>
+                  <div class="info-div">
+                    <div class="title theme_font_black">
+                      {{ prodata.productName }}
+                    </div>
+                    <div class="title theme_font_black">
+                      <span style="font-size: 11px; color: #696969">{{
+                        prodata.specs
+                      }}</span>
+                    </div>
+                    <div class="price">
+                      <PriceOrder :productData="prodata"></PriceOrder>
+                      <van-stepper
+                        v-model="prodata.number"
+                        class="wish-prod-stepper"
+                        v-if="$route.query.entryType == 'wish'"
+                        :max="$route.params.wishProdInfo.saleNumMax"
+                        :min="$route.params.wishProdInfo.saleNumBegin"
+                        :step="$route.params.wishProdInfo.saleNumStep"
+                        integer
+                      />
+                      <span style="float: right" v-else
+                        >x {{ prodata.number }}</span
+                      >
+                    </div>
+                    <div
+                      v-if="
+                        prodata.currentSelfActivity &&
+                        prodata.currentSelfActivity.mktActivityType != ''
+                      "
+                      class="activity-type theme_bg_red"
+                    >
+                      {{ prodata.currentSelfActivity.mktActivityType }}
+                    </div>
                   </div>
                 </div>
-                <div class="info-div">
-                  <div class="title theme_font_black">
-                    {{ prodata.productName }}
+                <div
+                  v-if="occurData.needPickupId == 1"
+                  @click="toSelectZitiAddress"
+                >
+                  <div class="pickup-shop">
+                    <div style="flex: 1">
+                      <div class="flex-row">
+                        <div class="name theme_font_black">
+                          兑换点：{{ $store.state.mall2.zitiAddress.storeName }}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <i
+                        class="iconfont mall-gengduo more-icon theme_font_tint"
+                      ></i>
+                    </div>
                   </div>
-                  <div class="title theme_font_black">
-                    <span style="font-size:11px; color:#696969">{{ prodata.specs }}</span>
-                  </div>
-                  <div class="price">
-                    <PriceOrder :productData="prodata"></PriceOrder>
-                    <van-stepper
-                      v-model="prodata.number"
-                      class="wish-prod-stepper"
-                      v-if="$route.query.entryType == 'wish'"
-                      :max="$route.params.wishProdInfo.saleNumMax"
-                      :min="$route.params.wishProdInfo.saleNumBegin"
-                      :step="$route.params.wishProdInfo.saleNumStep"
-                      integer
-                    />
-                    <span style="float: right" v-else
-                      >x {{ prodata.number }}</span
-                    >
-                  </div>
+                </div>
+                <div
+                  class="service"
+                  v-if="store.storeProData.serviceArr.length"
+                >
+                  <div class="title">保障服务</div>
                   <div
-                    v-if="
-                      prodata.currentSelfActivity &&
-                        prodata.currentSelfActivity.mktActivityType != ''
-                    "
-                    class="activity-type theme_bg_red"
+                    class="service-row line_top"
+                    v-for="(prodata, index) in store.storeProData.serviceArr"
+                    :key="index"
+                    @click="toServiceEvent(prodata)"
                   >
-                    {{ prodata.currentSelfActivity.mktActivityType }}
+                    <div class="name single-line">
+                      {{ prodata.productName }}
+                    </div>
+                    <div class="price">
+                      ¥{{ $util.toDecimal2(prodata.price) }} x
+                      {{ prodata.number }}
+                      <i class="iconfont mall-gengduojiantou"></i>
+                    </div>
                   </div>
                 </div>
               </div>
               <div
-                v-if="occurData.needPickupId == 1"
-                @click="toSelectZitiAddress"
+                v-if="store.storeProData.num > 1"
+                @click="showProsDetailEvent(store)"
               >
-                <div class="pickup-shop">
-                  <div style="flex: 1">
-                    <div class="flex-row">
-                      <div class="name theme_font_black">
-                        兑换点：{{ $store.state.mall2.zitiAddress.storeName }}
-                      </div>
-                    </div>
-                  </div>
-                  <div>
+                <div class="pros-row">
+                  <div class="pros-msg">
+                    <span>共{{ store.storeProData.proNum }}件</span>
                     <i
                       class="iconfont mall-gengduo more-icon theme_font_tint"
                     ></i>
                   </div>
-                </div>
-              </div>
-              <div class="service" v-if="store.storeProData.serviceArr.length">
-                <div class="title">保障服务</div>
-                <div
-                  class="service-row line_top"
-                  v-for="prodata in store.storeProData.serviceArr"
-                  @click="toServiceEvent(prodata)"
-                >
-                  <div class="name single-line">{{ prodata.productName }}</div>
-                  <div class="price">
-                    ¥{{ $util.toDecimal2(prodata.price) }} x
-                    {{ prodata.number }}
-                    <i class="iconfont mall-gengduojiantou"></i>
+                  <div
+                    class="img-div"
+                    v-for="(pro, imgIdx) in store.storeProData.proArr"
+                    :key="imgIdx"
+                    v-show="imgIdx < 3"
+                  >
+                    <img :src="pro.phPictureUrl" />
+                    <div class="presale" v-if="paramsData.cartType == 1">
+                      预售
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              v-if="store.storeProData.num > 1"
-              @click="showProsDetailEvent(store)"
-            >
-              <div class="pros-row">
-                <div class="pros-msg">
-                  <span>共{{ store.storeProData.proNum }}件</span>
-                  <i
-                    class="iconfont mall-gengduo more-icon theme_font_tint"
-                  ></i>
-                </div>
-                <div
-                  class="img-div"
-                  v-for="(pro, imgIdx) in store.storeProData.proArr"
-                  v-if="imgIdx < 3"
-                >
-                  <img :src="pro.phPictureUrl" />
-                  <div class="presale" v-if="paramsData.cartType == 1">
-                    预售
-                  </div>
+              <div class="flex-row">
+                <div class="label-middle theme_font_common">备注</div>
+                <div class="full">
+                  <input
+                    class="row-input theme_font_common"
+                    placeholder="请留下您想说的话"
+                    v-model="store.remark"
+                  />
                 </div>
               </div>
             </div>
-            <div class="flex-row">
-              <div class="label-middle theme_font_common">备注</div>
-              <div class="full">
-                <input
-                  class="row-input theme_font_common"
-                  placeholder="请留下您想说的话"
-                  v-model="store.remark"
-                />
-              </div>
-            </div>
-          </div>
 
-          <div class="block-div" v-if="productType == 8">
+            <!--没有生鲜的时候才能选时间-->
+            <!-- <div class="block-div" v-if="productType == 8">
             <div class="flex-row" @click="openServiceTimePicker">
-              <!--没有生鲜的时候才能选时间-->
               <div class="label-middle theme_font_common">服务时间</div>
               <div class="full theme_font_common" style="text-align: right">
                 {{ serviceDateTime }}
@@ -399,102 +432,111 @@
                 <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <!--金豆商城不支持开发票-->
-          <!--          <div-->
-          <!--            class="block-div"-->
-          <!--            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">-->
-          <!--            <div class="flex-row">-->
-          <!--              <div class="title full theme_font_common">发票</div>-->
-          <!--              <div class="swith" @click="useInvoiceEvent">-->
-          <!--                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>-->
-          <!--                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">-->
-          <!--              <div class="label-middle theme_font_common">发票信息</div>-->
-          <!--              <div class="full"></div>-->
-          <!--              <div-->
-          <!--                class="theme_font_black right-margin"-->
-          <!--                :class="{theme_font_tint: invoiceInfo == ''}"-->
-          <!--              >-->
-          <!--                {{invoiceInfo !=-->
-          <!--                '' ? invoiceInfo : '请编辑发票信息'}}-->
-          <!--              </div>-->
-          <!--              <div>-->
-          <!--                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
+            <!--金豆商城不支持开发票-->
+            <!--          <div-->
+            <!--            class="block-div"-->
+            <!--            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">-->
+            <!--            <div class="flex-row">-->
+            <!--              <div class="title full theme_font_common">发票</div>-->
+            <!--              <div class="swith" @click="useInvoiceEvent">-->
+            <!--                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>-->
+            <!--                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">-->
+            <!--              <div class="label-middle theme_font_common">发票信息</div>-->
+            <!--              <div class="full"></div>-->
+            <!--              <div-->
+            <!--                class="theme_font_black right-margin"-->
+            <!--                :class="{theme_font_tint: invoiceInfo == ''}"-->
+            <!--              >-->
+            <!--                {{invoiceInfo !=-->
+            <!--                '' ? invoiceInfo : '请编辑发票信息'}}-->
+            <!--              </div>-->
+            <!--              <div>-->
+            <!--                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
 
-          <div
-            class="block-div"
-            v-if="
-              (!cardType || (cardType && cardType == 551)) &&
+            <!-- 优惠券 -->
+            <div
+              class="block-div"
+              v-if="
+                (!cardType || (cardType && cardType == 551)) &&
                 paramsData.orderCategory != 1 &&
                 $route.query.entryType !== 'wish'
-            "
-          >
-            <div class="flex-row" @click="couponEvent">
-              <div class="label-middle theme_font_common">优惠券</div>
-              <div class="full"></div>
-              <div v-if="lastRes.occur" class="theme_font_black right-margin">
-                优惠{{ $util.toDecimal2(occurData.couponAmount) }}元
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-            <!--能使用的各种金额-->
-            <div
-              v-for="digital in occurData.digitalList"
-              v-if="digital.acctType != 'LimitWallet'"
+              "
             >
-              <!--去掉易捷卡的展示-->
-              <div class="flex-row" v-if="digital.deductionState != 0">
-                <div class="label-middle theme_font_common">
-                  {{ getDigitalDisplayName(digital.acctType) }}
-                </div>
+              <div class="flex-row" @click="couponEvent(index)">
+                <div class="label-middle theme_font_common">优惠券</div>
                 <div class="full"></div>
-                <div class="right-margin" v-if="digital.userCanUseDigital > 0">
-                  共{{ digital.userBalanceDigital }}，可用{{
-                    digital.userCanUseDigital
-                  }}，抵￥{{
-                    $util.toDecimal2(digital.userCanUseDigitalAmount)
-                  }}元
+                <div v-if="lastRes.occur" class="theme_font_black right-margin">
+                  优惠{{ $util.toDecimal2(item.couponAmount) }}元
                 </div>
-                <div class="right-margin" v-if="digital.userCanUseDigital <= 0">
-                  共{{ digital.userBalanceDigital }}，{{
-                    getCanNotUseStr(digital.deductionState)
-                  }}，不能使用
-                </div>
-                <div class="swith" @click="useDigitalEvent(digital)">
-                  <img
-                    v-if="digital.payDigital > digital.fixedDigital"
-                    src="static/image/mall2/switch-on.png"
-                  />
-                  <img
-                    v-if="digital.payDigital <= digital.fixedDigital"
-                    src="static/image/mall2/switch-off.png"
-                  />
+                <div>
+                  <i
+                    class="iconfont mall-gengduo more-icon theme_font_tint"
+                  ></i>
                 </div>
               </div>
+              <!--能使用的各种金额-->
+              <!--去掉易捷卡的展示-->
+              <!-- <div
+                v-for="digital in occurData.digitalList"
+                v-if="digital.acctType != 'LimitWallet'"
+              >
+                <div class="flex-row" v-if="digital.deductionState != 0">
+                  <div class="label-middle theme_font_common">
+                    {{ getDigitalDisplayName(digital.acctType) }}
+                  </div>
+                  <div class="full"></div>
+                  <div
+                    class="right-margin"
+                    v-if="digital.userCanUseDigital > 0"
+                  >
+                    共{{ digital.userBalanceDigital }}，可用{{
+                      digital.userCanUseDigital
+                    }}，抵￥{{
+                      $util.toDecimal2(digital.userCanUseDigitalAmount)
+                    }}元
+                  </div>
+                  <div
+                    class="right-margin"
+                    v-if="digital.userCanUseDigital <= 0"
+                  >
+                    共{{ digital.userBalanceDigital }}，{{
+                      getCanNotUseStr(digital.deductionState)
+                    }}，不能使用
+                  </div>
+                  <div class="swith" @click="useDigitalEvent(digital)">
+                    <img
+                      v-if="digital.payDigital > digital.fixedDigital"
+                      src="static/image/mall2/switch-on.png"
+                    />
+                    <img
+                      v-if="digital.payDigital <= digital.fixedDigital"
+                      src="static/image/mall2/switch-off.png"
+                    />
+                  </div>
+                </div>
+              </div> -->
+              <!--<div class="flex-row" v-if="lastRes.pointsDeductionEnable && occurData.userCanUsePoints == 0">-->
+              <!--<div class="label-middle theme_font_common label-btn" @click="pointsRuleEvent()">积分<i class="iconfont mall-info theme_font_gray" style="margin-left: 3px;"></i></div>-->
+              <!--<div class="full"></div>-->
+              <!--<div v-if="occurData.userBanlancePoints < lastRes.pointsDeductionStep">-->
+              <!--共{{occurData.userBanlancePoints}}分，积分不足{{lastRes.pointsDeductionStep}}无法使用-->
+              <!--</div>-->
+              <!--<div v-if="occurData.userBanlancePoints >= lastRes.pointsDeductionStep">-->
+              <!--共{{occurData.userBanlancePoints}}分，订单金额不足{{lastRes.pointsDeductionStep * lastRes.pointsGainPerUnit / lastRes.pointsGainUnitCount / 100}}元无法使用-->
+              <!--</div>-->
+              <!--</div>-->
             </div>
-            <!--<div class="flex-row" v-if="lastRes.pointsDeductionEnable && occurData.userCanUsePoints == 0">-->
-            <!--<div class="label-middle theme_font_common label-btn" @click="pointsRuleEvent()">积分<i class="iconfont mall-info theme_font_gray" style="margin-left: 3px;"></i></div>-->
-            <!--<div class="full"></div>-->
-            <!--<div v-if="occurData.userBanlancePoints < lastRes.pointsDeductionStep">-->
-            <!--共{{occurData.userBanlancePoints}}分，积分不足{{lastRes.pointsDeductionStep}}无法使用-->
-            <!--</div>-->
-            <!--<div v-if="occurData.userBanlancePoints >= lastRes.pointsDeductionStep">-->
-            <!--共{{occurData.userBanlancePoints}}分，订单金额不足{{lastRes.pointsDeductionStep * lastRes.pointsGainPerUnit / lastRes.pointsGainUnitCount / 100}}元无法使用-->
-            <!--</div>-->
-            <!--</div>-->
-          </div>
 
-          <!--易捷卡信息-->
-          <div
+            <!--易捷卡信息-->
+            <!-- <div
             class="block-div"
             v-if="
               cardList.length != 0 &&
@@ -502,15 +544,6 @@
                 limitType == 'true'
             "
           >
-            <!--<div class="table-view yj-card">-->
-            <!--<div class="table-view-cell">-->
-            <!--<div class="table-view-cell-text">易捷卡</div>-->
-            <!--<div class="table-view-cell-arrow">-->
-            <!--<p>{{cardName ? cardName : $route.params.cardName}}</p>-->
-            <!--<p>{{cardName ? cardName : $route.params.cardName}}</p>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
             <div class="flex-row" @click="showYJChange = true">
               <div class="label-middle theme_font_common">易捷卡</div>
               <div
@@ -547,8 +580,8 @@
                 <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
               </div>
             </div>
-          </div>
-          <div
+          </div> -->
+            <!-- <div
             class="block-div"
             v-if="
               cardType == '552' &&
@@ -564,99 +597,102 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <!--易捷卡信息-->
-          <div class="block-div">
-            <div class="flex-row">
-              <div class="label-middle full theme_font_common">商品金额</div>
-              <div class="theme_font_black">
-                ￥{{ $util.toDecimal2(occurData.amount) }}
+            <!--易捷卡信息-->
+            <div class="block-div">
+              <div class="flex-row">
+                <div class="label-middle full theme_font_common">商品金额</div>
+                <div class="theme_font_black">
+                  ￥{{ $util.toDecimal2(item.amount) }}
+                </div>
               </div>
-            </div>
-            <div class="flex-row">
-              <div class="label-middle full theme_font_common">立减</div>
-              <div class="theme_font_red">
-                -￥{{ $util.toDecimal2(occurData.discountAmount) }}
+              <div class="flex-row">
+                <div class="label-middle full theme_font_common">立减</div>
+                <div class="theme_font_red">
+                  -￥{{ $util.toDecimal2(item.discountAmount) }}
+                </div>
               </div>
-            </div>
-            <div class="flex-row" @click="showFreightDetail">
-              <div class="label-middle full theme_font_common">
-                运费
-                <i
-                  class="iconfont mall-info theme_font_gray"
-                  style="margin-left: 3px"
-                ></i>
+              <div class="flex-row" @click="showFreightDetail(index)">
+                <div class="label-middle full theme_font_common">
+                  运费
+                  <i
+                    class="iconfont mall-info theme_font_gray"
+                    style="margin-left: 3px"
+                  ></i>
+                </div>
+                <div class="theme_font_red">
+                  +￥{{
+                    $util.toDecimal2(
+                      parseFloat(item.freightAmount) -
+                        parseFloat(item.freightDiscountAmount)
+                    )
+                  }}
+                </div>
               </div>
-              <div class="theme_font_red">
-                +￥{{
-                  $util.toDecimal2(
-                    parseFloat(occurData.freightAmount) -
-                      parseFloat(occurData.freightDiscountAmount)
-                  )
-                }}
-              </div>
-            </div>
-            <div
-              class="flex-row"
-              v-if="
-                paramsData.orderCategory != 1 &&
+              <div
+                class="flex-row"
+                v-if="
+                  paramsData.orderCategory != 1 &&
                   $route.query.entryType != 'wish'
-              "
-            >
-              <div class="label-middle full theme_font_common">优惠券</div>
-              <div class="theme_font_red">
-                -￥{{ $util.toDecimal2(occurData.couponAmount) }}
+                "
+              >
+                <div class="label-middle full theme_font_common">优惠券</div>
+                <div class="theme_font_red">
+                  -￥{{ $util.toDecimal2(item.couponAmount) }}
+                </div>
               </div>
-            </div>
-            <div
-              class="flex-row"
-              v-if="
-                limitType == 'true' &&
+              <!-- <div
+                class="flex-row"
+                v-if="
+                  limitType == 'true' &&
                   cardList.length != 0 &&
                   (cardDetails.cardName || $route.params.cardName) &&
                   radio != 'a'
-              "
-            >
-              <div class="label-middle full theme_font_common">
-                {{
-                  cardDetails.cardName
-                    ? cardDetails.cardName
-                    : $route.params.cardName
-                }}
-              </div>
-              <div class="theme_font_red">
-                -￥{{ $util.toDecimal2(userCanUseDigital) }}
-              </div>
-            </div>
-            <div
-              class="flex-row"
-              v-if="limitType == 'true' && cardType == '552' && radio != 'a'"
-            >
-              <div class="label-middle full theme_font_common">
-                {{ $route.params.cardName }}
-              </div>
-              <div class="theme_font_red">
-                -￥{{ $util.toDecimal2(occurData.couponAmount) }}
-              </div>
-            </div>
-            <div
-              class="flex-row"
-              v-for="digital in occurData.digitalList"
-              v-if="
-                digital.payDigital > digital.fixedDigital &&
-                  digital.acctType != 'LimitWallet'
-              "
-            >
+                "
+              >
+                <div class="label-middle full theme_font_common">
+                  {{
+                    cardDetails.cardName
+                      ? cardDetails.cardName
+                      : $route.params.cardName
+                  }}
+                </div>
+                <div class="theme_font_red">
+                  -￥{{ $util.toDecimal2(userCanUseDigital) }}
+                </div>
+              </div> -->
+              <!-- <div
+                class="flex-row"
+                v-if="limitType == 'true' && cardType == '552' && radio != 'a'"
+              >
+                <div class="label-middle full theme_font_common">
+                  {{ $route.params.cardName }}
+                </div>
+                <div class="theme_font_red">
+                  -￥{{ $util.toDecimal2(occurData.couponAmount) }}
+                </div>
+              </div> -->
               <!--去掉易捷卡的展示-->
-              <div class="label-middle full theme_font_common">
-                {{ getDigitalDisplayName(digital.acctType) }}
-              </div>
-              <div class="theme_font_red">
-                -￥{{ $util.toDecimal2(digital.userCanUseDigitalAmount) }}
-              </div>
+              <!-- <div
+                class="flex-row"
+                v-for="(digital, index) in occurData.digitalList"
+                :key="index"
+                v-show="
+                  digital.payDigital > digital.fixedDigital &&
+                  digital.acctType != 'LimitWallet'
+                "
+              >
+                <div class="label-middle full theme_font_common">
+                  {{ getDigitalDisplayName(digital.acctType) }}
+                </div>
+                <div class="theme_font_red">
+                  -￥{{ $util.toDecimal2(digital.userCanUseDigitalAmount) }}
+                </div>
+              </div> -->
             </div>
           </div>
+
           <!--          <div-->
           <!--            class="block-div"-->
           <!--            :class="{'is-need-referrer': occurData.needReferrer}"-->
@@ -719,14 +755,15 @@
               <div
                 class="digital-div"
                 v-for="(digital, digitalindex) in occurData.digitalList"
-                v-if="$mallCommon.getTotalUsePoints(digital) > 0"
+                :key="digitalindex"
+                v-show="$mallCommon.getTotalUsePoints(digital) > 0"
               >
                 <span
                   class="price-big theme_font_red"
                   v-if="
                     digitalindex !=
                       $mallCommon.getFirstVartualIndex(occurData) ||
-                      $mallCommon.getOccurShowPrice(occurData)
+                    $mallCommon.getOccurShowPrice(occurData)
                   "
                   >+</span
                 >
@@ -742,7 +779,7 @@
           <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
         </div>
         <!--          易捷卡弹框（充值卡）-->
-        <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
+        <!-- <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
           <div class="top">
             <div class="close-img">
               <div class="text">易捷卡</div>
@@ -789,7 +826,7 @@
             </van-radio>
           </van-radio-group>
           <div class="pay-confirm" @click="queryBtn">确定</div>
-        </van-popup>
+        </van-popup> -->
         <!--          易捷卡弹框（充值卡）-->
       </div>
     </nav-content>
@@ -802,10 +839,11 @@
             :class="{
               theme_light_bg: payWaySelected == payway.tag,
               theme_standard_font_i: payWaySelected == payway.tag,
-              theme_standard_bdr_i: payWaySelected == payway.tag
+              theme_standard_bdr_i: payWaySelected == payway.tag,
             }"
             @click="payWayEvent(payway)"
-            v-for="payway in payWays"
+            v-for="(payway, index) in payWays"
+            :key="index"
           >
             {{ payway.text }}
           </div>
@@ -828,10 +866,11 @@
             :class="{
               theme_light_bg: payWaySelected == index,
               theme_standard_font_i: payWaySelected == index,
-              theme_standard_bdr_i: payWaySelected == index
+              theme_standard_bdr_i: payWaySelected == index,
             }"
             @click="payWayEvent1(payway, index)"
             v-for="(payway, index) in payWays1"
+            :key="index"
           >
             {{ payway.text }}
           </div>
@@ -896,7 +935,8 @@
         <div class="pop-scroll-div">
           <div
             class="pro-row"
-            v-for="prodata in currentStore.storeProData.proArr"
+            v-for="(prodata, index) in currentStore.storeProData.proArr"
+            :key="index"
           >
             <div class="img-div">
               <img :src="prodata.phPictureUrl" />
@@ -919,7 +959,8 @@
             <div class="title">保障服务</div>
             <div
               class="service-row line_top"
-              v-for="prodata in currentStore.storeProData.serviceArr"
+              v-for="(prodata, index) in currentStore.storeProData.serviceArr"
+              :key="index"
               @click="toServiceEvent(prodata)"
             >
               <div class="name single-line">{{ prodata.productName }}</div>
@@ -992,7 +1033,7 @@ export default {
   name: "placeorder",
   components: {
     PriceOrder,
-    Agreement
+    Agreement,
   },
   data() {
     return {
@@ -1003,8 +1044,8 @@ export default {
       payWays: [
         {
           text: "在线支付",
-          tag: "1"
-        }
+          tag: "1",
+        },
         // {
         //   text: "货到付款",
         //   tag: "0",
@@ -1017,8 +1058,8 @@ export default {
       payWays1: [
         {
           text: "在线支付",
-          tag: "1"
-        }
+          tag: "1",
+        },
         // {
         //   text: "货到付款",
         //   tag: "0",
@@ -1082,7 +1123,7 @@ export default {
       overFlag: false,
       wishData: {
         payNiceName: "",
-        payMsg: ""
+        payMsg: "",
       },
       buyType: "",
       lbId: "",
@@ -1095,7 +1136,14 @@ export default {
       microStoreCode: "",
       proSkuDistributionId: "",
       pickupStartTime: new Date(),
-      count: 0
+      count: 0,
+      occurDataList:[],
+      paramsDataList:[],
+      occurList:[],
+      usedCouponsList:[],
+      cartsList:[],
+      submitDataList:[],
+      payInfoList:[],
     };
   },
   computed: {
@@ -1123,9 +1171,10 @@ export default {
         this.$store.state.rfrCodeMap
       ) {
         // bindCardReferrer;//绑卡推荐人  orderReferrer;//订单推荐人 regReferrer;//注册推荐人 lastReferrer;//最后的推荐人
-        recommend = this.$store.state.rfrCodeMap[
-          this.$store.state.globalConfig.rfrCodeType
-        ];
+        recommend =
+          this.$store.state.rfrCodeMap[
+            this.$store.state.globalConfig.rfrCodeType
+          ];
       }
       // URL入参，暂时定优先级最高，不清楚意义
       if (
@@ -1149,10 +1198,10 @@ export default {
         this.$store.state.globalConfig.appCanEditReferrer == 1 ||
         !this.recommend
       );
-    }
+    },
   },
   created() {
-    console.log(this.$route.params.cutPrice);
+    console.log(this.$route.params);
     console.log(
       this.$store.state.globalConfig.order_pickup_cancel_tip_show != "false"
     );
@@ -1168,7 +1217,7 @@ export default {
     // 获取LimitWallet的limitType
     let acctList = this.$store.state.globalConfig.acctList || [];
     let startUsing = "";
-    acctList.forEach(item => {
+    acctList.forEach((item) => {
       if (item.acctType == "LimitWallet") {
         startUsing = item.startUsing;
       }
@@ -1177,7 +1226,7 @@ export default {
     if (this.$route.query.SCREEN) {
       // 扫码购 流程
       // if (true) {
-      this.getShortAddress(this.$route.query.SCREEN);
+      // this.getShortAddress(this.$route.query.SCREEN);
       // this.getShortAddress('GBhQwKRpkN')
     } else {
       this.complete = true;
@@ -1195,6 +1244,9 @@ export default {
       this.paramsData = this.$route.params.paramsData
         ? this.$route.params.paramsData
         : {};
+      this.paramsDataList = this.$route.params.paramsDataList
+        ? this.$route.params.paramsDataList
+        : [];
       this.deliveryType = this.$route.params.deliveryType
         ? this.$route.params.deliveryType
         : "2";
@@ -1209,12 +1261,12 @@ export default {
           userAddress: this.$store.state.mall2.selectAddress,
           pickupId: this.$route.query.pickupId,
           userAddressId: this.$store.state.mall2.selectAddress.id,
-          deliveryType: this.deliveryType
+          deliveryType: this.deliveryType,
         };
         if (this.$route.query.pickupId) {
           this.$mallCommon.getSysStoreById(
             this.$route.query.pickupId,
-            pickupAddress => {
+            (pickupAddress) => {
               this.$store.state.mall2.zitiAddress = pickupAddress;
               sessionStorage.setItem(
                 "RHY_Pickup_Address",
@@ -1249,7 +1301,7 @@ export default {
           } else {
             this.$MessageBox
               .alert("当前状态不支持刷新！", "提示")
-              .then(action => {
+              .then((action) => {
                 this.$router.go(-1);
               });
           }
@@ -1317,7 +1369,7 @@ export default {
   },
   methods: {
     // 家政服务，选中服务时间
-    openServiceTimePicker: function() {
+    openServiceTimePicker: function () {
       let curDate = new Date();
       let nextDay = new Date(curDate.getTime() + 24 * 60 * 60 * 1000);
       DatetimePicker.open({
@@ -1328,10 +1380,10 @@ export default {
           console.log(date, time);
           this.selectedServiceTime = {
             date: date,
-            time: time
+            time: time,
           };
           // this.serviceDateTime = this.selectedServiceTime.date.dateStr + ' ' + this.selectedServiceTime.time.label
-        }
+        },
       });
     },
     // 去认证
@@ -1340,13 +1392,13 @@ export default {
       if (type == 1) {
         this.$router.push({
           path: "/authentication/index",
-          query: {}
+          query: {},
         });
         //个人实名认证
       } else {
         this.$router.push({
           path: "/authentication/index",
-          query: {}
+          query: {},
         });
       }
     },
@@ -1360,11 +1412,11 @@ export default {
         this.contratWayText = "个人";
       }
     },
-    getAuthInfo: function() {
+    getAuthInfo: function () {
       let params = {};
       this.$http
         .post("/app/json/app_purchase_order/getAuthInfo", params)
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           console.log(res);
           if (data.status == 0) {
@@ -1374,16 +1426,16 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$Toast(err);
         });
     },
-    toServiceEvent: function(item) {
+    toServiceEvent: function (item) {
       let url = "/app/json/product/getThirdServeDetail";
       let paramsData = {
-        id: item.thirdServeId
+        id: item.thirdServeId,
       };
-      this.$http.post(url, paramsData).then(res => {
+      this.$http.post(url, paramsData).then((res) => {
         let data = res.data;
         if (data.status == 0) {
           let pageUrl = data.data.pageUrl;
@@ -1413,7 +1465,7 @@ export default {
         }
       });
     },
-    getSelectReceiveTime: function() {
+    getSelectReceiveTime: function () {
       // order.fresh.pickup.timeout.startday";             // 生鲜提货时间开始天数
       // order.fresh.pickup.timeout.starttime";            // 生鲜提货时间开始时间
       let sd =
@@ -1434,7 +1486,7 @@ export default {
 
       return str;
     },
-    getReceiveEndTime: function() {
+    getReceiveEndTime: function () {
       // "order.fresh.pickup.timeout.endtime";                // 生鲜提货时间截止时间
       // order.fresh.pickup.timeout.endday";                 // 生鲜提货时间截止天数
       let ed =
@@ -1455,40 +1507,44 @@ export default {
 
       return str;
     },
-    getShortAddress(code) {
-      // 大屏扫码购  获取长码 结算信息
-      this.$request
-        .post("/app/json/short_address/getShortAddress", {
-          code: code
-        })
-        .then(res => {
-          if (res.status == 0) {
-            let data = JSON.parse(res.data.addressData);
-            this.deliveryType = data.deliveryType;
-            data.token = this.$store.state.login.token;
-            this.paramsData = data;
-            console.log(data);
-            this._reSettleCart(data.carts);
-          } else {
-            this.$toast(res.info);
-          }
-        });
-    },
-    getTotalPriceDuan: function(index) {
-      let str = this.$util.toDecimal2(this.occurData.payAmount);
+    // getShortAddress(code) {
+    //   // 大屏扫码购  获取长码 结算信息
+    //   this.$request
+    //     .post("/app/json/short_address/getShortAddress", {
+    //       code: code,
+    //     })
+    //     .then((res) => {
+    //       if (res.status == 0) {
+    //         let data = JSON.parse(res.data.addressData);
+    //         this.deliveryType = data.deliveryType;
+    //         data.token = this.$store.state.login.token;
+    //         this.paramsData = data;
+    //         console.log(data);
+    //         this._reSettleCart(data.carts);
+    //       } else {
+    //         this.$toast(res.info);
+    //       }
+    //     });
+    // },
+    getTotalPriceDuan: function (index) {
+      let amount = 0;
+      this.occurList.forEach(e=>{
+        amount+=e.payAmount
+      })
+      let str = this.$util.toDecimal2(amount);
       let arr = str.split(".");
       return arr[index];
     },
 
-    queryBtn() {
-      // 确定不使用易捷卡按钮
-      this.showYJChange = false;
-      if (this.radio == "a") {
-        this._reSettleCart(null, "");
-      } else {
-        this._reSettleCart(null, this.cardDetails.cardNo);
-      }
-    },
+    // queryBtn() {
+    //   // 确定不使用易捷卡按钮
+    //   this.showYJChange = false;
+    //   if (this.radio == "a") {
+    //     this._reSettleCart(null, "");
+    //   } else {
+    //     this._reSettleCart(null, this.cardDetails.cardNo);
+    //   }
+    // },
     getCardList() {
       // 不判断非空，会使得代码部分情况下报错
       if (!this.occurData.store) {
@@ -1496,17 +1552,17 @@ export default {
       }
       // 获取我的卡包列表
       let proSkus = [];
-      this.occurData.store.forEach(item => {
-        item.noActivityCart.forEach(item2 => {
+      this.occurData.store.forEach((item) => {
+        item.noActivityCart.forEach((item2) => {
           proSkus.push({ skuId: item2.skuId, storeOuCode: item2.storeOuCode });
         });
       });
 
       this.$request
         .post("/app/json/app_user_easy_card/getCardList", {
-          proSkus: proSkus
+          proSkus: proSkus,
         })
-        .then(res => {
+        .then((res) => {
           if (res.status == 0) {
             this.cardList = res.data || [];
             if (this.cardList.length) {
@@ -1532,7 +1588,7 @@ export default {
         this.cardDetails = "";
       }
     },
-    getCanNotUseStr: function(state) {
+    getCanNotUseStr: function (state) {
       if (state == 1 || state == 3) {
         return "余额不足";
       } else if (state == 1) {
@@ -1544,13 +1600,13 @@ export default {
     // 虚拟支付
     // 字典匹配
     // 1.先从字典库查询所有的值存在本地
-    getDictByAlias: function() {
+    getDictByAlias: function () {
       let Url = "/app/json/app_dict/getDictByAlias";
       let paramsData = {
         token: this.$store.state.login.token,
-        alias: "rewards_group"
+        alias: "rewards_group",
       };
-      this.$http.post(Url, paramsData).then(res => {
+      this.$http.post(Url, paramsData).then((res) => {
         let data = res.data;
         if (data.status == 0 && data.data.length != 0) {
           this.dictByAlias = data.data;
@@ -1578,13 +1634,13 @@ export default {
     //   }
     // },
     // 3. 匹配公共的虚拟支付名称
-    getDigitalDisplayName: function(acctType) {
+    getDigitalDisplayName: function (acctType) {
       return this.$mallCommon.accTypeToName(acctType, "200001");
     },
-    pointsRuleEvent: function() {
+    pointsRuleEvent: function () {
       this.showPointsRule = true;
     },
-    getEndDate: function() {
+    getEndDate: function () {
       let cancelTime =
         this.$store.state.globalConfig.order_timeout_pickup_cancel || 0;
       let dd = new Date(this.pickupStartTime.getTime());
@@ -1595,17 +1651,17 @@ export default {
       }
       return dd;
     },
-    scanCodeFunc: function() {
-      this.$bridgefunc.scanCode(dic => {
+    scanCodeFunc: function () {
+      this.$bridgefunc.scanCode((dic) => {
         this.scanCode = dic.code;
         this.referrer = dic.code;
       });
     },
 
-    getTotalPrice: function() {
+    getTotalPrice: function () {
       return this.$util.toDecimal2(this.occurData.payAmount);
     },
-    getImgArrs: function(store) {
+    getImgArrs: function (store) {
       let arr = [];
       for (let i = 0; i < store.activity.length; i++) {
         let a1 = store.activity[i].cart;
@@ -1623,7 +1679,7 @@ export default {
       }
       return arr;
     },
-    getNoStockImgArrs: function(store) {
+    getNoStockImgArrs: function (store) {
       let noStockArr = [];
       let canBuyArr = [];
       for (let i = 0; i < store.activity.length; i++) {
@@ -1649,7 +1705,7 @@ export default {
               proSkuDistributionId: item.proSkuDistributionId || "",
               checked: item.checked,
               isGift: item.isGift,
-              spCode: item.spCode
+              spCode: item.spCode,
               //selfActivityId: item.currentSelfActivity != '' ? item.currentSelfActivity.mktActivityId : '',
             };
             if (
@@ -1703,7 +1759,7 @@ export default {
             proSkuDistributionId: item.proSkuDistributionId || "",
             checked: item.checked,
             isGift: item.isGift,
-            spCode: item.spCode
+            spCode: item.spCode,
           };
           if (
             item.currentSelfActivity != "" &&
@@ -1738,10 +1794,10 @@ export default {
     //   console.log(number)
     //   console.log('我是number')
     // },
-    showFreightDetail: function() {
+    showFreightDetail: function (index) {
       let storeArr = [];
-      for (let i = 0; i < this.occurData.store.length; i++) {
-        let store = this.occurData.store[i];
+      for (let i = 0; i < this.occurList[index].store.length; i++) {
+        let store = this.occurList[index].store[i];
         let item = {};
         item.storeName = store.storeName;
         item.freightAmount = store.freightAmount;
@@ -1752,14 +1808,14 @@ export default {
 
       Freight.open({
         initData: {
-          listData: storeArr
+          listData: storeArr,
         },
         sureEvent: () => {
           Freight.close();
-        }
+        },
       });
     },
-    pickerConfirm: function(value) {
+    pickerConfirm: function (value) {
       // let nowTime = this.$util.getDataString(value)
       // let orderTime = this.$store.state.globalConfig.order_timeout_pickup_cancel * 60 * 60 * 1000
       // let time = parseInt(nowTime) + parseInt(orderTime)
@@ -1772,11 +1828,11 @@ export default {
     openPicker() {
       this.$refs.dateDom.open();
     },
-    showProsDetailEvent: function(store) {
+    showProsDetailEvent: function (store) {
       this.currentStore = store;
       this.showProsDetail = true;
     },
-    getPeisongString: function(type) {
+    getPeisongString: function (type) {
       if (type == "0") {
         return "快递配送";
       } else if (type == "1") {
@@ -1784,7 +1840,7 @@ export default {
       }
       return "第三方配送";
     },
-    toSelectZitiAddress: function() {
+    toSelectZitiAddress: function () {
       if (this.$store.state.globalConfig.app_home_special_flag == "cnooc") {
         return;
       }
@@ -1798,26 +1854,26 @@ export default {
       this.$router.push({
         path: "/mall2/mypickupaddress",
         query: {
-          skuIds: JSON.stringify(skuIds)
-        }
+          skuIds: JSON.stringify(skuIds),
+        },
       });
     },
-    toSelectAddress: function() {
+    toSelectAddress: function () {
       this.$router.push({
-        path: "/mall2/addresslist"
+        path: "/mall2/addresslist",
       });
     },
     // 获取前面已填写的发票
-    useInvoiceEvent: function() {
+    useInvoiceEvent: function () {
       this.useInvoice = !this.useInvoice;
       if (this.useInvoice && this.invoiceData == null) {
         this.$Loading.open();
         let url = "/app/json/order_invoice/loadTwoTypeDefaultUserInvoiceHead";
         let paramsData = {
-          token: this.$store.state.login.token
+          token: this.$store.state.login.token,
         };
         this.$http.post(url, paramsData).then(
-          res => {
+          (res) => {
             this.$Loading.close();
             let data = res.data;
             if (data.status == 0) {
@@ -1830,7 +1886,8 @@ export default {
               } else {
                 this.currentInvoice.type = 1;
                 this.currentInvoice = this.invoiceData.company;
-                this.currentInvoice.invoiceTitle = this.invoiceData.company.title;
+                this.currentInvoice.invoiceTitle =
+                  this.invoiceData.company.title;
                 this.invoiceInfo = this.invoiceData.company.title;
               }
               this.invoiceData.phone = this.$store.state.login.phone;
@@ -1840,20 +1897,20 @@ export default {
               this.$Toast(data.info);
             }
           },
-          error => {
+          (error) => {
             this.$Loading.close();
             this.$Toast("请求数据失败！");
           }
         );
       }
     },
-    changeInvoice: function() {
+    changeInvoice: function () {
       Invoice.open({
         initData: {
           ...this.invoiceData,
-          token: this.$store.state.login.token
+          token: this.$store.state.login.token,
         },
-        selectedInvoice: invoice => {
+        selectedInvoice: (invoice) => {
           console.log(invoice);
           this.currentInvoice = invoice;
           if (invoice.type == 0) {
@@ -1876,10 +1933,10 @@ export default {
         },
         invoiceInformation: () => {
           this.showAgreement = true;
-        }
+        },
       });
     },
-    reloadSelectedCoupon: function() {
+    reloadSelectedCoupon: function () {
       if (this.backReloadCoupon == false) {
         return;
       }
@@ -1889,7 +1946,7 @@ export default {
       if (couNo.length > 0) {
         for (let i = 0; i < couNo.length; i++) {
           this.usedCoupons.push({
-            couNo: couNo[i]
+            couNo: couNo[i],
           });
         }
       }
@@ -1913,97 +1970,112 @@ export default {
         this.occurData.userCanUseWhenNotSelectCoupon
       );
     },
-    couponEvent: function() {
+    couponEvent: function (index) {
+      console.log('this.occurList[index]',this.occurList[index])
       let canCoupons = [];
-      for (let i = 0; i < this.occurData.userCanUseCoupon.length; i++) {
-        let couNo1 = this.occurData.userCanUseCoupon[i].couNo;
-        this.occurData.userCanUseCoupon[i].selected = false;
-        for (let j = 0; j < this.usedCoupons.length; j++) {
-          let couNo2 = this.usedCoupons[j].couNo;
+      for (let i = 0; i < this.occurList[index].userCanUseCoupon.length; i++) {
+        let couNo1 = this.occurList[index].userCanUseCoupon[i].couNo;
+        this.occurList[index].userCanUseCoupon[i].selected = false;
+        for (let j = 0; j < this.usedCouponsList[index].length; j++) {
+          let couNo2 = this.usedCouponsList[index][j].couNo;
           if (couNo2 == couNo1) {
-            this.occurData.userCanUseCoupon[i].selected = true;
+            this.occurList[index].userCanUseCoupon[i].selected = true;
             break;
           }
         }
-        canCoupons.push(this.occurData.userCanUseCoupon[i]);
+        canCoupons.push(this.occurList[index].userCanUseCoupon[i]);
       }
+      let isSelectedList = [];
+      this.occurList.forEach((e,i)=>{
+        if(e.couNo[0]){
+          isSelectedList.push({couNo:e.couNo[0],storeIndex:i});
+        }
+      })
+      console.log('this.occurList[index].userCanNotUseCoupon',this.occurList[index].userCanNotUseCoupon);
+      console.log('canCoupons',canCoupons);
+      console.log('this.occurList[index].userCanUseWhenNotSelectCoupon',this.occurList[index].userCanUseWhenNotSelectCoupon);
+      console.log('isSelectedList',isSelectedList);
       Coupon.open({
         initData: {
           listData: [],
-          userCanNotUseCoupon: this.occurData.userCanNotUseCoupon,
+          userCanNotUseCoupon: this.occurList[index].userCanNotUseCoupon,
           userCanUseCoupon: canCoupons,
-          userCanUseWhenNotSelectCoupon: this.occurData
-            .userCanUseWhenNotSelectCoupon,
+          userCanUseWhenNotSelectCoupon:
+            this.occurList[index].userCanUseWhenNotSelectCoupon,
           type: "use",
           skuId: "",
           categoryId: "",
           storeOuCode: "",
           token: this.$store.state.login.token,
           payAmount: this.$util.toDecimal2(
-            parseFloat(this.occurData.payAmount) +
-              parseFloat(this.occurData.couponAmount)
-          )
+            parseFloat(this.occurList[index].payAmount) +
+              parseFloat(this.occurList[index].couponAmount)
+          ),
+          storeIndex:index,
+          isSelectedList:isSelectedList
         },
-        selectedCoupon: couponArr => {
-          this.usedCoupons = couponArr;
-          this.backReloadCoupon = true;
-          this._reSettleCart(null);
+        selectedCoupon: (couponArr) => {
+          this.usedCouponsList[index] = couponArr;
+          // this.backReloadCoupon = true;
+          this._reSettleCart(null,undefined,index);
+          console.log('couponArr',couponArr);
           //Coupon.close();
-        }
+        },
       });
+      console.log('this.usedCouponsList[index]',this.usedCouponsList[index])
     },
-    useDigitalEvent: function(digital) {
-      if (digital.userCanUseDigital <= 0) {
-        let str = this.getCanNotUseStr(digital.deductionState);
-        this.$Toast(
-          str +
-            "，不支持" +
-            this.getDigitalDisplayName(digital.acctType) +
-            "支付！"
-        );
-        return;
-      }
-      let acctType = digital.acctType;
-      if (digital.payDigital <= digital.fixedDigital) {
-        // 当前是关闭装
-        let arr = [];
-        for (let i = 0; i < this.payDigitals.length; i++) {
-          if (this.payDigitals[i].acctType != acctType) {
-            arr.push(this.payDigitals[i]);
-          }
-        }
-        this.payDigitals = arr;
+    // useDigitalEvent: function (digital) {
+    //   if (digital.userCanUseDigital <= 0) {
+    //     let str = this.getCanNotUseStr(digital.deductionState);
+    //     this.$Toast(
+    //       str +
+    //         "，不支持" +
+    //         this.getDigitalDisplayName(digital.acctType) +
+    //         "支付！"
+    //     );
+    //     return;
+    //   }
+    //   let acctType = digital.acctType;
+    //   if (digital.payDigital <= digital.fixedDigital) {
+    //     // 当前是关闭装
+    //     let arr = [];
+    //     for (let i = 0; i < this.payDigitals.length; i++) {
+    //       if (this.payDigitals[i].acctType != acctType) {
+    //         arr.push(this.payDigitals[i]);
+    //       }
+    //     }
+    //     this.payDigitals = arr;
 
-        this.payDigitals.push({
-          acctType: acctType,
-          payDigital: digital.userCanUseDigital + digital.fixedDigital
-        });
-      } else {
-        let arr = [];
-        for (let i = 0; i < this.payDigitals.length; i++) {
-          if (this.payDigitals[i].acctType != acctType) {
-            arr.push(this.payDigitals[i]);
-          } else {
-            arr.push({
-              acctType: acctType,
-              payDigital: digital.fixedDigital
-            });
-          }
-        }
-        this.payDigitals = arr;
-      }
-      this._reSettleCart(null);
-    },
-    usePointsEvent: function() {
-      if (this.occurData.userCanUsePoints == 0) {
-        this.$Toast("您没有当前订单可用积分！");
-        return;
-      } else {
-        this.usePoints = !this.usePoints;
-        this._reSettleCart(null);
-      }
-    },
-    payWayShow: function() {
+    //     this.payDigitals.push({
+    //       acctType: acctType,
+    //       payDigital: digital.userCanUseDigital + digital.fixedDigital,
+    //     });
+    //   } else {
+    //     let arr = [];
+    //     for (let i = 0; i < this.payDigitals.length; i++) {
+    //       if (this.payDigitals[i].acctType != acctType) {
+    //         arr.push(this.payDigitals[i]);
+    //       } else {
+    //         arr.push({
+    //           acctType: acctType,
+    //           payDigital: digital.fixedDigital,
+    //         });
+    //       }
+    //     }
+    //     this.payDigitals = arr;
+    //   }
+    //   this._reSettleCart(null);
+    // },
+    // usePointsEvent: function () {
+    //   if (this.occurData.userCanUsePoints == 0) {
+    //     this.$Toast("您没有当前订单可用积分！");
+    //     return;
+    //   } else {
+    //     this.usePoints = !this.usePoints;
+    //     this._reSettleCart(null);
+    //   }
+    // },
+    payWayShow: function () {
       //企业团购
       if (this.pageType == 2) {
         // this.payWayPopShow1 = true;
@@ -2011,10 +2083,10 @@ export default {
         // this.payWayPopShow = true;
       }
     },
-    contratWayShow: function() {
+    contratWayShow: function () {
       this.getAuthInfo();
     },
-    payWayEvent: function(payway) {
+    payWayEvent: function (payway) {
       if (payway.tag == 0) {
         this.$Toast("暂不支持！");
         return;
@@ -2022,7 +2094,7 @@ export default {
       this.payWaySelected = payway.tag;
       this.payWayText = payway.text;
     },
-    payWayEvent1: function(payway, index) {
+    payWayEvent1: function (payway, index) {
       if (payway.tag == 0) {
         this.$Toast("暂不支持！");
         return;
@@ -2030,41 +2102,45 @@ export default {
       this.payWaySelected = index;
       this.payWayText = payway.text;
     },
-    popSureEvent: function() {
+    popSureEvent: function () {
       this.payWayPopShow = false;
     },
-    popSureEvent1: function() {
+    popSureEvent1: function () {
       this.contratWayPopShow = false;
     },
-    popSureEvent2: function() {
+    popSureEvent2: function () {
       this.payWayPopShow1 = false;
     },
-    popClose: function() {
+    popClose: function () {
       this.payWayPopShow = false;
     },
-    popClose2: function() {
+    popClose2: function () {
       this.payWayPopShow1 = false;
     },
-    popClose1: function() {
+    popClose1: function () {
       this.contratWayPopShow = false;
     },
     // 重新结算
-    _reSettleCart: function(carts, cardNo) {
-      console.log(333);
+    _reSettleCart: function (carts,cardNo,index) {
+      console.log('carts,cardNo,index',carts,cardNo,index);
       this.$Loading.open();
       let url = "/app/json/app_cart/SettleCart";
-      let paramsData = this.paramsData;
+      let paramsData = this.paramsDataList[index];
+      console.log('paramsData',paramsData)
       paramsData.couNo = [];
       if (carts) {
         paramsData.carts = carts;
       } else {
-        if (this.usedCoupons.length > 0) {
-          for (let i = 0; i < this.usedCoupons.length; i++) {
-            paramsData.couNo.push(this.usedCoupons[i].couNo);
+        if (this.usedCouponsList[index].length > 0) {
+          for (let i = 0; i < this.usedCouponsList[index].length; i++) {
+            paramsData.couNo.push(this.usedCouponsList[index][i].couNo);
           }
         } else {
           paramsData.couNo.push("-1");
         }
+      }
+      if(paramsData.couNo.length == 0 ){
+        paramsData.couNo = ['-1'];
       }
       paramsData.limitWalletCardNo = cardNo;
 
@@ -2089,16 +2165,16 @@ export default {
         }
       }
       paramsData.payDigital = arr;
-
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           this.complete = true;
           if (data.status == 0) {
             this.hasShengxian = false;
-            this.lastRes = data.data;
-            this.paramsData = paramsData;
+            this.occurList[index] = data.data.occur[0];
+            console.log('this.occurList[index]',this.occurList)
+            this.paramsDataList[index] = paramsData;
             this.initData();
             if (this.limitType == "true") {
               this.getCardList();
@@ -2109,14 +2185,21 @@ export default {
             this.reloadSelectedCoupon();
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
           this.reloadSelectedCoupon();
         }
       );
     },
-    checkProductStock: function() {
+    checkProductStock: function () {
+      
+      if(this.occurList.length > 1 ){
+        if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+          this.$Toast("小程序暂不支持多店铺合并支付");
+          return;
+        }
+      }
       if (this.pageType == 2) {
         if (!this.selectItem.realName) {
           this.$Toast("请选择预约单联系方式！");
@@ -2130,14 +2213,7 @@ export default {
         }
       }
       console.log("save");
-      if (!this.occurData.store || this.occurData.store.length == 0) {
-        if (this.deliveryType == 1) {
-          this.$Toast("当前自提点无库存！");
-        } else {
-          this.$Toast("当前地址无库存！");
-        }
-        return;
-      }
+
       // 判断地区
       if (this.deliveryType == 1) {
         if (
@@ -2156,94 +2232,112 @@ export default {
         }
         this.$bridgefunc.vuexStorage();
       }
-      if (
-        !(this.$store.state.mall2.selectAddress.id > 0) &&
-        this.deliveryType == 2 &&
-        this.occurData.needVirtualUserPhone != "1"
-      ) {
-        if (this.$route.params.productType != 514) {
-          this.$Toast("请维护并选择收货地址！");
+
+      for (let index = 0; index < this.occurList.length; index++) {
+        if (
+          this.occurList[index].cashCouponFaceValue > this.occurList[index].cashCouponAmount
+        ) {
+          this.$Toast('您的优惠券金额比订单金额大,无法使用,请重新选择');
+          break
+        }
+        if (!this.occurList[index].store || this.occurList[index].store.length == 0) {
+          if (this.deliveryType == 1) {
+            this.$Toast("当前自提点无库存！");
+          } else {
+            this.$Toast("当前地址无库存！");
+          }
           return;
         }
-      }
+        if (
+          !(this.$store.state.mall2.selectAddress.id > 0) &&
+          this.deliveryType == 2 &&
+          this.occurList[index].needVirtualUserPhone != "1"
+        ) {
+          if (this.$route.params.productType != 514) {
+            this.$Toast("请维护并选择收货地址！");
+            return;
+          }
+        }
+        // if (this.occurData.needPickupId == "1") {
+        //   if (!(this.$store.state.mall2.zitiAddress.id > 0)) {
+        //     this.$Toast("请选择商品兑换点！");
+        //     return;
+        //   }
+        // }
 
-      if (this.occurData.needPickupId == "1") {
-        if (!(this.$store.state.mall2.zitiAddress.id > 0)) {
-          this.$Toast("请选择商品兑换点！");
+        // 判断库存是否足够 提交订单先判断库存
+        let storeArr = [];
+        let carts = [];
+        let hasNoStockItem = false;
+        for (let i = 0; i < this.occurList[index].store.length; i++) {
+          let store = this.occurList[index].store[i];
+          let item = {};
+          item.storeName = store.storeName;
+          let idata = this.getNoStockImgArrs(store);
+          carts = carts.concat(idata.canBuyArr);
+          item.noStockArr = idata.noStockArr;
+          if (idata.noStockArr.length > 0) {
+            hasNoStockItem = true;
+          }
+          storeArr.push(item);
+        }
+        if (carts.length == 0) {
+          this.$Toast("当前区域商品库存不足！");
           return;
+        }
+        if (this.cardBalance.balance - this.number <= 0) {
+          this.$Toast("当前区域商品库存不足！");
+          return;
+        }
+        if (hasNoStockItem) {
+          NoStock.open({
+            initData: {
+              listData: storeArr,
+            },
+            cancelEvent: () => {
+              NoStock.close();
+            },
+            submitEvent: () => {
+              NoStock.close();
+              this._reSettleCart(carts,undefined,index);
+            },
+          });
+          break
+        } else {
+          // if (this.pageType == 2) {
+          //   if (this.payWayText == "提货付款") {
+          //     //如果提货付款方式
+          //     this.overFlag = true;
+          //     this._submitOrder(carts);
+          //   } else {
+          //     // 不是提货付款，校验金额
+          //     this.checkHighest_recharge(carts);
+          //   }
+          // } else {
+          //   this.checkCouponPrice(carts,index);
+          // }
+          this.checkNeedPwd(carts,index);
         }
       }
 
       // 判断是否填写推荐人
-      if (this.occurData && this.occurData.needReferrer) {
-        if (!this.referrer || this.referrer.length == 0) {
-          this.$Toast("请填写推荐人");
-          return false;
-        }
-      }
+      // if (this.occurData && this.occurData.needReferrer) {
+      //   if (!this.referrer || this.referrer.length == 0) {
+      //     this.$Toast("请填写推荐人");
+      //     return false;
+      //   }
+      // }
 
-      for (let i = 0; i < this.payDigitals.length; i++) {
-        let d = this.payDigitals[i];
-        if (d.payDigital > 0 && d.payDigital > d.userBalanceDigital) {
-          let str = "可用";
-          str += this.getDigitalDisplayName(d.acctType);
-          str += "余额不足！";
-          this.$Toast(str);
-          return;
-        }
-      }
-
-      // 判断库存是否足够 提交订单先判断库存
-      let storeArr = [];
-      let carts = [];
-      let hasNoStockItem = false;
-      for (let i = 0; i < this.occurData.store.length; i++) {
-        let store = this.occurData.store[i];
-        let item = {};
-        item.storeName = store.storeName;
-        let idata = this.getNoStockImgArrs(store);
-        carts = carts.concat(idata.canBuyArr);
-        item.noStockArr = idata.noStockArr;
-        if (idata.noStockArr.length > 0) {
-          hasNoStockItem = true;
-        }
-        storeArr.push(item);
-      }
-      if (carts.length == 0) {
-        this.$Toast("当前区域商品库存不足！");
-        return;
-      }
-      if (this.cardBalance.balance - this.number <= 0) {
-        this.$Toast("当前区域商品库存不足！");
-        return;
-      }
-      if (hasNoStockItem) {
-        NoStock.open({
-          initData: {
-            listData: storeArr
-          },
-          cancelEvent: () => {
-            NoStock.close();
-          },
-          submitEvent: () => {
-            NoStock.close();
-            this._reSettleCart(carts);
-          }
-        });
-      } else {
-        if (this.pageType == 2) {
-          if (this.payWayText == "提货付款") {
-            //如果提货付款方式
-            this.overFlag = true;
-            this._submitOrder(carts);
-          } else {
-            // 不是提货付款，校验金额
-            this.checkHighest_recharge(carts);
-          }
-        } else {
-          this.checkCouponPrice(carts);
-        }
-      }
+      // for (let i = 0; i < this.payDigitals.length; i++) {
+      //   let d = this.payDigitals[i];
+      //   if (d.payDigital > 0 && d.payDigital > d.userBalanceDigital) {
+      //     let str = "可用";
+      //     str += this.getDigitalDisplayName(d.acctType);
+      //     str += "余额不足！";
+      //     this.$Toast(str);
+      //     return;
+      //   }
+      // }
     },
     // 判断是否超过最大支付金额
     checkHighest_recharge(carts) {
@@ -2261,7 +2355,7 @@ export default {
           className: "price-con",
           getContainer: ".placeorder",
           cancelButtonText: "算了吧~",
-          message: `您的订单金额已到达改价金额${this.$store.state.globalConfig.bulkpurchase_modifyprice}元，可选择联系管理员进行改价后进行支付`
+          message: `您的订单金额已到达改价金额${this.$store.state.globalConfig.bulkpurchase_modifyprice}元，可选择联系管理员进行改价后进行支付`,
         })
           .then(() => {
             that.checkCouponPrice(carts);
@@ -2275,104 +2369,341 @@ export default {
         that.checkCouponPrice(carts);
       }
     },
-    checkCouponPrice: function(carts) {
+    checkCouponPrice: function (carts,index) {
       if (
-        this.occurData.cashCouponFaceValue > this.occurData.cashCouponAmount
+        this.occurList[index].cashCouponFaceValue > this.occurList[index].cashCouponAmount
       ) {
-        this.$MessageBox
-          .confirm("您的优惠券金额比订单金额大，确定使用吗？", "提示", {
-            confirmButtonText: "确定"
-          })
-          .then(action => {
-            this.checkNeedPwd(carts);
-          })
-          .catch(action => {});
+        // this.$MessageBox
+        //   .confirm("您的优惠券金额比订单金额大，确定使用吗？", "提示", {
+        //     confirmButtonText: "确定",
+        //   })
+        //   .then((action) => {
+        //     this.checkNeedPwd(carts,index);
+        //   })
+        //   .catch((action) => {});
+        this.$Toast('您的优惠券金额比订单金额大,无法使用,请重新选择');
+        return
       } else {
-        this.checkNeedPwd(carts);
+        this.checkNeedPwd(carts,index);
       }
     },
-    checkNeedPwd: function(carts) {
+    checkNeedPwd: function (carts,index) {
       // needPayPwd: false, // 是否需要支付密码
       // payPwdState: 0, // 支付密码状态 0 未设置支付密码 1 支付密码已锁定 2 已设置支付密码
-      this.digitalPWD = "";
-      if (this.occurData.needPayPwd) {
-        // 是否需要支付密码
-        let hasDigitail = true;
-        // for (let i = 0; i < this.payDigitals.length; i++) {
-        //   let d = this.payDigitals[i]
-        //   if (d.payDigital > 0) {
-        //     hasDigitail = true
-        //     break ;
-        //   }
-        // }
-        if (hasDigitail) {
-          // 是否需要虚拟支付
-          if (this.occurData.payPwdState == "1") {
-            this.$Toast("支付密码已锁定，请稍后再试！");
-            return;
-          }
-          DigitalPwd.open({
-            initData: {
-              payPwdState: this.occurData.payPwdState
-            },
-            toSettingPwd: () => {
-              this.$router.push({
-                path: "/usercenter/nosetpwd",
-                query: {
-                  isSet: 0
-                }
-              });
-              DigitalPwd.close();
-            },
-            inputFinished: value => {
-              this.digitalPWD = value;
-              this._submitOrder(carts);
-              DigitalPwd.close();
-            }
-          });
-        } else {
-          this._submitOrder(carts);
-        }
-      } else {
-        this._submitOrder(carts);
+      // this.digitalPWD = "";
+      // if (this.occurData.needPayPwd) {
+      //   // 是否需要支付密码
+      //   let hasDigitail = true;
+      //   // for (let i = 0; i < this.payDigitals.length; i++) {
+      //   //   let d = this.payDigitals[i]
+      //   //   if (d.payDigital > 0) {
+      //   //     hasDigitail = true
+      //   //     break ;
+      //   //   }
+      //   // }
+      //   if (hasDigitail) {
+      //     // 是否需要虚拟支付
+      //     if (this.occurData.payPwdState == "1") {
+      //       this.$Toast("支付密码已锁定，请稍后再试！");
+      //       return;
+      //     }
+      //     DigitalPwd.open({
+      //       initData: {
+      //         payPwdState: this.occurData.payPwdState,
+      //       },
+      //       toSettingPwd: () => {
+      //         this.$router.push({
+      //           path: "/usercenter/nosetpwd",
+      //           query: {
+      //             isSet: 0,
+      //           },
+      //         });
+      //         DigitalPwd.close();
+      //       },
+      //       inputFinished: (value) => {
+      //         this.digitalPWD = value;
+      //         this._submitOrder(carts);
+      //         DigitalPwd.close();
+      //       },
+      //     });
+      //   } else {
+      //     this._submitOrder(carts);
+      //   }
+      // } else {
+      //   this._submitOrder(carts);
+      // }
+      this.cartsList.push(carts)
+      if(index == this.occurList.length-1){
+        // this._submitOrder(carts);
+        this.concatSubmit()
       }
     },
-    pustLiveStreamMsg: function() {
+    pustLiveStreamMsg: function () {
       if (this.lbId == "") {
         return;
       }
       let url = "/app/json/live_broadcast/comment";
       let params = {
         lbId: this.lbId,
-        content: "【下单】成功下单 " + this.lsProductName + " 🎉🎉🎉"
+        content: "【下单】成功下单 " + this.lsProductName + " 🎉🎉🎉",
       };
 
       this.$http.post(url, params).then(
-        res => {
+        (res) => {
           let data = res.data;
           if (data.status == 0) {
           } else {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           console.log(error);
         }
       );
     },
-    updateBargainPayInfo: function(item) {
+    updateBargainPayInfo: function (item) {
       let url = "/app/json/user_bargain/updateBargainPayInfo";
       let params = {
         id: item.id,
-        orderId: item.orderId
+        orderId: item.orderId,
       };
-      this.$http.post(url, params).then(res => {
+      this.$http.post(url, params).then((res) => {
         // 砍价 前端不进行任何操作
       });
     },
-    _submitOrder: function(carts) {
+    setWxOrderInfo(){
+      let obj = {
+        state: 3,
+        orderId: this.submitDataList[0].orderId,
+        orderType: this.submitDataList[0].orderType,
+        tradeNo: this.submitDataList[0].tradeNo,
+        tag: 1,
+        deliverCheckcode: '',
+        deviceCode: '',
+        storeOuCode: '',
+        stationName: '',
+        selectedIndex: "1",
+        orderCategory: '',
+        vipUnitUserCode: '',
+        type: "",
+      };
+      this.$http.post('/app/json/home/vueAppTempData',{tempData:obj}).then(res=>{
+        if(res.data.status == 0){
+          let wxOrderInfoKey = "";
+          wxOrderInfoKey = res.data.data;
+          this.enterSuccess(wxOrderInfoKey)
+        }
+      })
+    },
+
+    enterSuccess(wxOrderInfoKey){
+      console.log('payInfoList',JSON.parse(JSON.parse(this.payInfoList[0].payInfo)))
+      let payInfo = JSON.parse(JSON.parse(this.payInfoList[0].payInfo));
+      let billNo = "";
+      if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+        //时代微信小程序支付
+        // let info = JSON.parse(JSON.parse(payInfo))
+        // console.log('info-info-info',info)
+        // let wxPayInfo = JSON.parse(info.payData)
+        // console.log('wxPayInfo-wxPayInfo-wxPayInfo',wxPayInfo)
+
+        let wxPayInfo = JSON.parse(payInfo.payData);
+        let redirectUrl = `/app-vue/app/index.html#/mall2/paysuccess?tradeNo=${this.submitDataList[0].tradeNo}&orderId=${this.submitDataList[0].orderId}`;
+
+        // if(isGroup){
+        //   redirectUrl = `/app-vue/app/index.html#/group_detail?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }else{
+        //   redirectUrl = `/app-vue/app/index.html#/paysuccess?wxOrderInfoKey=${wxOrderInfoKey}`
+        // }
+
+        // isGroup ? redirectUrl = "/app-vue/app/index.html#/group_detail" : redirectUrl = `/app-vue/app/index.html#/mall2/paysuccess?tradeNo=${tradeNo}&orderId=${orderId}`;
+
+        let params = {
+          package: wxPayInfo.package,
+          noncestr: wxPayInfo.nonceStr,
+          timestamp: wxPayInfo.timeStamp,
+          sign: wxPayInfo.paySign,
+          signType: wxPayInfo.signType,
+          redirectUrl:redirectUrl,
+          params:{
+            wxOrderInfoKey:wxOrderInfoKey
+          }
+          // wxOrderInfoKey: wxOrderInfoKey,
+          // isGroup: isGroup
+        }
+        console.log('params-params-params',params)
+        this.$Loading.close();
+        wx.miniProgram.navigateTo({
+          url: `/pages/common/repayment/index?payInfo=${encodeURIComponent(JSON.stringify(params))}`
+        })
+        console.log('跳转小程序')
+      }else{
+        this.payInfoList.forEach(e => {
+          billNo += JSON.parse(JSON.parse(e.payInfo)).billNo + ",";
+        });
+        console.log("唤起邻里邦支付平台");
+        let currentOrderDetails = {
+          state: 3,
+          orderId: this.submitDataList[0].orderId,
+          orderType: this.submitDataList[0].orderType,
+          tradeNo: this.submitDataList[0].tradeNo,
+          tag: 1,
+          deliverCheckcode: "",
+          deviceCode: '', //正常流程支付也为空 待保留
+          storeOuCode: '', //正常流程支付也为空 待保留
+          stationName: '', //正常流程支付也为空 待保留
+        };
+        console.log('currentOrderDetails',currentOrderDetails);
+        console.log('payInfo',payInfo);
+        console.log('billNo',billNo);
+        localStorage.setItem("currentOrderDetails", JSON.stringify(currentOrderDetails));
+        this.$Loading.close();
+        // 唤起邻里邦支付平台
+        window.location.href = `x-engine-json://yjzdbill/YJBillPayment?args=${encodeURIComponent(
+          JSON.stringify({
+            businessCstNo: payInfo.businessCstNo,
+            platMerCstNo: payInfo.platMerCstNo,
+            tradeMerCstNo: payInfo.tradeMerCstNo,
+            billNo: billNo,
+            appScheme: "x-engine-c",
+            payType: false,
+          })
+        )}&callback=${encodeURIComponent(location.origin + `/app-vue/app/index.html#/mall2/paysuccess?orderId=${this.submitDataList[0].orderId}&tradeNo=${this.submitDataList[0].tradeNo}&selectedIndex=1&orderCategory=&vipUnitUserCode=&type=&ret={ret}`)}`;
+      }
+    },
+    concatPay(){
+      this.$Loading.open();
+      let promiseList = [];
+      console.log('this.submitDataList',this.submitDataList)
+      this.submitDataList.forEach((e,i)=>{
+        promiseList.push(this.toPay(e))
+      })
+      Promise.allSettled(promiseList).then(res=>{
+        console.log('resresresresresresres',res)
+        res.forEach((item,index)=>{
+          if(item.status == "fulfilled"){
+            console.log(item,index)
+            if(item.value.data.status == 0){
+              this.payInfoList.push(item.value.data.data) 
+              if(index == res.length - 1){
+                if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
+                  this.setWxOrderInfo();
+                }else{
+                  this.enterSuccess();
+                }
+              }
+            }else{
+              this.$Loading.close();
+              this.$Toast(item.value.data.info)
+            }
+          }else{
+            this.$Loading.close();
+          }
+        })
+      })
+    },
+    toPay(params){
+      let url = '/app/json/app_shopping_order/pay';
+      let paramsData = {
+        token: this.$store.state.login.token,
+        orderType: params.orderType,
+        id: params.orderId,
+        orderId: params.orderId,
+        payMode: 260,
+        payModeSub: this.$store.state.webtype == 2 || this.$store.state.webtype == 3 ? 260003 : 260001,
+        // payModeSub: 260003,
+      };
+      return new Promise((resolve, reject) => {
+        this.$http.post(url, paramsData).then(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    },
+    concatSubmit(){
+      let promiseList = [];
+      for (let index = 0; index < this.occurList.length; index++) {
+        promiseList.push(this.orderSubmit(this.cartsList[index],this.paramsDataList[index],this.usedCouponsList[index],index))
+      }
+
+      Promise.allSettled(promiseList).then(res=>{
+        console.log('resresresresresresres',res)
+        res.forEach((item,index)=>{
+          if(item.status == "fulfilled"){
+            console.log(item,index)
+            if(item.value.data.status == 0){
+              this.submitDataList.push(item.value.data.data) 
+              if(index == res.length - 1){
+                this.concatPay();
+              }
+            }else{
+              this.$Loading.close();
+              this.$Toast(item.value.data.info)
+            }
+          }else{
+            this.$Loading.close();
+          }
+        })
+      })
+    },
+    orderSubmit(carts,paramsData,usedCoupons,index){
+      let url = "/app/json/app_shopping_order/submit";
+      let submitData = this.$util.deepClone(paramsData);
+      submitData.pickupId = this.$store.state.mall2.zitiAddress.id;
+      submitData.orderScene = this.$util.orderScene();
+      submitData.carts = carts;
+      submitData.couNo = [];
+      if (usedCoupons.length > 0) {
+        for (let i = 0; i < usedCoupons.length; i++) {
+          if(usedCoupons[i].couNo != '-1'){
+            submitData.couNo.push(usedCoupons[i].couNo);
+          }
+        }
+      }
+      submitData.remark = [];
+      for (let i = 0; i < this.occurList[index].store.length; i++) {
+        let astore = this.occurList[index].store[i];
+        let rm = {
+          storeOuCode: astore.storeOuCode,
+          remark: astore.remark,
+        };
+        submitData.remark.push(rm);
+      }
+      submitData.userAddress = this.$store.state.mall2.selectAddress;
+      submitData.userAddressId = this.$store.state.mall2.selectAddress.id;
+      submitData.token = this.$store.state.login.token;
+      submitData.payDigital = this.payDigitals;
+      //推荐人
+      // if (this.referrer && this.referrer.length) {
+      //   paramsData["rfrCode"] = this.referrer;
+      //   // 1 手动输入  2扫一扫
+      //   if (this.referrer == this.scanCode) {
+      //     paramsData["rfrCodeType"] = 2;
+      //   } else {
+      //     paramsData["rfrCodeType"] = 1;
+      //   }
+      // }
+      console.log('paramsData',submitData);
+      return new Promise((resolve, reject) => {
+        this.$http.post(url, submitData).then(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+
+    },
+    _submitOrder: function (carts) {
       let url = "/app/json/app_shopping_order/submit";
       let paramsData = this.$util.deepClone(this.paramsData);
+      paramsData.pickupId = this.$store.state.mall2.zitiAddress.id;
       if (this.deliveryType == 1) {
         paramsData.pickupReceiver = this.$store.state.mall2.pickUpUser;
         paramsData.pickupMobile = this.pickupPhone;
@@ -2408,7 +2739,7 @@ export default {
         let astore = this.occurData.store[i];
         let rm = {
           storeOuCode: astore.storeOuCode,
-          remark: astore.remark
+          remark: astore.remark,
         };
         paramsData.remark.push(rm);
       }
@@ -2450,9 +2781,11 @@ export default {
         paramsData.userInvoice.invoiceUserName = this.currentInvoice.name;
         paramsData.userInvoice.invoiceUserEmail = this.currentInvoice.email;
         paramsData.userInvoice.invoiceUserMobile = this.currentInvoice.phone;
-        paramsData.userInvoice.invoiceUserOrgTaxNo = this.currentInvoice.identifyNumber;
+        paramsData.userInvoice.invoiceUserOrgTaxNo =
+          this.currentInvoice.identifyNumber;
         // 票内容类型(0: 商品明细, 1:商品类别)
-        paramsData.userInvoice.invoiceDetailType = this.currentInvoice.selectedGoodsType;
+        paramsData.userInvoice.invoiceDetailType =
+          this.currentInvoice.selectedGoodsType;
       }
 
       // 心愿单，下单相关
@@ -2490,14 +2823,14 @@ export default {
       this.$Loading.open();
       console.log(paramsData);
       this.$http.post(url, paramsData).then(
-        res => {
+        (res) => {
           this.$Loading.close();
           let data = res.data;
           if (data.status == 0) {
             if (paramsData.bargainOrderId) {
               this.updateBargainPayInfo({
                 id: paramsData.bargainOrderId,
-                orderId: data.data.orderId
+                orderId: data.data.orderId,
               });
             }
             sessionStorage.removeItem("RHY_Pickup_Address");
@@ -2512,8 +2845,8 @@ export default {
                   query: {
                     payInfo: JSON.stringify(data.data),
                     carts: JSON.stringify(carts),
-                    deliveryType: this.deliveryType
-                  }
+                    deliveryType: this.deliveryType,
+                  },
                 });
               } else {
                 this.$router.replace({
@@ -2522,8 +2855,8 @@ export default {
                     selectedIndex: 1,
                     orderCategory: this.paramsData.orderCategory,
                     vipUnitUserCode: this.paramsData.vipUnitUserCode,
-                    name: this.$route.params.name
-                  }
+                    name: this.$route.params.name,
+                  },
                 });
               }
             } else {
@@ -2538,8 +2871,8 @@ export default {
                     buyType: this.buyType, // songli
                     giftCards: JSON.stringify(carts),
                     deliveryType: this.deliveryType,
-                    lbId: this.lbId
-                  }
+                    lbId: this.lbId,
+                  },
                 });
               } else {
                 this.$router.replace({
@@ -2554,8 +2887,8 @@ export default {
                     deliveryType: this.deliveryType,
                     name: this.$route.params.name,
                     lbId: this.lbId,
-                    cutPrice: true // 砍价
-                  }
+                    cutPrice: true, // 砍价
+                  },
                 });
               }
             }
@@ -2563,13 +2896,13 @@ export default {
             this.$Toast(data.info);
           }
         },
-        error => {
+        (error) => {
           this.$Loading.close();
           this.$Toast("请求数据失败！");
         }
       );
     },
-    returnStoreProducts: function(store) {
+    returnStoreProducts: function (store) {
       let num = 0;
       let num1 = 0; // 商品个数总数
       let proArr = [];
@@ -2611,104 +2944,166 @@ export default {
         num: num,
         proNum: num1,
         proArr: proArr,
-        serviceArr: serviceArr
+        serviceArr: serviceArr,
       };
       store.storeProData = storeProData;
 
-      this.count = store.storeProData.proNum;
     },
-    initData: function() {
+    initData: function () {
+      // this.pointsGain = this.lastRes.pointsGain;
+      // this.occurData = this.lastRes.occur[0];
+      // let beginPickupTime = this.occurData.beginPickupTime;
+      // if (beginPickupTime) {
+      //   this.pickupStartTime = new Date(beginPickupTime.replace(/-/g, "/"));
+      // }
+      // if (!this.occurData) {
+      //   this.occurData = {};
+      //   if (this.deliveryType == 1) {
+      //     this.$Toast("当前自提点无库存！");
+      //   } else {
+      //     this.$Toast("当前地址无库存！");
+      //   }
+      //   return;
+      // }
+
+      // for (let i = 0; i < this.occurData.store.length; i++) {
+      //   let store = this.occurData.store[i];
+      //   this.returnStoreProducts(store);
+      // }
+
+      // let couNo = this.occurData.couNo;
+      // this.usedCoupons = [];
+      // if (couNo && couNo.length > 0) {
+      //   for (let i = 0; i < couNo.length; i++) {
+      //     this.usedCoupons.push({
+      //       couNo: couNo[i]
+      //     });
+      //   }
+      // }
+      // this.payDigitals = [];
+      // for (let i = 0; i < this.occurData.digitalList.length; i++) {
+      //   let dItem = this.occurData.digitalList[i];
+      //   if (dItem.acctType == "LimitWallet") {
+      //     this.cardAmount = dItem.userBalanceDigital;
+      //     this.userCanUseDigital = dItem.userCanUseDigital;
+      //   }
+      //   if (dItem.payDigital > dItem.fixedDigital) {
+      //     this.payDigitals.push({
+      //       acctType: dItem.acctType,
+      //       userBalanceDigital: dItem.userBalanceDigital,
+      //       payDigital: dItem.userCanUseDigital + dItem.fixedDigital
+      //     });
+      //   } else {
+      //     this.payDigitals.push({
+      //       acctType: dItem.acctType,
+      //       userBalanceDigital: dItem.userBalanceDigital,
+      //       payDigital: dItem.fixedDigital
+      //     });
+      //   }
+      // }
+
+      // this.reloadSelectedCoupon();
+
       this.pointsGain = this.lastRes.pointsGain;
       this.occurData = this.lastRes.occur[0];
-      let beginPickupTime = this.occurData.beginPickupTime;
-      if (beginPickupTime) {
-        this.pickupStartTime = new Date(beginPickupTime.replace(/-/g, "/"));
-      }
-      if (!this.occurData) {
-        this.occurData = {};
-        if (this.deliveryType == 1) {
-          this.$Toast("当前自提点无库存！");
-        } else {
-          this.$Toast("当前地址无库存！");
+      this.occurList = this.lastRes.occur;
+      // let beginPickupTime = this.occurData.beginPickupTime;
+      // if (beginPickupTime) {
+      //   this.pickupStartTime = new Date(beginPickupTime.replace(/-/g, "/"));
+      // }
+      for (let index = 0; index < this.occurList.length; index++) {
+        if (!this.occurList[index]) {
+          this.occurList[index] = {};
+          if (this.deliveryType == 1) {
+            this.$Toast("当前自提点无库存！");
+          } else {
+            this.$Toast("当前地址无库存！");
+          }
+          return;
         }
-        return;
-      }
 
-      for (let i = 0; i < this.occurData.store.length; i++) {
-        let store = this.occurData.store[i];
-        this.returnStoreProducts(store);
-      }
+        for (let i = 0; i < this.occurList[index].store.length; i++) {
+          let store = this.occurList[index].store[i];
+          this.returnStoreProducts(store);
+          this.count += store.storeProData.proNum;
+        }
 
-      let couNo = this.occurData.couNo;
-      this.usedCoupons = [];
-      if (couNo && couNo.length > 0) {
-        for (let i = 0; i < couNo.length; i++) {
-          this.usedCoupons.push({
-            couNo: couNo[i]
-          });
-        }
-      }
-      this.payDigitals = [];
-      for (let i = 0; i < this.occurData.digitalList.length; i++) {
-        let dItem = this.occurData.digitalList[i];
-        if (dItem.acctType == "LimitWallet") {
-          this.cardAmount = dItem.userBalanceDigital;
-          this.userCanUseDigital = dItem.userCanUseDigital;
-        }
-        if (dItem.payDigital > dItem.fixedDigital) {
-          this.payDigitals.push({
-            acctType: dItem.acctType,
-            userBalanceDigital: dItem.userBalanceDigital,
-            payDigital: dItem.userCanUseDigital + dItem.fixedDigital
-          });
-        } else {
-          this.payDigitals.push({
-            acctType: dItem.acctType,
-            userBalanceDigital: dItem.userBalanceDigital,
-            payDigital: dItem.fixedDigital
-          });
-        }
-      }
 
-      this.reloadSelectedCoupon();
+        let couNo = this.occurList[index].couNo;
+        let usedCoupons = [];
+        if (couNo && couNo.length > 0) {
+          for (let i = 0; i < couNo.length; i++) {
+            usedCoupons.push({
+              couNo: couNo[i],
+            });
+          }
+        }
+        this.usedCouponsList.push(usedCoupons);
+        // for (let i = 0; i < this.occurData.digitalList.length; i++) {
+        //   let dItem = this.occurData.digitalList[i];
+        //   if (dItem.acctType == "LimitWallet") {
+        //     this.cardAmount = dItem.userBalanceDigital;
+        //     this.userCanUseDigital = dItem.userCanUseDigital;
+        //   }
+        //   if (dItem.payDigital > dItem.fixedDigital) {
+        //     this.payDigitals.push({
+        //       acctType: dItem.acctType,
+        //       userBalanceDigital: dItem.userBalanceDigital,
+        //       payDigital: dItem.userCanUseDigital + dItem.fixedDigital,
+        //     });
+        //   } else {
+        //     this.payDigitals.push({
+        //       acctType: dItem.acctType,
+        //       userBalanceDigital: dItem.userBalanceDigital,
+        //       payDigital: dItem.fixedDigital,
+        //     });
+        //   }
+        // }
+        this.payDigitals = [];
+        this.reloadSelectedCoupon();
+
+      }
     },
-    noMath: function() {
+    noMath: function () {
       let noMatch = this.$route.params.noMatch
         ? this.$route.params.noMatch
         : false;
       if (noMatch) {
         this.$MessageBox
           .confirm("没有相关区域的收货地址，是否要添加？", "提示", {
-            confirmButtonText: "确定"
+            confirmButtonText: "确定",
           })
-          .then(action => {
+          .then((action) => {
             this.$router.push({
               path: "addaddress",
               query: {
                 type: 1,
                 isSave: true,
-                direct: "direct"
-              }
+                direct: "direct",
+              },
             });
           })
-          .catch(action => {});
-      }else {
-        if(this.$store.state.mall2.selectAddress.id == "" || this.$store.state.mall2.selectAddress.id == "undefined") {
+          .catch((action) => {});
+      } else {
+        if (
+          this.$store.state.mall2.selectAddress.id == "" ||
+          this.$store.state.mall2.selectAddress.id == "undefined"
+        ) {
           this.$MessageBox
             .confirm("没有相关区域的收货地址，是否要添加？", "提示", {
-              confirmButtonText: "确定"
+              confirmButtonText: "确定",
             })
-            .then(action => {
+            .then((action) => {
               this.$router.push({
                 path: "addaddress",
                 query: {
                   type: 1,
-                    isSave: true,
-                  direct: "direct"
-                }
+                  isSave: true,
+                  direct: "direct",
+                },
               });
             })
-          .catch(action => {});
+            .catch((action) => {});
         }
       }
     },
@@ -2718,9 +3113,9 @@ export default {
       this.$http
         .post("/app/json/wish_order/getRandomWishOrderConfig", {
           type: 2,
-          isDefault
+          isDefault,
         })
-        .then(res => {
+        .then((res) => {
           let data = res.data;
           if (data.status == 0) {
             this.wishData = data.data;
@@ -2728,23 +3123,25 @@ export default {
             this.$Toast(data.info);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$Toast(err);
         });
     },
-    getContentTop: function() {
+    getContentTop: function () {
       if (this.noNavTop) {
         return "top: 0px;";
       }
       return "";
     },
-    ...mapActions(["rfrCodeMapAction"])
+    ...mapActions(["rfrCodeMapAction"]),
   },
   activated() {
     if (this.isFirst) {
       this.isFirst = false;
     } else {
-      this._reSettleCart(null);
+      for(let index = 0; index < this.occurList.length; index++){
+        this._reSettleCart(null,undefined,index);
+      }
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -2759,7 +3156,7 @@ export default {
       this.$keepaliveHelper.deleteCache(this);
     }
     next();
-  }
+  },
 };
 </script>
 
@@ -2768,7 +3165,14 @@ export default {
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
 
-.adapter-iphoneX{
+.margin_div{
+  margin: 0 8px;
+  font-size: 0.37333rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.adapter-iphoneX {
   width: 100%;
   height: 34px;
   background-color: #fff;
@@ -2955,8 +3359,8 @@ export default {
         .rmb-div {
           text-align: end;
 
-          .count{
-            margin-right:10px;
+          .count {
+            margin-right: 10px;
           }
         }
 
