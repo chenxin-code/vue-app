@@ -152,7 +152,7 @@ export default {
     },
     toCollection() {
       if (this.wxenvironment()) {
-        this.pushNewWebview("/mall2/collection", params);
+        this.pushNewWebview("/mall2/collection");
       } else {
         this.$router.push({
           path: "/mall2/collection",
