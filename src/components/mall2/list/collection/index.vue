@@ -2,7 +2,7 @@
 
 <template>
   <div class="index">
-    <nav-top @backEvent="goBack"></nav-top>
+    <nav-top @backEvent="goBack" v-if="!wxenvironment()"></nav-top>
     <nav-content v-if="loaded">
       <div class="no-collection" ref="collection">
         <van-tabs v-model="active" @change="changeTabs" class="van-tab-container">
@@ -161,6 +161,10 @@
       }
     },
     methods: {
+      wxenvironment() {
+        let ua = window.navigator.userAgent.toLowerCase();
+        return ua.match(/MicroMessenger/i) == "micromessenger";
+      },
       goBack: function () {
         if (this.$route.query.backApp) {
           appNav.navigatorBack({ url: '0' }).then( res => {
@@ -422,7 +426,11 @@
       }
     },
     created() {
-      this.active = this.$route.query.active ? Number(this.$route.query.active) : 0
+      if(this.wxenvironment()) {
+        document.title = "我的收藏"
+      }
+      this.active = this.$route.query.active ? Number(this.$route.query.active) : 0;
+
     },
     mounted() {
       // this.collectionStore()

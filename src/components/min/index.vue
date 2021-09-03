@@ -235,11 +235,11 @@ export default {
             return;
           } else {
             console.log('----item.pageUrl-->', item.pageUrl);
-            // mall2/addresslist
+            mall2/addresslist
             if(this.wxenvironment()) {
               let routerList = [
-                '/mall2/addresslist',
-                "/minUserInfo",
+                '/mall2/addresslist', // 收货地址
+                "/minUserInfo", // 个人资料
               ]
               let newWebview = false;
               routerList.forEach(str => {

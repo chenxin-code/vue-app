@@ -2,7 +2,7 @@
 
 <template>
   <div class="browsing-list mall2">
-    <nav-top @backEvent="goBack">
+    <nav-top @backEvent="goBack" :noTitle="true" :showBackBtn="false">
       <div class="right-btn edit-btn theme_font_tint" style="right: 0px; line-height: 44px; height: 44px; top: 0px; padding-right: 10px;" v-if="showList.length > 0">
         <span @click="clearAll" v-if="!isEdit">清空</span>
         <span @click="showEdit" v-if="!isEdit">编辑</span>
