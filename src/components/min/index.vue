@@ -235,17 +235,29 @@ export default {
             return;
           } else {
             console.log('----item.pageUrl-->', item.pageUrl);
-            if(this.wxenvironment() && item.pageUrl.indexOf('minUserInfo') != -1) {
-              const ENV = this.$store.state.environment == "development" ? 'uat' : 'prod';
-              const targetUrl = encodeURIComponent(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#/minUserInfo`);
-              const token = this.$store.state.ythToken
-                ? this.$store.state.ythToken
-                : localStorage.getItem("ythToken");
-            console.log('-----token------>', token);
-             wx.miniProgram.navigateTo({
-                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`))}`
-              });
-              return ;
+            // mall2/addresslist
+            if(this.wxenvironment()) {
+              let routerList = [
+                '/mall2/addresslist',
+                "/minUserInfo",
+              ]
+              let newWebview = false;
+              routerList.forEach(str => {
+                if(item.pageUrl.indexOf(str) != -1) {
+                  newWebview = true;
+                }
+              })
+              if(newWebview) {
+                const ENV = this.$store.state.environment == "development" ? 'uat' : 'prod';
+                const targetUrl = encodeURIComponent(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${item.pageUrl}`);
+                const token = this.$store.state.ythToken
+                  ? this.$store.state.ythToken
+                  : localStorage.getItem("ythToken") || 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJvbDdpZ2pqRDhXZFJ1Q1FSUGJXT1NlVTFheHJFIiwic2NvcGUiOlsiYWxsIl0sImlkIjoyNTM4NTk5NjczNjY5NjE1NjI0LCJleHAiOjE2MzA3MjU0MzcsImF1dGhvcml0aWVzIjpbInZpc2l0b3IiXSwianRpIjoiOWFmYmUyYjUtNzQyMS00NTFiLWJlMmEtY2VlYTZmNTFkNmY4IiwiY2xpZW50X2lkIjoibWluaV9tYWxsIn0.AmrVvL1aPFuz-bLDdO2oNJ2WjuNTRSaKE2cOYctxplEKD5pO1CYqoDi08TmciwC5zaV-TJoGbMbTjnsdtN76ZAcmV5zi1r38EQEbf1CT3hpmhoCAn4pG_WDA1ZKkoQlYt5v3NADSJJgbDPueGN8gNVY5DjTG9OFWDZ_t-MEQgRnUBTMkr6VEwjY9ABwgw664SscOHMWXfOcFZYmrnwx-5JtJopl7TKMgadPkHXb6xQIBspnBs7Mtmnnf8ho5sqzO724CzYFKyF9hxQdKUidrqn9Z2KKvrerrDXk1DkjYqi0PNr4-HAVMJArk1hq1VRmr4tu7PVaUobeiXAFsw2w7Iw';
+                wx.miniProgram.navigateTo({
+                  url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`))}`
+                });
+                return ;
+              }
             }
             this.$router.push(item.pageUrl);
           }

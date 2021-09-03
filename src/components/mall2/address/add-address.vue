@@ -1,6 +1,6 @@
 <template>
   <div class="add-address mall2">
-    <nav-top :title="eventType==1?'新建收货人':'编辑收货地址'" @backEvent="backEvent"></nav-top>
+    <nav-top :title="eventType==1?'新建收货人':'编辑收货地址'" @backEvent="backEvent" v-if="!wxenvironment()"></nav-top>
     <nav-content>
       <div class="scrolcontent">
         <div class="shadow-con shadow-cell">
@@ -74,7 +74,10 @@
       }
     },
     methods: {
-
+      wxenvironment() {
+        let ua = window.navigator.userAgent.toLowerCase();
+        return ua.match(/MicroMessenger/i) == "micromessenger";
+      },
       phoneInputChange: function(e) {
         let num = parseInt(e);
         if(!this.$util.checkPhone(num)) {
@@ -308,6 +311,9 @@
 
     },
     created() {
+      if(wxenvironment()) {
+        document.title = this.eventType == 1 ?'新建收货人' : '编辑收货地址'
+      }
       let defaultProvince = this.$route.query.defaultProvince ? this.$route.query.defaultProvince : '';
       let defaultCity = this.$route.query.defaultCity ? this.$route.query.defaultCity : '';
       if (defaultProvince && defaultCity) {
