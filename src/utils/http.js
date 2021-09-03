@@ -125,7 +125,7 @@ Axios.interceptors.request.use(
       //删除token头，解决跨域问题
       delete config.headers.token
     }
-
+    
     //中台接口要带一体化token
 
     /*物业系统请求处理逻辑

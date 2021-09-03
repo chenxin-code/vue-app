@@ -1,31 +1,31 @@
 <template>
-  <div class="order">
+  <div class="order" :class="{ 'order-x': this.$util.getIsIphoneX_X() }">
     <van-sticky :offset-top="offsetTop">
       <nav-top
         navLeftName="我的订单"
-        navRightName="历史缴费记录"
+        navRightName="发票中心"
         @backEvent="goBack"
-        @navToPage="navToHistory"
+        @navToPage="navToInvoiceCenter"
       ></nav-top>
     </van-sticky>
-    <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <van-tabs
-        v-model="active"
-        swipeable
-        swipe-threshold="6"
-        title-active-color="#e5165a"
-        @click="navTo"
+    <!-- <van-sticky :offset-top="offsetTop" ref="stickyIndex"> -->
+    <van-tabs
+      v-model="active"
+      swipeable
+      swipe-threshold="6"
+      title-active-color="#e5165a"
+      @click="navTo"
+    >
+      <van-tab
+        :title="item.title"
+        v-for="(item, index) in orderStatusList"
+        :key="index"
+        title-class="tabTitle"
+        :name="item.components"
       >
-        <van-tab
-          :title="item.title"
-          v-for="(item, index) in orderStatusList"
-          :key="index"
-          title-class="tabTitle"
-          :name="item.components"
-        >
-        </van-tab>
-      </van-tabs>
-    </van-sticky>
+      </van-tab>
+    </van-tabs>
+    <!-- </van-sticky> -->
     <component
       v-bind:is="active"
       :key="$route.path + $route.query.time"
@@ -100,12 +100,15 @@ export default {
     // });
   },
   methods: {
-    //跳到历史欠缴记录页面
-    navToHistory() {
+    //跳到发票中心页面
+    navToInvoiceCenter() {
+      let url = "";
+      this.$store.state.environment == "production"
+        ? (url = `https://mall-prod-app-linli.timesgroup.cn:5000`)
+        : (url = `http://8.134.9.70/`);
       navToMicroApplication.openTargetRouter({
-        type: "microapp",
-        uri: "com.times.microapp.AppcPrepay", // 微应用包名
-        path: "/bill/index", // 微应用具体路由
+        type: "h5",
+        uri: url,
         hideNavbar: false
       });
     },
@@ -171,7 +174,10 @@ export default {
 #app .router_class.order {
   background: #F9F9F9;
   // overflow: auto;
-  top: 80px;
+  top: 70px;
+  &.order-x {
+    top: 85px;
+  }
 }
 
 .van-tab__pane, .van-tab__pane-wrapper {
@@ -182,7 +188,7 @@ export default {
   font-family: SourceHanSansCN-Medium, SourceHanSansCN;
 
   /deep/.van-tabs {
-    box-shadow: 0px 5px 10px 0px #F1F1F1;
+    box-shadow: 0px 10px 10px -3px #F1F1F1;
   }
 
   /deep/.van-tab {

@@ -1,15 +1,17 @@
 import sensors from "sa-sdk-javascript";
-import store from '../vuex/store'
-import Vue from 'vue'
+import store from "../vuex/store";
+import Vue from "vue";
 
-let initSensors = function () {
+let initSensors = function() {
   const tokenStr = "Bearer " + store.state.ythToken;
-  console.log('sensorssensorssensors', store.state.ythToken);
-  let url = '';
-  if (process.env.NODE_ENV == 'production') {
-    url = 'https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=production'
+  console.log("sensorssensorssensors", store.state.ythToken);
+  let url = "";
+  if (process.env.NODE_ENV == "production") {
+    url =
+      "https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=production";
   } else {
-    url = 'https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=llb_uat';
+    url =
+      "https://datasink-ss-prod-linli.timesgroup.cn:9106/sa?project=llb_uat";
   }
   sensors.init({
     server_url: `${url}&token=${tokenStr}`, // 接收地址
@@ -22,9 +24,9 @@ let initSensors = function () {
       clickmap: "not_collect",
       // 是否开启触达注意力图，not_collect 表示关闭，不会自动采集 $WebStay 事件，可以设置 'default' 表示开启。
       scroll_notice_map: "not_collect",
-      get_vtrack_config: false,
+      get_vtrack_config: false
     },
-    app_js_bridge: true,
+    app_js_bridge: true
     // ...options
   });
   // sensors.quick("autoTrack");
@@ -32,10 +34,11 @@ let initSensors = function () {
   // sensors.quick("autoTrack", {
   //   platform: "h5"
   // });
-  sensors.login(store.state.ythUserInfo.id);
+  try {
+    sensors.login(store.state.ythUserInfo.id);
+  } catch (error) {}
 
-  Vue.prototype.$sensors = sensors
-}
-
+  Vue.prototype.$sensors = sensors;
+};
 
 export default initSensors;

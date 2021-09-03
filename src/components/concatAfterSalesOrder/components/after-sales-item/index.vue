@@ -90,6 +90,7 @@ export default {
       } else {
         let url = "";
         let Authorization = "";
+        let isWx = false;
         this.$store.state.environment == "development"
           ? (url =
               "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleDetails")
@@ -100,8 +101,10 @@ export default {
           this.$store.state.webtype == "3"
         ) {
           Authorization = localStorage.getItem("ythToken");
+          isWx = true;
         } else {
           Authorization = this.$store.state.ythToken;
+          isWx = false;
         }
         // appNav
         //   .setNavBarHidden({
@@ -109,7 +112,7 @@ export default {
         //     isAnimation: true,
         //   })
         //   .then((res) => {});
-        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&tabShow=${true}&Authorization=${Authorization}`;
+        window.location.href = `${url}?afterSaleNo=${this.orderItem.orderNo}&tabShow=${isWx ? false : true}&Authorization=${Authorization}`;
       }
     },
   },

@@ -156,10 +156,7 @@
     <div class="withdraw" @click="goTocommission">
       <img src="./images/money.png" alt="" />
       <div class="dingwei">
-        <p style="font-size:14px">
-          <span style="font-size:6px">￥</span
-          >{{ $util.toDecimal2(this.balancesAmount) }}
-        </p>
+        <p><span>￥</span>{{ $util.toDecimal2(this.balancesAmount) }}</p>
         <p>点击提现</p>
       </div>
     </div>
@@ -347,7 +344,7 @@ export default {
               link: getLocation(window.location.href),
               imageurl:
                 this.shareItemData.groupbuyActivityPicurl +
-                "?x-oss-process=image/format,jpg/quality,Q_10",
+                `?x-oss-process=image/format,jpg/quality,Q_${this.$util.isAndroid()?'50':'10'}`,
               // miniProgramType: process.env.NODE_ENV == "production" ? 2 : 0,
               miniProgramType:
                 this.$store.state.environment == "production" ? 0 : 2,
@@ -754,6 +751,8 @@ export default {
   width: 90px;
   height: 90px;
   text-align: center;
+  font-size: 14px;
+  font-weight: bold;
   img{
     position: absolute;
     width: 100%;
@@ -762,13 +761,18 @@ export default {
     top: 0;
   }
   .dingwei{
-    // position: absolute;
     position: relative;
-    // left: 10%;
-    // bottom: 10%;
     color: #fff;
     top: 48px;
     line-height: 15px;
+    p {
+      font-size:14px;
+      font-weight: bold;
+    }
+    span {
+      font-size:6px;
+      font-weight: bold;
+    }
   }
 }
 </style>
