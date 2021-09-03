@@ -5,7 +5,7 @@
     class="order mall2"
     :class="{theme_sys_base:orderCategory == 1,theme_sys_blue:orderCategory == 1}"
   >
-    <nav-top @backEvent="backEvent">
+    <nav-top @backEvent="backEvent" v-if="!wxenvironment()">
       <div
         class="right-btn theme_font_gray"
         style="right: 0px; height: 44px; top: 0px; padding-right: 10px;font-size: 12px;"
@@ -556,6 +556,10 @@ export default {
 
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     dealPushDeliveryBtn(time) {
       let num = this.$store.state.globalConfig.order_delivery_remind_displaytime
       var curDate = new Date(time);
@@ -1417,6 +1421,9 @@ export default {
     }
   },
   created() {
+    if(this,this.wxenvironment) {
+      document.title = "订单列表"
+    }
     //this.$store.state.globalConfig.pickup_cancel_order_tip = '123123123'
     //this.$store.state.globalConfig.delivery_cancel_order_tip = '4444545454'
     if (this.$store.state.globalConfig.delivertype_default == '1') {

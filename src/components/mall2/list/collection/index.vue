@@ -3,7 +3,7 @@
 <template>
   <div class="index">
     <nav-top @backEvent="goBack" v-if="!wxenvironment()"></nav-top>
-    <div v-if="loaded">
+    <nav-content v-if="loaded">
       <div class="no-collection" ref="collection">
         <van-tabs v-model="active" @change="changeTabs" class="van-tab-container">
           <!--            <van-tabs v-model="active" @click="collectionStore(active)">-->
@@ -103,7 +103,7 @@
           </van-tab>
         </van-tabs>
       </div>
-    </div>
+    </nav-content>
     <van-action-sheet
       v-model="show"
       :actions="actions"
