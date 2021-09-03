@@ -234,6 +234,13 @@ export default {
             window.location.href = "tel:400-111-9928";
             return;
           } else {
+            const targetUrl = `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/minUserInfo`;
+            if(this.wxenvironment() && item.pageUrl.indexOf('minUserInfo') != -1) {
+              wx.miniProgram.navigateTo({
+                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-prod-app-linli.timesgroup.cn/app/index?token=${this.$store.state.ythToken}&redirect=${encodeURIComponent(targetUrl)}`))}`
+              });
+              return ;
+            }
             this.$router.push(item.pageUrl);
           }
         }
