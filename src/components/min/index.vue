@@ -234,10 +234,15 @@ export default {
             window.location.href = "tel:400-111-9928";
             return;
           } else {
-            const targetUrl = `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/minUserInfo`;
+            console.log('----item.pageUrl-->', item.pageUrl);
             if(this.wxenvironment() && item.pageUrl.indexOf('minUserInfo') != -1) {
+              const ENV = this.$store.state.environment == "development" ? 'uat' : 'prod';
+              const targetUrl = encodeURIComponent(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${item.pageUrl}`);
+              const token = this.$store.state.ythToken
+                ? this.$store.state.ythToken
+                : localStorage.getItem("ythToken");
               wx.miniProgram.navigateTo({
-                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-uat-app-linli.timesgroup.cn/app/index?token=${this.$store.state.ythToken}&redirect=${encodeURIComponent(targetUrl)}`))}`
+                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-uat-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`))}`
               });
               return ;
             }
