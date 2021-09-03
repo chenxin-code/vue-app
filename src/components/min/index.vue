@@ -262,7 +262,7 @@ export default {
               })
               if(newWebview) {
                 wx.miniProgram.navigateTo({
-                  url: this.webviewConfig()
+                  url: this.webviewConfig(item.pageUrl)
                 });
                 return ;
               }

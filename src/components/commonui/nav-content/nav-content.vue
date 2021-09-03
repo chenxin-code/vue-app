@@ -4,7 +4,7 @@
   <div class="nav-content" :style="{top: top+ 'px'}" v-if="!wxenvironment()">
     <slot></slot>
   </div>
-  <div class="nav-content" v-else>
+  <div class="nav-content" style="top: 0" v-else>
     <slot></slot>
   </div>
 </template>
