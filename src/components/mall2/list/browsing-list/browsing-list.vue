@@ -321,7 +321,7 @@
     activated() {
     },
     created() {
-      if(wxenvironment()) {
+      if(this.wxenvironment()) {
         document.title = "我的足迹"
       }
       if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
