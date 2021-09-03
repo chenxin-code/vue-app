@@ -169,7 +169,7 @@
                 >
                   <div>
                     <div class="swiper-div theme_bg_white">
-                      <swiper :options="swiperOption">
+                      <swiper :options="swiperOption" @click.native="swiperItemChange">
                         <swiper-slide v-if="videoUrl != ''">
                           <video-player
                             class="video-player vjs-custom-skin"
@@ -185,7 +185,6 @@
                         >
                           <div
                             class="swiper-img-div"
-                            @click="showBigImageEvent(pidx)"
                           >
                             <img
                               :src="pic + '?x-oss-process=image/format,jpg'"
@@ -1976,7 +1975,6 @@ export default {
     clearInterval(this.interval);
     this.interval = setInterval(() => {
       this.duration++;
-      console.log(this.duration);
     }, 1000);
   },
   watch: {
@@ -2007,6 +2005,13 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, true);
   },
   methods: {
+    swiperItemChange(swiper){
+      let index=this.proImgIndex;
+      if(this.videoUrl && !index){
+        return 
+      }
+      this.showBigImageEvent(index);
+    },
     wxenvironment() {
       let ua = window.navigator.userAgent.toLowerCase();
       this.isWX = ua.match(/MicroMessenger/i) == "micromessenger";
@@ -3858,6 +3863,10 @@ export default {
             this.swiperOption.loop = false;
             this.proImgIndex = 0;
           }
+          if(this.detailData.picUrls.length <= 1){
+            this.swiperOption.autoplay = false;
+            this.swiperOption.loop = false;
+          }
           this._getProductDetailDynamic();
           // this._getCustomStock();
           // this._getCollectState();
