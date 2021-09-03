@@ -237,7 +237,7 @@ export default {
             const targetUrl = `https://mall-uat-app-linli.timesgroup.cn/app-vue/app/index.html#/minUserInfo`;
             if(this.wxenvironment() && item.pageUrl.indexOf('minUserInfo') != -1) {
               wx.miniProgram.navigateTo({
-                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-prod-app-linli.timesgroup.cn/app/index?token=${this.$store.state.ythToken}&redirect=${encodeURIComponent(targetUrl)}`))}`
+                url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-uat-app-linli.timesgroup.cn/app/index?token=${this.$store.state.ythToken}&redirect=${encodeURIComponent(targetUrl)}`))}`
               });
               return ;
             }
