@@ -121,11 +121,18 @@ export default {
       const ENV =
         this.$store.state.environment == "development" ? "uat" : "prod";
       const targetUrl = encodeURIComponent(
-        `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${flag ? '?active=1' : ''}`
+        `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${
+          flag ? "?active=1" : ""
+        }`
       );
-      console.log(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${flag ? '?active=1' : ''}`)
-      const token =
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJvbDdpZ2pqRDhXZFJ1Q1FSUGJXT1NlVTFheHJFIiwic2NvcGUiOlsiYWxsIl0sImlkIjoyNTM4NTk5NjczNjY5NjE1NjI0LCJleHAiOjE2MzA3MjU0MzcsImF1dGhvcml0aWVzIjpbInZpc2l0b3IiXSwianRpIjoiOWFmYmUyYjUtNzQyMS00NTFiLWJlMmEtY2VlYTZmNTFkNmY4IiwiY2xpZW50X2lkIjoibWluaV9tYWxsIn0.AmrVvL1aPFuz-bLDdO2oNJ2WjuNTRSaKE2cOYctxplEKD5pO1CYqoDi08TmciwC5zaV-TJoGbMbTjnsdtN76ZAcmV5zi1r38EQEbf1CT3hpmhoCAn4pG_WDA1ZKkoQlYt5v3NADSJJgbDPueGN8gNVY5DjTG9OFWDZ_t-MEQgRnUBTMkr6VEwjY9ABwgw664SscOHMWXfOcFZYmrnwx-5JtJopl7TKMgadPkHXb6xQIBspnBs7Mtmnnf8ho5sqzO724CzYFKyF9hxQdKUidrqn9Z2KKvrerrDXk1DkjYqi0PNr4-HAVMJArk1hq1VRmr4tu7PVaUobeiXAFsw2w7Iw";
+      console.log(
+        `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${
+          flag ? "?active=1" : ""
+        }`
+      );
+      const token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
       wx.miniProgram.navigateTo({
         url: `/pages/distributionWebView/index?url=${encodeURIComponent(
           JSON.stringify(
