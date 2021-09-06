@@ -2,7 +2,7 @@
 
 <template>
   <div class="placeorder mall2">
-    <nav-top @backEvent="$router.go(-1)" v-if="!noNavTop"></nav-top>
+    <nav-top @backEvent="$router.go(-1)" v-if="!noNavTop" :placeorder="true"></nav-top>
     <nav-content v-if="complete" :style="getContentTop()">
       <div class="flex-div">
         <div class="scroll-div">

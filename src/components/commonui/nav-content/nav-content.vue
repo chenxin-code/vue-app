@@ -1,7 +1,7 @@
 /**Created by liaoyingchao on 2018/10/24.*/
 
 <template>
-  <div class="nav-content" :style="{top: top+ 'px'}" v-if="!wxenvironment()">
+  <div class="nav-content" :style="{top: top+ 'px'}" v-if="!wxenvironment() || placeorder">
     <slot></slot>
   </div>
   <div class="nav-content" style="top: 0" v-else>
@@ -14,6 +14,12 @@
   export default {
     name: "nav-content",
     components: {},
+    prop: {
+      placeorder: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {}
     },
