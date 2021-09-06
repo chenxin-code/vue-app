@@ -3275,6 +3275,7 @@ export default {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       background-color #f1f1f1
+      margin-bottom 60px
 
       .colorfulline {
         margin: 0 -8px;
@@ -3292,7 +3293,10 @@ export default {
       /* height 70px; */
       overflow: hidden;
       padding 10px 15px
-      background-color #fff
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #fff;
 
       .tip {
         padding: 5px 15px;
@@ -3369,8 +3373,7 @@ export default {
   .pro-row {
     display: flex;
     align-items: center;
-    padding-top: 5px;
-    padding-bottom: 15px;
+    margin 7px 0
 
     .img-div {
       position: relative;
@@ -3428,6 +3431,8 @@ export default {
   }
 
   .pros-row {
+    padding-top: 5px;
+    padding-bottom: 15px;
     /* overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap; */
