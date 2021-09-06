@@ -3292,6 +3292,7 @@ export default {
       /* height 70px; */
       overflow: hidden;
       padding 10px 15px
+      background-color #fff
 
       .tip {
         padding: 5px 15px;
@@ -3368,6 +3369,8 @@ export default {
   .pro-row {
     display: flex;
     align-items: center;
+    padding-top: 5px;
+    padding-bottom: 15px;
 
     .img-div {
       position: relative;
@@ -3425,8 +3428,6 @@ export default {
   }
 
   .pros-row {
-    padding-top: 5px;
-    padding-bottom: 15px;
     /* overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap; */
