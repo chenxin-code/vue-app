@@ -3,11 +3,12 @@
 <template>
   <div class="placeorder mall2">
     <nav-top @backEvent="$router.go(-1)" v-if="!noNavTop"></nav-top>
-    <nav-content v-if="complete" :style="getContentTop()">
+    <nav-content v-if="complete" :style="getContentTop()" :placeorder="true">
       <div class="flex-div">
         <div class="scroll-div">
           <div
             class="block-div no-padding-bottom"
+            :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
             style="background-color: #fff;"
             v-if="
               (buyType != 'songli' &&
@@ -226,33 +227,6 @@
             </div>
           </div>
 
-          <!-- 心愿单 -->
-          <!-- <div
-            class="block-div wish-message-container"
-            v-if="$route.query.entryType == 'wish'"
-          >
-            <div class="top">
-              <p class="title">对TA说的话</p>
-              <span class="random-btn" @click="getWishMsg()">随机换一句</span>
-            </div>
-            <div class="msg-input-c">
-              <van-field
-                type="textarea"
-                class="msg-input"
-                v-model="wishData.payMsg"
-                placeholder="请输入想说的话"
-              />
-            </div>
-            <div class="nick-container">
-              <p class="nick-title">留言昵称</p>
-              <input
-                type="text"
-                v-model="wishData.payNiceName"
-                class="name"
-                placeholder="请输入昵称"
-              />
-            </div>
-          </div> -->
 
           <div class="block-div" v-if="occurData.needVirtualUserPhone == '1'">
             <div class="flex-row">
@@ -268,37 +242,8 @@
             </div>
           </div>
 
-          <!-- 支付方式 -->
-          <!-- <div class="block-div" v-if="false">
-            <div class="flex-row" @click="payWayShow">
-              <div class="label-middle theme_font_common">支付方式</div>
-              <div class="full"></div>
-              <div class="theme_font_common right-margin">{{ payWayText }}</div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="block-div" v-if="pageType == 2">
-            <div class="flex-row" @click="contratWayShow">
-              <div class="label-middle theme_font_common" style="width: 100px">
-                预约单联系方式
-              </div>
-              <div class="full"></div>
-              <div class="theme_font_common right-margin">
-                {{ contratWayText }}
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-            <div class="" v-if="contratWayText != '选择联系方式'">
-              <van-cell title="姓名：" :value="selectItem.realName" />
-              <van-cell title="联系电话：" :value="selectItem.userName" />
-            </div>
-          </div> -->
-
           <div class="concatStore" style="background-color: #f1f1f1" v-for="(item,index) in occurList" :key="index">
+          <div class="concatStore" v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div
               class="block-div"
@@ -442,46 +387,6 @@
                 </div>
               </div>
             </div>
-
-            <!--没有生鲜的时候才能选时间-->
-            <!-- <div class="block-div" v-if="productType == 8">
-            <div class="flex-row" @click="openServiceTimePicker">
-              <div class="label-middle theme_font_common">服务时间</div>
-              <div class="full theme_font_common" style="text-align: right">
-                {{ serviceDateTime }}
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-          </div> -->
-
-            <!--金豆商城不支持开发票-->
-            <!--          <div-->
-            <!--            class="block-div"-->
-            <!--            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">-->
-            <!--            <div class="flex-row">-->
-            <!--              <div class="title full theme_font_common">发票</div>-->
-            <!--              <div class="swith" @click="useInvoiceEvent">-->
-            <!--                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>-->
-            <!--                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">-->
-            <!--              <div class="label-middle theme_font_common">发票信息</div>-->
-            <!--              <div class="full"></div>-->
-            <!--              <div-->
-            <!--                class="theme_font_black right-margin"-->
-            <!--                :class="{theme_font_tint: invoiceInfo == ''}"-->
-            <!--              >-->
-            <!--                {{invoiceInfo !=-->
-            <!--                '' ? invoiceInfo : '请编辑发票信息'}}-->
-            <!--              </div>-->
-            <!--              <div>-->
-            <!--                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--          </div>-->
 
             <!-- 优惠券 -->
             <div
@@ -858,6 +763,7 @@
           <div class="pay-confirm" @click="queryBtn">确定</div>
         </van-popup> -->
         <!--          易捷卡弹框（充值卡）-->
+        </div>
       </div>
     </nav-content>
     <pop-view v-if="payWayPopShow" @closeEvent="popClose">
@@ -1399,6 +1305,10 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     // 家政服务，选中服务时间
     openServiceTimePicker: function () {
       let curDate = new Date();
