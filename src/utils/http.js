@@ -319,7 +319,7 @@ Axios.interceptors.response.use(
               for (let i = 0; i < urlParamArr.length; i++) {
                 let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
                 //如果键雨要删除的不一致，则加入到参数中
-                if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId') {
+                if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId' && paramArr[0] !== 'ythToken') {
                   arr.push(urlParamArr[i]);
                 }
               }

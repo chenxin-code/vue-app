@@ -11,6 +11,7 @@
 import MinTop from "./components/min-top/min-top";
 import GridList from "./components/gridList/gridList";
 import BottomCell from "./components/bottomCell/bottomCell";
+import { mapMutations } from "vuex";
 export default {
   name: "NewMinPage",
   data() {
@@ -154,6 +155,7 @@ export default {
     BottomCell
   },
   methods: {
+    ...mapMutations(["setShowBackTop"]),
     navTo(url, value) {
       console.log(url);
       let params = {};
@@ -420,6 +422,7 @@ export default {
       this.getWallet();
       this.getOrderCount();
     }
+    this.setShowBackTop(false);
   }
 };
 </script>

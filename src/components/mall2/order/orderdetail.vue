@@ -886,7 +886,7 @@
                       </div>
                       <PriceOrder :orderdetailp="product" v-else></PriceOrder>
                       <div
-                        class="row-btn line_circle theme_font_common "
+                        class="block-btn"
                         @click.stop="toService(product)"
                         v-if="
                           tag == '9' &&
@@ -2919,6 +2919,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
+
+  .block-btn{
+    padding: 0.08rem 0.16rem;
+    font-size: 0.37333rem;
+    border: 1px solid #999;
+    border-radius: 0.10667rem;
+    color: #999;
+    float: right;
+  }
 
   .refundFail{
     width: 100%;

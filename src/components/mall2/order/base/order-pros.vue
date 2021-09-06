@@ -13,7 +13,14 @@
           <img :src="product.phPictureUrl">
         </div>
         <div class="info-div" >
-          <div class="title theme_font_black">{{product.skuName}}</div>
+          <div class="info_detail">
+            <div class="title theme_font_black">{{product.skuName}}</div>
+            <div class="price_detail">
+              <span class="unit">￥</span>
+              <span class="integer">{{goodsAmount.integer}}</span>
+              <span class="decimal">.{{goodsAmount.decimal}}</span>
+            </div>
+          </div>
           <div class="number theme_font_tint" v-if="product.number >= 1">
             <span>购买数量：</span>
             <span> {{product.number}}</span>
@@ -39,7 +46,11 @@
     components: {},
     data() {
       return {
-        endTime: ''
+        endTime: '',
+        goodsAmount: {
+          integer: "0",
+          decimal: "00"
+        },
       }
     },
     computed: {
@@ -65,6 +76,21 @@
       },
     },
     methods: {
+      computedPrice(){
+        console.log('this.orderItemList[0].salePrice',this.orderItemList[0].realPrice)
+        if(this.orderItemList.length == 1){
+          let amountArr = this.$util
+            .toDecimal2(this.orderItemList[0].realPrice)
+            .toString()
+            .split(".");
+          if (amountArr.length !== 0) {
+            this.goodsAmount.integer = amountArr[0];
+            this.goodsAmount.decimal = amountArr[1];
+          }
+        }else{
+          return
+        }
+      },
       enterProductDetail:function(product){
         // 砍价订单禁止进入详情
         if(this.$store.state.globalConfig.cut_price_strict==1){
@@ -102,6 +128,10 @@
           let t3 = Math.floor(t1 / 1000)
           this.endTime = parseInt(t3 + stockupCancel)
         }
+      }
+      if(this.orderItemList.length == 1){
+        this.computedPrice();
+        console.log('this.orderItemList',this.orderItemList)
       }
     },
     beforeDestroy() {
@@ -148,15 +178,48 @@
         }
       }
       .info-div {
-        max-width 250px;
+        width 250px;
         display inline-block;
         vertical-align middle;
         line-height 22px;
-        .title {
-          overflow hidden;
-          min-height $font-size-medium;
-          font-size $font-size-medium;
+
+        .info_detail{
+          display: flex;
+          justify-content: space-between;
+          .title {
+            max-width 145px;
+            max-height 44px;
+            font-size $font-size-medium;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          .price_detail{
+            flex: 1;
+            min-height $font-size-medium;
+            font-size $font-size-medium;
+            text-align right;
+            font-weight: 400;
+            color: #121212;
+            font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+            .unit{
+              font-size: 12px;
+              line-height: 18px;
+            }
+            .integer{
+              font-size: 16px;
+              line-height: 24px;
+            }
+            .decimal{
+              font-size: 12px;
+              line-height: 18px;
+            }
+          }
         }
+
         .number {
           margin-top 10px;
           min-height $font-size-small;

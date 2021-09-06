@@ -46,6 +46,7 @@
   import Search from '../common/search'
   import SubPage from '@/components/product/index/subpage/subpage'
   import AdPage from '@/components/product/index/subpage/adpage'
+  import { mapMutations } from "vuex";
 
   export default {
     name: "category",
@@ -71,6 +72,7 @@
       }
     },
     methods: {
+      ...mapMutations(["setShowBackTop"]),
       scrollEvent: function () {
         this.scrollTopValue1 = this.$refs.leftScroll.scrollTop
         this.scrollTopValue2 = this.$refs.rightScroll.scrollTop
@@ -186,6 +188,7 @@
       if (this.$route.query.userNo) {
         sessionStorage.setItem('USER_NO', this.$route.query.userNo || '')
       }
+      this.setShowBackTop(false);
     },
     activated () {
       console.log('categories activated')

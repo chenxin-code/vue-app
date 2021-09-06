@@ -700,6 +700,7 @@ export default {
         } else {
           document.getElementsByTagName("body")[0].style.paddingTop = "0rem";
         }
+        console.log('$store.state.isShowBackTop',this.$store.state.isShowBackTop);
         if (
           (value[0].path == "/common" || value[0].path == "/mall2/list/:id") &&
           this.$store.state.isShowBackTop

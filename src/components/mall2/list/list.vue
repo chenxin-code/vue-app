@@ -1417,6 +1417,7 @@ export default {
     if (this.deductionSkuId != "") {
       this.deductionCart();
     }
+    this.setShowBackTop(true);
   },
   activated() {
     // 判断配送自提变了界面需要刷新

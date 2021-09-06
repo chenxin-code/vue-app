@@ -106,6 +106,7 @@ import TopNav from "../top-nav/top-nav";
 import NewCategory from "../category/index";
 // import PullTo from '@/components/Vendor/vue-pull-to/vue-pull-to'
 // import Scroll from '@/components/base/scroll/scroll'
+import { mapMutations } from "vuex";
 export default {
   name: "preview-component",
   components: {
@@ -172,14 +173,20 @@ export default {
   },
   created() {
     if (this.$route.path == "/common") {
-      if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-        this.scrollPadding = "1.333333rem";
-      } else {
-        this.scrollPadding = "4rem";
+      if(this.$route.query.pgCode){
+        this.scrollPadding = "0rem";
+      }else{
+        if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
+          this.scrollPadding = "1.333333rem";
+        } else {
+          this.scrollPadding = "4rem";
+        }
       }
     }
+    this.setShowBackTop(true);
   },
   methods: {
+    ...mapMutations(["setShowBackTop"]),
     componentEvent: function(d) {
       // 组建里面调用父级事件
       let code = d.code;

@@ -4,14 +4,14 @@
     <nav-content v-if="isShow">
       <div class="detail-service-content">
         <div class="scroll-info">
-          <div class="top-step theme_bg_red">
+          <div class="top-step pink_bg">
             <div class="line-con theme_bg_white" :style="getStyleWith()"></div>
             <div class="steps">
               <div class="step-item theme_font_white" v-for="(step,index) in stateAll">
                 <div class="step-icon">
                   <i v-if="step.code<=(orderInfo.state==10?1:orderInfo.state)"
-                     class="iconfont mall-dui theme_font_red theme_bg_white"></i>
-                  <div class="count-con theme_bg_white theme_font_red"
+                     class="iconfont mall-dui"></i>
+                  <div class="count-con theme_bg_white pink_font"
                        v-if="step.code>(orderInfo.state==10?1:orderInfo.state)">{{index+1}}
                   </div>
                 </div>
@@ -29,7 +29,8 @@
           </div>
           <div class="padding-con shadow-cell" v-if="this.orderInfo.state!=10 && this.orderInfo.productType != 5">
             <div class="flow-cell">
-              <i class="iconfont mall-xuanzhong theme_font_red"></i>
+              <!-- <i class="iconfont mall-xuanzhong theme_font_red"></i> -->
+              <img src="./img/select_icon.png" alt="" class="select_icon">
               <span class="bigtitle">{{getShowStateTitle()}}</span>
             </div>
             <div v-if="orderInfo.type!=2 && orderInfo.type != 3&& orderInfo.type != 5" class="detail-info">
@@ -70,7 +71,7 @@
           </div>
         </div>
 
-        <div v-if="isShowSureBtn && orderInfo.interfaceType != '2'" class="submit-btn theme_bg_red theme_font_white" @click="_sureClick">
+        <div v-if="isShowSureBtn && orderInfo.interfaceType != '2'" class="submit-btn pink_bg theme_font_white" @click="_sureClick">
           <p>{{btnTitle}}</p>
         </div>
         <div v-if="orderInfo.interfaceType == '2' && orderInfo.state < 8" class="submit-btn theme_bg_red theme_font_white" @click="_cancelapplyOrder(orderInfo)">
@@ -441,6 +442,18 @@
     }
   }
 
+  .select_icon{
+    width 16px;
+    height 16px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+  }
+
+  .pink_bg{
+    background-color: #fe83ab;
+  }
+
   .detailservice {
     width 100%
     height 100%
@@ -490,6 +503,9 @@
                 height $font-size-large
                 font-size $font-size-small
               }
+              .pink_font{
+                color: #fe83ab;
+              }
             }
 
             p {
@@ -501,6 +517,7 @@
           }
         }
       }
+
 
       .flow-cell {
         i {
