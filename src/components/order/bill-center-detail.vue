@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-09-01 10:53:42
+ * @LastEditTime: 2021-09-06 10:06:54
 -->
 <template>
   <div class="bill-center-detail">
@@ -17,12 +17,12 @@
           <span class="num">{{ query.payableAmount }}</span>
         </div>
         <div class="status">
-          {{ query.isFinishBill == "false" ? "待支付" : "已完成" }}
+          {{ query.pageBillType | filterPage }}
         </div>
-        <div class="status">
+        <div class="status" v-if="query.pageBillType == 2">
           托收中
         </div>
-        <div class="status">
+        <div class="status" v-if="query.pageBillType == 2">
           （已签署托收协议，请忽略此账单）
         </div>
       </div>
@@ -44,13 +44,13 @@
               {{ query.platMerCstNo }}
             </div>
           </div>
-          <div class="item-hd" v-if="query.isFinishBill == 'true'">
+          <div class="item-hd" v-if="query.pageBillType == 1">
             <div class="title">缴费时间</div>
             <div class="result">
               {{ query.tollDate }}
             </div>
           </div>
-          <div class="item-hd" v-if="query.isFinishBill == 'true'">
+          <div class="item-hd" v-if="query.pageBillType == 1">
             <div class="title">支付方式</div>
             <div class="result">
               {{ query.payWay }}
@@ -108,7 +108,6 @@
   </div>
 </template>
 <script>
-// import appNav from "@zkty-team/x-engine-module-nav";
 import navTop from "@/components/order/components/common/nav-top";
 import _ from "lodash";
 import moment from "moment";
@@ -136,16 +135,26 @@ export default {
       } else {
         return "";
       }
+    },
+    filterPage(val) {
+      switch (val) {
+        case 0:
+          return "待支付";
+          break;
+        case 1:
+          return "已完成";
+          break;
+        case 2:
+          return "托收中";
+          break;
+        default:
+          return "";
+          break;
+      }
     }
   },
-  mounted() {
-    // appNav.setNavLeftBtn({
-    //   title: "账单详情",
-    //   titleColor: "#333333",
-    //   titleSize: 17,
-    //   titleFontName: "PingFangSC-Medium",
-    //   titleBig: "500"
-    // });
+  created() {
+    console.log(`queryqueryquery`, this.query);
   },
   methods: {
     backEvent() {

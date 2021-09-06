@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-09-01 10:55:51
+ * @LastEditTime: 2021-09-06 09:47:39
 -->
 <template>
   <div class="bill-detail">
@@ -129,7 +129,7 @@
                   </div>
                   <div
                     class="detail-item"
-                    :class="{ collecting: i == 0 }"
+                    :class="{ collecting: monthDetail.isCollection === 1 }"
                     v-for="(monthDetail, k) in detail.monthList"
                     :key="k"
                     @click="goToDetail(monthDetail, isFinishBill)"
@@ -137,10 +137,8 @@
                     <span class="detail-name"
                       >{{ monthDetail.showInfo }}<i></i
                     ></span>
-                    <span class="detail-money" v-if="i == 0">
-                      托收中 ￥{{ monthDetail.payableAmount }}</span
-                    >
-                    <span class="detail-money" v-else>
+                    <span class="detail-money">
+                      {{ monthDetail.isCollection === 1 ? "托收中" : "" }}
                       ￥{{ monthDetail.payableAmount }}</span
                     >
                     <div>
@@ -783,10 +781,20 @@ export default {
     //查看详情
     goToDetail(item, isFinishBill) {
       console.log(`goToDetail`, item);
+      /**
+       * pageBillType
+       * 0: 待支付
+       * 1: 已完成
+       * 2：托收中
+       */
+      const pageBillType = isFinishBill == true ? 1 : 0
+      if(item.isCollection === 1) {
+        pageBillType = 2 
+      }
       this.$router.push({
         path: "/billCenter/detail",
         query: {
-          isFinishBill: isFinishBill,
+          pageBillType: pageBillType,
           payWay: item.payType,
           tollDate: item.payTime
             ? moment(item.payTime).format("YYYY-MM-DD")
@@ -1117,7 +1125,6 @@ $color = #8D8D8D;
 
               .detail-title {
                 width: 100%;
-                margin-bottom: 7px;
                 border-bottom: 0.026667rem solid #F1F1F1;
 
                 .month-text {
@@ -1182,7 +1189,7 @@ $color = #8D8D8D;
               }
 
               .detail-item {
-                margin: 5px 16px;
+                padding: 5px 16px;
                 &.collecting {
                   color $color
                 }
@@ -1206,6 +1213,9 @@ $color = #8D8D8D;
                 .detail-money {
                   float: right;
                 }
+              }
+              .detail-item:not(:last-child) {
+                border-bottom: 1px solid #f1f1f1;
               }
             }
           }
