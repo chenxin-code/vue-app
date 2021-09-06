@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <nav-top></nav-top>
+      <nav-top v-if="!wxenvironment()"></nav-top>
       <van-tabs
         v-model="active"
         swipeable
@@ -66,6 +66,10 @@ export default {
     // }
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     //跳到历史欠缴记录页面
     navToHistory() {
       navToMicroApplication.openTargetRouter({

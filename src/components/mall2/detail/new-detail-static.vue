@@ -2338,6 +2338,8 @@ export default {
     },
     // 唤起客服
     handleCustomer: function() {
+      const that = this;
+      console.log('----that.detailData--->', that.detailData)
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
@@ -2346,7 +2348,21 @@ export default {
         data: this.$store.state.userLable,
         success: function() {
           // 成功回调
-          ysf("open");
+          ysf("product", {
+            show: 1,
+            title: that.detailData.spuName,
+            desc: that.detailData.spuShortName,
+            picture: that.detailData.picUrls[0],
+            // note: product.note,
+            //   url: "跳转链接",
+            success: function() {
+              // 成功回调
+              ysf("open");
+            },
+            error: function() {
+            }
+          });
+
         },
         error: function() {
           // 错误回调
