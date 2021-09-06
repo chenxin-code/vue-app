@@ -1274,7 +1274,7 @@ export default {
   methods: {
     wxenvironment() {
       let ua = window.navigator.userAgent.toLowerCase();
-      this.isWX = ua.match(/MicroMessenger/i) == "micromessenger";
+      return ua.match(/MicroMessenger/i) == "micromessenger";
     },
     // 家政服务，选中服务时间
     openServiceTimePicker: function () {
