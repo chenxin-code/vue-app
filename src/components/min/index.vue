@@ -176,7 +176,8 @@ export default {
       if(this.wxenvironment()) {
         let routerList = [
           '/mall2/orderlist', // 收货地址
-          '/concatAfterSalesOrder' //售后
+          '/concatAfterSalesOrder', //售后
+          '/coupon/get_coupon_list', // 优惠卷
         ]
         let newWebview = false;
         routerList.forEach(str => {
@@ -188,8 +189,8 @@ export default {
           wx.miniProgram.navigateTo({
             url: this.webviewConfig(url)
           });
+          return;
         }
-        return;
       }
 
 
