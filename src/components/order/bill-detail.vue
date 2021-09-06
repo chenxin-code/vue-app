@@ -408,8 +408,6 @@ export default {
     },
     // 点击为true
     checkTrue(item, itemIn) {
-      console.log(`checkTrue item`, item);
-      console.log(`checkTrue itemIn`, itemIn);
       let _this = this;
       //判断当前是否为月份账单
       if (_this.isMonthPay) {
@@ -447,7 +445,6 @@ export default {
 
         let mergeList = Array.from(_this.checkData);
 
-        console.log(`mergeList checkTrue`, mergeList);
         //计算所有选中账单的总金额
         let testSub = 0;
         let num = mergeList.reduce((total, e) => {
@@ -464,15 +461,11 @@ export default {
     },
     // 点击为false
     checkFalse(item, itemIn) {
-      console.log(`checkFalse item`, item);
-      console.log(`checkFalse itemIn`, itemIn);
       let _this = this;
-
       if (this.isMonthPay) {
         _this.checkData.delete(itemIn); // 删除数据中取消选中的数据
         itemIn.checked = false; // 将月份账单选中状态改为false
       } else {
-        console.log(`checkFalse checkData`, item);
         _this.checkData.delete(itemIn); // 删除数据中取消选中的数据
       }
       item.shopCheck = false; // 将季度账单选中状态改为false
@@ -480,7 +473,6 @@ export default {
 
       //计算所有选中账单的总金额
       let mergeList = Array.from(_this.checkData);
-      console.log(`mergeList checkFalse`, mergeList);
       let num = mergeList.reduce((total, e) => {
         return BigNumber(total).plus(e.monthPayableAmount);
       }, 0);
@@ -651,11 +643,15 @@ export default {
       } else {
         let billNoList = [];
         payData.forEach((payItem, index) => {
-          console.log(`payItem`,payItem);
-          
-          payItem.billNos.forEach(it => {
-            billNoList.push(it.toString());
-          });
+          // payItem.billNos.forEach(it => {
+          //   billNoList.push(it.toString());
+          // });
+          payItem.monthList.forEach(it => {
+            //托收中的账单编号不提交给账单中心
+            if(it.isCollection === 0) {
+              billNoList.push(it.billNo.toString());
+            }
+          })
         });
 
         //请求物业系统接口校验账单是否能够支付
@@ -669,7 +665,6 @@ export default {
         let pcsObj = {
           list: billNoList
         };
-        console.log(`pcsObj`,pcsObj);
         
         this.$http
           .post(pcsUrl, JSON.stringify(pcsObj))
@@ -779,7 +774,6 @@ export default {
     },
     //查看详情
     goToDetail(item, isFinishBill) {
-      console.log(`goToDetail`, item);
       /**
        * pageBillType
        * 0: 待支付

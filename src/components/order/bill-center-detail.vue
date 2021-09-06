@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-09-06 10:06:54
+ * @LastEditTime: 2021-09-06 10:56:46
 -->
 <template>
   <div class="bill-center-detail">
@@ -83,12 +83,12 @@
             <div class="result buildings">{{ query.unit || "--" }}</div>
           </div>
           <div class="item-hd">
-            <div class="title">房号</div>
-            <div class="result buildings">{{ query.buildings }}</div>
-          </div>
-          <div class="item-hd">
             <div class="title">应收金额</div>
             <div class="result">{{ query.payableAmount }}</div>
+          </div>
+          <div class="item-hd">
+            <div class="title">房号</div>
+            <div class="result buildings">{{ query.buildings }}</div>
           </div>
           <div class="item-hd">
             <div class="title">业主姓名</div>
@@ -138,13 +138,13 @@ export default {
     },
     filterPage(val) {
       switch (val) {
-        case 0:
+        case "0":
           return "待支付";
           break;
-        case 1:
+        case "1":
           return "已完成";
           break;
-        case 2:
+        case "2":
           return "托收中";
           break;
         default:
@@ -153,9 +153,7 @@ export default {
       }
     }
   },
-  created() {
-    console.log(`queryqueryquery`, this.query);
-  },
+  created() {},
   methods: {
     backEvent() {
       this.$router.go(-1);
