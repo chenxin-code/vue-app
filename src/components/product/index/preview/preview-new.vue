@@ -175,15 +175,16 @@ export default {
     if (this.$route.path == "/common") {
       if(this.$route.query.pgCode){
         this.scrollPadding = "0rem";
+        this.setShowBackTop(false);
       }else{
         if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
           this.scrollPadding = "1.333333rem";
         } else {
           this.scrollPadding = "4rem";
         }
+        this.setShowBackTop(true);
       }
     }
-    this.setShowBackTop(true);
   },
   methods: {
     ...mapMutations(["setShowBackTop"]),

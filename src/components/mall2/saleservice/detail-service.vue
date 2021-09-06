@@ -10,7 +10,7 @@
               <div class="step-item theme_font_white" v-for="(step,index) in stateAll">
                 <div class="step-icon">
                   <i v-if="step.code<=(orderInfo.state==10?1:orderInfo.state)"
-                     class="iconfont mall-dui"></i>
+                     class="iconfont mall-dui pink_font theme_bg_white"></i>
                   <div class="count-con theme_bg_white pink_font"
                        v-if="step.code>(orderInfo.state==10?1:orderInfo.state)">{{index+1}}
                   </div>
