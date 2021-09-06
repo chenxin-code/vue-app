@@ -8,6 +8,7 @@
         <div class="scroll-div">
           <div
             class="block-div no-padding-bottom"
+            style="background-color: #fff;"
             v-if="
               (buyType != 'songli' &&
                 deliveryType == 2 &&
@@ -25,22 +26,28 @@
               @click="toSelectAddress"
             >
               <div class="flex-row">
-                <div class="name theme_font_black">
-                  {{ $store.state.mall2.selectAddress.receiverName }}
-                </div>
-                <div class="name theme_font_black">
-                  {{ $store.state.mall2.selectAddress.mobile }}
-                </div>
                 <div
                   class="act-item-full theme_standard_bg theme_font_white"
-                  v-if="$store.state.mall2.selectAddress.isDefault == 1"
-                >
+                  style="border-radius: 5px;"
+                  v-if="$store.state.mall2.selectAddress.isDefault == 1">
                   默认
                 </div>
+                <span style="color: #333333;font-size: 13px">
+                  {{$store.state.mall2.selectAddress.provinceName
+                  + $store.state.mall2.selectAddress.cityName
+                  + $store.state.mall2.selectAddress.countryName
+                  + $store.state.mall2.selectAddress.townName}}
+                </span>
               </div>
               <div class="flex-row">
-                <div class="full theme_font_tint font-small">
-                  {{ $store.state.mall2.selectAddress.addressFull }}
+                <div class="full theme_font_tint font-small"
+                     style="
+                     color: #333333;
+                     font-size: 16px;
+                     font-weight: bold;
+                     overflow: hidden;"
+                >
+                  {{ $store.state.mall2.selectAddress.address }}
                 </div>
                 <div>
                   <i
@@ -50,7 +57,16 @@
                       theme_font_tint
                       icon-font
                     "
+                    style="font-size: 12px"
                   ></i>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                  {{ $store.state.mall2.selectAddress.receiverName }}
+                </div>
+                <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                  {{ $store.state.mall2.selectAddress.mobile }}
                 </div>
               </div>
             </div>
@@ -106,9 +122,9 @@
                 </div>
               </div>
             </div>
-            <div class="colorfulline">
+            <!--<div class="colorfulline">
               <img src="static/image/mall2/colorfulline.png" />
-            </div>
+            </div>-->
           </div>
 
           <div
@@ -282,17 +298,16 @@
             </div>
           </div> -->
 
-          <div class="concatStore" v-for="(item,index) in occurList" :key="index">
+          <div class="concatStore" style="background-color: #f1f1f1" v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
-            <span class="theme_font_black margin_div">
-              <i class="iconfont mall-shoukuanfang"></i>
-              {{ item.store[0].storeName }}</span
-            >
             <div
               class="block-div"
               v-for="(store, storeIndex) in item.store"
-              :key="storeIndex"
-            >
+              :key="storeIndex">
+              <div class="theme_font_black margin_div">
+                <img src="static/image/mall2/dianpu.png" style="width: 18px;vertical-align: bottom;" />
+                <span style="vertical-align: middle;font-size: 15px;margin-left: 5px;font-weight: bold">{{ store.storeName }}</span>
+              </div>
               <!--{{returnStoreProducts(store)}}-->
               <!--            <div class="flex-row">-->
               <!--              <div class="name">{{store.storeName}}</div>-->
@@ -314,7 +329,7 @@
                       {{ prodata.productName }}
                     </div>
                     <div class="title theme_font_black">
-                      <span style="font-size: 11px; color: #696969">{{
+                      <span style="font-size: 11px; color: #999999">{{
                         prodata.specs
                       }}</span>
                     </div>
@@ -329,8 +344,8 @@
                         :step="$route.params.wishProdInfo.saleNumStep"
                         integer
                       />
-                      <span style="float: right" v-else
-                        >x {{ prodata.number }}</span
+                      <span style="font-size: 12px;color: #999999;position: absolute;top:0;right: 0" v-else
+                        >x{{ prodata.number }}</span
                       >
                     </div>
                     <div
@@ -409,14 +424,21 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-row">
+              <div class="flex-row top-line">
                 <div class="label-middle theme_font_common">备注</div>
                 <div class="full">
                   <input
                     class="row-input theme_font_common"
-                    placeholder="请留下您想说的话"
+                    placeholder="选填，请先和商家协商一致"
                     v-model="store.remark"
+                    style="text-align: right"
                   />
+                </div>
+              </div>
+              <div class="flex-row">
+                <div style="width: 100%;text-align: right">
+                  <span style="color: #999999">共{{item.store.length}}件</span>
+                  小计:<span style="color: #E5165A">￥{{ $util.toDecimal2(item.amount) }}</span>
                 </div>
               </div>
             </div>
@@ -473,12 +495,17 @@
               <div class="flex-row" @click="couponEvent(index)">
                 <div class="label-middle theme_font_common">优惠券</div>
                 <div class="full"></div>
-                <div v-if="lastRes.occur" class="theme_font_black right-margin">
-                  优惠{{ $util.toDecimal2(item.couponAmount) }}元
+                <div v-if="lastRes.occur" class="theme_font_black right-margin" style="color: #E5165A">
+                  优惠¥{{ $util.toDecimal2(item.couponAmount) }}元
                 </div>
                 <div>
                   <i
-                    class="iconfont mall-gengduo more-icon theme_font_tint"
+                    class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
                   ></i>
                 </div>
               </div>
@@ -600,7 +627,7 @@
           </div> -->
 
             <!--易捷卡信息-->
-            <div class="block-div">
+            <div class="block-div add-padding">
               <div class="flex-row">
                 <div class="label-middle full theme_font_common">商品金额</div>
                 <div class="theme_font_black">
@@ -735,8 +762,6 @@
           <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
           <div class="price">
             <div class="rmb-div" v-if="Object.keys(occurData).length">
-              <span class="count">共{{ count }}件</span>
-
               <span
                 class="theme_font_red"
                 v-show="$mallCommon.getOccurShowPrice(occurData)"
@@ -752,6 +777,11 @@
                 v-show="$mallCommon.getOccurShowPrice(occurData)"
                 >.{{ getTotalPriceDuan(1) }}</span
               >
+              <span class="count">(共{{ count }}件)</span>
+              <div style="height: 15px;font-size: 12px;color: #999999">
+                共省 ¥{{$util.toDecimal2(occurList[0].discountAmount + occurList[0].couponAmount)}}
+              </div>
+              <!-- 易捷卡不会展示 -->
               <div
                 class="digital-div"
                 v-for="(digital, digitalindex) in occurData.digitalList"
@@ -1023,12 +1053,12 @@ import Invoice from "../common/invoice";
 import Freight from "../common/freight";
 import NoStock from "../common/no-stock";
 import DigitalPwd from "../common/digital-pwd";
-import PriceOrder from "@/components/commonui/price/price-order";
+import PriceOrder from "../../../components/commonui/price/price-order";
 import Agreement from "@/components/usercenter/register/agreement";
 import md5String from "../../../utils/md5";
 import { Dialog, Toast } from "vant";
 import { mapActions } from "vuex";
-import DatetimePicker from "@/components/commonui/datetime-picker";
+import DatetimePicker from "../../../components/commonui/datetime-picker";
 export default {
   name: "placeorder",
   components: {
@@ -1343,6 +1373,7 @@ export default {
     }
   },
   mounted() {
+    console.log('地址------------>',this.$store.state.mall2.selectAddress);
     this.pageType = this.$route.query.pageType;
     // 企业团购type=2默认提货付款
     // this.pageType=2
@@ -2193,7 +2224,7 @@ export default {
       );
     },
     checkProductStock: function () {
-      
+
       if(this.occurList.length > 1 ){
         if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
           this.$Toast("小程序暂不支持多店铺合并支付");
@@ -2584,7 +2615,7 @@ export default {
           if(item.status == "fulfilled"){
             console.log(item,index)
             if(item.value.data.status == 0){
-              this.payInfoList.push(item.value.data.data) 
+              this.payInfoList.push(item.value.data.data)
               if(index == res.length - 1){
                 if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
                   this.setWxOrderInfo();
@@ -2636,7 +2667,7 @@ export default {
           if(item.status == "fulfilled"){
             console.log(item,index)
             if(item.value.data.status == 0){
-              this.submitDataList.push(item.value.data.data) 
+              this.submitDataList.push(item.value.data.data)
               if(index == res.length - 1){
                 this.concatPay();
               }
@@ -3164,14 +3195,36 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
-
+.row-input {
+  &::placeholder {
+    color: #999999 !important;
+  }
+}
+.mall2 {
+  .block-div {
+    background-color #fff
+  }
+}
+.theme_font_red {
+  color #E5165A
+}
+.theme_standard_bg {
+  background-color #E5165A
+}
 .margin_div{
-  margin: 0 8px;
-  font-size: 0.37333rem;
+  margin: 10px 8px;
+  font-size: 0.42rem;
   font-weight: 600;
   color: #1a1a1a;
 }
-
+.block-div.add-padding{
+  .flex-row{
+    padding 0.337rem 0
+  }
+}
+.flex-row.top-line{
+  border-top 1px solid #EEEEEE
+}
 .adapter-iphoneX {
   width: 100%;
   height: 34px;
@@ -3311,6 +3364,7 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      background-color #f1f1f1
 
       .colorfulline {
         margin: 0 -8px;
@@ -3327,6 +3381,7 @@ export default {
     .bottom-btns {
       /* height 70px; */
       overflow: hidden;
+      padding 10px 15px
 
       .tip {
         padding: 5px 15px;
@@ -3342,9 +3397,9 @@ export default {
       }
 
       .price {
-        height: 50px;
+        height: 40px;
         overflow: hidden;
-        padding: 0px 10px 0 20px;
+        padding: 0 10px 0 1px;
         font-size: 0px;
         // line-height 50px;
         display: flex;
@@ -3357,10 +3412,15 @@ export default {
           flex 1;
         } */
         .rmb-div {
-          text-align: end;
+          //text-align: end;
+          height: 34px;
+          margin 3px 0
 
           .count {
+            margin-left 3px
             margin-right: 10px;
+            color #999999
+            font-size 12px
           }
         }
 
@@ -3383,12 +3443,14 @@ export default {
 
       .btn {
         float: right;
-        height: 50px;
-        line-height: 50px;
+        height: 40px;
+        line-height: 40px;
         text-align: center;
         padding: 0 25px;
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 500;
+        border-radius 15px
+        background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
       }
     }
   }
@@ -3406,6 +3468,7 @@ export default {
         display: block;
         width: 100%;
         height: 100%;
+        border-radius 8px
       }
 
       .presale {
@@ -3428,9 +3491,11 @@ export default {
       min-height: $font-size-medium;
       font-size: $font-size-medium;
       flex: 1;
+      position relative
 
       .title {
         margin-bottom: 5px;
+        margin-right 25px;
       }
 
       .font-small {
@@ -3450,7 +3515,8 @@ export default {
   }
 
   .pros-row {
-    padding-bottom: 8px;
+    padding-top: 5px;
+    padding-bottom: 15px;
     /* overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap; */
