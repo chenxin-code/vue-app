@@ -651,6 +651,8 @@ export default {
       } else {
         let billNoList = [];
         payData.forEach((payItem, index) => {
+          console.log(`payItem`,payItem);
+          
           payItem.billNos.forEach(it => {
             billNoList.push(it.toString());
           });
@@ -667,6 +669,8 @@ export default {
         let pcsObj = {
           list: billNoList
         };
+        console.log(`pcsObj`,pcsObj);
+        
         this.$http
           .post(pcsUrl, JSON.stringify(pcsObj))
           .then(res => {
@@ -677,8 +681,6 @@ export default {
                   checkStatus.push(arr[index].status);
                 }
               }
-              console.log(`详情页checkStatus`, checkStatus);
-
               if (_.uniq(checkStatus).includes(2)) {
                 Toast.clear(); //关闭页面loading
                 this.showErrorMsg = true;
@@ -719,10 +721,7 @@ export default {
                     appScheme: "x-engine",
                     payType: false,
                     __ret__: res => {
-                      console.log(
-                        "---------------开始支付提交记录---------------------"
-                      );
-                      console.log(res);
+                      console.log(`开始支付提交记录`,res);
                       if (res.billRetStatus == "1") {
                         Toast.clear(); //关闭页面loading
                         //支付成功
