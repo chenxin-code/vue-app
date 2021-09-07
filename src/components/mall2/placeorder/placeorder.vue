@@ -45,8 +45,10 @@
                      color: #333333;
                      font-size: 16px;
                      font-weight: bold;
-                     overflow: hidden;"
-                  >
+                     margin-right: 30px;
+                     overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;">
                     {{ $store.state.mall2.selectAddress.address }}
                   </div>
                   <div>
@@ -683,76 +685,7 @@
           <!--          </div>-->
 
 
-        <div class="bottom-btns">
-          <!-- <div
-            class="tip theme_bg_yl theme_standard_font theme_light_bg"
-            v-if="deliveryType == 2 && occurData.needAddress == 1"
-          >
-            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
-          </div> -->
-          <div
-            class="btn theme_standard_bg theme_font_white"
-            v-if="buyType == 'songli'"
-            @click="checkProductStock"
-          >
-            提交礼单
-          </div>
-          <div
-            class="btn theme_standard_bg theme_font_white"
-            v-else
-            @click="checkProductStock"
-          >
-            提交订单
-          </div>
-          <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
-          <div class="price">
-            <div class="rmb-div" v-if="Object.keys(occurData).length">
-              <span
-                class="theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >￥</span
-              >
-              <span
-                class="left-no-space price-big theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >{{ getTotalPriceDuan(0) }}</span
-              >
-              <span
-                class="theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >.{{ getTotalPriceDuan(1) }}</span
-              >
-              <span class="count">(共{{ count }}件)</span>
-              <div style="height: 15px;font-size: 12px;color: #999999">
-                共省 ¥{{$util.toDecimal2(occurList[0].discountAmount + occurList[0].couponAmount)}}
-              </div>
-              <!-- 易捷卡不会展示 -->
-              <div
-                class="digital-div"
-                v-for="(digital, digitalindex) in occurData.digitalList"
-                :key="digitalindex"
-                v-show="$mallCommon.getTotalUsePoints(digital) > 0"
-              >
-                <span
-                  class="price-big theme_font_red"
-                  v-if="
-                    digitalindex !=
-                      $mallCommon.getFirstVartualIndex(occurData) ||
-                    $mallCommon.getOccurShowPrice(occurData)
-                  "
-                  >+</span
-                >
-                <span class="price-big theme_font_red">{{
-                  $mallCommon.getTotalUsePoints(digital)
-                }}</span>
-                <span class="theme_font_red">{{
-                  $mallCommon.getTotalUnitStr(digital.acctType)
-                }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
-        </div>
+
         <!--          易捷卡弹框（充值卡）-->
         <!-- <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
           <div class="top">
@@ -803,6 +736,76 @@
           <div class="pay-confirm" @click="queryBtn">确定</div>
         </van-popup> -->
         <!--          易捷卡弹框（充值卡）-->
+        </div>
+        <div class="bottom-btns">
+          <!-- <div
+            class="tip theme_bg_yl theme_standard_font theme_light_bg"
+            v-if="deliveryType == 2 && occurData.needAddress == 1"
+          >
+            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
+          </div> -->
+          <div
+            class="btn theme_standard_bg theme_font_white"
+            v-if="buyType == 'songli'"
+            @click="checkProductStock"
+          >
+            提交礼单
+          </div>
+          <div
+            class="btn theme_standard_bg theme_font_white"
+            v-else
+            @click="checkProductStock"
+          >
+            提交订单
+          </div>
+          <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
+          <div class="price">
+            <div class="rmb-div" v-if="Object.keys(occurData).length">
+              <span
+                class="theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >￥</span
+              >
+              <span
+                class="left-no-space price-big theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >{{ getTotalPriceDuan(0) }}</span
+              >
+              <span
+                class="theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >.{{ getTotalPriceDuan(1) }}</span
+              >
+              <span class="count">(共{{ count }}件)</span>
+              <div style="height: 15px;font-size: 12px;color: #999999">
+                共省 ¥{{$util.toDecimal2(occurList[0].discountAmount + occurList[0].couponAmount)}}
+              </div>
+              <!-- 易捷卡不会展示 -->
+              <div
+                class="digital-div"
+                v-for="(digital, digitalindex) in occurData.digitalList"
+                :key="digitalindex"
+                v-show="$mallCommon.getTotalUsePoints(digital) > 0"
+              >
+                <span
+                  class="price-big theme_font_red"
+                  v-if="
+                    digitalindex !=
+                      $mallCommon.getFirstVartualIndex(occurData) ||
+                    $mallCommon.getOccurShowPrice(occurData)
+                  "
+                >+</span
+                >
+                <span class="price-big theme_font_red">{{
+                    $mallCommon.getTotalUsePoints(digital)
+                  }}</span>
+                <span class="theme_font_red">{{
+                    $mallCommon.getTotalUnitStr(digital.acctType)
+                  }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
         </div>
       </div>
     </nav-content>
