@@ -287,14 +287,14 @@
                :style="index === 0 ? (showMini ? { 'margin-top' : '58px'} : { 'margin-top' : '112px'}) : ''"
                v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
+            <div class="theme_font_black margin_div">
+              <img src="static/image/mall2/dianpu.png" style="width: 18px;vertical-align: bottom;" />
+              <span style="vertical-align: middle;font-size: 15px;margin-left: 5px;font-weight: bold">{{ item.store[0].storeName }}</span>
+            </div>
             <div
               class="block-div"
               v-for="(store, storeIndex) in item.store"
               :key="storeIndex">
-              <div class="theme_font_black margin_div">
-                <img src="static/image/mall2/dianpu.png" style="width: 18px;vertical-align: bottom;" />
-                <span style="vertical-align: middle;font-size: 15px;margin-left: 5px;font-weight: bold">{{ store.storeName }}</span>
-              </div>
               <!--{{returnStoreProducts(store)}}-->
               <!--            <div class="flex-row">-->
               <!--              <div class="name">{{store.storeName}}</div>-->
