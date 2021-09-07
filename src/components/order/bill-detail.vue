@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-09-06 09:47:39
+ * @LastEditTime: 2021-09-07 11:34:29
 -->
 <template>
   <div class="bill-detail">
@@ -627,7 +627,6 @@ export default {
       let payData = payInfoList.filter(item => {
         return item.monthList;
       });
-      console.log(`payData`, payData);
       let billNos = [];
       payData.forEach((item, index) => {
         item.billNos.forEach(data => {
@@ -648,10 +647,10 @@ export default {
           // });
           payItem.monthList.forEach(it => {
             //托收中的账单编号不提交给账单中心
-            if(it.isCollection === 0) {
+            if (it.isCollection === 0) {
               billNoList.push(it.billNo.toString());
             }
-          })
+          });
         });
 
         //请求物业系统接口校验账单是否能够支付
@@ -665,7 +664,7 @@ export default {
         let pcsObj = {
           list: billNoList
         };
-        
+
         this.$http
           .post(pcsUrl, JSON.stringify(pcsObj))
           .then(res => {
@@ -692,12 +691,11 @@ export default {
                   // isPay=1：支付中；isPay=0：待支付
                   payStr.push(item.isPay);
                 });
-                console.log(`是否支付中账单`, payStr);
                 if (payStr.includes(1)) {
                   Toast.clear(); //关闭页面loading
                   this.showErrorMsg = true;
                   this.errorMsg =
-                    "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                    "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的资金安全，请稍等15分钟后重新支付，感谢您的理解。";
                 } else {
                   console.log(`提交账单中心参数`, {
                     businessCstNo: this.$store.state.userInfo.phone,
@@ -716,7 +714,7 @@ export default {
                     appScheme: "x-engine",
                     payType: false,
                     __ret__: res => {
-                      console.log(`开始支付提交记录`,res);
+                      console.log(`开始支付提交记录`, res);
                       if (res.billRetStatus == "1") {
                         Toast.clear(); //关闭页面loading
                         //支付成功
@@ -780,9 +778,9 @@ export default {
        * 1: 已完成
        * 2：托收中
        */
-      const pageBillType = isFinishBill == true ? 1 : 0
-      if(item.isCollection === 1) {
-        pageBillType = 2 
+      const pageBillType = isFinishBill == true ? 1 : 0;
+      if (item.isCollection === 1) {
+        pageBillType = 2;
       }
       this.$router.push({
         path: "/billCenter/detail",
