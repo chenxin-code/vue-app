@@ -311,7 +311,7 @@
 
     },
     created() {
-      if(wxenvironment()) {
+      if(this.wxenvironment()) {
         document.title = this.eventType == 1 ?'新建收货人' : '编辑收货地址'
       }
       let defaultProvince = this.$route.query.defaultProvince ? this.$route.query.defaultProvince : '';

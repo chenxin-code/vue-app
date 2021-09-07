@@ -50,6 +50,9 @@ export default {
     CloseProcess,
   },
   created() {
+    if(this.wxenvironment()) {
+      document.title = '我的售后'
+    }
     this.initPage(this.$route.params.id);
     let padding = "";
     padding = document.getElementsByTagName("body")[0].style.paddingTop;

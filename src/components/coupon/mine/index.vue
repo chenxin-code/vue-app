@@ -142,7 +142,7 @@ export default {
   },
   created() {
     if(this.wxenvironment()) {
-      document.title = '发优惠券'
+      document.title = '我的卡券'
     }
     if (!this.memberId) {
       this.$http
