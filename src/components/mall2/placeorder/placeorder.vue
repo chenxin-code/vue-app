@@ -243,7 +243,6 @@
           </div>
 
           <div class="concatStore" style="background-color: #f1f1f1" v-for="(item,index) in occurList" :key="index">
-          <div class="concatStore" v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div
               class="block-div"
@@ -382,8 +381,8 @@
               </div>
               <div class="flex-row">
                 <div style="width: 100%;text-align: right">
-                  <span style="color: #999999">共{{item.store.length}}件</span>
-                  小计:<span style="color: #E5165A">￥{{ $util.toDecimal2(item.amount) }}</span>
+                  <span style="color: #999999">共{{calcTotal(store.storeProData.proArr)}}件</span>
+                  小计:<span style="color: #E5165A">￥{{calcAmount(store.storeProData.proArr)}}</span>
                 </div>
               </div>
             </div>
@@ -641,7 +640,7 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-        </div>
+
 
         <div class="bottom-btns">
           <!-- <div
@@ -1305,6 +1304,20 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    calcTotal(proArr){
+      let total = 0;
+      proArr.forEach(item => {
+        total += item.number;
+      });
+      return total
+    },
+    calcAmount(proArr){
+      let amount = 0;
+      proArr.forEach(item => {
+        amount += item.amount;
+      });
+      return amount
+    },
     wxenvironment() {
       let ua = window.navigator.userAgent.toLowerCase();
       return ua.match(/MicroMessenger/i) == "micromessenger";
