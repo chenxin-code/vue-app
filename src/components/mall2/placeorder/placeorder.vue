@@ -281,7 +281,9 @@
             </div>
           </div>
 
-          <div class="concatStore" style="background-color: #f1f1f1;margin-top: 112px;" v-for="(item,index) in occurList" :key="index">
+          <div class="concatStore" style="background-color: #f1f1f1;"
+               :style="showMini ? { 'margin-top' : '58px'} : { 'margin-top' : '112px'}"
+               v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div
               class="block-div"
