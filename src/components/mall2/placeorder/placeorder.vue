@@ -5,12 +5,8 @@
     <nav-top @backEvent="$router.go(-1)" v-if="!noNavTop"></nav-top>
     <nav-content v-if="complete" :style="getContentTop()">
       <div class="flex-div">
-        <div class="scroll-div">
-          <div
-            class="block-div no-padding-bottom"
-            :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
-            style="background-color: #fff;"
-            v-if="
+        <div class="scroll-div" @touchstart="touchstart()" @touchmove="touchmove()">
+          <div v-if="
               (buyType != 'songli' &&
                 deliveryType == 2 &&
                 occurData.needAddress == 1 &&
@@ -18,114 +14,157 @@
               (deliveryType == 1 &&
                 $route.query.entryType != 'wish' &&
                 $route.params.productType != 514)
-            "
-          >
+            ">
             <div
-              v-if="
+              class="block-div no-padding-bottom"
+              :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
+              style="background-color: #fff;position: fixed;top: 58px;left: 0;right: 0;z-index: 10;" v-show="!showMini">
+              <div
+                v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
               "
-              @click="toSelectAddress"
-            >
-              <div class="flex-row">
-                <div
-                  class="act-item-full theme_standard_bg theme_font_white"
-                  style="border-radius: 5px;"
-                  v-if="$store.state.mall2.selectAddress.isDefault == 1">
-                  默认
-                </div>
-                <span style="color: #333333;font-size: 13px">
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">
+                  <div
+                    class="act-item-full theme_standard_bg theme_font_white"
+                    style="border-radius: 5px;white-space: nowrap;"
+                    v-if="$store.state.mall2.selectAddress.isDefault == 1">
+                    默认
+                  </div>
+                  <span style="color: #333333;font-size: 13px">
                   {{$store.state.mall2.selectAddress.provinceName
                   + $store.state.mall2.selectAddress.cityName
                   + $store.state.mall2.selectAddress.countryName
                   + $store.state.mall2.selectAddress.townName}}
                 </span>
-              </div>
-              <div class="flex-row">
-                <div class="full theme_font_tint font-small"
-                     style="
+                </div>
+                <div class="flex-row">
+                  <div class="full theme_font_tint font-small"
+                       style="
                      color: #333333;
                      font-size: 16px;
                      font-weight: bold;
                      overflow: hidden;"
-                >
-                  {{ $store.state.mall2.selectAddress.address }}
-                </div>
-                <div>
-                  <i
-                    class="
+                  >
+                    {{ $store.state.mall2.selectAddress.address }}
+                  </div>
+                  <div>
+                    <i
+                      class="
                       iconfont
                       mall-gengduojiantou
                       theme_font_tint
                       icon-font
                     "
-                    style="font-size: 12px"
-                  ></i>
+                      style="font-size: 12px"
+                    ></i>
+                  </div>
+                </div>
+                <div class="flex-row">
+                  <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                    {{ $store.state.mall2.selectAddress.receiverName }}
+                  </div>
+                  <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                    {{ $store.state.mall2.selectAddress.mobile }}
+                  </div>
                 </div>
               </div>
-              <div class="flex-row">
-                <div class="name theme_font_black" style="color: #333333;font-size: 13px">
-                  {{ $store.state.mall2.selectAddress.receiverName }}
-                </div>
-                <div class="name theme_font_black" style="color: #333333;font-size: 13px">
-                  {{ $store.state.mall2.selectAddress.mobile }}
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="
+              <div
+                v-if="
                 !($store.state.mall2.selectAddress.id > 0) &&
                 deliveryType == 2 &&
                 $route.params.productType != 514
               "
-              @click="toSelectAddress"
-            >
-              <div class="flex-row">请选择地址信息</div>
-            </div>
-            <div
-              v-if="
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">请选择地址信息</div>
+              </div>
+              <div
+                v-if="
                 $store.state.mall2.zitiAddress.id > 0 &&
                 deliveryType == 1 &&
                 $route.params.productType != 514
               "
-              @click="toSelectZitiAddress"
-            >
-              <div class="pickup-shop">
-                <div style="flex: 1">
-                  <div class="flex-row">
-                    <div class="name theme_font_black">
-                      自提店铺：{{ $store.state.mall2.zitiAddress.storeName }}
+                @click="toSelectZitiAddress"
+              >
+                <div class="pickup-shop">
+                  <div style="flex: 1">
+                    <div class="flex-row">
+                      <div class="name theme_font_black">
+                        自提店铺：{{ $store.state.mall2.zitiAddress.storeName }}
+                      </div>
+                    </div>
+                    <div class="flex-row">
+                      <div
+                        class="full theme_font_tint font-small"
+                        style="line-height: 1.4"
+                      >
+                        {{ $store.state.mall2.zitiAddress.addressFull }}
+                        {{
+                          $store.state.mall2.zitiAddress.phone &&
+                          $store.state.mall2.zitiAddress.phone != ""
+                            ? "(" + $store.state.mall2.zitiAddress.phone + ")"
+                            : ""
+                        }}
+                      </div>
                     </div>
                   </div>
-                  <div class="flex-row">
-                    <div
-                      class="full theme_font_tint font-small"
-                      style="line-height: 1.4"
-                    >
-                      {{ $store.state.mall2.zitiAddress.addressFull }}
-                      {{
-                        $store.state.mall2.zitiAddress.phone &&
-                        $store.state.mall2.zitiAddress.phone != ""
-                          ? "(" + $store.state.mall2.zitiAddress.phone + ")"
-                          : ""
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <i
-                    class="
+                  <div>
+                    <i
+                      class="
                       iconfont
                       mall-gengduojiantou
                       theme_font_tint
                       icon-font
                     "
-                  ></i>
+                    ></i>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="colorfulline">
+                <img src="static/image/mall2/colorfulline.png" />
+              </div>-->
+            </div>
+            <div
+              class="block-div no-padding-bottom"
+              :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
+              style="background-color: #fff;position: fixed;top: 58px;left: 0;right: 0;z-index: 10;" v-show="showMini">
+              <div
+                v-if="
+                $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
+              "
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">
+                  <div
+                    class="act-item-full theme_standard_bg theme_font_white"
+                    style="border-radius: 5px;white-space: nowrap;"
+                    v-if="$store.state.mall2.selectAddress.isDefault == 1">
+                    默认
+                  </div>
+                  <span style="color: #333333;
+                  font-size: 13px;
+                  margin-right: 30px;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;">
+                    {{$store.state.mall2.selectAddress.addressFull}}
+                  </span>
+                  <div style="position: absolute;right: 7px;">
+                    <i
+                      class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
+                      style="font-size: 12px"
+                    ></i>
+                  </div>
                 </div>
               </div>
             </div>
-            <!--<div class="colorfulline">
-              <img src="static/image/mall2/colorfulline.png" />
-            </div>-->
           </div>
 
           <div
@@ -242,7 +281,7 @@
             </div>
           </div>
 
-          <div class="concatStore" style="background-color: #f1f1f1" v-for="(item,index) in occurList" :key="index">
+          <div class="concatStore" style="background-color: #f1f1f1;margin-top: 112px;" v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div
               class="block-div"
@@ -972,6 +1011,9 @@ export default {
   },
   data() {
     return {
+      showMini: false,
+      startX: null,
+      startY: null,
       contactFlag: false,
       contratWayList: [],
       //上个页面的结算参数
@@ -1304,6 +1346,21 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    touchstart() {
+      this.startX = event.changedTouches[0].pageX
+      this.startY = event.changedTouches[0].pageY
+    },
+    touchmove() {
+      var moveEndX = event.changedTouches[0].pageX
+      var moveEndY = event.changedTouches[0].pageY
+      var X = moveEndX - this.startX
+      var Y = moveEndY - this.startY
+      if (Math.abs(Y) > Math.abs(X) && Y > 0) {
+        this.showMini = false
+      } else if (Math.abs(Y) > Math.abs(X) && Y < 0) {
+        this.showMini = true
+      }
+    },
     calcTotal(proArr){
       let total = 0;
       proArr.forEach(item => {
