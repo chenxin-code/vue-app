@@ -3044,6 +3044,7 @@ export default {
           this.count += store.storeProData.proNum;
         }
 
+        console.log('count--------->',this.count)
 
         let couNo = this.occurList[index].couNo;
         let usedCoupons = [];
