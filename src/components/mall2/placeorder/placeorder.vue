@@ -1378,7 +1378,7 @@ export default {
       proArr.forEach(item => {
         amount += item.amount;
       });
-      return amount
+      return amount.toFixed(2)
     },
     wxenvironment() {
       let ua = window.navigator.userAgent.toLowerCase();
