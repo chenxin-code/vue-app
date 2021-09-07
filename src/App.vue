@@ -136,10 +136,10 @@ export default {
     this.$store.state.microSho.carts = [];
     this.$store.state.microSho.groupbuyingCarts = [];
     //加多一个token获取
-    var token =
-      this.$util.getUrlQuery("ythToken") ||
-      this.$util.getUrlQuery("Authorization");
-    this.$store.commit("setYthToken", token);
+    // var token =
+    //   this.$util.getUrlQuery("ythToken") ||
+    //   this.$util.getUrlQuery("Authorization");
+    // this.$store.commit("setYthToken", token);
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       let initObj = {};
@@ -160,7 +160,7 @@ export default {
       console.log("initObj", initObj);
       console.log("initObj.ythToken", initObj.ythToken);
       console.log("getYthUserInfo", this.$store.state.ythToken);
-      this.$store.commit("setYthToken", initObj.ythToken);
+      // this.$store.commit("setYthToken", initObj.ythToken);
       this.getYthUserInfo();
     } else {
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
@@ -170,7 +170,7 @@ export default {
           "---------------this.$store.state.ythToken----------",
           this.$store.state.ythToken
         );
-        this.$store.commit("setYthToken", res.result);
+        // this.$store.commit("setYthToken", res.result);
         this.getYthUserInfo();
       });
     }
@@ -301,11 +301,11 @@ export default {
         token = this.$store.state.ythToken;
       }
       //加多一个token获取
-      token =
-        token ||
-        this.$util.getUrlQuery("ythToken") ||
-        this.$util.getUrlQuery("Authorization");
-      this.$store.commit("setYthToken", token);
+      // token =
+      //   token ||
+      //   this.$util.getUrlQuery("ythToken") ||
+      //   this.$util.getUrlQuery("Authorization");
+      // this.$store.commit("setYthToken", token);
       this.$http
         .post("/app/json/login/getYthUser", { token: token })
         .then(res => {

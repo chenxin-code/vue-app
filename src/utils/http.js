@@ -301,38 +301,37 @@ Axios.interceptors.response.use(
       //   return userCenter.expireUpdateToken(res);
       // } else {
       if (store.state.webtype == '1' || store.state.webtype == '0') {
-        console.log('store.state.login.token',store.state.login.token);
         store.state.login.token = ''
         bridgefunc.vuexStorage(function () {
           // !store.state.ythToken
           if (process.env.VUE_APP_ENV === 'development') util.toLogin();
-          // if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
-          //   util.toLogin();
-          // } else {
-          //   // 用户token过期重新走一体化转商城token接口
-          //   let url = window.location.hash;
-          //   let beforeUrl = url.substr(0, url.indexOf("?"));   //?之前主地址
-          //   let afterUrl = url.substr(url.indexOf("?") + 1);   //？之后参数路径
-          //   let nextUrl = "";
-          //   let arr = new Array();
-          //   if (afterUrl != "") {
-          //     let urlParamArr = afterUrl.split("&"); //将参数按照&符分成数组
-          //     for (let i = 0; i < urlParamArr.length; i++) {
-          //       let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
-          //       //如果键雨要删除的不一致，则加入到参数中
-          //       if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId' && paramArr[0] !== 'ythToken') {
-          //         arr.push(urlParamArr[i]);
-          //       }
-          //     }
-          //   }
-          //   if (arr.length > 0) {
-          //     nextUrl = "?" + arr.join("&");
-          //   }
-          //   url = beforeUrl + nextUrl;
-          //   console.log('url', url)
-          //   window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${url}`)}`
-          // }
-          util.toLogin();
+          if (!store.state.ythToken) {//如果没有一体化token,表示在普通网页不在app或小程序，走正常登录流程
+            util.toLogin();
+          } else {
+            // 用户token过期重新走一体化转商城token接口
+            let url = window.location.hash;
+            let beforeUrl = url.substr(0, url.indexOf("?"));   //?之前主地址
+            let afterUrl = url.substr(url.indexOf("?") + 1);   //？之后参数路径
+            let nextUrl = "";
+            let arr = new Array();
+            if (afterUrl != "") {
+              let urlParamArr = afterUrl.split("&"); //将参数按照&符分成数组
+              for (let i = 0; i < urlParamArr.length; i++) {
+                let paramArr = urlParamArr[i].split("="); //将参数键，值拆开
+                //如果键雨要删除的不一致，则加入到参数中
+                if (paramArr[0] !== 'token' && paramArr[0] !== 'projectId' && paramArr[0] !== 'ythToken') {
+                  arr.push(urlParamArr[i]);
+                }
+              }
+            }
+            if (arr.length > 0) {
+              nextUrl = "?" + arr.join("&");
+            }
+            url = beforeUrl + nextUrl;
+            console.log('url', url)
+            window.location.href = `${window.location.origin}/app/index?token=${store.state.ythToken}&projectId=&redirect=${encodeURIComponent(`/app-vue/app/index.html${url}`)}`
+          }
+          // util.toLogin();
           return res;
         })
       }
