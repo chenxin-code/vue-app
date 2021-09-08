@@ -68,7 +68,7 @@
                     {{ $store.state.mall2.selectAddress.receiverName }}
                   </div>
                   <div class="name theme_font_black" style="color: #333333;font-size: 13px">
-                    {{ $store.state.mall2.selectAddress.mobile }}
+                    {{ hiddenMobile($store.state.mall2.selectAddress.mobile) }}
                   </div>
                 </div>
               </div>
@@ -418,7 +418,6 @@
                     class="row-input theme_font_common"
                     placeholder="选填，请先和商家协商一致"
                     v-model="store.remark"
-                    style="text-align: right"
                   />
                 </div>
               </div>
@@ -1351,6 +1350,9 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    hiddenMobile(mobile) {
+      return mobile.substring(0,3) + '****' + mobile.substring(7,11)
+    },
     touchstart() {
       this.startX = event.changedTouches[0].pageX
       this.startY = event.changedTouches[0].pageY
@@ -3038,13 +3040,13 @@ export default {
           return;
         }
 
+        this.count = 0;
+
         for (let i = 0; i < this.occurList[index].store.length; i++) {
           let store = this.occurList[index].store[i];
           this.returnStoreProducts(store);
           this.count += store.storeProData.proNum;
         }
-
-        console.log('count--------->',this.count)
 
         let couNo = this.occurList[index].couNo;
         let usedCoupons = [];
