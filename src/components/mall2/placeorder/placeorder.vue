@@ -17,8 +17,9 @@
             ">
             <div
               class="block-div no-padding-bottom"
-              :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
-              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;" v-show="!showMini">
+              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;"
+              :style="wxenvironment() ? { 'top' : '42px'} : ''"
+              v-show="!showMini">
               <div
                 v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
@@ -130,8 +131,9 @@
             </div>
             <div
               class="block-div no-padding-bottom"
-              :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
-              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;" v-show="showMini">
+              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;"
+              :style="wxenvironment() ? { 'top' : '42px'} : ''"
+              v-show="showMini">
               <div
                 v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
