@@ -8,7 +8,6 @@
         <div class="scroll-div">
           <div
             class="block-div no-padding-bottom"
-            :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
             v-if="
               (buyType != 'songli' &&
                 deliveryType == 2 &&
