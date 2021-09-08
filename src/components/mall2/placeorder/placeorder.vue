@@ -18,7 +18,7 @@
             <div
               class="block-div no-padding-bottom"
               :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
-              style="background-color: #fff;position: fixed;top: 58px;left: 0;right: 0;z-index: 10;" v-show="!showMini">
+              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;" v-show="!showMini">
               <div
                 v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
@@ -131,7 +131,7 @@
             <div
               class="block-div no-padding-bottom"
               :style="wxenvironment() ? { 'margin-top' : '15px'} : ''"
-              style="background-color: #fff;position: fixed;top: 58px;left: 0;right: 0;z-index: 10;" v-show="showMini">
+              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;" v-show="showMini">
               <div
                 v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
@@ -284,7 +284,7 @@
           </div>
 
           <div class="concatStore" style="background-color: #f1f1f1;"
-               :style="index === 0 ? (showMini ? { 'margin-top' : '58px'} : { 'margin-top' : '112px'}) : ''"
+               :style="index === 0 ? (showMini ? { 'margin-top' : '57px'} : { 'margin-top' : '112px'}) : ''"
                v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div class="theme_font_black margin_div">
@@ -777,7 +777,7 @@
               >
               <span class="count">(共{{ count }}件)</span>
               <div style="height: 15px;font-size: 12px;color: #999999">
-                共省 ¥{{$util.toDecimal2(occurList[0].discountAmount + occurList[0].couponAmount)}}
+                共省 ¥{{gongsheng(occurList)}}
               </div>
               <!-- 易捷卡不会展示 -->
               <div
@@ -1350,6 +1350,13 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    gongsheng(occurList){
+      let amount = 0;
+      occurList.forEach(item => {
+        amount += item.discountAmount + item.couponAmount;
+      });
+      return this.$util.toDecimal2(amount);
+    },
     hiddenMobile(mobile) {
       return mobile.substring(0,3) + '****' + mobile.substring(7,11)
     },
