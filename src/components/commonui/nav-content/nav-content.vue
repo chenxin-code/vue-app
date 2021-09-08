@@ -1,10 +1,10 @@
 /**Created by liaoyingchao on 2018/10/24.*/
 
 <template>
-  <div class="nav-content" :style="{top: top+ 'px'}" v-if="!wxenvironment() || placeorder">
+  <div class="nav-content" style="top: 0" v-if="wxenvironment() && titleDefault">
     <slot></slot>
   </div>
-  <div class="nav-content" style="top: 0" v-else>
+  <div class="nav-content" :style="{top: top + 'px'}" v-else>
     <slot></slot>
   </div>
 </template>
@@ -15,7 +15,7 @@
     name: "nav-content",
     components: {},
     prop: {
-      placeorder: {
+      titleDefault: {
         type: Boolean,
         default: false
       }
