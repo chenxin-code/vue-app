@@ -82,14 +82,14 @@
                   @click="checkShop(item, index, isMonthPay)"
                   checked-color="#E5165A"
                   ref="checkShop"
-                  >{{ item.quarterTitle }}</van-checkbox
+                  >{{ item.quarterTitle.substr(0,5) }}</van-checkbox
                 >
                 <div class="title-hd" v-show="isMonthPay">
-                  {{ item.quarterTitle }}
+                  {{ item.quarterTitle.substr(0,5) }}
                 </div>
               </div>
               <div class="title-hd" v-show="isFinishBill">
-                {{ item.quarterTitle }}
+                {{ item.quarterTitle.substr(0,5) }}
               </div>
               <div
                 class="item"
