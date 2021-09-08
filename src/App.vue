@@ -272,6 +272,20 @@ export default {
     }
   },
   methods: {
+    /*更新分销码*/ 
+    updateReferrerCode(){
+      let distributionPersonDetail=this.$store.state.distributionPersonDetail;
+      let params={
+        distributorShareCode:this.$route.query.referrerCode || -1,
+        referrerId: distributionPersonDetail.distributorId,
+        referrerFatherId: distributionPersonDetail.parentDistributorId
+      };
+      this.$http
+        .post("/app/json/user/updateReferrerCode", params)
+        .then(res => {
+
+        });
+    },
     // getUserTable(phone){
     //   this.$http.post('/app/json/customer_service/findHeadInfoByList',{
     //     userId:phone,
@@ -354,7 +368,7 @@ export default {
         .then(res => {
           console.log("头像返回", res);
         });
-    },
+    }, 
     getDistributionInfo(phone) {
       let distributionUrl = "";
       // this.$store.state.ythUserInfo.phone
@@ -379,6 +393,7 @@ export default {
               };
             }
           }
+          this.updateReferrerCode()
         })
         .catch(err => {
           this.$Toast(err);
