@@ -1660,20 +1660,30 @@
       position="bottom"
     >
       <div class="share_popup">
+        <div class="popup-top">分享至</div>
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
-            <img src="./shareImage/image/share_wx.png" alt="" />
+            <img src="./shareImage/image/weixin.png" alt="" />
             <div>微信好友</div>
           </div>
           <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="./shareImage/image/share_haibao.png" alt="" />
-            <div>推广海报</div>
+            <img src="./shareImage/image/poster.png" alt="" />
+            <div>生成图片</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/share_tuwen.png" alt="" />
+            <img src="./shareImage/image/text.png" alt="" />
             <div>图文推广</div>
           </div>
+          <div class="share_botton_item">
+            <img src="./shareImage/image/friends.png" alt="" />
+            <div>朋友圈</div>
+          </div>
+          <div class="share_botton_item">
+            <img src="./shareImage/image/link.png" alt="" />
+            <div>复制链接</div>
+          </div>
         </div>
+        <div class="divLine"></div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
     </van-popup>
@@ -4894,7 +4904,14 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  padding-top: 40px;
+  .popup-top {
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    text-align: center;
+    padding: 18px;
+  }
 
   .share_botton {
     display: flex;
@@ -4914,7 +4931,7 @@ export default {
       }
 
       div {
-        margin-top: 23px;
+        margin-top: 15px;
         font-size: 13px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
@@ -4922,20 +4939,32 @@ export default {
       }
     }
   }
+  .divLine {
+    width: 375px;
+    height: 1px;
+    background: #E9E9E9;
+    margin-top: 20px;
+  }
 
   .cancel {
-    width: 295px;
-    height: 37px;
-    background: #ffffff;
-    border-radius: 6px;
-    border: 1px solid #e5e5e5;
-    text-align: center;
-    line-height: 37px;
-    font-size: 13px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #666666;
-    margin: 20px auto;
+    // width: 295px;
+    // height: 37px;
+    // background: #ffffff;
+    // border-radius: 6px;
+    // border: 1px solid #e5e5e5;
+    // text-align: center;
+    // line-height: 37px;
+    // font-size: 13px;
+    // font-family: PingFangSC-Regular, PingFang SC;
+    // font-weight: 400;
+    // color: #666666;
+    // margin: 20px auto;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #8d8d8d;
+      text-align: center;
+      padding: 15px 0 25px 0;
   }
 }
 
