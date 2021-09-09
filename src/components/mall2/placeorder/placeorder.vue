@@ -17,8 +17,8 @@
             ">
             <div
               class="block-div no-padding-bottom"
-              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;"
-              :style="wxenvironment() ? { 'top' : '42px'} : ''"
+              style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;"
+              :style="$store.state.webtype == '2' || $store.state.webtype == '3' ? { 'top' : '42px'} : ''"
               v-show="!showMini">
               <div
                 v-if="
@@ -131,8 +131,8 @@
             </div>
             <div
               class="block-div no-padding-bottom"
-              style="margin: 0;border-radius: 0;background-color: #fff;position: fixed;top: 57px;left: 0;right: 0;z-index: 10;"
-              :style="wxenvironment() ? { 'top' : '42px'} : ''"
+              style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;"
+              :style="$store.state.webtype == '2' || $store.state.webtype == '3' ? { 'top' : '42px'} : ''"
               v-show="showMini">
               <div
                 v-if="
@@ -1391,10 +1391,6 @@ export default {
         amount += item.amount;
       });
       return amount.toFixed(2)
-    },
-    wxenvironment() {
-      let ua = window.navigator.userAgent.toLowerCase();
-      return ua.match(/MicroMessenger/i) == "micromessenger";
     },
     // 家政服务，选中服务时间
     openServiceTimePicker: function () {
@@ -3039,6 +3035,8 @@ export default {
       // if (beginPickupTime) {
       //   this.pickupStartTime = new Date(beginPickupTime.replace(/-/g, "/"));
       // }
+
+      this.count = 0;
       for (let index = 0; index < this.occurList.length; index++) {
         if (!this.occurList[index]) {
           this.occurList[index] = {};
@@ -3049,8 +3047,6 @@ export default {
           }
           return;
         }
-
-        //this.count = 0;
 
         for (let i = 0; i < this.occurList[index].store.length; i++) {
           let store = this.occurList[index].store[i];
