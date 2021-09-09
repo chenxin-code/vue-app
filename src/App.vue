@@ -113,7 +113,8 @@ export default {
         "/purchase",
         "/bulkDetails",
         "/orderInfo"
-      ]
+      ],
+      referrerCode:-1
     };
   },
   created() {
@@ -141,15 +142,27 @@ export default {
     //   this.$util.getUrlQuery("Authorization");
     // this.$store.commit("setYthToken", token);
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
-    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
-      let initObj = {};
-      console.log("localtion href", location.href);
-      location.href
+    let initObj = {};
+    console.log("localtion href", location.href);
+    if(location.href.includes("&")){
+       location.href
         .split("?")[1]
         .split("&")
         .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
+    }
+    console.log(initObj);
+    this.referrerCode=initObj.referrerCode || -1;
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      // let initObj = {};
+      // console.log("localtion href", location.href);
+      // location.href
+      //   .split("?")[1]
+      //   .split("&")
+      //   .forEach(item => {
+      //     initObj[item.split("=")[0]] = item.split("=")[1];
+      //   });
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
         initObj.ythToken = window.localStorage.getItem("ythToken");
       }
@@ -157,7 +170,7 @@ export default {
       this.$store.state.projectId = 11111;
       // this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
-      console.log("initObj", initObj);
+      // console.log("initObj", initObj);
       console.log("initObj.ythToken", initObj.ythToken);
       console.log("getYthUserInfo", this.$store.state.ythToken);
       // this.$store.commit("setYthToken", initObj.ythToken);
@@ -276,7 +289,7 @@ export default {
     updateReferrerCode(){
       let distributionPersonDetail=this.$store.state.distributionPersonDetail;
       let params={
-        distributorShareCode:this.$route.query.referrerCode || -1,
+        distributorShareCode:this.referrerCode || -1,
         referrerId: distributionPersonDetail.distributorId,
         referrerFatherId: distributionPersonDetail.parentDistributorId
       };
@@ -372,7 +385,7 @@ export default {
     getDistributionInfo(phone) {
       let distributionUrl = "";
       // this.$store.state.ythUserInfo.phone
-      this.$store.state.environment == "development"
+      this.$store.state.environment == "production"
         ? (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/times/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`)
         : (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/times/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`);
       this.$http
