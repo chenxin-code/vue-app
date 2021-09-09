@@ -18,7 +18,6 @@
             <div
               class="block-div no-padding-bottom"
               style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;"
-              :style="$store.state.webtype == '2' || $store.state.webtype == '3' ? { 'top' : '42px'} : ''"
               v-show="!showMini">
               <div
                 v-if="
@@ -132,7 +131,6 @@
             <div
               class="block-div no-padding-bottom"
               style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;"
-              :style="$store.state.webtype == '2' || $store.state.webtype == '3' ? { 'top' : '42px'} : ''"
               v-show="showMini">
               <div
                 v-if="
