@@ -415,11 +415,12 @@
               </div>
               <div class="flex-row top-line">
                 <div class="label-middle theme_font_common">备注</div>
-                <div class="full">
+                <div class="full" style="margin-right: 5px;">
                   <input
                     class="row-input theme_font_common"
                     placeholder="选填，请先和商家协商一致"
                     v-model="store.remark"
+                    style="text-align: right;"
                   />
                 </div>
               </div>
