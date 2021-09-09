@@ -494,14 +494,14 @@ const store = new Vuex.Store({
     setShowBackTop: (state, isShowBackTop) => {
       state.isShowBackTop = isShowBackTop;
     },
-    setYthToken: (state, _token) => {
-      const token = _token || window.localStorage.getItem("ythToken");
-      state.ythToken = token;
-      state.login.token = token;
-      if (_token) {
-        window.localStorage.setItem("ythToken", _token);
-      }
-    }
+    // setYthToken: (state, _token) => {
+    //   const token = _token || window.localStorage.getItem("ythToken");
+    //   state.ythToken = token;
+    //   state.login.token = token;
+    //   if (_token) {
+    //     window.localStorage.setItem("ythToken", _token);
+    //   }
+    // }
   },
   actions: {
     rfrCodeMapAction({ state, commit }) {

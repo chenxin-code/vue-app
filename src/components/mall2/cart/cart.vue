@@ -86,6 +86,7 @@ import CartList from "./cart-list";
 import InitialLoadPickupAny from "@/utils/initialLoadPickupAny.js";
 import AdPage from "@/components/product/index/subpage/adpage";
 import cartEvent from "../../../utils/presale/cart";
+import { mapMutations } from "vuex";
 
 export default {
   name: "cart",
@@ -124,6 +125,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setShowBackTop"]),
     toPresaleCart: function() {
       this.$router.push({
         path: "/mall2/presalecart"
@@ -391,6 +393,7 @@ export default {
     } else {
       this.showBackBtn = true;
     }
+    this.setShowBackTop(false);
   },
   watch: {
     "$store.state.mall2.cartNum": function(val, oldVal) {
