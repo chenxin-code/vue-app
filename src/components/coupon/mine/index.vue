@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-top title="发优惠券" @backEvent="backEvent" v-if="!wxenvironment()"></nav-top>
-    <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }">
+    <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }" :style="wxenvironment() ? { padding: '0 0 70px 0'} : ''">
       <van-list
         v-model="loading"
         :finished="finished"
