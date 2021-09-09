@@ -2253,7 +2253,7 @@ export default {
           // userName: "gh_2a45a4d38d81",
           userName: "gh_28d617271c97",
           path: `pages/common/home/index?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
+            `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}&referrerCode=${this.referrerCode||''}`
           )}`,
           title: this.getSkuNameStr(this.detailData),
           desc: this.getSkuNameStr(this.detailData),
