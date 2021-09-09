@@ -153,7 +153,7 @@ export default {
         });
     }
     console.log(initObj);
-    this.referrerCode=initObj.referrerCode || -1;
+    this.referrerCode=initObj.referrerCode;
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       // let initObj = {};
       // console.log("localtion href", location.href);
@@ -289,7 +289,7 @@ export default {
     updateReferrerCode(){
       let distributionPersonDetail=this.$store.state.distributionPersonDetail;
       let params={
-        distributorShareCode:this.referrerCode || -1,
+        distributorShareCode:this.referrerCode || this.$route.query.referrerCode || -1,
         referrerId: distributionPersonDetail.distributorId,
         referrerFatherId: distributionPersonDetail.parentDistributorId
       };
