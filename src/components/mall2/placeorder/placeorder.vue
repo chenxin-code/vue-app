@@ -3050,7 +3050,7 @@ export default {
           return;
         }
 
-        this.count = 0;
+        //this.count = 0;
 
         for (let i = 0; i < this.occurList[index].store.length; i++) {
           let store = this.occurList[index].store[i];
