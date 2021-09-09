@@ -14,7 +14,7 @@
   export default {
     name: "nav-content",
     components: {},
-    prop: {
+    props: {
       titleDefault: {
         type: Boolean,
         default: false
