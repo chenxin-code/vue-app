@@ -17,7 +17,7 @@
             ">
             <div
               class="block-div no-padding-bottom"
-              style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;border-top: 1px solid #eee;"
+              style=""
               v-show="!showMini">
               <div
                 v-if="
@@ -283,8 +283,7 @@
             </div>
           </div>
 
-          <div class="concatStore" style="background-color: #f1f1f1;"
-               :style="index === 0 ? (showMini ? { 'margin-top' : '72px'} : { 'margin-top' : '128px'}) : { 'margin-top' : '25px'}"
+          <div class="concatStore" style="background-color: #f1f1f1;margin-top: 25px;"
                v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
             <div class="theme_font_black margin_div">
