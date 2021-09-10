@@ -163,6 +163,7 @@ export default {
       //   .forEach(item => {
       //     initObj[item.split("=")[0]] = item.split("=")[1];
       //   });
+      this.$store.state.login.token=this.setLoginToken(initObj.token);
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
         initObj.ythToken = window.localStorage.getItem("ythToken");
       }
@@ -170,7 +171,7 @@ export default {
       this.$store.state.projectId = 11111;
       // this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
-      // console.log("initObj", initObj);
+      console.log("login.token", this.$store.state.login.token);
       console.log("initObj.ythToken", initObj.ythToken);
       console.log("getYthUserInfo", this.$store.state.ythToken);
       // this.$store.commit("setYthToken", initObj.ythToken);
@@ -285,6 +286,15 @@ export default {
     }
   },
   methods: {
+    setLoginToken(token){
+      if(token) return token;
+      if(!this.$route.query) return;
+      let usertoken="";
+      let query_=this.$route.query;
+      usertoken= query_.token && query_.token;
+      usertoken= query_.logintoken && query_.logintoken;
+      return usertoken;
+    },
     /*更新分销码*/ 
     updateReferrerCode(){
       let distributionPersonDetail=this.$store.state.distributionPersonDetail;
@@ -562,6 +572,7 @@ export default {
         this.isShy = true;
       }, 3000);
     },
+    //测试提交
     // 返回首页，这里很low但是没bug，切最简单，需要找机会处理
     backIndex: function() {
       // 返回首页时清除 微店code（河北）
@@ -834,6 +845,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  .nav-bar {
+    z-index: 0
+  }
   .backTop {
     position: fixed;
     bottom: 170px;
@@ -853,7 +867,6 @@ export default {
     top: 0;
     bottom: 0;
     background-color: white;
-    z-index: 50;
   }
 
   .back-index {
