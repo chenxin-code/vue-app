@@ -6,7 +6,7 @@
       :title="navTopTitle"
       v-if="!wxenvironment()"
     ></nav-top>
-    <div class="user_info" :style="wxenvironment() ? {'padding: 0 auto'} : ''">
+    <div class="user_info" :style="wxenvironment() ? { padding: '0 auto'} : ''">
       <div class="info">
         <span>提货人姓名：</span>
         <input v-model="consigneeName" disabled />
