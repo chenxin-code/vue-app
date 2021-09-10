@@ -804,8 +804,8 @@ export default {
       let checkStatus = [];
       this.$store.state.environment == "development"
         ? (url =
-            "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
-        : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+            "https://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill-not-auth")
+        : (url = "https://times-pms.linli580.com/pcs/bill-center/check-bill-not-auth");
       let paramsObj = {
         list: list
       };

@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-08-16 14:08:51
+ * @LastEditTime: 2021-09-10 17:33:59
 -->
 <template>
   <div class="bill-detail">
@@ -661,9 +661,9 @@ export default {
         let pcsUrl = "";
         this.$store.state.environment == "development"
           ? (pcsUrl =
-              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill")
+              "http://times-pcs.linli580.com.cn:8888/pcs/bill-center/check-bill-not-auth")
           : (pcsUrl =
-              "https://times-pms.linli580.com/pcs/bill-center/check-bill");
+              "https://times-pms.linli580.com/pcs/bill-center/check-bill-not-auth");
         let pcsObj = {
           list: billNoList
         };
