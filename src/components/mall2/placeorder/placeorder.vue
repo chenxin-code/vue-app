@@ -17,7 +17,6 @@
             ">
             <div
               class="block-div no-padding-bottom"
-              style=""
               v-show="!showMini">
               <div
                 v-if="
@@ -124,9 +123,9 @@
                   </div>
                 </div>
               </div>
-              <!--<div class="colorfulline">
+              <div class="colorfulline">
                 <img src="static/image/mall2/colorfulline.png" />
-              </div>-->
+              </div>
             </div>
             <div
               class="block-div no-padding-bottom"
