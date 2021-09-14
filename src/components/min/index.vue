@@ -175,9 +175,9 @@ export default {
 
       if(this.wxenvironment()) {
         let routerList = [
-          '/mall2/orderlist', // 收货地址
-          '/concatAfterSalesOrder', //售后
-          '/coupon/get_coupon_list', // 优惠卷
+          // '/mall2/orderlist', // 收货地址
+          // '/concatAfterSalesOrder', //售后
+          // '/coupon/get_coupon_list', // 优惠卷
         ]
         let newWebview = false;
         routerList.forEach(str => {
@@ -252,8 +252,8 @@ export default {
             console.log('----item.pageUrl-->', item.pageUrl);
             if(this.wxenvironment()) {
               let routerList = [
-                '/mall2/addresslist', // 收货地址
-                "/minUserInfo", // 个人资料
+                // '/mall2/addresslist', // 收货地址
+                // "/minUserInfo", // 个人资料
               ]
               let newWebview = false;
               routerList.forEach(str => {
