@@ -154,6 +154,7 @@ export default {
     }
     console.log(initObj);
     this.referrerCode=initObj.referrerCode || initObj.shareCode;
+    this.$store.state.referrerCode=this.referrerCode;
     if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
       // let initObj = {};
       // console.log("localtion href", location.href);

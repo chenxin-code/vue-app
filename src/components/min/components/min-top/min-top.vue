@@ -45,7 +45,7 @@
         <ul>
           <li @click="exchange">
             <img :src="require(`./img/bangdou0${rankNum}.png`)">
-            <p>邦豆兑换</p>
+            <p>邦豆兑换</p> 
           </li>
           <li @click="task">
             <img :src="require(`./img/task0${rankNum}.png`)">
@@ -66,10 +66,12 @@
 export default {
   props: [
     'memberInfo',
-    'userInfo'
+    'userInfo',
+    'referrerCode'
   ],
   data() {
     return {
+     
     }
   },
   computed: {
@@ -126,13 +128,17 @@ export default {
     navToUserInfo(){
       this.$router.push({
         path: '/minUserInfo',
+        query: {
+          referrerCode:this.referrerCode
+        }
       })
     },
     toCollection() {
       this.$router.push({
         path: '/mall2/collection',
         query: {
-          active: 0
+          active: 0,
+          referrerCode:this.referrerCode
         }
       })
     },
@@ -140,13 +146,15 @@ export default {
       this.$router.push({
         path: '/mall2/collection',
         query: {
-          active: 1
+          active: 1,
+          referrerCode:this.referrerCode
         }
       })
     },
     toBrowsinglist() {
       this.$router.push({
-        path: '/mall2/browsinglist'
+        path: '/mall2/browsinglist',
+        referrerCode:this.referrerCode
       })
     },
     toCustomerService() {
@@ -160,7 +168,7 @@ export default {
     },
     strategy() {
       // this.$toast('敬请期待…')
-      this.$router.push('/gradeDescription')
+      this.$router.push('/gradeDescription?referrerCode='+this.referrerCode);
     }
   },
 };

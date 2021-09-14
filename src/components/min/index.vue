@@ -1,6 +1,6 @@
 <template>
   <div class="adapter">
-    <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
+    <min-top :memberInfo="memberInfo" :userInfo="userInfo" :referrerCode="referrerCode"></min-top>
     <grid-list :gridData="walletData" @navTo="navTo"></grid-list>
     <grid-list :gridData="orderData" @navTo="navTo"></grid-list>
     <bottom-cell :cellData="cellData" @bottomNavTo="bottomNavTo"></bottom-cell>
@@ -146,7 +146,8 @@ export default {
       userInfo: {
         userImage: "",
         userName: ""
-      }
+      },
+      referrerCode:-1
     };
   },
   components: {
@@ -163,6 +164,9 @@ export default {
         params = {
           totalRecord: value
         };
+      }
+      if(!params.referrerCode){
+        params.referrerCode=this.referrerCode
       }
       console.log(params);
       if (url == "") {
@@ -208,12 +212,13 @@ export default {
           
           if (/token=/.test(url)) {
             let ythToken = "";
-
             this.$store.state.webtype == 2 || this.$store.state.webtype == 3
               ? (ythToken = localStorage.getItem("ythToken"))
               : (ythToken = this.$store.state.ythToken);
-
             url = url.replace(/token=/, `token=${ythToken}`);
+          }
+          if(url.indexOf('referrerCode')<=-1 && url.indexOf('shareCode')<=-1){
+            url+= "&referrerCode="+this.referrerCode;
           }
           // 分销工程单独跳转webview， 解决微信小程序双标题问题
           if(this.wxenvironment() && this.isDistribution(url)) {
@@ -401,6 +406,7 @@ export default {
     }
   },
   created() {
+    this.referrerCode=this.$store.state.referrerCode;
     if (!this.memberId) {
       this.$http
         .post("/app/json/user/getUserSummary", {
