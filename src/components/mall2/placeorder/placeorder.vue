@@ -5,10 +5,8 @@
     <nav-top @backEvent="$router.go(-1)" v-if="!noNavTop"></nav-top>
     <nav-content v-if="complete" :style="getContentTop()">
       <div class="flex-div">
-        <div class="scroll-div">
-          <div
-            class="block-div no-padding-bottom"
-            v-if="
+        <div class="scroll-div" @touchstart="touchstart()" @touchmove="touchmove()">
+          <div v-if="
               (buyType != 'songli' &&
                 deliveryType == 2 &&
                 occurData.needAddress == 1 &&
@@ -16,98 +14,157 @@
               (deliveryType == 1 &&
                 $route.query.entryType != 'wish' &&
                 $route.params.productType != 514)
-            "
-          >
+            ">
             <div
-              v-if="
+              class="block-div no-padding-bottom"
+              v-show="!showMini">
+              <div
+                v-if="
                 $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
               "
-              @click="toSelectAddress"
-            >
-              <div class="flex-row">
-                <div class="name theme_font_black">
-                  {{ $store.state.mall2.selectAddress.receiverName }}
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">
+                  <div
+                    class="act-item-full theme_standard_bg theme_font_white"
+                    style="border-radius: 5px;white-space: nowrap;"
+                    v-if="$store.state.mall2.selectAddress.isDefault == 1">
+                    默认
+                  </div>
+                  <span style="color: #333333;font-size: 13px">
+                  {{$store.state.mall2.selectAddress.provinceName
+                  + $store.state.mall2.selectAddress.cityName
+                  + $store.state.mall2.selectAddress.countryName
+                  + $store.state.mall2.selectAddress.townName}}
+                </span>
                 </div>
-                <div class="name theme_font_black">
-                  {{ $store.state.mall2.selectAddress.mobile }}
-                </div>
-                <div
-                  class="act-item-full theme_standard_bg theme_font_white"
-                  v-if="$store.state.mall2.selectAddress.isDefault == 1"
-                >
-                  默认
-                </div>
-              </div>
-              <div class="flex-row">
-                <div class="full theme_font_tint font-small">
-                  {{ $store.state.mall2.selectAddress.addressFull }}
-                </div>
-                <div>
-                  <i
-                    class="
+                <div class="flex-row">
+                  <div class="full theme_font_tint font-small"
+                       style="
+                     color: #333333;
+                     font-size: 16px;
+                     font-weight: bold;
+                     margin-right: 30px;
+                     overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;">
+                    {{ $store.state.mall2.selectAddress.address }}
+                  </div>
+                  <div>
+                    <i
+                      class="
                       iconfont
                       mall-gengduojiantou
                       theme_font_tint
                       icon-font
                     "
-                  ></i>
+                      style="font-size: 12px"
+                    ></i>
+                  </div>
+                </div>
+                <div class="flex-row">
+                  <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                    {{ $store.state.mall2.selectAddress.receiverName }}
+                  </div>
+                  <div class="name theme_font_black" style="color: #333333;font-size: 13px">
+                    {{ hiddenMobile($store.state.mall2.selectAddress.mobile) }}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              v-if="
+              <div
+                v-if="
                 !($store.state.mall2.selectAddress.id > 0) &&
                 deliveryType == 2 &&
                 $route.params.productType != 514
               "
-              @click="toSelectAddress"
-            >
-              <div class="flex-row">请选择地址信息</div>
-            </div>
-            <div
-              v-if="
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">请选择地址信息</div>
+              </div>
+              <div
+                v-if="
                 $store.state.mall2.zitiAddress.id > 0 &&
                 deliveryType == 1 &&
                 $route.params.productType != 514
               "
-              @click="toSelectZitiAddress"
-            >
-              <div class="pickup-shop">
-                <div style="flex: 1">
-                  <div class="flex-row">
-                    <div class="name theme_font_black">
-                      自提店铺：{{ $store.state.mall2.zitiAddress.storeName }}
+                @click="toSelectZitiAddress"
+              >
+                <div class="pickup-shop">
+                  <div style="flex: 1">
+                    <div class="flex-row">
+                      <div class="name theme_font_black">
+                        自提店铺：{{ $store.state.mall2.zitiAddress.storeName }}
+                      </div>
+                    </div>
+                    <div class="flex-row">
+                      <div
+                        class="full theme_font_tint font-small"
+                        style="line-height: 1.4"
+                      >
+                        {{ $store.state.mall2.zitiAddress.addressFull }}
+                        {{
+                          $store.state.mall2.zitiAddress.phone &&
+                          $store.state.mall2.zitiAddress.phone != ""
+                            ? "(" + $store.state.mall2.zitiAddress.phone + ")"
+                            : ""
+                        }}
+                      </div>
                     </div>
                   </div>
-                  <div class="flex-row">
-                    <div
-                      class="full theme_font_tint font-small"
-                      style="line-height: 1.4"
-                    >
-                      {{ $store.state.mall2.zitiAddress.addressFull }}
-                      {{
-                        $store.state.mall2.zitiAddress.phone &&
-                        $store.state.mall2.zitiAddress.phone != ""
-                          ? "(" + $store.state.mall2.zitiAddress.phone + ")"
-                          : ""
-                      }}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <i
-                    class="
+                  <div>
+                    <i
+                      class="
                       iconfont
                       mall-gengduojiantou
                       theme_font_tint
                       icon-font
                     "
-                  ></i>
+                    ></i>
+                  </div>
                 </div>
               </div>
+              <div class="colorfulline">
+                <img src="static/image/mall2/colorfulline.png" />
+              </div>
             </div>
-            <div class="colorfulline">
-              <img src="static/image/mall2/colorfulline.png" />
+            <div
+              class="block-div no-padding-bottom"
+              style="margin: 0;border-radius: 0;background-color: #fff;position: absolute;top: 0;left: 0;right: 0;z-index: 10;border-top: 1px solid #eee;"
+              v-show="showMini">
+              <div
+                v-if="
+                $store.state.mall2.selectAddress.id > 0 && deliveryType == 2
+              "
+                @click="toSelectAddress"
+              >
+                <div class="flex-row">
+                  <div
+                    class="act-item-full theme_standard_bg theme_font_white"
+                    style="border-radius: 5px;white-space: nowrap;"
+                    v-if="$store.state.mall2.selectAddress.isDefault == 1">
+                    默认
+                  </div>
+                  <span style="color: #333333;
+                  font-size: 13px;
+                  margin-right: 30px;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;">
+                    {{$store.state.mall2.selectAddress.addressFull}}
+                  </span>
+                  <div style="position: absolute;right: 7px;">
+                    <i
+                      class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
+                      style="font-size: 12px"
+                    ></i>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -210,33 +267,6 @@
             </div>
           </div>
 
-          <!-- 心愿单 -->
-          <!-- <div
-            class="block-div wish-message-container"
-            v-if="$route.query.entryType == 'wish'"
-          >
-            <div class="top">
-              <p class="title">对TA说的话</p>
-              <span class="random-btn" @click="getWishMsg()">随机换一句</span>
-            </div>
-            <div class="msg-input-c">
-              <van-field
-                type="textarea"
-                class="msg-input"
-                v-model="wishData.payMsg"
-                placeholder="请输入想说的话"
-              />
-            </div>
-            <div class="nick-container">
-              <p class="nick-title">留言昵称</p>
-              <input
-                type="text"
-                v-model="wishData.payNiceName"
-                class="name"
-                placeholder="请输入昵称"
-              />
-            </div>
-          </div> -->
 
           <div class="block-div" v-if="occurData.needVirtualUserPhone == '1'">
             <div class="flex-row">
@@ -252,47 +282,17 @@
             </div>
           </div>
 
-          <!-- 支付方式 -->
-          <!-- <div class="block-div" v-if="false">
-            <div class="flex-row" @click="payWayShow">
-              <div class="label-middle theme_font_common">支付方式</div>
-              <div class="full"></div>
-              <div class="theme_font_common right-margin">{{ payWayText }}</div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="block-div" v-if="pageType == 2">
-            <div class="flex-row" @click="contratWayShow">
-              <div class="label-middle theme_font_common" style="width: 100px">
-                预约单联系方式
-              </div>
-              <div class="full"></div>
-              <div class="theme_font_common right-margin">
-                {{ contratWayText }}
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
-              </div>
-            </div>
-            <div class="" v-if="contratWayText != '选择联系方式'">
-              <van-cell title="姓名：" :value="selectItem.realName" />
-              <van-cell title="联系电话：" :value="selectItem.userName" />
-            </div>
-          </div> -->
-
-          <div class="concatStore" v-for="(item,index) in occurList" :key="index">
+          <div class="concatStore" style="background-color: #f1f1f1;margin-top: 25px;"
+               v-for="(item,index) in occurList" :key="index">
             <!-- <div class="block-div">{{item.store[0].storeName}}</div> -->
-            <span class="theme_font_black margin_div">
-              <i class="iconfont mall-shoukuanfang"></i>
-              {{ item.store[0].storeName }}</span
-            >
+            <div class="theme_font_black margin_div">
+              <img src="static/image/mall2/dianpu.png" style="width: 18px;vertical-align: bottom;" />
+              <span style="vertical-align: middle;font-size: 15px;margin-left: 5px;font-weight: bold">{{ item.store[0].storeName }}</span>
+            </div>
             <div
               class="block-div"
               v-for="(store, storeIndex) in item.store"
-              :key="storeIndex"
-            >
+              :key="storeIndex">
               <!--{{returnStoreProducts(store)}}-->
               <!--            <div class="flex-row">-->
               <!--              <div class="name">{{store.storeName}}</div>-->
@@ -314,7 +314,7 @@
                       {{ prodata.productName }}
                     </div>
                     <div class="title theme_font_black">
-                      <span style="font-size: 11px; color: #696969">{{
+                      <span style="font-size: 11px; color: #999999">{{
                         prodata.specs
                       }}</span>
                     </div>
@@ -329,8 +329,8 @@
                         :step="$route.params.wishProdInfo.saleNumStep"
                         integer
                       />
-                      <span style="float: right" v-else
-                        >x {{ prodata.number }}</span
+                      <span style="font-size: 12px;color: #999999;position: absolute;top:0;right: 0" v-else
+                        >x{{ prodata.number }}</span
                       >
                     </div>
                     <div
@@ -409,57 +409,24 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-row">
+              <div class="flex-row top-line">
                 <div class="label-middle theme_font_common">备注</div>
-                <div class="full">
+                <div class="full" style="margin-right: 5px;">
                   <input
                     class="row-input theme_font_common"
-                    placeholder="请留下您想说的话"
+                    placeholder="选填，请先和商家协商一致"
                     v-model="store.remark"
+                    style="text-align: right;"
                   />
                 </div>
               </div>
-            </div>
-
-            <!--没有生鲜的时候才能选时间-->
-            <!-- <div class="block-div" v-if="productType == 8">
-            <div class="flex-row" @click="openServiceTimePicker">
-              <div class="label-middle theme_font_common">服务时间</div>
-              <div class="full theme_font_common" style="text-align: right">
-                {{ serviceDateTime }}
-              </div>
-              <div>
-                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>
+              <div class="flex-row">
+                <div style="width: 100%;text-align: right">
+                  <span style="color: #999999">共{{calcTotal(store.storeProData.proArr)}}件</span>
+                  小计:<span style="color: #E5165A">￥{{calcAmount(store.storeProData.proArr)}}</span>
+                </div>
               </div>
             </div>
-          </div> -->
-
-            <!--金豆商城不支持开发票-->
-            <!--          <div-->
-            <!--            class="block-div"-->
-            <!--            v-if="(!cardType || (cardType && cardType == 551)) && $store.state.globalConfig.invoice_shopping_enable != 'false' && paramsData.orderCategory != 1&&$store.state.globalConfig.cut_price_strict!=1">-->
-            <!--            <div class="flex-row">-->
-            <!--              <div class="title full theme_font_common">发票</div>-->
-            <!--              <div class="swith" @click="useInvoiceEvent">-->
-            <!--                <img v-if="useInvoice" src="static/image/mall2/switch-on.png"/>-->
-            <!--                <img v-if="!useInvoice" src="static/image/mall2/switch-off.png"/>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--            <div class="flex-row" v-if="useInvoice" @click="changeInvoice">-->
-            <!--              <div class="label-middle theme_font_common">发票信息</div>-->
-            <!--              <div class="full"></div>-->
-            <!--              <div-->
-            <!--                class="theme_font_black right-margin"-->
-            <!--                :class="{theme_font_tint: invoiceInfo == ''}"-->
-            <!--              >-->
-            <!--                {{invoiceInfo !=-->
-            <!--                '' ? invoiceInfo : '请编辑发票信息'}}-->
-            <!--              </div>-->
-            <!--              <div>-->
-            <!--                <i class="iconfont mall-gengduo more-icon theme_font_tint"></i>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--          </div>-->
 
             <!-- 优惠券 -->
             <div
@@ -473,12 +440,17 @@
               <div class="flex-row" @click="couponEvent(index)">
                 <div class="label-middle theme_font_common">优惠券</div>
                 <div class="full"></div>
-                <div v-if="lastRes.occur" class="theme_font_black right-margin">
-                  优惠{{ $util.toDecimal2(item.couponAmount) }}元
+                <div v-if="lastRes.occur" class="theme_font_black right-margin" style="color: #E5165A">
+                  优惠¥{{ $util.toDecimal2(item.couponAmount) }}元
                 </div>
                 <div>
                   <i
-                    class="iconfont mall-gengduo more-icon theme_font_tint"
+                    class="
+                      iconfont
+                      mall-gengduojiantou
+                      theme_font_tint
+                      icon-font
+                    "
                   ></i>
                 </div>
               </div>
@@ -600,7 +572,7 @@
           </div> -->
 
             <!--易捷卡信息-->
-            <div class="block-div">
+            <div class="block-div add-padding">
               <div class="flex-row">
                 <div class="label-middle full theme_font_common">商品金额</div>
                 <div class="theme_font_black">
@@ -709,75 +681,9 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-        </div>
 
-        <div class="bottom-btns">
-          <!-- <div
-            class="tip theme_bg_yl theme_standard_font theme_light_bg"
-            v-if="deliveryType == 2 && occurData.needAddress == 1"
-          >
-            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
-          </div> -->
-          <div
-            class="btn theme_standard_bg theme_font_white"
-            v-if="buyType == 'songli'"
-            @click="checkProductStock"
-          >
-            提交礼单
-          </div>
-          <div
-            class="btn theme_standard_bg theme_font_white"
-            v-else
-            @click="checkProductStock"
-          >
-            提交订单
-          </div>
-          <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
-          <div class="price">
-            <div class="rmb-div" v-if="Object.keys(occurData).length">
-              <span class="count">共{{ count }}件</span>
 
-              <span
-                class="theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >￥</span
-              >
-              <span
-                class="left-no-space price-big theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >{{ getTotalPriceDuan(0) }}</span
-              >
-              <span
-                class="theme_font_red"
-                v-show="$mallCommon.getOccurShowPrice(occurData)"
-                >.{{ getTotalPriceDuan(1) }}</span
-              >
-              <div
-                class="digital-div"
-                v-for="(digital, digitalindex) in occurData.digitalList"
-                :key="digitalindex"
-                v-show="$mallCommon.getTotalUsePoints(digital) > 0"
-              >
-                <span
-                  class="price-big theme_font_red"
-                  v-if="
-                    digitalindex !=
-                      $mallCommon.getFirstVartualIndex(occurData) ||
-                    $mallCommon.getOccurShowPrice(occurData)
-                  "
-                  >+</span
-                >
-                <span class="price-big theme_font_red">{{
-                  $mallCommon.getTotalUsePoints(digital)
-                }}</span>
-                <span class="theme_font_red">{{
-                  $mallCommon.getTotalUnitStr(digital.acctType)
-                }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
-        </div>
+
         <!--          易捷卡弹框（充值卡）-->
         <!-- <van-popup class="pay-modal" position="bottom" v-model="showYJChange">
           <div class="top">
@@ -828,6 +734,77 @@
           <div class="pay-confirm" @click="queryBtn">确定</div>
         </van-popup> -->
         <!--          易捷卡弹框（充值卡）-->
+        </div>
+        <div class="bottom-btns">
+          <!-- <div
+            class="tip theme_bg_yl theme_standard_font theme_light_bg"
+            v-if="deliveryType == 2 && occurData.needAddress == 1"
+          >
+            仓库地址：{{ $store.state.mall2.selectAddress.addressFull }}
+          </div> -->
+          <div
+            class="btn theme_standard_bg theme_font_white"
+            v-if="buyType == 'songli'"
+            @click="checkProductStock"
+          >
+            提交礼单
+          </div>
+          <div
+            class="btn theme_standard_bg theme_font_white"
+            v-else
+            @click="checkProductStock"
+          >
+            提交订单
+          </div>
+          <!--<div class="btn theme_bg_y theme_font_white"  v-if="occurData && occurData.fixedPoints > occurData.userBanlancePoints">积分不足</div>-->
+          <div class="price">
+            <div class="rmb-div" v-if="Object.keys(occurData).length">
+              <span
+                class="theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >￥</span
+              >
+              <span
+                class="left-no-space price-big theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >{{ getTotalPriceDuan(0) }}</span
+              >
+              <span
+                class="theme_font_red"
+                v-show="$mallCommon.getOccurShowPrice(occurData)"
+              >.{{ getTotalPriceDuan(1) }}</span
+              >
+              <span class="count">(共{{ count }}件)</span>
+              <div style="height: 15px;font-size: 12px;color: #999999">
+                共省 ¥{{gongsheng(occurList)}}
+              </div>
+              <!-- 易捷卡不会展示 -->
+              <div
+                class="digital-div"
+                v-for="(digital, digitalindex) in occurData.digitalList"
+                :key="digitalindex"
+                v-show="$mallCommon.getTotalUsePoints(digital) > 0"
+              >
+                <span
+                  class="price-big theme_font_red"
+                  v-if="
+                    digitalindex !=
+                      $mallCommon.getFirstVartualIndex(occurData) ||
+                    $mallCommon.getOccurShowPrice(occurData)
+                  "
+                >+</span
+                >
+                <span class="price-big theme_font_red">{{
+                    $mallCommon.getTotalUsePoints(digital)
+                  }}</span>
+                <span class="theme_font_red">{{
+                    $mallCommon.getTotalUnitStr(digital.acctType)
+                  }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="adapter-iphoneX" v-if="this.$util.getIsIphoneX_X()"></div>
+        </div>
       </div>
     </nav-content>
     <pop-view v-if="payWayPopShow" @closeEvent="popClose">
@@ -1023,12 +1000,12 @@ import Invoice from "../common/invoice";
 import Freight from "../common/freight";
 import NoStock from "../common/no-stock";
 import DigitalPwd from "../common/digital-pwd";
-import PriceOrder from "@/components/commonui/price/price-order";
+import PriceOrder from "../../../components/commonui/price/price-order";
 import Agreement from "@/components/usercenter/register/agreement";
 import md5String from "../../../utils/md5";
 import { Dialog, Toast } from "vant";
 import { mapActions } from "vuex";
-import DatetimePicker from "@/components/commonui/datetime-picker";
+import DatetimePicker from "../../../components/commonui/datetime-picker";
 export default {
   name: "placeorder",
   components: {
@@ -1037,6 +1014,9 @@ export default {
   },
   data() {
     return {
+      showMini: false,
+      startX: null,
+      startY: null,
       contactFlag: false,
       contratWayList: [],
       //上个页面的结算参数
@@ -1343,6 +1323,7 @@ export default {
     }
   },
   mounted() {
+    console.log('地址------------>',this.$store.state.mall2.selectAddress);
     this.pageType = this.$route.query.pageType;
     // 企业团购type=2默认提货付款
     // this.pageType=2
@@ -1368,6 +1349,45 @@ export default {
     // this.getDictByAlias();
   },
   methods: {
+    gongsheng(occurList){
+      let amount = 0;
+      occurList.forEach(item => {
+        amount += item.discountAmount + item.couponAmount;
+      });
+      return this.$util.toDecimal2(amount);
+    },
+    hiddenMobile(mobile) {
+      return mobile.substring(0,3) + '****' + mobile.substring(7,11)
+    },
+    touchstart() {
+      this.startX = event.changedTouches[0].pageX
+      this.startY = event.changedTouches[0].pageY
+    },
+    touchmove() {
+      var moveEndX = event.changedTouches[0].pageX
+      var moveEndY = event.changedTouches[0].pageY
+      var X = moveEndX - this.startX
+      var Y = moveEndY - this.startY
+      if (Math.abs(Y) > Math.abs(X) && Y > 0) {
+        this.showMini = false
+      } else if (Math.abs(Y) > Math.abs(X) && Y < 0) {
+        this.showMini = true
+      }
+    },
+    calcTotal(proArr){
+      let total = 0;
+      proArr.forEach(item => {
+        total += item.number;
+      });
+      return total
+    },
+    calcAmount(proArr){
+      let amount = 0;
+      proArr.forEach(item => {
+        amount += item.amount;
+      });
+      return amount.toFixed(2)
+    },
     // 家政服务，选中服务时间
     openServiceTimePicker: function () {
       let curDate = new Date();
@@ -2193,7 +2213,7 @@ export default {
       );
     },
     checkProductStock: function () {
-      
+
       if(this.occurList.length > 1 ){
         if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
           this.$Toast("小程序暂不支持多店铺合并支付");
@@ -2584,7 +2604,7 @@ export default {
           if(item.status == "fulfilled"){
             console.log(item,index)
             if(item.value.data.status == 0){
-              this.payInfoList.push(item.value.data.data) 
+              this.payInfoList.push(item.value.data.data)
               if(index == res.length - 1){
                 if(this.$store.state.webtype == 2 || this.$store.state.webtype == 3){
                   this.setWxOrderInfo();
@@ -2636,7 +2656,7 @@ export default {
           if(item.status == "fulfilled"){
             console.log(item,index)
             if(item.value.data.status == 0){
-              this.submitDataList.push(item.value.data.data) 
+              this.submitDataList.push(item.value.data.data)
               if(index == res.length - 1){
                 this.concatPay();
               }
@@ -3011,6 +3031,8 @@ export default {
       // if (beginPickupTime) {
       //   this.pickupStartTime = new Date(beginPickupTime.replace(/-/g, "/"));
       // }
+
+      this.count = 0;
       for (let index = 0; index < this.occurList.length; index++) {
         if (!this.occurList[index]) {
           this.occurList[index] = {};
@@ -3027,7 +3049,6 @@ export default {
           this.returnStoreProducts(store);
           this.count += store.storeProData.proNum;
         }
-
 
         let couNo = this.occurList[index].couNo;
         let usedCoupons = [];
@@ -3164,14 +3185,36 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/common/stylus/variable.styl';
 @import '~@/common/stylus/mixin.styl';
-
+.row-input {
+  &::placeholder {
+    color: #999999 !important;
+  }
+}
+.mall2 {
+  .block-div {
+    background-color #fff
+  }
+}
+.theme_font_red {
+  color #E5165A
+}
+.theme_standard_bg {
+  background-color #E5165A
+}
 .margin_div{
-  margin: 0 8px;
-  font-size: 0.37333rem;
+  margin: 10px 8px;
+  font-size: 0.42rem;
   font-weight: 600;
   color: #1a1a1a;
 }
-
+.block-div.add-padding{
+  .flex-row{
+    padding 0.337rem 0
+  }
+}
+.flex-row.top-line{
+  border-top 1px solid #EEEEEE
+}
 .adapter-iphoneX {
   width: 100%;
   height: 34px;
@@ -3311,6 +3354,8 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      background-color #f1f1f1
+      margin-bottom 60px
 
       .colorfulline {
         margin: 0 -8px;
@@ -3327,6 +3372,11 @@ export default {
     .bottom-btns {
       /* height 70px; */
       overflow: hidden;
+      padding 10px 15px
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #fff;
 
       .tip {
         padding: 5px 15px;
@@ -3342,9 +3392,9 @@ export default {
       }
 
       .price {
-        height: 50px;
+        height: 40px;
         overflow: hidden;
-        padding: 0px 10px 0 20px;
+        padding: 0 10px 0 1px;
         font-size: 0px;
         // line-height 50px;
         display: flex;
@@ -3357,10 +3407,15 @@ export default {
           flex 1;
         } */
         .rmb-div {
-          text-align: end;
+          //text-align: end;
+          height: 34px;
+          margin 3px 0
 
           .count {
+            margin-left 3px
             margin-right: 10px;
+            color #999999
+            font-size 12px
           }
         }
 
@@ -3383,12 +3438,14 @@ export default {
 
       .btn {
         float: right;
-        height: 50px;
-        line-height: 50px;
+        height: 40px;
+        line-height: 40px;
         text-align: center;
         padding: 0 25px;
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 500;
+        border-radius 15px
+        background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
       }
     }
   }
@@ -3396,6 +3453,7 @@ export default {
   .pro-row {
     display: flex;
     align-items: center;
+    margin 7px 0
 
     .img-div {
       position: relative;
@@ -3406,6 +3464,7 @@ export default {
         display: block;
         width: 100%;
         height: 100%;
+        border-radius 8px
       }
 
       .presale {
@@ -3428,9 +3487,11 @@ export default {
       min-height: $font-size-medium;
       font-size: $font-size-medium;
       flex: 1;
+      position relative
 
       .title {
         margin-bottom: 5px;
+        margin-right 25px;
       }
 
       .font-small {
@@ -3450,7 +3511,8 @@ export default {
   }
 
   .pros-row {
-    padding-bottom: 8px;
+    padding-top: 5px;
+    padding-bottom: 15px;
     /* overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap; */
