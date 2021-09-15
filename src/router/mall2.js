@@ -53,9 +53,9 @@ module.exports = [
     }
   },
   {
-    path: '/mall2/savePicture',
-    name: '商品分享',
-    component: () => import('@/components/mall2/savePicture'),
+    path: '/mall2/commonIm',
+    name: '在线客服',
+    component: () => import('@/components/mall2/commonIm/index'),
     // component: () => import('@/components/mall2/detail/detail'),
     meta: {
       keepAlive: false
