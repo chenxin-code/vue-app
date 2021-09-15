@@ -1,7 +1,10 @@
 /**Created by liaoyingchao on 2018/10/24.*/
 
 <template>
-  <div class="nav-content" :style="{top: top+ 'px'}">
+  <div class="nav-content" style="top: 0" v-if="wxenvironment() && titleDefault">
+    <slot></slot>
+  </div>
+  <div class="nav-content" :style="{top: top + 'px'}" v-else>
     <slot></slot>
   </div>
 </template>
@@ -11,10 +14,21 @@
   export default {
     name: "nav-content",
     components: {},
+    props: {
+      titleDefault: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {}
     },
-    methods: {},
+    methods: {
+      wxenvironment() {
+        let ua = window.navigator.userAgent.toLowerCase();
+        return ua.match(/MicroMessenger/i) == "micromessenger";
+      },
+    },
     computed: {
       // 不合设计 不要用各种判断，不同情况尽量用webtype，所有地方都判断webtype，谁也不知道cookie什么时候就变了
       // web-view 打开新页面去除 自带导航（河北有滴）

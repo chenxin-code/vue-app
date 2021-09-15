@@ -1,6 +1,6 @@
 <template>
   <div class="userInfo">
-    <van-sticky :offset-top="offsetTop">
+    <van-sticky :offset-top="offsetTop" v-if="!wxenvironment()">
       <nav-top title="个人资料" @backEvent="backEvent"></nav-top>
     </van-sticky>
     <div class="info info_height">
@@ -53,8 +53,15 @@ export default {
       this.offsetTop = padding;
     }
     this.getUserInfo();
+    if(this.wxenvironment()) {
+      document.title = "个人资料"
+    }
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     backEvent() {
       this.$router.go(-1);
     },

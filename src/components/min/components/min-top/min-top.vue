@@ -2,8 +2,8 @@
   <div class="min-top">
     <div class="user">
       <div class="ph" @click="navToUserInfo">
-        <img :src="userImage">
-        <p>{{userName}}</p>
+        <img :src="userImage" />
+        <p>{{ userName }}</p>
       </div>
       <!-- <div class="cu" @click="toCustomerService">
         <img src="./img/customer-service.png">
@@ -12,15 +12,15 @@
     <div class="nav">
       <ul>
         <li @click="toCollection">
-          <img src="./img/collect.png">
+          <img src="./img/collect.png" />
           <p>我的收藏</p>
         </li>
         <li @click="toBrowsinglist">
-          <img src="./img/record.png">
+          <img src="./img/record.png" />
           <p>我的足迹</p>
         </li>
         <li @click="toStore">
-          <img src="./img/shop.png">
+          <img src="./img/shop.png" />
           <p>订阅店铺</p>
         </li>
       </ul>
@@ -28,31 +28,29 @@
     <div class="user-detail" :class="`rank${rankNum}`">
       <div class="grade">
         <div class="us-gr">
-          <img class="img1" :src="require(`./img/ico0${rankNum}.png`)">
+          <img class="img1" :src="require(`./img/ico0${rankNum}.png`)" />
           <!-- <img class="img2" src="./img/dou.png"> -->
         </div>
         <!-- <div class="tip tip2"><p>100邦豆待领取</p></div> -->
       </div>
       <div class="growth-value">
-        <div class="gr">
-          成长值：{{rangeBegin}}/{{rangeEnd}}
-        </div>
+        <div class="gr">成长值：{{ rangeBegin }}/{{ rangeEnd }}</div>
         <div class="ra">
-          <div class="ra-con" :style="{width: barWidth}"></div>
+          <div class="ra-con" :style="{ width: barWidth }"></div>
         </div>
       </div>
       <div class="detail-nav">
         <ul>
           <li @click="exchange">
-            <img :src="require(`./img/bangdou0${rankNum}.png`)">
+            <img :src="require(`./img/bangdou0${rankNum}.png`)" />
             <p>邦豆兑换</p>
           </li>
           <li @click="task">
-            <img :src="require(`./img/task0${rankNum}.png`)">
+            <img :src="require(`./img/task0${rankNum}.png`)" />
             <p>成长任务</p>
           </li>
           <li @click="strategy">
-            <img :src="require(`./img/strategy0${rankNum}.png`)">
+            <img :src="require(`./img/strategy0${rankNum}.png`)" />
             <p>会员攻略</p>
           </li>
         </ul>
@@ -64,105 +62,145 @@
 
 <script>
 export default {
-  props: [
-    'memberInfo',
-    'userInfo'
-  ],
+  props: ["memberInfo", "userInfo"],
   data() {
-    return {
-    }
+    return {};
   },
   computed: {
-    userImage () {
+    userImage() {
       if (this.userInfo.userImage) {
-        return this.userInfo.userImage
+        return this.userInfo.userImage;
       } else {
-        return require('./img/header-default.png')
+        return require("./img/header-default.png");
       }
     },
-    userName () {
+    userName() {
       if (this.userInfo.userName) {
-        return this.userInfo.userName
+        return this.userInfo.userName;
       }
     },
-    barWidth(){ 
-      return (this.rangeBegin / this.rangeEnd) * 100 + '%'
+    barWidth() {
+      return (this.rangeBegin / this.rangeEnd) * 100 + "%";
     },
     rangeBegin() {
       if (this.memberInfo.memberCardRelats) {
-        return this.memberInfo.memberCardRelats[0].rangeBegin
+        return this.memberInfo.memberCardRelats[0].rangeBegin;
       }
     },
     rangeEnd() {
       if (this.memberInfo.memberCardRelats) {
-        return this.memberInfo.memberCardRelats[0].rangeEnd
+        return this.memberInfo.memberCardRelats[0].rangeEnd;
       }
     },
     rankNum() {
-      let rankNum = '1';
+      let rankNum = "1";
       if (this.memberInfo.memberCardRelats) {
-        switch(this.memberInfo.memberCardRelats[0].levelId){
+        switch (this.memberInfo.memberCardRelats[0].levelId) {
           case 1:
-            rankNum = '1'
-          break
+            rankNum = "1";
+            break;
           case 2:
-            rankNum = '2'
-          break;
+            rankNum = "2";
+            break;
           case 3:
-            rankNum = '3'
-          break;
+            rankNum = "3";
+            break;
           case 4:
-            rankNum = '4'
-          break;
+            rankNum = "4";
+            break;
           case 5:
-            rankNum = '5'
-          break;
+            rankNum = "5";
+            break;
         }
       }
       return rankNum;
     }
   },
   methods: {
-    navToUserInfo(){
+    pushNewWebview(route, flag) {
+      const ENV =
+        this.$store.state.environment == "development" ? "uat" : "prod";
+      const targetUrl = encodeURIComponent(
+        `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${
+          flag ? "?active=1" : ""
+        }`
+      );
+      console.log(
+        `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${route}${
+          flag ? "?active=1" : ""
+        }`
+      );
+      const token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
+      wx.miniProgram.navigateTo({
+        url: `/pages/distributionWebView/index?url=${encodeURIComponent(
+          JSON.stringify(
+            `https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`
+          )
+        )}`
+      });
+    },
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
+    navToUserInfo() {
       this.$router.push({
-        path: '/minUserInfo',
-      })
+        path: "/minUserInfo"
+      });
     },
     toCollection() {
-      this.$router.push({
-        path: '/mall2/collection',
-        query: {
-          active: 0
-        }
-      })
+      if (this.wxenvironment()) {
+        this.pushNewWebview("/mall2/collection");
+      } else {
+        this.$router.push({
+          path: "/mall2/collection",
+          query: {
+            active: 0
+          }
+        });
+      }
     },
     toStore() {
-      this.$router.push({
-        path: '/mall2/collection',
-        query: {
-          active: 1
-        }
-      })
+      if (this.wxenvironment()) {
+        this.pushNewWebview("/mall2/collection", true);
+      } else {
+        this.$router.push({
+          path: "/mall2/collection",
+          query: {
+            active: 1
+          }
+        });
+      }
     },
     toBrowsinglist() {
-      this.$router.push({
-        path: '/mall2/browsinglist'
-      })
+      if (this.wxenvironment()) {
+        this.pushNewWebview("/mall2/browsinglist");
+      } else {
+        this.$router.push({
+          path: "/mall2/browsinglist"
+        });
+      }
     },
     toCustomerService() {
-      window.open('https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id='+ this.$store.state.login.phone +'&client_id=linli')
+      window.open(
+        "https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id=" +
+          this.$store.state.login.phone +
+          "&client_id=linli"
+      );
     },
     exchange() {
-      this.$toast('敬请期待…')
+      this.$toast("敬请期待…");
     },
     task() {
-      this.$toast('敬请期待…')
+      this.$toast("敬请期待…");
     },
     strategy() {
       // this.$toast('敬请期待…')
-      this.$router.push('/gradeDescription')
+      this.$router.push("/gradeDescription");
     }
-  },
+  }
 };
 </script>
 
@@ -178,7 +216,7 @@ export default {
     font-weight: 300;
     text-align: center;
     position: absolute;
-    top: -4px; 
+    top: -4px;
     left: 170px;
     background: url('./img/tips-little01.png') no-repeat;
     background-size: 100% 100%;
@@ -251,7 +289,7 @@ export default {
     height: 172px;
     background: url('./img/bg01.png') no-repeat;
     background-size: 100% 100%;
-    border-radius: 20px 20px 0 0; 
+    border-radius: 20px 20px 0 0;
     box-sizing: border-box;
     margin: 0 auto;
     padding: 16px;
@@ -325,7 +363,7 @@ export default {
       }
       background-image: url('./img/bg02.png')
 
-      .gr {    
+      .gr {
         color: #B5561A;
       }
       .ra {
@@ -352,7 +390,7 @@ export default {
       }
       background-image: url('./img/bg03.png')
 
-      .gr {    
+      .gr {
         color: #434342;
       }
       .ra {
@@ -379,7 +417,7 @@ export default {
       }
       background-image: url('./img/bg04.png')
 
-      .gr {    
+      .gr {
         color: #FFFFED;
       }
       .ra {
@@ -406,7 +444,7 @@ export default {
       }
       background-image: url('./img/bg05.png')
 
-      .gr {    
+      .gr {
         color: #F1D8B0;
       }
       .ra {

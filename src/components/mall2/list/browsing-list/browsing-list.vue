@@ -2,7 +2,7 @@
 
 <template>
   <div class="browsing-list mall2">
-    <nav-top @backEvent="goBack">
+    <nav-top @backEvent="goBack" :noTitle="wxenvironment() ? true : ''" :showBackBtn="wxenvironment() ? false : true">
       <div class="right-btn edit-btn theme_font_tint" style="right: 0px; line-height: 44px; height: 44px; top: 0px; padding-right: 10px;" v-if="showList.length > 0">
         <span @click="clearAll" v-if="!isEdit">清空</span>
         <span @click="showEdit" v-if="!isEdit">编辑</span>
@@ -50,6 +50,10 @@
       }
     },
     methods: {
+      wxenvironment() {
+        let ua = window.navigator.userAgent.toLowerCase();
+        return ua.match(/MicroMessenger/i) == "micromessenger";
+      },
       goBack: function () {
         if (this.$route.query.backApp) {
           appNav.navigatorBack({ url: '0' }).then( res => {
@@ -317,6 +321,9 @@
     activated() {
     },
     created() {
+      if(this.wxenvironment()) {
+        document.title = "我的足迹"
+      }
       if (this.$store.state.webtype == '2' || this.$store.state.webtype == '3') {
         this.$bridgefunc.getItem('browsingHistory', (result) => {
           console.log('h5 localstorage', result)

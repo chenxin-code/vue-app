@@ -2,8 +2,8 @@
 
 <template>
   <div class="address-list">
-    <nav-top @backEvent="backEvent"></nav-top>
-    <nav-content>
+    <nav-top @backEvent="backEvent" v-if="!wxenvironment()"></nav-top>
+    <nav-content :titleDefault="true">
       <div class="scrolcontent" ref="addresslistscrl">
         <div
           class="address-cells shadow-cell"
@@ -165,6 +165,10 @@ export default {
     };
   },
   methods: {
+    wxenvironment() {
+      let ua = window.navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == "micromessenger";
+    },
     backEvent: function() {
       this.$router.go(-1);
     },
@@ -339,6 +343,9 @@ export default {
   //   next()
   // },
   created() {
+    if(this.wxenvironment()) {
+      document.title = "收货地址"
+    }
     this.pageType = this.$route.query.pageType
       ? this.$route.query.pageType
       : "0";

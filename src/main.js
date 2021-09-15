@@ -118,10 +118,55 @@ import assign from "lodash.assign";
 Vue.prototype.$assign = assign;
 Vue.config.productionTip = false;
 
+function wxenvironment() {
+  let ua = window.navigator.userAgent.toLowerCase();
+  return ua.match(/MicroMessenger/i) == "micromessenger";
+}
+
+// function webviewConfig(targetPage) {
+//   const ENV = store.state.environment == "development" ? "uat" : "prod";
+//   const targetUrl = encodeURIComponent(
+//     `https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${targetPage}`
+//   );
+//   // const token = store.state.ythToken
+//   //   ? store.state.ythToken
+//   //   : localStorage.getItem("ythToken");
+//   const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJvbDdpZ2pqRDhXZFJ1Q1FSUGJXT1NlVTFheHJFIiwic2NvcGUiOlsiYWxsIl0sImlkIjoyNTM4NTk5NjczNjY5NjE1NjI0LCJleHAiOjE2MzE3ODA0MDcsImF1dGhvcml0aWVzIjpbInZpc2l0b3IiLCJub25Pd25lciJdLCJqdGkiOiI5ZDQ0ZTkwYy0yNmE3LTRhNjUtOTkzYS0zNTJlOTI1NDk1NWUiLCJjbGllbnRfaWQiOiJtaW5pX21hbGwifQ.aywDHxQ6fAAvD4zaPKCmn7pXIQAokDQvbG_rR5OMjmUc-Pxh8vj-wbOD0A-Dx0N5jIAZWO8s22dpCxuxwFY--zhNRNXu6xJb6bKL1AfKCRAh0PCTXes4IyH-adS_qhJE7yLeO2a_QKtnOrCdrC-0NYMurrvNJTDrog2b2LPWk4fYGRvh9ppODVEs-NSVBRCjJ5fZgP5t1I6SH2z8LqStpQFvkv2GmlD9BWfLNrFCZD32QT1A35FLTQONIM3d82TWMXCih6PzcexW5xqv-UwRpd250ruPF-4FzGl5NPUSqpjEtCQxP6Dug21EC7XCdqjQ4mnzPF7mEF1gMsPMm_Iy8Q';
+//   return `/pages/distributionWebView/index?url=${encodeURIComponent(
+//     JSON.stringify(
+//       `https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`
+//     )
+//   )}`;
+// }
+
+Vue.prototype.$isWX = wxenvironment();
+
 // todo 页面多个地方需要定制化跳转，涉及到弹框，目前没有好的方式，后期有更好的方式再修改
 import project from "../build/env";
 window.PROJECT = project;
 import App from "./App";
+
+// 部分页面出现双标题，通过路由守卫对特定路由在跳转的时候打开新的webview
+// const doubleTitle = [
+//   "/concatAfterSalesOrder",
+//   "/mall2/orderlist",
+//   "/coupon/get_coupon_list",
+//   "/mall2/addresslist",
+//   "/minUserInfo"
+// ];
+
+// router.beforeEach((to, from, next) => {
+//   const flag = doubleTitle.some(target => {
+//     return target == to.path;
+//   });
+//   if (wxenvironment() && flag) {
+//     wx.miniProgram.navigateTo({
+//       url: webviewConfig(to.fullPath)
+//     });
+//   } else {
+//     next();
+//   }
+// });
 
 /* eslint-disable no-new */
 new Vue({
