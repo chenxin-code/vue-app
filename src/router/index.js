@@ -298,6 +298,7 @@ router.beforeEach((to, from, next) => {
 
     to.query.lastPath = from.path;
     to.query.referrerCode = store.state.referrerCode || "";
+
     //  已读取
     if (ISREAD) {
         router.otherEventTransitionName(to.path, from.path);
