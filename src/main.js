@@ -118,6 +118,14 @@ import assign from "lodash.assign";
 Vue.prototype.$assign = assign;
 Vue.config.productionTip = false;
 
+
+function wxenvironment() {
+  let ua = window.navigator.userAgent.toLowerCase();
+  return ua.match(/MicroMessenger/i) == "micromessenger";
+}
+
+Vue.prototype.$isWX = wxenvironment()
+
 // todo 页面多个地方需要定制化跳转，涉及到弹框，目前没有好的方式，后期有更好的方式再修改
 import project from "../build/env";
 window.PROJECT = project;

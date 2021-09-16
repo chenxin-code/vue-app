@@ -2,7 +2,7 @@
 
 <template>
   <div class="address-list">
-    <nav-top @backEvent="backEvent"></nav-top>
+    <nav-top @backEvent="backEvent" v-if="!$isWX"></nav-top>
     <nav-content>
       <div class="scrolcontent" ref="addresslistscrl">
         <div
@@ -339,6 +339,9 @@ export default {
   //   next()
   // },
   created() {
+    if(this.$isWX) {
+      document.title = '收货地址'
+    }
     this.pageType = this.$route.query.pageType
       ? this.$route.query.pageType
       : "0";

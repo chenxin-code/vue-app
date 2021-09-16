@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-top title="发优惠券" @backEvent="backEvent"></nav-top>
+    <nav-top title="发优惠券" @backEvent="backEvent" v-if="!$isWX"></nav-top>
     <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }">
       <van-list
         v-model="loading"
@@ -141,6 +141,9 @@ export default {
     };
   },
   created() {
+    if(this.$isWX) {
+      document.title = '我的卡卷'
+    }
     if (!this.memberId) {
       this.$http
         .post("/app/json/user/getUserSummary", {

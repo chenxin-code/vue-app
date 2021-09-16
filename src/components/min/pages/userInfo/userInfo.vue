@@ -1,6 +1,6 @@
 <template>
   <div class="userInfo">
-    <van-sticky :offset-top="offsetTop">
+    <van-sticky :offset-top="offsetTop" v-if="!$isWX">
       <nav-top title="个人资料" @backEvent="backEvent"></nav-top>
     </van-sticky>
     <div class="info info_height">
@@ -47,6 +47,9 @@ export default {
     navTop,
   },
   created() {
+    if(this.$isWX) {
+      document.title = '个人资料'
+    }
     let padding = "";
     padding = document.getElementsByTagName("body")[0].style.paddingTop;
     if (padding !== "") {

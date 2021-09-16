@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <nav-top></nav-top>
+      <nav-top v-if="!$isWX"></nav-top>
       <van-tabs
         v-model="active"
         swipeable
@@ -50,6 +50,9 @@ export default {
     CloseProcess,
   },
   created() {
+    if(this.$isWX) {
+      document.title = '售后列表'
+    }
     this.initPage(this.$route.params.id);
     let padding = "";
     padding = document.getElementsByTagName("body")[0].style.paddingTop;
