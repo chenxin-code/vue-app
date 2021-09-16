@@ -2035,9 +2035,9 @@ export default {
       let url = "";
       this.$store.state.environment == "development"
         ? (url =
-            "https://mall-uat-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info")
+            "https://mall-uat-web-linli.timesgroup.cn/times/distr-service/index/api-c/v1/get/my/info")
         : (url =
-            "https://mall-prod-web-linli.timesgroup.cn/distr-service/index/api-c/v1/get/my/info");
+            "https://mall-prod-web-linli.timesgroup.cn/times/distr-service/index/api-c/v1/get/my/info");
       this.$http.get(url).then(
         res => {
           console.log("----distributionMessage------", res);
@@ -2057,8 +2057,8 @@ export default {
     distributionMessageCode() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
-        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
 
       fetchMethod("GET", url).then(res => {
         console.log("----distributionMessageCode--->>-", res);
@@ -2121,8 +2121,8 @@ export default {
     distributionMessageCode() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
-        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/times/distr-service/graphics/api/getShareErCode?skuId=${this.skuId}&type=1&shareCode=${this.personShareCode}`);
 
       fetchMethod("GET", url).then(res => {
         console.log("----distributionMessageCode--->>-", res);
@@ -2134,8 +2134,8 @@ export default {
     distributionProduct() {
       let url = "";
       this.$store.state.environment == "development"
-        ? (url = `https://mall-uat-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
-        : (url = `https://mall-prod-web-linli.timesgroup.cn/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
+        ? (url = `https://mall-uat-web-linli.timesgroup.cn/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`)
+        : (url = `https://mall-prod-web-linli.timesgroup.cn/times/distr-service/good/api/v1/distr/getShoppingGoodBySkuId?skuId=${this.skuId}`);
       fetchMethod("POST", url).then(res => {
         if (res.code == 200 && res.data) {
           this.estimatedCommission = res.data.estimatedCommission; // 预计佣金
