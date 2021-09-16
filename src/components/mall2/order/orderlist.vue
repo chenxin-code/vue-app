@@ -966,6 +966,9 @@ export default {
           console.log(res)
         })
       } else {
+        if(this.$route.query.back){
+          return this.$router.back()
+        }
         this.$router.push("/common")
       }
       // this.$util.wxmpBackHome(() => {

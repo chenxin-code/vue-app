@@ -44,11 +44,11 @@
                 <div class="time-bg-block">{{ timeData.days }}天</div>
 
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.hours }}</div>
+                <div class="time-bg-block">{{ timeData.hours | formartStr }}</div>
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.minutes }}</div>
+                <div class="time-bg-block">{{ timeData.minutes | formartStr }}</div>
                 <span style="color: #c0003f">:</span>
-                <div class="time-bg-block">{{ timeData.seconds }}</div>
+                <div class="time-bg-block">{{ timeData.seconds | formartStr }}</div>
               </div>
             </template>
           </van-count-down>
@@ -95,7 +95,7 @@
 
         <div class="group-desc">
           <div class="group-desc-content">
-            <img src="./images/icon_01@2x.png" class="group-desc-content-pic" />
+            <img src="./images/icon_01@2x.png" width="12px" height="12px"/>
             <div class="group-desc-content-right">
               <div class="group-desc-content-right-top">团购活动描述:</div>
               <div class="group-desc-content-right-bottom" v-html="str"></div>
@@ -105,7 +105,7 @@
           <div class="divLine"></div>
 
           <div class="group-desc-content">
-            <img src="./images/icon_02@2x.png" class="group-desc-content-pic" />
+            <img src="./images/icon_02@2x.png" width="11px" height="15px"/>
             <div class="group-desc-content-right">
               <div class="group-desc-content-right-top">团购规则描述:</div>
               <div class="group-desc-content-right-bottom">
@@ -127,7 +127,7 @@
                   销售价格：￥{{ item.crossedPrice }}
                 </div>
                 <div class="product-prize-group">
-                  团购价格：￥{{ item.groupPrice }}
+                  团购价格：<span style="font-weight:bold">￥{{ item.groupPrice }}</span>
                 </div>
               </div>
 
@@ -159,7 +159,11 @@
 
       <div class="user-group-team">
         <div class="gruop-title">
-          <div class="group-header-one">这些团友都买了</div>
+          <div class="group-header-one">
+            <img src="./images/tips_01.png" alt="" width="5px">
+            这些团友都买了
+             <img src="./images/tips_01.png" alt="" width="5px">
+          </div>
           <div class="group-header-second">
             （共{{ otherBuyList.length }}人参加了本次团购）
           </div>
@@ -168,6 +172,7 @@
         <div class="group-people">
           <div v-for="(item, index) in otherBuyList" :key="index">
             <div class="group-people-item">
+              <div class="group-people-number">{{otherBuyList.length-index}}F</div>
               <img
                 class="group-people-pic"
                 :src="item.buyerAvtUrl ? item.buyerAvtUrl : defaultAvt"
@@ -180,14 +185,13 @@
                   v-for="(targetItem, indexTarget) in item.orderItemList"
                   :key="indexTarget"
                 >
-                  <span>{{ targetItem.groupbuySkuName }}</span>
+                  <span class="people-item-desc-name">{{ targetItem.groupbuySkuName }}</span>
                   <span>X{{ targetItem.buyNumber }}</span>
                 </div>
               </div>
             </div>
             <div
-              class="divLine"
-              style="width: 8rem"
+              class="div_menber_Line"
               v-show="index !== otherBuyList.length - 1"
             ></div>
           </div>
@@ -204,6 +208,8 @@
 
       <div class="order-button" @click="confirmOrder">去结算</div>
     </div>
+
+    <nav-button/>
   </div>
 </template>
 
@@ -213,10 +219,12 @@ import { mapMutations } from "vuex";
 import vantImage from "@/components/bulk/components/vantImage.js";
 import { Toast } from "vant";
 import { BigNumber } from "bignumber.js";
+import navButton from "./components/navButton";
 
 export default {
   name: "share",
   props: {},
+  components:{navButton},
   data() {
     return {
       defaultAvatar: require("@/components/bulk/activity/images/user-default.png"),
@@ -241,7 +249,7 @@ export default {
       groupStatus: "start",
       orderSwiperList: [],
       defaultAvt: require("./images/user_01@2x.png"),
-      defaultHeadAvt: require("./images/img_user_01@2x.png"),
+      defaultHeadAvt: require("./images/img_user_01@2x.png")
     };
   },
   created() {
@@ -254,12 +262,17 @@ export default {
     // this.userId = "2337237484980666802";
 
     this.totalPrice = this.$util.toDecimal2(this.totalPrice);
-    this.checkList.forEach((e) => {
+    this.checkList.forEach(e => {
       this.result.push(e.id);
     });
     this.initData();
   },
-
+  filters:{
+    formartStr(num){
+      if(num<=9) return "0"+num;
+      return num;
+    }
+  },
   methods: {
     getTimestamp(time) {
       //把时间日期转成时间戳
@@ -303,21 +316,21 @@ export default {
           purchaseId: this.purchaseId,
           chiefId: this.chiefId,
           userId: this.userId,
-          status: "1,2,3,4,5",
+          status: "1,2,3,4,5"
         })
-        .then((res) => {
+        .then(res => {
           console.log("分享页面信息~~~~~~~", res);
           if (res.data.result == "success") {
             this.shareData = res.data.data;
             this.goodsList = this.shareData.groupbuySkuInfoList;
-            this.goodsList.forEach((item) => {
+            this.goodsList.forEach(item => {
               item["count"] = 0;
               item["isCheck"] = true;
               item["skuImg"] = item.skuPicUrl.split(",");
             });
             if (this.shareData.currentActOrderList) {
               this.otherBuyList = this.shareData.currentActOrderList;
-              this.otherBuyList.forEach((e) => {
+              this.otherBuyList.forEach(e => {
                 e["isShowOther"] = false;
                 if (e.orderItemList.length > 1) {
                   e["otherOrderItemList"] = e.orderItemList.slice(1);
@@ -337,9 +350,11 @@ export default {
                 }
               });
             }
-            if(this.otherBuyList.length > 2){
+            if (this.otherBuyList.length > 2) {
               let swipeLength = 0;
-              this.otherBuyList.length <= 10 ? swipeLength = this.otherBuyList.length : swipeLength = 10;
+              this.otherBuyList.length <= 10
+                ? (swipeLength = this.otherBuyList.length)
+                : (swipeLength = 10);
               for (let index = 0; index < swipeLength; index++) {
                 this.orderSwiperList.push(this.otherBuyList[index]);
                 this.orderSwiperList.push({ show: false });
@@ -350,19 +365,20 @@ export default {
             for (let i in this.shareData.categoryMap) {
               this.categoryMap.push({
                 key: i,
-                value: this.shareData.categoryMap[i],
+                value: this.shareData.categoryMap[i]
               });
             }
             this.descData = this.shareData.groupDescriptionRichTxt;
 
             this.str = this.descData.replace(/<img.*?>/g, "");
 
-            let imgStrs =
-              this.shareData.groupDescriptionRichTxt.match(/<img.*?>/g);
+            let imgStrs = this.shareData.groupDescriptionRichTxt.match(
+              /<img.*?>/g
+            );
 
             // 获取每个img url
             if (imgStrs) {
-              this.imgUrls = imgStrs.map((url) => {
+              this.imgUrls = imgStrs.map(url => {
                 return url.match(/\ssrc=['"](.*?)['"]/)[1];
               });
             }
@@ -385,7 +401,7 @@ export default {
                 this.shareData.communityName + this.shareData.place,
               group_buying_describe: this.shareData.groupDescriptionRichTxt,
               group_buying_rule_descibe: this.shareData.ruleDescription,
-              group_buying_end_time: this.shareData.actEndTime,
+              group_buying_end_time: this.shareData.actEndTime
             });
           }
         });
@@ -400,18 +416,18 @@ export default {
         groupbuySkuName: item.skuName,
         groupbuyPurchaseNumber: item.buyerCount,
         groupbuyRuleDescribe: this.shareData.ruleDescription,
-        groupbuySkuDetail: item.groupbuySkuDetail,
+        groupbuySkuDetail: item.groupbuySkuDetail
       };
       this.$store.state.CharseInfo = obj;
       console.log("this.$store.state.charseInfo", this.$store.state.CharseInfo);
       this.$router.push({
         path: "/bulk_goods_deatil",
         params: {
-          resouce: obj,
+          resouce: obj
         },
         query: {
-          isWxShare: true,
-        },
+          isWxShare: true
+        }
       });
     },
 
@@ -421,7 +437,7 @@ export default {
 
     checkAll() {
       if (this.isCheckAll) {
-        this.checkList.forEach((item) => {
+        this.checkList.forEach(item => {
           item.isCheck = false;
         });
         this.result = [];
@@ -430,7 +446,7 @@ export default {
       } else {
         this.isCheckAll = true;
         this.result = [];
-        this.checkList.forEach((e) => {
+        this.checkList.forEach(e => {
           e.isCheck = true;
           this.result.push(e.id);
         });
@@ -484,7 +500,7 @@ export default {
       this.totalPriceFn();
     },
     clearCar() {
-      this.checkList.forEach((e) => {
+      this.checkList.forEach(e => {
         e.count = 0;
       });
       this.checkList = [];
@@ -509,11 +525,11 @@ export default {
         .post("/app/json/app_group_buying_share_home/getScreenSkuInfoList", {
           purchaseId: this.purchaseId,
           chiefId: this.chiefId,
-          skuCategory: item.key == "all" ? undefined : item.key,
+          skuCategory: item.key == "all" ? undefined : item.key
         })
-        .then((res) => {
+        .then(res => {
           this.goodsList = res.data.data;
-          this.goodsList.forEach((item) => {
+          this.goodsList.forEach(item => {
             item["count"] = 0;
             item["isCheck"] = true;
             item["skuImg"] = item.skuPicUrl.split(",");
@@ -535,7 +551,7 @@ export default {
         Toast.loading({
           message: "加载中...",
           duration: "toast",
-          forbidClick: true,
+          forbidClick: true
         });
         this.setBulkTotalPrice(this.totalPrice);
         // this.setBulkCheckList(this.checkList);
@@ -552,8 +568,8 @@ export default {
             purchaseId: JSON.stringify(this.purchaseId),
             chiefId: JSON.stringify(this.chiefId),
             userId: JSON.stringify(this.userId),
-            checkList: JSON.stringify(this.checkList),
-          },
+            checkList: JSON.stringify(this.checkList)
+          }
           // params:{
           //   shareData: JSON.stringify(this.shareData),
           //   purchaseId: JSON.stringify(this.purchaseId),
@@ -564,8 +580,8 @@ export default {
         });
       }
     },
-    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"]),
-  },
+    ...mapMutations(["setBulkTotalPrice", "setBulkCheckList"])
+  }
 };
 </script>
 
@@ -581,7 +597,7 @@ export default {
 }
 
 .bulk-share-main {
-  background: #f0f0f0 !important;
+  background: #F7F8F9 !important;
   width: 100%;
   height: 100%;
 
@@ -597,7 +613,7 @@ export default {
     background-image: url('./images/main_bg_default@2x.png');
     background-repeat: no-repeat;
     background-color: #ffffff;
-    padding-top: 8px;
+    padding-top: 12px;
 
     .headbox {
       display: flex;
@@ -607,12 +623,13 @@ export default {
 
       .orderSwiper {
         position: fixed;
-        top: 8px;
+        top: 13px;
         right: 12px;
         flex: 1;
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        z-index:1;
 
         .van-swipe-item {
           width: 100%;
@@ -659,28 +676,25 @@ export default {
     }
 
     .bulk-back {
-      width: 50px;
-      height: 25px;
+      width: 71px;
+      height: 32px;
       background-color: rgba(0, 0, 0, 0.3);
-      border-radius: 0px 10.67px 10.67px 0px;
+      border-radius: 0px 16px 16px 0px;
       display: flex;
-      padding-left: 5px;
+      align-items center;
+      padding-left: 17px;
 
       .back-img {
         background-image: url('./images/btn-back.png');
         background-size: 100% 100%;
-        width: 4px;
-        height: 12px;
-        margin-top: 5px;
-        flex: 0.15;
+        width: 9px;
+        height: 16px;
       }
 
       .back-word {
-        font-size: 12px;
+        font-size: 14px;
         color: #FFFFFF;
         font-weight: blod;
-        line-height: 25px;
-        flex: 0.85;
         padding-left: 4px;
       }
     }
@@ -742,7 +756,7 @@ export default {
             align-items: center;
             font-size: 16px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #121212;
           }
 
@@ -756,7 +770,7 @@ export default {
             margin-top: 10px;
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
           }
         }
@@ -769,12 +783,8 @@ export default {
 
       .group-desc-content {
         display: flex;
-        margin-left: 10px;
-
-        .group-desc-content-pic {
-          width: 12px;
-          height: 12px;
-        }
+        margin-left: 7px;
+        align-items:baseline;
 
         .group-desc-content-right {
           display: flex;
@@ -823,6 +833,7 @@ export default {
       .product-pic {
         width: 120px;
         height: 120px;
+        object-fit:contain;
       }
 
       .product-desc {
@@ -833,16 +844,25 @@ export default {
 
         .product-title {
           font-size: 13px;
+          line-height 18px;
+          margin-top:5px;
           font-family: PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           color: #121212;
           width: 200px;
+          text-overflow: -o-ellipsis-lastline;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
 
         .product-prize-old {
           font-size: 12px;
           font-family: PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           text-decoration: line-through;
           color: #999999;
           margin-top: 13px;
@@ -851,8 +871,8 @@ export default {
         .product-prize-group {
           font-size: 13px;
           font-family: PingFang SC;
-          font-weight: bold;
-          color: #f03000;
+          font-weight: 400;
+          color: #f00000;
           margin-top: 13px;
         }
 
@@ -869,6 +889,26 @@ export default {
           .product-num {
             margin: 0 10px;
           }
+          /deep/ .van-stepper__minus, 
+          /deep/ .van-stepper__plus{
+            width: 24px;
+            height:24px;
+            border:none;
+            opacity:1;
+            background-color:#fff;
+            background-size:100%;
+          }
+          /deep/ .van-stepper--round .van-stepper__minus{
+            background-image:url('./images/button_del_default@2x.png');
+          }
+
+          /deep/ .van-stepper--round .van-stepper__plus{
+            background-image: url('./images/button_add_default@2x.png');
+          }
+
+          /deep/ .van-stepper--round .van-stepper__plus.van-stepper__plus--disabled{
+            opacity:0.5
+          }
         }
       }
     }
@@ -883,7 +923,7 @@ export default {
     padding: 15px 0;
 
     .gruop-title {
-      padding-top: 21px;
+      padding-top: 6px;
       text-align: center;
 
       .group-header-one {
@@ -891,58 +931,88 @@ export default {
         font-family: PingFang SC;
         font-weight: bold;
         color: #121212;
+        display : flex;
+        justify-content center;
+        align-items center;
+        height:14px;
+        img{
+          margin 0 8px;
+        }
       }
 
       .group-header-second {
-        margin: 10px 0 20px 0;
+        margin: 10px 0 5px 0;
         font-size: 13px;
         font-family: PingFang SC;
-        font-weight: bold;
+        font-weight: 400;
         color: #999999;
       }
     }
 
     .group-people {
+      .div_menber_Line{
+        margin-left:54px;
+        margin-right: 13px;
+        height: 1px;
+        background: #F0F0F0;
+      }
       .group-people-item {
-        margin-top: 10px;
+        padding: 16px 0;
         display: flex;
+        .group-people-number{
+          width: 26px; 
+          font-size: 15px;
+          color: #BABABA;
+          width 54px;
+          line-height 42px;
+          text-align center;
+        }
 
         .group-people-pic {
-          margin-left: 26px;
           width: 42px;
           height: 42px;
           border-radius: 50%;
         }
-
+        
         .group-people-message {
           display: flex;
           flex-direction: column;
-          margin-left: 13px;
+          padding:0 13px;
+          flex:1;
+          overflow:hidden;
 
           .people-item-phone {
             font-size: 13px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #121212;
           }
 
           .people-item-time {
             font-size: 12px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #999999;
             margin-top: 8px;
           }
 
           .people-item-desc {
             font-size: 13px;
+            line-height 15px;
             font-family: PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #666666;
             margin-top: 8px;
             display: flex;
-            justify-content: space-between;
-            width: 250px;
+            .people-item-desc-name{
+               flex:1;
+               padding-right:11px;
+               justify-content: space-between;
+               white-space: nowrap;
+               text-overflow: ellipsis;
+               overflow: hidden;
+               word-break: break-all;
+            }
           }
         }
       }
@@ -962,7 +1032,7 @@ export default {
     .car-shop {
       width: 51px;
       height: 51px;
-      margin: -15px 0 0 13px;
+      margin: -15px 6px 0 13px;
     }
 
     .bottom-button-prize {
