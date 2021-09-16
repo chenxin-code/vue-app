@@ -1,7 +1,7 @@
 <template>
   <div class="add-address mall2">
     <nav-top :title="eventType==1?'新建收货人':'编辑收货地址'" @backEvent="backEvent" v-if="!$isWX"></nav-top>
-    <nav-content>
+    <nav-content :titleDefault="true">
       <div class="scrolcontent">
         <div class="shadow-con shadow-cell">
           <mt-field class="mt-title border" label="收货人姓名" placeholder="请输入收货人姓名" v-model="receiverName"  @input.native.capture="receiverInputChange"></mt-field>

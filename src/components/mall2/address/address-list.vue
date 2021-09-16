@@ -3,7 +3,7 @@
 <template>
   <div class="address-list">
     <nav-top @backEvent="backEvent" v-if="!$isWX"></nav-top>
-    <nav-content>
+    <nav-content :titleDefault="true">
       <div class="scrolcontent" ref="addresslistscrl">
         <div
           class="address-cells shadow-cell"

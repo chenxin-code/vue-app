@@ -13,7 +13,7 @@
         v-if="$store.state.globalConfig.kshop_orderListUrl && $store.state.globalConfig.kshop_orderListUrl != undefined"
       >历史订单</div>
     </nav-top>
-    <nav-content>
+    <nav-content :titleDefault="true">
       <div class="tabs">
         <div class="tab-item" v-for="(item, idx) in tabs" @click="tabEvent(item, idx)">
           <div
