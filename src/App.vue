@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="theme_sys_base" :class="theme">
-    <van-nav-bar safe-area-inset-top />
+    <van-nav-bar style="z-index: 0" safe-area-inset-top />
     <!-- APP -->
     <!--@touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"-->
     <!--<div id="app" class="theme_sys_base">-->
