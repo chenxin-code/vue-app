@@ -294,16 +294,17 @@ export default {
           // 砍价订单
         } else {
           let redirectUrl = "";
+          let referrerCode=this.$store.state.referrerCode;
           if (this.$route.query.isWashCarOrder == 1) {
-            redirectUrl = `/carWash/paySuccess?orderId=${this.payInfo.orderId}&orderType=${this.payInfo.orderType}&tradeNo=${this.payInfo.tradeNo}&deliverCheckcode=${this.payInfo.deliverCheckcode}&deviceCode=${this.$route.query.deviceCode}&storeOuCode=${this.$route.query.storeOuCode}&stationName=${this.$route.query.stationName}`;
+            redirectUrl = `/carWash/paySuccess?orderId=${this.payInfo.orderId}&orderType=${this.payInfo.orderType}&tradeNo=${this.payInfo.tradeNo}&deliverCheckcode=${this.payInfo.deliverCheckcode}&deviceCode=${this.$route.query.deviceCode}&storeOuCode=${this.$route.query.storeOuCode}&stationName=${this.$route.query.stationName}&referrerCode=${referrerCode}`;
             if (
               this.$route.query.washingWay == 2 ||
               this.$route.query.washingWay == "2"
             ) {
-              redirectUrl = `/carWash/scanPaySuccess?state=3&orderId=${this.payInfo.orderId}&orderType=${this.payInfo.orderType}&tradeNo=${this.payInfo.tradeNo}&deliverCheckcode=${this.payInfo.deliverCheckcode}&deviceCode=${this.$route.query.deviceCode}&storeOuCode=${this.$route.query.storeOuCode}&stationName=${this.$route.query.stationName}`;
+              redirectUrl = `/carWash/scanPaySuccess?state=3&orderId=${this.payInfo.orderId}&orderType=${this.payInfo.orderType}&tradeNo=${this.payInfo.tradeNo}&deliverCheckcode=${this.payInfo.deliverCheckcode}&deviceCode=${this.$route.query.deviceCode}&storeOuCode=${this.$route.query.storeOuCode}&stationName=${this.$route.query.stationName}&referrerCode=${referrerCode}`;
             }
           } else if (this.$route.query.isGroup == "1") {
-            redirectUrl = `/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1`;
+            redirectUrl = `/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess=1&referrerCode=${referrerCode}`;
           }
           if (this.isBulk) {
             payHelper
@@ -462,6 +463,7 @@ export default {
       // 直播购买，发送直播消息
       this.pustLiveStreamMsg();
       this.isSuccessed = true;
+      let referrerCode=this.$store.state.referrerCode;
       if (this.$route.query.isGroup == "1") {
         console.log("res-----------", res);
         var payInfo = JSON.parse(JSON.parse(res.payInfo));
@@ -476,7 +478,7 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`
+            `/app-vue/app/index.html#/group_detail?skuId=${this.$route.query.skuId}&productType=${this.$route.query.productType}&groupId=${this.$route.query.groupId}&orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}&referrerCode=${referrerCode}`
         )}`;
         // `/app-vue/app/index.html#/group_detail?orderId=${this.$route.query.orderId}&mktGroupBuyId=${this.$route.query.mktGroupBuyId}&formPaySuccess='1'&ret={ret}`
         // this.$router.replace({
@@ -562,7 +564,7 @@ export default {
           })
         )}&callback=${encodeURIComponent(
           location.origin +
-            `/app-vue/app/index.html#/mall2/paysuccess?token=${this.$store.state.login.token}&orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}`
+            `/app-vue/app/index.html#/mall2/paysuccess?token=${this.$store.state.login.token}&orderId=${this.payInfo.orderId}&tradeNo=${this.payInfo.tradeNo}&selectedIndex=1&orderCategory=${this.$route.query.orderCategory}&vipUnitUserCode=${this.$route.query.vipUnitUserCode}&type=${this.$route.query.type}&ret={ret}&referrerCode=${referrerCode}`
         )}`;
         // this.$router.replace({
         //   path: "/mall2/paysuccess",

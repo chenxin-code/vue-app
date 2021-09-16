@@ -1,6 +1,6 @@
 <template>
   <div class="adapter">
-    <min-top :memberInfo="memberInfo" :userInfo="userInfo"></min-top>
+    <min-top :memberInfo="memberInfo" :userInfo="userInfo" :referrerCode="referrerCode"></min-top>
     <grid-list :gridData="walletData" @navTo="navTo"></grid-list>
     <grid-list :gridData="orderData" @navTo="navTo"></grid-list>
     <bottom-cell :cellData="cellData" @bottomNavTo="bottomNavTo"></bottom-cell>
@@ -146,7 +146,8 @@ export default {
       userInfo: {
         userImage: "",
         userName: ""
-      }
+      },
+      referrerCode:-1
     };
   },
   components: {
@@ -156,52 +157,16 @@ export default {
   },
   methods: {
     ...mapMutations(["setShowBackTop"]),
-    webviewConfig(targetPage) {
-      // 上述规则命中则开启新的webview
-      const ENV = this.$store.state.environment == "development" ? 'uat' : 'prod';
-      const targetUrl = encodeURIComponent(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${targetPage}`);
-      const token = this.$store.state.ythToken
-        ? this.$store.state.ythToken
-        : localStorage.getItem("ythToken") || 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJvbDdpZ2pqRDhXZFJ1Q1FSUGJXT1NlVTFheHJFIiwic2NvcGUiOlsiYWxsIl0sImlkIjoyNTM4NTk5NjczNjY5NjE1NjI0LCJleHAiOjE2MzA3MjU0MzcsImF1dGhvcml0aWVzIjpbInZpc2l0b3IiXSwianRpIjoiOWFmYmUyYjUtNzQyMS00NTFiLWJlMmEtY2VlYTZmNTFkNmY4IiwiY2xpZW50X2lkIjoibWluaV9tYWxsIn0.AmrVvL1aPFuz-bLDdO2oNJ2WjuNTRSaKE2cOYctxplEKD5pO1CYqoDi08TmciwC5zaV-TJoGbMbTjnsdtN76ZAcmV5zi1r38EQEbf1CT3hpmhoCAn4pG_WDA1ZKkoQlYt5v3NADSJJgbDPueGN8gNVY5DjTG9OFWDZ_t-MEQgRnUBTMkr6VEwjY9ABwgw664SscOHMWXfOcFZYmrnwx-5JtJopl7TKMgadPkHXb6xQIBspnBs7Mtmnnf8ho5sqzO724CzYFKyF9hxQdKUidrqn9Z2KKvrerrDXk1DkjYqi0PNr4-HAVMJArk1hq1VRmr4tu7PVaUobeiXAFsw2w7Iw';
-      return `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`))}`
-    },
     navTo(url, value) {
-      console.log('--navTo-->', url);
-      // 分销工程单独跳转webview， 解决微信小程序双标题问题
-      if(this.wxenvironment() && (this.isDistribution(url) || this.isServeMall(url))) {
-        wx.miniProgram.navigateTo({
-          url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(url))}`,
-        });
-        return ;
-      }
-
-      if(this.wxenvironment()) {
-        let routerList = [
-          '/mall2/orderlist', // 收货地址
-          '/concatAfterSalesOrder', //售后
-          '/coupon/get_coupon_list', // 优惠卷
-        ]
-        let newWebview = false;
-        routerList.forEach(str => {
-          if(url.indexOf(str) != -1) {
-            newWebview = true;
-          }
-        })
-        if(newWebview) {
-          wx.miniProgram.navigateTo({
-            url: this.webviewConfig(url)
-          });
-          return;
-        }
-      }
-
-
-
+      console.log(url);
       let params = {};
       if (url == "/record") {
         params = {
           totalRecord: value
         };
+      }
+      if(!params.referrerCode){
+        params.referrerCode=this.referrerCode
       }
       console.log(params);
       if (url == "") {
@@ -223,22 +188,40 @@ export default {
         this.$toast("敬请期待");
       } else {
         if (item.externalLinks) {
+          // if (item.title == "分享有礼") {
+          //   this.$store.state.environment == "development"
+          //     ? (item.url =
+          //         "http://8.129.64.205:8087/wxApplyDistribution?token=")
+          //     : (item.url =
+          //         "https://mall-prod-app-linli.timesgroup.cn:8081/wxApplyDistribution?token=");
+          //   if (
+          //     this.$store.state.webtype == 2 ||
+          //     this.$store.state.webtype == 3
+          //   ) {
+          //     item.url = item.url + localStorage.getItem("ythToken");
+          //   } else {
+          //     item.url = item.url + this.$store.state.ythToken;
+          //   }
+          // } else {
+          //   return;
+          // }
           let url = "";
           this.$store.state.environment == "development"
             ? (url = item.devUrl)
             : (url = item.prodUrl);
-
+          
           if (/token=/.test(url)) {
             let ythToken = "";
-
             this.$store.state.webtype == 2 || this.$store.state.webtype == 3
               ? (ythToken = localStorage.getItem("ythToken"))
               : (ythToken = this.$store.state.ythToken);
-
             url = url.replace(/token=/, `token=${ythToken}`);
           }
+          if(url.indexOf('referrerCode')<=-1 && url.indexOf('shareCode')<=-1){
+            url+= "&referrerCode="+this.referrerCode;
+          }
           // 分销工程单独跳转webview， 解决微信小程序双标题问题
-          if(this.wxenvironment() && (this.isDistribution(url) || this.isServeMall(url))) {
+          if(this.wxenvironment() && this.isDistribution(url)) {
             wx.miniProgram.navigateTo({
               url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(url))}`,
             });
@@ -251,25 +234,6 @@ export default {
             window.location.href = "tel:400-111-9928";
             return;
           } else {
-            console.log('----item.pageUrl-->', item.pageUrl);
-            if(this.wxenvironment()) {
-              let routerList = [
-                '/mall2/addresslist', // 收货地址
-                "/minUserInfo", // 个人资料
-              ]
-              let newWebview = false;
-              routerList.forEach(str => {
-                if(item.pageUrl.indexOf(str) != -1) {
-                  newWebview = true;
-                }
-              })
-              if(newWebview) {
-                wx.miniProgram.navigateTo({
-                  url: this.webviewConfig(item.pageUrl)
-                });
-                return ;
-              }
-            }
             this.$router.push(item.pageUrl);
           }
         }
@@ -284,13 +248,6 @@ export default {
         return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
       }else {
         return /https:\/\/mall-prod-app-linli.timesgroup.cn:8081/.test(url);
-      }
-    },
-    isServeMall(url) {
-      if(this.$store.state.environment == "development") {
-        return /https:\/\/mall-uat-app-linli.timesgroup.cn:1443/.test(url);
-      }else {
-        return /https:\/\/mall-prod-app-linli.timesgroup.cn:9001/.test(url);
       }
     },
     async getMemberInformation() {
@@ -449,6 +406,7 @@ export default {
     }
   },
   created() {
+    this.referrerCode=this.$store.state.referrerCode;
     if (!this.memberId) {
       this.$http
         .post("/app/json/user/getUserSummary", {

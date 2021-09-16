@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <van-sticky :offset-top="offsetTop" ref="stickyIndex">
-      <nav-top v-if="!wxenvironment()"></nav-top>
+      <nav-top></nav-top>
       <van-tabs
         v-model="active"
         swipeable
@@ -50,9 +50,6 @@ export default {
     CloseProcess,
   },
   created() {
-    if(this.wxenvironment()) {
-      document.title = '我的售后'
-    }
     this.initPage(this.$route.params.id);
     let padding = "";
     padding = document.getElementsByTagName("body")[0].style.paddingTop;
@@ -69,10 +66,6 @@ export default {
     // }
   },
   methods: {
-    wxenvironment() {
-      let ua = window.navigator.userAgent.toLowerCase();
-      return ua.match(/MicroMessenger/i) == "micromessenger";
-    },
     //跳到历史欠缴记录页面
     navToHistory() {
       navToMicroApplication.openTargetRouter({

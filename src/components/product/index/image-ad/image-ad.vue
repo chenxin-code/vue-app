@@ -586,7 +586,7 @@ export default {
       }
 
       // 分销工程单独跳转webview， 解决微信小程序双标题问题
-      if(this.wxenvironment() && (this.isDistribution(newNav.link.url) || this.isServeMall(newNav.link.url))) {
+      if(this.wxenvironment() && this.isDistribution(newNav.link.url)) {
         wx.miniProgram.navigateTo({
           url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(newNav.link.url))}`,
         });
@@ -630,13 +630,6 @@ export default {
         return /https:\/\/mall-uat-app-linli.timesgroup.cn:8001/.test(url);
       }else {
         return /https:\/\/mall-prod-app-linli.timesgroup.cn:8081/.test(url);
-      }
-    },
-    isServeMall(url) {
-      if(this.$store.state.environment == "development") {
-        return /https:\/\/mall-uat-app-linli.timesgroup.cn:1443/.test(url);
-      }else {
-        return /https:\/\/mall-prod-app-linli.timesgroup.cn:9001/.test(url);
       }
     },
     resetGndhPageArr: function (codeArr) {

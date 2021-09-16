@@ -1,7 +1,7 @@
 <template>
   <div>
-    <nav-top title="发优惠券" @backEvent="backEvent" v-if="!wxenvironment()"></nav-top>
-    <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }" :style="wxenvironment() ? { padding: '0 0 70px 0'} : ''">
+    <nav-top title="发优惠券" @backEvent="backEvent"></nav-top>
+    <div class="coupon-list-page" ref="coupon" :class="{ isWx: isWx }">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -141,9 +141,6 @@ export default {
     };
   },
   created() {
-    if(this.wxenvironment()) {
-      document.title = '我的卡券'
-    }
     if (!this.memberId) {
       this.$http
         .post("/app/json/user/getUserSummary", {
@@ -163,10 +160,6 @@ export default {
     }
   },
   methods: {
-    wxenvironment() {
-      let ua = window.navigator.userAgent.toLowerCase();
-      return ua.match(/MicroMessenger/i) == "micromessenger";
-    },
     //返回上一页
     backEvent() {
       this.$router.go(-1);

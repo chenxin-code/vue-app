@@ -11,7 +11,7 @@
       <div class="cart-top">
         <!-- @click="chooseAddress(deliverType)" -->
         <div class="cart-title">
-          <span class="title theme_font_black" :style="goodsCount > 0?{marginLeft:'40px'}:{marginRight:'20px'}">您的购物车中已添加了({{ $store.state.mall2.cartNum }})种商品</span>
+          <span class="title theme_font_black" :style="goodsCount > 0?{marginLeft:'40px'}:{marginRight:'20px'}">购物车({{ $store.state.mall2.cartNum }})</span>
           <!-- <span class="address theme_font_gray">{{getAddressName()}}</span>
           <i class="iconfont mall-dingwei theme_font_black"></i> -->
         </div>

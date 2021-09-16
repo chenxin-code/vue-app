@@ -5,7 +5,7 @@
     class="order mall2"
     :class="{theme_sys_base:orderCategory == 1,theme_sys_blue:orderCategory == 1}"
   >
-    <nav-top @backEvent="backEvent" v-if="!wxenvironment()">
+    <nav-top @backEvent="backEvent">
       <div
         class="right-btn theme_font_gray"
         style="right: 0px; height: 44px; top: 0px; padding-right: 10px;font-size: 12px;"
@@ -13,7 +13,7 @@
         v-if="$store.state.globalConfig.kshop_orderListUrl && $store.state.globalConfig.kshop_orderListUrl != undefined"
       >历史订单</div>
     </nav-top>
-    <nav-content :titleDefault="true">
+    <nav-content>
       <div class="tabs">
         <div class="tab-item" v-for="(item, idx) in tabs" @click="tabEvent(item, idx)">
           <div
@@ -556,10 +556,6 @@ export default {
 
   },
   methods: {
-    wxenvironment() {
-      let ua = window.navigator.userAgent.toLowerCase();
-      return ua.match(/MicroMessenger/i) == "micromessenger";
-    },
     dealPushDeliveryBtn(time) {
       let num = this.$store.state.globalConfig.order_delivery_remind_displaytime
       var curDate = new Date(time);
@@ -1421,9 +1417,6 @@ export default {
     }
   },
   created() {
-    if(this,this.wxenvironment) {
-      document.title = "订单列表"
-    }
     //this.$store.state.globalConfig.pickup_cancel_order_tip = '123123123'
     //this.$store.state.globalConfig.delivery_cancel_order_tip = '4444545454'
     if (this.$store.state.globalConfig.delivertype_default == '1') {

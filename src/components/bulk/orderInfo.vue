@@ -4,9 +4,8 @@
       bstyle="transparent"
       @backEvent="$router.go(-1)"
       :title="navTopTitle"
-      v-if="!wxenvironment()"
     ></nav-top>
-    <div class="user_info" :style="wxenvironment() ? { padding: '0 auto'} : ''">
+    <div class="user_info">
       <div class="info">
         <span>提货人姓名：</span>
         <input v-model="consigneeName" disabled />
@@ -189,9 +188,6 @@ export default {
     }else{
         this.navTopTitle = titleData[this.pageType];
     };
-    if(this.wxenvironment) {
-      document.title = this.navTopTitle;
-    }
   },
 //   activated() {
 //     if (this.pageAvtive) {
@@ -216,10 +212,6 @@ export default {
 //     next();
 //   },
   methods: {
-    wxenvironment() {
-      let ua = window.navigator.userAgent.toLowerCase();
-      return ua.match(/MicroMessenger/i) == "micromessenger";
-    },
     // 唤起客服
     handleCustomer: function() {
       ysf('config', {

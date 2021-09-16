@@ -113,7 +113,8 @@ export default {
         "/purchase",
         "/bulkDetails",
         "/orderInfo"
-      ]
+      ],
+      referrerCode:-1
     };
   },
   created() {
@@ -141,15 +142,29 @@ export default {
     //   this.$util.getUrlQuery("Authorization");
     // this.$store.commit("setYthToken", token);
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
-    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
-      let initObj = {};
-      console.log("localtion href", location.href);
-      location.href
+    let initObj = {};
+    console.log("localtion href", location.href);
+    if(location.href.includes("&")){
+       location.href
         .split("?")[1]
         .split("&")
         .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
+    }
+    console.log(initObj);
+    this.referrerCode=initObj.referrerCode || initObj.shareCode;
+    this.$store.state.referrerCode=this.referrerCode;
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      // let initObj = {};
+      // console.log("localtion href", location.href);
+      // location.href
+      //   .split("?")[1]
+      //   .split("&")
+      //   .forEach(item => {
+      //     initObj[item.split("=")[0]] = item.split("=")[1];
+      //   });
+      this.$store.state.login.token=this.setLoginToken(initObj.token);
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
         initObj.ythToken = window.localStorage.getItem("ythToken");
       }
@@ -157,7 +172,7 @@ export default {
       this.$store.state.projectId = 11111;
       // this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
-      console.log("initObj", initObj);
+      console.log("login.token", this.$store.state.login.token);
       console.log("initObj.ythToken", initObj.ythToken);
       console.log("getYthUserInfo", this.$store.state.ythToken);
       // this.$store.commit("setYthToken", initObj.ythToken);
@@ -272,6 +287,29 @@ export default {
     }
   },
   methods: {
+    setLoginToken(token){
+      if(token) return token;
+      if(!this.$route.query) return;
+      let usertoken="";
+      let query_=this.$route.query;
+      usertoken= query_.token && query_.token;
+      usertoken= query_.logintoken && query_.logintoken;
+      return usertoken;
+    },
+    /*更新分销码*/ 
+    updateReferrerCode(){
+      let distributionPersonDetail=this.$store.state.distributionPersonDetail;
+      let params={
+        distributorShareCode:this.referrerCode || -1,
+        referrerId: distributionPersonDetail.distributorId,
+        referrerFatherId: distributionPersonDetail.parentDistributorId
+      };
+      this.$http
+        .post("/app/json/user/updateReferrerCode", params)
+        .then(res => {
+
+        });
+    },
     // getUserTable(phone){
     //   this.$http.post('/app/json/customer_service/findHeadInfoByList',{
     //     userId:phone,
@@ -354,13 +392,13 @@ export default {
         .then(res => {
           console.log("头像返回", res);
         });
-    },
+    }, 
     getDistributionInfo(phone) {
       let distributionUrl = "";
       // this.$store.state.ythUserInfo.phone
-      this.$store.state.environment == "development"
-        ? (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`)
-        : (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`);
+      this.$store.state.environment == "production"
+        ? (distributionUrl = `https://mall-prod-web-linli.timesgroup.cn/times/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`)
+        : (distributionUrl = `https://mall-uat-web-linli.timesgroup.cn/times/distr-service/customer/api/v1/distr/get_simple_data?customerPhone=${phone}`);
       this.$http
         .get(distributionUrl)
         .then(res => {
@@ -379,6 +417,7 @@ export default {
               };
             }
           }
+          this.updateReferrerCode()
         })
         .catch(err => {
           this.$Toast(err);
@@ -534,6 +573,7 @@ export default {
         this.isShy = true;
       }, 3000);
     },
+    //测试提交
     // 返回首页，这里很low但是没bug，切最简单，需要找机会处理
     backIndex: function() {
       // 返回首页时清除 微店code（河北）
@@ -806,6 +846,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  .nav-bar {
+    z-index: 0
+  }
   .backTop {
     position: fixed;
     bottom: 170px;
@@ -825,7 +868,6 @@ export default {
     top: 0;
     bottom: 0;
     background-color: white;
-    z-index: 50;
   }
 
   .back-index {

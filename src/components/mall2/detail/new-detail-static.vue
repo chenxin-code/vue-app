@@ -1659,30 +1659,20 @@
       position="bottom"
     >
       <div class="share_popup">
-        <div class="popup-top">分享至</div>
         <div class="share_botton">
           <div class="share_botton_item" @click="shareWechatFriends">
-            <img src="./shareImage/image/weixin.png" alt="" />
+            <img src="./shareImage/image/share_wx.png" alt="" />
             <div>微信好友</div>
           </div>
           <div class="share_botton_item" @click="shareImg('poster')">
-            <img src="./shareImage/image/poster.png" alt="" />
-            <div>生成图片</div>
+            <img src="./shareImage/image/share_haibao.png" alt="" />
+            <div>推广海报</div>
           </div>
           <div class="share_botton_item" @click="shareImg('imageText')">
-            <img src="./shareImage/image/text.png" alt="" />
+            <img src="./shareImage/image/share_tuwen.png" alt="" />
             <div>图文推广</div>
           </div>
-          <div class="share_botton_item">
-            <img src="./shareImage/image/friends.png" alt="" />
-            <div>朋友圈</div>
-          </div>
-          <div class="share_botton_item">
-            <img src="./shareImage/image/link.png" alt="" />
-            <div>复制链接</div>
-          </div>
         </div>
-        <div class="divLine"></div>
         <div class="cancel" @click="showSharePopup = false">取消</div>
       </div>
     </van-popup>
@@ -2263,7 +2253,7 @@ export default {
           // userName: "gh_2a45a4d38d81",
           userName: "gh_28d617271c97",
           path: `pages/common/home/index?redirect=${encodeURIComponent(
-            `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}`
+            `/app-vue/app/index.html#/mall2/detail/1000?skuId=${this.skuId}&referrerCode=${this.referrerCode}`
           )}`,
           title: this.getSkuNameStr(this.detailData),
           desc: this.getSkuNameStr(this.detailData),
@@ -2353,8 +2343,6 @@ export default {
     },
     // 唤起客服
     handleCustomer: function() {
-      const that = this;
-      console.log('----that.detailData--->', that.detailData)
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
@@ -2363,21 +2351,7 @@ export default {
         data: this.$store.state.userLable,
         success: function() {
           // 成功回调
-          ysf("product", {
-            show: 1,
-            title: that.detailData.spuName,
-            desc: that.detailData.spuShortName,
-            picture: that.detailData.picUrls[0],
-            // note: product.note,
-            //   url: "跳转链接",
-            success: function() {
-              // 成功回调
-              ysf("open");
-            },
-            error: function() {
-            }
-          });
-
+          ysf("open");
         },
         error: function() {
           // 错误回调
@@ -4913,14 +4887,7 @@ export default {
 .share_popup {
   width: 100%;
   height: 100%;
-  .popup-top {
-    font-size: 13px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #666666;
-    text-align: center;
-    padding: 18px;
-  }
+  padding-top: 40px;
 
   .share_botton {
     display: flex;
@@ -4940,7 +4907,7 @@ export default {
       }
 
       div {
-        margin-top: 15px;
+        margin-top: 23px;
         font-size: 13px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
@@ -4948,32 +4915,20 @@ export default {
       }
     }
   }
-  .divLine {
-    width: 375px;
-    height: 1px;
-    background: #E9E9E9;
-    margin-top: 20px;
-  }
 
   .cancel {
-    // width: 295px;
-    // height: 37px;
-    // background: #ffffff;
-    // border-radius: 6px;
-    // border: 1px solid #e5e5e5;
-    // text-align: center;
-    // line-height: 37px;
-    // font-size: 13px;
-    // font-family: PingFangSC-Regular, PingFang SC;
-    // font-weight: 400;
-    // color: #666666;
-    // margin: 20px auto;
-      font-size: 14px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #8d8d8d;
-      text-align: center;
-      padding: 15px 0 25px 0;
+    width: 295px;
+    height: 37px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 37px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    margin: 20px auto;
   }
 }
 
