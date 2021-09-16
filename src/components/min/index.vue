@@ -157,8 +157,45 @@ export default {
   },
   methods: {
     ...mapMutations(["setShowBackTop"]),
+    webviewConfig(targetPage) {
+      // 上述规则命中则开启新的webview
+      const ENV = this.$store.state.environment == "development" ? 'uat' : 'prod';
+      const targetUrl = encodeURIComponent(`https://mall-${ENV}-app-linli.timesgroup.cn/app-vue/app/index.html#${targetPage}`);
+      const token = this.$store.state.ythToken
+        ? this.$store.state.ythToken
+        : localStorage.getItem("ythToken");
+      return `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(`https://mall-${ENV}-app-linli.timesgroup.cn/app/index?token=${token}&redirect=${targetUrl}`))}`
+    },
     navTo(url, value) {
       console.log(url);
+      // 分销工程单独跳转webview， 解决微信小程序双标题问题
+      if(this.wxenvironment() && (this.isDistribution(url) || this.isServeMall(url))) {
+        wx.miniProgram.navigateTo({
+          url: `/pages/distributionWebView/index?url=${encodeURIComponent(JSON.stringify(url))}`,
+        });
+        return ;
+      }
+
+      if(this.wxenvironment()) {
+        let routerList = [
+          '/mall2/orderlist', // 收货地址
+          '/concatAfterSalesOrder', //售后
+          '/coupon/get_coupon_list', // 优惠卷
+        ]
+        let newWebview = false;
+        routerList.forEach(str => {
+          if(url.indexOf(str) != -1) {
+            newWebview = true;
+          }
+        })
+        if(newWebview) {
+          wx.miniProgram.navigateTo({
+            url: this.webviewConfig(url)
+          });
+          return;
+        }
+      }
+
       let params = {};
       if (url == "/record") {
         params = {
@@ -234,9 +271,35 @@ export default {
             window.location.href = "tel:400-111-9928";
             return;
           } else {
+            console.log('----item.pageUrl-->', item.pageUrl);
+            if(this.wxenvironment()) {
+              let routerList = [
+                '/mall2/addresslist', // 收货地址
+                "/minUserInfo", // 个人资料
+              ]
+              let newWebview = false;
+              routerList.forEach(str => {
+                if(item.pageUrl.indexOf(str) != -1) {
+                  newWebview = true;
+                }
+              })
+              if(newWebview) {
+                wx.miniProgram.navigateTo({
+                  url: this.webviewConfig(item.pageUrl)
+                });
+                return ;
+              }
+            }
             this.$router.push(item.pageUrl);
           }
         }
+      }
+    },
+    isServeMall(url) {
+      if(this.$store.state.environment == "development") {
+        return /https:\/\/mall-uat-app-linli.timesgroup.cn:1443/.test(url);
+      }else {
+        return /https:\/\/mall-prod-app-linli.timesgroup.cn:9001/.test(url);
       }
     },
     wxenvironment() {
