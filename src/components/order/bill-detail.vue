@@ -2,7 +2,7 @@
  * @Description: 这是账单明细页面
  * @Date: 2021-06-10 17:25:46
  * @Author: shuimei
- * @LastEditTime: 2021-09-07 11:34:29
+ * @LastEditTime: 2021-09-17 15:51:31
 -->
 <template>
   <div class="bill-detail">
@@ -82,14 +82,14 @@
                   @click="checkShop(item, index, isMonthPay)"
                   checked-color="#E5165A"
                   ref="checkShop"
-                  >{{ item.quarterTitle.substr(0,5) }}</van-checkbox
+                  >{{ item.quarterTitle.substr(0, 5) }}</van-checkbox
                 >
                 <div class="title-hd" v-show="isMonthPay">
-                  {{ item.quarterTitle.substr(0,5) }}
+                  {{ item.quarterTitle.substr(0, 5) }}
                 </div>
               </div>
               <div class="title-hd" v-show="isFinishBill">
-                {{ item.quarterTitle.substr(0,5) }}
+                {{ item.quarterTitle.substr(0, 5) }}
               </div>
               <div
                 class="item"
@@ -197,6 +197,8 @@ import moment from "moment";
 import _ from "lodash";
 import { Dialog } from "vant";
 import { Loading } from "vant";
+import nav from "@zkty-team/x-engine-module-nav";
+
 export default {
   data() {
     return {
@@ -565,7 +567,8 @@ export default {
     },
     //返回上一级
     backEvent() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      nav.navigatorBack();
     },
     navToPage() {
       //跳转发票查询微应用
