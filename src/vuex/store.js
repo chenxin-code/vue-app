@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
+        comeFromPage:'/common',//小程序审核跳转error页面打开登录页面
         ythUser: {}, //一体化头像昵称
         distributionPersonDetail: {}, //分销信息
         userSummary: {},

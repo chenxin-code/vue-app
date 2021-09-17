@@ -8,21 +8,51 @@
 </template>
 
 <script>
+import bridgefunc from '@/utils/bridgefunc.js';
+import util from "@/utils/util";
 export default {
   name: "error",
   props: {},
   data() {
-    return {};
+    return {
+      version: "1.0.23",
+      isAudit: false,
+    };
   },
   created() {
-    if (this.$store.state.webtype == 2 || this.$store.state.webtype == 3) {
-      this.$nextTick(() => {
-        console.log("wx", wx);
-        wx.miniProgram.navigateTo({
-          url: "/pages/common/home/index",
+    this.checkVersion();
+  },
+  methods: {
+    checkVersion() {
+      this.$http
+        .post("/app/json/login/getVersionStatus", { versionNum: "1.0.23" })
+        .then((res) => {
+          if (res.data.status == 0) {
+            this.isAudit = res.data.data.isTrue;
+            console.log("this.isAudit", this.isAudit);
+            if (this.isAudit) {
+              this.$store.state.login.token = '';
+              this.$store.state.comeFromPage = '/error';
+              bridgefunc.vuexStorage(function () {
+                util.toLogin();
+                return
+              });
+            } else {
+              if (
+                this.$store.state.webtype == 2 ||
+                this.$store.state.webtype == 3
+              ) {
+                this.$nextTick(() => {
+                  console.log("wx", wx);
+                  wx.miniProgram.navigateTo({
+                    url: "/pages/common/home/index",
+                  });
+                });
+              }
+            }
+          }
         });
-      });
-    }
+    },
   },
 };
 //

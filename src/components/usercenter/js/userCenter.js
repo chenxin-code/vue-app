@@ -399,29 +399,35 @@ var userCenter = {
       if (store.state.indexData.selectedIndex != '' && store.state.indexData.selectedIndex > -1) {
         store.state.indexData.useSaveIndex = true
       }
-      bridgefunc.vuexStorage(function () {
-        // 注册退到第几个层级
-        if (n && n > 0) {
-          router.go(-n);
-        } else if (n === 0) {
-          console.log('n === 0，不做处理')
-        } else {
-          router.go(-1)
-        }
-        setTimeout(() => {
-          if (window.wechatFirstIn) {
-            window.wechatFirstIn = null
-            router.replace('/common')
+      if(store.state.comeFromPage == '/error'){
+        //如果是从error页面过来直接返回首页
+        router.replace('/common');
+        store.state.comeFromPage == '/common';
+      }else{
+        bridgefunc.vuexStorage(function () {
+          // 注册退到第几个层级
+          if (n && n > 0) {
+            router.go(-n);
+          } else if (n === 0) {
+            console.log('n === 0，不做处理')
           } else {
-            Cookie.set('usertoken', '', -1)
-            if (store.state.deployType == '2') {
-              // 标记为刚刚登录过
-              sessionStorage.setItem('just_login_reload', '1')
-            }
-            window.location.reload(true);
+            router.go(-1)
           }
-        }, 50)
-      }, true)
+          setTimeout(() => {
+            if (window.wechatFirstIn) {
+              window.wechatFirstIn = null
+              router.replace('/common')
+            } else {
+              Cookie.set('usertoken', '', -1)
+              if (store.state.deployType == '2') {
+                // 标记为刚刚登录过
+                sessionStorage.setItem('just_login_reload', '1')
+              }
+              window.location.reload(true);
+            }
+          }, 50)
+        }, true)
+      }
     } else {
       console.log('vuexStorage')
       bridgefunc.vuexStorage(function () {
