@@ -280,7 +280,7 @@ export default {
               let list = {
                 billType: 11,
                 tag: 16, //状态订单
-                amount: item.realAmount,
+                amount: item.payAmount,
                 submitTime: item.submitTime,
                 deliverType: item.deliverType,
                 orderId: item.id,
@@ -424,7 +424,7 @@ export default {
       currentOrderList = this.orderList.map(item => {
         return {
           billType: item.billType,
-          amount: item.realAmount,
+          amount: item.payAmount,
           submitTime: item.submitTime,
           deliverType: item.deliverType,
           orderId: item.id,
@@ -574,7 +574,7 @@ export default {
                     let list = {
                       billType: 11,
                       tag: 16, //状态订单
-                      amount: item.realAmount,
+                      amount: item.payAmount,
                       submitTime: item.submitTime,
                       deliverType: item.deliverType,
                       orderId: item.id,
