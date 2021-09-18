@@ -938,6 +938,7 @@
     methods: {
       // 唤起客服
       handleCustomer: function() {
+        const that = this;
         ysf('config', {
           uid: this.$store.state.userInfo.userId,
           name: this.$store.state.userInfo.nickName,
@@ -945,7 +946,19 @@
           mobile: this.$store.state.userInfo.phone,
           data: this.$store.state.userLable,
           success: function(){     // 成功回调
-            ysf('open');
+            // ysf('open');
+            ysf("product", {
+              show: 1,
+              title: that.detailData[0].groupbuySkuName,
+              desc: `价格：¥ ${that.detailData.dpedData.integer}.${detailData.dpedData.decimals}`,
+              picture: that.detailData.picUrls[0],
+              //   url: "跳转链接",
+              success: function() {
+                // 成功回调
+                ysf("open");
+              },
+              error: function() {}
+            });
           },
           error: function(){       // 错误回调
             // handle error

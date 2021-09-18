@@ -1828,6 +1828,7 @@ export default {
   methods: {
     // 唤起客服
     handleCustomer: function() {
+      const that = this;
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
@@ -1836,7 +1837,19 @@ export default {
         data: this.$store.state.userLable,
         success: function() {
           // 成功回调
-          ysf("open");
+          // ysf("open");
+          ysf("product", {
+            show: 1,
+            title: that.detailData.skuName,
+            desc: `价格：¥ ${that.detailData.costPrice}`,
+            picture: that.detailData.phPictureUrl.split(',')[0],
+            //   url: "跳转链接",
+            success: function() {
+              // 成功回调
+              ysf("open");
+            },
+            error: function() {}
+          });
         },
         error: function() {
           // 错误回调

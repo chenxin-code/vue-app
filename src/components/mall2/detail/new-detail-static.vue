@@ -2357,7 +2357,7 @@ export default {
           ysf("product", {
             show: 1,
             title: that.detailData.showTitle,
-            desc: `¥ ${that.detailData.salePrice}`,
+            desc: `价格：¥ ${that.detailData.salePrice}`,
             picture: that.detailData.picUrls[0],
             //   url: "跳转链接",
             success: function() {

@@ -141,7 +141,7 @@ export default {
           ysf("product", {
             show: 1,
             title: that.resouce.groupbuySkuName,
-            desc: that.resouce.groupbuyBuyerPrice ,
+            desc: `价格：${that.resouce.groupbuyBuyerPrice}`,
             picture: that.groupbuySkuPicurl[0],
             //   url: "跳转链接",
             success: function() {
