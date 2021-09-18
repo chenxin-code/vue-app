@@ -119,14 +119,14 @@ export default {
   },
   created() {
     // this.viewPortSet();
-    console.log("this.$util.getIsIphoneX_X();", this.$util.getIsIphoneX_X());
-    console.log(window.location.href);
+    // console.log("this.$util.getIsIphoneX_X();", this.$util.getIsIphoneX_X());
+    console.log(window.location.href,this.$route);
     if (/mall-prod-app-linli/.test(window.location.href)) {
       this.$store.state.environment = "production";
     } else {
       this.$store.state.environment = "development";
     }
-    console.log("环境变量", this.$store.state.environment);
+    // console.log("环境变量", this.$store.state.environment);
     appNav
       .setNavBarHidden({
         isHidden: true,
@@ -142,53 +142,53 @@ export default {
     //   this.$util.getUrlQuery("Authorization");
     // this.$store.commit("setYthToken", token);
     // this.$store.state.webtype == "2" || this.$store.state.webtype == "3"
-    let initObj = {};
-    console.log("localtion href", location.href);
-    if(location.href.includes("&")){
-       location.href
+    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
+      let initObj = {};
+      location.href
         .split("?")[1]
         .split("&")
         .forEach(item => {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
-    }
-    console.log(initObj);
-    this.referrerCode=initObj.referrerCode || initObj.shareCode;
-    this.$store.state.referrerCode=this.referrerCode;
-    if (this.$store.state.webtype == "2" || this.$store.state.webtype == "3") {
-      // let initObj = {};
-      // console.log("localtion href", location.href);
-      // location.href
-      //   .split("?")[1]
-      //   .split("&")
-      //   .forEach(item => {
-      //     initObj[item.split("=")[0]] = item.split("=")[1];
-      //   });
+      if(location.hash && location.hash.indexOf('referrerCode')>=0){
+        location.hash.split("?")[1].split("&").forEach(item => {
+          initObj[item.split("=")[0]] = item.split("=")[1];
+        });
+      }  
+      this.referrerCode=initObj.referrerCode || initObj.shareCode || "";
       this.$store.state.login.token=this.setLoginToken(initObj.token);
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
         initObj.ythToken = window.localStorage.getItem("ythToken");
       }
       this.$store.state.projectId = initObj.projectId;
-      this.$store.state.projectId = 11111;
+      // this.$store.state.projectId = 11111;
       // this.$store.state.ythToken = initObj.ythToken;
       localStorage.setItem("ythToken", initObj.ythToken);
-      console.log("login.token", this.$store.state.login.token);
-      console.log("initObj.ythToken", initObj.ythToken);
-      console.log("getYthUserInfo", this.$store.state.ythToken);
+      // console.log("login.token", this.$store.state.login.token);
+      // console.log("initObj.ythToken", initObj.ythToken);
+      // console.log("getYthUserInfo", this.$store.state.ythToken);
       // this.$store.commit("setYthToken", initObj.ythToken);
       this.getYthUserInfo();
     } else {
+      appLocalstorage.get({ key: "LLBDistributionCode", isPublic: true }).then(res => {
+        this.referrerCode = res.result;
+        if(!res.result){
+           this.referrerCode=this.$route.query.referrerCode || this.$route.query.shareCode
+        }
+        console.log("---------------app获取分销码----------", res);
+      });
       appLocalstorage.get({ key: "LLBToken", isPublic: true }).then(res => {
         this.$store.state.ythToken = res.result;
         console.log("---------------一体化token获取成功----------", res);
-        console.log(
-          "---------------this.$store.state.ythToken----------",
-          this.$store.state.ythToken
-        );
+        // console.log(
+        //   "---------------this.$store.state.ythToken----------",
+        //   this.$store.state.ythToken
+        // );
         // this.$store.commit("setYthToken", res.result);
         this.getYthUserInfo();
       });
     }
+    this.$store.state.referrerCode=this.referrerCode;
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then(res => {
       if (res.hasOwnProperty("result")) {
         console.log("---------------人房id获取成功----------", res);
