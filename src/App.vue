@@ -155,7 +155,7 @@ export default {
           initObj[item.split("=")[0]] = item.split("=")[1];
         });
       }  
-      this.referrerCode=initObj.referrerCode || initObj.shareCode || "";
+      this.referrerCode=initObj.referrerCode || initObj.shareCode;
       this.$store.state.login.token=this.setLoginToken(initObj.token);
       if (initObj.ythToken == "" || initObj.ythToken == undefined) {
         initObj.ythToken = window.localStorage.getItem("ythToken");
@@ -188,7 +188,7 @@ export default {
         this.getYthUserInfo();
       });
     }
-    this.$store.state.referrerCode=this.referrerCode;
+    this.$store.state.referrerCode=this.referrerCode || "";
     appLocalstorage.get({ key: "LLBUserRoomId", isPublic: true }).then(res => {
       if (res.hasOwnProperty("result")) {
         console.log("---------------人房id获取成功----------", res);
