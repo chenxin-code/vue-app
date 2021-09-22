@@ -51,7 +51,7 @@
           lng: this.$store.state.currentLocation.posx,
           lat: this.$store.state.currentLocation.posy,
           deliverType: this.deliveryType,
-          proHotType:"热门商品"
+          proHotType:2
         };
         this.$http.post(url, paramsData).then(
           res => {
