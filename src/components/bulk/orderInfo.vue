@@ -215,6 +215,8 @@ export default {
     // 唤起客服
     handleCustomer: function() {
       const that = this;
+      console.log('----handleCustomer--->');
+      console.log('----handleCustomer--->', that.orderInfo);
       ysf('config', {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
