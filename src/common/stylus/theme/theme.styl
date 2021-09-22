@@ -83,11 +83,19 @@
   // 背景-红
 
   .theme_bg_red {
-    background-color #F80F16
+    // background-color #F80F16
+    background linear-gradient(90deg, #E5165A 0%, #FF6094 100%)
   }
 
   .theme_bg_red_i {
-    background-color #F80F16 !important
+    // background-color #F80F16 !important
+    background linear-gradient(90deg, #E5165A 0%, #FF6094 100%) !important
+  }
+
+  //背景 - 玫红
+  .theme_bg_rose_red {
+    background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
+
   }
 
   // 背景-蓝
@@ -180,6 +188,11 @@
     color #999999 !important
   }
 
+  // 文字 - 玫红色
+  .theme_font_rose_tint {
+    color #E5165A
+  }
+
   // 文字-浅蓝
 
   .theme_font_light_blue {
@@ -203,11 +216,18 @@
   // 文字-红
 
   .theme_font_red {
-    color #F80F16
+    // #F80F16
+    color #E5165A
   }
 
   .theme_font_red_i {
-    color #F80F16 !important
+    // #F80F16
+    color #E5165A !important
+  }
+
+  //文字-玫红
+  .theme_font_rose_red {
+    color #E5165A
   }
 
   // 文字-蓝
@@ -223,16 +243,16 @@
   // 边线-红
 
   .theme_border_red {
-    border-color #F80F16
+    border-color #E5165A
     &.theme_border_red:before {
-      border-color #F80F16
+      border-color #E5165A
     }
   }
 
   .theme_border_red_i {
-    border-color #F80F16 !important
+    border-color #E5165A !important
     &.theme_border_red_i:before {
-      border-color #F80F16 !important
+      border-color #E5165A !important
     }
   }
 
@@ -282,7 +302,8 @@
     }
   }
 
-  $theme_color = #F80F16
+  // $theme_color = #F80F16
+  $theme_color = #E5165A
   $theme_color_l = #fafafa
 
   .theme_standard_font {
@@ -343,6 +364,11 @@
     &.theme_light_bdr_i:before {
       border-color $theme_color_l !important
     }
+  }
+
+  //按钮-背景
+  .theme_btn_bg {
+    background: linear-gradient(90deg, #E5165A 0%, #FF6094 100%);
   }
 
 

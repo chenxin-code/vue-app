@@ -105,7 +105,7 @@ export default {
       let url = "";
       this.$store.state.environment == "production"
         ? (url = `https://mall-prod-app-linli.timesgroup.cn:5000`)
-        : (url = `http://8.134.9.70/`);
+        : (url = `https://mall-uat-app-linli.timesgroup.cn:9000/`);
       navToMicroApplication.openTargetRouter({
         type: "h5",
         uri: url,

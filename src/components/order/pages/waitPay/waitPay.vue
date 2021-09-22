@@ -854,13 +854,12 @@ export default {
                 // isPay=1：支付中；isPay=0：待支付
                 payStr.push(item.isPay);
               });
-              console.log(`待支付-是否有支付中账单`, payStr);
 
               if (payStr.includes(1)) {
                 Toast.clear(); //关闭页面loading
                 this.isShowErrorMsg = true;
                 this.errorMsg =
-                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的账户安全，请稍等10分钟后重新支付，感谢您的理解。";
+                  "尊敬的邻里邦用户，由于上次账单支付异常中断，为确保您的资金安全，请稍等15分钟后重新支付，感谢您的理解。";
                 //动态修改van-sticky样式，让弹窗铺满整个屏幕
                 this.$nextTick(() => {
                   this.$parent.$refs.stickyIndex.$el.style.position =

@@ -2,7 +2,7 @@
  * @Description: 这是账单详情页面
  * @Date: 2021-06-12 23:32:07
  * @Author: shuimei
- * @LastEditTime: 2021-08-16 14:34:44
+ * @LastEditTime: 2021-09-06 10:56:46
 -->
 <template>
   <div class="bill-center-detail">
@@ -11,12 +11,20 @@
     </van-sticky>
     <div class="content">
       <div class="total">
-        <div class="name">物业缴费</div>
+        <div class="name">{{ query.showInfo }}</div>
         <div class="money">
           <span class="syb">￥</span>
           <span class="num">{{ query.payableAmount }}</span>
         </div>
-        <div class="status">待支付</div>
+        <div class="status">
+          {{ query.pageBillType | filterPage }}
+        </div>
+        <div class="status" v-if="query.pageBillType == 2">
+          托收中
+        </div>
+        <div class="status" v-if="query.pageBillType == 2">
+          （已签署托收协议，请忽略此账单）
+        </div>
       </div>
       <div class="detail-box">
         <div class="item">
@@ -34,6 +42,18 @@
             <div class="title">商户单号</div>
             <div class="result merchant">
               {{ query.platMerCstNo }}
+            </div>
+          </div>
+          <div class="item-hd" v-if="query.pageBillType == 1">
+            <div class="title">缴费时间</div>
+            <div class="result">
+              {{ query.tollDate }}
+            </div>
+          </div>
+          <div class="item-hd" v-if="query.pageBillType == 1">
+            <div class="title">支付方式</div>
+            <div class="result">
+              {{ query.payWay }}
             </div>
           </div>
         </div>
@@ -63,6 +83,10 @@
             <div class="result buildings">{{ query.unit || "--" }}</div>
           </div>
           <div class="item-hd">
+            <div class="title">应收金额</div>
+            <div class="result">{{ query.payableAmount }}</div>
+          </div>
+          <div class="item-hd">
             <div class="title">房号</div>
             <div class="result buildings">{{ query.buildings }}</div>
           </div>
@@ -84,7 +108,6 @@
   </div>
 </template>
 <script>
-// import appNav from "@zkty-team/x-engine-module-nav";
 import navTop from "@/components/order/components/common/nav-top";
 import _ from "lodash";
 import moment from "moment";
@@ -112,17 +135,25 @@ export default {
       } else {
         return "";
       }
+    },
+    filterPage(val) {
+      switch (val) {
+        case "0":
+          return "待支付";
+          break;
+        case "1":
+          return "已完成";
+          break;
+        case "2":
+          return "托收中";
+          break;
+        default:
+          return "";
+          break;
+      }
     }
   },
-  mounted() {
-    // appNav.setNavLeftBtn({
-    //   title: "账单详情",
-    //   titleColor: "#333333",
-    //   titleSize: 17,
-    //   titleFontName: "PingFangSC-Medium",
-    //   titleBig: "500"
-    // });
-  },
+  created() {},
   methods: {
     backEvent() {
       this.$router.go(-1);
