@@ -84,7 +84,8 @@
           orderByKey: '',
           ascOrDesc: '',
           deliverType: this.deliverType,
-          collectType: 1
+          collectType: 1,
+          proHotType:"热门商品"
         };
         if (this.deliverType == 1) {
           //  自提

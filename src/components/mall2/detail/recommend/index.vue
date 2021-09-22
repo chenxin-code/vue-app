@@ -98,7 +98,8 @@
           skuId: this.skuId,
           lng: this.$store.state.currentLocation.posx,
           lat: this.$store.state.currentLocation.posy,
-          deliverType: this.deliveryType
+          deliverType: this.deliveryType,
+          proHotType:'热销商品'
         };
         this.$http.post(url, paramsData).then(
           res => {
