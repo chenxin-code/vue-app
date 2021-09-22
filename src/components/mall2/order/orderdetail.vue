@@ -1828,8 +1828,9 @@ export default {
   methods: {
     // 唤起客服
     handleCustomer: function() {
+      console.log('---------detailData-------->');
       const that = this;
-      console.log('---------detailData-------->', that.detailData);
+      console.log('---------detailData-------->', this.detailData);
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
