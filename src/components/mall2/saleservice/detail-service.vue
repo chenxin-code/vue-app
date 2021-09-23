@@ -166,10 +166,15 @@
           data: this.$store.state.userLable,
           success: function(){     // 成功回调
             // ysf('open');
+          //             spuName: `售后编号: ${details.afterSaleNo}`,
+          // spuShortName: `售后申请时间: ${details.applyTime}`,
+          // note: `售后理由: ${details.applyReason}`,
+          // picture: details.orderItemList[0].itemImg
             ysf("product", {
               show: 1,
-              title: that.orderInfo.skuName,
-              desc: `价格：¥ ${that.orderInfo.price}`,
+              title: `售后编号：${that.orderInfo.id}`,
+              desc: `售后申请时间： ${that.orderInfo.approveTimeStr}`,
+              // note: `售后理由：`,
               picture: that.orderInfo.phPictureUrl,
               //   url: "跳转链接",
               success: function() {
