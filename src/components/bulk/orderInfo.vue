@@ -228,9 +228,9 @@ export default {
           // ysf('open');
           ysf("product", {
             show: 1,
-            title: that.orderInfo.groupbuySkuName,
-            desc: `价格：¥ ${that.orderInfo.groupbuyLinePrice}`,
-            picture: that.orderInfo.groupbuySkuPicurl.split(',')[0],
+            title: that.orderInfo.groupbuyActivityName,
+            desc: `价格：¥ ${that.orderInfo.skuModelList[0].groupbuyLinePrice}`,
+            picture: that.orderInfo.skuModelList[0].groupbuySkuPicurl.split(',')[0],
             //   url: "跳转链接",
             success: function() {
               // 成功回调
