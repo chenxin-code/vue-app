@@ -2232,7 +2232,7 @@ export default {
           userName: this.$store.state.ythUserInfo.userName,
           referrerCode: this.referrerCode,
           qrCode: this.qrCode,
-          estimatedCommission: this.estimatedCommission,
+          estimatedCommission: this.referrerCode ? this.estimatedCommission : "",
           link
         };
         wx.miniProgram.navigateTo({
@@ -2301,7 +2301,7 @@ export default {
         userName: this.$store.state.ythUserInfo.userName,
         referrerCode: this.referrerCode,
         qrCode: this.qrCode,
-        estimatedCommission: this.estimatedCommission,
+        estimatedCommission: this.referrerCode ? this.estimatedCommission : "",
         link
       };
       this.showSharePopup = false;
