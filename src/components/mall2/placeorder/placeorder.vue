@@ -2268,6 +2268,7 @@ export default {
           }
           return;
         }
+
         if (
           !(this.$store.state.mall2.selectAddress.id > 0) &&
           this.deliveryType == 2 &&
@@ -2310,6 +2311,7 @@ export default {
           return;
         }
         if (hasNoStockItem) {
+          console.log("inner666");
           NoStock.open({
             initData: {
               listData: storeArr,
