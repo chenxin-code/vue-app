@@ -1356,7 +1356,8 @@ export default {
             let params = {
               res: data.data,
               paramsData: paramsData,
-              deliveryType: paramsData.deliveryType
+              paramsDataList: [paramsData],
+              deliveryType: paramsData.deliveryType,
             };
 
             if (!(this.$store.state.mall2.selectAddress.id > 0) && this.detailData.deliveryType == 2) {
