@@ -212,6 +212,7 @@ export default {
 //     next();
 //   },
   methods: {
+    // TODO
     // 唤起客服
     handleCustomer: function() {
       const that = this;
@@ -227,9 +228,9 @@ export default {
           // ysf('open');
           ysf("product", {
             show: 1,
-            title: that.orderInfo[0].groupbuySkuName,
-            desc: `价格：¥ ${that.orderInfo[0].groupbuyLinePrice}`,
-            picture: that.orderInfo[0].groupbuySkuPicurl.split(',')[0],
+            title: that.orderInfo.groupbuySkuName,
+            desc: `价格：¥ ${that.orderInfo.groupbuyLinePrice}`,
+            picture: that.orderInfo.groupbuySkuPicurl.split(',')[0],
             //   url: "跳转链接",
             success: function() {
               // 成功回调

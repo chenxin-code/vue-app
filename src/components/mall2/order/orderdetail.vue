@@ -1826,7 +1826,7 @@ export default {
     }
   },
   methods: {
-    // 唤起客服
+  // 唤起客服
     handleCustomer: function() {
       console.log('---------detailData-------->');
       const that = this;
@@ -1842,9 +1842,9 @@ export default {
           // ysf("open");
           ysf("product", {
             show: 1,
-            title: that.detailData.skuName,
-            desc: `价格：¥ ${that.detailData.costPrice}`,
-            picture: that.detailData.phPictureUrl.split(',')[0],
+            title: that.detailData.skuNames,
+            desc: `价格：¥ ${that.detailData.costAmount}`,
+            picture: that.detailData.orderItemList[0].phPictureUrl.split(',')[0],
             //   url: "跳转链接",
             success: function() {
               // 成功回调
