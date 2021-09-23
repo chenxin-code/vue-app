@@ -438,10 +438,11 @@ export default {
       display: inline-block;
       padding: 10px 5px 5px;
       text-align: center;
-      min-width: 64px;
+      min-width: 16.6%;
       font-size: 14px;
       color: #121212;
       line-height:14px;
+      flex:1;
     }
 
     .selected {
