@@ -1,6 +1,6 @@
 <template>
   <div
-    class="product-list"
+    class="product-list home_intro_list"
     :class="{'min-height' : usePorpData != true}"
     :style="$market.getModuleBgStyle(moduleData)"
     v-if="(getModuleIsShow() && moduleData.rows.length > 0) || usePorpData != true"
@@ -28,7 +28,7 @@
           </div>
           <div class="tip"></div>
           <div
-            class="channels-div"
+            class="channels-div" 
             v-if="moduleData.useApi == '4' && moduleData.channels && moduleData.channels.length > 1"
           >
             <div
@@ -53,7 +53,7 @@
                   :propData="propData"
                   v-if="moduleData.type == '3'"
                 ></ProductLlistHScroll>
-                  </div>
+  </div>
 </template>
 
 <script>
@@ -384,10 +384,11 @@ export default {
 <style lang="stylus" scoped type="text/stylus">
 @import '~@/common/stylus/variable.styl';
 
-.product-list {
+.home_intro_list {
   width: 100%;
   height: 100%;
-
+  margin-top:-7px;
+  background-color:#F8F8F8 !important;
   .title-img {
     position: relative;
     width: 100%;
@@ -428,35 +429,37 @@ export default {
   }
 
   .channels-div {
-    padding: 0 10px 5px;
+    padding: 0 10px 15px;
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
-
+    font-family: SourceHanSansCN-Regular, SourceHanSansCN;
     .channel {
       display: inline-block;
       padding: 10px 5px 5px;
       text-align: center;
       min-width: 64px;
       font-size: 14px;
+      color: #121212;
+      line-height:14px;
     }
 
     .selected {
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 500;
       position: relative;
-      color: #f80f16;
+      color: #E8374A;
 
       &.selected::after {
         content: ' ';
         position: absolute;
         left: 50%;
-        bottom: 0;
-        background-color: #f80f16;
-        width: 40px;
-        margin-left: -20px;
-        height: 2px;
-        border-radius: 1px;
+        bottom: -4px;
+        background: url("./images/selectIconRed.png");
+        background-size: cover;
+        width: 12px;
+        margin-left: -6px;
+        height: 6px;
       }
     }
   }
