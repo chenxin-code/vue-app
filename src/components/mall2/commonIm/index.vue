@@ -32,6 +32,9 @@
 
 <script>
 export default {
+  created() {
+    document.title = "在线客服"
+  },
   methods: {
     pushWUYE() {
       location.href = `https://times.shidaijia.com/crmguest/public/index.html#/outer/cust-service?cust_id=${this.$store.state.ythUserInfo.phone}&client_id=linli`;
