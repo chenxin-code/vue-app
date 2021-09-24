@@ -2284,6 +2284,10 @@ export default {
       this.shareSensors("微信");
     },
     shareImg(type) {
+      if(type == 'imageText') {
+        this.$Toast('敬请期待')
+        return;
+      }
       // this.showShare();
       let { picUrls, salePrice, skuName } = this.detailData;
       const link =
