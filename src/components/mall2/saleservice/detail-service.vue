@@ -157,6 +157,7 @@
     methods: {
       // 唤起客服
       handleCustomer: function() {
+        const that = this;
         ysf('config', {
           uid: this.$store.state.userInfo.userId,
           name: this.$store.state.userInfo.nickName,
@@ -164,7 +165,24 @@
           mobile: this.$store.state.userInfo.phone,
           data: this.$store.state.userLable,
           success: function(){     // 成功回调
-            ysf('open');
+            // ysf('open');
+          //             spuName: `售后编号: ${details.afterSaleNo}`,
+          // spuShortName: `售后申请时间: ${details.applyTime}`,
+          // note: `售后理由: ${details.applyReason}`,
+          // picture: details.orderItemList[0].itemImg
+            ysf("product", {
+              show: 1,
+              title: `售后编号：${that.orderInfo.id}`,
+              desc: `售后申请时间： ${that.orderInfo.approveTimeStr}`,
+              // note: `售后理由：`,
+              picture: that.orderInfo.phPictureUrl,
+              //   url: "跳转链接",
+              success: function() {
+                // 成功回调
+                ysf("open");
+              },
+              error: function() {}
+            });
           },
           error: function(){       // 错误回调
             // handle error
