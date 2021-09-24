@@ -1843,7 +1843,8 @@ export default {
           ysf("product", {
             show: 1,
             title: that.detailData.skuNames,
-            desc: `价格：¥ ${that.detailData.costAmount}`,
+            desc: `价格：¥ ${that.detailData.payAmount}`,
+            note: `备注: ${that.detailData.remark ? that.detailData.remark : ' '}`,
             picture: that.detailData.orderItemList[0].phPictureUrl.split(',')[0],
             //   url: "跳转链接",
             success: function() {
