@@ -3963,6 +3963,7 @@ export default {
      */
     _getProductDetailDynamic: function() {
       let url = "/app/json/product/getProductDetailDynamic";
+      let referrerCode=this.$store.state.referrerCode || '';
       let paramsData = {
         skuId: this.skuId,
         storeOuCode: this.detailData.storeOuCode,
@@ -3973,9 +3974,7 @@ export default {
           town: this.$store.state.mall2.selectAddress.townId
         },
         deliverType: this.deliveryType,
-        referrerCode: this.$route.query.referrerCode
-          ? this.$route.query.referrerCode
-          : "",
+        referrerCode: referrerCode,
         referrerId: this.distributionPersonDetail.distributorId,
         referrerFatherId: this.distributionPersonDetail.parentDistributorId
       };
@@ -4094,7 +4093,7 @@ export default {
             this.$store.state.mall2.cartNum = data.data;
             this.showPop = false;
             this.showProductImg = true;
-
+  ``
             this.$sensors.track("add_to_shoppingcart", {
               referrer_id: this.distributionPersonDetail.distributorId,
               top_referrer_id: this.distributionPersonDetail
