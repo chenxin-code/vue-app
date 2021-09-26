@@ -98,24 +98,24 @@ export default {
         isShowNumber: true
       },
       cellData: [
-        // {
-        //   title: "服务商城订单",
-        //   icon: require("./images/serviceOrder.png"),
-        //   devUrl:
-        //     "https://mall-uat-app-linli.timesgroup.cn:1443/order/listPage?token=",
-        //   prodUrl:
-        //     "https://mall-prod-app-linli.timesgroup.cn:9001/order/listPage?token=",
-        //   externalLinks: true
-        // },
-        // {
-        //   title: "服务商城售后",
-        //   icon: require("./images/serviceAfterSales.png"),
-        //   devUrl:
-        //     "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleList?token=",
-        //   prodUrl:
-        //     "https://mall-prod-app-linli.timesgroup.cn:9001/order/afterSaleList?token=",
-        //   externalLinks: true
-        // },
+        {
+          title: "服务商城订单",
+          icon: require("./images/serviceOrder.png"),
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:1443/order/listPage?token=",
+          prodUrl:
+            "https://mall-prod-app-linli.timesgroup.cn:9001/order/listPage?token=",
+          externalLinks: true
+        },
+        {
+          title: "服务商城售后",
+          icon: require("./images/serviceAfterSales.png"),
+          devUrl:
+            "https://mall-uat-app-linli.timesgroup.cn:1443/order/afterSaleList?token=",
+          prodUrl:
+            "https://mall-prod-app-linli.timesgroup.cn:9001/order/afterSaleList?token=",
+          externalLinks: true
+        },
         {
           title: "个人信息",
           icon: require("./images/user.png"),
