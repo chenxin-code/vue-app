@@ -3720,6 +3720,7 @@ export default {
 
       let url = "/appcontent/js/product/productDetail.js";
       let funcName = "productDetail_" + this.skuId;
+      let referrerCode=this.$store.state.referrerCode;
       let args = dataMergeInterceptor.getRequestArgs() || [];
       args.push({ skuId: this.skuId });
       args.push({ storeOuCode: storeOuCode });
@@ -3727,6 +3728,7 @@ export default {
       args.push({ deliverType: deliverType });
       args.push({ secondDeliveType: secondDeliveType });
       args.push({ activityId: activityId });
+      args.push({ referrerCode: referrerCode });
 
       staticDataRequest.request(url, funcName, args).then(data => {
         this.$Loading.close();
