@@ -129,6 +129,7 @@ export default {
     // 唤起客服
     handleCustomer: function () {
       const that = this;
+      console.log('-------resouce----->', that.resouce)
       ysf("config", {
         uid: this.$store.state.userInfo.userId,
         name: this.$store.state.userInfo.nickName,
@@ -142,7 +143,7 @@ export default {
             show: 1,
             title: that.resouce.groupbuySkuName,
             desc: `价格：${that.resouce.groupbuyBuyerPrice}`,
-            picture: that.groupbuySkuPicurl[0],
+            picture: that.resouce.groupbuySkuPicurl[0],
             //   url: "跳转链接",
             success: function() {
               // 成功回调

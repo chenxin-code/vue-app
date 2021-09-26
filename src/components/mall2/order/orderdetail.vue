@@ -1842,8 +1842,8 @@ export default {
           // ysf("open");
           ysf("product", {
             show: 1,
-            title: that.detailData.skuNames,
-            desc: `价格：¥ ${that.detailData.payAmount}`,
+            title: `订单编号：${that.detailData.deliveryOrderId || that.detailData.id}`,
+            desc: `下单时间：${that.detailData.submitTime}`,
             note: `备注: ${that.detailData.remark ? that.detailData.remark : ' '}`,
             picture: that.detailData.orderItemList[0].phPictureUrl.split(',')[0],
             //   url: "跳转链接",
