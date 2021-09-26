@@ -173,7 +173,7 @@
             ysf("product", {
               show: 1,
               title: `售后编号：${that.orderInfo.id}`,
-              desc: `售后申请时间： ${that.orderInfo.approveTimeStr}`,
+              desc: `售后申请时间： ${that.orderInfo.approveTimeStr || that.orderInfo.createTimeStr }`,
               // note: `售后理由：`,
               picture: that.orderInfo.phPictureUrl,
               //   url: "跳转链接",
