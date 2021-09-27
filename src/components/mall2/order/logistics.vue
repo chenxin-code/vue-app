@@ -2,8 +2,8 @@
 
 <template>
   <div class="logistics-page">
-    <nav-top @backEvent="turnback"></nav-top>
-    <nav-content>
+    <nav-top @backEvent="turnback" v-if="!$isWX"></nav-top>
+    <nav-content :titleDefault="true">
       <div class="scroll-order">
         <div class="logistics-count">{{expressNo.length}}个包裹已经发出</div>
          <div class="logistics-main">
