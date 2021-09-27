@@ -1085,39 +1085,15 @@
         return false
       },
       showExpress: function () {
-        // 京东物流
-        if(this.detailData.interfaceType == 2 || this.detailData.interfaceType == 1){
-          this.$router.push({
-            name: 'expressinfo',
-            params: {
-              expressinfo: encodeURIComponent(JSON.stringify(this.detailData.tracksList)),
-            }
-          })
-        } else if (this.$store.state.globalConfig.enableEMS == 1 && this.detailData.expressSendingMode == '1') {
-          // 邮政物流
-          this.$router.push({
-            path: '/mall2/orderlogistics',
-            query: {
-              traceNo: this.detailData.expressNo,
-            }
-          })
-        } else if (this.$store.state.globalConfig.order_ali_deliver_enable == '1' && this.detailData.interfaceType == '0' && this.detailData.deliverType == '2') {
-          // 对接阿里物流
-          this.$router.push({
-            path: '/mall2/aliexpressinfo',
+        this.$router.push({
+            path: '/mall2/logistics',
             query: {
               orderType: this.detailData.orderType,
-              orderId: this.detailData.id
+              orderId: this.detailData.id,
+              expressNo: this.detailData.expressNo,
+              expressName:this.detailData.expressName
             }
           })
-        } else {
-          let url = 'https://m.kuaidi100.com/index_all.html?type=' + encodeURIComponent(this.detailData.expressName) + '&postid=' + encodeURIComponent(this.detailData.expressNo)
-          this.$bridgefunc.customPush({
-            path: url,
-            isnativetop: '1',
-            isVuePage: false
-          })
-        }
       },
       codeBack: function () {
         this.showCode = false

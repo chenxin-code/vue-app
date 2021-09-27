@@ -80,12 +80,7 @@
     "enum": 200110
   },
   {
-    "path": "/mall2/expressinfo",
-    "name": "物流详情",
-    "enum": 200120
-  },
-  {
-    "path": "/mall2/orderlogistics",
+    "path": "/mall2/logistics",
     "name": "订单物流",
     "enum": 200130
   },

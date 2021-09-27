@@ -161,35 +161,9 @@ module.exports = [
       keepAlive: false
     }
   }, {
-    path: '/mall2/expressinfo',
-    name: 'expressinfo',
-    component: () => import('@/components/mall2/order/expressinfo'),
-    meta: {
-      keepAlive: false,
-      title: '物流详情'
-    }
-  }, {
-    path: '/mall2/aliexpressinfo',
+    path: '/mall2/logistics',
     name: '物流详情',
-    component: () => import('@/components/mall2/order/ali-express-info'),
-    meta: {
-      keepAlive: false,
-      title: '物流详情'
-    }
-  },
-  {
-    path: '/mall2/100expressinfo',
-    name: 'aliexpressinfo',
-    component: () => import('@/components/mall2/order/express-info-100'),
-    meta: {
-      keepAlive: false,
-      title: '物流详情'
-    }
-  },
-  {
-    path: '/mall2/orderlogistics',
-    name: '订单物流',
-    component: () => import('@/components/mall2/order/orderlogistics'),
+    component: () => import('@/components/mall2/order/logistics'),
     meta: {
       keepAlive: false
     }

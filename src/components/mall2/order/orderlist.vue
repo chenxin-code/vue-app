@@ -456,17 +456,6 @@
       </div>
       <img style="display: none" id="img" src="../../../../static/image/microShop/1@222x.png" alt />
     </nav-content>
-    <van-dialog v-model="showDialog" title="选择快递单号" @confirm="confirmForm" show-cancel-button>
-      <van-radio-group v-model="expressNo">
-        <van-cell-group>
-          <van-cell @click="selExpress(item2)" v-for="(item2,index) in expressNoList" :key="index" :title="item2" clickable >
-            <template #right-icon>
-              <van-radio checked-color="#ee0a24" :name="item2" />
-            </template>
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-    </van-dialog>
     <PickupCode v-if="showCode" :code="pickUpCode" @backEvent="codeBack"></PickupCode>
   </div>
 </template>
@@ -495,10 +484,7 @@ export default {
     return {
       lastPath: '',
       showCode: false,
-      showDialog: false,
       formItem: {},
-      expressNo: '',
-      expressNoList: [],
       tabs: [
         {
           text: '待支付',
@@ -573,26 +559,17 @@ export default {
         return -1
       }
     },
-    selExpress(item) {
-      this.expressNo = item;
-      this.formItem.expressNo = item;
-      console.log(this.formItem)
-    },
-    confirmForm() {
-      this.showExpress(this.formItem)
-    },
     expressType(obj) {
       this.formItem = this.$util.deepClone(obj);
-      let expressArr = []
-      if(this.formItem.expressNo && typeof(this.formItem.expressNo) == 'string') {
-        expressArr = this.formItem.expressNo.split(",");
-      }
-      if(expressArr.length == 1) {
-        this.showExpress(this.formItem)
-      } else {
-        this.showDialog = true;
-        this.expressNoList = expressArr;
-      }
+      this.$router.push({
+        path: '/mall2/logistics',
+        query: {
+          orderId: obj.id,
+          orderType: obj.orderType,
+          expressNo: obj.expressNo,
+          expressName:obj.expressName
+        }
+      })
     },
     productNumber(orderItemList) {
       let num = 0
@@ -780,7 +757,6 @@ export default {
         // 蜂鸟配送
         return false
       }
-
       if (item.interfaceType == 2 || item.interfaceType == 1) {
         // 京东物流
         return true
@@ -805,91 +781,6 @@ export default {
         return true
       }
       return false
-    },
-    showExpress: function(item) {
-      console.log(item,'item')
-      //京东快递
-      if (item.interfaceType == 2 || item.interfaceType == 1) {
-        //请求详情
-        this.$Loading.open()
-        let url = '/app/json/app_shopping_order/detail'
-        let paramsData = {
-          token: this.$store.state.login.token,
-          orderId: item.id,
-          orderType: item.orderType,
-          orderCategory: this.orderCategory,
-          vipUnitUserCode: this.vipUnitUserCode
-        }
-        this.$http.post(url, paramsData).then(
-          res => {
-            this.$Loading.close()
-            let data = res.data
-            if (data.status == 0) {
-              this.$router.push({
-                name: 'expressinfo',
-                params: {
-                  expressinfo: encodeURIComponent(
-                    JSON.stringify(data.data.tracksList)
-                  )
-                }
-              })
-            } else {
-              this.$Toast(data.info)
-            }
-          },
-          error => {
-            this.$Loading.close()
-            this.$Toast('请求数据失败！')
-          }
-        )
-      } else if (
-        // EMS快递
-        this.$store.state.globalConfig.enableEMS == 1 &&
-        item.interfaceType == 0 &&
-        item.expressSendingMode == '1'
-      ) {
-        this.$router.push({
-          path: '/mall2/orderlogistics',
-          query: {
-            traceNo: item.expressNo
-          }
-        })
-      } else if (
-        // 阿里物流
-        this.$store.state.globalConfig.order_ali_deliver_enable == '1' &&
-        item.interfaceType == '0' &&
-        item.deliverType == '2'
-      ) {
-        this.$router.push({
-          path: '/mall2/aliexpressinfo',
-          query: {
-            orderType: item.orderType,
-            orderId: item.id,
-            logisticsOrderNo: item.expressNo,
-          }
-        })
-      } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
-        // 快递100API版本
-        this.$router.push({
-          path: '/mall2/100expressinfo',
-          query: {
-            expressNo: item.expressNo,
-            expressName: item.expressName
-          }
-        })
-      } else {
-        // 快递100web版本
-        let url =
-          'https://m.kuaidi100.com/index_all.html?type=' +
-          encodeURIComponent(item.expressName) +
-          '&postid=' +
-          encodeURIComponent(item.expressNo)
-        this.$bridgefunc.customPush({
-          path: url,
-          isnativetop: '1',
-          isVuePage: false
-        })
-      }
     },
     toComment: function(item) {
       console.log(item.itemAbstractList, 'toComment')

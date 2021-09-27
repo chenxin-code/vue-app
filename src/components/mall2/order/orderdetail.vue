@@ -1457,21 +1457,7 @@
           >
             付款
           </div>
-          <!-- 
-            v-if="
-              pivotalProductType != 8 &&
-                tag == '4' &&
-                detailData.deliverType == 2 &&
-                isShowExpress
-            "
-           -->
-          <div
-            class="row-btn line_circle theme_font_common "
-            @click="expressType"
-            v-if="false"
-          >
-            查看物流
-          </div>
+          
           <div
             class="row-btn line_circle theme_font_common "
             @click="interceptOrder"
@@ -1550,28 +1536,6 @@
       :show="vityFlag"
       @blur="showKeyboard = false"
     />
-    <van-dialog
-      v-model="showDialog"
-      title="选择快递单号"
-      @confirm="confirmForm"
-      show-cancel-button
-    >
-      <van-radio-group v-model="expressNo">
-        <van-cell-group>
-          <van-cell
-            @click="expressNo = item"
-            v-for="(item, index) in expressNoList"
-            :key="index"
-            :title="item"
-            clickable
-          >
-            <template #right-icon>
-              <van-radio checked-color="#ee0a24" :name="item" />
-            </template>
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-    </van-dialog>
     <!--<PickUpCode v-if="showCode" :code="detailData.deliverCheckcode" @backEvent="codeBack"></PickUpCode>-->
     <van-popup v-model="showRefundLoading" round :style="{ height: '26.23%',width:'46.66%' }" :close-on-click-overlay="false">
       <div class="refundLoading">
@@ -1627,8 +1591,7 @@ export default {
       personList: [],
       awardActivity: {}, // 活动
       orderCategory: "",
-      showDialog: false, //弹出框，选择物流单号
-      expressNo: "", //被选中的物流单号
+  
       vipUnitUserCode: "",
       copyBtn: null, //存储初始化复制按钮事件
       brightnessResult: null,
@@ -2182,68 +2145,15 @@ export default {
       return false;
     },
     expressType() {
-      if (this.expressNoList.length == 1) {
-        this.showExpress();
-      } else {
-        this.showDialog = true;
-      }
-    },
-    confirmForm() {
-      if (this.expressNo) {
-        this.showExpress(this.expressNo);
-      }
-    },
-    showExpress: function(expressNo = this.detailData.expressNo) {
-      console.log(expressNo);
-      // 京东物流
-      if (
-        this.detailData.interfaceType == 2 ||
-        this.detailData.interfaceType == 1
-      ) {
         this.$router.push({
-          name: "expressinfo",
-          params: {
-            expressinfo: encodeURIComponent(
-              JSON.stringify(this.detailData.tracksList)
-            )
-          }
-        });
-      } else if (
-        this.$store.state.globalConfig.enableEMS == 1 &&
-        this.detailData.expressSendingMode == "1"
-      ) {
-        // 邮政物流
-        this.$router.push({
-          path: "/mall2/orderlogistics",
-          query: {
-            traceNo: expressNo
-          }
-        });
-      } else if (
-        this.$store.state.globalConfig.order_ali_deliver_enable == "1" &&
-        this.detailData.interfaceType == "0" &&
-        this.detailData.deliverType == "2"
-      ) {
-        // 对接阿里物流
-        this.$router.push({
-          path: "/mall2/aliexpressinfo",
+          path: "/mall2/logistics",
           query: {
             orderType: this.detailData.orderType,
-            orderId: this.detailData.id
+            orderId: this.detailData.id,
+            expressNo: this.detailData.expressNo,
+            expressName: this.detailData.expressName
           }
         });
-      } else {
-        let url =
-          "https://m.kuaidi100.com/index_all.html?type=" +
-          encodeURIComponent(this.detailData.expressName) +
-          "&postid=" +
-          encodeURIComponent(expressNo);
-        this.$bridgefunc.customPush({
-          path: url,
-          isnativetop: "1",
-          isVuePage: false
-        });
-      }
     },
     codeBack: function() {
       this.showCode = false;

@@ -4093,7 +4093,6 @@ export default {
             this.$store.state.mall2.cartNum = data.data;
             this.showPop = false;
             this.showProductImg = true;
-  ``
             this.$sensors.track("add_to_shoppingcart", {
               referrer_id: this.distributionPersonDetail.distributorId,
               top_referrer_id: this.distributionPersonDetail

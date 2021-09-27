@@ -80,14 +80,9 @@ let actionStatistics = {
       "enum": 200110
     },
     {
-      "path": "/mall2/expressinfo",
+      "path": "/mall2/logistics",
       "name": "物流详情",
       "enum": 200120
-    },
-    {
-      "path": "/mall2/orderlogistics",
-      "name": "订单物流",
-      "enum": 200130
     },
     {
       "path": "/mall2/choosesertype",

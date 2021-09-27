@@ -120,28 +120,7 @@
         </div>
       </div>
     </div>
-    <van-dialog
-      v-model="showDialog"
-      title="选择快递单号"
-      @confirm="confirmForm"
-      show-cancel-button
-    >
-      <van-radio-group v-model="expressNo">
-        <van-cell-group>
-          <van-cell
-            @click.stop="selExpress(item)"
-            v-for="(item, index) in expressNoList"
-            :key="index"
-            :title="item"
-            clickable
-          >
-            <template #right-icon>
-              <van-radio checked-color="#ee0a24" :name="item" />
-            </template>
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-    </van-dialog>
+    
   </div>
 </template>
 
@@ -181,10 +160,6 @@ export default {
       isChecked: false,
       isDisabled: false,
       isShow: false,
-      showDialog: false,
-      expressNo: "",
-      expressNoList: [],
-      formItem: {},
       smallDataList: [],
       showMore: false,
       vipUnitUserCode: "", // type  为空  待保留 旧订间为空，可不传
@@ -781,126 +756,18 @@ export default {
       try {
         let awaitData = await this.$http.post(url, paramsData);
         let data = awaitData.data.data;
-        obj.expressNo = data.expressNo;
-        obj.expressName = data.expressName;
-        obj.orderType = data.orderType;
-        obj.id = data.id;
-        obj.interfaceType = data.interfaceType;
-
-        this.formItem = this.$util.deepClone(obj);
-        let expressArr = [];
-        // console.log(this.formItem);
-        // console.log(this.formItem.expressNo);
-        // console.log(typeof this.formItem.expressNo);
-        if (
-          this.formItem.expressNo &&
-          typeof this.formItem.expressNo == "string"
-        ) {
-          expressArr = this.formItem.expressNo.split(",");
-        }
-        if (expressArr.length == 1) {
-          this.showExpress(this.formItem);
-        } else {
-          this.showDialog = true; //选择快递单号弹窗
-          this.expressNoList = expressArr; //快递单号数组
-        }
+        this.$router.push({
+         path: '/mall2/logistics',
+         query: {
+           orderId: data.id,
+           orderType: obj.orderType,
+           expressNo: data.expressNo,
+           expressName: data.expressName
+         }
+       })
+      
       } catch (e) {
         this.$Toast(e);
-      }
-    },
-    selExpress(item) {
-      // 弹窗选择快递单号方法
-      this.expressNo = item;
-      this.formItem.expressNo = item;
-      console.log(this.formItem);
-    },
-    confirmForm() {
-      // 弹窗确认方法
-      this.showExpress(this.formItem);
-    },
-    showExpress: function(item) {
-      console.log(item, "item");
-      //京东快递
-      if (item.interfaceType == 2 || item.interfaceType == 1) {
-        //请求详情
-        this.$Loading.open();
-        let url = "/app/json/app_shopping_order/detail";
-        let paramsData = {
-          token: this.$store.state.login.token,
-          orderId: item.id,
-          orderType: item.orderType,
-          orderCategory: this.params.orderCategory,
-          vipUnitUserCode: this.vipUnitUserCode
-        };
-        this.$http.post(url, paramsData).then(
-          res => {
-            this.$Loading.close();
-            let data = res.data;
-            if (data.status == 0) {
-              this.$router.push({
-                name: "expressinfo",
-                params: {
-                  expressinfo: encodeURIComponent(
-                    JSON.stringify(data.data.tracksList)
-                  )
-                }
-              });
-            } else {
-              this.$Toast(data.info);
-            }
-          },
-          error => {
-            this.$Loading.close();
-            this.$Toast("请求数据失败！");
-          }
-        );
-      } else if (
-        // EMS快递
-        this.$store.state.globalConfig.enableEMS == 1 &&
-        item.interfaceType == 0 &&
-        item.expressSendingMode == "1"
-      ) {
-        this.$router.push({
-          path: "/mall2/orderlogistics",
-          query: {
-            traceNo: item.expressNo
-          }
-        });
-      } else if (
-        // 阿里物流
-        this.$store.state.globalConfig.order_ali_deliver_enable == "1" &&
-        item.interfaceType == "0" &&
-        item.deliverType == "2"
-      ) {
-        this.$router.push({
-          path: "/mall2/aliexpressinfo",
-          query: {
-            orderType: item.orderType,
-            orderId: item.id,
-            logisticsOrderNo: item.expressNo
-          }
-        });
-      } else if (this.$store.state.globalConfig.hasApiForExpress100 == 1) {
-        // 快递100API版本
-        this.$router.push({
-          path: "/mall2/100expressinfo",
-          query: {
-            expressNo: item.expressNo,
-            expressName: item.expressName
-          }
-        });
-      } else {
-        // 快递100web版本
-        let url =
-          "https://m.kuaidi100.com/index_all.html?type=" +
-          encodeURIComponent(item.expressName) +
-          "&postid=" +
-          encodeURIComponent(item.expressNo);
-        this.$bridgefunc.customPush({
-          path: url,
-          isnativetop: "1",
-          isVuePage: false
-        });
       }
     },
     confirmProduct: function() {

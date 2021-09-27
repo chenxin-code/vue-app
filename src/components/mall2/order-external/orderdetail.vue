@@ -1020,38 +1020,15 @@ export default {
       return false;
     },
     showExpress: function() {
-      // 京东物流
-      if (this.detailData.interfaceType == 2) {
-        this.$router.push({
-          path: "/mall2/expressinfo",
+      this.$router.push({
+          path: "/mall2/logistics",
           query: {
-            expressinfo: encodeURIComponent(
-              JSON.stringify(this.detailData.tracksList)
-            )
+             orderType: this.detailData.orderType,
+            orderId: this.detailData.id,
+            expressNo: this.detailData.expressNo,
+            expressName:this.detailData.expressName
           }
         });
-      } else if (
-        this.$store.state.globalConfig.enableEMS == 1 &&
-        this.detailData.expressSendingMode == "1"
-      ) {
-        this.$router.push({
-          path: "/mall2/orderlogistics",
-          query: {
-            traceNo: this.detailData.expressNo
-          }
-        });
-      } else {
-        let url =
-          "https://m.kuaidi100.com/index_all.html?type=" +
-          encodeURIComponent(this.detailData.expressName) +
-          "&postid=" +
-          encodeURIComponent(this.detailData.expressNo);
-        this.$bridgefunc.customPush({
-          path: url,
-          isnativetop: "1",
-          isVuePage: false
-        });
-      }
     },
     codeBack: function() {
       this.showCode = false;
