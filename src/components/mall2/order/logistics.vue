@@ -70,6 +70,7 @@ export default {
       carrierTel: "",
       logisticsDetails: [],
       colorList: ["primary", "danger", "secondary", "info"],
+      webtype_wx:false,
       indexPrev: "0"
       // inputVal: ''
     };
@@ -98,8 +99,12 @@ export default {
       if (phoneNums) {
         phoneNums=Array.from(new Set(phoneNums));  
         for (var i = 0; i < phoneNums.length; i++) {
-          var temp = phoneNums[i]
-          str = str.replaceAll(phoneNums[i], `<a href="tel:${temp}" style="color:#e5165a;">${temp}</a>`);
+          var temp = phoneNums[i];
+          if(this.webtype_wx){ 
+            str = str.replaceAll(phoneNums[i], `<a href="tel:${temp}" style="color:#e5165a;">${temp}</a>`);
+          }else{ 
+            str = str.replaceAll(phoneNums[i], `<a href="#" style="color:#e5165a;">${temp}</a>`);
+          }
         }
       }
       return str;
@@ -141,6 +146,7 @@ export default {
     }
   },
   created() {
+    this.webtype_wx=this.$store.state.webtype == "2" || this.$store.state.webtype == "3" ;
     this.getQuery();
     this.expressNo.map(v => {
       this.getExpressInfo_ali(v);
@@ -182,7 +188,7 @@ export default {
       font-weight 500
       position absolute
       right: 10px
-      top:10px
+      top:16px
     }
     .logistics-status{
       font-size 16px
