@@ -182,7 +182,7 @@ export default {
       font-weight 500
       position absolute
       right: 10px
-      top:16px
+      top:14px
     }
     .logistics-status{
       font-size 16px
