@@ -111,8 +111,13 @@ export default {
     /*获取query的值*/ 
     getQuery(){
       this.queryObj=this.$route.query;
-      this.expressNo = this.queryObj.expressNo.split(',') || [],
-      this.expressName = this.queryObj.expressName || '';
+      this.expressNo = this.queryObj.expressNo.split(',') || [];
+      try {
+        this.expressName=decodeURIComponent(this.queryObj.expressName);
+      }
+      catch(err){ 
+          this.expressName=this.queryObj.expressName
+      }
     },
     /*快递--ali订单详情*/
     getExpressInfo_ali(expressNo) {
